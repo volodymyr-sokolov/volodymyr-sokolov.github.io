@@ -1,3 +1,6 @@
-theme: pages-themes/minimal@v0.2.0
 title: Volodymyr Sokolov, Ph.D.
+logo: /images/sokolov.png
 description: Volodymyr Sokolov Publication List
+show_downloads: false
+google_analytics:
+theme: jekyll-theme-minimal
