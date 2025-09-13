@@ -1,6 +1,6 @@
 # Articles
 
-2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](2-s2.0-85205045796.md)
+2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves)
 
 2023 [Brainwave‐based Authentication using Features Fusion](Brainwave‐based-Authentication-using-Features-Fusion)
 
