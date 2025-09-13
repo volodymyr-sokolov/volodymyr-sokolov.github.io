@@ -11,7 +11,7 @@ The article presents the author’s works in the field of modifications and mode
 
 <img src="/icons/doi.svg" width="32" height="32"> [10.3390/cryptography8030038](https://doi.org/10.3390/cryptography8030038) 
 
-<a href="https://www.mdpi.com/2410-387X/8/3/38/pdf?version=1724758976" width="32" height="32"><img src="/icons/pdf.svg"></a> | [https://www.mdpi.com/2410-387X/8/3/38](https://www.mdpi.com/2410-387X/8/3/38) 
+<a href="https://www.mdpi.com/2410-387X/8/3/38/pdf?version=1724758976"><img src="/icons/pdf.svg" width="32" height="32"></a> | [https://www.mdpi.com/2410-387X/8/3/38](https://www.mdpi.com/2410-387X/8/3/38) 
 
 ## Keywords
 complete Edwards curve; CRS; CSIDH; CSIKE; isogeny; isogeny-based cryptography; post-quantum cryptography; quadratic Edwards curve; supersingular Edwards curve; twisted Edwards curve
