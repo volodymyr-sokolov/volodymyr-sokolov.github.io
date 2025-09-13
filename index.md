@@ -1,3 +1,5 @@
+# A Little about Myself
+
 I'm an associate professor, specializing in cybersecurity and information technologies. My academic journey began with a foundation in engineering at Kyiv Polytechnic Institute, leading to my doctoral research focused on advanced security frameworks for modern wireless systems. My research interests encompass a broad range of topics, including information security risk assessment, wireless sensor network privacy, IoT security, and the application of artificial intelligence in cybersecurity.
 
 # Academic Career
