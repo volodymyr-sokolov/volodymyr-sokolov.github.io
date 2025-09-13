@@ -29,6 +29,7 @@
 2022 [Implementation of Active Cybersecurity Education in Ukrainian Higher School](Implementation-of-Active-Cybersecurity-Education-in-Ukrainian-Higher-School)
 
 2022 [Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation](Method-of-Obtaining-Data-from-Open-Scientific-Sources-and-Social-Engineering-Attack-Simulation)
+<details>
 
 2022 [Transferability Evaluation of Speech Emotion Recognition Between Different Languages](Transferability-Evaluation-of-Speech-Emotion-Recognition-Between-Different-Languages)
 
@@ -59,6 +60,7 @@
 2024 [ZigBee Network Resistance to Jamming Attacks](ZigBee-Network-Resistance-to-Jamming-Attacks)
 
 2023 [Jump‐Stay Jamming Attack on Wi‐Fi Systems](Jump‐Stay-Jamming-Attack-on-Wi‐Fi-Systems)
+<details>
 
 2023 [Bluetooth Low‐Energy Beacon Resistance to Jamming Attack](Bluetooth-Low‐Energy-Beacon-Resistance-to-Jamming-Attack)
 
@@ -111,6 +113,7 @@
 2024 [Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles](Integration-of-Smart-Contracts-and-Artificial-Intelligence-using-Cryptographic-Oracles)
 
 2024 [Method for Managing IT Incidents in Critical Information Infrastructure Facilities](Method-for-Managing-IT-Incidents-in-Critical-Information-Infrastructure-Facilities)
+<details>
 
 2024 [Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form](Research-of-the-Graphic-Model-of-the-Points-of-the-Elliptic-Curve-in-the-Edward-Form)
 
