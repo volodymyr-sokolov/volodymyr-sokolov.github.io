@@ -17,7 +17,7 @@ The article presents the author’s works in the field of modifications and mode
 complete Edwards curve; CRS; CSIDH; CSIKE; isogeny; isogeny-based cryptography; post-quantum cryptography; quadratic Edwards curve; supersingular Edwards curve; twisted Edwards curve
 
 ## SciVal Topics
-<a href="/volodymyr-sokolov/publications/wiki/SciVal-Topics#quantum-cryptography-elliptic-curve-finite-field" target="_blank">Quantum Cryptography; Elliptic Curve; Finite Field</a>
+Supersingular Isogeny Protocols in Quantum Cryptography
 
 ***
 ## Publisher
