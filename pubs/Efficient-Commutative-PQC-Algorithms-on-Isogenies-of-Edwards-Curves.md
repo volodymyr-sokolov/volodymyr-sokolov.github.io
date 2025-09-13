@@ -24,7 +24,7 @@ complete Edwards curve; CRS; CSIDH; CSIKE; isogeny; isogeny-based cryptography; 
 
 <a href="https://www.scimagojr.com/journalsearch.php?q=21101039441&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://www.scimagojr.com/journal_img.php?id=21101039441" alt="SCImago Journal &amp; Country Rank"  /></a> 
 
-<span class="__dimensions_badge_embed__" data-doi="10.1001/jama.2016.9797" data-hide-zero-citations="true" data-style="small_circle"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
+<span class="__dimensions_badge_embed__" data-doi="10.1016/j.cose.2023.103198" data-hide-zero-citations="true" data-style="small_circle"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 
 
 First Online: 27 August 2024
