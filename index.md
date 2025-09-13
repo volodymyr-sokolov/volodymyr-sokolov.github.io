@@ -2,7 +2,7 @@ I'm an associate professor, specializing in cybersecurity and information techno
 
 # Academic Career
 
-Sep 2018 to present | Associate Professor at [Borys Grinchenko Kyiv Metropolitan University](https://partner.kubg.edu.ua/), Kyiv, UA
+Sep 2018 <br />to present | Associate Professor at [Borys Grinchenko Kyiv Metropolitan University](https://partner.kubg.edu.ua/), Kyiv, UA
 
 Apr 2021 — Oct 2022 | Reasearcher at [Institute of Telecommunications and Global Information Space](https://itgip.org/en/), Kyiv, UA
 
