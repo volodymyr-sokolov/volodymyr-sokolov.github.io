@@ -25,7 +25,7 @@ complete Edwards curve; CRS; CSIDH; CSIKE; isogeny; isogeny-based cryptography; 
 <a href="https://plu.mx/plum/a/?doi=10.1016/j.cose.2023.103198" class="plumx-plum-print-popup"></a>
 
 <a href="https://www.altmetric.com/details.php?doi=10.1016/j.cose.2023.103198" target="_blank">
-    <img src="https://badges.altmetric.com/?doi=10.1016/j.cose.2023.103198" alt="Altmetric score">
+    <img src="https://badges.altmetric.com/?doi=10.1038/nature12373&score=all&types=twitter,news,policy" />
 </a>
 
 First Online: 27 August 2024
