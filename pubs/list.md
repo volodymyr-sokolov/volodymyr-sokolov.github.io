@@ -30,8 +30,6 @@
 
 2022 [Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation](Method-of-Obtaining-Data-from-Open-Scientific-Sources-and-Social-Engineering-Attack-Simulation)
 
-<details>
-
 2022 [Transferability Evaluation of Speech Emotion Recognition Between Different Languages](Transferability-Evaluation-of-Speech-Emotion-Recognition-Between-Different-Languages)
 
 2021 [Authentication System by Human Brainwaves using Machine Learning and Artificial Intelligence](Authentication-System-by-Human-Brainwaves-using-Machine-Learning-and-Artificial-Intelligence)
@@ -48,8 +46,6 @@
 
 2019 [Implementation of Active Learning in the Master’s Program on Cybersecurity](Implementation-of-Active-Learning-in-the-Master’s-Program-on-Cybersecurity)
 
-</details>
-
 # Conference Papers
 
 ## IEEE
@@ -63,8 +59,6 @@
 2024 [ZigBee Network Resistance to Jamming Attacks](ZigBee-Network-Resistance-to-Jamming-Attacks)
 
 2023 [Jump‐Stay Jamming Attack on Wi‐Fi Systems](Jump‐Stay-Jamming-Attack-on-Wi‐Fi-Systems)
-
-<details>
 
 2023 [Bluetooth Low‐Energy Beacon Resistance to Jamming Attack](Bluetooth-Low‐Energy-Beacon-Resistance-to-Jamming-Attack)
 
@@ -106,8 +100,6 @@
 
 2013 [Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11](Research-Results-of-the-Impact-of-Spatial-and-Polarization-Value-of-the-Antennas-on-Network-Capacity-of-Wireless-Channels-Standard-IEEE-802.11)
 
-</details>
-
 ## CEUR-WS
 
 2025 [A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps](A-System-for-Assessing-the-Interdependencies-of-Information-System-Agents-in-Information-Security-Risk-Management-using-Cognitive-Maps)
@@ -119,8 +111,6 @@
 2024 [Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles](Integration-of-Smart-Contracts-and-Artificial-Intelligence-using-Cryptographic-Oracles)
 
 2024 [Method for Managing IT Incidents in Critical Information Infrastructure Facilities](Method-for-Managing-IT-Incidents-in-Critical-Information-Infrastructure-Facilities)
-
-<details>
 
 2024 [Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form](Research-of-the-Graphic-Model-of-the-Points-of-the-Elliptic-Curve-in-the-Edward-Form)
 
@@ -185,8 +175,6 @@
 2019 [Men‐in‐the‐Middle Attack Simulation on Low Energy Wireless Devices using Software Define Radio](Men‐in‐the‐Middle-Attack-Simulation-on-Low-Energy-Wireless-Devices-using-Software-Define-Radio)
 
 2019 [Security Rating Metrics for Distributed Wireless Systems](Security-Rating-Metrics-for-Distributed-Wireless-Systems)
-
-</details>
 
 # Grant
 
