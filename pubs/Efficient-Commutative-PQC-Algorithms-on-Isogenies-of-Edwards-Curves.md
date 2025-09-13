@@ -11,7 +11,7 @@ The article presents the author’s works in the field of modifications and mode
 
 <img src="/icons/doi.svg" width="32" height="32"> [10.3390/cryptography8030038](https://doi.org/10.3390/cryptography8030038) 
 
-<a href="https://www.mdpi.com/2410-387X/8/3/38/pdf?version=1724758976"><img src="/icons/pdf.svg" width="32" height="32"></a> | [https://www.mdpi.com/2410-387X/8/3/38](https://www.mdpi.com/2410-387X/8/3/38) 
+<a href="https://www.mdpi.com/2410-387X/8/3/38/pdf?version=1724758976"><img src="/icons/pdf.svg" width="32" height="32"></a> [https://www.mdpi.com/2410-387X/8/3/38](https://www.mdpi.com/2410-387X/8/3/38) 
 
 ## Keywords
 complete Edwards curve; CRS; CSIDH; CSIKE; isogeny; isogeny-based cryptography; post-quantum cryptography; quadratic Edwards curve; supersingular Edwards curve; twisted Edwards curve
@@ -24,7 +24,7 @@ complete Edwards curve; CRS; CSIDH; CSIKE; isogeny; isogeny-based cryptography; 
 
 <a href="https://www.scimagojr.com/journalsearch.php?q=21101039441&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://www.scimagojr.com/journal_img.php?id=21101039441" alt="SCImago Journal &amp; Country Rank"  /></a>
 
-<div class="__dimensions_badge_embed__" data-doi="10.1038/s41586-020-2086-5" data-style="large_rectangle"></div>
+<div class="__dimensions_badge_embed__" data-doi="10.1016/j.cose.2023.103198" data-style="large_rectangle"></div>
 <script async type="text/javascript" src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 
 First Online: 27 August 2024
