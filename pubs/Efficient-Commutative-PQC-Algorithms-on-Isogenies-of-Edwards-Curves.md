@@ -22,16 +22,7 @@ complete Edwards curve; CRS; CSIDH; CSIKE; isogeny; isogeny-based cryptography; 
 ***
 ## Publisher
 
-<table>
-<tr>
-<td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21101039441&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://www.scimagojr.com/journal_img.php?id=21101039441" alt="SCImago Journal &amp; Country Rank"  /></a> 
-</td>
-<td>
-<span class="__dimensions_badge_embed__" data-doi="10.3390/cryptography8030038" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
-</td>
-</tr>
-</table>
 
 First Online: 27 August 2024
 
@@ -52,6 +43,32 @@ First Online: 27 August 2024
 
 ### [IEEE](https://citation.crosscite.org/format?doi=10.3390/cryptography8030038&style=ieee&lang=en-US)
 
+  <div id="output">Загрузка...</div>
+
+  <script>
+    // Ссылка, откуда получаем текст
+    const url = 'https://citation.crosscite.org/format?doi=10.3390/cryptography8030038&style=ieee&lang=en-US';
+
+    // fetch получает данные по ссылке
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Ошибка сети');
+        }
+        return response.text(); // Получаем текст
+      })
+      .then(text => {
+        document.getElementById('output').textContent = text; // Показываем на странице
+      })
+      .catch(error => {
+        document.getElementById('output').textContent = 'Ошибка: ' + error;
+      });
+  </script>
+
+
 ### CEUR-WS
 
 `A. Bessalov, V. Sokolov, S. Abramov, Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves, Cryptography 8(3), iss. 38 (2024) 1–17. doi:10.3390/cryptography8030038.`
+
+
+<span class="__dimensions_badge_embed__" data-doi="10.3390/cryptography8030038" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
