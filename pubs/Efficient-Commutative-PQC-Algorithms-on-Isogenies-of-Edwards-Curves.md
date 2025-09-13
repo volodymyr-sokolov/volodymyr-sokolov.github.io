@@ -9,9 +9,11 @@ Serhii Abramov <a href="https://orcid.org/0000-0002-5145-2782" target="_blank"><
 ## Abstract
 The article presents the author’s works in the field of modifications and modeling of the Post-Quantum Cryptography (PQC) Commutative Supersingular Isogeny Diffie-Hellman (CSIDH) algorithm on non-cyclic supersingular Edwards curves and its predecessor Couveignes-Rostovtsev-Stolbunov (CRS) scheme on ordinary non-cyclic Edwards curves are reviewed. Lower estimates of the computational speed gains of the modified algorithms over the original ones are obtained. The most significant results were obtained by choosing classes of non-cyclic Edwards curves connected as quadratic twist pairs instead of cyclic complete Edwards curves, as well as the method of algorithm randomization as an alternative to “constant time CSIDH”. It is shown that in the CSIDH and Commutative Supersingular Isogeny Key Encapsulation (CSIKE) algorithms, there are two independent cryptosystems with the possibility of parallel computation, eliminating the threat of side-channel attacks. There are four such cryptosystems for the CRS scheme. Integral lower bound estimates of the performance gain of the modified CSIDH algorithm are obtained at 1.5 × 2⁹, and for the CRS scheme are 3 × 2⁹.
 
-<img src="/icons/doi.svg" width="32" height="32"> [10.3390/cryptography8030038](https://doi.org/10.3390/cryptography8030038) 
+## Keywords
 
-<a href="https://www.mdpi.com/2410-387X/8/3/38/pdf?version=1724758976"><img src="/icons/pdf.svg" width="32" height="32"></a> [https://www.mdpi.com/2410-387X/8/3/38](https://www.mdpi.com/2410-387X/8/3/38) 
+DOI: [10.3390/cryptography8030038](https://doi.org/10.3390/cryptography8030038) 
+Publisher: [https://www.mdpi.com/2410-387X/8/3/38](https://www.mdpi.com/2410-387X/8/3/38) 
+Full text: <a href="https://www.mdpi.com/2410-387X/8/3/38/pdf?version=1724758976">PDF</a>
 
 ## Keywords
 complete Edwards curve; CRS; CSIDH; CSIKE; isogeny; isogeny-based cryptography; post-quantum cryptography; quadratic Edwards curve; supersingular Edwards curve; twisted Edwards curve
@@ -27,7 +29,7 @@ Supersingular Isogeny Protocols in Quantum Cryptography
 <a href="https://www.scimagojr.com/journalsearch.php?q=21101039441&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://www.scimagojr.com/journal_img.php?id=21101039441" alt="SCImago Journal &amp; Country Rank"  /></a> 
 </td>
 <td style="text-align: left;">
-<span class="__dimensions_badge_embed__" data-doi="10.1016/j.cose.2023.103198" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
+<span class="__dimensions_badge_embed__" data-doi="10.3390/cryptography8030038" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
 </tr>
 </table>
