@@ -32,7 +32,7 @@ Jan&nbsp;2007&nbsp;—<br />Feb&nbsp;2012 | Technical Writing Manager (Retail) i
 
 Nov&nbsp;2005&nbsp;—<br />Oct&nbsp;2008 | Postgraduate studies (Department of Information Security) at [State University of Information and Communication Technologies](https://www.duikt.edu.ua/en/), Kyiv, UA
 
-Sep&nbsp;1999 —<br />Jun&nbsp;2005 | Master of Electronic Engineering (Faculty of Electronics) at [Kyiv Polytechnic Institute](https://kpi.ua/en/), Kyiv, UA
+Sep&nbsp;1999&nbsp;—<br />Jun&nbsp;2005 | Master of Electronic Engineering (Faculty of Electronics) at [Kyiv Polytechnic Institute](https://kpi.ua/en/), Kyiv, UA
 
 # Other Activities
 
@@ -42,7 +42,7 @@ Nov&nbsp;2017&nbsp;—<br />Dec&nbsp;2021 | Academia member (ID 1200190674, ITU-
 
 As an editor and reviewer, I have participated in the editorial boards of conferences and workshops, such as the [Cybersecurity Providing in Information and Telecommunication Systems (CPITS)](https://cpits.kubg.edu.ua/) and [Classic, Quantum, and Post-Quantum Cryptography (CQPC)](https://cqpc.kubg.edu.ua/).
 
-# [Publications](/volodymyr-sokolov/publications/wiki/Publication-List-of-Volodymyr-Sokolov)
+# [Publications](/pubs/list.md)
 
 # Languages
 
@@ -51,8 +51,8 @@ As an editor and reviewer, I have participated in the editorial boards of confer
 
 # Profiles
 
-ORCID: [0000-0002-9349-7946](https://orcid.org/0000-0002-9349-7946)
-Scopus ID: [57208521755](https://www.scopus.com/authid/detail.uri?authorId=57208521755)
-Web of Science ID: [400301](https://www.webofscience.com/wos/author/record/400301) or [O-2333-2017](https://www.webofscience.com/wos/author/record/O-2333-2017)
-ResearchGate: [Vladimir_Sokolov8](https://www.researchgate.net/profile/Vladimir_Sokolov8)
-And other: [Google Scholar](https://scholar.google.com/citations?user=_Zicvs8AAAAJ), [Academia](https://kubg.academia.edu/VladimirSokolov), [IEEE](https://ieeexplore.ieee.org/author/37089400752), [ACM](https://dl.acm.org/profile/99660030382), [SSRN](https://ssrn.com/author=3711409), [DBLP](https://dblp.org/pers/hd/s/Sokolov:Volodymyr), [KUBG](http://wiki.kubg.edu.ua/%D0%A1%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%D0%B2_%D0%92%D0%BE%D0%BB%D0%BE%D0%B4%D0%B8%D0%BC%D0%B8%D1%80_%D0%AE%D1%80%D1%96%D0%B9%D0%BE%D0%B2%D0%B8%D1%87)
+* ORCID: [0000-0002-9349-7946](https://orcid.org/0000-0002-9349-7946)
+* Scopus ID: [57208521755](https://www.scopus.com/authid/detail.uri?authorId=57208521755)
+* Web of Science ID: [400301](https://www.webofscience.com/wos/author/record/400301) or [O-2333-2017](https://www.webofscience.com/wos/author/record/O-2333-2017)
+* ResearchGate: [Vladimir_Sokolov8](https://www.researchgate.net/profile/Vladimir_Sokolov8)
+* And other: [Google Scholar](https://scholar.google.com/citations?user=_Zicvs8AAAAJ), [Academia](https://kubg.academia.edu/VladimirSokolov), [IEEE](https://ieeexplore.ieee.org/author/37089400752), [ACM](https://dl.acm.org/profile/99660030382), [SSRN](https://ssrn.com/author=3711409), [DBLP](https://dblp.org/pers/hd/s/Sokolov:Volodymyr), [KUBG](http://wiki.kubg.edu.ua/%D0%A1%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%D0%B2_%D0%92%D0%BE%D0%BB%D0%BE%D0%B4%D0%B8%D0%BC%D0%B8%D1%80_%D0%AE%D1%80%D1%96%D0%B9%D0%BE%D0%B2%D0%B8%D1%87)
