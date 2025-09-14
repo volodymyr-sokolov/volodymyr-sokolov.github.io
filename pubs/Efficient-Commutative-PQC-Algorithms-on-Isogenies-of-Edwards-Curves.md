@@ -12,7 +12,7 @@ The article presents the author’s works in the field of modifications and mode
 ## Links
 
 * DOI: [10.3390/cryptography8030038](https://doi.org/10.3390/cryptography8030038) 
-* Publisher: [https://www.mdpi.com/2410-387X/8/3/38](https://www.mdpi.com/2410-387X/8/3/38) 
+* Publisher: [MDPI, Cryptography](https://www.mdpi.com/2410-387X/8/3/38) 
 * Full text: <a href="https://www.mdpi.com/2410-387X/8/3/38/pdf?version=1724758976">PDF</a>
 
 ## Keywords
