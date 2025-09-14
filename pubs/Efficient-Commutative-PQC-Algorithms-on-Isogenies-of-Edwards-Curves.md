@@ -3,7 +3,7 @@
 # Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves
 
 Anatoly Bessalov <a href="https://orcid.org/0000-0002-6967-5001" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-<a href="/" target="_blank">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Serhii Abramov <a href="https://orcid.org/0000-0002-5145-2782" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
