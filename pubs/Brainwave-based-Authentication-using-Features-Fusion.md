@@ -13,8 +13,7 @@ This article investigates the use of human brainwaves for user authentication. W
 ## Links
 
 * DOI: [10.1016/j.cose.2023.103198](https://doi.org/10.1016/j.cose.2023.103198) 
-* Publisher: [https://www.sciencedirect.com/science/article/pii/S0167404823001086](https://www.sciencedirect.com/science/article/pii/S0167404823001086) 
-* Full text: <a href="https://www.mdpi.com/2410-387X/8/3/38/pdf?version=1724758976">PDF</a>
+* Publisher: [Computers & Security](https://www.sciencedirect.com/science/article/pii/S0167404823001086)
 
 ## Keywords
 authentication; BCI; biometrics; brain-computer interface; brainwaves; coherence; EEG; electroencephalogram; feature extraction; machine learning
