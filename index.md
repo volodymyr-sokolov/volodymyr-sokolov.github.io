@@ -1,8 +1,8 @@
-# A Little about Myself
+## A Little about Myself
 
 I'm an associate professor, specializing in cybersecurity and information technologies. My academic journey began with a foundation in engineering at Kyiv Polytechnic Institute, leading to my doctoral research focused on advanced security frameworks for modern wireless systems. My research interests encompass a broad range of topics, including information security risk assessment, wireless sensor network privacy, IoT security, and the application of artificial intelligence in cybersecurity.
 
-# Academic Career
+## Academic Career
 
 Sep&nbsp;2018<br />to&nbsp;present | Associate Professor at [Borys Grinchenko Kyiv Metropolitan University](https://partner.kubg.edu.ua/), Kyiv, UA
 
@@ -10,7 +10,7 @@ Apr&nbsp;2021&nbsp;—<br />Oct&nbsp;2022 | Reasearcher at [Institute of Telecom
 
 Sep&nbsp;2005&nbsp;—<br />Aug&nbsp;2018 | Senior Lecturer at [State University of Information and Communication Technologies](https://www.duikt.edu.ua/en/), Kyiv, UA
 
-# Professional Career
+## Professional Career
 
 Sep&nbsp;2022&nbsp;—<br />Jul&nbsp;2023 | Senior Business Analyst / Proxy Product Owner (TeleCom) in [Pivotal Commware](https://pivotalcommware.com/), USA
 
@@ -24,7 +24,7 @@ Mar&nbsp;2012&nbsp;—<br />Apr&nbsp;2013 | Project Manager (Retail & EDI) in [S
 
 Jan&nbsp;2007&nbsp;—<br />Feb&nbsp;2012 | Technical Writing Manager (Retail) in [SystemGroup](https://systemgroup.com.ua/), UA
 
-# Education and Scientific Degrees
+## Education and Scientific Degrees
 
 30.11.2021 | Associate Professor (Department of Information and Cyber Security) at [Borys Grinchenko Kyiv Metropolitan University](https://partner.kubg.edu.ua/), Kyiv, UA
 
@@ -34,7 +34,7 @@ Nov&nbsp;2005&nbsp;—<br />Oct&nbsp;2008 | Postgraduate studies (Department of 
 
 Sep&nbsp;1999&nbsp;—<br />Jun&nbsp;2005 | Master of Electronic Engineering (Faculty of Electronics) at [Kyiv Polytechnic Institute](https://kpi.ua/en/), Kyiv, UA
 
-# Other Activities
+## Other Activities
 
 May&nbsp;2019<br />to&nbsp;present | Member (AM3743) of [European Microwave Association (EuMA)](https://www.eumwa.org/en/euma/), Louvain-la-Neuve, BE
 
@@ -42,14 +42,26 @@ Nov&nbsp;2017&nbsp;—<br />Dec&nbsp;2021 | Academia member (ID 1200190674, ITU-
 
 As an editor and reviewer, I have participated in the editorial boards of conferences and workshops, such as the [Cybersecurity Providing in Information and Telecommunication Systems (CPITS)](https://cpits.kubg.edu.ua/) and [Classic, Quantum, and Post-Quantum Cryptography (CQPC)](https://cqpc.kubg.edu.ua/).
 
-# [Publications](/pubs/list.md)
+## Publications
 
-# Languages
+2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md)
+
+2023 [Brainwave-based Authentication using Features Fusion](Brainwave-based-Authentication-using-Features-Fusion.md)
+
+2021 [10.3390/encyclopedia1030050](https://doi.org/10.3390/encyclopedia1030050)
+
+2020 [Wireless Sensors for Brain Activity — A Survey](Wireless-Sensors-for-Brain-Activity-A-Survey.md)
+
+2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md)
+
+[See more](/pubs/list.md)
+
+## Languages
 
 * English B2
 * German B1
 
-# Profiles
+## Profiles
 
 * ORCID: [0000-0002-9349-7946](https://orcid.org/0000-0002-9349-7946)
 * Scopus ID: [57208521755](https://www.scopus.com/authid/detail.uri?authorId=57208521755)
