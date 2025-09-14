@@ -3,7 +3,7 @@
 # Brainwave-based Authentication using Features Fusion
 
 Mahyar TajDini <a href="https://orcid.org/0000-0001-8875-3362" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-<a href="/" target="_blank">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Ievgeniia Kuzminykh <a href="https://orcid.org/0000-0001-6917-4234" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Bogdan Ghita <a href="https://orcid.org/0000-0002-1788-547X" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
