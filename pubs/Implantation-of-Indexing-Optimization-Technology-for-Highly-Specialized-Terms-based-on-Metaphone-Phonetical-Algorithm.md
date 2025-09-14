@@ -39,7 +39,7 @@ fuzzy match, phonetic rule, phonetic algorithm, Metaphone, Ukrainian surname
 First Online: 29 October 2019
 
 ***
-# Indices
+## Indices
 
 * ISSN: [1729-3774](https://portal.issn.org/resource/ISSN/1729-3774) <img src="/icons/print.svg" width="16" height="16">, [1729-4061](https://portal.issn.org/resource/ISSN/1729-4061) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85075389262](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85075389262) (Q2)
@@ -47,7 +47,7 @@ First Online: 29 October 2019
 * KUBG: [29410](http://elibrary.kubg.edu.ua/id/eprint/29410/)
 
 ***
-# Cite
+## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.15587/1729-4061.2019.181943&style=apa&lang=en-US)
 
