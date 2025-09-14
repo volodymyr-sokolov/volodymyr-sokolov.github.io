@@ -6,11 +6,11 @@
 
 2022 [Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency](Application-of-Game-Theory,-Fuzzy-Logic-and-Neural-Networks-for-Assessing-Risks-and-Forecasting-Rates-of-Digital-Currency.md)
 
-2022 [Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models](Application-of-a-Convolutional-Neural-Network-with-a-Module-of-Elementary-Graphic-Primitive-Classifiers-in-the-Problems-of-Recognition-of-Drawing-Documentation-and-Transformation-of-2D-to-3D-Models.md)
+2022 [Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models](Application-of-a-Convolutional-Neural-Network-with-a-Module-of-Elementary-Graphic-Primitive-Classifiers.md)
 
 2022 [Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network](Evaluation-Method-of-the-Physical-Compatibility-of-Equipment-in-a-Hybrid-Information-Transmission-Network.md)
 
-2020 [Wireless Sensors for Brain Activity — A Survey](Wireless-Sensors-for-Brain-Activity-—-A-Survey.md)
+2020 [Wireless Sensors for Brain Activity — A Survey](Wireless-Sensors-for-Brain-Activity-A-Survey.md)
 
 2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md)
 
