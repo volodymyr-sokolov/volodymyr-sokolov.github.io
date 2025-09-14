@@ -44,15 +44,15 @@ As an editor and reviewer, I have participated in the editorial boards of confer
 
 ## Publications
 
-2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md)
+2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](pubs/Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md)
 
-2023 [Brainwave-based Authentication using Features Fusion](Brainwave-based-Authentication-using-Features-Fusion.md)
+2023 [Brainwave-based Authentication using Features Fusion](pubs/Brainwave-based-Authentication-using-Features-Fusion.md)
 
 2021 [Information Security Risk Assessment](https://doi.org/10.3390/encyclopedia1030050)
 
-2020 [Wireless Sensors for Brain Activity — A Survey](Wireless-Sensors-for-Brain-Activity-A-Survey.md)
+2020 [Wireless Sensors for Brain Activity — A Survey](pubs/Wireless-Sensors-for-Brain-Activity-A-Survey.md)
 
-2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md)
+2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](pubs/Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md)
 
 [See more](/pubs/list.md)
 
