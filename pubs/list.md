@@ -10,6 +10,8 @@
 
 2022 [Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network](Evaluation-Method-of-the-Physical-Compatibility-of-Equipment-in-a-Hybrid-Information-Transmission-Network.md)
 
+2021 [Information Security Risk Assessment](Information-Security-Risk-Assessment.md)
+
 2020 [Wireless Sensors for Brain Activity — A Survey](Wireless-Sensors-for-Brain-Activity-A-Survey.md)
 
 2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md)
