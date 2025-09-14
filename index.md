@@ -48,7 +48,7 @@ As an editor and reviewer, I have participated in the editorial boards of confer
 
 2023 [Brainwave-based Authentication using Features Fusion](Brainwave-based-Authentication-using-Features-Fusion.md)
 
-2021 [10.3390/encyclopedia1030050](https://doi.org/10.3390/encyclopedia1030050)
+2021 [Information Security Risk Assessment](https://doi.org/10.3390/encyclopedia1030050)
 
 2020 [Wireless Sensors for Brain Activity — A Survey](Wireless-Sensors-for-Brain-Activity-A-Survey.md)
 
