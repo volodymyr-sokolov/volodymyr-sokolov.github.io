@@ -2,11 +2,11 @@
 
 # Bandwidth Research of Wireless IoT Switches
 
-Zhengbing Hu <a href="https://orcid.org/0000-0002-6140-3351" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-Bohdan Vovkotrub <a href="https://orcid.org/0000-0002-6196-4554" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-Volodymyr Buriachok <a href="https://orcid.org/0000-0002-4055-1494" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-Yevhen Zotkin <a href="https://orcid.org/0000-0002-6029-1044" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-<a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>
+Zhengbing Hu <a href="https://orcid.org/0000-0002-6140-3351" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+Bohdan Vovkotrub <a href="https://orcid.org/0000-0002-6196-4554" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+Volodymyr Buriachok <a href="https://orcid.org/0000-0002-4055-1494" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+Yevhen Zotkin <a href="https://orcid.org/0000-0002-6029-1044" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
 
@@ -39,14 +39,14 @@ bandwidth; IoT; network load; Raspberry Pi; RPi; wireless network
 
 [2020 IEEE 15th International Conference on Advanced Trends in Radioelectronics, Telecommunications and Computer Engineering (TCSET)](https://ieeexplore.ieee.org/xpl/conhome/9083930/proceeding)
 
-25–29 February 2020 <img src="/volodymyr-sokolov/publications/blob/main/icons/location-pin.svg" width="16" height="16"> Lviv-Slavske, Ukraine
+25–29 February 2020 <img src="/icons/location-pin.svg" width="16" height="16"> Lviv-Slavske, Ukraine
 
 First Online: 7 May 2020
 
 ***
 ## Indices
 
-* ISBN: 978-1-7281-5567-8 <img src="/volodymyr-sokolov/publications/blob/main/icons/print.svg" width="16" height="16">, 978-1-7281-5566-1 <img src="/volodymyr-sokolov/publications/blob/main/icons/online.svg" width="16" height="16">
+* ISBN: 978-1-7281-5567-8 <img src="/icons/print.svg" width="16" height="16">, 978-1-7281-5566-1 <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85086312920](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85086312920)
 * WOS: [000578041000113](https://www.webofscience.com/wos/woscc/full-record/WOS:000578041000113)
 * INSPEC: 19593272
