@@ -35,7 +35,7 @@ steganography, steganalysis, hidden information, audio container, graphic contai
 
 [2024 Classic, Quantum, and Post-Quantum Cryptography (CQPC)](https://ceur-ws.org/Vol-4016/)
 
-5 August 2025 <img src="/icons/location-pin.svg" width="16" height="16"> Lviv, Ukraine
+5 August 2025 <img src="/icons/location-pin.svg" width="16" height="16"> Kyiv, Ukraine
 
 First Online: 26 August 2025
 
