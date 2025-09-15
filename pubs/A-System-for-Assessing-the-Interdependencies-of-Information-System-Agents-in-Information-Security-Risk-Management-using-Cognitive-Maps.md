@@ -21,10 +21,6 @@ To determine the key concepts (information resources, threats, and vulnerabiliti
 
 Fuzzy cognitive maps; information security risk management; SADT
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <table>
@@ -41,7 +37,6 @@ Fuzzy cognitive maps; information security risk management; SADT
 
 First Online: 21 February 2025
 
-***
 ## Indices
 
 * ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
@@ -50,7 +45,6 @@ First Online: 21 February 2025
 * DBLP: [conf/cmigin/KostiukSSKBS24](https://dblp.org/rec/conf/cmigin/KostiukSSKBS24.html)
 * KUBG: [51242](http://elibrary.kubg.edu.ua/id/eprint/51242/)
 
-***
 ## Cite
 
 ### APA

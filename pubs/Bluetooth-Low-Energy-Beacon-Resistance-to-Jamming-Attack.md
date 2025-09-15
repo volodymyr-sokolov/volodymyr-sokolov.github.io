@@ -19,16 +19,13 @@ To assess the potential damage from jamming attacks on a Bluetooth Low-Energy (B
 
 AltBeacon; beacon; BLE; Bluetooth Low-Energy; Eddystone; iBeacon; jamming; PER
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/ELIT61488.2023.10310815" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -41,7 +38,6 @@ AltBeacon; beacon; BLE; Bluetooth Low-Energy; Eddystone; iBeacon; jamming; PER
 
 First Online: 10 November 2023
 
-***
 ## Indices
 
 * ISBN: 979-8-3503-8310-2 <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-8309-6](https://isbnsearch.org/isbn/979-8-3503-8309-6) <img src="/icons/online.svg" width="16" height="16">
@@ -49,7 +45,6 @@ First Online: 10 November 2023
 * INSPEC: 24127267
 * KUBG: [46982](http://elibrary.kubg.edu.ua/id/eprint/46982/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/ELIT61488.2023.10310815&style=apa&lang=en-US)

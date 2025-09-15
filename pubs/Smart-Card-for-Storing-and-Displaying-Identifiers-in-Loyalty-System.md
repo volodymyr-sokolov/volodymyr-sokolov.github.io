@@ -18,24 +18,18 @@ Smart card for storing and displaying identifiers in loyalty system, has protect
 ## Keywords
 none
 
-## SciVal Topics
-none
-
-***
 ## Publisher
 
 European Patent Register
 
 First Online: 7 March 2013
 
-***
 ## Indices
 
 * Patent number: WO2013032413-A1
 * Local filing number: WOUA000084
 * DIIDW: 2013D33177
 
-***
 ## Cite
 
 ### APA

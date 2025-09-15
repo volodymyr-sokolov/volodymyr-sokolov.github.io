@@ -21,10 +21,6 @@ The paper presents a substantiation of the effectiveness of IEEE 802.11 wireless
 
 Access point; Availability; Dynamic channel allocation; Integrity; Spectrum analyzer
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -42,7 +38,6 @@ Access point; Availability; Dynamic channel allocation; Integrity; Spectrum anal
 
 First Online: 21 June 2020
 
-***
 ## Indices
 
 * ISSN: [2367-4512](https://portal.issn.org/resource/ISSN/2367-4512) <img src="/icons/print.svg" width="16" height="16">, [2367-4520](https://portal.issn.org/resource/ISSN/2367-4520) <img src="/icons/online.svg" width="16" height="16">
@@ -50,7 +45,6 @@ First Online: 21 June 2020
 * EID: [2-s2.0-85087214225](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85087214225)
 * KUBG: [31575](http://elibrary.kubg.edu.ua/id/eprint/31575/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-43070-2_29&style=apa&lang=en-US)

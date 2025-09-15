@@ -19,16 +19,13 @@ For this paper, a noise generator based on the ADF435x board was developed and a
 
 cyberattack; drone; jamming; noise generator; radio suppression; UAV; unmanned aerial vehicle
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/ELNANO54667.2022.9927105" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -41,7 +38,6 @@ cyberattack; drone; jamming; noise generator; radio suppression; UAV; unmanned a
 
 First Online: 4 November 2022
 
-***
 ## Indices
 
 * ISSN: [2377-6935](https://portal.issn.org/resource/ISSN/2377-6935) <img src="/icons/print.svg" width="16" height="16">, [2693-3535](https://portal.issn.org/resource/ISSN/2693-3535) <img src="/icons/online.svg" width="16" height="16">
@@ -50,8 +46,6 @@ First Online: 4 November 2022
 * INSPEC: 22237585
 * KUBG: [43154](http://elibrary.kubg.edu.ua/id/eprint/43154/)
 
-
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/ELNANO54667.2022.9927105&style=apa&lang=en-US)

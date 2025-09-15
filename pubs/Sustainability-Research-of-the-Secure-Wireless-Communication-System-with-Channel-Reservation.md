@@ -20,16 +20,13 @@ The paper presents the research of the stability of the system with a redundancy
 
 channel reservation; sustainability; wireless
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/TCSET49122.2020.235583" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -42,7 +39,6 @@ channel reservation; sustainability; wireless
 
 First Online: 7 May 2020
 
-***
 ## Indices
 
 * ISBN: 978-1-7281-5567-8 <img src="/icons/print.svg" width="16" height="16">, 978-1-7281-5566-1 <img src="/icons/online.svg" width="16" height="16">
@@ -52,7 +48,6 @@ First Online: 7 May 2020
 * URN: [urn:nbn:se:bth-20017](https://nbn-resolving.org/xml/urn:nbn:se:bth-20017)
 * KUBG: [31518](http://elibrary.kubg.edu.ua/id/eprint/31518/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/TCSET49122.2020.235583&style=apa&lang=en-US)

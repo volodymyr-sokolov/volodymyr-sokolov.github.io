@@ -8,6 +8,7 @@ Ievgeniia Kuzminykh <a href="https://orcid.org/0000-0001-6917-4234" target="_bla
 Bogdan Ghita <a href="https://orcid.org/0000-0002-1788-547X" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
+
 This article investigates the use of human brainwaves for user authentication. We used data collected from 50 volunteers and leveraged the Support Vector Machine (SVM) as a classification algorithm for the case study. User recognition patterns are taken from a combination of blinking, attention concentration, and picture recognition emotion sequences. These actions impact alpha, beta, gamma, and theta brain waves, which are measured using several electrodes. Ten different electrode placement patterns are explored, with varied positioning on the head. For each placement position, four features are examined, for a total of 40 extracts in the learning model. Features are: 1) spectral information, 2) coherence, 3) mutual correlation coefficient, and 4) mutual information. Each feature type is trained by the SVM algorithm, and the 40 weak classifier candidates. Adaptive Boosting (AdaBoost), a type of machine learning, is then used to generate a robust classifier, which is subsequently used to create a model, and select features, used to accurately identify individuals for authentication purposes. Upon verifying the proposed method using 32 legitimate users and 18 intruders, we obtained an authentication error rate (ERR) of 0.52%, and a classification rate of 99.06%.
 
 ## Links
@@ -16,13 +17,11 @@ This article investigates the use of human brainwaves for user authentication. W
 * Publisher: [Elsevier, Computers & Security](https://www.sciencedirect.com/science/article/pii/S0167404823001086)
 
 ## Keywords
+
 authentication; BCI; biometrics; brain-computer interface; brainwaves; coherence; EEG; electroencephalogram; feature extraction; machine learning
 
-## SciVal Topics
--
-
-***
 ## Publisher
+
 <table>
 <tr>
 <td>
@@ -36,7 +35,6 @@ authentication; BCI; biometrics; brain-computer interface; brainwaves; coherence
 
 First Online: 22 March 2023
 
-***
 ## Indices
 
 * ISSN: [0167-4048](https://portal.issn.org/resource/ISSN/0167-4048) <img src="/icons/print.svg" width="16" height="16">, [1872-6208](https://portal.issn.org/resource/ISSN/1872-6208) <img src="/icons/online.svg" width="16" height="16">
@@ -46,7 +44,6 @@ First Online: 22 March 2023
 * DBLP: [journals/compsec/TajDiniSKG23](https://dblp.org/rec/journals/compsec/TajDiniSKG23)
 * KUBG: [44602](http://elibrary.kubg.edu.ua/id/eprint/44602/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1016/j.cose.2023.103198&style=apa&lang=en-US)

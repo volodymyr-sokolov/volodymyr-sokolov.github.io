@@ -21,10 +21,6 @@ Advances in automated speech recognition significantly accelerated the automatio
 
 Emotion detection; Engagement analysis; Sentiment analysis; Speech emotion recognition
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -46,7 +42,6 @@ Emotion detection; Engagement analysis; Sentiment analysis; Speech emotion recog
 
 First Online: 28 April 2022
 
-***
 ## Indices
 
 * ISSN: [2367-4512](https://portal.issn.org/resource/ISSN/2367-4512) <img src="/icons/print.svg" width="16" height="16">, [2367-4520](https://portal.issn.org/resource/ISSN/2367-4520) <img src="/icons/online.svg" width="16" height="16">
@@ -55,7 +50,6 @@ First Online: 28 April 2022
 * INSPEC: 22035725
 * KUBG: [41097](http://elibrary.kubg.edu.ua/id/eprint/41097/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-031-04812-8_35&style=apa&lang=en-US)

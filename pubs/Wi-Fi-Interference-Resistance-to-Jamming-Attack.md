@@ -19,16 +19,13 @@ The paper looks at the problem of jamming attacks on wireless IEEE 802.11 networ
 
 HackRF One; interference; jamming; Portapack; SDR; software-defined radio; Wi-Fi
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/AICT61584.2023.10452687" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -41,7 +38,6 @@ HackRF One; interference; jamming; Portapack; SDR; software-defined radio; Wi-Fi
 
 First Online: 18 March 2024
 
-***
 ## Indices
 
 * ISBN: 979-8-3503-7258-8 <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-7257-1](https://isbnsearch.org/isbn/979-8-3503-7257-1) <img src="/icons/online.svg" width="16" height="16">
@@ -49,7 +45,6 @@ First Online: 18 March 2024
 * INSPEC: 24867014
 * KUBG: [48627](http://elibrary.kubg.edu.ua/id/eprint/48627/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/AICT61584.2023.10452687&style=apa&lang=en-US)

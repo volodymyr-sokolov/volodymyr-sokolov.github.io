@@ -20,16 +20,13 @@ The paper presents a brief overview of information security components criteria.
 
 accuracy; cellular; consistency; GNSS; IoT; ranking; sensor set; statistics
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/PICST54195.2021.9772181" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -42,7 +39,6 @@ accuracy; cellular; consistency; GNSS; IoT; ranking; sensor set; statistics
 
 First Online: 16 May 2022
 
-***
 ## Indices
 
 * ISBN: [978-1-6654-0683-3](https://isbnsearch.org/isbn/978-1-6654-0683-3) <img src="/icons/print.svg" width="16" height="16">, 978-1-6654-0682-6 <img src="/icons/online.svg" width="16" height="16">
@@ -50,7 +46,6 @@ First Online: 16 May 2022
 * INSPEC: 21731019
 * KUBG: [41217](http://elibrary.kubg.edu.ua/id/eprint/41217/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/PICST54195.2021.9772181&style=apa&lang=en-US)

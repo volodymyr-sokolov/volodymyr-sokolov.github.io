@@ -22,10 +22,6 @@ In the paper, we present a software pipeline for speech recognition to automate 
 
 ASR; Asynchronous graphs; Automatic Speech Recognition; Dataset creation pipeline; Natural language processing; NLP
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -47,7 +43,6 @@ ASR; Asynchronous graphs; Automatic Speech Recognition; Dataset creation pipelin
 
 First Online: 21 July 2021
 
-***
 ## Indices
 
 * ISSN: [2194-5357](https://portal.issn.org/resource/ISSN/2194-5357) <img src="/icons/print.svg" width="16" height="16">, [2194-5365](https://portal.issn.org/resource/ISSN/2194-5365) <img src="/icons/online.svg" width="16" height="16">
@@ -56,7 +51,6 @@ First Online: 21 July 2021
 * INSPEC: 23013480
 * KUBG: [36974](http://elibrary.kubg.edu.ua/id/eprint/36974/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-80472-5_3&style=apa&lang=en-US)

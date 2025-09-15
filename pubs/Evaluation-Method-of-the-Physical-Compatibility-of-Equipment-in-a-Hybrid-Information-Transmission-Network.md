@@ -11,6 +11,7 @@ Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
+
 The article considers the physical compatibility of equipment (PCE) in a hybrid network of information transmissions. The use of information technology is justified in the scheme of the protection measures applied against disturbances. A method of equipment compatibility research has been developed to describe communication channels in network nodes unambiguously. A correlation matrix of the signals of different physical nature, which are used for information transmission via media, has been developed. The corresponding examples have been given. The dependence of the hybrid network parameter values on the physical nature of the signal and the transmission medium has been revealed. It has been shown that the distribution of the telecommunication network resources into channels with signals of different physical nature in different media increases the physical compatibility of the equipment. A method for assessing the PCE in a hybrid information transmission network is proposed. The method proposed in the paper is based on the distribution of resources of a heterogeneous telecommunication network into channels with signals of different physical natures in different transmission environments, which contributes to increasing the compatibility of communication channels. A device has been developed to implement multi-channel information transmission in a hybrid network, allowing optimizing recommendations for increasing the PCE in a hybrid information transmission network.
 
 ## Links
@@ -18,13 +19,11 @@ The article considers the physical compatibility of equipment (PCE) in a hybrid 
 * Full text: <a href="http://www.jatit.org/volumes/Vol100No22/18Vol100No22.pdf">PDF</a>
 
 ## Keywords
+
 Interference; Parasitic Channel Weakening; Physical Compatibility; Spurious Emission
 
-## SciVal Topics
--
-
-***
 ## Publisher
+
 <table>
 <tr>
 <td>
@@ -35,14 +34,12 @@ Interference; Parasitic Channel Weakening; Physical Compatibility; Spurious Emis
 
 First Online: 30 November 2022
 
-***
 ## Indices
 
 * ISSN: [1992-8645](https://portal.issn.org/resource/ISSN/1992-8645) <img src="/icons/print.svg" width="16" height="16">, [1817-3195](https://portal.issn.org/resource/ISSN/1817-3195) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85143412570](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85143412570) (Q4)
 * KUBG: [43156](http://elibrary.kubg.edu.ua/id/eprint/43156/)
 
-***
 ## Cite
 
 ### APA

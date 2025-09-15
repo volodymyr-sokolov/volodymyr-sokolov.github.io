@@ -18,10 +18,6 @@ The paper examines the possibility and practical approach of combining the highe
 
 Active learning; Cybersecurity; Information and communication systems; Learning outcomes; Professional competences; Wireless security
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -43,7 +39,6 @@ Active learning; Cybersecurity; Information and communication systems; Learning 
 
 First Online: 29 March 2019
 
-***
 ## Indices
 
 * ISSN: [2194-5357](https://portal.issn.org/resource/ISSN/2194-5357) <img src="/icons/print.svg" width="16" height="16">, [2194-5365](https://portal.issn.org/resource/ISSN/2194-5365) <img src="/icons/online.svg" width="16" height="16">
@@ -52,7 +47,6 @@ First Online: 29 March 2019
 * INSPEC: 19695699
 * KUBG: [27219](http://elibrary.kubg.edu.ua/id/eprint/27219/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-16621-2_57&style=apa&lang=en-US)

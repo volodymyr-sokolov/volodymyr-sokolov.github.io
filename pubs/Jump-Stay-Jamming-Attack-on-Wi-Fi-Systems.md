@@ -19,16 +19,13 @@ The growth of wireless technologies and the proliferation of smart devices incre
 
 ADF435x; interference; jamming; SDR; software-defined radio; Wi-Fi
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/CSIT61576.2023.10324031" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -41,7 +38,6 @@ ADF435x; interference; jamming; SDR; software-defined radio; Wi-Fi
 
 First Online: 27 November 2023
 
-***
 ## Indices
 
 * ISSN: [2766-3655](https://portal.issn.org/resource/ISSN/2766-3655) <img src="/icons/print.svg" width="16" height="16">, [2766-3639](https://portal.issn.org/resource/ISSN/2766-3639) <img src="/icons/online.svg" width="16" height="16">
@@ -50,7 +46,6 @@ First Online: 27 November 2023
 * INSPEC: 24208605
 * KUBG: [47512](http://elibrary.kubg.edu.ua/id/eprint/47512/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/CSIT61576.2023.10324031&style=apa&lang=en-US)

@@ -9,6 +9,7 @@ Stavros Shiaeles <a href="https://orcid.org/0000-0003-3866-0672" target="_blank"
 Bogdan Ghita <a href="https://orcid.org/0000-0002-1788-547X" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
+
 Over the last decade, the area of electroencephalography (EEG) witnessed a progressive move from high-end large measurement devices, relying on accurate construction and providing high sensitivity, to miniature hardware, more specifically wireless wearable EEG devices. While accurate, traditional EEG systems need a complex structure and long periods of application time, unwittingly causing discomfort and distress on the users. Given their size and price, aside from their lower sensitivity and narrower spectrum band(s), wearable EEG devices may be used regularly by individuals for continuous collection of user data from non-medical environments. This allows their usage for diverse, nontraditional, non-medical applications, including cognition, BCI, education, and gaming. Given the reduced need for standardization or accuracy, the area remains a rather incipient one, mostly driven by the emergence of new devices that represent the critical link of the innovation chain. In this context, the aim of this study is to provide a holistic assessment of the consumer-grade EEG devices for cognition, BCI, education, and gaming, based on the existing products, the success of their underlying technologies, as benchmarked by the undertaken studies, and their integration with current applications across the four areas. Beyond establishing a reference point, this review also provides the critical and necessary systematic guidance for non-medical EEG research and development efforts at the start of their investigation.
 
 ## Links
@@ -18,12 +19,9 @@ Over the last decade, the area of electroencephalography (EEG) witnessed a progr
 * Full text: <a href="https://www.mdpi.com/2079-9292/9/12/2092/pdf?version=1607997748">PDF</a>
 
 ## Keywords
+
 Brain wave; Brain-controlled games; Cognition study; EEG signals; NeuroSky; OpenBCI
 
-## SciVal Topics
--
-
-***
 ## Publisher
 <table>
 <tr>
@@ -38,7 +36,6 @@ Brain wave; Brain-controlled games; Cognition study; EEG signals; NeuroSky; Open
 
 First Online: 8 December 2020
 
-***
 ## Indices
 
 * ISSN: [2079-9292](https://portal.issn.org/resource/ISSN/2079-9292) <img src="/icons/online.svg" width="16" height="16">
@@ -46,7 +43,6 @@ First Online: 8 December 2020
 * WOS: [000602048000001](https://www.webofscience.com/wos/woscc/full-record/WOS:000602048000001) (Q2)
 * KUBG: [33888](http://elibrary.kubg.edu.ua/id/eprint/33888/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.3390/electronics9122092&style=apa&lang=en-US)

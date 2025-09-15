@@ -11,6 +11,7 @@ Svitlana Shevchenko <a href="https://orcid.org/0000-0002-9736-8623" target="_bla
 Mereke Zhumadilova <a href="https://orcid.org/0000-0002-2974-0227" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
+
 In this scientific work is aimed to obtain mathematical tools for solving the problem of finding optimal investment strategies in digital cryptocurrencies (hereinafter referred to as the CX) or a CX set from the side of investor/investors were proposed. The solution was found on the basis of the application of the games theory, the theory of fuzzy sets and artificial neural networks (ANN). The developed model, which allows one to obtain an algorithm for the success forecast assessment of the investment procedure in the CX by the investor, which can be then implemented in one of the modules of the intellectual information system for the CX rates forecasting. The scientific novelty of the results is that for the first time to solve the problem of the CX market evaluation in the context of the CX investment problem, gaming approaches based on solving a bilinear quality game in fuzzy production, as well as ANN were used.
 
 ## Links
@@ -18,13 +19,11 @@ In this scientific work is aimed to obtain mathematical tools for solving the pr
 * Full text: <a href="http://www.jatit.org/volumes/Vol100No24/15Vol100No24.pdf">PDF</a>
 
 ## Keywords
+
 Digital Cryptocurrency; Forecasting; Fuzzy Logic; Games Theory; Neural Networks
 
-## SciVal Topics
--
-
-***
 ## Publisher
+
 <table>
 <tr>
 <td>
@@ -35,14 +34,12 @@ Digital Cryptocurrency; Forecasting; Fuzzy Logic; Games Theory; Neural Networks
 
 First Online: 31 December 2022
 
-***
 ## Indices
 
 * ISSN: [1992-8645](https://portal.issn.org/resource/ISSN/1992-8645) <img src="/icons/print.svg" width="16" height="16">, [1817-3195](https://portal.issn.org/resource/ISSN/1817-3195) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85145479763](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85145479763) (Q4)
 * KUBG: [43768](http://elibrary.kubg.edu.ua/id/eprint/43768/)
 
-***
 ## Cite
 
 ### APA

@@ -18,16 +18,13 @@ The paper addresses new results of research on the use of an accelerating lens t
 
 metal-lamellar cylindrical lens; phase distribution; radiation pattern
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/ICATT.2015.7136852" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -40,7 +37,6 @@ metal-lamellar cylindrical lens; phase distribution; radiation pattern
 
 First Online: 29 June 2015
 
-***
 ## Indices
 
 * ISBN: [978-1-4799-8556-2](https://isbnsearch.org/isbn/978-1-4799-8556-2) <img src="/icons/print.svg" width="16" height="16">, 978-1-4799-8557-9 <img src="/icons/online.svg" width="16" height="16">
@@ -48,7 +44,6 @@ First Online: 29 June 2015
 * WOS: [000381609800077](https://www.webofscience.com/wos/woscc/full-record/WOS:000381609800077)
 * INSPEC: 15257661
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/ICATT.2015.7136852&style=apa&lang=en-US)

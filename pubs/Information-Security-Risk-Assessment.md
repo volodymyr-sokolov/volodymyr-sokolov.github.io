@@ -8,6 +8,7 @@ Bogdan Ghita <a href="https://orcid.org/0000-0002-1788-547X" target="_blank"><im
 Taimur Bakhshi <a href="https://orcid.org/0000-0003-4750-7864" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
+
 Information security risk assessment is an important part of enterprises’ management practices that helps to identify, quantify, and prioritize risks against criteria for risk acceptance and objectives relevant to the organization. Risk management refers to a process that consists of identification, management, and elimination or reduction of the likelihood of events that can negatively affect the resources of the information system to reduce security risks that potentially have the ability to affect the information system, subject to an acceptable cost of protection means that contain a risk analysis, analysis of the “cost-effectiveness” parameter, and selection, construction, and testing of the security subsystem, as well as the study of all aspects of security.
 
 ## Links
@@ -17,13 +18,11 @@ Information security risk assessment is an important part of enterprises’ mana
 * Full text: <a href="https://www.mdpi.com/2673-8392/1/3/50/pdf?version=1627366742">PDF</a>
 
 ## Keywords
+
 information risk management; security risk assessment; risk classification; OCTAVE; CRAMM; RiskWatch; fuzzy logic
 
-## SciVal Topics
--
-
-***
 ## Publisher
+
 <table>
 <tr>
 <!--td>
@@ -37,14 +36,12 @@ information risk management; security risk assessment; risk classification; OCTA
 
 First Online: 24 July 2021
 
-***
 ## Indices
 
 * ISSN: [2673-8392](https://portal.issn.org/resource/ISSN/2673-8392) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-105014629454](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105014629454)
 * KUBG: [36990](http://elibrary.kubg.edu.ua/id/eprint/36990/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.3390/encyclopedia1030050&style=apa&lang=en-US)

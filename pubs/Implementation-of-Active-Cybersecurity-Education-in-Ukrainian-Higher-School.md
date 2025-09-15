@@ -21,10 +21,6 @@ Cybersecurity as a part of information technology requires constant professional
 
 Active learning; CDIO; Conceive-Design-Implement-Operate; cybersecurity; practice-oriented training
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -46,7 +42,6 @@ Active learning; CDIO; Conceive-Design-Implement-Operate; cybersecurity; practic
 
 First Online: 18 June 2023
 
-***
 ## Indices
 
 * ISSN: [2367-4512](https://portal.issn.org/resource/ISSN/2367-4512) <img src="/icons/print.svg" width="16" height="16">, [2367-4520](https://portal.issn.org/resource/ISSN/2367-4520) <img src="/icons/online.svg" width="16" height="16">
@@ -56,7 +51,6 @@ First Online: 18 June 2023
 * DBLP: [conf/cmis/BuriachokKZSS22](https://dblp.org/rec/conf/itest/BuriachokKZSS22)
 * KUBG: [45656](http://elibrary.kubg.edu.ua/id/eprint/45656/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-031-35467-0_32&style=apa&lang=en-US)

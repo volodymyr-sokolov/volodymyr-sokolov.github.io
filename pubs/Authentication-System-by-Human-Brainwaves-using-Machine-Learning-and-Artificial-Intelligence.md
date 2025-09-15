@@ -8,6 +8,7 @@ Mahyar TajDini <a href="https://orcid.org/0000-0001-8875-3362" target="_blank"><
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
+
 Authentication and authorization are an indispensable piece of security in computer-based frameworks. As an option for biometrics, electroencephalography (EEG) authentication (authorization) presents focal points contrasted with other biological qualities. Brainwaves are difficult to reproduce, and diverse mental undertakings produce various brainwaves. This examination researches the parts of execution and time-invariance of the EEG-based confirmation. Two arrangements of trials are done to record EEG of various people. We actualize the utilization of artificial intelligence (AI), for example, support vector machine (SVM) and deep neural network (DNN) to characterize EEG of subjects. The correlation between EEG highlights, anodes position, and a mental errand is made. We accomplish more than 90% order exactness utilizing three kinds of highlights from four electrodes. Information from prior meetings is utilized as AI preparing information and information from later meeting are grouped. We discovered that characterization precision diminishes after some time, and inactive undertakings perform in a way that is better than dynamic errands.
 
 ## Links
@@ -19,10 +20,6 @@ Authentication and authorization are an indispensable piece of security in compu
 
 Biometric authentication; Deep neural network; DNN; EEG; Electroencephalography; Human brainwave authentication; Keras Neural Network; KNN; Machine learning authentication; Support vector machine; SVM
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -44,7 +41,6 @@ Biometric authentication; Deep neural network; DNN; EEG; Electroencephalography;
 
 First Online: 21 July 2021
 
-***
 ## Indices
 
 * ISSN: [2194-5357](https://portal.issn.org/resource/ISSN/2194-5357) <img src="/icons/print.svg" width="16" height="16">, [2194-5365](https://portal.issn.org/resource/ISSN/2194-5365) <img src="/icons/online.svg" width="16" height="16">
@@ -53,7 +49,6 @@ First Online: 21 July 2021
 * INSPEC: 23013483
 * KUBG: [36975](http://elibrary.kubg.edu.ua/id/eprint/36975/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-80472-5_31&style=apa&lang=en-US)

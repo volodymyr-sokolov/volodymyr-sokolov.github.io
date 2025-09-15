@@ -19,10 +19,6 @@ This paper attempts to optimize the phonetic search processes for fuzzy matching
 
 Deduplication; Drug; Fuzzy coincidence; International nonproprietary name; Medication; Medicine; Metaphone; Phonetic algorithm; Phonetic rule; Toponym; Ukrainian last name; Ukrainian surname
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -44,7 +40,6 @@ Deduplication; Drug; Fuzzy coincidence; International nonproprietary name; Medic
 
 First Online: 6 August 2020
 
-***
 ## Indices
 
 * ISSN: [2194-5357](https://portal.issn.org/resource/ISSN/2194-5357) <img src="/icons/print.svg" width="16" height="16">, [2194-5365](https://portal.issn.org/resource/ISSN/2194-5365) <img src="/icons/online.svg" width="16" height="16">
@@ -53,7 +48,6 @@ First Online: 6 August 2020
 * INSPEC: 19893238
 * KUBG: [31677](http://elibrary.kubg.edu.ua/id/eprint/31677/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-55506-1_47&style=apa&lang=en-US)

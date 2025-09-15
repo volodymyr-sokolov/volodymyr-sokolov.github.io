@@ -19,16 +19,13 @@ The paper introduces a new scheme of dynamic interference free channel allocatio
 
 access point; dynamic channel allocation; interference reducing; spectrum analyzer
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/INFOCOMMST.2017.8246463" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -41,7 +38,6 @@ access point; dynamic channel allocation; interference reducing; spectrum analyz
 
 First Online: 4 January 2018
 
-***
 ## Indices
 
 * ISBN: 978-1-5386-0984-2 <img src="/icons/print.svg" width="16" height="16">, 978-1-5386-0983-5 <img src="/icons/online.svg" width="16" height="16">
@@ -50,7 +46,6 @@ First Online: 4 January 2018
 * INSPEC: 17484933
 * URN: [urn:nbn:se:bth-15950](https://nbn-resolving.org/xml/urn:nbn:se:bth-15950)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/INFOCOMMST.2017.8246463&style=apa&lang=en-US)

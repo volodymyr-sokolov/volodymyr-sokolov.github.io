@@ -20,10 +20,6 @@ In the dynamic digital landscape, the General Data Protection Regulation (GDPR) 
 
 AES-256; cryptographical application; encryption; GDPR; post-quantum cryptography
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <table>
@@ -43,7 +39,6 @@ AES-256; cryptographical application; encryption; GDPR; post-quantum cryptograph
 
 First Online: 12 November 2024
 
-***
 ## Indices
 
 * ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
@@ -52,7 +47,6 @@ First Online: 12 November 2024
 * DBLP: [conf/cqpc/IavichKGKS24](https://dblp.org/rec/conf/cqpc/IavichKGKS24)
 * KUBG: [50189](http://elibrary.kubg.edu.ua/id/eprint/50189/)
 
-***
 ## Cite
 
 ### APA

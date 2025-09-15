@@ -20,10 +20,6 @@ Artificial Intelligence (AI) and Distributed Ledger Technology (DLT) together ad
 
 AI; artificial intelligence; blockchain; crypto-economy; cryptography; decentralization; decentralized artificial intelligence; oracle; smart contracts; web3
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <table>
@@ -43,7 +39,6 @@ AI; artificial intelligence; blockchain; crypto-economy; cryptography; decentral
 
 First Online: 12 November 2024
 
-***
 ## Indices
 
 * ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
@@ -52,7 +47,6 @@ First Online: 12 November 2024
 * DBLP: [conf/cqpc/VirovetsOZSS24](https://dblp.org/rec/conf/cqpc/VirovetsOZSS24)
 * KUBG: [50186](http://elibrary.kubg.edu.ua/id/eprint/50186/)
 
-***
 ## Cite
 
 ### APA

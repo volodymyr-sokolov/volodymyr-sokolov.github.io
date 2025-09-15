@@ -19,10 +19,6 @@ Social engineering penetration testing is a complex but necessary tool to test t
 
 High school; Higher education institution; Penetration testing; Phishing; Sensitive information; Social engineering
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -44,7 +40,6 @@ High school; Higher education institution; Penetration testing; Phishing; Sensit
 
 First Online: 19 August 2023
 
-***
 ## Indices
 
 * ISSN: [2367-4512](https://portal.issn.org/resource/ISSN/2367-4512) <img src="/icons/print.svg" width="16" height="16">, [2367-4520](https://portal.issn.org/resource/ISSN/2367-4520) <img src="/icons/online.svg" width="16" height="16">
@@ -52,7 +47,6 @@ First Online: 19 August 2023
 * EID: [2-s2.0-85169039263](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85169039263) (Q3)
 * KUBG: [45924](http://elibrary.kubg.edu.ua/id/eprint/45656/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-031-36118-0_96&style=apa&lang=en-US)

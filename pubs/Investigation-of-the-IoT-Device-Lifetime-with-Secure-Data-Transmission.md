@@ -20,10 +20,6 @@ This paper represents the approach for estimation of the lifetime of the IoT end
 
 Cryptographic algorithms; Energy efficiency; IoT; Lifetime; Power consumption
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -45,7 +41,6 @@ Cryptographic algorithms; Energy efficiency; IoT; Lifetime; Power consumption
 
 First Online: 12 September 2019
 
-***
 ## Indices
 
 * ISSN: [0302-9743](https://portal.issn.org/resource/ISSN/0302-9743) <img src="/icons/print.svg" width="16" height="16">, [1611-3349](https://portal.issn.org/resource/ISSN/1611-3349) <img src="/icons/online.svg" width="16" height="16">
@@ -57,7 +52,6 @@ First Online: 12 September 2019
 * DBLP: [conf/new2an/KuzminykhCYS19](https://dblp.org/rec/html/conf/new2an/KuzminykhCYS19)
 * KUBG: [27984](http://elibrary.kubg.edu.ua/id/eprint/27984/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-30859-9_2&style=apa&lang=en-US)

@@ -19,10 +19,6 @@ The effectiveness of phishing attacks is being analyzed by many researchers. At 
 
 Attack; Fishing; Personal information; Sensitive information; Social engineering
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -44,7 +40,6 @@ Attack; Fishing; Personal information; Sensitive information; Social engineering
 
 First Online: 6 August 2020
 
-***
 ## Indices
 
 * ISSN: [2194-5357](https://portal.issn.org/resource/ISSN/2194-5357) <img src="/icons/print.svg" width="16" height="16">, [2194-5365](https://portal.issn.org/resource/ISSN/2194-5365) <img src="/icons/online.svg" width="16" height="16">
@@ -53,7 +48,6 @@ First Online: 6 August 2020
 * INSPEC: 19893244
 * KUBG: [31678](http://elibrary.kubg.edu.ua/id/eprint/31678/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-55506-1_59&style=apa&lang=en-US)

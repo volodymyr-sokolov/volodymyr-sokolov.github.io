@@ -19,16 +19,13 @@ This paper discusses the issues of hiding geolocation when sending messages on s
 
 geolocation; location hiding; SIP; spoofing
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/UkrMiCo52950.2021.9716700" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -41,7 +38,6 @@ geolocation; location hiding; SIP; spoofing
 
 First Online: 24 February 2022
 
-***
 ## Indices
 
 * ISBN: 978-1-6654-2653-4 <img src="/icons/print.svg" width="16" height="16">, [978-1-6654-2652-7](https://isbnsearch.org/isbn/978-1-6654-2652-7) <img src="/icons/online.svg" width="16" height="16">
@@ -49,7 +45,6 @@ First Online: 24 February 2022
 * INSPEC: 21706866
 * KUBG: [40895](http://elibrary.kubg.edu.ua/id/eprint/40895/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/UkrMiCo52950.2021.9716700&style=apa&lang=en-US)

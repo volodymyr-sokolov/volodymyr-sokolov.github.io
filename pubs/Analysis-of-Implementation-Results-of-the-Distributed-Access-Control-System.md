@@ -21,16 +21,13 @@ This paper attempts to create software and hardware complex that can work autono
 
 Attendee tracking; Distributed access control system; Radio frequency identification
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/PICST47496.2019.9061376" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -43,7 +40,6 @@ Attendee tracking; Distributed access control system; Radio frequency identifica
 
 First Online: 9 April 2020
 
-***
 ## Indices
 
 * ISBN: [978-1-7281-4182-4](https://isbnsearch.org/isbn/978-1-7281-4182-4) <img src="/icons/print.svg" width="16" height="16">, [978-1-7281-4184-8](https://isbnsearch.org/isbn/978-1-7281-4184-8) <img src="/icons/online.svg" width="16" height="16">
@@ -51,7 +47,6 @@ First Online: 9 April 2020
 * INSPEC: 19513541
 * KUBG: [31519](http://elibrary.kubg.edu.ua/id/eprint/31519/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/PICST47496.2019.9061376&style=apa&lang=en-US)

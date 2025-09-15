@@ -19,16 +19,13 @@ The increase in the number of Wi-Fi hotspots is influenced by a combination of t
 
 access point; AP; Internet of Things; IoT; Wi-Fi
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/AICT61584.2023.10452421" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -41,7 +38,6 @@ access point; AP; Internet of Things; IoT; Wi-Fi
 
 First Online: 18 March 2024
 
-***
 ## Indices
 
 * ISBN: 979-8-3503-7258-8 <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-7257-1](https://isbnsearch.org/isbn/979-8-3503-7257-1) <img src="/icons/online.svg" width="16" height="16">
@@ -49,7 +45,6 @@ First Online: 18 March 2024
 * INSPEC: 24867017
 * KUBG: [48628](http://elibrary.kubg.edu.ua/id/eprint/48628/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/AICT61584.2023.10452421&style=apa&lang=en-US)

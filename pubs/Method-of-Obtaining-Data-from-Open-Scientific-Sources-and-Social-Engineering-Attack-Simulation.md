@@ -19,10 +19,6 @@ Anti-spam software is constantly being improved. User behavior algorithms—the 
 
 Deduplication; Email validation; ORCID; Phishing; Social engineering; Spam filter
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/springer.svg" height="50">
@@ -44,7 +40,6 @@ Deduplication; Email validation; ORCID; Phishing; Social engineering; Spam filte
 
 First Online: 29 April 2022
 
-***
 ## Indices
 
 * ISSN: [2367-4512](https://portal.issn.org/resource/ISSN/2367-4512) <img src="/icons/print.svg" width="16" height="16">, [2367-4520](https://portal.issn.org/resource/ISSN/2367-4520) <img src="/icons/online.svg" width="16" height="16">
@@ -53,7 +48,6 @@ First Online: 29 April 2022
 * INSPEC: 22035789
 * KUBG: [41098](http://elibrary.kubg.edu.ua/id/eprint/41098/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-031-04809-8_53&style=apa&lang=en-US)

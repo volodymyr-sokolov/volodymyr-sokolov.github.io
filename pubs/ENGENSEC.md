@@ -16,18 +16,15 @@ et al.
 * Publisher: [European Union](https://engensec.eu/about-the-project/) 
 * Full text: <a href="/pdf/058.pdf">PDF</a>
 
-***
 ## Publisher
 
 1 December 2013 — 30 November 2017 <img src="/icons/location-pin.svg" width="16" height="16"> Blekinge Institute of Technology, Karlskrona, Sweden
 
-***
 ## Indices
 
 * Project Number: 544455-TEMPUS-1-2013-1-SE-TEMPUS-JPCR
 * KUBG: [27109](http://elibrary.kubg.edu.ua/id/eprint/27109/)
 
-***
 ## Cite
 
 ### APA

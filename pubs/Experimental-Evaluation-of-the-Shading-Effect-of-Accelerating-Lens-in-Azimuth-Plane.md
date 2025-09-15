@@ -18,16 +18,13 @@ When using an accelerating metal-lamellar cylindrical lens to increase the signa
 
 Access point; Field distribution; Last mile; Metal-lamellar cylindrical lens; Signal-To-noise ratio
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/ICATT.2017.7972671" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -40,7 +37,6 @@ Access point; Field distribution; Last mile; Metal-lamellar cylindrical lens; Si
 
 First Online: 11 July 2017
 
-***
 ## Indices
 
 * ISBN: 978-1-5386-2922-2 <img src="/icons/print.svg" width="16" height="16">, 978-1-5386-2921-5 <img src="/icons/online.svg" width="16" height="16">
@@ -48,7 +44,6 @@ First Online: 11 July 2017
 * WOS: [000426507800086](https://www.webofscience.com/wos/woscc/full-record/WOS:000426507800086)
 * INSPEC: 17014667
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/ICATT.2017.7972671&style=apa&lang=en-US)

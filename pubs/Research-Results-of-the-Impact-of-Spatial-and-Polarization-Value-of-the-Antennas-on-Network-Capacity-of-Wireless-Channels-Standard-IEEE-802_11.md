@@ -18,16 +18,13 @@ We consider the experimental results and calculations of the impact of directed 
 
 metal-lamellar cylindrical lens; Network capacity; polarization
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/ICATT.2013.6650715" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -40,14 +37,12 @@ metal-lamellar cylindrical lens; Network capacity; polarization
 
 First Online: 31 October 2013
 
-***
 ## Indices
 
 * ISBN: 978-1-4799-2896-5 <img src="/icons/print.svg" width="16" height="16">, [978-1-4799-2897-2](https://isbnsearch.org/isbn/978-1-4799-2897-2) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-84898619015](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-84898619015)
 * INSPEC: 13880356
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/ICATT.2013.6650715&style=apa&lang=en-US)

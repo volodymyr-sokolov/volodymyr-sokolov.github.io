@@ -20,10 +20,6 @@ Security audits of information systems, including systems containing personal da
 
 Information security; personal data; risk assessment; fuzzy logic; model; decision support system; security audit; risk management
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <table>
@@ -40,7 +36,6 @@ Information security; personal data; risk assessment; fuzzy logic; model; decisi
 
 First Online: 21 February 2025
 
-***
 ## Indices
 
 * ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
@@ -49,7 +44,6 @@ First Online: 21 February 2025
 * DBLP: [conf/cmigin/KostiukSSHK24](https://dblp.org/rec/conf/cmigin/KostiukSSHK24.html)
 * KUBG: [51241](http://elibrary.kubg.edu.ua/id/eprint/51241/)
 
-***
 ## Cite
 
 ### APA

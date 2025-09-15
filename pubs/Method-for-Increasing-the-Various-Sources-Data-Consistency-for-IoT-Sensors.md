@@ -21,16 +21,13 @@ The paper represents importance of performing data consistency operations with d
 
 accuracy; cellular; consistency; GNSS; IoT; ranking; sensor set; statistics
 
-## SciVal Topics
--
-
-***
 ## Publisher
-
-<img src="/icons/ieee.svg" height="50">
 
 <table>
 <tr>
+<td>
+<img src="/icons/ieee.svg" height="50">
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/PICST57299.2022.10238518" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -43,7 +40,6 @@ accuracy; cellular; consistency; GNSS; IoT; ranking; sensor set; statistics
 
 First Online: 6 September 2023
 
-***
 ## Indices
 
 * ISBN: 979-8-3503-9892-2 <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-9891-5](https://isbnsearch.org/isbn/979-8-3503-9891-5) <img src="/icons/online.svg" width="16" height="16">
@@ -51,7 +47,6 @@ First Online: 6 September 2023
 * INSPEC: 23693600
 * KUBG: [46307](http://elibrary.kubg.edu.ua/id/eprint/46307/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/PICST57299.2022.10238518&style=apa&lang=en-US)
