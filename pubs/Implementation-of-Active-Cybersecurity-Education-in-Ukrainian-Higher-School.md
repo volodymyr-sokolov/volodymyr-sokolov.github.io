@@ -6,7 +6,7 @@ Volodymyr Buriachok <a href="https://orcid.org/0000-0002-4055-1494" target="_bla
 Nataliia Korshun <a href="https://orcid.org/0000-0003-2908-970X" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Oleksii Zhyltsov <a href="https://orcid.org/0000-0002-7253-5990" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 <a href="https://github.com/volodymyr-sokolov/publications/wiki/Volodymyr-Sokolov,-Ph.D." target="_blank">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-<a href="https://github.com/volodymyr-sokolov/publications/wiki/Pavlo-Skladannyi,-Ph.D." target="_blank">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
+Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
 
