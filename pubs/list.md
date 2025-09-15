@@ -40,7 +40,7 @@
 
 2020 [Experimental Evaluation of Phishing Attack on High School Students](Experimental-Evaluation-of-Phishing-Attack-on-High-School-Students.md)
 
-2020 [Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms based on Metaphone Phonetic Algorithm](Deduplication-Method-for-Ukrainian-Last-Names,-Medicinal-Names-and-Toponyms-based-on-Metaphone-Phonetic-Algorithm.md)
+2020 [Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms based on Metaphone Phonetic Algorithm](Deduplication-Method-for-Ukrainian-Last-Names-Medicinal-Names-and-Toponyms-based-on-Metaphone-Phonetic-Algorithm.md)
 
 2020 [Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range](Development-and-Operation-Analysis-of-Spectrum-Monitoring-Subsystem-2_4-2_5-GHz-Range.md)
 
