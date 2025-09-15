@@ -43,6 +43,7 @@ First Online: 4 November 2022
 * ISSN: [2377-6935](https://portal.issn.org/resource/ISSN/2377-6935) <img src="/icons/print.svg" width="16" height="16">, [2693-3535](https://portal.issn.org/resource/ISSN/2693-3535) <img src="/icons/online.svg" width="16" height="16">
 * ISBN: [978-1-6654-6923-4](https://isbnsearch.org/isbn/978-1-6654-6923-4) <img src="/icons/print.svg" width="16" height="16">, [978-1-6654-6922-7](https://isbnsearch.org/isbn/978-1-6654-6922-7) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85142604882](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85142604882)
+* WOS: [001438839200100](https://www.webofscience.com/wos/woscc/full-record/WOS:001438839200100)
 * INSPEC: 22237585
 * KUBG: [43154](http://elibrary.kubg.edu.ua/id/eprint/43154/)
 
