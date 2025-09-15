@@ -36,8 +36,8 @@ et al.
 
 ### IEEE
 
-`M. Yevdokymenko and V. Sokolov, “Overview of the Course in 'Wireless and Mobile Security',” Educating the Next Generation MSc in Cyber Security, pp. 104–119, 2019.`</small>
+<small>`M. Yevdokymenko and V. Sokolov, “Overview of the Course in 'Wireless and Mobile Security',” Educating the Next Generation MSc in Cyber Security, pp. 104–119, 2019.`</small>
 
 ### CEUR-WS
 
-`M. Yevdokymenko, V. Sokolov, Overview of the Course in 'Wireless and Mobile Security', in: Educating the Next Generation MSc in Cyber Security (2019) 104–119.`</small>
+<small>`M. Yevdokymenko, V. Sokolov, Overview of the Course in 'Wireless and Mobile Security', in: Educating the Next Generation MSc in Cyber Security (2019) 104–119.`</small>
