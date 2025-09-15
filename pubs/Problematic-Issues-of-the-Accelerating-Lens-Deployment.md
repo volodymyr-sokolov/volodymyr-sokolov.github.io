@@ -10,9 +10,6 @@ Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"
 
 The paper is a continuation of the earlier studies of the characteristics of accelerating metal-plate lenses (AMPL) carried out by the authors, intended for use in antenna devices of information systems. Compared to commonly used retardation lenses, they have such advantages as lightness, low weight, and manufacturing availability. A brief analysis of the results obtained earlier is presented. In the example of the frequency parameters of the drone control system, the problematic issues of expanding the range properties of the AMPL are considered. To solve this problem, it is proposed to use: (1) a combined lens consisting of alternating and located one above the other “floors” of lenses with parameters corresponding to two operating frequencies; (2) longitudinally corrugated lens plates. A variant of the method for calculating the distortions of phase distributions in the aperture of such lenses is presented. The options for controlling the maximum radiation pattern orientation are considered.
 
- <img src="/icons/ieee_small.svg" width="16" height="16"> | [](https://doi.org/10.1109/UkrMW58013.2022.10037124) <img src="/icons/doi.svg" width="16" height="16">
-
-
 ## Links
 
 * DOI: [10.1109/UkrMW58013.2022.10037124](https://doi.org/10.1109/UkrMW58013.2022.10037124) 
