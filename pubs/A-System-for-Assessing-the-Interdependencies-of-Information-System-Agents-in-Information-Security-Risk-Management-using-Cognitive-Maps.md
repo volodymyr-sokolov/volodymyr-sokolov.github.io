@@ -27,8 +27,6 @@ Fuzzy cognitive maps; information security risk management; SADT
 ***
 ## Publisher
 
-<img src="/icons/ieee.svg" height="50">
-
 <table>
 <tr>
 <td>

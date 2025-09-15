@@ -26,8 +26,6 @@ Information security; personal data; risk assessment; fuzzy logic; model; decisi
 ***
 ## Publisher
 
-<img src="/icons/ieee.svg" height="50">
-
 <table>
 <tr>
 <td>
