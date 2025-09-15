@@ -1,4 +1,4 @@
-# Articles
+## Articles
 
 2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md)
 
@@ -16,11 +16,11 @@
 
 2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md)
 
-# Patent
+## Patent
 
 2013 [Smart Card for Storing and Displaying Identifiers in Loyalty System](Smart-Card-for-Storing-and-Displaying-Identifiers-in-Loyalty-System.md)
 
-# Book Chapters (Springer.md)
+## Book Chapters (Springer)
 
 2025 [Evaluation of State-of-the-Art Machine Learning Smart Contract Vulnerability Detection Method](Evaluation-of-State-of-the-Art-Machine-Learning-Smart-Contract-Vulnerability-Detection-Method.md)
 
@@ -42,15 +42,15 @@
 
 2020 [Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms based on Metaphone Phonetic Algorithm](Deduplication-Method-for-Ukrainian-Last-Names,-Medicinal-Names,-and-Toponyms-based-on-Metaphone-Phonetic-Algorithm.md)
 
-2020 [Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range](Development-and-Operation-Analysis-of-Spectrum-Monitoring-Subsystem-2.4–2.5-GHz-Range.md)
+2020 [Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range](Development-and-Operation-Analysis-of-Spectrum-Monitoring-Subsystem-2_4-2_5-GHz-Range.md)
 
 2019 [Investigation of the IoT Device Lifetime with Secure Data Transmission](Investigation-of-the-IoT-Device-Lifetime-with-Secure-Data-Transmission.md)
 
-2019 [Implementation of Active Learning in the Master’s Program on Cybersecurity](Implementation-of-Active-Learning-in-the-Master’s-Program-on-Cybersecurity.md)
+2019 [Implementation of Active Learning in the Master’s Program on Cybersecurity](Implementation-of-Active-Learning-in-the-Masters-Program-on-Cybersecurity.md)
 
-# Conference Papers
+## Conference Papers
 
-## IEEE
+### IEEE
 
 2024 [Determining the Zone of Successful Interaction in RFID Technologies](Determining-the-Zone-of-Successful-Interaction-in-RFID-Technologies.md)
 
@@ -98,11 +98,11 @@
 
 2017 [Experimental Evaluation of the Shading Effect of Accelerating Lens in Azimuth Plane](Experimental-Evaluation-of-the-Shading-Effect-of-Accelerating-Lens-in-Azimuth-Plane.md)
 
-2015 [Modified Accelerating Lens as a Means of Increasing the Throughput, Range and Noise Immunity of IEEE 802.11 Systems](Modified-Accelerating-Lens-as-a-Means-of-Increasing-the-Throughput,-Range-and-Noise-Immunity-of-IEEE-802.11-Systems.md)
+2015 [Modified Accelerating Lens as a Means of Increasing the Throughput, Range and Noise Immunity of IEEE 802.11 Systems](Modified-Accelerating-Lens-as-a-Means-of-Increasing-the-Throughput,-Range-and-Noise-Immunity-of-IEEE-802_11-Systems.md)
 
-2013 [Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11](Research-Results-of-the-Impact-of-Spatial-and-Polarization-Value-of-the-Antennas-on-Network-Capacity-of-Wireless-Channels-Standard-IEEE-802.11.md)
+2013 [Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11](Research-Results-of-the-Impact-of-Spatial-and-Polarization-Value-of-the-Antennas-on-Network-Capacity-of-Wireless-Channels-Standard-IEEE-802_11.md)
 
-## CEUR-WS
+### CEUR-WS
 
 2025 [A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps](A-System-for-Assessing-the-Interdependencies-of-Information-System-Agents-in-Information-Security-Risk-Management-using-Cognitive-Maps.md)
 
@@ -178,6 +178,6 @@
 
 2019 [Security Rating Metrics for Distributed Wireless Systems](Security-Rating-Metrics-for-Distributed-Wireless-Systems.md)
 
-# Grant
+## Grant
 
-2017 [ENGENSEC](ENGENSEC.md)
+2017 [ENGENSEC](ENGENSEC)
