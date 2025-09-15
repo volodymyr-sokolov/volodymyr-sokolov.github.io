@@ -102,6 +102,14 @@
 
 ## Workshop Papers (CEUR-WS)
 
+2025 [Determining the Error Distribution of BLE Beacons at Antenna Near and Far Fields](Determining-the-Error-Distribution-of-BLE-Beacons-at-Antenna-Near-and-Far-Fields.md)
+
+2025 [Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files](Application-of-Statistical-and-Neural-Network-Algorithms-in-Steganographic-Synthesis-and-Analysis.md)
+
+2025 [Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence](Models-and-Technologies-of-Cognitive-Agents-for-Decision-making-with-Integration-of-Artificial-Intelligence.md)
+
+2025 [Effectiveness of Information Security Control using Audit Logs](Effectiveness-of-Information-Security-Control-using-Audit-Logs.md)
+
 2025 [A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps](A-System-for-Assessing-the-Interdependencies-of-Information-System-Agents-in-Information-Security-Risk-Management-using-Cognitive-Maps.md)
 
 2025 [Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System](Models-and-Algorithms-for-Analyzing-Information-Risks-during-the-Security-Audit-of-Personal-Data-Information-System.md)
