@@ -90,7 +90,7 @@
 
 2020 [Investigation of Availability of Wireless Access Points based on Embedded Systems](Investigation-of-Availability-of-Wireless-Access-Points-based-on-Embedded-Systems.md)
 
-2019 [Monitoring Subsystem for Wireless Systems Based on Miniature Spectrum Analyzers](Monitoring-Subsystem-for-Wireless-Systems-Based-on-Miniature-Spectrum-Analyzers.md)
+2019 [Monitoring Subsystem for Wireless Systems based on Miniature Spectrum Analyzers](Monitoring-Subsystem-for-Wireless-Systems-based-on-Miniature-Spectrum-Analyzers.md)
 
 2018 [Scheme for Dynamic Channel Allocation with Interference Reduction in Wireless Sensor Network](Scheme-for-Dynamic-Channel-Allocation-with-Interference-Reduction-in-Wireless-Sensor-Network.md)
 
