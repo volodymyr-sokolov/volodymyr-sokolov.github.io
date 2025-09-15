@@ -48,9 +48,7 @@
 
 2019 [Implementation of Active Learning in the Master’s Program on Cybersecurity](Implementation-of-Active-Learning-in-the-Masters-Program-on-Cybersecurity.md)
 
-## Conference Papers
-
-### IEEE
+## Conference Papers (IEEE)
 
 2024 [Determining the Zone of Successful Interaction in RFID Technologies](Determining-the-Zone-of-Successful-Interaction-in-RFID-Technologies.md)
 
@@ -102,7 +100,7 @@
 
 2013 [Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11](Research-Results-of-the-Impact-of-Spatial-and-Polarization-Value-of-the-Antennas-on-Network-Capacity-of-Wireless-Channels-Standard-IEEE-802_11.md)
 
-### CEUR-WS
+## Workshop Papers (CEUR-WS)
 
 2025 [A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps](A-System-for-Assessing-the-Interdependencies-of-Information-System-Agents-in-Information-Security-Risk-Management-using-Cognitive-Maps.md)
 
