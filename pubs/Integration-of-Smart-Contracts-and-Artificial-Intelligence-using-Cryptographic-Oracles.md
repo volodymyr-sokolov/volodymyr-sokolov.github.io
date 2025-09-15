@@ -26,8 +26,6 @@ AI; artificial intelligence; blockchain; crypto-economy; cryptography; decentral
 ***
 ## Publisher
 
-<img src="/icons/ieee.svg" height="50">
-
 <table>
 <tr>
 <td>
