@@ -19,10 +19,6 @@ The growth in the number of wireless devices, particularly in the context of the
 
 interference; Internet of Things; jamming; SDR; software-defined radio; ZigBee
 
-## SciVal Topics
--
-
-***
 ## Publisher
 
 <img src="/icons/ieee.svg" height="50">
@@ -41,7 +37,6 @@ interference; Internet of Things; jamming; SDR; software-defined radio; ZigBee
 
 First Online: 5 January 2024
 
-***
 ## Indices
 
 * ISBN: 979-8-3503-4849-1 <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-4848-4](https://isbnsearch.org/isbn/979-8-3503-4848-4) <img src="/icons/online.svg" width="16" height="16">
@@ -49,7 +44,6 @@ First Online: 5 January 2024
 * INSPEC: 24400993
 * KUBG: [48321](http://elibrary.kubg.edu.ua/id/eprint/48321/)
 
-***
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.1109/UkrMiCo61577.2023.10380360&style=apa&lang=en-US)
