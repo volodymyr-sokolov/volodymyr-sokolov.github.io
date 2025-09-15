@@ -31,7 +31,7 @@ Cognitive agents; artificial intelligence; decision-making; neuro-fuzzy networks
 
 [2025 Modern Data Science Technologies Doctoral Consortium (MoDaST)](https://ceur-ws.org/Vol-4005/)
 
-15 June 2025 <img src="/icons/location-pin.svg" width="16" height="16"> Kyiv/Lviv, Ukraine
+15 June 2025 <img src="/icons/location-pin.svg" width="16" height="16"> Lviv, Ukraine
 
 First Online: 1 August 2025
 
