@@ -1,3 +1,8 @@
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Modeling of 3- and 5-Isogenies of Supersingular Edwards Curves
