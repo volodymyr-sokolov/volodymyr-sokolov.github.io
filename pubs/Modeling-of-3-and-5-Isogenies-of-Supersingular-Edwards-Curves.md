@@ -2,9 +2,9 @@
 
 # Modeling of 3- and 5-Isogenies of Supersingular Edwards Curves
 
-Anatoly Bessalov <a href="https://orcid.org/0000-0002-6967-5001" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-<a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>
+Anatoly Bessalov <a href="https://orcid.org/0000-0002-6967-5001" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
 
@@ -30,13 +30,13 @@ Complete Edwards Curve; Curve Order; Degree Of Isogeny; Generalized Edwards Curv
 
 [2020 2nd International Workshop on Modern Machine Learning Technologies and Data Science (MoMLeT+DS)](https://ceur-ws.org/Vol-2386/)
 
-2–3 June 2020 <img src="/volodymyr-sokolov/publications/blob/main/icons/location-pin.svg" width="16" height="16"> Lviv-Shatsk, Ukraine
+2–3 June 2020 <img src="/icons/location-pin.svg" width="16" height="16"> Lviv-Shatsk, Ukraine
 
 First Online: 3 July 2020
 
 ## Indices
 
-* ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/volodymyr-sokolov/publications/blob/main/icons/online.svg" width="16" height="16">
+* ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85088879005](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85088879005)
 * WOS: [000664104800003](https://www.webofscience.com/wos/woscc/full-record/WOS:000664104800003)
 * URN: [urn:nbn:de:0074-2631-6](https://nbn-resolving.org/xml/urn:nbn:de:0074-2631-6)
