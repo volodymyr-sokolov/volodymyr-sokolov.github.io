@@ -2,11 +2,11 @@
 
 # Decentralized Access Demarcation System Construction in Situational Center Network
 
-Viktor Grechaninov <a href="https://orcid.org/0000-0001-6268-3204" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-Hennadii Hulak <a href="https://orcid.org/0000-0001-9131-9233" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-Evgen Hulak <a href="https://orcid.org/0000-0003-4984-686X" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-<a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>
+Viktor Grechaninov <a href="https://orcid.org/0000-0001-6268-3204" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+Hennadii Hulak <a href="https://orcid.org/0000-0001-9131-9233" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+Evgen Hulak <a href="https://orcid.org/0000-0003-4984-686X" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
 
@@ -35,13 +35,13 @@ access control system; block cipher; cyber defense; Information security policy;
 
 [2021 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)](http://ceur-ws.org/Vol-3188/)
 
-26 October 2021 <img src="/volodymyr-sokolov/publications/blob/main/icons/location-pin.svg" width="16" height="16"> Kyiv, Ukraine
+26 October 2021 <img src="/icons/location-pin.svg" width="16" height="16"> Kyiv, Ukraine
 
 First Online: 16 August 2022
 
 ## Indices
 
-* ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/volodymyr-sokolov/publications/blob/main/icons/online.svg" width="16" height="16">
+* ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85137139416](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85137139416)
 * URN: [urn:nbn:de:0074-3188-5](https://nbn-resolving.org/xml/urn:nbn:de:0074-3188-5)
 * DBLP: [conf/cpits/GrechaninovHHSS21](https://dblp.org/rec/conf/cpits/GrechaninovHHSS21)
