@@ -16,7 +16,7 @@ When compiling databases, for example to meet the needs of healthcare establishm
 
 * DOI: [10.15587/1729-4061.2019.181943](https://doi.org/10.15587/1729-4061.2019.181943) 
 * Publisher: [Eastern-European Journal of Enterprise Technologies](https://journals.uran.ua/eejet/article/view/181943) 
-* Full text: <a href="https://journals.uran.ua/eejet/article/download/181943/182273/405034">PDF</a>
+* Full text: [PDF](https://journals.uran.ua/eejet/article/download/181943/182273/405034)
 
 ## Keywords
 
