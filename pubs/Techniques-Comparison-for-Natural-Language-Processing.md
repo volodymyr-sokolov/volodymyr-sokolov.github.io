@@ -2,10 +2,10 @@
 
 # Techniques Comparison for Natural Language Processing
 
-Olena Iosifova <a href="https://orcid.org/0000-0001-6507-0761" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-Ievgen Iosifov <a href="https://orcid.org/0000-0001-6203-9945" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-Oleksandr Rolik <a href="https://orcid.org/0000-0001-8829-4645" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>,
-<a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/volodymyr-sokolov/publications/blob/main/icons/orcid.svg" width="16" height="16"></a>
+Olena Iosifova <a href="https://orcid.org/0000-0001-6507-0761" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+Ievgen Iosifov <a href="https://orcid.org/0000-0001-6203-9945" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+Oleksandr Rolik <a href="https://orcid.org/0000-0001-8829-4645" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
 
@@ -31,13 +31,13 @@ Attention; Decoder; Deep Learning; Embedding; Encoder; Gated Recurrent Unit; GRU
 
 [2020 2nd International Workshop on Modern Machine Learning Technologies and Data Science (MoMLeT+DS)](https://ceur-ws.org/Vol-2386/)
 
-2–3 June 2020 <img src="/volodymyr-sokolov/publications/blob/main/icons/location-pin.svg" width="16" height="16"> Lviv-Shatsk, Ukraine
+2–3 June 2020 <img src="/icons/location-pin.svg" width="16" height="16"> Lviv-Shatsk, Ukraine
 
 First Online: 3 July 2020
 
 ## Indices
 
-* ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/volodymyr-sokolov/publications/blob/main/icons/online.svg" width="16" height="16">
+* ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85088881294](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85088881294)
 * WOS: [000664104800005](https://www.webofscience.com/wos/woscc/full-record/WOS:000664104800005)
 * URN: [urn:nbn:de:0074-2631-6](https://nbn-resolving.org/xml/urn:nbn:de:0074-2631-6)
