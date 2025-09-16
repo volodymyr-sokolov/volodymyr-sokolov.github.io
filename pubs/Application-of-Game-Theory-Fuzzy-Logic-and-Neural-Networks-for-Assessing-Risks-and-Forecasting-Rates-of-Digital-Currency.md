@@ -16,7 +16,7 @@ In this scientific work is aimed to obtain mathematical tools for solving the pr
 
 ## Links
 
-* Full text: <a href="http://www.jatit.org/volumes/Vol100No24/15Vol100No24.pdf">PDF</a>
+* Full text: [PDF](http://www.jatit.org/volumes/Vol100No24/15Vol100No24.pdf)
 
 ## Keywords
 
