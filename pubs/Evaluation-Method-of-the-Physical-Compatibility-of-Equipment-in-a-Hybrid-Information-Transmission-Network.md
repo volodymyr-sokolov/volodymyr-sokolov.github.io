@@ -16,7 +16,7 @@ The article considers the physical compatibility of equipment (PCE) in a hybrid 
 
 ## Links
 
-* Full text: <a href="http://www.jatit.org/volumes/Vol100No22/18Vol100No22.pdf">PDF</a>
+* Full text: [PDF](http://www.jatit.org/volumes/Vol100No22/18Vol100No22.pdf)
 
 ## Keywords
 
