@@ -4,7 +4,7 @@
 
 2023 [Brainwave-based Authentication using Features Fusion](Brainwave-based-Authentication-using-Features-Fusion.md)
 
-2022 [Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency](Application-of-Game-Theory,-Fuzzy-Logic-and-Neural-Networks-for-Assessing-Risks-and-Forecasting-Rates-of-Digital-Currency.md)
+2022 [Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency](Application-of-Game-Theory-Fuzzy-Logic-and-Neural-Networks-for-Assessing-Risks-and-Forecasting-Rates-of-Digital-Currency.md)
 
 2022 [Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models](Application-of-a-Convolutional-Neural-Network-with-a-Module-of-Elementary-Graphic-Primitive-Classifiers.md)
 
