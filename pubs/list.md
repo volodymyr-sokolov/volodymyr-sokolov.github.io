@@ -98,7 +98,7 @@
 
 2015 [Modified Accelerating Lens as a Means of Increasing the Throughput, Range and Noise Immunity of IEEE 802.11 Systems](Modified-Accelerating-Lens-as-a-Means-of-Increasing-the-Throughput,-Range-and-Noise-Immunity-of-IEEE-802_11-Systems.md)
 
-2013 [Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11](Research-Results-of-the-Impact-of-Spatial-and-Polarization-Value-of-the-Antennas-on-Network-Capacity-of-Wireless-Channels-Standard-IEEE-802_11.md)
+2013 [Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11](Research-Results-of-the-Impact-of-Spatial-and-Polarization-Value-of-the-Antennas-on-Network-Capacity-of-Wireless.md)
 
 ## Workshop Papers (CEUR-WS)
 
