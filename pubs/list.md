@@ -110,7 +110,7 @@
 
 2025 [Effectiveness of Information Security Control using Audit Logs](Effectiveness-of-Information-Security-Control-using-Audit-Logs.md)
 
-2025 [A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps](A-System-for-Assessing-the-Interdependencies-of-Information-System-Agents-in-Information-Security-Risk-Management-using-Cognitive-Maps.md)
+2025 [A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps](A-System-for-Assessing-the-Interdependencies-of-Information-System-Agents-in-Information-Security-Risk-Management.md)
 
 2025 [Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System](Models-and-Algorithms-for-Analyzing-Information-Risks-during-the-Security-Audit-of-Personal-Data-Information-System.md)
 
