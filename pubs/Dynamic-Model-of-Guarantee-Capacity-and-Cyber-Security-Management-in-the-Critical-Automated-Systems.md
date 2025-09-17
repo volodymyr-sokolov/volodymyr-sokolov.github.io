@@ -3,7 +3,7 @@
 # Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated Systems
 
 Hennadii Hulak <a href="https://orcid.org/0000-0001-9131-9233" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="https://pavlo-skladannyi.github.io/">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Evgen Hulak <a href="https://orcid.org/0000-0003-4984-686X" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Viktor Korniiets <a href="https://orcid.org/0000-0002-4967-8395" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>

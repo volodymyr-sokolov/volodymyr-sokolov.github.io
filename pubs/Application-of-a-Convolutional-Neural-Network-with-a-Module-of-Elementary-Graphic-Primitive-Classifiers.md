@@ -3,7 +3,7 @@
 # Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models
 
 Karyna Khorolska <a href="https://orcid.org/0000-0003-3270-4494" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="https://pavlo-skladannyi.github.io/">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Nataliia Korshun <a href="https://orcid.org/0000-0003-2908-970X" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Bohdan Bebeshko <a href="https://orcid.org/0000-0001-6599-0808" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
@@ -16,7 +16,7 @@ This paper presents the results of the research related to the design of a convo
 
 ## Links
 
-* Full text: <a href="http://www.jatit.org/volumes/Vol100No24/18Vol100No24.pdf">PDF</a>
+* Full text: [PDF](http://www.jatit.org/volumes/Vol100No24/18Vol100No24.pdf)
 
 ## Keywords
 

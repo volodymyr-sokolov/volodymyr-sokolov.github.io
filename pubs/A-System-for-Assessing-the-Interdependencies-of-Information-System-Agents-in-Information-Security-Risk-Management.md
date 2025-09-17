@@ -3,7 +3,7 @@
 # A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps
 
 Yuliia Kostiuk <a href="https://orcid.org/0000-0001-5423-0985" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="https://pavlo-skladannyi.github.io/">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Yuliia Samoilenko <a href="https://orcid.org/0000-0003-3787-1435" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Karyna Khorolska <a href="https://orcid.org/0000-0003-3270-4494" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Bohdan Bebeshko <a href="https://orcid.org/0000-0001-6599-0808" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,

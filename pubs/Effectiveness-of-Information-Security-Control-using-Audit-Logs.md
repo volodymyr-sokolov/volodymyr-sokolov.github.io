@@ -3,7 +3,7 @@
 # Effectiveness of Information Security Control using Audit Logs
 
 Yuliia Kostiuk <a href="https://orcid.org/0000-0001-5423-0985" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="https://pavlo-skladannyi.github.io/">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Oleksii Zhyltsov <a href="https://orcid.org/0000-0002-7253-5990" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Yevhen Ivanichenko <a href="https://orcid.org/0000-0002-6408-443X" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>

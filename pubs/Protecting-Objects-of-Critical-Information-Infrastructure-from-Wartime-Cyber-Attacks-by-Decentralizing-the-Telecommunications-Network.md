@@ -5,7 +5,7 @@
 Pavlo Anakhov <a href="https://orcid.org/0000-0001-9169-8560" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Viktoriia Zhebka <a href="https://orcid.org/0000-0003-4051-1190" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Svitlana Popereshnyak <a href="https://orcid.org/0000-0002-0531-9809" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="https://pavlo-skladannyi.github.io/">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract

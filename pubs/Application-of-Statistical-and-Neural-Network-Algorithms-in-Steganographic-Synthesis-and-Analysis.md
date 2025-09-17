@@ -3,7 +3,7 @@
 # Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files
 
 Yuliia Kostiuk <a href="https://orcid.org/0000-0001-5423-0985" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="https://pavlo-skladannyi.github.io/">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Karyna Khorolska <a href="https://orcid.org/0000-0003-3270-4494" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Hennadii Hulak <a href="https://orcid.org/0000-0001-9131-9233" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>

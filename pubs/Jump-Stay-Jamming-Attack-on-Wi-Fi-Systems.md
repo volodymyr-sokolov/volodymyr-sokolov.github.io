@@ -3,7 +3,7 @@
 # Jump-Stay Jamming Attack on Wi-Fi Systems
 
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="https://pavlo-skladannyi.github.io/">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Artem Platonenko <a href="https://orcid.org/0000-0002-2962-5667" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract

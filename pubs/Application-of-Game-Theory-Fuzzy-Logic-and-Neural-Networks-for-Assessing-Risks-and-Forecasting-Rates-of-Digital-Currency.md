@@ -5,7 +5,7 @@
 Bohdan Bebeshko <a href="https://orcid.org/0000-0001-6599-0808" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Volodymyr Malyukov <a href="https://orcid.org/0000-0002-7533-1555" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Miroslav Lakhno <a href="https://orcid.org/0000-0001-6979-6076" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="https://pavlo-skladannyi.github.io/">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Svitlana Shevchenko <a href="https://orcid.org/0000-0002-9736-8623" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Mereke Zhumadilova <a href="https://orcid.org/0000-0002-2974-0227" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>

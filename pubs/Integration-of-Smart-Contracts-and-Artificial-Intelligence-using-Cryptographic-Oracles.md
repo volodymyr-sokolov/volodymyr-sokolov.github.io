@@ -5,7 +5,7 @@
 Denys Virovets <a href="https://orcid.org/0000-0003-4934-8377" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Sergiy Obushnyi <a href="https://orcid.org/0000-0001-6936-955X" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Bohdan Zhurakovskyi <a href="https://orcid.org/0000-0003-3990-5205" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="https://pavlo-skladannyi.github.io/">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract

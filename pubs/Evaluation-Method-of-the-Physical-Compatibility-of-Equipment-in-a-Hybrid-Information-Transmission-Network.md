@@ -7,7 +7,7 @@ Viktoriia Zhebka <a href="https://orcid.org/0000-0003-4051-1190" target="_blank"
 Alina Tushych <a href="https://orcid.org/0000-0002-0544-6154" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Vladislav Kravchenko <a href="https://orcid.org/0000-0002-4758-7027" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 Nazarii Blazhennyi <a href="https://orcid.org/0000-0002-3826-7400" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
-Pavlo Skladannyi <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
+<a href="https://pavlo-skladannyi.github.io/">Pavlo Skladannyi</a> <a href="https://orcid.org/0000-0002-7775-6039" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>,
 <a href="/">Volodymyr Sokolov</a> <a href="https://orcid.org/0000-0002-9349-7946" target="_blank"><img src="/icons/orcid.svg" width="16" height="16"></a>
 
 ## Abstract
