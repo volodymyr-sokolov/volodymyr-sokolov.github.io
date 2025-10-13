@@ -102,6 +102,8 @@
 
 ## Workshop Papers (CEUR-WS)
 
+2025 [Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies](Information-Technologies-in-Modeling-the-Impact-of-the-Economic-Environment-on-the-Performance-of-Companies.md)
+
 2025 [Determining the Error Distribution of BLE Beacons at Antenna Near and Far Fields](Determining-the-Error-Distribution-of-BLE-Beacons-at-Antenna-Near-and-Far-Fields.md)
 
 2025 [Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files](Application-of-Statistical-and-Neural-Network-Algorithms-in-Steganographic-Synthesis-and-Analysis.md)
