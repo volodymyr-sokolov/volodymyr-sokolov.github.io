@@ -38,10 +38,9 @@ First Online: 11 September 2025
 ## Indices
 
 * ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-85219596273](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85219596273)
+* EID: [2-s2.0-105017753952](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105017753952)
 * URN: [urn:nbn:de:0074-4024-X](https://nbn-resolving.org/xml/urn:nbn:de:0074-4024-X)
-* DBLP: [conf/cmigin/KostiukSSHK24](https://dblp.org/rec/conf/cmigin/KostiukSSHK24)
-* KUBG: [51241](http://elibrary.kubg.edu.ua/id/eprint/51241/)
+* KUBG: [53129](http://elibrary.kubg.edu.ua/id/eprint/53129/)
 
 ## Cite
 
