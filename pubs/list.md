@@ -102,6 +102,10 @@
 
 ## Workshop Papers (CEUR-WS)
 
+2025 [Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements](Adaptation-of-Network-Traffic-Routing-Policy-to-Information-Security-and-Network-Protection-Requirements.md)
+
+2025 [Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats](Model-and-Methodology-for-the-Formation-of-Adaptive-Security-Profiles-for-the-Protection-of-Wireless-Networks.md)
+
 2025 [Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies](Information-Technologies-in-Modeling-the-Impact-of-the-Economic-Environment-on-the-Performance-of-Companies.md)
 
 2025 [Determining the Error Distribution of BLE Beacons at Antenna Near and Far Fields](Determining-the-Error-Distribution-of-BLE-Beacons-at-Antenna-Near-and-Far-Fields.md)
