@@ -27,7 +27,7 @@ fuzzy match, phonetic rule, phonetic algorithm, Metaphone, Ukrainian surname
 <table>
 <tr>
 <td>
-<a href="https://www.scimagojr.com/journalsearch.php?q=21100450083&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://www.scimagojr.com/journal_img.php?id=21100450083" alt="SCImago Journal &amp; Country Rank"  /></a>
+<a href="https://www.scimagojr.com/journalsearch.php?q=21100450083&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100450083" alt="SCImago Journal &amp; Country Rank"  /></a>
 </td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.15587/1729-4061.2019.181943" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>

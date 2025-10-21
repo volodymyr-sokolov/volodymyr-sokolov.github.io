@@ -24,10 +24,12 @@ adaptive routing; automated security systems; information security; mathematical
 <table>
 <tr>
 <td>
-<a href="https://www.scimagojr.com/journalsearch.php?q=21100218356&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://www.scimagojr.com/journal_img.php?id=21100218356" alt="SCImago Journal &amp; Country Rank"  /></a>
+<a href="https://www.scimagojr.com/journalsearch.php?q=21100218356&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100218356" alt="SCImago Journal &amp; Country Rank"  /></a>
 </td>
 </tr>
 </table>
+
+<a href="https://www.scimagojr.com/journalsearch.php?q=21100218356&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100218356" alt="SCImago Journal &amp; Country Rank"  /></a>
 
 [2025 Information Control Systems & Technologies (ICST)](https://ceur-ws.org/Vol-4048/)
 
