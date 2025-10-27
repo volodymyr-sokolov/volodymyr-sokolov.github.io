@@ -102,6 +102,8 @@
 
 ## Workshop Papers (CEUR-WS)
 
+2025 [Intelligent System for Simulation Modeling and Research of Information Objects](Intelligent-System-for-Simulation-Modeling-and-Research-of-Information-Objects.md)
+
 2025 [Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements](Adaptation-of-Network-Traffic-Routing-Policy-to-Information-Security-and-Network-Protection-Requirements.md)
 
 2025 [Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats](Model-and-Methodology-for-the-Formation-of-Adaptive-Security-Profiles-for-the-Protection-of-Wireless-Networks.md)
