@@ -20,6 +20,10 @@
 
 2013 [Smart Card for Storing and Displaying Identifiers in Loyalty System](Smart-Card-for-Storing-and-Displaying-Identifiers-in-Loyalty-System.md)
 
+## Book Chapters
+
+2026 [Network Traffic Analysis and Management](Network-Traffic-Analysis-and-Management.md)
+
 ## Book Chapters (Springer)
 
 2025 [Evaluation of State-of-the-Art Machine Learning Smart Contract Vulnerability Detection Method](Evaluation-of-State-of-the-Art-Machine-Learning-Smart-Contract-Vulnerability-Detection-Method.md)
