@@ -20,7 +20,7 @@
 
 2013 [Smart Card for Storing and Displaying Identifiers in Loyalty System](Smart-Card-for-Storing-and-Displaying-Identifiers-in-Loyalty-System.md)
 
-## Book Chapters
+## Book Chapter
 
 2026 [Network Traffic Analysis and Management](Network-Traffic-Analysis-and-Management.md)
 
