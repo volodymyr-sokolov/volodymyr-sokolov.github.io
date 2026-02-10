@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Implementation of Social Engineering Attack at Institution of Higher Education
@@ -47,12 +50,12 @@ First Online: 19 August 2020
 
 ### APA
 
-<small>`Hu, Z. B., Buriachok, V., & Sokolov, V. (2020). Implementation of Social Engineering Attack at Institution of Higher Education. In 1th International Workshop on Cyber Hygiene & Conflict Management in Global Information Networks (Vol. 2654, pp. 155–164).`</small>
+<small class="citation">`Hu, Z. B., Buriachok, V., & Sokolov, V. (2020). Implementation of Social Engineering Attack at Institution of Higher Education. In 1th International Workshop on Cyber Hygiene & Conflict Management in Global Information Networks (Vol. 2654, pp. 155–164).`</small>
 
 ### IEEE
 
-<small>`Z. B. Hu, V. Buriachok, and V. Sokolov, “Implementation of Social Engineering Attack at Institution of Higher Education,” 1th International Workshop on Cyber Hygiene & Conflict Management in Global Information Networks, vol. 2654, pp. 155–164, 2020.`</small>
+<small class="citation">`Z. B. Hu, V. Buriachok, and V. Sokolov, “Implementation of Social Engineering Attack at Institution of Higher Education,” 1th International Workshop on Cyber Hygiene & Conflict Management in Global Information Networks, vol. 2654, pp. 155–164, 2020.`</small>
 
 ### CEUR-WS
 
-<small>`Z. B. Hu, V. Buriachok, V. Sokolov, Implementation of Social Engineering Attack at Institution of Higher Education, in: 1st International Workshop on Cyber Hygiene & Conflict Management in Global Information Networks (CybHyg), vol. 2654 (2020) pp. 155–164.`</small>
+<small class="citation">`Z. B. Hu, V. Buriachok, V. Sokolov, Implementation of Social Engineering Attack at Institution of Higher Education, in: 1st International Workshop on Cyber Hygiene & Conflict Management in Global Information Networks (CybHyg), vol. 2654 (2020) pp. 155–164.`</small>

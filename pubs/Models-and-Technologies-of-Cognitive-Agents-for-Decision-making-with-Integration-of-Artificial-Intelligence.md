@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence
@@ -47,12 +50,12 @@ First Online: 1 August 2025
 
 ### APA
 
-<small>`Kostiuk, Y., Skladannyi, P., Sokolov, V., & Vorokhob, M. (2025). Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence. In Modern Data Science Technologies Doctoral Consortium (MoDaST) (Vol. 4005, pp. 82–96).`</small>
+<small class="citation">`Kostiuk, Y., Skladannyi, P., Sokolov, V., & Vorokhob, M. (2025). Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence. In Modern Data Science Technologies Doctoral Consortium (MoDaST) (Vol. 4005, pp. 82–96).`</small>
 
 ### IEEE
 
-<small>`Y. Kostiuk, P. Skladannyi, V. Sokolov, and M. Vorokhob, “Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence,” Modern Data Science Technologies Doctoral Consortium (MoDaST), vol. 4005, pp. 82–96, 2025.`</small>
+<small class="citation">`Y. Kostiuk, P. Skladannyi, V. Sokolov, and M. Vorokhob, “Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence,” Modern Data Science Technologies Doctoral Consortium (MoDaST), vol. 4005, pp. 82–96, 2025.`</small>
 
 ### CEUR-WS
 
-<small>`Y. Kostiuk, P. Skladannyi, V. Sokolov, M. Vorokhob, Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence, in: Modern Data Science Technologies Doctoral Consortium (MoDaST), vol. 4005 (2025) 82–96.`</small>
+<small class="citation">`Y. Kostiuk, P. Skladannyi, V. Sokolov, M. Vorokhob, Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence, in: Modern Data Science Technologies Doctoral Consortium (MoDaST), vol. 4005 (2025) 82–96.`</small>

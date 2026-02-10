@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Article
 
 # Information Security Risk Assessment
@@ -46,12 +49,12 @@ First Online: 24 July 2021
 
 ### APA
 
-<small>`Kuzminykh, I., Ghita, B., Sokolov, V., & Bakhshi, T. (2021). Information Security Risk Assessment. Encyclopedia, 1(3), 602–617. https://doi.org/10.3390/encyclopedia1030050`</small>
+<small class="citation">`Kuzminykh, I., Ghita, B., Sokolov, V., & Bakhshi, T. (2021). Information Security Risk Assessment. Encyclopedia, 1(3), 602–617. https://doi.org/10.3390/encyclopedia1030050`</small>
 
 ### IEEE
 
-<small>`I. Kuzminykh, B. Ghita, V. Sokolov, and T. Bakhshi, “Information Security Risk Assessment,” Encyclopedia, vol. 1, no. 3, pp. 602–617, July 2021, doi: 10.3390/encyclopedia1030050.`</small>
+<small class="citation">`I. Kuzminykh, B. Ghita, V. Sokolov, and T. Bakhshi, “Information Security Risk Assessment,” Encyclopedia, vol. 1, no. 3, pp. 602–617, July 2021, doi: 10.3390/encyclopedia1030050.`</small>
 
 ### CEUR-WS
 
-<small>`I. Kuzminykh, et al., Information Security Risk Assessment, Encyclopedia 1(3) (2021) 602–617. doi:10.3390/encyclopedia1030050`</small>
+<small class="citation">`I. Kuzminykh, et al., Information Security Risk Assessment, Encyclopedia 1(3) (2021) 602–617. doi:10.3390/encyclopedia1030050`</small>

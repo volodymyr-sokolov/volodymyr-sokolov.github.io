@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Jump-Stay Jamming Attack on Wi-Fi Systems
@@ -50,12 +53,12 @@ First Online: 27 November 2023
 
 ### APA
 
-<small>`Sokolov, V., Skladannyi, P., & Platonenko, A. (2023). Jump-Stay Jamming Attack on Wi-Fi Systems. In 2023 IEEE 18th International Conference on Computer Science and Information Technologies (CSIT) (pp. 1–5). https://doi.org/10.1109/csit61576.2023.10324031`</small>
+<small class="citation">`Sokolov, V., Skladannyi, P., & Platonenko, A. (2023). Jump-Stay Jamming Attack on Wi-Fi Systems. In 2023 IEEE 18th International Conference on Computer Science and Information Technologies (CSIT) (pp. 1–5). https://doi.org/10.1109/csit61576.2023.10324031`</small>
 
 ### IEEE
 
-<small>`V. Sokolov, P. Skladannyi, and A. Platonenko, “Jump-Stay Jamming Attack on Wi-Fi Systems,” 2023 IEEE 18th International Conference on Computer Science and Information Technologies (CSIT). IEEE, pp. 1–5, Oct. 19, 2023. doi: 10.1109/csit61576.2023.10324031.`</small>
+<small class="citation">`V. Sokolov, P. Skladannyi, and A. Platonenko, “Jump-Stay Jamming Attack on Wi-Fi Systems,” 2023 IEEE 18th International Conference on Computer Science and Information Technologies (CSIT). IEEE, pp. 1–5, Oct. 19, 2023. doi: 10.1109/csit61576.2023.10324031.`</small>
 
 ### CEUR-WS
 
-<small>`V. Sokolov, P. Skladannyi, A. Platonenko, Jump-Stay Jamming Attack on Wi-Fi Systems, in: IEEE 18th International Conference on Computer Science and Information Technologies (2023) 1–5. doi:10.1109/CSIT61576.2023.10324031`</small>
+<small class="citation">`V. Sokolov, P. Skladannyi, A. Platonenko, Jump-Stay Jamming Attack on Wi-Fi Systems, in: IEEE 18th International Conference on Computer Science and Information Technologies (2023) 1–5. doi:10.1109/CSIT61576.2023.10324031`</small>

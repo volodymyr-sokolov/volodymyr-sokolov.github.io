@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -56,12 +59,12 @@ First Online: 24 December 2022
 
 ### APA
 
-<small>`Bessalov, A., Sokolov, V., Skladannyi, P., Abramov, S., & Zhyltsov, O. (2022). Modeling CSIKE Algorithm on Non-Cyclic Edwards Curves. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 3288, pp. 1–10).`</small>
+<small class="citation">`Bessalov, A., Sokolov, V., Skladannyi, P., Abramov, S., & Zhyltsov, O. (2022). Modeling CSIKE Algorithm on Non-Cyclic Edwards Curves. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 3288, pp. 1–10).`</small>
 
 ### IEEE
 
-<small>`A. Bessalov, V. Sokolov, P. Skladannyi, S. Abramov, and O. Zhyltsov, “Modeling CSIKE Algorithm on Non-Cyclic Edwards Curves,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 3288, pp. 1–10, 2022.`</small>
+<small class="citation">`A. Bessalov, V. Sokolov, P. Skladannyi, S. Abramov, and O. Zhyltsov, “Modeling CSIKE Algorithm on Non-Cyclic Edwards Curves,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 3288, pp. 1–10, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`A. Bessalov, et al., Modeling CSIKE Algorithm on Non-Cyclic Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3288 (2022) 1–10.`</small>
+<small class="citation">`A. Bessalov, et al., Modeling CSIKE Algorithm on Non-Cyclic Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3288 (2022) 1–10.`</small>

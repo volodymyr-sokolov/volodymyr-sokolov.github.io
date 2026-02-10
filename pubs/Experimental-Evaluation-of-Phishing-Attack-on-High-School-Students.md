@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Book Chapter
 
 # Experimental Evaluation of Phishing Attack on High School Students
@@ -52,12 +55,12 @@ First Online: 6 August 2020
 
 ### APA
 
-<small>`Marusenko, R., Sokolov, V., & Buriachok, V. (2020). Experimental Evaluation of Phishing Attack on High School Students. In Advances in Intelligent Systems and Computing (pp. 668–680). Springer International Publishing. https://doi.org/10.1007/978-3-030-55506-1_59`</small>
+<small class="citation">`Marusenko, R., Sokolov, V., & Buriachok, V. (2020). Experimental Evaluation of Phishing Attack on High School Students. In Advances in Intelligent Systems and Computing (pp. 668–680). Springer International Publishing. https://doi.org/10.1007/978-3-030-55506-1_59`</small>
 
 ### IEEE
 
-<small>`R. Marusenko, V. Sokolov, and V. Buriachok, “Experimental Evaluation of Phishing Attack on High School Students,” Advances in Intelligent Systems and Computing. Springer International Publishing, pp. 668–680, Aug. 06, 2020. doi: 10.1007/978-3-030-55506-1_59.`</small>
+<small class="citation">`R. Marusenko, V. Sokolov, and V. Buriachok, “Experimental Evaluation of Phishing Attack on High School Students,” Advances in Intelligent Systems and Computing. Springer International Publishing, pp. 668–680, Aug. 06, 2020. doi: 10.1007/978-3-030-55506-1_59.`</small>
 
 ### CEUR-WS
 
-<small>`R. Marusenko, V. Sokolov, V. Buriachok, Experimental Evaluation of Phishing Attack on High School Students, Advances in Computer Science for Engineering and Education III, vol. 1247 (2020) 668–680. doi:10.1007/978-3-030-55506-1_59`</small>
+<small class="citation">`R. Marusenko, V. Sokolov, V. Buriachok, Experimental Evaluation of Phishing Attack on High School Students, Advances in Computer Science for Engineering and Education III, vol. 1247 (2020) 668–680. doi:10.1007/978-3-030-55506-1_59`</small>

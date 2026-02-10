@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Last Mile Technique for Wireless Delivery System using an Accelerating Lens
@@ -51,12 +54,12 @@ First Online: 2 July 2021
 
 ### APA
 
-<small>`Astapenya, V., Buriachok, V., Sokolov, V., Skladannyi, P., & Ageyev, D. (2020). Last Mile Technique for Wireless Delivery System using an Accelerating Lens. In 2020 IEEE International Conference on Problems of Infocommunications. Science and Technology (PIC S&amp;T) (pp. 811–814). https://doi.org/10.1109/picst51311.2020.9467886`</small>
+<small class="citation">`Astapenya, V., Buriachok, V., Sokolov, V., Skladannyi, P., & Ageyev, D. (2020). Last Mile Technique for Wireless Delivery System using an Accelerating Lens. In 2020 IEEE International Conference on Problems of Infocommunications. Science and Technology (PIC S&amp;T) (pp. 811–814). https://doi.org/10.1109/picst51311.2020.9467886`</small>
 
 ### IEEE
 
-<small>`V. Astapenya, V. Buriachok, V. Sokolov, P. Skladannyi, and D. Ageyev, “Last Mile Technique for Wireless Delivery System using an Accelerating Lens,” 2020 IEEE International Conference on Problems of Infocommunications. Science and Technology (PIC S&amp;T). IEEE, pp. 811–814, Oct. 06, 2020. doi: 10.1109/picst51311.2020.9467886.`</small>
+<small class="citation">`V. Astapenya, V. Buriachok, V. Sokolov, P. Skladannyi, and D. Ageyev, “Last Mile Technique for Wireless Delivery System using an Accelerating Lens,” 2020 IEEE International Conference on Problems of Infocommunications. Science and Technology (PIC S&amp;T). IEEE, pp. 811–814, Oct. 06, 2020. doi: 10.1109/picst51311.2020.9467886.`</small>
 
 ### CEUR-WS
 
-<small>`V. Astapenya, et al., Last Mile Technique for Wireless Delivery System using an Accelerating Lens, in: IEEE 7th International Conference on Problems of Infocommunications. Science and Technology (2020) 811–814. doi:10.1109/picst51311.2020.9467886`</small>
+<small class="citation">`V. Astapenya, et al., Last Mile Technique for Wireless Delivery System using an Accelerating Lens, in: IEEE 7th International Conference on Problems of Infocommunications. Science and Technology (2020) 811–814. doi:10.1109/picst51311.2020.9467886`</small>

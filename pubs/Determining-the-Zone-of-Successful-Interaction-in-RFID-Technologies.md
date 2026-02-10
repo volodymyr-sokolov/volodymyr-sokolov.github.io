@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Determining the Zone of Successful Interaction in RFID Technologies
@@ -51,12 +54,12 @@ First Online: 11 October 2024
 
 ### APA
 
-<small>`Kriuchkova, L., Sokolov, Volodymyr, & Skladannyi, P. (2024). Determining the Zone of Successful Interaction in RFID Technologies. In 2024 IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (DIPED) (pp. 168–171). https://doi.org/10.1109/diped63529.2024.10706153`</small>
+<small class="citation">`Kriuchkova, L., Sokolov, Volodymyr, & Skladannyi, P. (2024). Determining the Zone of Successful Interaction in RFID Technologies. In 2024 IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (DIPED) (pp. 168–171). https://doi.org/10.1109/diped63529.2024.10706153`</small>
 
 ### IEEE
 
-<small>`L. Kriuchkova, V. Sokolov, and P. Skladannyi, “Determining the Zone of Successful Interaction in RFID Technologies,” 2024 IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (DIPED). IEEE, pp. 168–171, Sep. 11, 2024. doi: 10.1109/diped63529.2024.10706153.`</small>
+<small class="citation">`L. Kriuchkova, V. Sokolov, and P. Skladannyi, “Determining the Zone of Successful Interaction in RFID Technologies,” 2024 IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (DIPED). IEEE, pp. 168–171, Sep. 11, 2024. doi: 10.1109/diped63529.2024.10706153.`</small>
 
 ### CEUR-WS
 
-<small>`L. Kriuchkova, V. Sokolov, P. Skladannyi, Determining the Zone of Successful Interaction in RFID Technologies, in IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (2024) 168–171. doi:10.1109/diped63529.2024.10706153`</small>
+<small class="citation">`L. Kriuchkova, V. Sokolov, P. Skladannyi, Determining the Zone of Successful Interaction in RFID Technologies, in IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (2024) 168–171. doi:10.1109/diped63529.2024.10706153`</small>

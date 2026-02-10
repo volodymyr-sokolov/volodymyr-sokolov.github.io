@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Model to Formation Data Base of Secondary Parameters for Assessing Status of the State Secret Protection
@@ -47,12 +50,12 @@ First Online: 24 October 2024
 
 ### APA
 
-<small>`Dreis, Y., Korchenko, O., Sokolov, V., & Skladannyi, P. (2024). Model to Formation Data Base of Secondary Parameters for Assessing Status of the State Secret Protection. In Cyber Security and Data Protection (Vol. 3800, pp. 1–11).`</small>
+<small class="citation">`Dreis, Y., Korchenko, O., Sokolov, V., & Skladannyi, P. (2024). Model to Formation Data Base of Secondary Parameters for Assessing Status of the State Secret Protection. In Cyber Security and Data Protection (Vol. 3800, pp. 1–11).`</small>
 
 ### IEEE
 
-<small>`Y. Dreis, O. Korchenko, V. Sokolov, and P. Skladannyi, “Model to Formation Data Base of Secondary Parameters for Assessing Status of the State Secret Protection,” Cyber Security and Data Protection, vol. 3800, pp. 1–11, 2024.`</small>
+<small class="citation">`Y. Dreis, O. Korchenko, V. Sokolov, and P. Skladannyi, “Model to Formation Data Base of Secondary Parameters for Assessing Status of the State Secret Protection,” Cyber Security and Data Protection, vol. 3800, pp. 1–11, 2024.`</small>
 
 ### CEUR-WS
 
-<small>`Y. Dreis, et al., Model to Formation Data Base of Secondary Parameters for Assessing Status of the State Secret Protection, in: Cyber Security and Data Protection, vol. 3800 (2024) 1–11.`</small>
+<small class="citation">`Y. Dreis, et al., Model to Formation Data Base of Secondary Parameters for Assessing Status of the State Secret Protection, in: Cyber Security and Data Protection, vol. 3800 (2024) 1–11.`</small>

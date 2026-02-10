@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Resistance to Replay Attacks of Remote Control Protocols using the 433 MHz Radio Channel
@@ -51,12 +54,12 @@ First Online: 20 March 2024
 
 ### APA
 
-<small>`Mykhaylova, O., Stefankiv, A., Nakonechny, T., Fedynyshyn, T., & Sokolov, V. (2024). Resistance to Replay Attacks of Remote Control Protocols using the 433 MHz Radio Channel. In Workshop on Cybersecurity Providing in Information and Telecommunication Systems (CPITS) (Vol. 3654, pp. 98–110).`</small>
+<small class="citation">`Mykhaylova, O., Stefankiv, A., Nakonechny, T., Fedynyshyn, T., & Sokolov, V. (2024). Resistance to Replay Attacks of Remote Control Protocols using the 433 MHz Radio Channel. In Workshop on Cybersecurity Providing in Information and Telecommunication Systems (CPITS) (Vol. 3654, pp. 98–110).`</small>
 
 ### IEEE
 
-<small>`O. Mykhaylova, A. Stefankiv, T. Nakonechny, T. Fedynyshyn, and V. Sokolov, “Resistance to Replay Attacks of Remote Control Protocols using the 433 MHz Radio Channel,” Workshop on Cybersecurity Providing in Information and Telecommunication Systems (CPITS), vol. 3654, pp. 98–110, 2024.`</small>
+<small class="citation">`O. Mykhaylova, A. Stefankiv, T. Nakonechny, T. Fedynyshyn, and V. Sokolov, “Resistance to Replay Attacks of Remote Control Protocols using the 433 MHz Radio Channel,” Workshop on Cybersecurity Providing in Information and Telecommunication Systems (CPITS), vol. 3654, pp. 98–110, 2024.`</small>
 
 ### CEUR-WS
 
-<small>`O. Mykhaylova, et al., Resistance to Replay Attacks of Remote Control Protocols using the 433 MHz Radio Channel, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3654 (2024) 98–110.`</small>
+<small class="citation">`O. Mykhaylova, et al., Resistance to Replay Attacks of Remote Control Protocols using the 433 MHz Radio Channel, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3654 (2024) 98–110.`</small>

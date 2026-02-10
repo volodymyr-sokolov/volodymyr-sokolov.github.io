@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Book Chapter
 
 # Implementation of Active Cybersecurity Education in Ukrainian Higher School
@@ -55,12 +58,12 @@ First Online: 18 June 2023
 
 ### APA
 
-<small>`Buriachok, V., Korshun, N., Zhyltsov, O., Sokolov, V., & Skladannyi, P. (2023). Implementation of Active Cybersecurity Education in Ukrainian Higher School. In Lecture Notes on Data Engineering and Communications Technologies (pp. 533–551). Springer Nature Switzerland. https://doi.org/10.1007/978-3-031-35467-0_32`</small>
+<small class="citation">`Buriachok, V., Korshun, N., Zhyltsov, O., Sokolov, V., & Skladannyi, P. (2023). Implementation of Active Cybersecurity Education in Ukrainian Higher School. In Lecture Notes on Data Engineering and Communications Technologies (pp. 533–551). Springer Nature Switzerland. https://doi.org/10.1007/978-3-031-35467-0_32`</small>
 
 ### IEEE
 
-<small>`V. Buriachok, N. Korshun, O. Zhyltsov, V. Sokolov, and P. Skladannyi, “Implementation of Active Cybersecurity Education in Ukrainian Higher School,” Lecture Notes on Data Engineering and Communications Technologies. Springer Nature Switzerland, pp. 533–551, 2023. doi: 10.1007/978-3-031-35467-0_32.`</small>
+<small class="citation">`V. Buriachok, N. Korshun, O. Zhyltsov, V. Sokolov, and P. Skladannyi, “Implementation of Active Cybersecurity Education in Ukrainian Higher School,” Lecture Notes on Data Engineering and Communications Technologies. Springer Nature Switzerland, pp. 533–551, 2023. doi: 10.1007/978-3-031-35467-0_32.`</small>
 
 ### CEUR-WS
 
-<small>`V. Buriachok, et al., Implementation of Active Cybersecurity Education in Ukrainian Higher School, Information Technology for Education, Science, and Technics, vol. 178 (2023) 533–551. doi:10.1007/978-3-031-35467-0_32`</small>
+<small class="citation">`V. Buriachok, et al., Implementation of Active Cybersecurity Education in Ukrainian Higher School, Information Technology for Education, Science, and Technics, vol. 178 (2023) 533–551. doi:10.1007/978-3-031-35467-0_32`</small>

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11
@@ -46,11 +49,11 @@ First Online: 31 October 2013
 ## Cite
 
 ### [APA]
-<small>`Astapenya, V., & Sokolov, V. (2013). Research results of the impact of spatial and polarization value of the antennas on network capacity of wireless channels standard IEEE 802.11. In 2013 IX Internatioal Conference on Antenna Theory and Techniques (pp. 172–174). https://doi.org/10.1109/icatt.2013.6650715`</small>
+<small class="citation">`Astapenya, V., & Sokolov, V. (2013). Research results of the impact of spatial and polarization value of the antennas on network capacity of wireless channels standard IEEE 802.11. In 2013 IX Internatioal Conference on Antenna Theory and Techniques (pp. 172–174). https://doi.org/10.1109/icatt.2013.6650715`</small>
 
 ### [IEEE]
-<small>`V. Astapenya and V. Sokolov, “Research results of the impact of spatial and polarization value of the antennas on network capacity of wireless channels standard IEEE 802.11,” 2013 IX Internatioal Conference on Antenna Theory and Techniques. IEEE, pp. 172–174, Sep. 2013. doi: 10.1109/icatt.2013.6650715.`</small>
+<small class="citation">`V. Astapenya and V. Sokolov, “Research results of the impact of spatial and polarization value of the antennas on network capacity of wireless channels standard IEEE 802.11,” 2013 IX Internatioal Conference on Antenna Theory and Techniques. IEEE, pp. 172–174, Sep. 2013. doi: 10.1109/icatt.2013.6650715.`</small>
 
 ### CEUR-WS
 
-<small>`V. Astapenya, V. Sokolov, Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11, in: IEEE 9th Internatioal Conference on Antenna Theory and Techniques (2013) 172–174. doi:10.1109/icatt.2013.6650715`</small>
+<small class="citation">`V. Astapenya, V. Sokolov, Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11, in: IEEE 9th Internatioal Conference on Antenna Theory and Techniques (2013) 172–174. doi:10.1109/icatt.2013.6650715`</small>

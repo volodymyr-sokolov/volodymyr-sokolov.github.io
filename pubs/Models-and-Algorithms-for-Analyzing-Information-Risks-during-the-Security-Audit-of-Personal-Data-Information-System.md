@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System
@@ -48,12 +51,12 @@ First Online: 21 February 2025
 
 ### APA
 
-<small>`Kostiuk, Y., Skladannyi, P., Sokolov, V., Hulak, H., & Korshun, N. (2025). Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System. In 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks (Vol. 3925, pp. 155–171).`</small>
+<small class="citation">`Kostiuk, Y., Skladannyi, P., Sokolov, V., Hulak, H., & Korshun, N. (2025). Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System. In 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks (Vol. 3925, pp. 155–171).`</small>
 
 ### IEEE
 
-<small>`Y. Kostiuk, P. Skladannyi, V. Sokolov, H. Hulak, and N. Korshun, “Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System,” 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks, vol. 3925, pp. 155–171, 2025.`</small>
+<small class="citation">`Y. Kostiuk, P. Skladannyi, V. Sokolov, H. Hulak, and N. Korshun, “Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System,” 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks, vol. 3925, pp. 155–171, 2025.`</small>
 
 ### CEUR-WS
 
-<small>`Y. Kostiuk, et al., Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System, in: 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks, vol. 3925 (2025) 155–171.`</small>
+<small class="citation">`Y. Kostiuk, et al., Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System, in: 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks, vol. 3925 (2025) 155–171.`</small>

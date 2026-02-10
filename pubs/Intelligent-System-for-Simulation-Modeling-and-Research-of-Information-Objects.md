@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Intelligent System for Simulation Modeling and Research of Information Objects
@@ -46,12 +49,12 @@ First Online: 530 October 2025
 
 ### APA
 
-<small>`Kostiuk, Y., Skladannyi, P., Sokolov, V., & Rzaieva, S. (2025). Intelligent System for Simulation Modeling and Research of Information Objects. In 1st Workshop Software Engineering and Semantic Technologies (Vol. 4053, pp. 237–251).`</small>
+<small class="citation">`Kostiuk, Y., Skladannyi, P., Sokolov, V., & Rzaieva, S. (2025). Intelligent System for Simulation Modeling and Research of Information Objects. In 1st Workshop Software Engineering and Semantic Technologies (Vol. 4053, pp. 237–251).`</small>
 
 ### IEEE
 
-<small>`Y. Kostiuk, P. Skladannyi, V. Sokolov, and S. Rzaieva, “Intelligent System for Simulation Modeling and Research of Information Objects,” 1st Workshop Software Engineering and Semantic Technologies, vol. 4053, pp. 237–251, 2025.`</small>
+<small class="citation">`Y. Kostiuk, P. Skladannyi, V. Sokolov, and S. Rzaieva, “Intelligent System for Simulation Modeling and Research of Information Objects,” 1st Workshop Software Engineering and Semantic Technologies, vol. 4053, pp. 237–251, 2025.`</small>
 
 ### CEUR-WS
 
-<small>`Y. Kostiuk, P. Skladannyi, V. Sokolov, S. Rzaieva, Intelligent System for Simulation Modeling and Research of Information Objects, in: 1st Workshop Software Engineering and Semantic Technologies, vol. 4053 (2025) 237–251.`</small>
+<small class="citation">`Y. Kostiuk, P. Skladannyi, V. Sokolov, S. Rzaieva, Intelligent System for Simulation Modeling and Research of Information Objects, in: 1st Workshop Software Engineering and Semantic Technologies, vol. 4053 (2025) 237–251.`</small>

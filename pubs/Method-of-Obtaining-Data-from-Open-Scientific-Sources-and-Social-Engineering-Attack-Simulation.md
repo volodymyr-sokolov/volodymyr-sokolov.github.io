@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Book Chapter
 
 # Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation
@@ -52,12 +55,12 @@ First Online: 29 April 2022
 
 ### APA
 
-<small>`Marusenko, R., Sokolov, V., & Bogachuk, I. (2022). Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation. In Lecture Notes on Data Engineering and Communications Technologies (pp. 583–594). Springer International Publishing. https://doi.org/10.1007/978-3-031-04809-8_53`</small>
+<small class="citation">`Marusenko, R., Sokolov, V., & Bogachuk, I. (2022). Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation. In Lecture Notes on Data Engineering and Communications Technologies (pp. 583–594). Springer International Publishing. https://doi.org/10.1007/978-3-031-04809-8_53`</small>
 
 ### IEEE
 
-<small>`R. Marusenko, V. Sokolov, and I. Bogachuk, “Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 583–594, 2022. doi: 10.1007/978-3-031-04809-8_53.`</small>
+<small class="citation">`R. Marusenko, V. Sokolov, and I. Bogachuk, “Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 583–594, 2022. doi: 10.1007/978-3-031-04809-8_53.`</small>
 
 ### CEUR-WS
 
-<small>`R. Marusenko, V. Sokolov, I. Bogachuk, Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation, Advances in Artificial Systems for Logistics Engineering, vol. 135 (2022) 583–594. doi:10.1007/978-3-031-04809-8_53`</small>
+<small class="citation">`R. Marusenko, V. Sokolov, I. Bogachuk, Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation, Advances in Artificial Systems for Logistics Engineering, vol. 135 (2022) 583–594. doi:10.1007/978-3-031-04809-8_53`</small>

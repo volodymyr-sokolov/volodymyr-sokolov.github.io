@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies
@@ -48,12 +51,12 @@ First Online: 27 September 2025
 
 ### APA
 
-<small>`Kuzheliev, M., Nechyporenko, A., Danovych, O., Osadchyi, V., & Sokolov, V. (2025). Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies. In Workshop on Digital Economy Concepts and Technologies (Vol. 4029, pp. 126–134).`</small>
+<small class="citation">`Kuzheliev, M., Nechyporenko, A., Danovych, O., Osadchyi, V., & Sokolov, V. (2025). Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies. In Workshop on Digital Economy Concepts and Technologies (Vol. 4029, pp. 126–134).`</small>
 
 ### IEEE
 
-<small>`M. Kuzheliev, A. Nechyporenko, O. Danovych, V. Osadchyi, and V. Sokolov, “Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies,” Workshop on Digital Economy Concepts and Technologies, vol. 4029, pp. 126–134, 2025.`</small>
+<small class="citation">`M. Kuzheliev, A. Nechyporenko, O. Danovych, V. Osadchyi, and V. Sokolov, “Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies,” Workshop on Digital Economy Concepts and Technologies, vol. 4029, pp. 126–134, 2025.`</small>
 
 ### CEUR-WS
 
-<small>`M. Kuzheliev, et al., Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies, in: Digital Economy Concepts and Technologies, vol. 4029 (2025) 126–134.`</small>
+<small class="citation">`M. Kuzheliev, et al., Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies, in: Digital Economy Concepts and Technologies, vol. 4029 (2025) 126–134.`</small>

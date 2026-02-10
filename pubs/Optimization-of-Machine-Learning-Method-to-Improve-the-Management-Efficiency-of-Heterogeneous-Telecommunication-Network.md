@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Optimization of Machine Learning Method to Improve the Management Efficiency of Heterogeneous Telecommunication Network
@@ -51,12 +54,12 @@ First Online: 24 December 2022
 
 ### APA
 
-<small>`Zhebka, V., Gertsiuk, M., Sokolov, V., Malinov, V., & Sablina, M. (2022). Optimization of Machine Learning Method to Improve the Management Efficiency of Heterogeneous Telecommunication Network. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 3288, pp. 149–155).`</small>
+<small class="citation">`Zhebka, V., Gertsiuk, M., Sokolov, V., Malinov, V., & Sablina, M. (2022). Optimization of Machine Learning Method to Improve the Management Efficiency of Heterogeneous Telecommunication Network. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 3288, pp. 149–155).`</small>
 
 ### IEEE
 
-<small>`V. Zhebka, M. Gertsiuk, V. Sokolov, V. Malinov, and M. Sablina, “Optimization of Machine Learning Method to Improve the Management Efficiency of Heterogeneous Telecommunication Network,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 3288, pp. 149–155, 2022.`</small>
+<small class="citation">`V. Zhebka, M. Gertsiuk, V. Sokolov, V. Malinov, and M. Sablina, “Optimization of Machine Learning Method to Improve the Management Efficiency of Heterogeneous Telecommunication Network,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 3288, pp. 149–155, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`V. Zhebka, et al., Optimization of Machine Learning Method to Improve the Management Efficiency of Heterogeneous Telecommunication Network, in: Workshop on Cybersecurity Providing in Information and Telecommunication Systems, vol. 3288 (2022) 149–155.`</small>
+<small class="citation">`V. Zhebka, et al., Optimization of Machine Learning Method to Improve the Management Efficiency of Heterogeneous Telecommunication Network, in: Workshop on Cybersecurity Providing in Information and Telecommunication Systems, vol. 3288 (2022) 149–155.`</small>

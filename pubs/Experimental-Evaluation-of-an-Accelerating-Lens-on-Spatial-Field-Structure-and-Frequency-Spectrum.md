@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Experimental Evaluation of an Accelerating Lens on Spatial Field Structure and Frequency Spectrum
@@ -49,12 +52,12 @@ First Online: 11 November 2020
 
 ### APA
 
-<small>`Astapenya, V., Sokolov, V., & Ageyev, D. (2020). Experimental Evaluation of an Accelerating Lens on Spatial Field Structure and Frequency Spectrum. In 2020 IEEE Ukrainian Microwave Week (UkrMW) (pp. 203–206). IEEE. 2020 IEEE Ukrainian Microwave Week (UkrMW). https://doi.org/10.1109/ukrmw49653.2020.9252755`</small>
+<small class="citation">`Astapenya, V., Sokolov, V., & Ageyev, D. (2020). Experimental Evaluation of an Accelerating Lens on Spatial Field Structure and Frequency Spectrum. In 2020 IEEE Ukrainian Microwave Week (UkrMW) (pp. 203–206). IEEE. 2020 IEEE Ukrainian Microwave Week (UkrMW). https://doi.org/10.1109/ukrmw49653.2020.9252755`</small>
 
 ### IEEE
 
-<small>`V. Astapenya, V. Sokolov, and D. Ageyev, “Experimental Evaluation of an Accelerating Lens on Spatial Field Structure and Frequency Spectrum,” 2020 IEEE Ukrainian Microwave Week (UkrMW). IEEE, pp. 203–206, Sep. 21, 2020. doi: 10.1109/ukrmw49653.2020.9252755.`</small>
+<small class="citation">`V. Astapenya, V. Sokolov, and D. Ageyev, “Experimental Evaluation of an Accelerating Lens on Spatial Field Structure and Frequency Spectrum,” 2020 IEEE Ukrainian Microwave Week (UkrMW). IEEE, pp. 203–206, Sep. 21, 2020. doi: 10.1109/ukrmw49653.2020.9252755.`</small>
 
 ### CEUR-WS
 
-<small>`V. Astapenya, V. Sokolov, D. Ageyev, Experimental Evaluation of an Accelerating Lens on Spatial Field Structure and Frequency Spectrum, in: IEEE Ukrainian Microwave Week (2020) 203–206. doi:10.1109/ukrmw49653.2020.9252755`</small>
+<small class="citation">`V. Astapenya, V. Sokolov, D. Ageyev, Experimental Evaluation of an Accelerating Lens on Spatial Field Structure and Frequency Spectrum, in: IEEE Ukrainian Microwave Week (2020) 203–206. doi:10.1109/ukrmw49653.2020.9252755`</small>

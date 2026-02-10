@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Patent
 
 # Smart Card for Storing and Displaying Identifiers in Loyalty System
@@ -34,12 +37,12 @@ First Online: 7 March 2013
 
 ### APA
 
-<small>`Sokolov, V., Ivanov, A., Senkovskiy, V., & Bogdanovskiy, V. (2013). Smart Card for Storing and Displaying Identifiers in Loyalty System. In International patent (pp. 1–16).`</small>
+<small class="citation">`Sokolov, V., Ivanov, A., Senkovskiy, V., & Bogdanovskiy, V. (2013). Smart Card for Storing and Displaying Identifiers in Loyalty System. In International patent (pp. 1–16).`</small>
 
 ### IEEE
 
-<small>`V. Sokolov, A. Ivanov, V. Senkovskiy, and V. Bogdanovskiy, “Smart Card for Storing and Displaying Identifiers in Loyalty System,” International patent, pp. 1–16, 2013.`</small>
+<small class="citation">`V. Sokolov, A. Ivanov, V. Senkovskiy, and V. Bogdanovskiy, “Smart Card for Storing and Displaying Identifiers in Loyalty System,” International patent, pp. 1–16, 2013.`</small>
 
 ### CEUR-WS
 
-<small>`V. Sokolov, et al., Smart Card for Storing and Displaying Identifiers in Loyalty System, International patent (2013) 1–16.`</small>
+<small class="citation">`V. Sokolov, et al., Smart Card for Storing and Displaying Identifiers in Loyalty System, International patent (2013) 1–16.`</small>

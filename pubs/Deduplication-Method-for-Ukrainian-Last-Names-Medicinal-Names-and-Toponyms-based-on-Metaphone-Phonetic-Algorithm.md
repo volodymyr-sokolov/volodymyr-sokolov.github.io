@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Book Chapter
 
 # Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms based on Metaphone Phonetic Algorithm
@@ -52,12 +55,12 @@ First Online: 6 August 2020
 
 ### APA
 
-<small>`Hu, Z., Buriachok, V., & Sokolov, V. (2020). Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm. In Advances in Intelligent Systems and Computing (pp. 518–533). Springer International Publishing. https://doi.org/10.1007/978-3-030-55506-1_47`</small>
+<small class="citation">`Hu, Z., Buriachok, V., & Sokolov, V. (2020). Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm. In Advances in Intelligent Systems and Computing (pp. 518–533). Springer International Publishing. https://doi.org/10.1007/978-3-030-55506-1_47`</small>
 
 ### IEEE
 
-<small>`Z. Hu, V. Buriachok, and V. Sokolov, “Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm,” Advances in Intelligent Systems and Computing. Springer International Publishing, pp. 518–533, Aug. 06, 2020. doi: 10.1007/978-3-030-55506-1_47.`</small>
+<small class="citation">`Z. Hu, V. Buriachok, and V. Sokolov, “Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm,” Advances in Intelligent Systems and Computing. Springer International Publishing, pp. 518–533, Aug. 06, 2020. doi: 10.1007/978-3-030-55506-1_47.`</small>
 
 ### CEUR-WS
 
-<small>`Z. B. Hu, V. Buriachok, V. Sokolov, Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm, Advances in Computer Science for Engineering and Education III, vol. 1247 (2020) 518–533. doi:10.1007/978-3-030-55506-1_47`</small>
+<small class="citation">`Z. B. Hu, V. Buriachok, V. Sokolov, Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm, Advances in Computer Science for Engineering and Education III, vol. 1247 (2020) 518–533. doi:10.1007/978-3-030-55506-1_47`</small>

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Article
 
 # Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm
@@ -48,12 +51,12 @@ First Online: 29 October 2019
 
 ### APA
 
-<small>`Buriachok, Volodymyr, Hadzhyiev, M., Sokolov, Volodymyr, Skladannyi, P., & Kuzmenko, L. (2019). Implantation of indexing optimization technology for highly specialized terms based on Metaphone phonetical algorithm. Eastern-European Journal of Enterprise Technologies, 5(2 (101)), 43–50. https://doi.org/10.15587/1729-4061.2019.181943`</small>
+<small class="citation">`Buriachok, Volodymyr, Hadzhyiev, M., Sokolov, Volodymyr, Skladannyi, P., & Kuzmenko, L. (2019). Implantation of indexing optimization technology for highly specialized terms based on Metaphone phonetical algorithm. Eastern-European Journal of Enterprise Technologies, 5(2 (101)), 43–50. https://doi.org/10.15587/1729-4061.2019.181943`</small>
 
 ### IEEE
 
-<small>`V. Buriachok, M. Hadzhyiev, V. Sokolov, P. Skladannyi, and L. Kuzmenko, “Implantation of indexing optimization technology for highly specialized terms based on Metaphone phonetical algorithm,” EEJET, vol. 5, no. 2 (101), pp. 43–50, Oct. 2019, doi: 10.15587/1729-4061.2019.181943.`</small>
+<small class="citation">`V. Buriachok, M. Hadzhyiev, V. Sokolov, P. Skladannyi, and L. Kuzmenko, “Implantation of indexing optimization technology for highly specialized terms based on Metaphone phonetical algorithm,” EEJET, vol. 5, no. 2 (101), pp. 43–50, Oct. 2019, doi: 10.15587/1729-4061.2019.181943.`</small>
 
 ### CEUR-WS
 
-<small>`V. Buriachok, et al., Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm, East.-Eur. J. Enterp. Technol., vol. 5, no. 2(101) (2019) 64–71. doi:10.15587/1729-4061.2019.181943`</small>
+<small class="citation">`V. Buriachok, et al., Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm, East.-Eur. J. Enterp. Technol., vol. 5, no. 2(101) (2019) 64–71. doi:10.15587/1729-4061.2019.181943`</small>

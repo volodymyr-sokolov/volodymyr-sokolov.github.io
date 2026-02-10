@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Article
 
 # Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network
@@ -44,12 +47,12 @@ First Online: 30 November 2022
 
 ### APA
 
-<small>`Anakhov, P., Zhebka, V., Tushych, A., Kravchenko, V., Blazhennyi, N., Skladannyi, P., & Sokolov, V. (2022). Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network. In Journal of Theoretical and Applied Information Technology (Vol. 100, Issue 22, pp. 6635–6644).`</small>
+<small class="citation">`Anakhov, P., Zhebka, V., Tushych, A., Kravchenko, V., Blazhennyi, N., Skladannyi, P., & Sokolov, V. (2022). Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network. In Journal of Theoretical and Applied Information Technology (Vol. 100, Issue 22, pp. 6635–6644).`</small>
 
 ### IEEE
 
-<small>`P. Anakhov, V. Zhebka, A. Tushych, V. Kravchenko, N. Blazhennyi, P. Skladannyi, and V. Sokolov, “Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network,” Journal of Theoretical and Applied Information Technology, vol. 100, no. 22, pp. 6635–6644, 2022.`</small>
+<small class="citation">`P. Anakhov, V. Zhebka, A. Tushych, V. Kravchenko, N. Blazhennyi, P. Skladannyi, and V. Sokolov, “Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network,” Journal of Theoretical and Applied Information Technology, vol. 100, no. 22, pp. 6635–6644, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`P. Anakhov, et al., Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network, J. Theor. Appl. Inf. Technol. 100(22) (2022) 6635–6644.`</small>
+<small class="citation">`P. Anakhov, et al., Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network, J. Theor. Appl. Inf. Technol. 100(22) (2022) 6635–6644.`</small>

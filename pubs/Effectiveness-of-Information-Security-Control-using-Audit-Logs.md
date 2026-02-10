@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Effectiveness of Information Security Control using Audit Logs
@@ -51,12 +54,12 @@ First Online: 7 July 2025
 
 ### APA
 
-<small>`Kostiuk, Y., Skladannyi, P., Sokolov, V., Zhyltsov, O., & Ivanichenko, Y. (2025). Effectiveness of Information Security Control using Audit Logs. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 3991, pp. 524–538).`</small>
+<small class="citation">`Kostiuk, Y., Skladannyi, P., Sokolov, V., Zhyltsov, O., & Ivanichenko, Y. (2025). Effectiveness of Information Security Control using Audit Logs. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 3991, pp. 524–538).`</small>
 
 ### IEEE
 
-<small>`Y. Kostiuk, P. Skladannyi, V. Sokolov, O. Zhyltsov, and Y. Ivanichenko, “Effectiveness of Information Security Control using Audit Logs,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 3991, pp. 524–538, 2025.`</small>
+<small class="citation">`Y. Kostiuk, P. Skladannyi, V. Sokolov, O. Zhyltsov, and Y. Ivanichenko, “Effectiveness of Information Security Control using Audit Logs,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 3991, pp. 524–538, 2025.`</small>
 
 ### CEUR-WS
 
-<small>`Y. Kostiuk, et al., Effectiveness of Information Security Control using Audit Logs, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3991 (2025) 524–538.`</small>
+<small class="citation">`Y. Kostiuk, et al., Effectiveness of Information Security Control using Audit Logs, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3991 (2025) 524–538.`</small>

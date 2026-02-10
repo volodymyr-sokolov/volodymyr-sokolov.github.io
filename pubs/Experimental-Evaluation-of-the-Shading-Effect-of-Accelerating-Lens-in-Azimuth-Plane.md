@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Experimental Evaluation of the Shading Effect of Accelerating Lens in Azimuth Plane
@@ -48,12 +51,12 @@ First Online: 11 July 2017
 
 ### APA
 
-<small>`Astapenya, V. M., & Sokolov, V. Yu. (2017). Experimental evaluation of the shading effect of accelerating lens in azimuth plane. In 2017 XI International Conference on Antenna Theory and Techniques (ICATT) (pp. 388–390). https://doi.org/10.1109/icatt.2017.7972671`</small>
+<small class="citation">`Astapenya, V. M., & Sokolov, V. Yu. (2017). Experimental evaluation of the shading effect of accelerating lens in azimuth plane. In 2017 XI International Conference on Antenna Theory and Techniques (ICATT) (pp. 388–390). https://doi.org/10.1109/icatt.2017.7972671`</small>
 
 ### IEEE
 
-<small>`V. M. Astapenya and V. Yu. Sokolov, “Experimental evaluation of the shading effect of accelerating lens in azimuth plane,” 2017 XI International Conference on Antenna Theory and Techniques (ICATT). IEEE, pp. 388–390, May 2017. doi: 10.1109/icatt.2017.7972671.`</small>
+<small class="citation">`V. M. Astapenya and V. Yu. Sokolov, “Experimental evaluation of the shading effect of accelerating lens in azimuth plane,” 2017 XI International Conference on Antenna Theory and Techniques (ICATT). IEEE, pp. 388–390, May 2017. doi: 10.1109/icatt.2017.7972671.`</small>
 
 ### CEUR-WS
 
-<small>`V. Astapenya, V. Sokolov, Experimental Evaluation of the Shading Effect of Accelerating Lens in Azimuth Plane, in: IEEE 11th International Conference on Antenna Theory and Techniques (2017) 389–391. doi:10.1109/icatt.2017.7972671`</small>
+<small class="citation">`V. Astapenya, V. Sokolov, Experimental Evaluation of the Shading Effect of Accelerating Lens in Azimuth Plane, in: IEEE 11th International Conference on Antenna Theory and Techniques (2017) 389–391. doi:10.1109/icatt.2017.7972671`</small>

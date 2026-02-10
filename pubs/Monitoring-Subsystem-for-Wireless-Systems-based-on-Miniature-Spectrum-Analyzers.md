@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Monitoring Subsystem for Wireless Systems based on Miniature Spectrum Analyzers
@@ -50,12 +53,12 @@ First Online: 3 February 2019
 
 ### APA
 
-<small>`Bogachuk, I., Sokolov, V., & Buriachok, V. (2018). Monitoring Subsystem for Wireless Systems Based on Miniature Spectrum Analyzers. In 2018 International Scientific-Practical Conference Problems of Infocommunications. Science and Technology (PIC S&amp;T). https://doi.org/10.1109/infocommst.2018.8632151`</small>
+<small class="citation">`Bogachuk, I., Sokolov, V., & Buriachok, V. (2018). Monitoring Subsystem for Wireless Systems Based on Miniature Spectrum Analyzers. In 2018 International Scientific-Practical Conference Problems of Infocommunications. Science and Technology (PIC S&amp;T). https://doi.org/10.1109/infocommst.2018.8632151`</small>
 
 ### IEEE
 
-<small>`I. Bogachuk, V. Sokolov, and V. Buriachok, “Monitoring Subsystem for Wireless Systems Based on Miniature Spectrum Analyzers,” 2018 International Scientific-Practical Conference Problems of Infocommunications. Science and Technology (PIC S&amp;T). IEEE, Oct. 2018. doi: 10.1109/infocommst.2018.8632151.`</small>
+<small class="citation">`I. Bogachuk, V. Sokolov, and V. Buriachok, “Monitoring Subsystem for Wireless Systems Based on Miniature Spectrum Analyzers,” 2018 International Scientific-Practical Conference Problems of Infocommunications. Science and Technology (PIC S&amp;T). IEEE, Oct. 2018. doi: 10.1109/infocommst.2018.8632151.`</small>
 
 ### CEUR-WS
 
-<small>`I. Bogachuk, V. Sokolov, V. Buriachok, Monitoring Subsystem for Wireless Systems based on Miniature Spectrum Analyzers, in: IEEE 5th International Scientific and Practical Conference Problems of Infocommunications. Science and Technology (2018) 581–585. doi:10.1109/INFOCOMMST.2018.8632151`</small>
+<small class="citation">`I. Bogachuk, V. Sokolov, V. Buriachok, Monitoring Subsystem for Wireless Systems based on Miniature Spectrum Analyzers, in: IEEE 5th International Scientific and Practical Conference Problems of Infocommunications. Science and Technology (2018) 581–585. doi:10.1109/INFOCOMMST.2018.8632151`</small>

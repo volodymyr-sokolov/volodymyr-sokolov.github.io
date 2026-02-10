@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Methodology of Network Infrastructure Analysis as Part of Migration to Zero-Trust Architecture
@@ -51,12 +54,12 @@ First Online: 24 October 2024
 
 ### APA
 
-<small>`Syrotynskyi, R., Tyshyk, I., Kochan, O., Sokolov, V., & Skladannyi, P. (2024). Methodology of Network Infrastructure Analysis as Part of Migration to Zero-Trust Architecture. In Cyber Security and Data Protection (Vol. 3800, pp. 97–105).`</small>
+<small class="citation">`Syrotynskyi, R., Tyshyk, I., Kochan, O., Sokolov, V., & Skladannyi, P. (2024). Methodology of Network Infrastructure Analysis as Part of Migration to Zero-Trust Architecture. In Cyber Security and Data Protection (Vol. 3800, pp. 97–105).`</small>
 
 ### IEEE
 
-<small>`R. Syrotynskyi, I. Tyshyk, O. Kochan, V. Sokolov, and P. Skladannyi, “Methodology of Network Infrastructure Analysis as Part of Migration to Zero-Trust Architecture,” Cyber Security and Data Protection, vol. 3800, pp. 97–105, 2024.`</small>
+<small class="citation">`R. Syrotynskyi, I. Tyshyk, O. Kochan, V. Sokolov, and P. Skladannyi, “Methodology of Network Infrastructure Analysis as Part of Migration to Zero-Trust Architecture,” Cyber Security and Data Protection, vol. 3800, pp. 97–105, 2024.`</small>
 
 ### CEUR-WS
 
-<small>`R. Syrotynskyi, et al., Methodology of Network Infrastructure Analysis as Part of Migration to Zero-Trust Architecture, in: Cyber Security and Data Protection, vol. 3800 (2024) 97–105.`</small>
+<small class="citation">`R. Syrotynskyi, et al., Methodology of Network Infrastructure Analysis as Part of Migration to Zero-Trust Architecture, in: Cyber Security and Data Protection, vol. 3800 (2024) 97–105.`</small>

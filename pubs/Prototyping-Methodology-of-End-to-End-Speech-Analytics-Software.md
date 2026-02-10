@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Prototyping Methodology of End-to-End Speech Analytics Software
@@ -49,12 +52,12 @@ First Online: 29 December 2022
 
 ### APA
 
-<small>`Romanovskyi, O., Iosifov, I., Iosifova, O., Sokolov, V., Skladannyi, P., & Sukaylo, I. (2022). Prototyping Methodology of End-to-End Speech Analytics Software. In 4th International Workshop on Modern Machine Learning Technologies and Data Science (Vol. 3312, pp. 76–86).`</small>
+<small class="citation">`Romanovskyi, O., Iosifov, I., Iosifova, O., Sokolov, V., Skladannyi, P., & Sukaylo, I. (2022). Prototyping Methodology of End-to-End Speech Analytics Software. In 4th International Workshop on Modern Machine Learning Technologies and Data Science (Vol. 3312, pp. 76–86).`</small>
 
 ### IEEE
 
-<small>`O. Romanovskyi, I. Iosifov, O. Iosifova, V. Sokolov, P. Skladannyi, and I. Sukaylo, “Prototyping Methodology of End-to-End Speech Analytics Software,” 4th International Workshop on Modern Machine Learning Technologies and Data Science, vol. 3312, pp. 76–86, 2022.`</small>
+<small class="citation">`O. Romanovskyi, I. Iosifov, O. Iosifova, V. Sokolov, P. Skladannyi, and I. Sukaylo, “Prototyping Methodology of End-to-End Speech Analytics Software,” 4th International Workshop on Modern Machine Learning Technologies and Data Science, vol. 3312, pp. 76–86, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`O. Romanovskyi, et al., Prototyping Methodology of End-to-End Speech Analytics Software, in: 4th International Workshop on Modern Machine Learning Technologies and Data Science, vol. 3312 (2022) 76–86.`</small>
+<small class="citation">`O. Romanovskyi, et al., Prototyping Methodology of End-to-End Speech Analytics Software, in: 4th International Workshop on Modern Machine Learning Technologies and Data Science, vol. 3312 (2022) 76–86.`</small>

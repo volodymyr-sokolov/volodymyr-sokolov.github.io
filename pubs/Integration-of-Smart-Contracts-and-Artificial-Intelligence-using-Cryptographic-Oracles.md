@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles
@@ -51,12 +54,12 @@ First Online: 12 November 2024
 
 ### APA
 
-<small>`Virovets, D., Obushnyi, S., Zhurakovskyi, B., Skladannyi, P., & Sokolov, V. (2024). Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles. In Classic, Quantum, and Post-Quantum Cryptography (Vol. 3829, pp. 39–46).`</small>
+<small class="citation">`Virovets, D., Obushnyi, S., Zhurakovskyi, B., Skladannyi, P., & Sokolov, V. (2024). Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles. In Classic, Quantum, and Post-Quantum Cryptography (Vol. 3829, pp. 39–46).`</small>
 
 ### IEEE
 
-<small>`D. Virovets, S. Obushnyi, B. Zhurakovskyi, P. Skladannyi, and V. Sokolov, “Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles,” Classic, Quantum, and Post-Quantum Cryptography, vol. 3829, pp. 39–46, 2024.`</small>
+<small class="citation">`D. Virovets, S. Obushnyi, B. Zhurakovskyi, P. Skladannyi, and V. Sokolov, “Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles,” Classic, Quantum, and Post-Quantum Cryptography, vol. 3829, pp. 39–46, 2024.`</small>
 
 ### CEUR-WS
 
-<small>`D. Virovets, et al., Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles, in: Classic, Quantum, and Post-Quantum Cryptography, vol. 3829 (2024) 39–46.`</small>
+<small class="citation">`D. Virovets, et al., Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles, in: Classic, Quantum, and Post-Quantum Cryptography, vol. 3829 (2024) 39–46.`</small>

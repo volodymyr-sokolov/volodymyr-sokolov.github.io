@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Methodology for Choosing a Consensus Algorithm for Blockchain Technology
@@ -48,12 +51,12 @@ First Online: 19 April 2024
 
 ### APA
 
-<small>`Zhebka, V., Zhebka, S., Bazhan, T., Skladannyi, P., & Sokolov, V. (2024). Methodology for Choosing a Consensus Algorithm for Blockchain Technology. In Workshop on Digital Economy Concepts and Technologies (Vol. 3665, pp. 106–113).`</small>
+<small class="citation">`Zhebka, V., Zhebka, S., Bazhan, T., Skladannyi, P., & Sokolov, V. (2024). Methodology for Choosing a Consensus Algorithm for Blockchain Technology. In Workshop on Digital Economy Concepts and Technologies (Vol. 3665, pp. 106–113).`</small>
 
 ### IEEE
 
-<small>`V. Zhebka, S. Zhebka, T. Bazhan, P. Skladannyi, and V. Sokolov, “Methodology for Choosing a Consensus Algorithm for Blockchain Technology,” Workshop on Digital Economy Concepts and Technologies, vol. 3665, pp. 106–113, 2024.`</small>
+<small class="citation">`V. Zhebka, S. Zhebka, T. Bazhan, P. Skladannyi, and V. Sokolov, “Methodology for Choosing a Consensus Algorithm for Blockchain Technology,” Workshop on Digital Economy Concepts and Technologies, vol. 3665, pp. 106–113, 2024.`</small>
 
 ### CEUR-WS
 
-<small>`V. Zhebka, et al., Methodology for Choosing a Consensus Algorithm for Blockchain Technology, in: Digital Economy Concepts and Technologies, vol. 3665 (2024) 106–113.`</small>
+<small class="citation">`V. Zhebka, et al., Methodology for Choosing a Consensus Algorithm for Blockchain Technology, in: Digital Economy Concepts and Technologies, vol. 3665 (2024) 106–113.`</small>

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -52,12 +55,12 @@ First Online: 3 July 2020
 
 ### APA
 
-<small>`Bessalov, A., Sokolov, V., & Skladannyi, P. (2020). Modeling of 3- and 5-Isogenies of Supersingular Edwards Curves. In 2nd International Workshop on Modern Machine Learning Tech-nologies and Data Science (Vol. 2631, no. I, pp. 30–39).`</small>
+<small class="citation">`Bessalov, A., Sokolov, V., & Skladannyi, P. (2020). Modeling of 3- and 5-Isogenies of Supersingular Edwards Curves. In 2nd International Workshop on Modern Machine Learning Tech-nologies and Data Science (Vol. 2631, no. I, pp. 30–39).`</small>
 
 ### IEEE
 
-<small>`A. Bessalov, V. Sokolov, and P. Skladannyi, “Modeling of 3- and 5-Isogenies of Supersingular Edwards Curves,” 2nd International Workshop on Modern Machine Learning Tech-nologies and Data Science, vol. 2631, no. I, pp. 30–39, 2020.`</small>
+<small class="citation">`A. Bessalov, V. Sokolov, and P. Skladannyi, “Modeling of 3- and 5-Isogenies of Supersingular Edwards Curves,” 2nd International Workshop on Modern Machine Learning Tech-nologies and Data Science, vol. 2631, no. I, pp. 30–39, 2020.`</small>
 
 ### CEUR-WS
 
-<small>`A. Bessalov, V. Sokolov, P. Skladannyi, Modeling of 3- and 5-Isogenies of Supersingular Edwards Curves, in: 2nd International Workshop on Modern Machine Learning Technologies and Data Science, no. I, vol. 2631 (2020) 30–39.`</small>
+<small class="citation">`A. Bessalov, V. Sokolov, P. Skladannyi, Modeling of 3- and 5-Isogenies of Supersingular Edwards Curves, in: 2nd International Workshop on Modern Machine Learning Technologies and Data Science, no. I, vol. 2631 (2020) 30–39.`</small>

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Increasing the Functional Network Stability in the Depression Zone of the Hydroelectric Power Station Reservoir
@@ -49,12 +52,12 @@ First Online: 6 June 2022
 
 ### APA
 
-<small>`P. Anakhov, V. Zhebka, V. Koretska, V., Sokolov, V., & Skladannyi, P. (2022). Increasing the Functional Network Stability in the Depression Zone of the Hydroelectric Power Station Reservoir. In Emerging Technology Trends on the Smart Industry and the Internet of Things (Vol. 3149, pp. 169–176).`</small>
+<small class="citation">`P. Anakhov, V. Zhebka, V. Koretska, V., Sokolov, V., & Skladannyi, P. (2022). Increasing the Functional Network Stability in the Depression Zone of the Hydroelectric Power Station Reservoir. In Emerging Technology Trends on the Smart Industry and the Internet of Things (Vol. 3149, pp. 169–176).`</small>
 
 ### IEEE
 
-<small>`P. Anakhov, V. Zhebka, V. Koretska, V. Sokolov, and P. Skladannyi, “Increasing the Functional Network Stability in the Depression Zone of the Hydroelectric Power Station Reservoir,” Emerging Technology Trends on the Smart Industry and the Internet of Things, vol. 3149, pp. 169–176, 2022.`</small>
+<small class="citation">`P. Anakhov, V. Zhebka, V. Koretska, V. Sokolov, and P. Skladannyi, “Increasing the Functional Network Stability in the Depression Zone of the Hydroelectric Power Station Reservoir,” Emerging Technology Trends on the Smart Industry and the Internet of Things, vol. 3149, pp. 169–176, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`P. Anakhov, et al., Increasing the Functional Network Stability in the Depression Zone of the Hydroelectric Power Station Reservoir, in: Emerging Technology Trends on the Smart Industry and the Internet of Things, vol. 3149 (2022) 169–176.`</small>
+<small class="citation">`P. Anakhov, et al., Increasing the Functional Network Stability in the Depression Zone of the Hydroelectric Power Station Reservoir, in: Emerging Technology Trends on the Smart Industry and the Internet of Things, vol. 3149 (2022) 169–176.`</small>

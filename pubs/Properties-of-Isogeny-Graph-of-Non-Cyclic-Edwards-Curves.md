@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Properties of Isogeny Graph of Non-Cyclic Edwards Curves
@@ -49,12 +52,12 @@ First Online: 16 November 2023
 
 ### APA
 
-<small>`Abramov, S., Bessalov, A., & Sokolov, V. (2023). Properties of Isogeny Graph of Non-Cyclic Edwards Curves. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3550, pp. 234–239).`</small>
+<small class="citation">`Abramov, S., Bessalov, A., & Sokolov, V. (2023). Properties of Isogeny Graph of Non-Cyclic Edwards Curves. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3550, pp. 234–239).`</small>
 
 ### IEEE
 
-<small>`S. Abramov, A. Bessalov, and V. Sokolov, “Properties of Isogeny Graph of Non-Cyclic Edwards Curves,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3550, pp. 234–239, 2023.`</small>
+<small class="citation">`S. Abramov, A. Bessalov, and V. Sokolov, “Properties of Isogeny Graph of Non-Cyclic Edwards Curves,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3550, pp. 234–239, 2023.`</small>
 
 ### CEUR-WS
 
-<small>`S. Abramov, A. Bessalov, V. Sokolov, Properties of Isogeny Graph of Non-Cyclic Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3550 (2023) 234–239.`</small>
+<small class="citation">`S. Abramov, A. Bessalov, V. Sokolov, Properties of Isogeny Graph of Non-Cyclic Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3550 (2023) 234–239.`</small>

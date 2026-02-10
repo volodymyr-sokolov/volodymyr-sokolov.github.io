@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -56,12 +59,12 @@ First Online: 16 August 2022
 
 ### APA
 
-<small>`Bessalov, A., Sokolov, V., Skladannyi, P., Mazur, N., & Ageyev, D. (2022). Implementation of the CSIDH Algorithm Model on Supersingular Twisted and Quadratic Edwards Curves. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3187, no. 1, pp. 302–309).`</small>
+<small class="citation">`Bessalov, A., Sokolov, V., Skladannyi, P., Mazur, N., & Ageyev, D. (2022). Implementation of the CSIDH Algorithm Model on Supersingular Twisted and Quadratic Edwards Curves. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3187, no. 1, pp. 302–309).`</small>
 
 ### IEEE
 
-<small>`A. Bessalov, V. Sokolov, P. Skladannyi, N. Mazur, and D. Ageyev, “Implementation of the CSIDH Algorithm Model on Supersingular Twisted and Quadratic Edwards Curves,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3187, no. 1, pp. 302–309, 2022.`</small>
+<small class="citation">`A. Bessalov, V. Sokolov, P. Skladannyi, N. Mazur, and D. Ageyev, “Implementation of the CSIDH Algorithm Model on Supersingular Twisted and Quadratic Edwards Curves,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3187, no. 1, pp. 302–309, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`A. Bessalov, et al., Implementation of the CSIDH Algorithm Model on Supersingular Twisted and Quadratic Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3187, no. 1 (2022) 302–309.`</small>
+<small class="citation">`A. Bessalov, et al., Implementation of the CSIDH Algorithm Model on Supersingular Twisted and Quadratic Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3187, no. 1 (2022) 302–309.`</small>

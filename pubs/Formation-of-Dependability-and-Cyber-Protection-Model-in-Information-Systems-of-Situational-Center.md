@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Formation of Dependability and Cyber Protection Model in Information Systems of Situational Center
@@ -48,12 +51,12 @@ First Online: 6 June 2022
 
 ### APA
 
-<small>`Grechaninov, V., Hulak, H., Sokolov, V., Skladannyi, P., & Korshun, N. (2022). Formation of Dependability and Cyber Protection Model in Information Systems of Situational Center. In Emerging Technology Trends on the Smart Industry and the Internet of Things (Vol. 3149, pp. 107–117).`</small>
+<small class="citation">`Grechaninov, V., Hulak, H., Sokolov, V., Skladannyi, P., & Korshun, N. (2022). Formation of Dependability and Cyber Protection Model in Information Systems of Situational Center. In Emerging Technology Trends on the Smart Industry and the Internet of Things (Vol. 3149, pp. 107–117).`</small>
 
 ### IEEE
 
-<small>`V. Grechaninov, H. Hulak, V. Sokolov, P. Skladannyi, and N. Korshun, “Formation of Dependability and Cyber Protection Model in Information Systems of Situational Center,” Emerging Technology Trends on the Smart Industry and the Internet of Things, vol. 3149, pp. 107–117, 2022.`</small>
+<small class="citation">`V. Grechaninov, H. Hulak, V. Sokolov, P. Skladannyi, and N. Korshun, “Formation of Dependability and Cyber Protection Model in Information Systems of Situational Center,” Emerging Technology Trends on the Smart Industry and the Internet of Things, vol. 3149, pp. 107–117, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`V. Grechaninov, et al., Formation of Dependability and Cyber Protection Model in Information Systems of Situational Center, in: Emerging Technology Trends on the Smart Industry and the Internet of Things, vol. 3149 (2022) 107–117.`</small>
+<small class="citation">`V. Grechaninov, et al., Formation of Dependability and Cyber Protection Model in Information Systems of Situational Center, in: Emerging Technology Trends on the Smart Industry and the Internet of Things, vol. 3149 (2022) 107–117.`</small>

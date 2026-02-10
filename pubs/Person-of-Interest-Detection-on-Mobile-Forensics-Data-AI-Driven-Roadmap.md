@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Person-of-Interest Detection on Mobile Forensics Data — AI-Driven Roadmap
@@ -50,12 +53,12 @@ First Online: 20 March 2024
 
 ### APA
 
-<small>`Mykhaylova, O. Fedynyshyn, T., Sokolov, V., & Kyrychok, R. (2024). Person-of-Interest Detection on Mobile Forensics Data—AI-Driven Roadmap. In Workshop on Cybersecurity Providing in Information and Telecommunication Systems (CPITS) (Vol. 3654, pp. 239–251).`</small>
+<small class="citation">`Mykhaylova, O. Fedynyshyn, T., Sokolov, V., & Kyrychok, R. (2024). Person-of-Interest Detection on Mobile Forensics Data—AI-Driven Roadmap. In Workshop on Cybersecurity Providing in Information and Telecommunication Systems (CPITS) (Vol. 3654, pp. 239–251).`</small>
 
 ### IEEE
 
-<small>`O. Mykhaylova, T. Fedynyshyn, V. Sokolov, and R. Kyrychok, “Person-of-Interest Detection on Mobile Forensics Data—AI-Driven Roadmap,” Workshop on Cybersecurity Providing in Information and Telecommunication Systems (CPITS), vol. 3654, pp. 239–251, 2024.`</small>
+<small class="citation">`O. Mykhaylova, T. Fedynyshyn, V. Sokolov, and R. Kyrychok, “Person-of-Interest Detection on Mobile Forensics Data—AI-Driven Roadmap,” Workshop on Cybersecurity Providing in Information and Telecommunication Systems (CPITS), vol. 3654, pp. 239–251, 2024.`</small>
 
 ### CEUR-WS
 
-<small>`O. Mykhaylova, et al., Person-of-Interest Detection on Mobile Forensics Data — AI-Driven Roadmap, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3654 (2024) 239–251.`</small>
+<small class="citation">`O. Mykhaylova, et al., Person-of-Interest Detection on Mobile Forensics Data — AI-Driven Roadmap, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3654 (2024) 239–251.`</small>

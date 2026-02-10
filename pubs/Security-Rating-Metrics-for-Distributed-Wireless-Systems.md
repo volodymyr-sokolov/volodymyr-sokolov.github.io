@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Security Rating Metrics for Distributed Wireless Systems
@@ -47,12 +50,12 @@ First Online: 22 June 2019
 
 ### APA
 
-<small>`Buriachok, V., Sokolov, V., & Skladannyi, P. (2019). Security Rating Metrics for Distributed Wireless Systems. In 8th International Conference on "Mathematics. Information Technologies. Education": Modern Machine Learning Technologies and Data Science (Vol. 2386, pp. 222–233).`</small>
+<small class="citation">`Buriachok, V., Sokolov, V., & Skladannyi, P. (2019). Security Rating Metrics for Distributed Wireless Systems. In 8th International Conference on "Mathematics. Information Technologies. Education": Modern Machine Learning Technologies and Data Science (Vol. 2386, pp. 222–233).`</small>
 
 ### IEEE
 
-<small>`V. Buriachok, V. Sokolov, and P. Skladannyi, “Security Rating Metrics for Distributed Wireless Systems,” 8th International Conference on "Mathematics. Information Technologies. Education": Modern Machine Learning Technologies and Data Science, vol. 2386, pp. 222–233, 2019.`</small>
+<small class="citation">`V. Buriachok, V. Sokolov, and P. Skladannyi, “Security Rating Metrics for Distributed Wireless Systems,” 8th International Conference on "Mathematics. Information Technologies. Education": Modern Machine Learning Technologies and Data Science, vol. 2386, pp. 222–233, 2019.`</small>
 
 ### CEUR-WS
 
-<small>`V. Buriachok, V. Sokolov, P. Skladannyi, Security Rating Metrics for Distributed Wireless Systems, in: 8th International Conference on "Mathematics. Information Technologies. Education": Modern Machine Learning Technologies and Data Science, vol. 2386 (2019) 222–233.`</small>
+<small class="citation">`V. Buriachok, V. Sokolov, P. Skladannyi, Security Rating Metrics for Distributed Wireless Systems, in: 8th International Conference on "Mathematics. Information Technologies. Education": Modern Machine Learning Technologies and Data Science, vol. 2386 (2019) 222–233.`</small>

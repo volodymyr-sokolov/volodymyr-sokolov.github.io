@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Protecting Objects of Critical Information Infrastructure from Wartime Cyber Attacks by Decentralizing the Telecommunications Network
@@ -51,12 +54,12 @@ First Online: 16 November 2023
 
 ### APA
 
-<small>`Anakhov, P., Zhebka, V., Popereshnyak, S., Skladannyi, P., & Sokolov, V. (2023). Protecting Objects of Critical Information Infrastructure from Wartime Cyber Attacks by Decentralizing the Telecommunications Network. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3550, pp. 240–245).`</small>
+<small class="citation">`Anakhov, P., Zhebka, V., Popereshnyak, S., Skladannyi, P., & Sokolov, V. (2023). Protecting Objects of Critical Information Infrastructure from Wartime Cyber Attacks by Decentralizing the Telecommunications Network. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3550, pp. 240–245).`</small>
 
 ### IEEE
 
-<small>`P. Anakhov, V. Zhebka, S. Popereshnyak, P. Skladannyi, and V. Sokolov, “Protecting Objects of Critical Information Infrastructure from Wartime Cyber Attacks by Decentralizing the Telecommunications Network,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3550, pp. 240–245, 2023.`</small>
+<small class="citation">`P. Anakhov, V. Zhebka, S. Popereshnyak, P. Skladannyi, and V. Sokolov, “Protecting Objects of Critical Information Infrastructure from Wartime Cyber Attacks by Decentralizing the Telecommunications Network,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3550, pp. 240–245, 2023.`</small>
 
 ### CEUR-WS
 
-<small>`P. Anakhov, et al., Protecting Objects of Critical Information Infrastructure from Wartime Cyber Attacks by Decentralizing the Telecommunications Network, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3550 (2023) 240–245.`</small>
+<small class="citation">`P. Anakhov, et al., Protecting Objects of Critical Information Infrastructure from Wartime Cyber Attacks by Decentralizing the Telecommunications Network, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3550 (2023) 240–245.`</small>

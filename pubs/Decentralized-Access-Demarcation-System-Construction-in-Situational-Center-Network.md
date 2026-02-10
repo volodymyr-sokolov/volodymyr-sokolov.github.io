@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Decentralized Access Demarcation System Construction in Situational Center Network
@@ -51,12 +54,12 @@ First Online: 16 August 2022
 
 ### APA
 
-<small>`Grechaninov, V., Hulak, H., Hulak, E., Skladannyi, P., & Sokolov, V. (2022). Decentralized Access Demarcation System Construction in Situational Center Network. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3188, no. 2, pp. 197–206).`</small>
+<small class="citation">`Grechaninov, V., Hulak, H., Hulak, E., Skladannyi, P., & Sokolov, V. (2022). Decentralized Access Demarcation System Construction in Situational Center Network. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3188, no. 2, pp. 197–206).`</small>
 
 ### IEEE
 
-<small>`V. Grechaninov, H. Hulak, E. Hulak, P. Skladannyi, and V. Sokolov, “Decentralized Access Demarcation System Construction in Situational Center Network,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3188, no. 2, pp. 197–206, 2022.`</small>
+<small class="citation">`V. Grechaninov, H. Hulak, E. Hulak, P. Skladannyi, and V. Sokolov, “Decentralized Access Demarcation System Construction in Situational Center Network,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3188, no. 2, pp. 197–206, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`V. Grechaninov, et al., Decentralized Access Demarcation System Construction in Situational Center Network, in: Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3188, no. 2 (2022) 197–206.`</small>
+<small class="citation">`V. Grechaninov, et al., Decentralized Access Demarcation System Construction in Situational Center Network, in: Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3188, no. 2 (2022) 197–206.`</small>

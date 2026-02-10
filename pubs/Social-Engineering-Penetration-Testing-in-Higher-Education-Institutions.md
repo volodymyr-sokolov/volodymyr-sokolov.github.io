@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Book Chapter
 
 # Social Engineering Penetration Testing in Higher Education Institutions
@@ -50,11 +53,11 @@ First Online: 19 August 2023
 ## Cite
 
 ### [APA]
-<small>`Marusenko, R., Sokolov, V., & Skladannyi, P. (2023). Social Engineering Penetration Testing in Higher Education Institutions. In Lecture Notes on Data Engineering and Communications Technologies (pp. 1132–1147). Springer Nature Switzerland. https://doi.org/10.1007/978-3-031-36118-0_96`</small>
+<small class="citation">`Marusenko, R., Sokolov, V., & Skladannyi, P. (2023). Social Engineering Penetration Testing in Higher Education Institutions. In Lecture Notes on Data Engineering and Communications Technologies (pp. 1132–1147). Springer Nature Switzerland. https://doi.org/10.1007/978-3-031-36118-0_96`</small>
 
 ### [IEEE]
-<small>`R. Marusenko, V. Sokolov, and P. Skladannyi, “Social Engineering Penetration Testing in Higher Education Institutions,” Lecture Notes on Data Engineering and Communications Technologies. Springer Nature Switzerland, pp. 1132–1147, 2023. doi: 10.1007/978-3-031-36118-0_96.`</small>
+<small class="citation">`R. Marusenko, V. Sokolov, and P. Skladannyi, “Social Engineering Penetration Testing in Higher Education Institutions,” Lecture Notes on Data Engineering and Communications Technologies. Springer Nature Switzerland, pp. 1132–1147, 2023. doi: 10.1007/978-3-031-36118-0_96.`</small>
 
 ### CEUR-WS
 
-<small>`R. Marusenko, V. Sokolov, P. Skladannyi, Social Engineering Penetration Testing in Higher Education Institutions, Advances in Computer Science for Engineering and Education VI, vol. 181 (2023) 1132–1147. doi:10.1007/978-3-031-36118-0_96`</small>
+<small class="citation">`R. Marusenko, V. Sokolov, P. Skladannyi, Social Engineering Penetration Testing in Higher Education Institutions, Advances in Computer Science for Engineering and Education VI, vol. 181 (2023) 1132–1147. doi:10.1007/978-3-031-36118-0_96`</small>

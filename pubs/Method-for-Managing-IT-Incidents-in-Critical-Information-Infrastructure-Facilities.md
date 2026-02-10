@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Method for Managing IT Incidents in Critical Information Infrastructure Facilities
@@ -50,12 +53,12 @@ First Online: 9 November 2024
 
 ### APA
 
-<small>`Gnatyuk, S., Sydorenko, V., Polozhentsev, A., & Sokolov, V. (2024). Method for Managing IT Incidents in Critical Information Infrastructure Facilities. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3826, pp. 326–333).`</small>
+<small class="citation">`Gnatyuk, S., Sydorenko, V., Polozhentsev, A., & Sokolov, V. (2024). Method for Managing IT Incidents in Critical Information Infrastructure Facilities. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3826, pp. 326–333).`</small>
 
 ### IEEE
 
-<small>`S. Gnatyuk, V. Sydorenko, A. Polozhentsev, and V. Sokolov, “Method for Managing IT Incidents in Critical Information Infrastructure Facilities,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3826, pp. 326–333, 2024.`</small>
+<small class="citation">`S. Gnatyuk, V. Sydorenko, A. Polozhentsev, and V. Sokolov, “Method for Managing IT Incidents in Critical Information Infrastructure Facilities,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3826, pp. 326–333, 2024.`</small>
 
 ### CEUR-WS
 
-<small>`S. Gnatyuk, et al., Method for Managing IT Incidents in Critical Information Infrastructure Facilities, in: Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3826 (2024) 326–333.`</small>
+<small class="citation">`S. Gnatyuk, et al., Method for Managing IT Incidents in Critical Information Infrastructure Facilities, in: Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3826 (2024) 326–333.`</small>

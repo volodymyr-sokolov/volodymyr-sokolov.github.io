@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Natural Language Technology to Ensure the Safety of Speech Information
@@ -51,12 +54,12 @@ First Online: 16 August 2022
 
 ### APA
 
-<small>`Iosifov, I., Iosifova, O., Sokolov, V., Skladannyi, P., & Sukaylo, I. (2022). Natural Language Technology to Ensure the Safety of Speech Information. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3187, no. 1, pp. 216–226).`</small>
+<small class="citation">`Iosifov, I., Iosifova, O., Sokolov, V., Skladannyi, P., & Sukaylo, I. (2022). Natural Language Technology to Ensure the Safety of Speech Information. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3187, no. 1, pp. 216–226).`</small>
 
 ### IEEE
 
-<small>`I. Iosifov, O. Iosifova, V. Sokolov, P. Skladannyi, and I. Sukaylo, “Natural Language Technology to Ensure the Safety of Speech Information,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3187, no. 1, pp. 216–226, 2022.`</small>
+<small class="citation">`I. Iosifov, O. Iosifova, V. Sokolov, P. Skladannyi, and I. Sukaylo, “Natural Language Technology to Ensure the Safety of Speech Information,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3187, no. 1, pp. 216–226, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`I. Iosifov, et al., Natural Language Technology to Ensure the Safety of Speech Information, in: Cybersecurity Providing in In-formation and Telecommunication Systems, vol. 3187, no. 1 (2022) 216–226.`</small>
+<small class="citation">`I. Iosifov, et al., Natural Language Technology to Ensure the Safety of Speech Information, in: Cybersecurity Providing in In-formation and Telecommunication Systems, vol. 3187, no. 1 (2022) 216–226.`</small>

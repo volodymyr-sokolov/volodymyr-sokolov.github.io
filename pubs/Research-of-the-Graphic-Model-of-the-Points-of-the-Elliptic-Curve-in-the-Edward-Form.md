@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form
@@ -49,12 +52,12 @@ First Online: 9 November 2024
 
 ### APA
 
-<small>`Abramov, S., Sokolov, V., & Abramov, V. (2024). Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3826, pp. 174–181).`</small>
+<small class="citation">`Abramov, S., Sokolov, V., & Abramov, V. (2024). Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3826, pp. 174–181).`</small>
 
 ### IEEE
 
-<small>`S. Abramov, V. Sokolov, and V. Abramov, “Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3826, pp. 174–181, 2024.`</small>
+<small class="citation">`S. Abramov, V. Sokolov, and V. Abramov, “Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3826, pp. 174–181, 2024.`</small>
 
 ### CEUR-WS
 
-<small>`S. Abramov, V. Sokolov, V. Abramov, Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form, in: Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3826 (2024) 174–181.`</small>
+<small class="citation">`S. Abramov, V. Sokolov, V. Abramov, Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form, in: Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3826 (2024) 174–181.`</small>

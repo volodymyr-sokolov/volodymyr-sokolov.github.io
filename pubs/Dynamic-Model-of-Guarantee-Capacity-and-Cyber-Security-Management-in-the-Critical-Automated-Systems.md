@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated Systems
@@ -48,12 +51,12 @@ First Online: 30 October 2023
 
 ### APA
 
-<small>`Hulak, H., Skladannyi, P., Sokolov, V., Hulak, Y., & Korniiets, V. (2023). Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated System. In 2nd International Conference on Conflict Management in Global Information Networks (Vol. 3530, pp. 102–111).`</small>
+<small class="citation">`Hulak, H., Skladannyi, P., Sokolov, V., Hulak, Y., & Korniiets, V. (2023). Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated System. In 2nd International Conference on Conflict Management in Global Information Networks (Vol. 3530, pp. 102–111).`</small>
 
 ### IEEE
 
-<small>`H. Hulak, P. Skladannyi, V. Sokolov, Y. Hulak, and V. Korniiets, “Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated System,” 2nd International Conference on Conflict Management in Global Information Networks, vol. 3530, pp. 102–111, 2023.`</small>
+<small class="citation">`H. Hulak, P. Skladannyi, V. Sokolov, Y. Hulak, and V. Korniiets, “Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated System,” 2nd International Conference on Conflict Management in Global Information Networks, vol. 3530, pp. 102–111, 2023.`</small>
 
 ### CEUR-WS
 
-<small>`H. Hulak, et al., Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated System, in: 2nd International Conference on Conflict Management in Global Information Networks, vol. 3530 (2023) 102–111.`</small>
+<small class="citation">`H. Hulak, et al., Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated System, in: 2nd International Conference on Conflict Management in Global Information Networks, vol. 3530 (2023) 102–111.`</small>

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies
@@ -52,12 +55,12 @@ First Online: 23 November 2020
 
 ### APA
 
-<small>`Buriachok, V., Ageyev, D., Zhyltsov, O., Skladannyi, P., & Sokolov, V. (2020). Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 2746, pp. 23–32).`</small>
+<small class="citation">`Buriachok, V., Ageyev, D., Zhyltsov, O., Skladannyi, P., & Sokolov, V. (2020). Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 2746, pp. 23–32).`</small>
 
 ### IEEE
 
-<small>`V. Buriachok, D. Ageyev, O. Zhyltsov, P. Skladannyi, and V. Sokolov, “Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 2746, pp. 23–32, 2020.`</small>
+<small class="citation">`V. Buriachok, D. Ageyev, O. Zhyltsov, P. Skladannyi, and V. Sokolov, “Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 2746, pp. 23–32, 2020.`</small>
 
 ### CEUR-WS
 
-<small>`V. Buriachok, et al., Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 2746 (2020) 23–32.`</small>
+<small class="citation">`V. Buriachok, et al., Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 2746 (2020) 23–32.`</small>

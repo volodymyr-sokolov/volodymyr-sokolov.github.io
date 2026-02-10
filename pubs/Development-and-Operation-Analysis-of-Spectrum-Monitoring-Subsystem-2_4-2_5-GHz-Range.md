@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Book Chapter
 
 # Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range
@@ -49,12 +52,12 @@ First Online: 21 June 2020
 
 ### APA
 
-<small>`Hu, Z., Buriachok, V., Bogachuk, I., Sokolov, V., & Ageyev, D. (2020). Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range. In Lecture Notes on Data Engineering and Communications Technologies (pp. 675–709). Springer International Publishing. https://doi.org/10.1007/978-3-030-43070-2_29`</small>
+<small class="citation">`Hu, Z., Buriachok, V., Bogachuk, I., Sokolov, V., & Ageyev, D. (2020). Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range. In Lecture Notes on Data Engineering and Communications Technologies (pp. 675–709). Springer International Publishing. https://doi.org/10.1007/978-3-030-43070-2_29`</small>
 
 ### IEEE
 
-<small>`Z. Hu, V. Buriachok, I. Bogachuk, V. Sokolov, and D. Ageyev, “Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 675–709, Jun. 21, 2020. doi: 10.1007/978-3-030-43070-2_29.`</small>
+<small class="citation">`Z. Hu, V. Buriachok, I. Bogachuk, V. Sokolov, and D. Ageyev, “Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 675–709, Jun. 21, 2020. doi: 10.1007/978-3-030-43070-2_29.`</small>
 
 ### CEUR-WS
 
-<small>`Z. Hu, et al., Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range, Data-Centric Business and Applications 48 (2020) 675–709. doi:10.1007/978-3-030-43070-2_29`</small>
+<small class="citation">`Z. Hu, et al., Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range, Data-Centric Business and Applications 48 (2020) 675–709. doi:10.1007/978-3-030-43070-2_29`</small>

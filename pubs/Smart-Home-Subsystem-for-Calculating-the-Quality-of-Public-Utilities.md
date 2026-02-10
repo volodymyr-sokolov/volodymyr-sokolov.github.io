@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Smart Home Subsystem for Calculating the Quality of Public Utilities
@@ -49,12 +52,12 @@ First Online: 16 June 2023
 
 ### APA
 
-<small>`Bahatskyi, O., Bahatskyi, V., & Sokolov, V. (2023). Smart Home Subsystem for Calculating the Quality of Public Utilities. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 3421, pp. 168–173).`</small>
+<small class="citation">`Bahatskyi, O., Bahatskyi, V., & Sokolov, V. (2023). Smart Home Subsystem for Calculating the Quality of Public Utilities. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 3421, pp. 168–173).`</small>
 
 ### IEEE
 
-<small>`O. Bahatskyi, V. Bahatskyi, and V. Sokolov, “Smart Home Subsystem for Calculating the Quality of Public Utilities,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 3421, pp. 168–173, 2023.`</small>
+<small class="citation">`O. Bahatskyi, V. Bahatskyi, and V. Sokolov, “Smart Home Subsystem for Calculating the Quality of Public Utilities,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 3421, pp. 168–173, 2023.`</small>
 
 ### CEUR-WS
 
-<small>`O. Bahatskyi, V. Bahatskyi, V. Sokolov, Smart Home Subsystem for Calculating the Quality of Public Utilities, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3421 (2023) 168–173.`</small>
+<small class="citation">`O. Bahatskyi, V. Bahatskyi, V. Sokolov, Smart Home Subsystem for Calculating the Quality of Public Utilities, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3421 (2023) 168–173.`</small>

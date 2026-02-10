@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Grant
 
 # Educating the Next Generation Experts in Cyber Security: The New EU-Recognized Master’s Program (ENGENSEC)
@@ -29,12 +32,12 @@ et al.
 
 ### APA
 
-<small>`Yevdokymenko, M., & Sokolov, V. (2019). Overview of the Course in 'Wireless and Mobile Security'. In Educating the Next Generation MSc in Cyber Security (pp. 104–119).`</small>
+<small class="citation">`Yevdokymenko, M., & Sokolov, V. (2019). Overview of the Course in 'Wireless and Mobile Security'. In Educating the Next Generation MSc in Cyber Security (pp. 104–119).`</small>
 
 ### IEEE
 
-<small>`M. Yevdokymenko and V. Sokolov, “Overview of the Course in 'Wireless and Mobile Security',” Educating the Next Generation MSc in Cyber Security, pp. 104–119, 2019.`</small>
+<small class="citation">`M. Yevdokymenko and V. Sokolov, “Overview of the Course in 'Wireless and Mobile Security',” Educating the Next Generation MSc in Cyber Security, pp. 104–119, 2019.`</small>
 
 ### CEUR-WS
 
-<small>`M. Yevdokymenko, V. Sokolov, Overview of the Course in 'Wireless and Mobile Security', in: Educating the Next Generation MSc in Cyber Security (2019) 104–119.`</small>
+<small class="citation">`M. Yevdokymenko, V. Sokolov, Overview of the Course in 'Wireless and Mobile Security', in: Educating the Next Generation MSc in Cyber Security (2019) 104–119.`</small>

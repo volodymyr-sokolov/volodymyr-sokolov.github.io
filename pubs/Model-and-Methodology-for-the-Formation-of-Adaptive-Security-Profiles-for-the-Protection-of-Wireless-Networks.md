@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats
@@ -48,12 +51,12 @@ First Online: 25 September 2025
 
 ### APA
 
-<small>`Skladannyi, P., Kostiuk Y., Khorolska, K., Bebeshko, B., & Sokolov, V. (2025). Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats. In Workshop on Cyber Security and Data Protection (Vol. 4042, pp. 17–36).`</small>
+<small class="citation">`Skladannyi, P., Kostiuk Y., Khorolska, K., Bebeshko, B., & Sokolov, V. (2025). Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats. In Workshop on Cyber Security and Data Protection (Vol. 4042, pp. 17–36).`</small>
 
 ### IEEE
 
-<small>`P. Skladannyi, Y. Kostiuk, K. Khorolska, B. Bebeshko, and V. Sokolov, “Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats,” Workshop on Cyber Security and Data Protection, vol. 4042, pp. 17–36, 2025.`</small>
+<small class="citation">`P. Skladannyi, Y. Kostiuk, K. Khorolska, B. Bebeshko, and V. Sokolov, “Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats,” Workshop on Cyber Security and Data Protection, vol. 4042, pp. 17–36, 2025.`</small>
 
 ### CEUR-WS
 
-<small>`P. Skladannyi, et al., Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats, in: Cyber Security and Data Protection, vol. 4042 (2025) 17–36.`</small>
+<small class="citation">`P. Skladannyi, et al., Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats, in: Cyber Security and Data Protection, vol. 4042 (2025) 17–36.`</small>

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Article
 
 # Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves
@@ -48,12 +51,12 @@ First Online: 27 August 2024
 
 ### APA
 
-<small>`Bessalov, A., Sokolov, V., & Abramov, S. (2024). Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves. Cryptography, 8(3), 38. https://doi.org/10.3390/cryptography8030038`</small>
+<small class="citation">`Bessalov, A., Sokolov, V., & Abramov, S. (2024). Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves. Cryptography, 8(3), 38. https://doi.org/10.3390/cryptography8030038`</small>
 
 ### IEEE
 
-<small>`A. Bessalov, V. Sokolov, and S. Abramov, “Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves,” Cryptography, vol. 8, no. 3, p. 38, Aug. 2024, doi: 10.3390/cryptography8030038.`</small>
+<small class="citation">`A. Bessalov, V. Sokolov, and S. Abramov, “Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves,” Cryptography, vol. 8, no. 3, p. 38, Aug. 2024, doi: 10.3390/cryptography8030038.`</small>
 
 ### CEUR-WS
 
-<small>`A. Bessalov, V. Sokolov, S. Abramov, Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves, Cryptography 8(3), iss. 38 (2024) 1–17. doi:10.3390/cryptography8030038`</small>
+<small class="citation">`A. Bessalov, V. Sokolov, S. Abramov, Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves, Cryptography 8(3), iss. 38 (2024) 1–17. doi:10.3390/cryptography8030038`</small>
