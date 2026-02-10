@@ -25,9 +25,9 @@ Deduplication; Email validation; ORCID; Phishing; Social engineering; Spam filte
 
 <table>
 <tr>
-<!--td>
-<a href="https://www.scimagojr.com/journalsearch.php?q=21100975545&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100975545" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td-->
+<td>
+<a href="https://www.scimagojr.com/journalsearch.php?q=21100975545&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://www.scimagojr.com/journal_img.php?id=21100975545" alt="SCImago Journal &amp; Country Rank"  /></a>
+</td>
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1007/978-3-031-04809-8_53" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>

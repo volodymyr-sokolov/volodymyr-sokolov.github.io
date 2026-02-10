@@ -30,7 +30,7 @@ bandwidth; IoT; network load; Raspberry Pi; RPi; wireless network
 </td>
 <!--td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/TCSET49122.2020.235492" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
-</td-->
+</td>
 </tr>
 </table>
 

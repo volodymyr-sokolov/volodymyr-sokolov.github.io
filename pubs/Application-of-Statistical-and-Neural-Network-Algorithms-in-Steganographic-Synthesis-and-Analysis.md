@@ -24,9 +24,9 @@ steganography, steganalysis, hidden information, audio container, graphic contai
 
 <table>
 <tr>
-<!--td>
-<a href="https://www.scimagojr.com/journalsearch.php?q=21100218356&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100218356" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td-->
+<td>
+<a href="https://www.scimagojr.com/journalsearch.php?q=21100218356&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://www.scimagojr.com/journal_img.php?id=21100218356" alt="SCImago Journal &amp; Country Rank"  /></a>
+</td>
 <td style="text-align: left;">
 <a href="https://cqpc.kubg.edu.ua/"><img src="/icons/cqpc.svg" width="200"></a>
 </td>
