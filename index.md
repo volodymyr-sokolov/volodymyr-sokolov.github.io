@@ -44,6 +44,8 @@ As an editor and reviewer, I have participated in the editorial boards of confer
 
 ## Publications
 
+2026 [Network Traffic Analysis and Management](Network-Traffic-Analysis-and-Management.md)
+
 2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](pubs/Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md)
 
 2023 [Brainwave-based Authentication using Features Fusion](pubs/Brainwave-based-Authentication-using-Features-Fusion.md)
