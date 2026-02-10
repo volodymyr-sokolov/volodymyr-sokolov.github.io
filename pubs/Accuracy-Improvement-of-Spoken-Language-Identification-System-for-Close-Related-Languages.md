@@ -55,36 +55,47 @@ First Online: 3 April 2025
 
 ### APA
 
-<small>`Romanovskyi, O., Iosifov, I., Iosifova, O., Sokolov, V., Skladannyi, P., Sukaylo, I., & Tsarenok, O. (2025). Accuracy Improvement of Spoken Language Identification System for Close-Related Languages. In Lecture Notes on Data Engineering and Communications Technologies (pp. 35–52). Springer Nature Switzerland. https://doi.org/10.1007/978-3-031-84228-3_4`</small>
+<small class="citation">`Romanovskyi, O., Iosifov, I., Iosifova, O., Sokolov, V., Skladannyi, P., Sukaylo, I., & Tsarenok, O. (2025). Accuracy Improvement of Spoken Language Identification System for Close-Related Languages. In Lecture Notes on Data Engineering and Communications Technologies (pp. 35–52). Springer Nature Switzerland. https://doi.org/10.1007/978-3-031-84228-3_4`</small>
 
 ### IEEE
 
-<small>`O. Romanovskyi et al., “Accuracy Improvement of Spoken Language Identification System for Close-Related Languages,” Lecture Notes on Data Engineering and Communications Technologies. Springer Nature Switzerland, pp. 35–52, 2025. doi: 10.1007/978-3-031-84228-3_4.`</small>
+<small class="citation">`O. Romanovskyi et al., "Accuracy Improvement of Spoken Language Identification System for Close-Related Languages," Lecture Notes on Data Engineering and Communications Technologies. Springer Nature Switzerland, pp. 35–52, 2025. doi: 10.1007/978-3-031-84228-3_4.`</small>
 
 ### CEUR-WS
 
-<small>`O. Romanovskyi, et al., Accuracy Improvement of Spoken Language Identification System for Close-Related Languages, Advances in Computer Science for Engineering and Education VII, vol. 242 (2025) 35–52. doi:10.1007/978-3-031-84228-3_4`</small>
+<small class="citation">`O. Romanovskyi, et al., Accuracy Improvement of Spoken Language Identification System for Close-Related Languages, Advances in Computer Science for Engineering and Education VII, vol. 242 (2025) 35–52. doi:10.1007/978-3-031-84228-3_4`</small>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <style>
-small {
+.citation-wrapper {
     position: relative;
-    display: inline-block;
+    display: block;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px 50px 15px 15px;
+    margin: 10px 0;
 }
 
 .copy-code-button {
     position: absolute;
     right: 10px;
-    top: 10px;
-    padding: 5px 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 6px 10px;
     cursor: pointer;
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 16px;
+    line-height: 1;
+    transition: all 0.2s ease;
 }
 
 .copy-code-button:hover {
-    background-color: #e0e0e0;
+    background-color: #e9ecef;
+    border-color: #adb5bd;
 }
 
 .copy-code-button.copied {
@@ -95,29 +106,28 @@ small {
 </style>
 
 <script>
-// Функция для добавления кнопок копирования к блокам <small>
+// Функция для добавления кнопок копирования к блокам <small class="citation">
 document.addEventListener('DOMContentLoaded', function() {
-    // Находим все элементы <small>
-    const smallElements = document.querySelectorAll('small');
+    // Находим все элементы <small> с классом citation
+    const citationElements = document.querySelectorAll('small.citation');
     
-    smallElements.forEach(function(small) {
+    citationElements.forEach(function(citation) {
         // Создаем обертку для позиционирования
         const wrapper = document.createElement('div');
-        wrapper.style.position = 'relative';
-        wrapper.style.display = 'inline-block';
-        wrapper.style.width = '100%';
+        wrapper.className = 'citation-wrapper';
         
-        // Создаем кнопку
+        // Создаем кнопку с иконкой Bootstrap
         const button = document.createElement('button');
         button.className = 'copy-code-button';
-        button.textContent = 'Copy';
+        button.innerHTML = '<i class="bi bi-clipboard"></i>';
+        button.setAttribute('title', 'Copy citation');
         button.onclick = function() {
-            copyText(small, button);
+            copyText(citation, button);
         };
         
-        // Заменяем small на wrapper
-        small.parentNode.insertBefore(wrapper, small);
-        wrapper.appendChild(small);
+        // Заменяем citation на wrapper
+        citation.parentNode.insertBefore(wrapper, citation);
+        wrapper.appendChild(citation);
         wrapper.appendChild(button);
     });
 });
@@ -134,13 +144,13 @@ function copyText(element, button) {
     // Копируем в буфер обмена
     navigator.clipboard.writeText(textToCopy).then(function() {
         // Успешно скопировано
-        const originalText = button.textContent;
-        button.textContent = 'Copied!';
+        const originalIcon = button.innerHTML;
+        button.innerHTML = '<i class="bi bi-check-lg"></i>';
         button.classList.add('copied');
         
-        // Возвращаем исходный текст через 2 секунды
+        // Возвращаем исходную иконку через 2 секунды
         setTimeout(function() {
-            button.textContent = originalText;
+            button.innerHTML = originalIcon;
             button.classList.remove('copied');
         }, 2000);
     }, function() {
