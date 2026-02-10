@@ -65,8 +65,6 @@ First Online: 3 April 2025
 
 <small class="citation">`O. Romanovskyi, et al., Accuracy Improvement of Spoken Language Identification System for Close-Related Languages, Advances in Computer Science for Engineering and Education VII, vol. 242 (2025) 35–52. doi:10.1007/978-3-031-84228-3_4`</small>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
 <style>
 .citation-wrapper {
     position: relative;
@@ -103,6 +101,12 @@ First Online: 3 April 2025
     border-color: #c3e6cb;
     color: #155724;
 }
+
+.copy-code-button img {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
 </style>
 
 <script>
@@ -116,10 +120,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const wrapper = document.createElement('div');
         wrapper.className = 'citation-wrapper';
         
-        // Создаем кнопку с иконкой Bootstrap
+        // Создаем кнопку с локальной иконкой
         const button = document.createElement('button');
         button.className = 'copy-code-button';
-        button.innerHTML = '<i class="bi bi-clipboard"></i>';
+        button.innerHTML = '<img src="/icons/copy.svg" alt="Copy">';
         button.setAttribute('title', 'Copy citation');
         button.onclick = function() {
             copyText(citation, button);
@@ -145,7 +149,7 @@ function copyText(element, button) {
     navigator.clipboard.writeText(textToCopy).then(function() {
         // Успешно скопировано
         const originalIcon = button.innerHTML;
-        button.innerHTML = '<i class="bi bi-check-lg"></i>';
+        button.innerHTML = '<img src="/icons/check.svg" alt="Copied">';
         button.classList.add('copied');
         
         // Возвращаем исходную иконку через 2 секунды
