@@ -110,17 +110,13 @@ First Online: 3 April 2025
 </style>
 
 <script>
-// Функция для добавления кнопок копирования к блокам <small class="citation">
 document.addEventListener('DOMContentLoaded', function() {
-    // Находим все элементы <small> с классом citation
     const citationElements = document.querySelectorAll('small.citation');
     
     citationElements.forEach(function(citation) {
-        // Создаем обертку для позиционирования
         const wrapper = document.createElement('div');
         wrapper.className = 'citation-wrapper';
         
-        // Создаем кнопку с локальной иконкой
         const button = document.createElement('button');
         button.className = 'copy-code-button';
         button.innerHTML = '<img src="/icons/copy.svg" alt="Copy">';
@@ -129,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
             copyText(citation, button);
         };
         
-        // Заменяем citation на wrapper
         citation.parentNode.insertBefore(wrapper, citation);
         wrapper.appendChild(citation);
         wrapper.appendChild(button);
@@ -137,29 +132,23 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function copyText(element, button) {
-    // Получаем текст из элемента (убираем обратные кавычки если есть)
     let textToCopy = element.innerText.trim();
     
-    // Убираем обратные кавычки в начале и конце если они есть
     if (textToCopy.startsWith('`') && textToCopy.endsWith('`')) {
         textToCopy = textToCopy.slice(1, -1);
     }
     
-    // Копируем в буфер обмена
     navigator.clipboard.writeText(textToCopy).then(function() {
-        // Успешно скопировано
         const originalIcon = button.innerHTML;
         button.innerHTML = '<img src="/icons/check.svg" alt="Copied">';
         button.classList.add('copied');
         
-        // Возвращаем исходную иконку через 2 секунды
         setTimeout(function() {
             button.innerHTML = originalIcon;
             button.classList.remove('copied');
         }, 2000);
     }, function() {
-        // Ошибка
-        alert("Ошибка при копировании");
+        alert("Copy error");
     });
 }
 </script>
