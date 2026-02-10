@@ -44,14 +44,14 @@ First Online: 24 July 2021
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.3390/encyclopedia1030050&style=apa&lang=en-US)
+### APA
 
 <small>`Kuzminykh, I., Ghita, B., Sokolov, V., & Bakhshi, T. (2021). Information Security Risk Assessment. Encyclopedia, 1(3), 602–617. https://doi.org/10.3390/encyclopedia1030050`</small>
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.3390/encyclopedia1030050&style=ieee&lang=en-US)
+### IEEE
 
 <small>`I. Kuzminykh, B. Ghita, V. Sokolov, and T. Bakhshi, “Information Security Risk Assessment,” Encyclopedia, vol. 1, no. 3, pp. 602–617, July 2021, doi: 10.3390/encyclopedia1030050.`</small>
 
 ### CEUR-WS
 
-<small>`I. Kuzminykh, et al., Information Security Risk Assessment, Encyclopedia 1(3) (2021) 602–617. doi:10.3390/encyclopedia1030050.`</small>
+<small>`I. Kuzminykh, et al., Information Security Risk Assessment, Encyclopedia 1(3) (2021) 602–617. doi:10.3390/encyclopedia1030050`</small>

@@ -26,9 +26,9 @@ Cryptographic algorithms; Energy efficiency; IoT; Lifetime; Power consumption
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=25674&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=25674" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1007/978-3-030-30859-9_2" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -54,10 +54,14 @@ First Online: 12 September 2019
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-30859-9_2&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1007/978-3-030-30859-9_2&style=ieee&lang=en-US)
+<small>`Kuzminykh, I., Carlsson, A., Yevdokymenko, M., & Sokolov, V. (2019). Investigation of the IoT Device Lifetime with Secure Data Transmission. In Lecture Notes in Computer Science (pp. 16–27). Springer International Publishing. https://doi.org/10.1007/978-3-030-30859-9_2`</small>
+
+### IEEE
+
+<small>`I. Kuzminykh, A. Carlsson, M. Yevdokymenko, and V. Sokolov, “Investigation of the IoT Device Lifetime with Secure Data Transmission,” Lecture Notes in Computer Science. Springer International Publishing, pp. 16–27, 2019. doi: 10.1007/978-3-030-30859-9_2.`</small>
 
 ### CEUR-WS
 
-<small>`I. Kuzminykh, et al., Investigation of the IoT Device Lifetime with Secure Data Transmission, in: Internet of Things, Smart Spaces, and Next Generation Networks and Systems, vol. 11660 (2019) 16–27. doi: 10.1007/978-3-030-30859-9_2.`</small>
+<small>`I. Kuzminykh, et al., Investigation of the IoT Device Lifetime with Secure Data Transmission, in: Internet of Things, Smart Spaces, and Next Generation Networks and Systems, vol. 11660 (2019) 16–27. doi:10.1007/978-3-030-30859-9_2`</small>

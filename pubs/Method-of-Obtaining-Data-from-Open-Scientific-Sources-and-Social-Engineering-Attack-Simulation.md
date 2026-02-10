@@ -25,9 +25,9 @@ Deduplication; Email validation; ORCID; Phishing; Social engineering; Spam filte
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100975545&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100975545" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1007/978-3-031-04809-8_53" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -50,10 +50,14 @@ First Online: 29 April 2022
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-031-04809-8_53&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1007/978-3-031-04809-8_53&style=ieee&lang=en-US)
+<small>`Marusenko, R., Sokolov, V., & Bogachuk, I. (2022). Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation. In Lecture Notes on Data Engineering and Communications Technologies (pp. 583–594). Springer International Publishing. https://doi.org/10.1007/978-3-031-04809-8_53`</small>
+
+### IEEE
+
+<small>`R. Marusenko, V. Sokolov, and I. Bogachuk, “Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 583–594, 2022. doi: 10.1007/978-3-031-04809-8_53.`</small>
 
 ### CEUR-WS
 
-<small>`R. Marusenko, V. Sokolov, I. Bogachuk, Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation, Advances in Artificial Systems for Logistics Engineering, vol. 135 (2022) 583–594. doi: 10.1007/978-3-031-04809-8_53.`</small>
+<small>`R. Marusenko, V. Sokolov, I. Bogachuk, Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation, Advances in Artificial Systems for Logistics Engineering, vol. 135 (2022) 583–594. doi:10.1007/978-3-031-04809-8_53`</small>

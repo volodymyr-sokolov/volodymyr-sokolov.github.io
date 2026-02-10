@@ -36,16 +36,20 @@ First Online: 2026
 
 ## Indices
 
-* ISBN: 978-1-041-07175-4 <img src="/icons/print.svg" width="16" height="16">, 978-1-041-07495-3 <img src="/icons/print.svg" width="16" height="16">,  978-1-003-64079-0 <img src="/icons/online.svg" width="16" height="16">
+* ISBN: 978-1-041-07175-4 <img src="/icons/print.svg" width="16" height="16">, 978-1-041-07495-3 <img src="/icons/print.svg" width="16" height="16">, 978-1-003-64079-0 <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-105019245212](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105019245212)
-<!--* KUBG: [51665](http://elibrary.kubg.edu.ua/id/eprint/51665/)-->
+* KUBG: [56247](http://elibrary.kubg.edu.ua/id/eprint/56247/)
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1201/9781003640790-9&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1201/9781003640790-9&style=ieee&lang=en-US)
+<small>`Skladannyi, P., Kostiuk, Y., Sokolov, V., & Khorolska, K. (2026). Network Traffic Analysis and Management. In Handbook of Cybersecurity (pp. 148–172). CRC Press. https://doi.org/10.1201/9781003640790-9`</small>
+
+### IEEE
+
+<small>`P. Skladannyi, Y. Kostiuk, V. Sokolov, and K. Khorolska, “Network Traffic Analysis and Management,” Handbook of Cybersecurity. CRC Press, pp. 148–172, Jan. 09, 2026. doi: 10.1201/9781003640790-9.`</small>
 
 ### CEUR-WS
 
-<small>`P. Skladannyi, Y. Kostiuk, V. Sokolov, K. Khorolska, Network Traffic Analysis and Management, in: Handbook of Cybersecurity, CRC Press, 2026, 148–172. doi: 10.1201/9781003640790-9.`</small>
+<small>`P. Skladannyi, Y. Kostiuk, V. Sokolov, K. Khorolska, Network Traffic Analysis and Management, in: Handbook of Cybersecurity, CRC Press, 2026, 148–172. doi:10.1201/9781003640790-9`</small>

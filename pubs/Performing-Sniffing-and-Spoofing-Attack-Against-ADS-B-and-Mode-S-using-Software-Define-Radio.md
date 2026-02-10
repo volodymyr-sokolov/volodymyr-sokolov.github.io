@@ -47,10 +47,12 @@ First Online: 24 February 2022
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1109/UkrMiCo52950.2021.9716665&style=apa&lang=en-US)
+### [APA]
+<small>`TajDini, M., Sokolov, V., & Skladannyi, P. (2021). Performing Sniffing and Spoofing Attack Against ADS-B and Mode S using Software Define Radio. In 2021 IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (UkrMiCo) (pp. 1–5). https://doi.org/10.1109/ukrmico52950.2021.9716665`</small>
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1109/UkrMiCo52950.2021.9716665&style=ieee&lang=en-US)
+### [IEEE]
+<small>`M. TajDini, V. Sokolov, and P. Skladannyi, “Performing Sniffing and Spoofing Attack Against ADS-B and Mode S using Software Define Radio,” 2021 IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (UkrMiCo). IEEE, pp. 1–5, Nov. 29, 2021. doi: 10.1109/ukrmico52950.2021.9716665.`</small>
 
 ### CEUR-WS
 
-<small>`M. TajDini, V. Sokolov, P. Skladannyi, Performing Sniffing and Spoofing Attack Against ADS-B and Mode S using Software Define Radio, in: IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (2021) 7–11. doi: 10.1109/UkrMiCo52950.2021.9716665.`</small>
+<small>`M. TajDini, V. Sokolov, P. Skladannyi, Performing Sniffing and Spoofing Attack Against ADS-B and Mode S using Software Define Radio, in: IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (2021) 7–11. doi:10.1109/UkrMiCo52950.2021.9716665`</small>

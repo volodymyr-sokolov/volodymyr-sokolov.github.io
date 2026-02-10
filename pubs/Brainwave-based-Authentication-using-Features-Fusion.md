@@ -24,9 +24,9 @@ authentication; BCI; biometrics; brain-computer interface; brainwaves; coherence
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=28898&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=28898" alt="SCImago Journal &amp; Country Rank" /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1016/j.cose.2023.103198" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -46,10 +46,14 @@ First Online: 22 March 2023
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1016/j.cose.2023.103198&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1016/j.cose.2023.103198&style=ieee&lang=en-US)
+<small>`TajDini, Mahyar, Sokolov, Volodymyr, Kuzminykh, I., & Ghita, B. (2023). Brainwave-based authentication using features fusion. Computers &amp; Security, 129, 103198. https://doi.org/10.1016/j.cose.2023.103198`</small>
+
+### IEEE
+
+<small>`M. TajDini, V. Sokolov, I. Kuzminykh, and B. Ghita, “Brainwave-based authentication using features fusion,” Computers &amp; Security, vol. 129, p. 103198, Jun. 2023, doi: 10.1016/j.cose.2023.103198.`</small>
 
 ### CEUR-WS
 
-<small>`M. TajDini, et al., Brainwave-based Authentication using Features Fusion, Comput. Secur. 129, no. 103198 (2023) 1–11. doi:10.1016/j.cose.2023.103198.`</small>
+<small>`M. TajDini, et al., Brainwave-based Authentication using Features Fusion, Comput. Secur. 129, no. 103198 (2023) 1–11. doi:10.1016/j.cose.2023.103198`</small>

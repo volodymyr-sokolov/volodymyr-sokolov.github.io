@@ -25,9 +25,9 @@ High school; Higher education institution; Penetration testing; Phishing; Sensit
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100975545&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100975545" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1007/978-3-031-36118-0_96" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -49,10 +49,12 @@ First Online: 19 August 2023
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-031-36118-0_96&style=apa&lang=en-US)
+### [APA]
+<small>`Marusenko, R., Sokolov, V., & Skladannyi, P. (2023). Social Engineering Penetration Testing in Higher Education Institutions. In Lecture Notes on Data Engineering and Communications Technologies (pp. 1132–1147). Springer Nature Switzerland. https://doi.org/10.1007/978-3-031-36118-0_96`</small>
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1007/978-3-031-36118-0_96&style=ieee&lang=en-US)
+### [IEEE]
+<small>`R. Marusenko, V. Sokolov, and P. Skladannyi, “Social Engineering Penetration Testing in Higher Education Institutions,” Lecture Notes on Data Engineering and Communications Technologies. Springer Nature Switzerland, pp. 1132–1147, 2023. doi: 10.1007/978-3-031-36118-0_96.`</small>
 
 ### CEUR-WS
 
-<small>`R. Marusenko, V. Sokolov, P. Skladannyi, Social Engineering Penetration Testing in Higher Education Institutions, Advances in Computer Science for Engineering and Education VI, vol. 181 (2023) 1132–1147. doi: 10.1007/978-3-031-36118-0_96.`</small>
+<small>`R. Marusenko, V. Sokolov, P. Skladannyi, Social Engineering Penetration Testing in Higher Education Institutions, Advances in Computer Science for Engineering and Education VI, vol. 181 (2023) 1132–1147. doi:10.1007/978-3-031-36118-0_96`</small>

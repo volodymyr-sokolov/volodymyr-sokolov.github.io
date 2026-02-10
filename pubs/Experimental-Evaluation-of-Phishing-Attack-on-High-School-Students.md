@@ -25,9 +25,9 @@ Attack; Fishing; Personal information; Sensitive information; Social engineering
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=5100152904&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=5100152904" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1007/978-3-030-55506-1_59" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -50,10 +50,14 @@ First Online: 6 August 2020
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-55506-1_59&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1007/978-3-030-55506-1_59&style=ieee&lang=en-US)
+<small>`Marusenko, R., Sokolov, V., & Buriachok, V. (2020). Experimental Evaluation of Phishing Attack on High School Students. In Advances in Intelligent Systems and Computing (pp. 668–680). Springer International Publishing. https://doi.org/10.1007/978-3-030-55506-1_59`</small>
+
+### IEEE
+
+<small>`R. Marusenko, V. Sokolov, and V. Buriachok, “Experimental Evaluation of Phishing Attack on High School Students,” Advances in Intelligent Systems and Computing. Springer International Publishing, pp. 668–680, Aug. 06, 2020. doi: 10.1007/978-3-030-55506-1_59.`</small>
 
 ### CEUR-WS
 
-<small>`R. Marusenko, V. Sokolov, V. Buriachok, Experimental Evaluation of Phishing Attack on High School Students, Advances in Computer Science for Engineering and Education III, vol. 1247 (2020) 668–680. doi:10.1007/978-3-030-55506-1_59.`</small>
+<small>`R. Marusenko, V. Sokolov, V. Buriachok, Experimental Evaluation of Phishing Attack on High School Students, Advances in Computer Science for Engineering and Education III, vol. 1247 (2020) 668–680. doi:10.1007/978-3-030-55506-1_59`</small>

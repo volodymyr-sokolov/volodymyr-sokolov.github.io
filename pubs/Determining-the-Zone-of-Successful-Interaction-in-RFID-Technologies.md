@@ -26,9 +26,9 @@ passive electrical oscillating circuit; primary measuring transducer; RFID; tag
 <td>
 <img src="/icons/ieee.svg" height="50">
 </td>
-<td style="text-align: left;">
+<!--td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/DIPED63529.2024.10706153" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
-</td>
+</td-->
 </tr>
 </table>
 
@@ -49,10 +49,14 @@ First Online: 11 October 2024
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1109/DIPED63529.2024.10706153&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1109/DIPED63529.2024.10706153&style=ieee&lang=en-US)
+<small>`Kriuchkova, L., Sokolov, Volodymyr, & Skladannyi, P. (2024). Determining the Zone of Successful Interaction in RFID Technologies. In 2024 IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (DIPED) (pp. 168–171). https://doi.org/10.1109/diped63529.2024.10706153`</small>
+
+### IEEE
+
+<small>`L. Kriuchkova, V. Sokolov, and P. Skladannyi, “Determining the Zone of Successful Interaction in RFID Technologies,” 2024 IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (DIPED). IEEE, pp. 168–171, Sep. 11, 2024. doi: 10.1109/diped63529.2024.10706153.`</small>
 
 ### CEUR-WS
 
-<small>`L. Kriuchkova, V. Sokolov, P. Skladannyi, Determining the Zone of Successful Interaction in RFID Technologies, in IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (2024) 168–171. doi: 10.1109/diped63529.2024.10706153.`</small>
+<small>`L. Kriuchkova, V. Sokolov, P. Skladannyi, Determining the Zone of Successful Interaction in RFID Technologies, in IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (2024) 168–171. doi:10.1109/diped63529.2024.10706153`</small>

@@ -28,9 +28,9 @@ Attendee tracking; Distributed access control system; Radio frequency identifica
 <td>
 <img src="/icons/ieee.svg" height="50">
 </td>
-<td style="text-align: left;">
+<!--td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/PICST47496.2019.9061376" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
-</td>
+</td-->
 </tr>
 </table>
 
@@ -49,10 +49,14 @@ First Online: 9 April 2020
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1109/PICST47496.2019.9061376&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1109/PICST47496.2019.9061376&style=ieee&lang=en-US)
+<small>`Vladymyrenko, M., Sokolov, V., Buriachok, V., Platonenko, A., & Ageyev, D. (2019). Analysis of Implementation Results of the Distributed Access Control System. In 2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&amp;T) (pp. 1–6). IEEE. 2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&T). https://doi.org/10.1109/picst47496.2019.9061376`</small>
+
+### IEEE
+
+<small>`M. Vladymyrenko, V. Sokolov, V. Buriachok, A. Platonenko, and D. Ageyev, “Analysis of Implementation Results of the Distributed Access Control System,” 2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&amp;T). IEEE, pp. 1–6, Oct. 2019. doi: 10.1109/picst47496.2019.9061376.`</small>
 
 ### CEUR-WS
 
-<small>`M. Vladymyrenko, et al., Analysis of Implementation Results of the Distributed Access Control System. in: IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (2019) 39–44. doi: 10.1109/picst47496.2019.9061376.`</small>
+<small>`M. Vladymyrenko, et al., Analysis of Implementation Results of the Distributed Access Control System. in: IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (2019) 39–44. doi:10.1109/picst47496.2019.9061376`</small>

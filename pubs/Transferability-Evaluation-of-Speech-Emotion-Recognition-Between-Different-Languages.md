@@ -27,9 +27,9 @@ Emotion detection; Engagement analysis; Sentiment analysis; Speech emotion recog
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100975545&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100975545" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1007/978-3-031-84228-3_4" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -52,10 +52,12 @@ First Online: 28 April 2022
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-031-04812-8_35&style=apa&lang=en-US)
+### [APA]
+<small>`Iosifov, I., Iosifova, O., Romanovskyi, O., Sokolov, V., & Sukailo, I. (2022). Transferability Evaluation of Speech Emotion Recognition Between Different Languages. In Lecture Notes on Data Engineering and Communications Technologies (pp. 413–426). Springer International Publishing. https://doi.org/10.1007/978-3-031-04812-8_35`</small>
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1007/978-3-031-04812-8_35&style=ieee&lang=en-US)
+### [IEEE]
+<small>`I. Iosifov, O. Iosifova, O. Romanovskyi, V. Sokolov, and I. Sukailo, “Transferability Evaluation of Speech Emotion Recognition Between Different Languages,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 413–426, 2022. doi: 10.1007/978-3-031-04812-8_35.`</small>
 
 ### CEUR-WS
 
-<small>`I. Iosifov, et al., Transferability Evaluation of Speech Emotion Recognition Between Different Languages, Advances in Computer Science for Engineering and Education 134 (2022) 413–426. doi: 10.1007/978-3-031-04812-8_35.`</small>
+<small>`I. Iosifov, et al., Transferability Evaluation of Speech Emotion Recognition Between Different Languages, Advances in Computer Science for Engineering and Education 134 (2022) 413–426. doi:10.1007/978-3-031-04812-8_35`</small>

@@ -49,10 +49,14 @@ First Online: 6 September 2023
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1109/PICST57299.2022.10238518&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1109/PICST57299.2022.10238518&style=ieee&lang=en-US)
+<small>`Sokolov, V., Kipchuk, F., Skladannyi, P., Zhyltsov, O., & Ageyev, D. (2022). Method for Increasing the Various Sources Data Consistency for IoT Sensors. In 2022 IEEE 9th International Conference on Problems of Infocommunications, Science and Technology (PIC S&amp;T) (pp. 522–526). IEEE. 2022 IEEE 9th International Conference on Problems of Infocommunications, Science and Technology (PIC S&T). https://doi.org/10.1109/picst57299.2022.10238518`</small>
+
+### IEEE
+
+<small>`V. Sokolov, F. Kipchuk, P. Skladannyi, O. Zhyltsov, and D. Ageyev, “Method for Increasing the Various Sources Data Consistency for IoT Sensors,” 2022 IEEE 9th International Conference on Problems of Infocommunications, Science and Technology (PIC S&amp;T). IEEE, pp. 522–526, Oct. 10, 2022. doi: 10.1109/picst57299.2022.10238518.`</small>
 
 ### CEUR-WS
 
-<small>`V. Sokolov, et al., Method for Increasing the Various Sources Data Consistency for IoT Sensors, in: IEEE 9th International Conference on Problems of Infocommunications, Science and Technology (2023) 522–526. doi: 10.1109/PICST57299.2022.10238518.`</small>
+<small>`V. Sokolov, et al., Method for Increasing the Various Sources Data Consistency for IoT Sensors, in: IEEE 9th International Conference on Problems of Infocommunications, Science and Technology (2023) 522–526. doi:10.1109/PICST57299.2022.10238518`</small>

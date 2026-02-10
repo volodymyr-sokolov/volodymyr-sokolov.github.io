@@ -22,9 +22,9 @@ commutative supersingular isogeny Diffie-Hellman algorithm; curve in generalized
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100218356&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100218356" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <a href="https://cpits.kubg.edu.ua/"><img src="/icons/cpits.svg" width="200"></a>
 </td>

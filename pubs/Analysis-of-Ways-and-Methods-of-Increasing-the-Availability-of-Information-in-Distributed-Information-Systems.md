@@ -27,9 +27,9 @@ Accelerating lens; Access point; Antenna; Antenna array; Metal-plate lens; MIMO;
 <td>
 <img src="/icons/ieee.svg" height="50">
 </td>
-<td style="text-align: left;">
+<!--td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/PICST54195.2021.9772161" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
-</td>
+</td-->
 </tr>
 </table>
 
@@ -48,10 +48,14 @@ First Online: 16 May 2022
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1109/PICST54195.2021.9772161&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1109/PICST54195.2021.9772161&style=ieee&lang=en-US)
+<small>`Astapenya, V., Sokolov, V., Skladannyi, P., & Zhyltsov, O. (2021). Analysis of Ways and Methods of Increasing the Availability of Information in Distributed Information Systems. In 2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&amp;T) (pp. 174–178). IEEE. 2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&T). https://doi.org/10.1109/picst54195.2021.9772161`</small>
+
+### IEEE
+
+<small>`V. Astapenya, V. Sokolov, P. Skladannyi, and O. Zhyltsov, “Analysis of Ways and Methods of Increasing the Availability of Information in Distributed Information Systems,” 2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&amp;T). IEEE, pp. 174–178, Oct. 05, 2021. doi: 10.1109/picst54195.2021.9772161.`</small>
 
 ### CEUR-WS
 
-<small>`V. Astapenya, et al., Analysis of Ways and Methods of Increasing the Availability of Information in Distributed Information Systems, in: IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (2021) 174–178. doi: 10.1109/picst54195.2021.9772161.`</small>
+<small>`V. Astapenya, et al., Analysis of Ways and Methods of Increasing the Availability of Information in Distributed Information Systems, in: IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (2021) 174–178. doi:10.1109/picst54195.2021.9772161`</small>

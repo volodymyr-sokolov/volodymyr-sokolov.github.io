@@ -21,13 +21,13 @@ limited access information protection; parameter model; state secrets protection
 
 ## Publisher
 
-<table>
+<!--table>
 <tr>
 <td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100218356&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100218356" alt="SCImago Journal &amp; Country Rank"  /></a>
 </td>
 </tr>
-</table>
+</table-->
 
 [2024 Cyber Security and Data Protection (CSDP)](https://ceur-ws.org/Vol-3800/)
 

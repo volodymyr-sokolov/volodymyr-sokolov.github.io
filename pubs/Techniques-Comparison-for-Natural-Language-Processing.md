@@ -21,13 +21,13 @@ Attention; Decoder; Deep Learning; Embedding; Encoder; Gated Recurrent Unit; GRU
 
 ## Publisher
 
-<table>
+<!--table>
 <tr>
 <td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100218356&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100218356" alt="SCImago Journal &amp; Country Rank"  /></a>
 </td>
 </tr>
-</table>
+</table-->
 
 [2020 2nd International Workshop on Modern Machine Learning Technologies and Data Science (MoMLeT+DS)](https://ceur-ws.org/Vol-2386/)
 

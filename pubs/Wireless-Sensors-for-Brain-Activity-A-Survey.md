@@ -25,9 +25,9 @@ Brain wave; Brain-controlled games; Cognition study; EEG signals; NeuroSky; Open
 ## Publisher
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100829272&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100829272" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.3390/electronics9122092" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -45,10 +45,14 @@ First Online: 8 December 2020
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.3390/electronics9122092&style=apa&lang=en-US)
+### [APA]
+<small>`TajDini, M., Sokolov, V., Kuzminykh, I., Shiaeles, S., & Ghita, B. (2020). Wireless Sensors for Brain Activity—A Survey. Electronics, 9(12), 2092. https://doi.org/10.3390/electronics9122092`</small>
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.3390/electronics9122092&style=ieee&lang=en-US)
+### [IEEE]
+<small>`M. TajDini, V. Sokolov, I. Kuzminykh, S. Shiaeles, and B. Ghita, “Wireless Sensors for Brain Activity—A Survey,” Electronics, vol. 9, no. 12, p. 2092, Dec. 2020, doi: 10.3390/electronics9122092.`</small>
 
 ### CEUR-WS
 
-<small>`M. TajDini, et al., Wireless Sensors for Brain Activity—A Survey, Electronics 9(12), iss. 2092 (2020) 1–26. doi:10.3390/electronics9122092.`</small>
+<small>`M. TajDini, et al., Wireless Sensors for Brain Activity—A Survey, Electronics 9(12), iss. 2092 (2020) 1–26. doi:10.3390/electronics9122092`</small>
+
+<small>``</small>

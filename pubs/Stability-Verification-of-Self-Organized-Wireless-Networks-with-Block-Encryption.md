@@ -21,13 +21,13 @@ bandwidth analysis; block encryption; botnets; IoT; self-organizing network; Spe
 
 ## Publisher
 
-<table>
+<!--table>
 <tr>
 <td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100218356&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100218356" alt="SCImago Journal &amp; Country Rank"  /></a>
 </td>
 </tr>
-</table>
+</table-->
 
 [2022 5th International Workshop on Computer Modeling and Intelligent Systems (CMIS)](http://ceur-ws.org/Vol-3137/)
 
@@ -46,9 +46,11 @@ First Online: 19 May 2022
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.32782/cmis/3137-19&style=apa&lang=en-US)
+<small>``</small>
 
 ### [IEEE](https://citation.crosscite.org/format?doi=10.32782/cmis/3137-19&style=apa&lang=en-US)
+<small>``</small>
 
 ### CEUR-WS
 
-<small>`V. Sokolov, P. Skladannyi, H. Hulak, Stability Verification of Self-Organized Wireless Networks with Block Encryption, in: 5th International Workshop on Computer Modeling and Intelligent Systems, vol. 3137 (2022) 227–237. doi: 10.32782/cmis/3137-19.`</small>
+<small>`V. Sokolov, P. Skladannyi, H. Hulak, Stability Verification of Self-Organized Wireless Networks with Block Encryption, in: 5th International Workshop on Computer Modeling and Intelligent Systems, vol. 3137 (2022) 227–237. doi:10.32782/cmis/3137-19`</small>

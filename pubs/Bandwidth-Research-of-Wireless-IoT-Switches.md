@@ -28,9 +28,9 @@ bandwidth; IoT; network load; Raspberry Pi; RPi; wireless network
 <td>
 <img src="/icons/ieee.svg" height="50">
 </td>
-<td style="text-align: left;">
+<!--td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/TCSET49122.2020.235492" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
-</td>
+</td-->
 </tr>
 </table>
 
@@ -50,10 +50,14 @@ First Online: 7 May 2020
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1109/TCSET49122.2020.235492&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1109/TCSET49122.2020.235492&style=ieee&lang=en-US)
+<small>`Hu, Z., Vovkotrub, B., Buriachok, V., Zotkin, Y., & Sokolov, V. (2020). Bandwidth Research of Wireless IoT Switches. In 2020 IEEE 15th International Conference on Advanced Trends in Radioelectronics, Telecommunications and Computer Engineering (TCSET) (pp. 1–5). IEEE. 2020 IEEE 15th International Conference on Advanced Trends in Radioelectronics, Telecommunications and Computer Engineering (TCSET). https://doi.org/10.1109/tcset49122.2020.235492`</small>
+
+### IEEE
+
+<small>`Z. Hu, B. Vovkotrub, V. Buriachok, Y. Zotkin, and V. Sokolov, “Bandwidth Research of Wireless IoT Switches,” 2020 IEEE 15th International Conference on Advanced Trends in Radioelectronics, Telecommunications and Computer Engineering (TCSET). IEEE, pp. 1–5, Feb. 2020. doi: 10.1109/tcset49122.2020.235492.`</small>
 
 ### CEUR-WS
 
-<small>`Z. Hu, et al., Bandwidth Research of Wireless IoT Switches, in: IEEE 15th International Conference on Advanced Trends in Radioelectronics, Telecommunications and Computer Engineering (2020) 546–550. doi: 10.1109/tcset49122.2020.2354922.`</small>
+<small>`Z. Hu, et al., Bandwidth Research of Wireless IoT Switches, in: IEEE 15th International Conference on Advanced Trends in Radioelectronics, Telecommunications and Computer Engineering (2020) 546–550. doi:10.1109/tcset49122.2020.2354922`</small>

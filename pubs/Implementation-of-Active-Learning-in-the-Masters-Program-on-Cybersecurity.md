@@ -24,9 +24,9 @@ Active learning; Cybersecurity; Information and communication systems; Learning 
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100975545&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100975545" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1007/978-3-030-16621-2_57" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -49,10 +49,14 @@ First Online: 29 March 2019
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-16621-2_57&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1007/978-3-030-16621-2_57&style=ieee&lang=en-US)
+<small>`Buriachok, Volodymyr, & Sokolov, Volodymyr. (2019). Implementation of Active Learning in the Master’s Program on Cybersecurity. In Advances in Intelligent Systems and Computing (pp. 610–624). Springer International Publishing. https://doi.org/10.1007/978-3-030-16621-2_57`</small>
+
+### IEEE
+
+<small>`V. Buriachok and V. Sokolov, “Implementation of Active Learning in the Master’s Program on Cybersecurity,” Advances in Intelligent Systems and Computing. Springer International Publishing, pp. 610–624, Mar. 29, 2019. doi: 10.1007/978-3-030-16621-2_57.`</small>
 
 ### CEUR-WS
 
-<small>`V. Buriachok, V. Sokolov, Implementation of Active Learning in the Master’s Program on Cybersecurity, Advances in Computer Science for Engineering and Education II, vol. 938 (2020) 610-624. doi: 10.1007/978-3-030-16621-2_57.`</small>
+<small>`V. Buriachok, V. Sokolov, Implementation of Active Learning in the Master’s Program on Cybersecurity, Advances in Computer Science for Engineering and Education II, vol. 938 (2020) 610-624. doi:10.1007/978-3-030-16621-2_57`</small>

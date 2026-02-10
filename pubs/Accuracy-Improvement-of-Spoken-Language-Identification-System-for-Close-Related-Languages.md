@@ -29,9 +29,9 @@ Common Voice; Language identification; LID; SLI; SLR; Spoken Language Identifica
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100975545&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100975545" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1007/978-3-031-84228-3_4" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -53,10 +53,14 @@ First Online: 3 April 2025
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-031-84228-3_4&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1007/978-3-031-84228-3_4&style=ieee&lang=en-US)
+<small>`Romanovskyi, O., Iosifov, I., Iosifova, O., Sokolov, V., Skladannyi, P., Sukaylo, I., & Tsarenok, O. (2025). Accuracy Improvement of Spoken Language Identification System for Close-Related Languages. In Lecture Notes on Data Engineering and Communications Technologies (pp. 35–52). Springer Nature Switzerland. https://doi.org/10.1007/978-3-031-84228-3_4`</small>
+
+### IEEE
+
+<small>`O. Romanovskyi et al., “Accuracy Improvement of Spoken Language Identification System for Close-Related Languages,” Lecture Notes on Data Engineering and Communications Technologies. Springer Nature Switzerland, pp. 35–52, 2025. doi: 10.1007/978-3-031-84228-3_4.`</small>
 
 ### CEUR-WS
 
-<small>`O. Romanovskyi, et al., Accuracy Improvement of Spoken Language Identification System for Close-Related Languages, Advances in Computer Science for Engineering and Education VII, vol. 242 (2025) 35–52. doi: 10.1007/978-3-031-84228-3_4.`</small>
+<small>`O. Romanovskyi, et al., Accuracy Improvement of Spoken Language Identification System for Close-Related Languages, Advances in Computer Science for Engineering and Education VII, vol. 242 (2025) 35–52. doi:10.1007/978-3-031-84228-3_4`</small>

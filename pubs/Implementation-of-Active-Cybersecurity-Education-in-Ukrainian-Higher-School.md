@@ -27,9 +27,9 @@ Active learning; CDIO; Conceive-Design-Implement-Operate; cybersecurity; practic
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100975545&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100975545" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1007/978-3-031-35467-0_32" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -53,10 +53,14 @@ First Online: 18 June 2023
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-031-35467-0_32&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1007/978-3-031-35467-0_32&style=ieee&lang=en-US)
+<small>`Buriachok, V., Korshun, N., Zhyltsov, O., Sokolov, V., & Skladannyi, P. (2023). Implementation of Active Cybersecurity Education in Ukrainian Higher School. In Lecture Notes on Data Engineering and Communications Technologies (pp. 533–551). Springer Nature Switzerland. https://doi.org/10.1007/978-3-031-35467-0_32`</small>
+
+### IEEE
+
+<small>`V. Buriachok, N. Korshun, O. Zhyltsov, V. Sokolov, and P. Skladannyi, “Implementation of Active Cybersecurity Education in Ukrainian Higher School,” Lecture Notes on Data Engineering and Communications Technologies. Springer Nature Switzerland, pp. 533–551, 2023. doi: 10.1007/978-3-031-35467-0_32.`</small>
 
 ### CEUR-WS
 
-<small>`V. Buriachok, et al., Implementation of Active Cybersecurity Education in Ukrainian Higher School, Information Technology for Education, Science, and Technics, vol. 178 (2023) 533–551. doi: 10.1007/978-3-031-35467-0_32.`</small>
+<small>`V. Buriachok, et al., Implementation of Active Cybersecurity Education in Ukrainian Higher School, Information Technology for Education, Science, and Technics, vol. 178 (2023) 533–551. doi:10.1007/978-3-031-35467-0_32`</small>

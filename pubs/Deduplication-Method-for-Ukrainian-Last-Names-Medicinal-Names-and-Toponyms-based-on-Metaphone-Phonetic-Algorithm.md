@@ -25,9 +25,9 @@ Deduplication; Drug; Fuzzy coincidence; International nonproprietary name; Medic
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=5100152904&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=5100152904" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1007/978-3-030-55506-1_47" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -50,10 +50,14 @@ First Online: 6 August 2020
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1007/978-3-030-55506-1_47&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1007/978-3-030-55506-1_47&style=ieee&lang=en-US)
+<small>`Hu, Z., Buriachok, V., & Sokolov, V. (2020). Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm. In Advances in Intelligent Systems and Computing (pp. 518–533). Springer International Publishing. https://doi.org/10.1007/978-3-030-55506-1_47`</small>
+
+### IEEE
+
+<small>`Z. Hu, V. Buriachok, and V. Sokolov, “Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm,” Advances in Intelligent Systems and Computing. Springer International Publishing, pp. 518–533, Aug. 06, 2020. doi: 10.1007/978-3-030-55506-1_47.`</small>
 
 ### CEUR-WS
 
-<small>`Z. B. Hu, V. Buriachok, V. Sokolov, Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm, Advances in Computer Science for Engineering and Education III, vol. 1247 (2020) 518–533. doi: 10.1007/978-3-030-55506-1_47.`</small>
+<small>`Z. B. Hu, V. Buriachok, V. Sokolov, Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm, Advances in Computer Science for Engineering and Education III, vol. 1247 (2020) 518–533. doi:10.1007/978-3-030-55506-1_47`</small>

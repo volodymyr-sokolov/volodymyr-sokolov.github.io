@@ -24,13 +24,13 @@ Decision Support System; Information Protection; Information Security; Infrastru
  
 ## Publisher
 
-<table>
+<!--table>
 <tr>
 <td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=19700182903&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=19700182903" alt="SCImago Journal &amp; Country Rank"  /></a>
 </td>
 </tr>
-</table>
+</table-->
 
 First Online: 31 December 2022
 

@@ -46,10 +46,14 @@ First Online: 29 June 2015
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1109/ICATT.2015.7136852&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1109/ICATT.2015.7136852&style=ieee&lang=en-US)
+<small>`Astapenya, V. M., & Sokolov, V. Yu. (2015). Modified accelerating lens as a means of increasing the throughput, range and noise immunity of IEEE 802.11 systems. In 2015 International Conference on Antenna Theory and Techniques (ICATT) (pp. 1–3). IEEE. 2015 International Conference on Antenna Theory and Techniques (ICATT). https://doi.org/10.1109/icatt.2015.7136852`</small>
+
+### IEEE
+
+<small>`V. M. Astapenya and V. Yu. Sokolov, “Modified accelerating lens as a means of increasing the throughput, range and noise immunity of IEEE 802.11 systems,” 2015 International Conference on Antenna Theory and Techniques (ICATT). IEEE, pp. 1–3, Apr. 2015. doi: 10.1109/icatt.2015.7136852.`</small>
 
 ### CEUR-WS
 
-<small>`V. Astapenya, V. Sokolov, Modified Accelerating Lens as a Means of Increasing the Throughput, Range and Noise Immunity of IEEE 802.11 Systems, in: IEEE 10th International Conference on Antenna Theory and Techniques (2015) 267–269. doi: 10.1109/icatt.2015.7136852.`</small>
+<small>`V. Astapenya, V. Sokolov, Modified Accelerating Lens as a Means of Increasing the Throughput, Range and Noise Immunity of IEEE 802.11 Systems, in: IEEE 10th International Conference on Antenna Theory and Techniques (2015) 267–269. doi:10.1109/icatt.2015.7136852`</small>

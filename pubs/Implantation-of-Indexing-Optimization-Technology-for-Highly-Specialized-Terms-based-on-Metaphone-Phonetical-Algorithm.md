@@ -26,9 +26,9 @@ fuzzy match, phonetic rule, phonetic algorithm, Metaphone, Ukrainian surname
 
 <table>
 <tr>
-<td>
+<!--td>
 <a href="https://www.scimagojr.com/journalsearch.php?q=21100450083&amp;tip=sid&amp;exact=no" title="SCImago Journal &amp; Country Rank"><img border="0" src="https://corsproxy.io/?https://www.scimagojr.com/journal_img.php?id=21100450083" alt="SCImago Journal &amp; Country Rank"  /></a>
-</td>
+</td-->
 <td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.15587/1729-4061.2019.181943" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
@@ -46,10 +46,14 @@ First Online: 29 October 2019
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.15587/1729-4061.2019.181943&style=apa&lang=en-US)
+### APA
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.15587/1729-4061.2019.181943&style=ieee&lang=en-US)
+<small>`Buriachok, Volodymyr, Hadzhyiev, M., Sokolov, Volodymyr, Skladannyi, P., & Kuzmenko, L. (2019). Implantation of indexing optimization technology for highly specialized terms based on Metaphone phonetical algorithm. Eastern-European Journal of Enterprise Technologies, 5(2 (101)), 43–50. https://doi.org/10.15587/1729-4061.2019.181943`</small>
+
+### IEEE
+
+<small>`V. Buriachok, M. Hadzhyiev, V. Sokolov, P. Skladannyi, and L. Kuzmenko, “Implantation of indexing optimization technology for highly specialized terms based on Metaphone phonetical algorithm,” EEJET, vol. 5, no. 2 (101), pp. 43–50, Oct. 2019, doi: 10.15587/1729-4061.2019.181943.`</small>
 
 ### CEUR-WS
 
-<small>`V. Buriachok, et al., Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm, East.-Eur. J. Enterp. Technol., vol. 5, no. 2(101) (2019) 64–71. doi: 10.15587/1729-4061.2019.181943.`</small>
+<small>`V. Buriachok, et al., Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm, East.-Eur. J. Enterp. Technol., vol. 5, no. 2(101) (2019) 64–71. doi:10.15587/1729-4061.2019.181943`</small>

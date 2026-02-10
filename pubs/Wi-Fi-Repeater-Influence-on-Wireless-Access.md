@@ -47,10 +47,12 @@ First Online: 18 March 2024
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.1109/AICT61584.2023.10452421&style=apa&lang=en-US)
+### [APA]
+<small>`Sokolov, V., Skladannyi, P., & Mazur, N. (2023). Wi-Fi Repeater Influence on Wireless Access. In 2023 IEEE 5th International Conference on Advanced Information and Communication Technologies (AICT) (pp. 33–36). https://doi.org/10.1109/aict61584.2023.10452421`</small>
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.1109/AICT61584.2023.10452421&style=ieee&lang=en-US)
+### [IEEE]
+<small>`V. Sokolov, P. Skladannyi, and N. Mazur, “Wi-Fi Repeater Influence on Wireless Access,” 2023 IEEE 5th International Conference on Advanced Information and Communication Technologies (AICT). IEEE, pp. 33–36, Nov. 21, 2023. doi: 10.1109/aict61584.2023.10452421.`</small>
 
 ### CEUR-WS
 
-<small>`V. Sokolov, P. Skladannyi, N. Mazur, Wi-Fi Repeater Influence on Wireless Access, in: IEEE 5th International Conference on Advanced Information and Communication Technologies (2023) 33–36. doi: 10.1109/AICT61584.2023.10452421.`</small>
+<small>`V. Sokolov, P. Skladannyi, N. Mazur, Wi-Fi Repeater Influence on Wireless Access, in: IEEE 5th International Conference on Advanced Information and Communication Technologies (2023) 33–36. doi:10.1109/AICT61584.2023.10452421`</small>
