@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Article
 
 # Wireless Sensors for Brain Activity — A Survey
@@ -46,13 +49,13 @@ First Online: 8 December 2020
 ## Cite
 
 ### [APA]
-<small>`TajDini, M., Sokolov, V., Kuzminykh, I., Shiaeles, S., & Ghita, B. (2020). Wireless Sensors for Brain Activity—A Survey. Electronics, 9(12), 2092. https://doi.org/10.3390/electronics9122092`</small>
+<small class="citation">`TajDini, M., Sokolov, V., Kuzminykh, I., Shiaeles, S., & Ghita, B. (2020). Wireless Sensors for Brain Activity—A Survey. Electronics, 9(12), 2092. https://doi.org/10.3390/electronics9122092`</small>
 
 ### [IEEE]
-<small>`M. TajDini, V. Sokolov, I. Kuzminykh, S. Shiaeles, and B. Ghita, “Wireless Sensors for Brain Activity—A Survey,” Electronics, vol. 9, no. 12, p. 2092, Dec. 2020, doi: 10.3390/electronics9122092.`</small>
+<small class="citation">`M. TajDini, V. Sokolov, I. Kuzminykh, S. Shiaeles, and B. Ghita, “Wireless Sensors for Brain Activity—A Survey,” Electronics, vol. 9, no. 12, p. 2092, Dec. 2020, doi: 10.3390/electronics9122092.`</small>
 
 ### CEUR-WS
 
-<small>`M. TajDini, et al., Wireless Sensors for Brain Activity—A Survey, Electronics 9(12), iss. 2092 (2020) 1–26. doi:10.3390/electronics9122092`</small>
+<small class="citation">`M. TajDini, et al., Wireless Sensors for Brain Activity—A Survey, Electronics 9(12), iss. 2092 (2020) 1–26. doi:10.3390/electronics9122092`</small>
 
-<small>``</small>
+<small class="citation">``</small>

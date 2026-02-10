@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Book Chapter
 
 # Automated Pipeline for Training Dataset Creation from Unlabeled Audios for Automatic Speech Recognition
@@ -55,12 +58,12 @@ First Online: 21 July 2021
 
 ### APA
 
-<small>`Romanovskyi, O., Iosifov, I., Iosifova, O., Sokolov, V., Kipchuk, F., & Sukaylo, I. (2021). Automated Pipeline for Training Dataset Creation from Unlabeled Audios for Automatic Speech Recognition. In Lecture Notes on Data Engineering and Communications Technologies (pp. 25–36). Springer International Publishing. https://doi.org/10.1007/978-3-030-80472-5_3`</small>
+<small class="citation">`Romanovskyi, O., Iosifov, I., Iosifova, O., Sokolov, V., Kipchuk, F., & Sukaylo, I. (2021). Automated Pipeline for Training Dataset Creation from Unlabeled Audios for Automatic Speech Recognition. In Lecture Notes on Data Engineering and Communications Technologies (pp. 25–36). Springer International Publishing. https://doi.org/10.1007/978-3-030-80472-5_3`</small>
 
 ### IEEE
 
-<small>`O. Romanovskyi, I. Iosifov, O. Iosifova, V. Sokolov, F. Kipchuk, and I. Sukaylo, “Automated Pipeline for Training Dataset Creation from Unlabeled Audios for Automatic Speech Recognition,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 25–36, 2021. doi: 10.1007/978-3-030-80472-5_3.`</small>
+<small class="citation">`O. Romanovskyi, I. Iosifov, O. Iosifova, V. Sokolov, F. Kipchuk, and I. Sukaylo, “Automated Pipeline for Training Dataset Creation from Unlabeled Audios for Automatic Speech Recognition,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 25–36, 2021. doi: 10.1007/978-3-030-80472-5_3.`</small>
 
 ### CEUR-WS
 
-<small>`O. Romanovskyi, et al., Automated Pipeline for Training Dataset Creation from Unlabeled Audios for Automatic Speech Recognition, Advances in Computer Science for Engineering and Education IV, vol. 83 (2021) 25–36. doi:10.1007/978-3-030-80472-5_3`</small>
+<small class="citation">`O. Romanovskyi, et al., Automated Pipeline for Training Dataset Creation from Unlabeled Audios for Automatic Speech Recognition, Advances in Computer Science for Engineering and Education IV, vol. 83 (2021) 25–36. doi:10.1007/978-3-030-80472-5_3`</small>

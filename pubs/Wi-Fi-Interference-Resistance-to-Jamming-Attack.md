@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Wi-Fi Interference Resistance to Jamming Attack
@@ -48,11 +51,11 @@ First Online: 18 March 2024
 ## Cite
 
 ### [APA]
-<small>`Sokolov, V., Skladannyi, P., & Astapenya, V. (2023). Wi-Fi Interference Resistance to Jamming Attack. In 2023 IEEE 5th International Conference on Advanced Information and Communication Technologies (AICT) (pp. 1–4). https://doi.org/10.1109/aict61584.2023.10452687`</small>
+<small class="citation">`Sokolov, V., Skladannyi, P., & Astapenya, V. (2023). Wi-Fi Interference Resistance to Jamming Attack. In 2023 IEEE 5th International Conference on Advanced Information and Communication Technologies (AICT) (pp. 1–4). https://doi.org/10.1109/aict61584.2023.10452687`</small>
 
 ### [IEEE]
-<small>`V. Sokolov, P. Skladannyi, and V. Astapenya, “Wi-Fi Interference Resistance to Jamming Attack,” 2023 IEEE 5th International Conference on Advanced Information and Communication Technologies (AICT). IEEE, pp. 1–4, Nov. 21, 2023. doi: 10.1109/aict61584.2023.10452687.`</small>
+<small class="citation">`V. Sokolov, P. Skladannyi, and V. Astapenya, “Wi-Fi Interference Resistance to Jamming Attack,” 2023 IEEE 5th International Conference on Advanced Information and Communication Technologies (AICT). IEEE, pp. 1–4, Nov. 21, 2023. doi: 10.1109/aict61584.2023.10452687.`</small>
 
 ### CEUR-WS
 
-<small>`V. Sokolov, P. Skladannyi, V. Astapenya, Wi-Fi Interference Resistance to Jamming Attack, in: IEEE 5th International Conference on Advanced Information and Communication Technologies (2023) 1–4. doi:10.1109/AICT61584.2023.10452687`</small>
+<small class="citation">`V. Sokolov, P. Skladannyi, V. Astapenya, Wi-Fi Interference Resistance to Jamming Attack, in: IEEE 5th International Conference on Advanced Information and Communication Technologies (2023) 1–4. doi:10.1109/AICT61584.2023.10452687`</small>

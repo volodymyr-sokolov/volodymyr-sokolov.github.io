@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Video Channel Suppression Method of Unmanned Aerial Vehicles
@@ -50,11 +53,11 @@ First Online: 4 November 2022
 ## Cite
 
 ### [APA]
-<small>`Sokolov, V., Skladannyi, P., & Platonenko, A. (2022). Video Channel Suppression Method of Unmanned Aerial Vehicles. In 2022 IEEE 41st International Conference on Electronics and Nanotechnology (ELNANO) (pp. 473–477). https://doi.org/10.1109/elnano54667.2022.9927105`</small>
+<small class="citation">`Sokolov, V., Skladannyi, P., & Platonenko, A. (2022). Video Channel Suppression Method of Unmanned Aerial Vehicles. In 2022 IEEE 41st International Conference on Electronics and Nanotechnology (ELNANO) (pp. 473–477). https://doi.org/10.1109/elnano54667.2022.9927105`</small>
 
 ### [IEEE]
-<small>`V. Sokolov, P. Skladannyi, and A. Platonenko, “Video Channel Suppression Method of Unmanned Aerial Vehicles,” 2022 IEEE 41st International Conference on Electronics and Nanotechnology (ELNANO). IEEE, pp. 473–477, Oct. 10, 2022. doi: 10.1109/elnano54667.2022.9927105.`</small>
+<small class="citation">`V. Sokolov, P. Skladannyi, and A. Platonenko, “Video Channel Suppression Method of Unmanned Aerial Vehicles,” 2022 IEEE 41st International Conference on Electronics and Nanotechnology (ELNANO). IEEE, pp. 473–477, Oct. 10, 2022. doi: 10.1109/elnano54667.2022.9927105.`</small>
 
 ### CEUR-WS
 
-<small>`V. Sokolov, P. Skladannyi, A. Platonenko, Video Channel Suppression Method of Unmanned Aerial Vehicles, in: IEEE 41st International Conference on Electronics and Nanotechnology (2022) 473–477. doi:10.1109/ELNANO54667.2022.9927105`</small>
+<small class="citation">`V. Sokolov, P. Skladannyi, A. Platonenko, Video Channel Suppression Method of Unmanned Aerial Vehicles, in: IEEE 41st International Conference on Electronics and Nanotechnology (2022) 473–477. doi:10.1109/ELNANO54667.2022.9927105`</small>

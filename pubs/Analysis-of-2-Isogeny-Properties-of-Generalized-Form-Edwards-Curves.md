@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves
@@ -52,12 +55,12 @@ First Online: 23 November 2020
 
 ### APA
 
-<small>`Bessalov, A., Kovalchuk, L., Sokolov, V., Skladannyi, P., & Radivilova, T. (2020). Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 2746, pp. 1–13).`</small>
+<small class="citation">`Bessalov, A., Kovalchuk, L., Sokolov, V., Skladannyi, P., & Radivilova, T. (2020). Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 2746, pp. 1–13).`</small>
 
 ### IEEE
 
-<small>`A. Bessalov, L. Kovalchuk, V. Sokolov, P. Skladannyi, and T. Radivilova, “Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 2746, pp. 1–13, 2020.`</small>
+<small class="citation">`A. Bessalov, L. Kovalchuk, V. Sokolov, P. Skladannyi, and T. Radivilova, “Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 2746, pp. 1–13, 2020.`</small>
 
 ### CEUR-WS
 
-<small>`A. Bessalov, et al., Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 2746 (2020) 1–13.`</small>
+<small class="citation">`A. Bessalov, et al., Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 2746 (2020) 1–13.`</small>

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Book Chapter
 
 # Transferability Evaluation of Speech Emotion Recognition Between Different Languages
@@ -53,11 +56,11 @@ First Online: 28 April 2022
 ## Cite
 
 ### [APA]
-<small>`Iosifov, I., Iosifova, O., Romanovskyi, O., Sokolov, V., & Sukailo, I. (2022). Transferability Evaluation of Speech Emotion Recognition Between Different Languages. In Lecture Notes on Data Engineering and Communications Technologies (pp. 413–426). Springer International Publishing. https://doi.org/10.1007/978-3-031-04812-8_35`</small>
+<small class="citation">`Iosifov, I., Iosifova, O., Romanovskyi, O., Sokolov, V., & Sukailo, I. (2022). Transferability Evaluation of Speech Emotion Recognition Between Different Languages. In Lecture Notes on Data Engineering and Communications Technologies (pp. 413–426). Springer International Publishing. https://doi.org/10.1007/978-3-031-04812-8_35`</small>
 
 ### [IEEE]
-<small>`I. Iosifov, O. Iosifova, O. Romanovskyi, V. Sokolov, and I. Sukailo, “Transferability Evaluation of Speech Emotion Recognition Between Different Languages,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 413–426, 2022. doi: 10.1007/978-3-031-04812-8_35.`</small>
+<small class="citation">`I. Iosifov, O. Iosifova, O. Romanovskyi, V. Sokolov, and I. Sukailo, “Transferability Evaluation of Speech Emotion Recognition Between Different Languages,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 413–426, 2022. doi: 10.1007/978-3-031-04812-8_35.`</small>
 
 ### CEUR-WS
 
-<small>`I. Iosifov, et al., Transferability Evaluation of Speech Emotion Recognition Between Different Languages, Advances in Computer Science for Engineering and Education 134 (2022) 413–426. doi:10.1007/978-3-031-04812-8_35`</small>
+<small class="citation">`I. Iosifov, et al., Transferability Evaluation of Speech Emotion Recognition Between Different Languages, Advances in Computer Science for Engineering and Education 134 (2022) 413–426. doi:10.1007/978-3-031-04812-8_35`</small>

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps
@@ -49,12 +52,12 @@ First Online: 21 February 2025
 
 ### APA
 
-<small>`Kostiuk, Y., Skladannyi, P., Samoilenko, Y., Khorolska, K., Bebeshko, B., & Sokolov, V. (2025). A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps. In 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks (Vol. 3925, pp. 249–264).`</small>
+<small class="citation">`Kostiuk, Y., Skladannyi, P., Samoilenko, Y., Khorolska, K., Bebeshko, B., & Sokolov, V. (2025). A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps. In 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks (Vol. 3925, pp. 249–264).`</small>
 
 ### IEEE
 
-<small>`Y. Kostiuk, P. Skladannyi, Y. Samoilenko, K. Khorolska, B. Bebeshko, and V. Sokolov, “A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps,” 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks, vol. 3925, pp. 249–264, 2025.`</small>
+<small class="citation">`Y. Kostiuk, P. Skladannyi, Y. Samoilenko, K. Khorolska, B. Bebeshko, and V. Sokolov, “A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps,” 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks, vol. 3925, pp. 249–264, 2025.`</small>
 
 ### CEUR-WS
 
-<small>`Y. Kostiuk, et al., A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps, in: 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks, vol. 3925 (2025) 249–264.`</small>
+<small class="citation">`Y. Kostiuk, et al., A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps, in: 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks, vol. 3925 (2025) 249–264.`</small>

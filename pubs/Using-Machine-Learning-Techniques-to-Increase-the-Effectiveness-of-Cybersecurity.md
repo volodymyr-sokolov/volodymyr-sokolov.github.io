@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Using Machine Learning Techniques to Increase the Effectiveness of Cybersecurity
@@ -51,12 +54,12 @@ First Online: 16 August 2022
 
 ### APA
 
-<small>`Buhas, V., Ponomarenko, I., Bugas, V., Ramskyi, A., & Sokolov, V. (2022). Using Machine Learning Techniques to Increase the Effectiveness of Cybersecurity. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3188, no. 2, pp. 273–281).`</small>
+<small class="citation">`Buhas, V., Ponomarenko, I., Bugas, V., Ramskyi, A., & Sokolov, V. (2022). Using Machine Learning Techniques to Increase the Effectiveness of Cybersecurity. In Cybersecurity Providing in Information and Telecommunication Systems II (Vol. 3188, no. 2, pp. 273–281).`</small>
 
 ### IEEE
 
-<small>`V. Buhas, I. Ponomarenko, V. Bugas, A. Ramskyi, and V. Sokolov, “Using Machine Learning Techniques to Increase the Effectiveness of Cybersecurity,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3188, no. 2, pp. 273–281, 2022.`</small>
+<small class="citation">`V. Buhas, I. Ponomarenko, V. Bugas, A. Ramskyi, and V. Sokolov, “Using Machine Learning Techniques to Increase the Effectiveness of Cybersecurity,” Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3188, no. 2, pp. 273–281, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`V. Buhas, et al., Using Machine Learning Techniques to Increase the Effectiveness of Cybersecurity, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3188, no. 2 (2021) 273–281.`</small>
+<small class="citation">`V. Buhas, et al., Using Machine Learning Techniques to Increase the Effectiveness of Cybersecurity, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3188, no. 2 (2021) 273–281.`</small>

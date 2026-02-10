@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Analysis of Implementation Results of the Distributed Access Control System
@@ -51,12 +53,12 @@ First Online: 9 April 2020
 
 ### APA
 
-<small>`Vladymyrenko, M., Sokolov, V., Buriachok, V., Platonenko, A., & Ageyev, D. (2019). Analysis of Implementation Results of the Distributed Access Control System. In 2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&amp;T) (pp. 1–6). IEEE. 2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&T). https://doi.org/10.1109/picst47496.2019.9061376`</small>
+<small class="citation">`Vladymyrenko, M., Sokolov, V., Buriachok, V., Platonenko, A., & Ageyev, D. (2019). Analysis of Implementation Results of the Distributed Access Control System. In 2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&amp;T) (pp. 1–6). IEEE. 2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&T). https://doi.org/10.1109/picst47496.2019.9061376`</small>
 
 ### IEEE
 
-<small>`M. Vladymyrenko, V. Sokolov, V. Buriachok, A. Platonenko, and D. Ageyev, “Analysis of Implementation Results of the Distributed Access Control System,” 2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&amp;T). IEEE, pp. 1–6, Oct. 2019. doi: 10.1109/picst47496.2019.9061376.`</small>
+<small class="citation">`M. Vladymyrenko, V. Sokolov, V. Buriachok, A. Platonenko, and D. Ageyev, “Analysis of Implementation Results of the Distributed Access Control System,” 2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&amp;T). IEEE, pp. 1–6, Oct. 2019. doi: 10.1109/picst47496.2019.9061376.`</small>
 
 ### CEUR-WS
 
-<small>`M. Vladymyrenko, et al., Analysis of Implementation Results of the Distributed Access Control System. in: IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (2019) 39–44. doi:10.1109/picst47496.2019.9061376`</small>
+<small class="citation">`M. Vladymyrenko, et al., Analysis of Implementation Results of the Distributed Access Control System. in: IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (2019) 39–44. doi:10.1109/picst47496.2019.9061376`</small>

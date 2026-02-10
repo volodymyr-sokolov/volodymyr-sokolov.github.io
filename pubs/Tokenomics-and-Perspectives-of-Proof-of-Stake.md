@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Tokenomics and Perspectives of Proof of Stake
@@ -47,12 +50,12 @@ First Online: 19 April 2024
 
 ### APA
 
-<small>`Chyzhevska, M., Romanovska, N., Venger, V., & Sokolov, V. (2024). Tokenomics and Perspectives of Proof of Stake. In Workshop on Digital Economy Concepts and Technologies (Vol. 3665, pp. 61–69).`</small>
+<small class="citation">`Chyzhevska, M., Romanovska, N., Venger, V., & Sokolov, V. (2024). Tokenomics and Perspectives of Proof of Stake. In Workshop on Digital Economy Concepts and Technologies (Vol. 3665, pp. 61–69).`</small>
 
 ### IEEE
 
-<small>`M. Chyzhevska, N. Romanovska, V. Venger, and V. Sokolov, “Tokenomics and Perspectives of Proof of Stake,” Workshop on Digital Economy Concepts and Technologies, vol. 3665, pp. 61–69, 2024.`</small>
+<small class="citation">`M. Chyzhevska, N. Romanovska, V. Venger, and V. Sokolov, “Tokenomics and Perspectives of Proof of Stake,” Workshop on Digital Economy Concepts and Technologies, vol. 3665, pp. 61–69, 2024.`</small>
 
 ### CEUR-WS
 
-<small>`M. Chyzhevska, et al., Tokenomics and Perspectives of Proof of Stake, in: Digital Economy Concepts and Technologies, vol. 3665 (2024) 61–69.`</small>
+<small class="citation">`M. Chyzhevska, et al., Tokenomics and Perspectives of Proof of Stake, in: Digital Economy Concepts and Technologies, vol. 3665 (2024) 61–69.`</small>

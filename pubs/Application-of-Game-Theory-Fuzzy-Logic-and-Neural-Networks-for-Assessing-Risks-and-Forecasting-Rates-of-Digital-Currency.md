@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Article
 
 # Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency
@@ -44,12 +47,12 @@ First Online: 31 December 2022
 
 ### APA
 
-<small>`Bebeshko, B., Malyukov, V., Lakhno, M., Skladannyi, P., Sokolov, V., Shevchenko, S., & Zhumadilova, M. (2022). Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency. In Journal of Theoretical and Applied Information Technology (Vol. 100, Issue 24, pp. 7390–7404).`</small>
+<small class="citation">`Bebeshko, B., Malyukov, V., Lakhno, M., Skladannyi, P., Sokolov, V., Shevchenko, S., & Zhumadilova, M. (2022). Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency. In Journal of Theoretical and Applied Information Technology (Vol. 100, Issue 24, pp. 7390–7404).`</small>
 
 ### IEEE
 
-<small>`B. Bebeshko, V. Malyukov, M. Lakhno, P. Skladannyi, V. Sokolov, S. Shevchenko, and M. Zhumadilova, “Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency,” Journal of Theoretical and Applied Information Technology, vol. 100, no. 24, pp. 7390–7404, 2022.`</small>
+<small class="citation">`B. Bebeshko, V. Malyukov, M. Lakhno, P. Skladannyi, V. Sokolov, S. Shevchenko, and M. Zhumadilova, “Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency,” Journal of Theoretical and Applied Information Technology, vol. 100, no. 24, pp. 7390–7404, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`B. Bebeshko, et al., Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency, J. Theor. Appl. Inf. Technol. 100(24) (2022) 7390–7404.`</small>
+<small class="citation">`B. Bebeshko, et al., Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency, J. Theor. Appl. Inf. Technol. 100(24) (2022) 7390–7404.`</small>

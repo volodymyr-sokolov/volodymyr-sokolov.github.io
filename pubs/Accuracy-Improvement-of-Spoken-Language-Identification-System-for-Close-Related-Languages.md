@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Book Chapter
 
 # Accuracy Improvement of Spoken Language Identification System for Close-Related Languages
@@ -64,91 +67,3 @@ First Online: 3 April 2025
 ### CEUR-WS
 
 <small class="citation">`O. Romanovskyi, et al., Accuracy Improvement of Spoken Language Identification System for Close-Related Languages, Advances in Computer Science for Engineering and Education VII, vol. 242 (2025) 35–52. doi:10.1007/978-3-031-84228-3_4`</small>
-
-<style>
-.citation-wrapper {
-    position: relative;
-    display: block;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    padding: 15px 50px 15px 15px;
-    margin: 10px 0;
-}
-
-.copy-code-button {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 6px 10px;
-    cursor: pointer;
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    line-height: 1;
-    transition: all 0.2s ease;
-}
-
-.copy-code-button:hover {
-    background-color: #e9ecef;
-    border-color: #adb5bd;
-}
-
-.copy-code-button.copied {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    color: #155724;
-}
-
-.copy-code-button img {
-    width: 16px;
-    height: 16px;
-    display: block;
-}
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const citationElements = document.querySelectorAll('small.citation');
-    
-    citationElements.forEach(function(citation) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'citation-wrapper';
-        
-        const button = document.createElement('button');
-        button.className = 'copy-code-button';
-        button.innerHTML = '<img src="/icons/copy.svg" alt="Copy">';
-        button.setAttribute('title', 'Copy citation');
-        button.onclick = function() {
-            copyText(citation, button);
-        };
-        
-        citation.parentNode.insertBefore(wrapper, citation);
-        wrapper.appendChild(citation);
-        wrapper.appendChild(button);
-    });
-});
-
-function copyText(element, button) {
-    let textToCopy = element.innerText.trim();
-    
-    if (textToCopy.startsWith('`') && textToCopy.endsWith('`')) {
-        textToCopy = textToCopy.slice(1, -1);
-    }
-    
-    navigator.clipboard.writeText(textToCopy).then(function() {
-        const originalIcon = button.innerHTML;
-        button.innerHTML = '<img src="/icons/check.svg" alt="Copied">';
-        button.classList.add('copied');
-        
-        setTimeout(function() {
-            button.innerHTML = originalIcon;
-            button.classList.remove('copied');
-        }, 2000);
-    }, function() {
-        alert("Copy error");
-    });
-}
-</script>

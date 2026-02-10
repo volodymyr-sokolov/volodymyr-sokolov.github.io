@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Stability Verification of Self-Organized Wireless Networks with Block Encryption
@@ -46,11 +49,11 @@ First Online: 19 May 2022
 ## Cite
 
 ### [APA](https://citation.crosscite.org/format?doi=10.32782/cmis/3137-19&style=apa&lang=en-US)
-<small>``</small>
+<small class="citation">``</small>
 
 ### [IEEE](https://citation.crosscite.org/format?doi=10.32782/cmis/3137-19&style=apa&lang=en-US)
-<small>``</small>
+<small class="citation">``</small>
 
 ### CEUR-WS
 
-<small>`V. Sokolov, P. Skladannyi, H. Hulak, Stability Verification of Self-Organized Wireless Networks with Block Encryption, in: 5th International Workshop on Computer Modeling and Intelligent Systems, vol. 3137 (2022) 227–237. doi:10.32782/cmis/3137-19`</small>
+<small class="citation">`V. Sokolov, P. Skladannyi, H. Hulak, Stability Verification of Self-Organized Wireless Networks with Block Encryption, in: 5th International Workshop on Computer Modeling and Intelligent Systems, vol. 3137 (2022) 227–237. doi:10.32782/cmis/3137-19`</small>

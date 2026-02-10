@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Classical and Post-Quantum Encryption for GDPR
@@ -51,12 +54,12 @@ First Online: 12 November 2024
 
 ### APA
 
-<small>`Iavich, M., Kovalchuk, O., Gnatyuk, S., Khavikova, Y., & Sokolov, V. (2024). Classical and Post-Quantum Encryption for GDPR. In Classic, Quantum, and Post-Quantum Cryptography (Vol. 3829, pp. 70–78).`</small>
+<small class="citation">`Iavich, M., Kovalchuk, O., Gnatyuk, S., Khavikova, Y., & Sokolov, V. (2024). Classical and Post-Quantum Encryption for GDPR. In Classic, Quantum, and Post-Quantum Cryptography (Vol. 3829, pp. 70–78).`</small>
 
 ### IEEE
 
-<small>`M. Iavich, O. Kovalchuk, S. Gnatyuk, Y. Khavikova, and V. Sokolov, “Classical and Post-Quantum Encryption for GDPR,” Classic, Quantum, and Post-Quantum Cryptography, vol. 3829, pp. 70–78, 2024.`</small>
+<small class="citation">`M. Iavich, O. Kovalchuk, S. Gnatyuk, Y. Khavikova, and V. Sokolov, “Classical and Post-Quantum Encryption for GDPR,” Classic, Quantum, and Post-Quantum Cryptography, vol. 3829, pp. 70–78, 2024.`</small>
 
 ### CEUR-WS
 
-<small>`M. Iavich, et al., Classical and Post-Quantum Encryption for GDPR, in: Classic, Quantum, and Post-Quantum Cryptography, vol. 3829 (2024) 70–78.`</small>
+<small class="citation">`M. Iavich, et al., Classical and Post-Quantum Encryption for GDPR, in: Classic, Quantum, and Post-Quantum Cryptography, vol. 3829 (2024) 70–78.`</small>

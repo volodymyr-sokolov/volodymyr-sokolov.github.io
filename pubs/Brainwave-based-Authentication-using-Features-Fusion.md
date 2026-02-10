@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Article
 
 # Brainwave-based Authentication using Features Fusion
@@ -48,12 +51,12 @@ First Online: 22 March 2023
 
 ### APA
 
-<small>`TajDini, Mahyar, Sokolov, Volodymyr, Kuzminykh, I., & Ghita, B. (2023). Brainwave-based authentication using features fusion. Computers &amp; Security, 129, 103198. https://doi.org/10.1016/j.cose.2023.103198`</small>
+<small class="citation">`TajDini, Mahyar, Sokolov, Volodymyr, Kuzminykh, I., & Ghita, B. (2023). Brainwave-based authentication using features fusion. Computers &amp; Security, 129, 103198. https://doi.org/10.1016/j.cose.2023.103198`</small>
 
 ### IEEE
 
-<small>`M. TajDini, V. Sokolov, I. Kuzminykh, and B. Ghita, “Brainwave-based authentication using features fusion,” Computers &amp; Security, vol. 129, p. 103198, Jun. 2023, doi: 10.1016/j.cose.2023.103198.`</small>
+<small class="citation">`M. TajDini, V. Sokolov, I. Kuzminykh, and B. Ghita, “Brainwave-based authentication using features fusion,” Computers &amp; Security, vol. 129, p. 103198, Jun. 2023, doi: 10.1016/j.cose.2023.103198.`</small>
 
 ### CEUR-WS
 
-<small>`M. TajDini, et al., Brainwave-based Authentication using Features Fusion, Comput. Secur. 129, no. 103198 (2023) 1–11. doi:10.1016/j.cose.2023.103198`</small>
+<small class="citation">`M. TajDini, et al., Brainwave-based Authentication using Features Fusion, Comput. Secur. 129, no. 103198 (2023) 1–11. doi:10.1016/j.cose.2023.103198`</small>

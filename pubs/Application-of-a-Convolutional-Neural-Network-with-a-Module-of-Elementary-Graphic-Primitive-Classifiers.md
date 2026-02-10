@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Article
 
 # Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models
@@ -44,12 +47,12 @@ First Online: 31 December 2022
 
 ### APA
 
-<small>`Khorolska, K., Skladannyi, P., Sokolov, V., Korshun, N., Bebeshko, B., Lakhno, V., & Zhumadilova, M. (2022). Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models. In Journal of Theoretical and Applied Information Technology (Vol. 100, Issue 24, pp. 7426–7437).`</small>
+<small class="citation">`Khorolska, K., Skladannyi, P., Sokolov, V., Korshun, N., Bebeshko, B., Lakhno, V., & Zhumadilova, M. (2022). Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models. In Journal of Theoretical and Applied Information Technology (Vol. 100, Issue 24, pp. 7426–7437).`</small>
 
 ### IEEE
 
-<small>`K. Khorolska, P. Skladannyi, V. Sokolov, N. Korshun, B. Bebeshko, V. Lakhno, and M. Zhumadilova, “Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models,” Journal of Theoretical and Applied Information Technology, vol. 100, no. 24, pp. 7426–7437, 2022.`</small>
+<small class="citation">`K. Khorolska, P. Skladannyi, V. Sokolov, N. Korshun, B. Bebeshko, V. Lakhno, and M. Zhumadilova, “Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models,” Journal of Theoretical and Applied Information Technology, vol. 100, no. 24, pp. 7426–7437, 2022.`</small>
 
 ### CEUR-WS
 
-<small>`K. Khorolska, et al., Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models, J. Theor. Appl. Inf. Technol. 100(24) (2022) 7426–7437.`</small>
+<small class="citation">`K. Khorolska, et al., Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models, J. Theor. Appl. Inf. Technol. 100(24) (2022) 7426–7437.`</small>

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files
@@ -51,12 +54,12 @@ First Online: 26 August 2025
 
 ### APA
 
-<small>`Kostiuk, Y., Skladannyi, P., Khorolska, K., Sokolov, V., & Hulak, H. (2025). Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files. In CClassic, Quantum, and Post-Quantum Cryptography (CQPC) (Vol. 4016, pp. 45–65).`</small>
+<small class="citation">`Kostiuk, Y., Skladannyi, P., Khorolska, K., Sokolov, V., & Hulak, H. (2025). Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files. In CClassic, Quantum, and Post-Quantum Cryptography (CQPC) (Vol. 4016, pp. 45–65).`</small>
 
 ### IEEE
 
-<small>`Y. Kostiuk, P. Skladannyi, K. Khorolska, V. Sokolov, and H. Hulak, “Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files,” Classic, Quantum, and Post-Quantum Cryptography (CQPC), vol. 4016, pp. 45–65, 2025.`</small>
+<small class="citation">`Y. Kostiuk, P. Skladannyi, K. Khorolska, V. Sokolov, and H. Hulak, “Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files,” Classic, Quantum, and Post-Quantum Cryptography (CQPC), vol. 4016, pp. 45–65, 2025.`</small>
 
 ### CEUR-WS
 
-<small>`Y. Kostiuk, et al., Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files, in: Classic, Quantum, and Post-Quantum Cryptography (CQPC), vol. 4016 (2025) 45–65.`</small>
+<small class="citation">`Y. Kostiuk, et al., Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files, in: Classic, Quantum, and Post-Quantum Cryptography (CQPC), vol. 4016 (2025) 45–65.`</small>

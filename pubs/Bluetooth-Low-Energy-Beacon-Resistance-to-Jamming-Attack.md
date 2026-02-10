@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Bluetooth Low-Energy Beacon Resistance to Jamming Attack
@@ -49,12 +52,12 @@ First Online: 10 November 2023
 
 ### APA
 
-<small>`Sokolov, Volodymyr, Skladannyi, P., & Astapenya, V. (2023). Bluetooth Low-Energy Beacon Resistance to Jamming Attack. In 2023 IEEE 13th International Conference on Electronics and Information Technologies (ELIT) (pp. 270–274). IEEE. 2023 IEEE 13th International Conference on Electronics and Information Technologies (ELIT). https://doi.org/10.1109/elit61488.2023.10310815`</small>
+<small class="citation">`Sokolov, Volodymyr, Skladannyi, P., & Astapenya, V. (2023). Bluetooth Low-Energy Beacon Resistance to Jamming Attack. In 2023 IEEE 13th International Conference on Electronics and Information Technologies (ELIT) (pp. 270–274). IEEE. 2023 IEEE 13th International Conference on Electronics and Information Technologies (ELIT). https://doi.org/10.1109/elit61488.2023.10310815`</small>
 
 ### IEEE
 
-<small>`V. Sokolov, P. Skladannyi, and V. Astapenya, “Bluetooth Low-Energy Beacon Resistance to Jamming Attack,” 2023 IEEE 13th International Conference on Electronics and Information Technologies (ELIT). IEEE, pp. 270–274, Sep. 26, 2023. doi: 10.1109/elit61488.2023.10310815.`</small>
+<small class="citation">`V. Sokolov, P. Skladannyi, and V. Astapenya, “Bluetooth Low-Energy Beacon Resistance to Jamming Attack,” 2023 IEEE 13th International Conference on Electronics and Information Technologies (ELIT). IEEE, pp. 270–274, Sep. 26, 2023. doi: 10.1109/elit61488.2023.10310815.`</small>
 
 ### CEUR-WS
 
-<small>`V. Sokolov, P. Skladannyi, V. Astapenya, Bluetooth Low-Energy Beacon Resistance to Jamming Attack, in: IEEE 13th International Conference on Electronics and Information Technologies (2023) 270–274. doi:10.1109/ELIT61488.2023.10310815`</small>
+<small class="citation">`V. Sokolov, P. Skladannyi, V. Astapenya, Bluetooth Low-Energy Beacon Resistance to Jamming Attack, in: IEEE 13th International Conference on Electronics and Information Technologies (2023) 270–274. doi:10.1109/ELIT61488.2023.10310815`</small>

@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Conference Paper
 
 # Assessing Approaches of IT Infrastructure Audit
@@ -50,12 +53,12 @@ First Online: 16 May 2022
 
 ### APA
 
-<small>`Kipchuk, F., Sokolov, Volodymyr, Skladannyi, P., & Ageyev, D. (2021). Assessing Approaches of IT Infrastructure Audit. In 2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&amp;T) (pp. 213–217). IEEE. 2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&T). https://doi.org/10.1109/picst54195.2021.9772181`</small>
+<small class="citation">`Kipchuk, F., Sokolov, Volodymyr, Skladannyi, P., & Ageyev, D. (2021). Assessing Approaches of IT Infrastructure Audit. In 2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&amp;T) (pp. 213–217). IEEE. 2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&T). https://doi.org/10.1109/picst54195.2021.9772181`</small>
 
 ### IEEE
 
-<small>`F. Kipchuk, V. Sokolov, P. Skladannyi, and D. Ageyev, “Assessing Approaches of IT Infrastructure Audit,” 2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&amp;T). IEEE, pp. 213–217, Oct. 05, 2021. doi: 10.1109/picst54195.2021.9772181.`</small>
+<small class="citation">`F. Kipchuk, V. Sokolov, P. Skladannyi, and D. Ageyev, “Assessing Approaches of IT Infrastructure Audit,” 2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&amp;T). IEEE, pp. 213–217, Oct. 05, 2021. doi: 10.1109/picst54195.2021.9772181.`</small>
 
 ### CEUR-WS
 
-<small>`F. Kipchuk, et al., Assessing Approaches of IT Infrastructure Audit, in: IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (2021) 213–217. doi:10.1109/picst54195.2021.9772181`</small>
+<small class="citation">`F. Kipchuk, et al., Assessing Approaches of IT Infrastructure Audit, in: IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (2021) 213–217. doi:10.1109/picst54195.2021.9772181`</small>

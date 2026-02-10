@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -55,12 +58,12 @@ First Online: 16 June 2023
 
 ### APA
 
-<small>`Bessalov, A., Abramov, S., Sokolov, V., & Mazur, N. (2023). CSIKE-ENC Combined Encryption Scheme with Optimized Degrees of Isogeny Distribution. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 3421, pp. 36–45).`</small>
+<small class="citation">`Bessalov, A., Abramov, S., Sokolov, V., & Mazur, N. (2023). CSIKE-ENC Combined Encryption Scheme with Optimized Degrees of Isogeny Distribution. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 3421, pp. 36–45).`</small>
 
 ### IEEE
 
-<small>`A. Bessalov, S. Abramov, V. Sokolov, and N. Mazur, “CSIKE-ENC Combined Encryption Scheme with Optimized Degrees of Isogeny Distribution,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 3421, pp. 36–45, 2023.`</small>
+<small class="citation">`A. Bessalov, S. Abramov, V. Sokolov, and N. Mazur, “CSIKE-ENC Combined Encryption Scheme with Optimized Degrees of Isogeny Distribution,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 3421, pp. 36–45, 2023.`</small>
 
 ### CEUR-WS
 
-<small>`A. Bessalov, et al., CSIKE-ENC Combined Encryption Scheme with Optimized Degrees of Isogeny Distribution, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3421 (2023) 36–45.`</small>
+<small class="citation">`A. Bessalov, et al., CSIKE-ENC Combined Encryption Scheme with Optimized Degrees of Isogeny Distribution, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3421 (2023) 36–45.`</small>

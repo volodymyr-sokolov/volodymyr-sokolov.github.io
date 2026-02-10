@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/lock.svg" width="16" height="16"> Book Chapter
 
 # Authentication System by Human Brainwaves using Machine Learning and Artificial Intelligence
@@ -53,12 +56,12 @@ First Online: 21 July 2021
 
 ### APA
 
-<small>`Hu, Z. B., Buriachok, V., TajDini, M., & Sokolov, V. (2021). Authentication System by Human Brainwaves Using Machine Learning and Artificial Intelligence. In Lecture Notes on Data Engineering and Communications Technologies (pp. 374–388). Springer International Publishing. https://doi.org/10.1007/978-3-030-80472-5_31`</small>
+<small class="citation">`Hu, Z. B., Buriachok, V., TajDini, M., & Sokolov, V. (2021). Authentication System by Human Brainwaves Using Machine Learning and Artificial Intelligence. In Lecture Notes on Data Engineering and Communications Technologies (pp. 374–388). Springer International Publishing. https://doi.org/10.1007/978-3-030-80472-5_31`</small>
 
 ### IEEE
 
-<small>`Z. B. Hu, V. Buriachok, M. TajDini, and V. Sokolov, “Authentication System by Human Brainwaves Using Machine Learning and Artificial Intelligence,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 374–388, 2021. doi: 10.1007/978-3-030-80472-5_31.`</small>
+<small class="citation">`Z. B. Hu, V. Buriachok, M. TajDini, and V. Sokolov, “Authentication System by Human Brainwaves Using Machine Learning and Artificial Intelligence,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 374–388, 2021. doi: 10.1007/978-3-030-80472-5_31.`</small>
 
 ### CEUR-WS
 
-<small>`Z. B. Hu, et al., Authentication System by Human Brainwaves Using Machine Learning and Artificial Intelligence, in: Advances in Computer Science for Engineering and Education IV (2021) 374–388. doi:10.1007/978-3-030-80472-5_31`</small>
+<small class="citation">`Z. B. Hu, et al., Authentication System by Human Brainwaves Using Machine Learning and Artificial Intelligence, in: Advances in Computer Science for Engineering and Education IV (2021) 374–388. doi:10.1007/978-3-030-80472-5_31`</small>

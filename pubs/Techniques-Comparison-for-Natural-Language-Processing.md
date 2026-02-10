@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Techniques Comparison for Natural Language Processing
@@ -48,12 +51,12 @@ First Online: 3 July 2020
 
 ### APA
 
-<small>`Iosifova, O., Iosifov, I., Rolik, O., & Sokolov, V. (2020). Techniques Comparison for Natural Language Processing. In 2nd International Workshop on Modern Machine Learning Tech-nologies and Data Science (Vol. 2631, no. I, pp. 57–67).`</small>
+<small class="citation">`Iosifova, O., Iosifov, I., Rolik, O., & Sokolov, V. (2020). Techniques Comparison for Natural Language Processing. In 2nd International Workshop on Modern Machine Learning Tech-nologies and Data Science (Vol. 2631, no. I, pp. 57–67).`</small>
 
 ### IEEE
 
-<small>`O. Iosifova, I. Iosifov, O. Rolik, and V. Sokolov, “Techniques Comparison for Natural Language Processing,” 2nd International Workshop on Modern Machine Learning Tech-nologies and Data Science, vol. 2631, no. I, pp. 57–67, 2020.`</small>
+<small class="citation">`O. Iosifova, I. Iosifov, O. Rolik, and V. Sokolov, “Techniques Comparison for Natural Language Processing,” 2nd International Workshop on Modern Machine Learning Tech-nologies and Data Science, vol. 2631, no. I, pp. 57–67, 2020.`</small>
 
 ### CEUR-WS
 
-<small>`O. Iosifova, et al., Techniques Comparison for Natural Language Processing, in: 2nd International Workshop on Modern Machine Learning Technologies and Data Science, vol. 2631, no. I (2020) 57–67.`</small>
+<small class="citation">`O. Iosifova, et al., Techniques Comparison for Natural Language Processing, in: 2nd International Workshop on Modern Machine Learning Technologies and Data Science, vol. 2631, no. I (2020) 57–67.`</small>

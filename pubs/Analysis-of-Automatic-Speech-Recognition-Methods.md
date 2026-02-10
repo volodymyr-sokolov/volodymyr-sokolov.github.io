@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Analysis of Automatic Speech Recognition Methods
@@ -51,12 +54,12 @@ First Online: 7 August 2021
 
 ### APA
 
-<small>`Iosifova, O., Iosifov, I., Sokolov, V., Romanovskyi, O., & Sukaylo, I. (2021). Analysis of Automatic Speech Recognition Methods. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 2923, pp. 252–257).`</small>
+<small class="citation">`Iosifova, O., Iosifov, I., Sokolov, V., Romanovskyi, O., & Sukaylo, I. (2021). Analysis of Automatic Speech Recognition Methods. In Cybersecurity Providing in Information and Telecommunication Systems (Vol. 2923, pp. 252–257).`</small>
 
 ### IEEE
 
-<small>`O. Iosifova, I. Iosifov, V. Sokolov, O. Romanovskyi, and I. Sukaylo, “Analysis of Automatic Speech Recognition Methods,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 2923, pp. 252–257, 2021.`</small>
+<small class="citation">`O. Iosifova, I. Iosifov, V. Sokolov, O. Romanovskyi, and I. Sukaylo, “Analysis of Automatic Speech Recognition Methods,” Cybersecurity Providing in Information and Telecommunication Systems, vol. 2923, pp. 252–257, 2021.`</small>
 
 ### CEUR-WS
 
-<small>`O. Iosifova, et al., Analysis of Automatic Speech Recognition Methods, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 2923 (2021) 252–257.`</small>
+<small class="citation">`O. Iosifova, et al., Analysis of Automatic Speech Recognition Methods, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 2923 (2021) 252–257.`</small>
