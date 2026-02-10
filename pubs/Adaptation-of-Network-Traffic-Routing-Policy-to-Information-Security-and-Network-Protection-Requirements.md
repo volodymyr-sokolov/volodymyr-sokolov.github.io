@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="citation-copy.css">
+<script src="citation-copy.js"></script>
+
 <img src="/icons/unlock.svg" width="16" height="16"> Conference Paper
 
 # Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements
@@ -46,12 +49,12 @@ First Online: 30 September 2025
 
 ### APA
 
-<small>`Sokolov, V., Kostiuk, Y., Skladannyi, P., & Korshun, N. (2025). Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements. In Workshop on Information Control Systems & Technologies (Vol. 4048, pp. 397–411).`</small>
+<small class="citation">`Sokolov, V., Kostiuk, Y., Skladannyi, P., & Korshun, N. (2025). Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements. In Workshop on Information Control Systems & Technologies (Vol. 4048, pp. 397–411).`</small>
 
 ### IEEE
 
-<small>`V. Sokolov, Y. Kostiuk, P. Skladannyi, and N. Korshun, “Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements,” Workshop on Information Control Systems & Technologies, vol. 4048, pp. 397–411, 2025.`</small>
+<small class="citation">`V. Sokolov, Y. Kostiuk, P. Skladannyi, and N. Korshun, “Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements,” Workshop on Information Control Systems & Technologies, vol. 4048, pp. 397–411, 2025.`</small>
 
 ### CEUR-WS
 
-<small>`V. Sokolov, et al., Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements, in: Information Control Systems & Technologies, vol. 4048 (2025) 397–411.`</small>
+<small class="citation">`V. Sokolov, et al., Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements, in: Information Control Systems & Technologies, vol. 4048 (2025) 397–411.`</small>
