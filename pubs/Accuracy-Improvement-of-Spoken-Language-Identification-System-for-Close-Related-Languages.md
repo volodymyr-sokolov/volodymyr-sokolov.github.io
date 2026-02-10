@@ -64,3 +64,88 @@ First Online: 3 April 2025
 ### CEUR-WS
 
 <small>`O. Romanovskyi, et al., Accuracy Improvement of Spoken Language Identification System for Close-Related Languages, Advances in Computer Science for Engineering and Education VII, vol. 242 (2025) 35–52. doi:10.1007/978-3-031-84228-3_4`</small>
+
+<style>
+small {
+    position: relative;
+    display: inline-block;
+}
+
+.copy-code-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.copy-code-button:hover {
+    background-color: #e0e0e0;
+}
+
+.copy-code-button.copied {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+</style>
+
+<script>
+// Функция для добавления кнопок копирования к блокам <small>
+document.addEventListener('DOMContentLoaded', function() {
+    // Находим все элементы <small>
+    const smallElements = document.querySelectorAll('small');
+    
+    smallElements.forEach(function(small) {
+        // Создаем обертку для позиционирования
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.display = 'inline-block';
+        wrapper.style.width = '100%';
+        
+        // Создаем кнопку
+        const button = document.createElement('button');
+        button.className = 'copy-code-button';
+        button.textContent = 'Copy';
+        button.onclick = function() {
+            copyText(small, button);
+        };
+        
+        // Заменяем small на wrapper
+        small.parentNode.insertBefore(wrapper, small);
+        wrapper.appendChild(small);
+        wrapper.appendChild(button);
+    });
+});
+
+function copyText(element, button) {
+    // Получаем текст из элемента (убираем обратные кавычки если есть)
+    let textToCopy = element.innerText.trim();
+    
+    // Убираем обратные кавычки в начале и конце если они есть
+    if (textToCopy.startsWith('`') && textToCopy.endsWith('`')) {
+        textToCopy = textToCopy.slice(1, -1);
+    }
+    
+    // Копируем в буфер обмена
+    navigator.clipboard.writeText(textToCopy).then(function() {
+        // Успешно скопировано
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+        
+        // Возвращаем исходный текст через 2 секунды
+        setTimeout(function() {
+            button.textContent = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+    }, function() {
+        // Ошибка
+        alert("Ошибка при копировании");
+    });
+}
+</script>
