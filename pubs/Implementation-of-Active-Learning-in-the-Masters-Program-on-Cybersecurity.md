@@ -48,7 +48,6 @@ First Online: 29 March 2019
 * ISBN: [978-3-030-16620-5](https://isbnsearch.org/isbn/978-3-030-16620-5) <img src="/icons/print.svg" width="16" height="16">, [978-3-030-16621-2](https://isbnsearch.org/isbn/978-3-030-16621-2) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85064552966](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85064552966) (Q3)
 * INSPEC: 19695699
-* KUBG: [27219](http://elibrary.kubg.edu.ua/id/eprint/27219/)
 
 ## Cite
 

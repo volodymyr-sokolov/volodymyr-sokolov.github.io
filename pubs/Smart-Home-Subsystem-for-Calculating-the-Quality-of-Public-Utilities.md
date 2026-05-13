@@ -46,7 +46,6 @@ First Online: 16 June 2023
 * EID: [2-s2.0-85163896091](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85163896091)
 * URN: [urn:nbn:de:0074-3421-9](https://nbn-resolving.org/xml/urn:nbn:de:0074-3421-9)
 * DBLP: [conf/cpits/BahatskyiBS23](https://dblp.org/rec/conf/cpits/BahatskyiBS23)
-* KUBG: [45692](http://elibrary.kubg.edu.ua/id/eprint/45692/)
 
 ## Cite
 

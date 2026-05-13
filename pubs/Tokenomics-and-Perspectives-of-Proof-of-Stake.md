@@ -44,7 +44,6 @@ First Online: 19 April 2024
 * EID: [2-s2.0-85191421388](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85191421388)
 * URN: [urn:nbn:de:0074-3665-4](https://nbn-resolving.org/xml/urn:nbn:de:0074-3665-4)
 * DBLP: [conf/decat/ChyzhevskaRVS24](https://dblp.org/rec/conf/decat/ChyzhevskaRVS24)
-* KUBG: [48729](http://elibrary.kubg.edu.ua/id/eprint/48729/)
 
 ## Cite
 

@@ -49,7 +49,6 @@ First Online: 23 November 2020
 * WOS: [000651092800003](https://www.webofscience.com/wos/woscc/full-record/WOS:000651092800003)
 * URN: [urn:nbn:de:0074-2746-1](https://nbn-resolving.org/xml/urn:nbn:de:0074-2746-1)
 * DBLP: [conf/cpits/BuriachokAZSS20](https://dblp.org/rec/conf/cpits/BuriachokAZSS20)
-* KUBG: [33913](http://elibrary.kubg.edu.ua/id/eprint/33913/)
 
 ## Cite
 

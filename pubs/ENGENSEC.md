@@ -26,7 +26,6 @@ et al.
 ## Indices
 
 * Project Number: 544455-TEMPUS-1-2013-1-SE-TEMPUS-JPCR
-* KUBG: [27109](http://elibrary.kubg.edu.ua/id/eprint/27109/)
 
 ## Cite
 

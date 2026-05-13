@@ -48,7 +48,6 @@ First Online: 7 August 2021
 * EID: [2-s2.0-85112360373](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85112360373)
 * URN: [urn:nbn:de:0074-2923-6](https://nbn-resolving.org/xml/urn:nbn:de:0074-2923-6)
 * DBLP: [conf/cpits/IosifovaISRS21](https://dblp.org/rec/conf/cpits/IosifovaISRS21)
-* KUBG: [36995](http://elibrary.kubg.edu.ua/id/eprint/36995/)
 
 ## Cite
 

@@ -43,7 +43,6 @@ First Online: 24 July 2021
 
 * ISSN: [2673-8392](https://portal.issn.org/resource/ISSN/2673-8392) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-105014629454](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105014629454)
-* KUBG: [36990](http://elibrary.kubg.edu.ua/id/eprint/36990/)
 
 ## Cite
 

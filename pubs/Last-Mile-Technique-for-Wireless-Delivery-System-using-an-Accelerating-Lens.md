@@ -31,7 +31,7 @@ accelerating lens; access point; antenna; field distribution; frequency properti
 <td>
 <img src="/icons/ieee.svg" height="50">
 </td>
-<!--td style="text-align: left;">
+<td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/PICST51311.2020.9467886" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
 </tr>
@@ -48,7 +48,6 @@ First Online: 2 July 2021
 * ISBN: [978-1-7281-9178-2](https://isbnsearch.org/isbn/978-1-7281-9178-2) <img src="/icons/print.svg" width="16" height="16">, 978-1-7281-9177-5 <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85114397136](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85114397136)
 * INSPEC: 20778117
-* KUBG: [37096](http://elibrary.kubg.edu.ua/id/eprint/37096/)
 
 ## Cite
 

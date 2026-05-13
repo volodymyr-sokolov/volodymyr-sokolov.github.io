@@ -44,7 +44,6 @@ First Online: 24 October 2024
 * EID: [2-s2.0-85208806879](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85208806879)
 * URN: [urn:nbn:de:0074-3800-2](https://nbn-resolving.org/xml/urn:nbn:de:0074-3800-2)
 * DBLP: [conf/csdp/DreisKSS24](https://dblp.org/rec/conf/csdp/DreisKSS24)
-* KUBG: [49909](http://elibrary.kubg.edu.ua/id/eprint/49909/)
 
 ## Cite
 

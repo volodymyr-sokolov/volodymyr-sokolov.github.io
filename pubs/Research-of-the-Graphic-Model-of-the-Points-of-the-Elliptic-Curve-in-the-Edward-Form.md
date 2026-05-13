@@ -46,7 +46,6 @@ First Online: 9 November 2024
 * EID: [2-s2.0-85210253375](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85210253375)
 * URN: [urn:nbn:de:0074-3826-1](https://nbn-resolving.org/xml/urn:nbn:de:0074-3826-1)
 * DBLP: [conf/cpits/AbramovSA24](https://dblp.org/rec/conf/cpits/AbramovSA24)
-* KUBG: [50154](http://elibrary.kubg.edu.ua/id/eprint/50154/)
 
 ## Cite
 

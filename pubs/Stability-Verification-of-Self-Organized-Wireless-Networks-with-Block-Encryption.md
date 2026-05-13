@@ -44,15 +44,15 @@ First Online: 19 May 2022
 * EID: [2-s2.0-85130712118](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85130712118)
 * URN: [urn:nbn:de:0074-3137-4](https://nbn-resolving.org/xml/urn:nbn:de:0074-3137-4)
 * DBLP: [conf/cmis/SokolovSH22](https://dblp.org/rec/conf/cmis/SokolovSH22)
-* KUBG: [41190](http://elibrary.kubg.edu.ua/id/eprint/41190/)
 
 ## Cite
 
-### [APA](https://citation.crosscite.org/format?doi=10.32782/cmis/3137-19&style=apa&lang=en-US)
-<small class="citation">``</small>
+### APA
+<small class="citation">`Sokolov, V., Skladannyi, P., & Hulak, H. (2022). Stability Verification of Self-Organized Wireless Networks with Block Encryption. Computer Modeling and Intelligent Systems, 3137, 227–237. https://doi.org/10.32782/cmis/3137-19`</small>
 
-### [IEEE](https://citation.crosscite.org/format?doi=10.32782/cmis/3137-19&style=apa&lang=en-US)
-<small class="citation">``</small>
+### IEEE
+
+<small class="citation">`Sokolov, V., Skladannyi, P., & Hulak, H. (2022). Stability Verification of Self-Organized Wireless Networks with Block Encryption. Computer Modeling and Intelligent Systems, 3137, 227–237. https://doi.org/10.32782/cmis/3137-19`</small>
 
 ### CEUR-WS
 

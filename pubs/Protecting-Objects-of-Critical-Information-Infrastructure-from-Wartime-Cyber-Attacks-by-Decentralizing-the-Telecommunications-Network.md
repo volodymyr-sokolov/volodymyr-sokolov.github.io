@@ -48,7 +48,6 @@ First Online: 16 November 2023
 * EID: [2-s2.0-85178338434](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85178338434)
 * URN: [urn:nbn:de:0074-3550-0](https://nbn-resolving.org/xml/urn:nbn:de:0074-3550-0)
 * DBLP: [conf/cpits/AnakhovZPSS23](https://dblp.org/rec/conf/cpits/AnakhovZPSS23)
-* KUBG: [47365](http://elibrary.kubg.edu.ua/id/eprint/47365/)
 
 ## Cite
 

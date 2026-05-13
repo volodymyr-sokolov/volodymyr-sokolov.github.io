@@ -46,7 +46,6 @@ First Online: 29 December 2022
 * EID: [2-s2.0-85146116195](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85146116195)
 * URN: [urn:nbn:de:0074-3312-6](https://nbn-resolving.org/xml/urn:nbn:de:0074-3312-6)
 * DBLP: [conf/momlet/RomanovskyiIISS22](https://dblp.org/rec/conf/momlet/RomanovskyiIISS22)
-* KUBG: [43756](http://elibrary.kubg.edu.ua/id/eprint/43202/)
 
 ## Cite
 

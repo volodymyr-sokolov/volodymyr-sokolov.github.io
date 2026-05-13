@@ -45,7 +45,6 @@ First Online: 22 June 2019
 * WOS: [000664097100021](https://www.webofscience.com/wos/woscc/full-record/WOS:000664097100021)
 * URN: [urn:nbn:de:0074-2386-1](https://nbn-resolving.org/xml/urn:nbn:de:0074-2386-1)
 * DBLP: [conf/momlet/DiniSB19](https://dblp.org/rec/conf/momlet/DiniSB19)
-* KUBG: [27704](http://elibrary.kubg.edu.ua/id/eprint/27704/)
 
 ## Cite
 

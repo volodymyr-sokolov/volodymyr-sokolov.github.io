@@ -45,7 +45,6 @@ First Online: 19 April 2024
 * EID: [2-s2.0-85191434425](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85191434425)
 * URN: [urn:nbn:de:0074-3665-4](https://nbn-resolving.org/xml/urn:nbn:de:0074-3665-4)
 * DBLP: [conf/decat/ZhebkaZBSS24](https://dblp.org/rec/conf/decat/ZhebkaZBSS24)
-* KUBG: [48727](http://elibrary.kubg.edu.ua/id/eprint/48727/)
 
 ## Cite
 

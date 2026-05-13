@@ -48,7 +48,6 @@ First Online: 24 December 2022
 * EID: [2-s2.0-85143791399](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85143791399)
 * URN: [urn:nbn:de:0074-3288-8](https://nbn-resolving.org/xml/urn:nbn:de:0074-3288-8)
 * DBLP: [conf/cpits/ZhebkaGSMS22](https://dblp.org/rec/conf/cpits/ZhebkaGSMS22)
-* KUBG: [43202](http://elibrary.kubg.edu.ua/id/eprint/43202/)
 
 ## Cite
 

@@ -48,7 +48,6 @@ First Online: 16 August 2022
 * EID: [2-s2.0-85137139416](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85137139416)
 * URN: [urn:nbn:de:0074-3188-5](https://nbn-resolving.org/xml/urn:nbn:de:0074-3188-5)
 * DBLP: [conf/cpits/GrechaninovHHSS21](https://dblp.org/rec/conf/cpits/GrechaninovHHSS21)
-* KUBG: [41951](http://elibrary.kubg.edu.ua/id/eprint/41951/)
 
 ## Cite
 

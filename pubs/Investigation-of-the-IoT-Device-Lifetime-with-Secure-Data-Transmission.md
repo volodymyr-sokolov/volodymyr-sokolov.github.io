@@ -53,7 +53,6 @@ First Online: 12 September 2019
 * INSPEC: 19695699
 * URN: [urn:nbn:se:bth-18767](https://nbn-resolving.org/xml/urn:nbn:se:bth-18767)
 * DBLP: [conf/new2an/KuzminykhCYS19](https://dblp.org/rec/html/conf/new2an/KuzminykhCYS19)
-* KUBG: [27984](http://elibrary.kubg.edu.ua/id/eprint/27984/)
 
 ## Cite
 

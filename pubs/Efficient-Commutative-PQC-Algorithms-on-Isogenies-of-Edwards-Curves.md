@@ -45,7 +45,6 @@ First Online: 27 August 2024
 * WOS: [001323200100001](https://www.webofscience.com/wos/woscc/full-record/WOS:001323200100001) (Q2)
 * INSPEC: 17014667
 * DBLP: [journals/cryptography/BessalovSA24](https://dblp.org/rec/journals/cryptography/BessalovSA24)
-* KUBG: [49773](http://elibrary.kubg.edu.ua/id/eprint/49773/)
 
 ## Cite
 

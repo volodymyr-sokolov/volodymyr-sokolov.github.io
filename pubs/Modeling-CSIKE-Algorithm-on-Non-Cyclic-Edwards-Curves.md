@@ -53,7 +53,6 @@ First Online: 24 December 2022
 * EID: [2-s2.0-85143809498](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85143809498)
 * URN: [urn:nbn:de:0074-3288-8](https://nbn-resolving.org/xml/urn:nbn:de:0074-3288-8)
 * DBLP: [conf/cpits/BessalovSSAZ22](https://dblp.org/rec/conf/cpits/BessalovSSAZ22)
-* KUBG: [43188](http://elibrary.kubg.edu.ua/id/eprint/43188/)
 
 ## Cite
 

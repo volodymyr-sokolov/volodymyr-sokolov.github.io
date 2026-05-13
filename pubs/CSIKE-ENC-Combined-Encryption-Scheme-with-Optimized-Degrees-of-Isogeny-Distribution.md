@@ -52,7 +52,6 @@ First Online: 16 June 2023
 * EID: [2-s2.0-85163882231](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85163882231)
 * URN: [urn:nbn:de:0074-3421-9](https://nbn-resolving.org/xml/urn:nbn:de:0074-3421-9)
 * DBLP: [conf/cpits/BessalovASM23](https://dblp.org/rec/conf/cpits/BessalovASM23)
-* KUBG: [45691](http://elibrary.kubg.edu.ua/id/eprint/45691/)
 
 ## Cite
 

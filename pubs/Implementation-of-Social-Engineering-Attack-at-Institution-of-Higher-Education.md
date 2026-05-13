@@ -44,7 +44,6 @@ First Online: 19 August 2020
 * EID: [2-s2.0-85091320429](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85091320429)
 * URN: [urn:nbn:de:0074-2654-4](https://nbn-resolving.org/xml/urn:nbn:de:0074-2654-4)
 * DBLP: [conf/momlet/IosifovaIRS20](https://dblp.org/rec/conf/momlet/IosifovaIRS20)
-* KUBG: [31886](http://elibrary.kubg.edu.ua/id/eprint/31886/)
 
 ## Cite
 

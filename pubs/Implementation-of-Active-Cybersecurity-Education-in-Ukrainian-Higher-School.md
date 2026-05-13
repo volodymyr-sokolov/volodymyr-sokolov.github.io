@@ -52,7 +52,6 @@ First Online: 18 June 2023
 * EID: [2-s2.0-85162953358](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85162953358) (Q3)
 * INSPEC: 23711003
 * DBLP: [conf/cmis/BuriachokKZSS22](https://dblp.org/rec/conf/itest/BuriachokKZSS22)
-* KUBG: [45656](http://elibrary.kubg.edu.ua/id/eprint/45656/)
 
 ## Cite
 

@@ -45,7 +45,6 @@ First Online: 22 March 2023
 * WOS: [001053816800001](https://www.webofscience.com/wos/woscc/full-record/WOS:001053816800001) (Q1)
 * INSPEC: 23509119
 * DBLP: [journals/compsec/TajDiniSKG23](https://dblp.org/rec/journals/compsec/TajDiniSKG23)
-* KUBG: [44602](http://elibrary.kubg.edu.ua/id/eprint/44602/)
 
 ## Cite
 

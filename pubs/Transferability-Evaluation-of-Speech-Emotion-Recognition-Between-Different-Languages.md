@@ -51,7 +51,6 @@ First Online: 28 April 2022
 * ISBN: [978-3-031-04811-1](https://isbnsearch.org/isbn/978-3-031-04811-1) <img src="/icons/print.svg" width="16" height="16">, [978-3-031-04812-8](https://isbnsearch.org/isbn/978-3-031-04812-8) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85129602152](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85129602152) (Q3)
 * INSPEC: 22035725
-* KUBG: [41097](http://elibrary.kubg.edu.ua/id/eprint/41097/)
 
 ## Cite
 

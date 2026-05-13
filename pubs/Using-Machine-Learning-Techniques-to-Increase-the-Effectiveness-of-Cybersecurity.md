@@ -48,7 +48,6 @@ First Online: 16 August 2022
 * EID: [2-s2.0-85137151000](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85137151000)
 * URN: [urn:nbn:de:0074-3188-5](https://nbn-resolving.org/xml/urn:nbn:de:0074-3188-5)
 * DBLP: [conf/cpits/BuhasPBRS21](https://dblp.org/rec/conf/cpits/BuhasPBRS21)
-* KUBG: [41953](http://elibrary.kubg.edu.ua/id/eprint/41953/)
 
 ## Cite
 

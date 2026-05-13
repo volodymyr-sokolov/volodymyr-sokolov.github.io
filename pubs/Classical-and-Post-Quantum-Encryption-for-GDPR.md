@@ -48,7 +48,6 @@ First Online: 12 November 2024
 * EID: [2-s2.0-85210257051](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85210257051)
 * URN: [uurn:nbn:de:0074-3829-5](https://nbn-resolving.org/xml/urn:nbn:de:0074-3829-5)
 * DBLP: [conf/cqpc/IavichKGKS24](https://dblp.org/rec/conf/cqpc/IavichKGKS24)
-* KUBG: [50189](http://elibrary.kubg.edu.ua/id/eprint/50189/)
 
 ## Cite
 

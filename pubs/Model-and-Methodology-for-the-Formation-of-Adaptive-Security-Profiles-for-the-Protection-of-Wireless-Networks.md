@@ -45,7 +45,6 @@ First Online: 25 September 2025
 * EID: [2-s2.0-105018463355](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105018463355)
 * URN: [urn:nbn:de:0074-4042-X](https://nbn-resolving.org/xml/urn:nbn:de:0074-4042-X)
 * DBLP: [conf/csdp/SkladannyiKKBS25](https://dblp.org/rec/conf/csdp/SkladannyiKKBS25)
-* KUBG: [53207](http://elibrary.kubg.edu.ua/id/eprint/53207/)
 
 ## Cite
 

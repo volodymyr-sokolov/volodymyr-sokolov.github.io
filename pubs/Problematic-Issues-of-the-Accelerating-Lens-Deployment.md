@@ -47,7 +47,6 @@ First Online: 13 February 2023
 * EID: [2-s2.0-85149175780](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85149175780)
 * WOS: [001058645700077](https://www.webofscience.com/wos/woscc/full-record/WOS:001058645700077)
 * INSPEC: 22626019
-* KUBG: [43770](http://elibrary.kubg.edu.ua/id/eprint/43770/)
 
 ## Cite
 

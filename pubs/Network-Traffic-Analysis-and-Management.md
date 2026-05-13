@@ -41,7 +41,6 @@ First Online: 2026
 
 * ISBN: 978-1-041-07175-4 <img src="/icons/print.svg" width="16" height="16">, 978-1-041-07495-3 <img src="/icons/print.svg" width="16" height="16">, 978-1-003-64079-0 <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-105019245212](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105019245212)
-* KUBG: [56247](http://elibrary.kubg.edu.ua/id/eprint/56247/)
 
 ## Cite
 

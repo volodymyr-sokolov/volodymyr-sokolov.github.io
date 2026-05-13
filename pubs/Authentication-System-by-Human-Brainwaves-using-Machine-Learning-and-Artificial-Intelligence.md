@@ -50,7 +50,6 @@ First Online: 21 July 2021
 * ISBN: [978-3-030-80471-8](https://isbnsearch.org/isbn/978-3-030-80471-8) <img src="/icons/print.svg" width="16" height="16">, [978-3-030-80472-5](https://isbnsearch.org/isbn/978-3-030-80472-5) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85111924795](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85111924795) (Q4)
 * INSPEC: 23013483
-* KUBG: [36975](http://elibrary.kubg.edu.ua/id/eprint/36975/)
 
 ## Cite
 

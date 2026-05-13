@@ -43,7 +43,6 @@ First Online: 530 October 2025
 * ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-105019245212](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105019245212)
 * URN: [urn:nbn:de:0074-4053-X](https://nbn-resolving.org/xml/urn:nbn:de:0074-4053-X)
-* KUBG: [53340](http://elibrary.kubg.edu.ua/id/eprint/53340/)
 
 ## Cite
 

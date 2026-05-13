@@ -29,7 +29,7 @@ passive electrical oscillating circuit; primary measuring transducer; RFID; tag
 <td>
 <img src="/icons/ieee.svg" height="50">
 </td>
-<!--td style="text-align: left;">
+<td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/DIPED63529.2024.10706153" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
 </tr>
@@ -48,7 +48,6 @@ First Online: 11 October 2024
 * EID: [2-s2.0-85207819325](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85207819325)
 * WOS: [001339446300033](https://www.webofscience.com/wos/woscc/full-record/WOS:001339446300033)
 * INSPEC: 25765268
-* KUBG: [49911](http://elibrary.kubg.edu.ua/id/eprint/49911/)
 
 ## Cite
 

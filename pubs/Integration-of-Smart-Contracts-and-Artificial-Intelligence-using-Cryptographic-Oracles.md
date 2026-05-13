@@ -48,7 +48,6 @@ First Online: 12 November 2024
 * EID: [2-s2.0-85210236161](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85210236161)
 * URN: [uurn:nbn:de:0074-3829-5](https://nbn-resolving.org/xml/urn:nbn:de:0074-3829-5)
 * DBLP: [conf/cqpc/VirovetsOZSS24](https://dblp.org/rec/conf/cqpc/VirovetsOZSS24)
-* KUBG: [50186](http://elibrary.kubg.edu.ua/id/eprint/50186/)
 
 ## Cite
 

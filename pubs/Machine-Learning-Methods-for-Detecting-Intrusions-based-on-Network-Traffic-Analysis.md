@@ -62,7 +62,6 @@ First Online: 29 December 2025
 * EID: [2-s2.0-105037917156](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105037917156)
 * URN: [urn:nbn:de:0074-4145-x](https://nbn-resolving.org/xml/urn:nbn:de:0074-4145-x)
 * DBLP: [conf/cpits/KostiukSSRK25](https://dblp.org/rec/conf/cpits/KostiukSSRK25)
-<!--* KUBG: [50181](http://elibrary.kubg.edu.ua/id/eprint/50181/)-->
 
 ## Cite
 

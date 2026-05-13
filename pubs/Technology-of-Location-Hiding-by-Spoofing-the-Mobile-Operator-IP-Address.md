@@ -29,7 +29,7 @@ geolocation; location hiding; SIP; spoofing
 <td>
 <img src="/icons/ieee.svg" height="50">
 </td>
-<!--td style="text-align: left;">
+<td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/UkrMiCo52950.2021.9716700" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
 </tr>
@@ -46,7 +46,6 @@ First Online: 24 February 2022
 * ISBN: 978-1-6654-2653-4 <img src="/icons/print.svg" width="16" height="16">, [978-1-6654-2652-7](https://isbnsearch.org/isbn/978-1-6654-2652-7) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85126945180](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85126945180)
 * INSPEC: 21706866
-* KUBG: [40895](http://elibrary.kubg.edu.ua/id/eprint/40895/)
 
 ## Cite
 

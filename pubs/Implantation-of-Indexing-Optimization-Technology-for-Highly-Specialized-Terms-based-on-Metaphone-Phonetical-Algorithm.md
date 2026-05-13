@@ -45,7 +45,6 @@ First Online: 29 October 2019
 * ISSN: [1729-3774](https://portal.issn.org/resource/ISSN/1729-3774) <img src="/icons/print.svg" width="16" height="16">, [1729-4061](https://portal.issn.org/resource/ISSN/1729-4061) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85075389262](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85075389262) (Q2)
 * DBLP: [journals/corr/abs-1911-00152](https://dblp.org/rec/html/journals/corr/abs-1911-00152)
-* KUBG: [29410](http://elibrary.kubg.edu.ua/id/eprint/29410/)
 
 ## Cite
 

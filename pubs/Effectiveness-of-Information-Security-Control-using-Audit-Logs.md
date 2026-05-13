@@ -48,7 +48,6 @@ First Online: 7 July 2025
 * EID: [2-s2.0-105010693193](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105010693193)
 * URN: [urn:nbn:de:0074-3991-X](https://nbn-resolving.org/xml/urn:nbn:de:0074-3991-X)
 * DBLP: [conf/cpits/KostiukSSZI25](https://dblp.org/rec/conf/cpits/KostiukSSZI25.html)
-* KUBG: [52541](http://elibrary.kubg.edu.ua/id/eprint/52541/)
 
 ## Cite
 

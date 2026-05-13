@@ -46,7 +46,6 @@ First Online: 2 July 2021
 * ISBN: [978-1-7281-9178-2](https://isbnsearch.org/isbn/978-1-7281-9178-2) <img src="/icons/print.svg" width="16" height="16">, 978-1-7281-9177-5 <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85114396341](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85114396341)
 * INSPEC: 20778104
-* KUBG: [37097](http://elibrary.kubg.edu.ua/id/eprint/37097/)
 
 ## Cite
 

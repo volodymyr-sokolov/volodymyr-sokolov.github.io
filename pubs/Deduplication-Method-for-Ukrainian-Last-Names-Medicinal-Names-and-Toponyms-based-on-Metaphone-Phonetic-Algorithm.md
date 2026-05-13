@@ -49,7 +49,6 @@ First Online: 6 August 2020
 * ISBN: [978-3-030-55505-4](https://isbnsearch.org/isbn/978-3-030-55505-4) <img src="/icons/print.svg" width="16" height="16">, [978-3-030-55506-1](https://isbnsearch.org/isbn/978-3-030-55506-1) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85089719737](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85072951424) (Q4)
 * INSPEC: 19893238
-* KUBG: [31677](http://elibrary.kubg.edu.ua/id/eprint/31677/)
 
 ## Cite
 

@@ -45,7 +45,6 @@ First Online: 30 October 2023
 * EID: [2-s2.0-85176926997](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85176926997)
 * URN: [urn:nbn:de:0074-3530-3](https://nbn-resolving.org/xml/urn:nbn:de:0074-3530-3)
 * DBLP: [conf/cmigin/HulakSSHK22](https://dblp.org/rec/conf/cmigin/HulakSSHK22.html)
-* KUBG: [46792](http://elibrary.kubg.edu.ua/id/eprint/46792/)
 
 ## Cite
 

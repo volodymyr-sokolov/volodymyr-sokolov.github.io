@@ -49,7 +49,6 @@ First Online: 7 May 2020
 * WOS: [000578041000204](https://www.webofscience.com/wos/woscc/full-record/WOS:000578041000204)
 * INSPEC: 19593358
 * URN: [urn:nbn:se:bth-20017](https://nbn-resolving.org/xml/urn:nbn:se:bth-20017)
-* KUBG: [31518](http://elibrary.kubg.edu.ua/id/eprint/31518/)
 
 ## Cite
 

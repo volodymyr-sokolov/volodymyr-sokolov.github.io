@@ -47,7 +47,6 @@ First Online: 16 May 2022
 * ISBN: [978-1-6654-0683-3](https://isbnsearch.org/isbn/978-1-6654-0683-3) <img src="/icons/print.svg" width="16" height="16">, 978-1-6654-0682-6 <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85130949573](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85130949573)
 * INSPEC: 21731019
-* KUBG: [41217](http://elibrary.kubg.edu.ua/id/eprint/41217/)
 
 ## Cite
 

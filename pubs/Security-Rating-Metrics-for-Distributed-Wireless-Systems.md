@@ -44,7 +44,6 @@ First Online: 22 June 2019
 * WOS: [000664097100017](https://www.webofscience.com/wos/woscc/full-record/WOS:000664097100017)
 * URN: [urn:nbn:de:0074-2386-1](https://nbn-resolving.org/xml/urn:nbn:de:0074-2386-1)
 * DBLP: [conf/momlet/BuriachokSS19](https://dblp.org/rec/conf/momlet/BuriachokSS19)
-* KUBG: [27702](http://elibrary.kubg.edu.ua/id/eprint/27702/)
 
 ## Cite
 

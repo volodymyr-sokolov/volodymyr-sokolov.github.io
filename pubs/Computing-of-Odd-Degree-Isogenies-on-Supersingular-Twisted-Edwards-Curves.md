@@ -52,7 +52,6 @@ First Online: 7 August 2021
 * EID: [2-s2.0-85112376265](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85112376265)
 * URN: [urn:nbn:de:0074-2923-6](https://nbn-resolving.org/xml/urn:nbn:de:0074-2923-6)
 * DBLP: [conf/cpits/BessalovSSZ21](https://dblp.org/rec/conf/cpits/BessalovSSZ21)
-* KUBG: [36994](http://elibrary.kubg.edu.ua/id/eprint/36994/)
 
 ## Cite
 

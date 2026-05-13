@@ -49,7 +49,6 @@ First Online: 7 May 2020
 * EID: [2-s2.0-85086312920](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85086312920)
 * WOS: [000578041000113](https://www.webofscience.com/wos/woscc/full-record/WOS:000578041000113)
 * INSPEC: 19593272
-* KUBG: [31517](http://elibrary.kubg.edu.ua/id/eprint/31517/)
 
 ## Cite
 

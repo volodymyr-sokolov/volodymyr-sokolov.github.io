@@ -45,7 +45,6 @@ First Online: 3 July 2020
 * WOS: [000664104800005](https://www.webofscience.com/wos/woscc/full-record/WOS:000664104800005)
 * URN: [urn:nbn:de:0074-2631-6](https://nbn-resolving.org/xml/urn:nbn:de:0074-2631-6)
 * DBLP: [conf/momlet/IosifovaIRS20](https://dblp.org/rec/conf/momlet/IosifovaIRS20)
-* KUBG: [31628](http://elibrary.kubg.edu.ua/id/eprint/31628/)
 
 ## Cite
 

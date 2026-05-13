@@ -48,7 +48,6 @@ First Online: 20 March 2024
 * EID: [2-s2.0-85189144731](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85189144731)
 * URN: [urn:nbn:de:0074-3654-7](https://nbn-resolving.org/xml/urn:nbn:de:0074-3654-7)
 * DBLP: [conf/cpits/MykhaylovaSNFS24](https://dblp.org/rec/conf/cpits/MykhaylovaSNFS24)
-* KUBG: [48575](http://elibrary.kubg.edu.ua/id/eprint/48575/)
 
 ## Cite
 

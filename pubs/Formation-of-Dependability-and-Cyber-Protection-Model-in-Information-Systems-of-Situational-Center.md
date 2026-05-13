@@ -45,7 +45,6 @@ First Online: 6 June 2022
 * EID: [2-s2.0-85132269263](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85132269263)
 * URN: [urn:nbn:de:0074-3149-8](https://nbn-resolving.org/xml/urn:nbn:de:0074-3149-8)
 * DBLP: [conf/ttsiit/GrechaninovHSSK22](https://dblp.org/rec/conf/ttsiit/GrechaninovHSSK22)
-* KUBG: [41336](http://elibrary.kubg.edu.ua/id/eprint/41336/)
 
 ## Cite
 

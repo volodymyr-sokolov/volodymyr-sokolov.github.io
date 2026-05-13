@@ -47,7 +47,6 @@ First Online: 9 April 2020
 * ISBN: [978-1-7281-4182-4](https://isbnsearch.org/isbn/978-1-7281-4182-4) <img src="/icons/print.svg" width="16" height="16">, [978-1-7281-4184-8](https://isbnsearch.org/isbn/978-1-7281-4184-8) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85083654177](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85083654177)
 * INSPEC: 19513541
-* KUBG: [31519](http://elibrary.kubg.edu.ua/id/eprint/31519/)
 
 ## Cite
 

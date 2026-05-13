@@ -48,7 +48,6 @@ First Online: 6 September 2023
 * ISBN: 979-8-3503-9892-2 <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-9891-5](https://isbnsearch.org/isbn/979-8-3503-9891-5) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85172739043](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85172739043)
 * INSPEC: 23693600
-* KUBG: [46307](http://elibrary.kubg.edu.ua/id/eprint/46307/)
 
 ## Cite
 

@@ -46,7 +46,6 @@ First Online: 18 March 2024
 * ISBN: 979-8-3503-7258-8 <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-7257-1](https://isbnsearch.org/isbn/979-8-3503-7257-1) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85189527228](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85189527228)
 * INSPEC: 24867014
-* KUBG: [48627](http://elibrary.kubg.edu.ua/id/eprint/48627/)
 
 ## Cite
 
