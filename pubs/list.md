@@ -1,5 +1,7 @@
 ## Articles
 
+2026 [Methodological Approaches to Assessing Enterprise Information Security using a Process-Oriented Approach](Methodological-Approaches-to-Assessing-Enterprise-Information-Security-using-a-Process-Oriented-Approach.md)
+
 2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md)
 
 2023 [Brainwave-based Authentication using Features Fusion](Brainwave-based-Authentication-using-Features-Fusion.md)
