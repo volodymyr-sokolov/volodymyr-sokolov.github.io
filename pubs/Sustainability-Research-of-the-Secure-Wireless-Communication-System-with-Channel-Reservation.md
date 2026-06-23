@@ -44,7 +44,7 @@ First Online: 7 May 2020
 
 ## Indices
 
-* ISBN: 978-1-7281-5567-8 <img src="/icons/print.svg" width="16" height="16">, 978-1-7281-5566-1 <img src="/icons/online.svg" width="16" height="16">
+* ISBN: [978-1-7281-5567-8](https://isbnsearch.org/isbn/978-1-7281-5567-8) <img src="/icons/print.svg" width="16" height="16">, [978-1-7281-5566-1](https://isbnsearch.org/isbn/978-1-7281-5566-1) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85086313460](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85086313460)
 * WOS: [000578041000204](https://www.webofscience.com/wos/woscc/full-record/WOS:000578041000204)
 * INSPEC: 19593358

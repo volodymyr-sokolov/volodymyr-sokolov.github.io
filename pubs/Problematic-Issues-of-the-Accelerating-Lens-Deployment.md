@@ -43,7 +43,7 @@ First Online: 13 February 2023
 
 ## Indices
 
-* ISBN: 979-8-3503-3153-0 <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-3152-3](https://isbnsearch.org/isbn/979-8-3503-3152-3) <img src="/icons/online.svg" width="16" height="16">
+* ISBN: [979-8-3503-3153-0](https://isbnsearch.org/isbn/979-8-3503-3153-0) <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-3152-3](https://isbnsearch.org/isbn/979-8-3503-3152-3) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85149175780](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85149175780)
 * WOS: [001058645700077](https://www.webofscience.com/wos/woscc/full-record/WOS:001058645700077)
 * INSPEC: 22626019

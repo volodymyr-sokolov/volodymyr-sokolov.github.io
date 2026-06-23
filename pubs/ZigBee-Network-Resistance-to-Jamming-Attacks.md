@@ -43,7 +43,7 @@ First Online: 5 January 2024
 
 ## Indices
 
-* ISBN: 979-8-3503-4849-1 <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-4848-4](https://isbnsearch.org/isbn/979-8-3503-4848-4) <img src="/icons/online.svg" width="16" height="16">
+* ISBN: [979-8-3503-4849-1](https://isbnsearch.org/isbn/979-8-3503-4849-1) <img src="/icons/print.svg" width="16" height="16">, [979-8-3503-4848-4](https://isbnsearch.org/isbn/979-8-3503-4848-4) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85183457098](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85183457098)
 * INSPEC: 24400993
 

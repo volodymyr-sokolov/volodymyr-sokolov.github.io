@@ -43,7 +43,7 @@ First Online: 1 June 2026
 
 ## Indices
 
-* ISBN: 979-8-3195-4202-1 <img src="/icons/print.svg" width="16" height="16">, [979-8-3195-4201-4](https://isbnsearch.org/isbn/979-8-3503-7257-1) <img src="/icons/online.svg" width="16" height="16">
+* ISBN: 979-8-3195-4202-1 <img src="/icons/print.svg" width="16" height="16">, [979-8-3195-4201-4](https://isbnsearch.org/isbn/979-8-3195-4201-4) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-105042165024](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105042165024)
 <!--* INSPEC: 24867017-->
 

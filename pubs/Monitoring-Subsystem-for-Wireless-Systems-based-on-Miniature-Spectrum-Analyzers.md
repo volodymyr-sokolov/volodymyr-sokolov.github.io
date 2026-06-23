@@ -43,7 +43,7 @@ First Online: 3 February 2019
 
 ## Indices
 
-* ISBN: 978-1-5386-6609-8 <img src="/icons/print.svg" width="16" height="16">, 978-1-5386-6611-1 <img src="/icons/online.svg" width="16" height="16">
+* ISBN: [978-1-5386-6609-8](https://isbnsearch.org/isbn/978-1-5386-6609-8) <img src="/icons/print.svg" width="16" height="16">, [978-1-5386-6611-1](https://isbnsearch.org/isbn/978-1-5386-6611-1) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85062891053](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85062891053)
 * WOS: [000458659100109](https://www.webofscience.com/wos/woscc/full-record/WOS:000458659100109)
 * INSPEC: 18439970

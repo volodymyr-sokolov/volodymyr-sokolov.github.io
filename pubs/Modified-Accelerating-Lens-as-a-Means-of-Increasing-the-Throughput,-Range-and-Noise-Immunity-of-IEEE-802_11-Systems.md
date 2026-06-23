@@ -42,7 +42,7 @@ First Online: 29 June 2015
 
 ## Indices
 
-* ISBN: [978-1-4799-8556-2](https://isbnsearch.org/isbn/978-1-4799-8556-2) <img src="/icons/print.svg" width="16" height="16">, 978-1-4799-8557-9 <img src="/icons/online.svg" width="16" height="16">
+* ISBN: [978-1-4799-8556-2](https://isbnsearch.org/isbn/978-1-4799-8556-2) <img src="/icons/print.svg" width="16" height="16">, [978-1-4799-8557-9](https://isbnsearch.org/isbn/978-1-4799-8557-9) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-84939458540](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-84939458540)
 * WOS: [000381609800077](https://www.webofscience.com/wos/woscc/full-record/WOS:000381609800077)
 * INSPEC: 15257661

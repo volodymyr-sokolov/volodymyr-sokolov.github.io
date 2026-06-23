@@ -58,5 +58,3 @@ First Online: 8 December 2020
 ### CEUR-WS
 
 <small class="citation">`M. TajDini, et al., Wireless Sensors for Brain Activity—A Survey, Electronics 9(12), iss. 2092 (2020) 1–26. doi:10.3390/electronics9122092`</small>
-
-<small class="citation">``</small>

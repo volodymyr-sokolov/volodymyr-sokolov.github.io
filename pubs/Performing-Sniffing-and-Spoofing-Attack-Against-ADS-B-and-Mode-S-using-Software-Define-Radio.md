@@ -43,7 +43,7 @@ First Online: 24 February 2022
 
 ## Indices
 
-* ISBN: 978-1-6654-2653-4 <img src="/icons/print.svg" width="16" height="16">, [978-1-6654-2652-7](https://isbnsearch.org/isbn/978-1-6654-2652-7) <img src="/icons/online.svg" width="16" height="16">
+* ISBN: [978-1-6654-2653-4](https://isbnsearch.org/isbn/978-1-6654-2653-4) <img src="/icons/print.svg" width="16" height="16">, [978-1-6654-2652-7](https://isbnsearch.org/isbn/978-1-6654-2652-7) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85126958490](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85126958490)
 * INSPEC: 21706827
 

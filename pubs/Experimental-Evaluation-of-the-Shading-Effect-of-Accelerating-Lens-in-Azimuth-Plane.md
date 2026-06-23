@@ -42,7 +42,7 @@ First Online: 11 July 2017
 
 ## Indices
 
-* ISBN: 978-1-5386-2922-2 <img src="/icons/print.svg" width="16" height="16">, 978-1-5386-2921-5 <img src="/icons/online.svg" width="16" height="16">
+* ISBN: [978-1-5386-2922-2](https://isbnsearch.org/isbn/978-1-5386-2922-2) <img src="/icons/print.svg" width="16" height="16">, [978-1-5386-2921-5](https://isbnsearch.org/isbn/978-1-5386-2921-5) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85027453269](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85027453269)
 * WOS: [000426507800086](https://www.webofscience.com/wos/woscc/full-record/WOS:000426507800086)
 * INSPEC: 17014667
