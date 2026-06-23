@@ -49,10 +49,12 @@ First Online: 5 January 2024
 
 ## Cite
 
-### [APA]
+### APA
+
 <small class="citation">`Sokolov, V., Skladannyi, P., & Korshun, N. (2023). ZigBee Network Resistance to Jamming Attacks. In 2023 IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (UkrMiCo) (pp. 161–165). https://doi.org/10.1109/ukrmico61577.2023.10380360`</small>
 
-### [IEEE]
+### IEEE
+
 <small class="citation">`V. Sokolov, P. Skladannyi, and N. Korshun, “ZigBee Network Resistance to Jamming Attacks,” 2023 IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (UkrMiCo). IEEE, pp. 161–165, Nov. 13, 2023. doi: 10.1109/ukrmico61577.2023.10380360.`</small>
 
 ### CEUR-WS

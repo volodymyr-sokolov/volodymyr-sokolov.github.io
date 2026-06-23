@@ -56,6 +56,10 @@
 
 ## Conference Papers (IEEE)
 
+2026 [Telecommunication Network Availability after Hydroelectric Power Plant Reservoir Dam Incident](Telecommunication-Network-Availability-after-Hydroelectric-Power-Plant-Reservoir-Dam-Incident.md)
+
+2026 [Determining the Bandwidth of a Multilayer VPN](Determining-the-Bandwidth-of-a-Multilayer-VPN.md)
+
 2024 [Determining the Zone of Successful Interaction in RFID Technologies](Determining-the-Zone-of-Successful-Interaction-in-RFID-Technologies.md)
 
 2024 [Wi-Fi Interference Resistance to Jamming Attack](Wi-Fi-Interference-Resistance-to-Jamming-Attack.md)

@@ -49,10 +49,12 @@ First Online: 24 February 2022
 
 ## Cite
 
-### [APA]
+### APA
+
 <small class="citation">`Sadykov, Y., Sokolov, V., & Skladannyi, P. (2021). Technology of Location Hiding by Spoofing the Mobile Operator IP Address. In 2021 IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (UkrMiCo) (pp. 22–25). https://doi.org/10.1109/ukrmico52950.2021.9716700`</small>
 
-### [IEEE]
+### IEEE
+
 <small class="citation">`Y. Sadykov, V. Sokolov, and P. Skladannyi, “Technology of Location Hiding by Spoofing the Mobile Operator IP Address,” 2021 IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (UkrMiCo). IEEE, pp. 22–25, Nov. 29, 2021. doi: 10.1109/ukrmico52950.2021.9716700.`</small>
 
 ### CEUR-WS

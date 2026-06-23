@@ -54,10 +54,12 @@ First Online: 28 April 2022
 
 ## Cite
 
-### [APA]
+### APA
+
 <small class="citation">`Iosifov, I., Iosifova, O., Romanovskyi, O., Sokolov, V., & Sukailo, I. (2022). Transferability Evaluation of Speech Emotion Recognition Between Different Languages. In Lecture Notes on Data Engineering and Communications Technologies (pp. 413–426). Springer International Publishing. https://doi.org/10.1007/978-3-031-04812-8_35`</small>
 
-### [IEEE]
+### IEEE
+
 <small class="citation">`I. Iosifov, O. Iosifova, O. Romanovskyi, V. Sokolov, and I. Sukailo, “Transferability Evaluation of Speech Emotion Recognition Between Different Languages,” Lecture Notes on Data Engineering and Communications Technologies. Springer International Publishing, pp. 413–426, 2022. doi: 10.1007/978-3-031-04812-8_35.`</small>
 
 ### CEUR-WS

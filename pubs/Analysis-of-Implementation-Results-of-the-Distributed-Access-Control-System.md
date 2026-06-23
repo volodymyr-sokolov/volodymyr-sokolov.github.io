@@ -30,7 +30,7 @@ Attendee tracking; Distributed access control system; Radio frequency identifica
 <td>
 <img src="/icons/ieee.svg" height="50">
 </td>
-<!--td style="text-align: left;">
+<td style="text-align: left;">
 <span class="__dimensions_badge_embed__" data-doi="10.1109/PICST47496.2019.9061376" data-hide-zero-citations="true"></span><script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 </td>
 </tr>

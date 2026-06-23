@@ -51,10 +51,12 @@ First Online: 19 August 2023
 
 ## Cite
 
-### [APA]
+### APA
+
 <small class="citation">`Marusenko, R., Sokolov, V., & Skladannyi, P. (2023). Social Engineering Penetration Testing in Higher Education Institutions. In Lecture Notes on Data Engineering and Communications Technologies (pp. 1132–1147). Springer Nature Switzerland. https://doi.org/10.1007/978-3-031-36118-0_96`</small>
 
-### [IEEE]
+### IEEE
+
 <small class="citation">`R. Marusenko, V. Sokolov, and P. Skladannyi, “Social Engineering Penetration Testing in Higher Education Institutions,” Lecture Notes on Data Engineering and Communications Technologies. Springer Nature Switzerland, pp. 1132–1147, 2023. doi: 10.1007/978-3-031-36118-0_96.`</small>
 
 ### CEUR-WS

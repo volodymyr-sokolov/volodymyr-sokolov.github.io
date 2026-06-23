@@ -48,6 +48,7 @@ First Online: 19 May 2022
 ## Cite
 
 ### APA
+
 <small class="citation">`Sokolov, V., Skladannyi, P., & Hulak, H. (2022). Stability Verification of Self-Organized Wireless Networks with Block Encryption. Computer Modeling and Intelligent Systems, 3137, 227–237. https://doi.org/10.32782/cmis/3137-19`</small>
 
 ### IEEE
