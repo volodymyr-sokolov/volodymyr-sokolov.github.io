@@ -77,7 +77,5 @@ First Online: 3 February 2019
  url       = {https://ieeexplore.ieee.org/document/8632151/},
  eid       = {2-s2.0-85062891053},
  isi       = {000458659100109},
- abstract  = {The paper presents a substantiation of the effectiveness of the implementation of IEEE 802.11 wireless network analysis subsystem using miniature spectrum analyzers. A practical implementation scheme, approaches to the software solution and hardware are shown. Design and implementation is presented.},
- keywords  = {Servers;Monitoring;Instruction sets;Browsers;Uniform resource locators;Wireless networks;dynamic channel allocation;access point;integrity;availability;spectrum analyzer}, 
  language  = {en}
 }`</small>
