@@ -64,8 +64,7 @@ First Online: 3 February 2019
 
 ### BibTeX
 
-<small class="citation">`
-@inproceedings{Bogachuk_Sokolov_Buriachok_2018,
+<small class="citation">`@inproceedings{Bogachuk_Sokolov_Buriachok_2018,
  author    = {Bogachuk, Ivan and Sokolov, Volodymyr and Buriachok, Volodymyr},
  title     = {Monitoring Subsystem for Wireless Systems based on Miniature Spectrum Analyzers},
  booktitle = {2018 5\textsuperscript{th} International Scientific-Practical Conference Problems of Infocommunications. Science and Technology (PIC S&T\'2018)},
@@ -81,5 +80,4 @@ First Online: 3 February 2019
  abstract  = {The paper presents a substantiation of the effectiveness of the implementation of IEEE 802.11 wireless network analysis subsystem using miniature spectrum analyzers. A practical implementation scheme, approaches to the software solution and hardware are shown. Design and implementation is presented.},
  keywords  = {Servers;Monitoring;Instruction sets;Browsers;Uniform resource locators;Wireless networks;dynamic channel allocation;access point;integrity;availability;spectrum analyzer}, 
  language  = {en}
-}
-`</small>
+}`</small>
