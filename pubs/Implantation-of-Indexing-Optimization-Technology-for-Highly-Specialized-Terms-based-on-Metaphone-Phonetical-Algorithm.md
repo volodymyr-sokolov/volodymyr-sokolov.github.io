@@ -59,3 +59,21 @@ First Online: 29 October 2019
 ### CEUR-WS
 
 <small class="citation">`V. Buriachok, et al., Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm, East.-Eur. J. Enterp. Technol., vol. 5, no. 2(101) (2019) 64–71. doi:10.15587/1729-4061.2019.181943`</small>
+
+### BibTeX
+
+<small class="citation">`@article{Buriachok_Hadzhyiev_Sokolov_2019,
+  author    = {Buriachok, Volodymyr and Hadzhyiev, Matin and Sokolov, Volodymyr and Skladannyi, Pavlo and Kuzmenko, Lidiia},
+  title     = {Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm},
+  journal   = {EEJET},
+  volume    = {5},
+  number    = {2},
+  publisher = {PC Technology Center},
+  year      = {2019},
+  month     = oct,
+  pages     = {43-–50},
+  doi       = {10.15587/1729-4061.2019.181943},
+  url       = {https://journals.uran.ua/eejet/article/view/181943},
+  eid       = {2-s2.0-85075389262},
+  language  = {en},
+}`</small>

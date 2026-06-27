@@ -59,3 +59,21 @@ First Online: 22 June 2019
 ### CEUR-WS
 
 <small class="citation">`M. TajDini, V. Sokolov, V. Buriachok, Men-in-the-Middle Attack Simulation on Low Energy Wireless Devices using Software Define Radio, in: 8th International Conference on "Mathematics. Information Technologies. Education": Modern Machine Learning Technologies and Data Science, vol. 2386 (2019) 287–296.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{TajDini_Sokolov_Buriachok_2019,
+  author    = {TajDini, Mahyar and Sokolov, Volodymyr and Buriachok, Volodymyr},
+  title     = {Men-in-the-Middle Attack Simulation on Low Energy Wireless Devices using Software Define Radio},
+  booktitle = {2019 8th International Conference on “Mathematics. Information Technologies. Education” (MoMLeT&DS)},
+  address   = {Shatsk, Ukraine},
+  publisher = {CEUR},
+  year      = {2019},
+  month     = jun,
+  pages     = {287-–296},
+  url       = {http://ceur-ws.org/Vol-2386/paper21.pdf},
+  eid       = {2-s2.0-85068084320},
+  isi       = {000664097100021},
+  language  = {en},
+}
+`</small>

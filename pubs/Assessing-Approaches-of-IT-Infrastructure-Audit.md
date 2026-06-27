@@ -61,3 +61,20 @@ First Online: 16 May 2022
 ### CEUR-WS
 
 <small class="citation">`F. Kipchuk, et al., Assessing Approaches of IT Infrastructure Audit, in: IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (2021) 213–217. doi:10.1109/picst54195.2021.9772181`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kipchuk_Sokolov_Skladannyi_2021,
+  author    = {Kipchuk, Feodosiy and Sokolov, Volodymyr and Skladannyi, Pavlo and Ageyev, Dmytro},
+  title     = {Assessing Approaches of IT Infrastructure Audit},
+  booktitle = {2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&T)},
+  address   = {Kharkiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2021},
+  month     = oct,
+  pages     = {213–-217},
+  doi       = {10.1109/PICST54195.2021.9772181},
+  url       = {https://ieeexplore.ieee.org/document/9772181},
+  eid       = {2-s2.0-85130949573},
+  language  = {en},
+}`</small>

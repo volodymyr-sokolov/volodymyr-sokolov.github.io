@@ -62,3 +62,19 @@ First Online: 7 July 2025
 ### CEUR-WS
 
 <small class="citation">`Y. Kostiuk, et al., Effectiveness of Information Security Control using Audit Logs, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3991 (2025) 524–538.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kostiuk_Skladannyi_Sokolov_2025,
+  author    = {Kostiuk, Yuliia and Skladannyi, Pavlo and Sokolov, Volodymyr and Zhyltsov, Oleksii and Ivanichenko, Yevhen},
+  title     = {Effectiveness of Information Security Control using Audit Logs},
+  booktitle = {2025 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2025},
+  month     = feb,
+  pages     = {524--538},
+  url       = {https://ceur-ws.org/Vol-3991/paper37.pdf},
+  eid       = {2-s2.0-105010693193},
+  language  = {en},
+}`</small>

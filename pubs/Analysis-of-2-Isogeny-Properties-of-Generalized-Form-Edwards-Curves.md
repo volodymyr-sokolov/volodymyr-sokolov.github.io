@@ -63,3 +63,20 @@ First Online: 23 November 2020
 ### CEUR-WS
 
 <small class="citation">`A. Bessalov, et al., Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 2746 (2020) 1–13.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Bessalov_Kovalchuk_Sokolov_2020,
+  author    = {Bessalov, Anatoly and Kovalchuk, Lyudmila and Sokolov, Volodymyr and Skladannyi, Pavlo and Radivilova, Tamara},
+  title     = {Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves},
+  booktitle = {2020 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2020},
+  month     = jul,
+  pages     = {1–-13},
+  url       = {http://ceur-ws.org/Vol-2746/paper1.pdf},
+  eid       = {2-s2.0-85096935822},
+  isi       = {000651092800001},
+  language  = {en},
+}`</small>

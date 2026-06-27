@@ -62,3 +62,21 @@ First Online: 11 October 2024
 ### CEUR-WS
 
 <small class="citation">`L. Kriuchkova, V. Sokolov, P. Skladannyi, Determining the Zone of Successful Interaction in RFID Technologies, in IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (2024) 168–171. doi:10.1109/diped63529.2024.10706153`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kriuchkova_Sokolov_Skladannyi_2024,
+  author    = {Kriuchkova, Larysa and Sokolov, Volodymyr and Skladannyi, Pavlo},
+  title     = {Determining the Zone of Successful Interaction in RFID Technologies},
+  booktitle = {2024 IEEE 29th International Seminar/Workshop on Direct and Inverse Problems of Electromagnetic and Acoustic Wave Theory (DIPED)},
+  address   = {Tbilisi, Georgia},
+  publisher = {IEEE},
+  year      = {2024},
+  month     = sep,
+  pages     = {168-–171},
+  doi       = {10.1109/DIPED63529.2024.10706153},
+  url       = {https://ieeexplore.ieee.org/document/10706153},
+  eid       = {2-s2.0-85207819325},
+  isi       = {001339446300033},
+  language  = {en},
+}`</small>

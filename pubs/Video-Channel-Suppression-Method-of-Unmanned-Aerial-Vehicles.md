@@ -62,3 +62,21 @@ First Online: 4 November 2022
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, P. Skladannyi, A. Platonenko, Video Channel Suppression Method of Unmanned Aerial Vehicles, in: IEEE 41st International Conference on Electronics and Nanotechnology (2022) 473–477. doi:10.1109/ELNANO54667.2022.9927105`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sokolov_Skladannyi_Platonenko_2022,
+  author    = {Sokolov, Volodymyr and Skladannyi, Pavlo and Platonenko, Artem},
+  title     = {Video Channel Suppression Method of Unmanned Aerial Vehicles},
+  booktitle = {2022 IEEE 41st International Conference on Electronics and Nanotechnology (ELNANO)},
+  address   = {Kyiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2022},
+  month     = oct,
+  pages     = {473-–477},
+  doi       = {10.1109/ELNANO54667.2022.9927105},
+  url       = {https://ieeexplore.ieee.org/document/9927105},
+  eid       = {2-s2.0-85142604882},
+  isi       = {001438839200100},
+  language  = {en},
+}`</small>

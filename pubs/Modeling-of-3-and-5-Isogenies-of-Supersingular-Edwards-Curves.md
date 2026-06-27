@@ -63,3 +63,20 @@ First Online: 3 July 2020
 ### CEUR-WS
 
 <small class="citation">`A. Bessalov, V. Sokolov, P. Skladannyi, Modeling of 3- and 5-Isogenies of Supersingular Edwards Curves, in: 2nd International Workshop on Modern Machine Learning Technologies and Data Science, no. I, vol. 2631 (2020) 30–39.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Bessalov_Sokolov_Skladannyi_2020,
+  author    = {Bessalov, Anatoly and Sokolov, Volodymyr and Skladannyi, Pavlo},
+  title     = {Modeling of 3- and 5-Isogenies of Supersingular Edwards Curves},
+  booktitle = {2020 2nd International Workshop on Modern Machine Learning Technologies and Data Science (MoMLeT+DS)},
+  address   = {Lviv-Shatsk, Ukraine},
+  publisher = {CEUR},
+  year      = {2020},
+  month     = jun,
+  pages     = {30–-39},
+  url       = {http://ceur-ws.org/Vol-2631/paper3.pdf},
+  eid       = {2-s2.0-85088879005},
+  isi       = {000664104800003},
+  language  = {en},
+}`</small>

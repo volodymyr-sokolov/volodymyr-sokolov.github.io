@@ -63,3 +63,18 @@ First Online: 29 April 2022
 ### CEUR-WS
 
 <small class="citation">`R. Marusenko, V. Sokolov, I. Bogachuk, Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation, Advances in Artificial Systems for Logistics Engineering, vol. 135 (2022) 583–594. doi:10.1007/978-3-031-04809-8_53`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Marusenko_Sokolov_Bogachuk_2022,
+  author    = {Marusenko, Roman and Sokolov, Volodymyr and Bogachuk, Ivan},
+  title     = {Method of Obtaining Data from Open Scientific Sources and Social Engineering Attack Simulation},
+  journal   = {Lecture Notes on Data Engineering and Communications Technologies},
+  publisher = {Springer International Publishing},
+  year      = {2022},
+  pages     = {583–-594},
+  doi       = {10.1007/978-3-031-04809-8_53},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-031-04809-8_53},
+  eid       = {2-s2.0-85129657396},
+  language  = {en},
+}`</small>

@@ -46,3 +46,19 @@ First Online: 7 March 2013
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, et al., Smart Card for Storing and Displaying Identifiers in Loyalty System, International patent (2013) 1–16.`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Sokolov_Ivanov_Senkovskiy_2013,
+  author    = {Sokolov, Volodymyr and Ivanov, Aleksey and Senkovskiy, Vasiliy and Bogdanovskiy, Vadim},
+  title     = {Smart Card for Storing and Displaying Identifiers in Loyalty System},
+  type      = {International patent},
+  number    = {WO2013032413-A1},
+  publisher = {European Patent Register},
+  year      = {2013},
+  month     = mar,
+  pages     = {1–-16},
+  url       = {https://patentscope.wipo.int/search/ru/detail.jsf?docId=WO2013032413},
+  note      = {Local filing number: WOUA000084; DIIDW: 2013D33177; see also Espacenet WO2013032413-A1},
+  language  = {en},
+}`</small>

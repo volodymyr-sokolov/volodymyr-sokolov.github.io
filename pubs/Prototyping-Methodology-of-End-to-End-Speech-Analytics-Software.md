@@ -60,3 +60,19 @@ First Online: 29 December 2022
 ### CEUR-WS
 
 <small class="citation">`O. Romanovskyi, et al., Prototyping Methodology of End-to-End Speech Analytics Software, in: 4th International Workshop on Modern Machine Learning Technologies and Data Science, vol. 3312 (2022) 76–86.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Romanovskyi_Iosifov_Iosifova_2022,
+  author    = {Romanovskyi, Oleh and Iosifov, Ievgen and Iosifova, Olena and Sokolov, Volodymyr and Skladannyi, Pavlo and Sukaylo, Igor},
+  title     = {Prototyping Methodology of End-to-End Speech Analytics Software},
+  booktitle = {2022 Modern Machine Learning Technologies and Data Science Workshop (MoMLeT&DS)},
+  address   = {Leiden, The Netherlands},
+  publisher = {CEUR},
+  year      = {2022},
+  month     = nov,
+  pages     = {76–-86},
+  url       = {https://ceur-ws.org/Vol-3312/paper6.pdf},
+  eid       = {2-s2.0-85146116195},
+  language  = {en},
+}`</small>

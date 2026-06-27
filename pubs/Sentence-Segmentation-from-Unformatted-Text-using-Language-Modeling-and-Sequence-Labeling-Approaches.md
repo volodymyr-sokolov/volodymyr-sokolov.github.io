@@ -60,3 +60,20 @@ First Online: 2 July 2021
 ### CEUR-WS
 
 <small class="citation">`I. Iosifov, O. Iosifova, V. Sokolov, Sentence Segmentation from Unformatted Text using Language Modeling and Sequence Labeling Approaches, in: IEEE 7th International Scientific and Practical Conference Problems of Infocommunications. Science and Technology (2020) 335–337. doi:10.1109/PICST51311.2020.9468084`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Iosifov_Iosifova_Sokolov_2020,
+  author    = {Iosifov, Ievgen and Iosifova, Olena and Sokolov, Volodymyr},
+  title     = {Sentence Segmentation from Unformatted Text using Language Modeling and Sequence Labeling Approaches},
+  booktitle = {2020 IEEE International Conference on Problems of Infocommunications. Science and Technology (PIC S&T)},
+  address   = {Kharkiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2020},
+  month     = oct,
+  pages     = {335-–337},
+  doi       = {10.1109/PICST51311.2020.9468084},
+  url       = {https://ieeexplore.ieee.org/document/9468084},
+  eid       = {2-s2.0-85114396341},
+  language  = {en},
+}`</small>

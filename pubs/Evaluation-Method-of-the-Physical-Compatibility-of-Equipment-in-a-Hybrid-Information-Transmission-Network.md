@@ -55,3 +55,20 @@ First Online: 30 November 2022
 ### CEUR-WS
 
 <small class="citation">`P. Anakhov, et al., Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network, J. Theor. Appl. Inf. Technol. 100(22) (2022) 6635–6644.`</small>
+
+### BibTeX
+
+<small class="citation">`@article{Anakhov_Zhebka_Tushych_2022,
+  author    = {Anakhov, Pavlo and Zhebka, Viktoriia and Tushych, Alina and Kravchenko, Vladislav and Blazhennyi, Nazarii and Skladannyi, Pavlo and Sokolov, Volodymyr},
+  title     = {Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network},
+  journal   = {Journal of Theoretical and Applied Information Technology},
+  volume    = {100},
+  number    = {22},
+  publisher = {Little Lion Scientific},
+  year      = {2022},
+  month     = nov,
+  pages     = {6635–-6644},
+  url       = {http://www.jatit.org/volumes/Vol100No22/18Vol100No22.pdf},
+  eid       = {2-s2.0-85143412570},
+  language  = {en},
+}`</small>

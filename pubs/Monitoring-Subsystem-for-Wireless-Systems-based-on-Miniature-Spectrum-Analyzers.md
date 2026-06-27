@@ -77,5 +77,5 @@ First Online: 3 February 2019
  url       = {https://ieeexplore.ieee.org/document/8632151/},
  eid       = {2-s2.0-85062891053},
  isi       = {000458659100109},
- language  = {en}
+ language  = {en},
 }`</small>

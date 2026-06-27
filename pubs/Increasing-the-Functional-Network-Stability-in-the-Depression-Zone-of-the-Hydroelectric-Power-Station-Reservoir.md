@@ -60,3 +60,19 @@ First Online: 6 June 2022
 ### CEUR-WS
 
 <small class="citation">`P. Anakhov, et al., Increasing the Functional Network Stability in the Depression Zone of the Hydroelectric Power Station Reservoir, in: Emerging Technology Trends on the Smart Industry and the Internet of Things, vol. 3149 (2022) 169–176.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Anakhov_Zhebka_Koretska_2022,
+  author    = {Anakhov, Pavlo and Zhebka, Viktoriia and Koretska, Viktoriia and Sokolov, Volodymyr and Skladannyi, Pavlo},
+  title     = {Increasing the Functional Network Stability in the Depression Zone of the Hydroelectric Power Station Reservoir},
+  booktitle = {2022 Emerging Technology Trends on the Smart Industry and the Internet of Things (TTSIIT)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2022},
+  month     = jan,
+  pages     = {169-–176},
+  url       = {http://ceur-ws.org/Vol-3149/short8.pdf},
+  eid       = {2-s2.0-85132243825},
+  language  = {en},
+}`</small>

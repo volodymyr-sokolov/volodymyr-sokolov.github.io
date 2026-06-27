@@ -60,3 +60,20 @@ First Online: 18 March 2024
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, P. Skladannyi, N. Mazur, Wi-Fi Repeater Influence on Wireless Access, in: IEEE 5th International Conference on Advanced Information and Communication Technologies (2023) 33–36. doi:10.1109/AICT61584.2023.10452421`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sokolov_Skladannyi_Mazur_2023,
+  author    = {Sokolov, Volodymyr and Skladannyi, Pavlo and Mazur, Nataliia},
+  title     = {Wi-Fi Repeater Influence on Wireless Access},
+  booktitle = {2023 IEEE 5th International Conference on Advanced Information and Communication Technologies (AICT)},
+  address   = {Lviv, Ukraine},
+  publisher = {IEEE},
+  year      = {2023},
+  month     = nov,
+  pages     = {33–-36},
+  doi       = {10.1109/AICT61584.2023.10452421},
+  url       = {https://ieeexplore.ieee.org/document/10452421},
+  eid       = {2-s2.0-85189553415},
+  language  = {en},
+}`</small>

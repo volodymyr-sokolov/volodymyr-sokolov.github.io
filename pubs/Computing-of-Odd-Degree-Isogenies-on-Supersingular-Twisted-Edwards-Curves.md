@@ -66,3 +66,20 @@ First Online: 7 August 2021
 ### CEUR-WS
 
 <small class="citation">`A. Bessalov, et al., Computing of Odd Degree Isogenies on Supersingular Twisted Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 2923 (2021) 1–11.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Bessalov_Sokolov_Skladannyi_2021,
+  author    = {Bessalov, Anatoly and Sokolov, Volodymyr and Skladannyi, Pavlo and Zhyltsov, Oleksii},
+  title     = {Computing of Odd Degree Isogenies on Supersingular Twisted Edwards Curves},
+  booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2021},
+  month     = jan,
+  pages     = {1--11},
+  url       = {http://ceur-ws.org/Vol-2923/paper1.pdf},
+  eid       = {2-s2.0-85112376265},
+  language  = {en},
+}
+`</small>

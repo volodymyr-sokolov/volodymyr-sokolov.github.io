@@ -40,3 +40,19 @@ et al.
 ### CEUR-WS
 
 <small class="citation">`M. Yevdokymenko, V. Sokolov, Overview of the Course in 'Wireless and Mobile Security', in: Educating the Next Generation MSc in Cyber Security (2019) 104–119.`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Carlsson_Yevdokymenko_Sokolov_2013,
+  author    = {Carlsson, Anders and Yevdokymenko, Maryna and Sokolov, Volodymyr and others},
+  title     = {Educating the Next Generation Experts in Cyber Security: The New EU-Recognized Master’s Program (ENGENSEC)},
+  type      = {Grant},
+  number    = {544455-TEMPUS-1-2013-1-SE-TEMPUS-JPCR},
+  publisher = {European Commission, EACEA, TEMPUS IV},
+  address   = {Blekinge Institute of Technology, Karlskrona, Sweden},
+  year      = {2013},
+  month     = dec,
+  url       = {https://engensec.eu/about-the-project/},
+  note      = {Funding period: 1 December 2013 – 30 November 2017},
+  language  = {en},
+}`</small>

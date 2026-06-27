@@ -58,3 +58,19 @@ First Online: 24 October 2024
 ### CEUR-WS
 
 <small class="citation">`Y. Dreis, et al., Model to Formation Data Base of Secondary Parameters for Assessing Status of the State Secret Protection, in: Cyber Security and Data Protection, vol. 3800 (2024) 1–11.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Dreis_Korchenko_Sokolov_2024,
+  author    = {Dreis, Yurii and Korchenko, Oleksandr and Sokolov, Volodymyr and Skladannyi, Pavlo},
+  title     = {Model to Formation Data Base of Secondary Parameters for Assessing Status of the State Secret Protection},
+  booktitle = {2024 Cyber Security and Data Protection (CSDP)},
+  address   = {Lviv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = jun,
+  pages     = {1–-11},
+  url       = {https://ceur-ws.org/Vol-3800/paper1.pdf},
+  eid       = {2-s2.0-85208806879},
+  language  = {en},
+}`</small>

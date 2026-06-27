@@ -67,3 +67,19 @@ First Online: 16 August 2022
 ### CEUR-WS
 
 <small class="citation">`A. Bessalov, et al., Implementation of the CSIDH Algorithm Model on Supersingular Twisted and Quadratic Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3187, no. 1 (2022) 302–309.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Bessalov_Sokolov_Skladannyi_2021b,
+  author    = {Bessalov, Anatoly and Sokolov, Volodymyr and Skladannyi, Pavlo and Mazur, Nataliia and Ageyev, Dmytro},
+  title     = {Implementation of the CSIDH Algorithm Model on Supersingular Twisted and Quadratic Edwards Curves},
+  booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2021},
+  month     = oct,
+  pages     = {302-–309},
+  url       = {http://ceur-ws.org/Vol-3187/short10.pdf},
+  eid       = {2-s2.0-85137145539},
+  language  = {en},
+}`</small>

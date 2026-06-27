@@ -60,3 +60,19 @@ First Online: 21 February 2025
 ### CEUR-WS
 
 <small class="citation">`Y. Kostiuk, et al., A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps, in: 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks, vol. 3925 (2025) 249–264.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kostiuk_Skladannyi_Samoilenko_2024,
+  author    = {Kostiuk, Yuliia and Skladannyi, Pavlo and Samoilenko, Yuliia and Khorolska, Karyna and Bebeshko, Bohdan and Sokolov, Volodymyr},
+  title     = {A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps},
+  booktitle = {2024 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks (CH&CMiGIN)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = jan,
+  pages     = {249-–264},
+  url       = {https://ceur-ws.org/Vol-3925/paper21.pdf},
+  eid       = {2-s2.0-85219608571},
+  language  = {en},
+}`</small>

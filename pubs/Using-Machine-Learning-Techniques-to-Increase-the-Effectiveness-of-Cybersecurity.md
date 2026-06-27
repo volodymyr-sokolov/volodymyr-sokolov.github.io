@@ -62,3 +62,19 @@ First Online: 16 August 2022
 ### CEUR-WS
 
 <small class="citation">`V. Buhas, et al., Using Machine Learning Techniques to Increase the Effectiveness of Cybersecurity, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3188, no. 2 (2021) 273–281.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Buhas_Ponomarenko_Bugas_2021,
+  author    = {Buhas, Vasyl and Ponomarenko, Ihor and Bugas, Vаlеriy and Ramskyi, Andrii and Sokolov, Volodymyr},
+  title     = {Using Machine Learning Techniques to Increase the Effectiveness of Cybersecurity},
+  booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2021},
+  month     = oct,
+  pages     = {273-–281},
+  url       = {http://ceur-ws.org/Vol-3188/short10.pdf},
+  eid       = {2-s2.0-85137151000},
+  language  = {en},
+}`</small>

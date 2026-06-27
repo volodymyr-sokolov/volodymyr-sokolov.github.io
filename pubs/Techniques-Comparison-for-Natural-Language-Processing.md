@@ -59,3 +59,20 @@ First Online: 3 July 2020
 ### CEUR-WS
 
 <small class="citation">`O. Iosifova, et al., Techniques Comparison for Natural Language Processing, in: 2nd International Workshop on Modern Machine Learning Technologies and Data Science, vol. 2631, no. I (2020) 57–67.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Iosifova_Iosifov_Rolik_2020,
+  author    = {Iosifova, Olena and Iosifov, Ievgen and Rolik, Oleksandr and Sokolov, Volodymyr},
+  title     = {Techniques Comparison for Natural Language Processing},
+  booktitle = {2020 2nd International Workshop on Modern Machine Learning Technologies and Data Science (MoMLeT+DS)},
+  address   = {Lviv-Shatsk, Ukraine},
+  publisher = {CEUR},
+  year      = {2020},
+  month     = jun,
+  pages     = {57–-67},
+  url       = {http://ceur-ws.org/Vol-2631/paper5.pdf},
+  eid       = {2-s2.0-85088881294},
+  isi       = {000664104800005},
+  language  = {en},
+}`</small>

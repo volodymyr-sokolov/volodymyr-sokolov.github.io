@@ -60,3 +60,20 @@ First Online: 11 November 2020
 ### CEUR-WS
 
 <small class="citation">`V. Astapenya, V. Sokolov, D. Ageyev, Experimental Evaluation of an Accelerating Lens on Spatial Field Structure and Frequency Spectrum, in: IEEE Ukrainian Microwave Week (2020) 203–206. doi:10.1109/ukrmw49653.2020.9252755`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Astapenya_Sokolov_Ageyev_2020,
+  author    = {Astapenya, Volodymyr and Sokolov, Volodymyr and Ageyev, Dmytro},
+  title     = {Experimental Evaluation of an Accelerating Lens on Spatial Field Structure and Frequency Spectrum},
+  booktitle = {2020 IEEE Ukrainian Microwave Week (UkrMW)},
+  address   = {Kharkiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2020},
+  month     = sep,
+  pages     = {203–-206},
+  doi       = {10.1109/UkrMW49653.2020.9252755},
+  url       = {https://ieeexplore.ieee.org/document/9252755},
+  eid       = {2-s2.0-85097710865},
+  language  = {en},
+}`</small>

@@ -62,3 +62,19 @@ First Online: 16 November 2023
 ### CEUR-WS
 
 <small class="citation">`P. Anakhov, et al., Protecting Objects of Critical Information Infrastructure from Wartime Cyber Attacks by Decentralizing the Telecommunications Network, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3550 (2023) 240–245.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Anakhov_Zhebka_Popereshnyak_2023,
+  author    = {Anakhov, Pavlo and Zhebka, Viktoriia and Popereshnyak, Svitlana and Skladannyi, Pavlo and Sokolov, Volodymyr},
+  title     = {Protecting Objects of Critical Information Infrastructure from Wartime Cyber Attacks by Decentralizing the Telecommunications Network},
+  booktitle = {2023 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2023},
+  month     = oct,
+  pages     = {240-–245},
+  url       = {https://ceur-ws.org/Vol-3550/short7.pdf},
+  eid       = {2-s2.0-85178338434},
+  language  = {en},
+}`</small>

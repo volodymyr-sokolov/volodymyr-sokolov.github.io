@@ -61,3 +61,19 @@ First Online: 9 November 2024
 ### CEUR-WS
 
 <small class="citation">`S. Gnatyuk, et al., Method for Managing IT Incidents in Critical Information Infrastructure Facilities, in: Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3826 (2024) 326–333.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Gnatyuk_Sydorenko_Polozhentsev_2024,
+  author    = {Gnatyuk, Sergiy and Sydorenko, Viktoria and Polozhentsev, Artem and Sokolov, Volodymyr},
+  title     = {Method for Managing IT Incidents in Critical Information Infrastructure Facilities},
+  booktitle = {2024 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = oct,
+  pages     = {326-–333},
+  url       = {https://ceur-ws.org/Vol-3826/short24.pdf},
+  eid       = {2-s2.0-85210245160},
+  language  = {en},
+}`</small>

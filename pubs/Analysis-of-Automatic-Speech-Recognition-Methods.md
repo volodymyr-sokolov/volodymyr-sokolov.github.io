@@ -62,3 +62,19 @@ First Online: 7 August 2021
 ### CEUR-WS
 
 <small class="citation">`O. Iosifova, et al., Analysis of Automatic Speech Recognition Methods, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 2923 (2021) 252–257.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Iosifova_Iosifov_Sokolov_2021,
+  author    = {Iosifova, Olena and Iosifov, Ievgen and Sokolov, Volodymyr and Romanovskyi, Oleh and Sukaylo, Igor},
+  title     = {Analysis of Automatic Speech Recognition Methods},
+  booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2021},
+  month     = jan,
+  pages     = {252-–257},
+  url       = {http://ceur-ws.org/Vol-2923/paper27.pdf},
+  eid       = {2-s2.0-85112360373},
+  language  = {en},
+}`</small>

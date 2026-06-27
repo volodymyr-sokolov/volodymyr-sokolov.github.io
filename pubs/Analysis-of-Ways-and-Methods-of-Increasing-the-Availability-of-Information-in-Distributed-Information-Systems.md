@@ -61,3 +61,20 @@ First Online: 16 May 2022
 ### CEUR-WS
 
 <small class="citation">`V. Astapenya, et al., Analysis of Ways and Methods of Increasing the Availability of Information in Distributed Information Systems, in: IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (2021) 174–178. doi:10.1109/picst54195.2021.9772161`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Astapenya_Sokolov_Skladannyi_2021,
+  author    = {Astapenya, Volodymyr and Sokolov, Volodymyr and Skladannyi, Pavlo and Zhyltsov, Oleksii},
+  title     = {Analysis of Ways and Methods of Increasing the Availability of Information in Distributed Information Systems},
+  booktitle = {2021 IEEE 8th International Conference on Problems of Infocommunications, Science and Technology (PIC S&T)},
+  address   = {Kharkiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2021},
+  month     = oct,
+  pages     = {174-–178},
+  doi       = {10.1109/PICST54195.2021.9772161},
+  url       = {https://ieeexplore.ieee.org/document/9772161},
+  eid       = {2-s2.0-85130900011},
+  language  = {en},
+}`</small>

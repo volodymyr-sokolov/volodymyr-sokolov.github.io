@@ -60,3 +60,20 @@ First Online: 1 June 2026
 ### CEUR-WS
 
 <small class="citation">`I. Kriuchkov, V. Sokolov, P. Skladannyi, Telecommunication Network Availability After Hydroelectric Power Plant Reservoir Dam Incident, in: IEEE 9th International Conference on Energy Smart Systems (2026) 1–5. doi:10.1109/ess70338.2026.11536756`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Zhebka_Anakhov_Aronov_2026,
+  author    = {Zhebka, Viktoriia and Anakhov, Pavlo and Aronov, Andrii and Skladannyi, Pavlo and Sokolov, Volodymyr},
+  title     = {Telecommunication Network Availability after Hydroelectric Power Plant Reservoir Dam Incident},
+  booktitle = {2026 IEEE 9th International Conference on Energy Smart Systems (ESS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2026},
+  month     = apr,
+  pages     = {1–-5},
+  doi       = {10.1109/ESS70338.2026.11536714},
+  url       = {https://ieeexplore.ieee.org/document/11536714},
+  eid       = {2-s2.0-105042161240},
+  language  = {en},
+}`</small>

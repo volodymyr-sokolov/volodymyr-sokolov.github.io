@@ -66,3 +66,19 @@ First Online: 16 June 2023
 ### CEUR-WS
 
 <small class="citation">`A. Bessalov, et al., CSIKE-ENC Combined Encryption Scheme with Optimized Degrees of Isogeny Distribution, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3421 (2023) 36–45.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Bessalov_Abramov_Sokolov_2023,
+  author    = {Bessalov, Anatoly and Abramov, Serhii and Sokolov, Volodymyr and Mazur, Nataliia},
+  title     = {CSIKE-ENC Combined Encryption Scheme with Optimized Degrees of Isogeny Distribution},
+  booktitle = {2023 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2023},
+  month     = feb,
+  pages     = {36–-45},
+  url       = {https://ceur-ws.org/Vol-3421/paper4.pdf},
+  eid       = {2-s2.0-85163882231},
+  language  = {en},
+}`</small>

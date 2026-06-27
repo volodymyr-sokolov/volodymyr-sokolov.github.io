@@ -60,3 +60,18 @@ First Online: 21 June 2020
 ### CEUR-WS
 
 <small class="citation">`Z. Hu, et al., Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range, Data-Centric Business and Applications 48 (2020) 675–709. doi:10.1007/978-3-030-43070-2_29`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Hu_Buriachok_Bogachuk_2020,
+  author    = {Hu, Zhengbing and Buriachok, Volodymyr and Bogachuk, Ivan and Sokolov, Volodymyr and Ageyev, Dmytro},
+  title     = {Development and Operation Analysis of Spectrum Monitoring Subsystem 2.4–2.5 GHz Range},
+  journal   = {Lecture Notes on Data Engineering and Communications Technologies},
+  publisher = {Springer International Publishing},
+  year      = {2020},
+  pages     = {675–-709},
+  doi       = {10.1007/978-3-030-43070-2_29},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-030-43070-2_29},
+  eid       = {2-s2.0-85087214225},
+  language  = {en},
+}`</small>

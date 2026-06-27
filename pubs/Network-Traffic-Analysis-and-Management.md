@@ -55,3 +55,18 @@ First Online: 2026
 ### CEUR-WS
 
 <small class="citation">`P. Skladannyi, Y. Kostiuk, V. Sokolov, K. Khorolska, Network Traffic Analysis and Management, in: Handbook of Cybersecurity, CRC Press, 2026, 148–172. doi:10.1201/9781003640790-9`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Skladannyi_Kostiuk_Sokolov_2026,
+  author    = {Skladannyi, Pavlo and Kostiuk, Yuliia and Sokolov, Volodymyr and Khorolska, Karyna},
+  title     = {Network Traffic Analysis and Management},
+  journal   = {Handbook of Cybersecurity},
+  publisher = {CRC Press},
+  year      = {2026},
+  pages     = {148–-172},
+  doi       = {10.1201/9781003640790-9},
+  url       = {https://www.taylorfrancis.com/chapters/edit/10.1201/9781003640790-9/network-traffic-analysis-management-pavlo-skladannyi-yuliia-kostiuk-volodymyr-sokolov-karyna-khorolska},
+  eid       = {2-s2.0-105019245212},
+  language  = {en},
+}`</small>

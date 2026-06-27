@@ -64,3 +64,18 @@ First Online: 21 July 2021
 ### CEUR-WS
 
 <small class="citation">`Z. B. Hu, et al., Authentication System by Human Brainwaves Using Machine Learning and Artificial Intelligence, in: Advances in Computer Science for Engineering and Education IV (2021) 374–388. doi:10.1007/978-3-030-80472-5_31`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Hu_Buriachok_TajDini_2021,
+  author    = {Hu, Zhengbing and Buriachok, Volodymyr and TajDini, Mahyar and Sokolov, Volodymyr},
+  title     = {Authentication System by Human Brainwaves using Machine Learning and Artificial Intelligence},
+  journal   = {Lecture Notes on Data Engineering and Communications Technologies},
+  publisher = {Springer International Publishing},
+  year      = {2021},
+  pages     = {374-–388},
+  doi       = {10.1007/978-3-030-80472-5_31},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-030-80472-5_31},
+  eid       = {2-s2.0-85111924795},
+  language  = {en},
+}`</small>

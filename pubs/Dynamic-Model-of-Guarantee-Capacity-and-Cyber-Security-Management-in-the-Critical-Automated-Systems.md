@@ -59,3 +59,19 @@ First Online: 30 October 2023
 ### CEUR-WS
 
 <small class="citation">`H. Hulak, et al., Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated System, in: 2nd International Conference on Conflict Management in Global Information Networks, vol. 3530 (2023) 102–111.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Hulak_Skladannyi_Sokolov_2022,
+  author    = {Hulak, Hennadii and Skladannyi, Pavlo and Sokolov, Volodymyr and Hulak, Evgen and Korniiets, Viktor},
+  title     = {Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated Systems},
+  booktitle = {2022 2nd International Conference on Conflict Management in Global Information Networks (CMiGiN)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2022},
+  month     = nov,
+  pages     = {102–-111},
+  url       = {https://ceur-ws.org/Vol-3530/paper11.pdf},
+  eid       = {2-s2.0-85176926997},
+  language  = {en},
+}`</small>

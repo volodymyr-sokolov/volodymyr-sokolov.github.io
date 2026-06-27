@@ -62,3 +62,19 @@ First Online: 24 December 2022
 ### CEUR-WS
 
 <small class="citation">`V. Zhebka, et al., Optimization of Machine Learning Method to Improve the Management Efficiency of Heterogeneous Telecommunication Network, in: Workshop on Cybersecurity Providing in Information and Telecommunication Systems, vol. 3288 (2022) 149–155.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Zhebka_Gertsiuk_Sokolov_2022,
+  author    = {Zhebka, Viktoriia and Gertsiuk, Mykola and Sokolov, Volodymyr and Malinov, Vladyslav and Sablina, Mylana},
+  title     = {Optimization of Machine Learning Method to Improve the Management Efficiency of Heterogeneous Telecommunication Network},
+  booktitle = {2022 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2022},
+  month     = oct,
+  pages     = {149-–155},
+  url       = {https://ceur-ws.org/Vol-3288/short13.pdf},
+  eid       = {2-s2.0-85143791399},
+  language  = {en},
+}`</small>

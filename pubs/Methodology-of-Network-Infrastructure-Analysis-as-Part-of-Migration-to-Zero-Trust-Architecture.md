@@ -62,3 +62,19 @@ First Online: 24 October 2024
 ### CEUR-WS
 
 <small class="citation">`R. Syrotynskyi, et al., Methodology of Network Infrastructure Analysis as Part of Migration to Zero-Trust Architecture, in: Cyber Security and Data Protection, vol. 3800 (2024) 97–105.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Syrotynskyi_Tyshyk_Kochan_2024,
+  author    = {Syrotynskyi, Roman and Tyshyk, Ivan and Kochan, Orest and Sokolov, Volodymyr and Skladannyi, Pavlo},
+  title     = {Methodology of Network Infrastructure Analysis as Part of Migration to Zero-Trust Architecture},
+  booktitle = {2024 Cyber Security and Data Protection (CSDP)},
+  address   = {Lviv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = jun,
+  pages     = {97-–105},
+  url       = {https://ceur-ws.org/Vol-3800/short3.pdf},
+  eid       = {2-s2.0-85208811031},
+  language  = {en},
+}`</small>

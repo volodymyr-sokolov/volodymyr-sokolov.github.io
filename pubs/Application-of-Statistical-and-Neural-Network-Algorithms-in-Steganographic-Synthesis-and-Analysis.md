@@ -62,3 +62,19 @@ First Online: 26 August 2025
 ### CEUR-WS
 
 <small class="citation">`Y. Kostiuk, et al., Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files, in: Classic, Quantum, and Post-Quantum Cryptography (CQPC), vol. 4016 (2025) 45–65.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kostiuk_Skladannyi_Khorolska_2025,
+  author    = {Kostiuk, Yuliia and Skladannyi, Pavlo and Khorolska, Karyna and Sokolov, Volodymyr and Hulak, Hennadii},
+  title     = {Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files},
+  booktitle = {2024 Classic, Quantum, and Post-Quantum Cryptography (CQPC)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2025},
+  month     = aug,
+  pages     = {45–-65},
+  url       = {https://ceur-ws.org/Vol-4016/paper4.pdf},
+  eid       = {2-s2.0-105015144720},
+  language  = {en},
+}`</small>

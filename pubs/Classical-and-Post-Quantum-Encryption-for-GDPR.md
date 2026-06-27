@@ -62,3 +62,19 @@ First Online: 12 November 2024
 ### CEUR-WS
 
 <small class="citation">`M. Iavich, et al., Classical and Post-Quantum Encryption for GDPR, in: Classic, Quantum, and Post-Quantum Cryptography, vol. 3829 (2024) 70–78.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Iavich_Kovalchuk_Gnatyuk_2024,
+  author    = {Iavich, Maksim and Kovalchuk, Oksana and Gnatyuk, Sergiy and Khavikova, Yuliia and Sokolov, Volodymyr},
+  title     = {Classical and Post-Quantum Encryption for GDPR},
+  booktitle = {2024 Classic, Quantum, and Post-Quantum Cryptography (CQPC)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = aug,
+  pages     = {70–-78},
+  url       = {https://ceur-ws.org/Vol-3829/short9.pdf},
+  eid       = {2-s2.0-85210257051},
+  language  = {en},
+}`</small>

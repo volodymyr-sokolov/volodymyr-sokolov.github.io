@@ -62,3 +62,19 @@ First Online: 13 October 2023
 ### CEUR-WS
 
 <small class="citation">`A. Bessalov, et al., Multifunctional CRS Encryption Scheme on Isogenies of Non-Supersingular Edwards Curves, in: Classic, Quantum, and Post-Quantum Cryptography, vol. 3504 (2023) 12–25.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Bessalov_Abramov_Sokolov_2023b,
+  author    = {Bessalov, Anatoly and Abramov, Serhii and Sokolov, Volodymyr and Skladannyi, Pavlo and Zhyltsov, Oleksii},
+  title     = {Multifunctional CRS Encryption Scheme on Isogenies of Non-Supersingular Edwards Curves},
+  booktitle = {2023 Classic, Quantum, and Post-Quantum Cryptography (CQPC)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2023},
+  month     = aug,
+  pages     = {12–-25},
+  url       = {https://ceur-ws.org/Vol-3504/paper2.pdf},
+  eid       = {2-s2.0-85175724530},
+  language  = {en},
+}`</small>

@@ -60,3 +60,19 @@ First Online: 16 November 2023
 ### CEUR-WS
 
 <small class="citation">`S. Abramov, A. Bessalov, V. Sokolov, Properties of Isogeny Graph of Non-Cyclic Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3550 (2023) 234–239.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Abramov_Bessalov_Sokolov_2023,
+  author    = {Abramov, Serhii and Bessalov, Anatoly and Sokolov, Volodymyr},
+  title     = {Properties of Isogeny Graph of Non-Cyclic Edwards Curves},
+  booktitle = {2023 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2023},
+  month     = oct,
+  pages     = {234-–239},
+  url       = {https://ceur-ws.org/Vol-3550/short6.pdf},
+  eid       = {2-s2.0-85178378792},
+  language  = {en},
+}`</small>

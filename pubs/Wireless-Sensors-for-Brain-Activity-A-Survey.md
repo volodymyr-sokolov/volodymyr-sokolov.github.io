@@ -58,3 +58,22 @@ First Online: 8 December 2020
 ### CEUR-WS
 
 <small class="citation">`M. TajDini, et al., Wireless Sensors for Brain Activity—A Survey, Electronics 9(12), iss. 2092 (2020) 1–26. doi:10.3390/electronics9122092`</small>
+
+### BibTeX
+
+<small class="citation">`@article{TajDini_Sokolov_Kuzminykh_2020,
+  author    = {TajDini, Mahyar and Sokolov, Volodymyr and Kuzminykh, Ievgeniia and Shiaeles, Stavros and Ghita, Bogdan},
+  title     = {Wireless Sensors for Brain Activity — A Survey},
+  journal   = {Electronics},
+  volume    = {9},
+  number    = {12},
+  publisher = {MDPI AG},
+  year      = {2020},
+  month     = dec,
+  pages     = {2092},
+  doi       = {10.3390/electronics9122092},
+  url       = {https://www.mdpi.com/2079-9292/9/12/2092},
+  eid       = {2-s2.0-85097402923},
+  isi       = {000602048000001},
+  language  = {en},
+}`</small>

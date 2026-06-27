@@ -60,3 +60,20 @@ First Online: 10 November 2023
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, P. Skladannyi, V. Astapenya, Bluetooth Low-Energy Beacon Resistance to Jamming Attack, in: IEEE 13th International Conference on Electronics and Information Technologies (2023) 270–274. doi:10.1109/ELIT61488.2023.10310815`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sokolov_Skladannyi_Astapenya_2023,
+  author    = {Sokolov, Volodymyr and Skladannyi, Pavlo and Astapenya, Volodymyr},
+  title     = {Bluetooth Low-Energy Beacon Resistance to Jamming Attack},
+  booktitle = {2023 IEEE 13th International Conference on Electronics and Information Technologies (ELIT)},
+  address   = {Lviv, Ukraine},
+  publisher = {IEEE},
+  year      = {2023},
+  month     = sep,
+  pages     = {270-–274},
+  doi       = {10.1109/ELIT61488.2023.10310815},
+  url       = {https://ieeexplore.ieee.org/document/10310815},
+  eid       = {2-s2.0-85179520418},
+  language  = {en},
+}`</small>

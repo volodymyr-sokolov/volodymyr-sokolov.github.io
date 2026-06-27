@@ -61,3 +61,20 @@ First Online: 9 April 2020
 ### CEUR-WS
 
 <small class="citation">`F. Kipchuk, et al., Investigation of Availability of Wireless Access Points based on Embedded Systems, in: IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (2019) 246–250. doi:10.1109/picst47496.2019.9061551`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kipchuk_Sokolov_Buriachok_2019,
+  author    = {Kipchuk, Feodosiy and Sokolov, Volodymyr and Buriachok, Volodymyr and Kuzmenko, Lidia},
+  title     = {Investigation of Availability of Wireless Access Points based on Embedded Systems},
+  booktitle = {2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&T)},
+  address   = {Kyiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2019},
+  month     = oct,
+  pages     = {1–-5},
+  doi       = {10.1109/PICST47496.2019.9061551},
+  url       = {https://ieeexplore.ieee.org/document/9061551},
+  eid       = {2-s2.0-85083675874},
+  language  = {en},
+}`</small>

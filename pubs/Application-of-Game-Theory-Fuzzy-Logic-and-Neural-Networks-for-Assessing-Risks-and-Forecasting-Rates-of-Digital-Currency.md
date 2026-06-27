@@ -55,3 +55,20 @@ First Online: 31 December 2022
 ### CEUR-WS
 
 <small class="citation">`B. Bebeshko, et al., Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency, J. Theor. Appl. Inf. Technol. 100(24) (2022) 7390–7404.`</small>
+
+### BibTeX
+
+<small class="citation">`@article{Bebeshko_Malyukov_Lakhno_2022,
+  author    = {Bebeshko, Bohdan and Malyukov, Volodymyr and Lakhno, Miroslav and Skladannyi, Pavlo and Sokolov, Volodymyr and Shevchenko, Svitlana and Zhumadilova, Mereke},
+  title     = {Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency},
+  journal   = {Journal of Theoretical and Applied Information Technology},
+  volume    = {100},
+  number    = {24},
+  publisher = {Little Lion Scientific},
+  year      = {2022},
+  month     = dec,
+  pages     = {7390–-7404},
+  url       = {http://www.jatit.org/volumes/Vol100No24/15Vol100No24.pdf},
+  eid       = {2-s2.0-85145479763},
+  language  = {en},
+}`</small>

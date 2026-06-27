@@ -59,3 +59,19 @@ First Online: 27 September 2025
 ### CEUR-WS
 
 <small class="citation">`M. Kuzheliev, et al., Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies, in: Digital Economy Concepts and Technologies, vol. 4029 (2025) 126–134.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kuzheliev_Nechyporenko_Danovych_2025,
+  author    = {Kuzheliev, Mykhailo and Nechyporenko, Alina and Danovych, Oleksandra and Osadchyi, Viacheslav and Sokolov, Volodymyr},
+  title     = {Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies},
+  booktitle = {2025 Digital Economy Concepts and Technologies (DECaT)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2025},
+  month     = apr,
+  pages     = {126–-134},
+  url       = {https://ceur-ws.org/Vol-4029/short3.pdf},
+  eid       = {2-s2.0-105017790344},
+  language  = {en},
+}`</small>

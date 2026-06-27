@@ -67,3 +67,18 @@ First Online: 12 September 2019
 ### CEUR-WS
 
 <small class="citation">`I. Kuzminykh, et al., Investigation of the IoT Device Lifetime with Secure Data Transmission, in: Internet of Things, Smart Spaces, and Next Generation Networks and Systems, vol. 11660 (2019) 16–27. doi:10.1007/978-3-030-30859-9_2`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Kuzminykh_Carlsson_Yevdokymenko_2019,
+  author    = {Kuzminykh, Ievgeniia and Carlsson, Anders and Yevdokymenko, Maryna and Sokolov, Volodymyr},
+  title     = {Investigation of the IoT Device Lifetime with Secure Data Transmission},
+  journal   = {Lecture Notes in Computer Science},
+  publisher = {Springer International Publishing},
+  year      = {2019},
+  pages     = {16–-27},
+  doi       = {10.1007/978-3-030-30859-9_2},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-030-30859-9_2},
+  eid       = {2-s2.0-85072951424},
+  language  = {en},
+}`</small>

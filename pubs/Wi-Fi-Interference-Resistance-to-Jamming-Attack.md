@@ -60,3 +60,20 @@ First Online: 18 March 2024
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, P. Skladannyi, V. Astapenya, Wi-Fi Interference Resistance to Jamming Attack, in: IEEE 5th International Conference on Advanced Information and Communication Technologies (2023) 1–4. doi:10.1109/AICT61584.2023.10452687`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sokolov_Skladannyi_Astapenya_2023b,
+  author    = {Sokolov, Volodymyr and Skladannyi, Pavlo and Astapenya, Volodymyr},
+  title     = {Wi-Fi Interference Resistance to Jamming Attack},
+  booktitle = {2023 IEEE 5th International Conference on Advanced Information and Communication Technologies (AICT)},
+  address   = {Lviv, Ukraine},
+  publisher = {IEEE},
+  year      = {2023},
+  month     = nov,
+  pages     = {1–-4},
+  doi       = {10.1109/AICT61584.2023.10452687},
+  url       = {https://ieeexplore.ieee.org/document/10452687},
+  eid       = {2-s2.0-85189527228},
+  language  = {en},
+}`</small>

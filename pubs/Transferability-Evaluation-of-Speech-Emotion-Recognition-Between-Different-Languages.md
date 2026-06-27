@@ -65,3 +65,18 @@ First Online: 28 April 2022
 ### CEUR-WS
 
 <small class="citation">`I. Iosifov, et al., Transferability Evaluation of Speech Emotion Recognition Between Different Languages, Advances in Computer Science for Engineering and Education 134 (2022) 413–426. doi:10.1007/978-3-031-04812-8_35`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Iosifov_Iosifova_Romanovskyi_2022,
+  author    = {Iosifov, Ievgen and Iosifova, Olena and Romanovskyi, Oleh and Sokolov, Volodymyr and Sukaylo, Igor},
+  title     = {Transferability Evaluation of Speech Emotion Recognition Between Different Languages},
+  journal   = {Lecture Notes on Data Engineering and Communications Technologies},
+  publisher = {Springer International Publishing},
+  year      = {2022},
+  pages     = {413–-426},
+  doi       = {10.1007/978-3-031-04812-8_35},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-031-04812-8_35},
+  eid       = {2-s2.0-85129602152},
+  language  = {en},
+}`</small>

@@ -62,3 +62,19 @@ First Online: 16 August 2022
 ### CEUR-WS
 
 <small class="citation">`V. Grechaninov, et al., Decentralized Access Demarcation System Construction in Situational Center Network, in: Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3188, no. 2 (2022) 197–206.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Grechaninov_Hulak_Hulak_2021,
+  author    = {Grechaninov, Viktor and Hulak, Hennadii and Hulak, Evgen and Skladannyi, Pavlo and Sokolov, Volodymyr},
+  title     = {Decentralized Access Demarcation System Construction in Situational Center Network},
+  booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2021},
+  month     = oct,
+  pages     = {197-–206},
+  url       = {http://ceur-ws.org/Vol-3188/paper18.pdf},
+  eid       = {2-s2.0-85137139416},
+  language  = {en},
+}`</small>

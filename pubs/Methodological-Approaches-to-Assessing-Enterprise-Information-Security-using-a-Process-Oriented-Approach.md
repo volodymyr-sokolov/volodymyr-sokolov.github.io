@@ -48,12 +48,30 @@ First Online: 8 June 2026
 
 ### APA
 
-<small class="citation">`Kostiuk, Y., Sokolov, V., Skladannyi, P., & Khorolska, K. (2026). Methodological Approaches to AssessingEnterprise Information Security using a ProcessOriented Approach. International Journal of Information Engineering and Electronic Business, 18(3), 37–51. https://doi.org/10.5815/ijieeb.2026.03.03`</small>
+<small class="citation">`Kostiuk, Y., Sokolov, V., Skladannyi, P., & Khorolska, K. (2026). Methodological Approaches to Assessing Enterprise Information Security using a ProcessOriented Approach. International Journal of Information Engineering and Electronic Business, 18(3), 37–51. https://doi.org/10.5815/ijieeb.2026.03.03`</small>
 
 ### IEEE
 
-<small class="citation">`Y. Kostiuk, V. Sokolov, P. Skladannyi, and K. Khorolska, “Methodological Approaches to AssessingEnterprise Information Security using a ProcessOriented Approach,” IJIEEB, vol. 18, no. 3, pp. 37–51, Jun. 2026, doi: 10.5815/ijieeb.2026.03.03.`</small>
+<small class="citation">`Y. Kostiuk, V. Sokolov, P. Skladannyi, and K. Khorolska, “Methodological Approaches to Assessing Enterprise Information Security using a ProcessOriented Approach,” IJIEEB, vol. 18, no. 3, pp. 37–51, Jun. 2026, doi: 10.5815/ijieeb.2026.03.03.`</small>
 
 ### CEUR-WS
 
-<small class="citation">`Y. Kostiuk, V. Sokolov, P. Skladannyi, K. Khorolska, Methodological Approaches to AssessingEnterprise Information Security using a ProcessOriented Approach, IJIEEB 18(3) (2026) 37–51. doi: 10.5815/ijieeb.2026.03.03`</small>
+<small class="citation">`Y. Kostiuk, V. Sokolov, P. Skladannyi, K. Khorolska, Methodological Approaches to Assessing Enterprise Information Security using a ProcessOriented Approach, IJIEEB 18(3) (2026) 37–51. doi: 10.5815/ijieeb.2026.03.03`</small>
+
+### BibTeX
+
+<small class="citation">`@article{Kostiuk_Sokolov_Skladannyi_2026,
+  author    = {Kostiuk, Yuliia and Sokolov, Volodymyr and Skladannyi, Pavlo and Khorolska, Karyna},
+  title     = {Methodological Approaches to Assessing Enterprise Information Security using a Process-Oriented Approach},
+  journal   = {International Journal of Information Engineering and Electronic Business},
+  volume    = {18},
+  number    = {3},
+  publisher = {MECS Press},
+  year      = {2026},
+  month     = jun,
+  pages     = {37–-51},
+  doi       = {10.5815/ijieeb.2026.03.03},
+  url       = {https://www.mecs-press.org/ijieeb/ijieeb-v18-n3/v18n3-3.html},
+  eid       = {2-s2.0-105040763278},
+  language  = {en},
+}`</small>

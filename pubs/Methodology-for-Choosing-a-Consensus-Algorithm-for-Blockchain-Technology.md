@@ -59,3 +59,19 @@ First Online: 19 April 2024
 ### CEUR-WS
 
 <small class="citation">`V. Zhebka, et al., Methodology for Choosing a Consensus Algorithm for Blockchain Technology, in: Digital Economy Concepts and Technologies, vol. 3665 (2024) 106–113.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Zhebka_Zhebka_Bazhan_2024,
+  author    = {Zhebka, Viktoriia and Zhebka, Serhii and Bazhan, Tetiana and Skladannyi, Pavlo and Sokolov, Volodymyr},
+  title     = {Methodology for Choosing a Consensus Algorithm for Blockchain Technology},
+  booktitle = {2024 Digital Economy Concepts and Technologies (DECaT)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = apr,
+  pages     = {106-–113},
+  url       = {https://ceur-ws.org/Vol-3665/short6.pdf},
+  eid       = {2-s2.0-85191434425},
+  language  = {en},
+}`</small>

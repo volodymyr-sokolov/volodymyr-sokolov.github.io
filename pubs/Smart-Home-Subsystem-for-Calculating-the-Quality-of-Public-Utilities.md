@@ -60,3 +60,19 @@ First Online: 16 June 2023
 ### CEUR-WS
 
 <small class="citation">`O. Bahatskyi, V. Bahatskyi, V. Sokolov, Smart Home Subsystem for Calculating the Quality of Public Utilities, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3421 (2023) 168–173.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Bahatskyi_Bahatskyi_Sokolov_2023,
+  author    = {Bahatskyi, Oleksii and Bahatskyi, Valentyn and Sokolov, Volodymyr},
+  title     = {Smart Home Subsystem for Calculating the Quality of Public Utilities},
+  booktitle = {2023 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2023},
+  month     = feb,
+  pages     = {168-–173},
+  url       = {https://ceur-ws.org/Vol-3421/short1.pdf},
+  eid       = {2-s2.0-85163896091},
+  language  = {en},
+}`</small>

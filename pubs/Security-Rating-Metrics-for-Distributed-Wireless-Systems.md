@@ -58,3 +58,20 @@ First Online: 22 June 2019
 ### CEUR-WS
 
 <small class="citation">`V. Buriachok, V. Sokolov, P. Skladannyi, Security Rating Metrics for Distributed Wireless Systems, in: 8th International Conference on "Mathematics. Information Technologies. Education": Modern Machine Learning Technologies and Data Science, vol. 2386 (2019) 222–233.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Buriachok_Sokolov_Skladannyi_2019,
+  author    = {Buriachok, Volodymyr and Sokolov, Volodymyr and Skladannyi, Pavlo},
+  title     = {Security Rating Metrics for Distributed Wireless Systems},
+  booktitle = {2019 8th International Conference on “Mathematics. Information Technologies. Education” (MoMLeT&DS)},
+  address   = {Shatsk, Ukraine},
+  publisher = {CEUR},
+  year      = {2019},
+  month     = jun,
+  pages     = {222-–233},
+  url       = {http://ceur-ws.org/Vol-2386/paper17.pdf},
+  eid       = {2-s2.0-85068053861},
+  isi       = {000664097100017},
+  language  = {en},
+}`</small>

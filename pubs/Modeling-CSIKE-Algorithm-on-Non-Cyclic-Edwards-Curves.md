@@ -67,3 +67,19 @@ First Online: 24 December 2022
 ### CEUR-WS
 
 <small class="citation">`A. Bessalov, et al., Modeling CSIKE Algorithm on Non-Cyclic Edwards Curves, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3288 (2022) 1–10.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Bessalov_Sokolov_Skladannyi_2022,
+  author    = {Bessalov, Anatoly and Sokolov, Volodymyr and Skladannyi, Pavlo and Abramov, Serhii and Zhyltsov, Oleksii},
+  title     = {Modeling CSIKE Algorithm on Non-Cyclic Edwards Curves},
+  booktitle = {2022 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2022},
+  month     = oct,
+  pages     = {1–-10},
+  url       = {https://ceur-ws.org/Vol-3288/paper1.pdf},
+  eid       = {2-s2.0-85143809498},
+  language  = {en},
+}`</small>

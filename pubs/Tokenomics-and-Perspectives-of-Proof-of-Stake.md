@@ -58,3 +58,19 @@ First Online: 19 April 2024
 ### CEUR-WS
 
 <small class="citation">`M. Chyzhevska, et al., Tokenomics and Perspectives of Proof of Stake, in: Digital Economy Concepts and Technologies, vol. 3665 (2024) 61–69.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Chyzhevska_Romanovska_Venger_2024,
+  author    = {Chyzhevska, Maryna and Romanovska, Nataliia and Venger, Vitalii and Sokolov, Volodymyr},
+  title     = {Tokenomics and Perspectives of Proof of Stake},
+  booktitle = {2024 Digital Economy Concepts and Technologies (DECaT)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = apr,
+  pages     = {61-–69},
+  url       = {https://ceur-ws.org/Vol-3665/short1.pdf},
+  eid       = {2-s2.0-85191421388},
+  language  = {en},
+}`</small>

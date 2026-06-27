@@ -63,3 +63,20 @@ First Online: 23 November 2020
 ### CEUR-WS
 
 <small class="citation">`V. Buriachok, et al., Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 2746 (2020) 23–32.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Buriachok_Ageyev_Zhyltsov_2020,
+  author    = {Buriachok, Volodymyr and Ageyev, Dmytro and Zhyltsov, Oleksii and Skladannyi, Pavlo and Sokolov, Volodymyr},
+  title     = {Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies},
+  booktitle = {2020 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2020},
+  month     = jul,
+  pages     = {23–-32},
+  url       = {http://ceur-ws.org/Vol-2746/paper3.pdf},
+  eid       = {2-s2.0-85096946608},
+  isi       = {000651092800003},
+  language  = {en},
+}`</small>

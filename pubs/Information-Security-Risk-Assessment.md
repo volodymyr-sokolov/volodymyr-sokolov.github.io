@@ -57,3 +57,21 @@ First Online: 24 July 2021
 ### CEUR-WS
 
 <small class="citation">`I. Kuzminykh, et al., Information Security Risk Assessment, Encyclopedia 1(3) (2021) 602–617. doi:10.3390/encyclopedia1030050`</small>
+
+### BibTeX
+
+<small class="citation">`@article{Kuzminykh_Ghita_Sokolov_2021,
+  author    = {Kuzminykh, Ievgeniia and Ghita, Bogdan and Sokolov, Volodymyr and Bakhshi, Taimur},
+  title     = {Information Security Risk Assessment},
+  journal   = {Encyclopedia},
+  volume    = {1},
+  number    = {3},
+  publisher = {MDPI AG},
+  year      = {2021},
+  month     = jul,
+  pages     = {602–-617},
+  doi       = {10.3390/encyclopedia1030050},
+  url       = {https://www.mdpi.com/2673-8392/1/3/50},
+  eid       = {2-s2.0-105014629454},
+  language  = {en},
+}`</small>

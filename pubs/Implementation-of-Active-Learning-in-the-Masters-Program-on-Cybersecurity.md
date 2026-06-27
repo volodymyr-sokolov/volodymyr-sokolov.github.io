@@ -62,3 +62,18 @@ First Online: 29 March 2019
 ### CEUR-WS
 
 <small class="citation">`V. Buriachok, V. Sokolov, Implementation of Active Learning in the Master’s Program on Cybersecurity, Advances in Computer Science for Engineering and Education II, vol. 938 (2020) 610-624. doi:10.1007/978-3-030-16621-2_57`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Buriachok_Sokolov_2019,
+  author    = {Buriachok, Volodymyr and Sokolov, Volodymyr},
+  title     = {Implementation of Active Learning in the Master’s Program on Cybersecurity},
+  journal   = {Advances in Intelligent Systems and Computing},
+  publisher = {Springer International Publishing},
+  year      = {2019},
+  pages     = {610–-624},
+  doi       = {10.1007/978-3-030-16621-2_57},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-030-16621-2_57},
+  eid       = {2-s2.0-85064552966},
+  language  = {en},
+}`</small>

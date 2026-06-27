@@ -59,3 +59,19 @@ First Online: 25 September 2025
 ### CEUR-WS
 
 <small class="citation">`P. Skladannyi, et al., Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats, in: Cyber Security and Data Protection, vol. 4042 (2025) 17–36.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Skladannyi_Kostiuk_Khorolska_2025,
+  author    = {Skladannyi, Pavlo and Kostiuk, Yuliia and Khorolska, Karyna and Bebeshko, Bohdan and Sokolov, Volodymyr},
+  title     = {Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats},
+  booktitle = {2025 Cyber Security and Data Protection (CSDP)},
+  address   = {Lviv, Ukraine},
+  publisher = {CEUR},
+  year      = {2025},
+  month     = jul,
+  pages     = {17–-36},
+  url       = {https://ceur-ws.org/Vol-4042/paper2.pdf},
+  eid       = {2-s2.0-105018463355},
+  language  = {en},
+}`</small>

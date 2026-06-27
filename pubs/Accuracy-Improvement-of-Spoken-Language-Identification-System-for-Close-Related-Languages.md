@@ -66,3 +66,19 @@ First Online: 3 April 2025
 ### CEUR-WS
 
 <small class="citation">`O. Romanovskyi, et al., Accuracy Improvement of Spoken Language Identification System for Close-Related Languages, Advances in Computer Science for Engineering and Education VII, vol. 242 (2025) 35–52. doi:10.1007/978-3-031-84228-3_4`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Romanovskyi_Iosifov_Iosifova_2025,
+  author    = {Romanovskyi, Oleh and Iosifov, Ievgen and Iosifova, Olena and Sokolov, Volodymyr and Skladannyi, Pavlo and Sukaylo, Igor and Tsarenok, Oleksii},
+  title     = {Accuracy Improvement of Spoken Language Identification System for Close-Related Languages},
+  journal   = {Lecture Notes on Data Engineering and Communications Technologies},
+  publisher = {Springer Nature Switzerland},
+  year      = {2025},
+  pages     = {35–-52},
+  doi       = {10.1007/978-3-031-84228-3_4},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-031-84228-3_4},
+  eid       = {2-s2.0-105002775622},
+  language  = {en},
+}
+`</small>

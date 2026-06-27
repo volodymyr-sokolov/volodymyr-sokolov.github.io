@@ -60,3 +60,20 @@ First Online: 5 January 2024
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, P. Skladannyi, N. Korshun, ZigBee Network Resistance to Jamming Attacks, in: IEEE 6th International Conference on Information and Telecommunication Technologies and Radio Electronics (2023) 161–165. doi:10.1109/UkrMiCo61577.2023.10380360`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sokolov_Skladannyi_Korshun_2023,
+  author    = {Sokolov, Volodymyr and Skladannyi, Pavlo and Korshun, Nataliia},
+  title     = {ZigBee Network Resistance to Jamming Attacks},
+  booktitle = {2023 IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (UkrMiCo)},
+  address   = {Kyiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2023},
+  month     = nov,
+  pages     = {161-–165},
+  doi       = {10.1109/UkrMiCo61577.2023.10380360},
+  url       = {https://ieeexplore.ieee.org/document/10380360},
+  eid       = {2-s2.0-85183457098},
+  language  = {en},
+}`</small>

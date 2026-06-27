@@ -62,3 +62,20 @@ First Online: 20 March 2024
 ### CEUR-WS
 
 <small class="citation">`O. Mykhaylova, et al., Resistance to Replay Attacks of Remote Control Protocols using the 433 MHz Radio Channel, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3654 (2024) 98–110.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Mykhaylova_Stefankiv_Nakonechny_2024,
+  author    = {Mykhaylova, Olha and Stefankiv, Artem and Nakonechny, Taras and Fedynyshyn, Taras and Sokolov, Volodymyr},
+  title     = {Resistance to Replay Attacks of Remote Control Protocols using the 433 MHz Radio Channel},
+  booktitle = {2024 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = feb,
+  pages     = {98–-110},
+  url       = {https://ceur-ws.org/Vol-3654/paper9.pdf},
+  eid       = {2-s2.0-85189144731},
+  language  = {en},
+}
+`</small>

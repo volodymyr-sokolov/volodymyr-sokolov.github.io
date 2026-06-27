@@ -62,3 +62,20 @@ First Online: 6 September 2023
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, et al., Method for Increasing the Various Sources Data Consistency for IoT Sensors, in: IEEE 9th International Conference on Problems of Infocommunications, Science and Technology (2023) 522–526. doi:10.1109/PICST57299.2022.10238518`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sokolov_Kipchuk_Skladannyi_2022,
+  author    = {Sokolov, Volodymyr and Kipchuk, Feodosiy and Skladannyi, Pavlo and Zhyltsov, Oleksii and Ageyev, Dmytro},
+  title     = {Method for Increasing the Various Sources Data Consistency for IoT Sensors},
+  booktitle = {2022 IEEE 9th International Conference on Problems of Infocommunications, Science and Technology (PIC S&T)},
+  address   = {Kharkiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2022},
+  month     = oct,
+  pages     = {522-–526},
+  doi       = {10.1109/PICST57299.2022.10238518},
+  url       = {https://ieeexplore.ieee.org/document/10238518},
+  eid       = {2-s2.0-85172739043},
+  language  = {en},
+}`</small>

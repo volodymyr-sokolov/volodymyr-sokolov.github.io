@@ -59,3 +59,20 @@ First Online: 31 October 2013
 ### CEUR-WS
 
 <small class="citation">`V. Astapenya, V. Sokolov, Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11, in: IEEE 9th Internatioal Conference on Antenna Theory and Techniques (2013) 172–174. doi:10.1109/icatt.2013.6650715`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Astapenya_Sokolov_2013,
+  author    = {Astapenya, Volodymyr and Sokolov, Volodymyr},
+  title     = {Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11},
+  booktitle = {2013 IX Internatioal Conference on Antenna Theory and Techniques},
+  address   = {Odesa, Ukraine},
+  publisher = {IEEE},
+  year      = {2013},
+  month     = sep,
+  pages     = {172-–174},
+  doi       = {10.1109/ICATT.2013.6650715},
+  url       = {https://ieeexplore.ieee.org/document/6650715},
+  eid       = {2-s2.0-84898619015},
+  language  = {en},
+}`</small>

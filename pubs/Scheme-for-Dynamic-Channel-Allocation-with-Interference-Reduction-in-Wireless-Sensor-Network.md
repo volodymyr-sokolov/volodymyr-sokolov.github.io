@@ -62,3 +62,21 @@ First Online: 4 January 2018
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, A. Carlsson, I. Kuzminykh, Scheme for Dynamic Channel Allocation with Interference Reduction in Wireless Sensor Network, in: IEEE 4th International Scientific-Practical Conference Problems of Infocommunications. Science and Technology (2017) 564–568. doi:10.1109/infocommst.2017.8246463`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sokolov_Carlsson_Kuzminykh_2017,
+  author    = {Sokolov, Volodymyr and Carlsson, Anders and Kuzminykh, Ievgeniia},
+  title     = {Scheme for Dynamic Channel Allocation with Interference Reduction in Wireless Sensor Network},
+  booktitle = {2017 4th International Scientific-Practical Conference Problems of Infocommunications. Science and Technology (PIC S&T)},
+  address   = {Kharkiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2017},
+  month     = oct,
+  pages     = {564–-568},
+  doi       = {10.1109/INFOCOMMST.2017.8246463},
+  url       = {https://ieeexplore.ieee.org/document/8246463},
+  eid       = {2-s2.0-85046096370},
+  isi       = {000426514100127},
+  language  = {en},
+}`</small>

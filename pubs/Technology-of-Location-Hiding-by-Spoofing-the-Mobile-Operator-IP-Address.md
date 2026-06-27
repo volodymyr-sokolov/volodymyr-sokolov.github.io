@@ -60,3 +60,20 @@ First Online: 24 February 2022
 ### CEUR-WS
 
 <small class="citation">`Y. Sadykov, et al., Technology of Location Hiding by Spoofing the Mobile Operator IP Address, in: IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (2021) 22–25. doi:10.1109/UkrMiCo52950.2021.9716700`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sadykov_Sokolov_Skladannyi_2021,
+  author    = {Sadykov, Yaroslav and Sokolov, Volodymyr and Skladannyi, Pavlo},
+  title     = {Technology of Location Hiding by Spoofing the Mobile Operator IP Address},
+  booktitle = {2021 IEEE International Conference on Information and Telecommunication Technologies and Radio Electronics (UkrMiCo)},
+  address   = {Odesa, Ukraine},
+  publisher = {IEEE},
+  year      = {2021},
+  month     = nov,
+  pages     = {22-–25},
+  doi       = {10.1109/UkrMiCo52950.2021.9716700},
+  url       = {https://ieeexplore.ieee.org/document/10706153},
+  eid       = {2-s2.0-85126945180},
+  language  = {en},
+}`</small>

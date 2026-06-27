@@ -66,3 +66,18 @@ First Online: 18 June 2023
 ### CEUR-WS
 
 <small class="citation">`V. Buriachok, et al., Implementation of Active Cybersecurity Education in Ukrainian Higher School, Information Technology for Education, Science, and Technics, vol. 178 (2023) 533–551. doi:10.1007/978-3-031-35467-0_32`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Buriachok_Korshun_Zhyltsov_2023,
+  author    = {Buriachok, Volodymyr and Korshun, Nataliia and Zhyltsov, Oleksii and Sokolov, Volodymyr and Skladannyi, Pavlo},
+  title     = {Implementation of Active Cybersecurity Education in Ukrainian Higher School},
+  journal   = {Lecture Notes on Data Engineering and Communications Technologies},
+  publisher = {Springer Nature Switzerland},
+  year      = {2023},
+  pages     = {533-–551},
+  doi       = {10.1007/978-3-031-35467-0_32},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-031-35467-0_32},
+  eid       = {2-s2.0-85162953358},
+  language  = {en},
+}`</small>

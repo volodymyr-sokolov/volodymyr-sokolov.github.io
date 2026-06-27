@@ -60,3 +60,19 @@ First Online: 9 November 2024
 ### CEUR-WS
 
 <small class="citation">`S. Abramov, V. Sokolov, V. Abramov, Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form, in: Cybersecurity Providing in Information and Telecommunication Systems II, vol. 3826 (2024) 174–181.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Abramov_Sokolov_Abramov_2024,
+  author    = {Abramov, Serhii and Sokolov, Volodymyr and Abramov, Vadym},
+  title     = {Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form},
+  booktitle = {2024 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = oct,
+  pages     = {174-–181},
+  url       = {https://ceur-ws.org/Vol-3826/short4.pdf},
+  eid       = {2-s2.0-85210253375},
+  language  = {en},
+}`</small>

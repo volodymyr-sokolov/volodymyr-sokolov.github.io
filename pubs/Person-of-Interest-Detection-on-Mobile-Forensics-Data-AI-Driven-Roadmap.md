@@ -61,3 +61,19 @@ First Online: 20 March 2024
 ### CEUR-WS
 
 <small class="citation">`O. Mykhaylova, et al., Person-of-Interest Detection on Mobile Forensics Data — AI-Driven Roadmap, in: Cybersecurity Providing in Information and Telecommunication Systems, vol. 3654 (2024) 239–251.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Mykhaylova_Fedynyshyn_Sokolov_2024,
+  author    = {Mykhaylova, Olha and Fedynyshyn, Taras and Sokolov, Volodymyr and Kyrychok, Roman},
+  title     = {Person-of-Interest Detection on Mobile Forensics Data — AI-Driven Roadmap},
+  booktitle = {2024 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = feb,
+  pages     = {239-–251},
+  url       = {https://ceur-ws.org/Vol-3654/paper20.pdf},
+  eid       = {2-s2.0-85189143222},
+  language  = {en},
+}`</small>

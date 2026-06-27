@@ -61,3 +61,21 @@ First Online: 13 February 2023
 ### CEUR-WS
 
 <small class="citation">`V. Astapenia, V. Sokolov, P. Skladannyi, Problematic Issues of the Accelerating Lens Deployment, in: IEEE 2nd Ukrainian Microwave Week (2022) 337–341. doi:10.1109/UkrMW58013.2022.10037124`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Astapenya_Sokolov_Skladannyi_2022,
+  author    = {Astapenya, Volodymyr and Sokolov, Volodymyr and Skladannyi, Pavlo},
+  title     = {Problematic Issues of the Accelerating Lens Deployment},
+  booktitle = {2022 IEEE 2nd Ukrainian Microwave Week (UkrMW)},
+  address   = {Kharkiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2022},
+  month     = nov,
+  pages     = {337–-341},
+  doi       = {10.1109/UkrMW58013.2022.10037124},
+  url       = {https://ieeexplore.ieee.org/document/10037124},
+  eid       = {2-s2.0-85149175780},
+  isi       = {001058645700077},
+  language  = {en},
+}`</small>

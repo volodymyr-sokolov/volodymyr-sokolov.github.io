@@ -63,3 +63,18 @@ First Online: 6 August 2020
 ### CEUR-WS
 
 <small class="citation">`Z. B. Hu, V. Buriachok, V. Sokolov, Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms Based on Metaphone Phonetic Algorithm, Advances in Computer Science for Engineering and Education III, vol. 1247 (2020) 518–533. doi:10.1007/978-3-030-55506-1_47`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Hu_Buriachok_Sokolov_2020,
+  author    = {Hu, Zhengbing and Buriachok, Volodymyr and Sokolov, Volodymyr},
+  title     = {Deduplication Method for Ukrainian Last Names, Medicinal Names, and Toponyms based on Metaphone Phonetic Algorithm},
+  journal   = {Advances in Intelligent Systems and Computing},
+  publisher = {Springer International Publishing},
+  year      = {2020},
+  pages     = {518–-533},
+  doi       = {10.1007/978-3-030-55506-1_47},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-030-55506-1_47},
+  eid       = {2-s2.0-85089719737},
+  language  = {en},
+}`</small>

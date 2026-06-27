@@ -57,3 +57,19 @@ First Online: 30 September 2025
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, et al., Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements, in: Information Control Systems & Technologies, vol. 4048 (2025) 397–411.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sokolov_Kostiuk_Skladannyi_2025,
+  author    = {Sokolov, Volodymyr and Kostiuk, Yuliia and Skladannyi, Pavlo and Korshun, Nataliia},
+  title     = {Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements},
+  booktitle = {2025 Information Control Systems & Technologies (ICST)},
+  address   = {Odesa, Ukraine},
+  publisher = {CEUR},
+  year      = {2025},
+  month     = sep,
+  pages     = {397–-411},
+  url       = {https://ceur-ws.org/Vol-4048/paper32.pdf},
+  eid       = {2-s2.0-105018666926},
+  language  = {en},
+}`</small>

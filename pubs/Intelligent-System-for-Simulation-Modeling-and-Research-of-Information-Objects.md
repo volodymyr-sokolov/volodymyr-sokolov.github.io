@@ -57,3 +57,20 @@ First Online: 530 October 2025
 ### CEUR-WS
 
 <small class="citation">`Y. Kostiuk, P. Skladannyi, V. Sokolov, S. Rzaieva, Intelligent System for Simulation Modeling and Research of Information Objects, in: 1st Workshop Software Engineering and Semantic Technologies, vol. 4053 (2025) 237–251.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kostiuk_Skladannyi_Sokolov_2025b,
+  author    = {Kostiuk, Yuliia and Skladannyi, Pavlo and Sokolov, Volodymyr and Rzaieva, Svitlana},
+  title     = {Intelligent System for Simulation Modeling and Research of Information Objects},
+  booktitle = {2025 Software Engineering and Semantic Technologies (SEST)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2025},
+  month     = may,
+  pages     = {237-–251},
+  url       = {https://ceur-ws.org/Vol-4053/paper15.pdf},
+  eid       = {2-s2.0-105019245212},
+  language  = {en},
+}
+`</small>

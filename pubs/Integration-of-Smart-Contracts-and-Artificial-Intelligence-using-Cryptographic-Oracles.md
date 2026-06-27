@@ -62,3 +62,20 @@ First Online: 12 November 2024
 ### CEUR-WS
 
 <small class="citation">`D. Virovets, et al., Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles, in: Classic, Quantum, and Post-Quantum Cryptography, vol. 3829 (2024) 39–46.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Virovets_Obushnyi_Zhurakovskyi_2024,
+  author    = {Virovets, Denys and Obushnyi, Sergiy and Zhurakovskyi, Bohdan and Skladannyi, Pavlo and Sokolov, Volodymyr},
+  title     = {Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles},
+  booktitle = {2024 Classic, Quantum, and Post-Quantum Cryptography (CQPC)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = aug,
+  pages     = {39–-46},
+  url       = {https://ceur-ws.org/Vol-3829/short5.pdf},
+  eid       = {2-s2.0-85210236161},
+  language  = {en},
+}
+`</small>

@@ -63,3 +63,21 @@ First Online: 7 May 2020
 ### CEUR-WS
 
 <small class="citation">`Z. Hu, et al., Bandwidth Research of Wireless IoT Switches, in: IEEE 15th International Conference on Advanced Trends in Radioelectronics, Telecommunications and Computer Engineering (2020) 546–550. doi:10.1109/tcset49122.2020.2354922`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Hu_Vovkotrub_Buriachok_2020,
+  author    = {Hu, Zhengbing and Vovkotrub, Bohdan and Buriachok, Volodymyr and Zotkin, Yevhen and Sokolov, Volodymyr},
+  title     = {Bandwidth Research of Wireless IoT Switches},
+  booktitle = {2020 IEEE 15th International Conference on Advanced Trends in Radioelectronics, Telecommunications and Computer Engineering (TCSET)},
+  address   = {Lviv-Slavske, Ukraine},
+  publisher = {IEEE},
+  year      = {2020},
+  month     = feb,
+  pages     = {1–-5},
+  doi       = {10.1109/TCSET49122.2020.235492},
+  url       = {https://ieeexplore.ieee.org/document/9088628},
+  eid       = {2-s2.0-85086312920},
+  isi       = {000578041000113},
+  language  = {en},
+}`</small>

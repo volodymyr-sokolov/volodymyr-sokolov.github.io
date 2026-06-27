@@ -60,3 +60,21 @@ First Online: 29 June 2015
 ### CEUR-WS
 
 <small class="citation">`V. Astapenya, V. Sokolov, Modified Accelerating Lens as a Means of Increasing the Throughput, Range and Noise Immunity of IEEE 802.11 Systems, in: IEEE 10th International Conference on Antenna Theory and Techniques (2015) 267–269. doi:10.1109/icatt.2015.7136852`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Astapenya_Sokolov_2015,
+  author    = {Astapenya, Volodymyr and Sokolov, Volodymyr},
+  title     = {Modified Accelerating Lens as a Means of Increasing the Throughput, Range and Noise Immunity of IEEE 802.11 Systems},
+  booktitle = {2015 International Conference on Antenna Theory and Techniques (ICATT)},
+  address   = {Kharkiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2015},
+  month     = apr,
+  pages     = {1–-3},
+  doi       = {10.1109/ICATT.2015.7136852},
+  url       = {https://ieeexplore.ieee.org/document/7136852},
+  eid       = {2-s2.0-84939458540},
+  isi       = {000381609800077},
+  language  = {en},
+}`</small>

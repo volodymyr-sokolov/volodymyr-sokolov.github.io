@@ -58,3 +58,20 @@ First Online: 19 May 2022
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, P. Skladannyi, H. Hulak, Stability Verification of Self-Organized Wireless Networks with Block Encryption, in: 5th International Workshop on Computer Modeling and Intelligent Systems, vol. 3137 (2022) 227–237. doi:10.32782/cmis/3137-19`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sokolov_Skladannyi_Hulak_2022,
+  author    = {Sokolov, Volodymyr and Skladannyi, Pavlo and Hulak, Hennadii},
+  title     = {Stability Verification of Self-Organized Wireless Networks with Block Encryption},
+  booktitle = {2022 5th International Workshop on Computer Modeling and Intelligent Systems (CMIS)},
+  address   = {Zaporizhzhia, Ukraine},
+  publisher = {CEUR},
+  year      = {2022},
+  month     = may,
+  pages     = {227–-237},
+  doi       = {10.32782/cmis/3137-19},
+  url       = {http://ceur-ws.org/Vol-3137/paper19.pdf},
+  eid       = {2-s2.0-85130712118},
+  language  = {en},
+}`</small>

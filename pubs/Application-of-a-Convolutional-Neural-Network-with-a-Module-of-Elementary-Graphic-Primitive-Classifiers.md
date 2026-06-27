@@ -55,3 +55,20 @@ First Online: 31 December 2022
 ### CEUR-WS
 
 <small class="citation">`K. Khorolska, et al., Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models, J. Theor. Appl. Inf. Technol. 100(24) (2022) 7426–7437.`</small>
+
+### BibTeX
+
+<small class="citation">`@article{Khorolska_Skladannyi_Sokolov_2022,
+  author    = {Khorolska, Karyna and Skladannyi, Pavlo and Sokolov, Volodymyr and Korshun, Nataliia and Bebeshko, Bohdan and Lakhno, Valerii and Zhumadilova, Mereke},
+  title     = {Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models},
+  journal   = {Journal of Theoretical and Applied Information Technology},
+  volume    = {100},
+  number    = {24},
+  publisher = {Little Lion Scientific},
+  year      = {2022},
+  month     = dec,
+  pages     = {7426–-7437},
+  url       = {http://www.jatit.org/volumes/Vol100No24/18Vol100No24.pdf},
+  eid       = {2-s2.0-85145368917},
+  language  = {en},
+}`</small>

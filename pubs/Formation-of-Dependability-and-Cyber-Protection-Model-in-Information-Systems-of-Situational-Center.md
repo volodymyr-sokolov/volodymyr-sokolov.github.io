@@ -59,3 +59,19 @@ First Online: 6 June 2022
 ### CEUR-WS
 
 <small class="citation">`V. Grechaninov, et al., Formation of Dependability and Cyber Protection Model in Information Systems of Situational Center, in: Emerging Technology Trends on the Smart Industry and the Internet of Things, vol. 3149 (2022) 107–117.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Grechaninov_Hulak_Sokolov_2022,
+  author    = {Grechaninov, Viktor and Hulak, Hennadii and Sokolov, Volodymyr and Skladannyi, Pavlo and Korshun, Nataliia},
+  title     = {Formation of Dependability and Cyber Protection Model in Information Systems of Situational Center},
+  booktitle = {2022 Emerging Technology Trends on the Smart Industry and the Internet of Things (TTSIIT)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2022},
+  month     = jan,
+  pages     = {107-–117},
+  url       = {https://ceur-ws.org/Vol-3149/paper11.pdf},
+  eid       = {2-s2.0-85132269263},
+  language  = {en},
+}`</small>

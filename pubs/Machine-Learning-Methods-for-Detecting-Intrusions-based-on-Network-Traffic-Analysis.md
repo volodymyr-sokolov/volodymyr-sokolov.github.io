@@ -76,3 +76,19 @@ First Online: 29 December 2025
 ### CEUR-WS
 
 <small class="citation">`Y. Kostiuk, et al., Machine Learning Methods for Detecting Intrusions based on Network Traffic Analysis, in: Cybersecurity Providing in Information and Telecommunication Systems II, vol. 4145 (2025) 72–94.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kostiuk_Skladannyi_Sokolov_2025c,
+  author    = {Kostiuk, Yuliia and Skladannyi, Pavlo and Sokolov, Volodymyr and Rzaieva, Svitlana and Khorolska, Karyna},
+  title     = {Machine Learning Methods for Detecting Intrusions based on Network Traffic Analysis},
+  booktitle = {2025 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2025},
+  month     = oct,
+  pages     = {72–-94},
+  url       = {https://ceur-ws.org/Vol-4145/paper6.pdf},
+  eid       = {2-s2.0-105037917156},
+  language  = {en},
+}`</small>

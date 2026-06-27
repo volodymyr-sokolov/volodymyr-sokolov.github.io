@@ -59,3 +59,22 @@ First Online: 27 August 2024
 ### CEUR-WS
 
 <small class="citation">`A. Bessalov, V. Sokolov, S. Abramov, Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves, Cryptography 8(3), iss. 38 (2024) 1–17. doi:10.3390/cryptography8030038`</small>
+
+### BibTeX
+
+<small class="citation">`@article{Bessalov_Sokolov_Abramov_2024,
+  author    = {Bessalov, Anatoly and Sokolov, Volodymyr and Abramov, Serhii},
+  title     = {Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves},
+  journal   = {Cryptography},
+  volume    = {8},
+  number    = {3},
+  publisher = {MDPI AG},
+  year      = {2024},
+  month     = aug,
+  pages     = {38},
+  doi       = {10.3390/cryptography8030038},
+  url       = {https://www.mdpi.com/2410-387X/8/3/38},
+  eid       = {2-s2.0-85205045796},
+  isi       = {001323200100001},
+  language  = {en},
+}`</small>

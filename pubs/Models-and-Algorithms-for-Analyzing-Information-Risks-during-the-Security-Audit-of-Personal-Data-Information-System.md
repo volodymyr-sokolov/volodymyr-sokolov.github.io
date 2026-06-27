@@ -59,3 +59,19 @@ First Online: 21 February 2025
 ### CEUR-WS
 
 <small class="citation">`Y. Kostiuk, et al., Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System, in: 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks, vol. 3925 (2025) 155–171.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kostiuk_Skladannyi_Sokolov_2024,
+  author    = {Kostiuk, Yuliia and Skladannyi, Pavlo and Sokolov, Volodymyr and Hulak, Hennadii and Korshun, Nataliia},
+  title     = {Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System},
+  booktitle = {2024 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks (CH&CMiGIN)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2024},
+  month     = jan,
+  pages     = {155-–171},
+  url       = {https://ceur-ws.org/Vol-3925/paper13.pdf},
+  eid       = {2-s2.0-85219596273},
+  language  = {en},
+}`</small>

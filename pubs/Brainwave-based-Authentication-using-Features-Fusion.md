@@ -59,3 +59,22 @@ First Online: 22 March 2023
 ### CEUR-WS
 
 <small class="citation">`M. TajDini, et al., Brainwave-based Authentication using Features Fusion, Comput. Secur. 129, no. 103198 (2023) 1–11. doi:10.1016/j.cose.2023.103198`</small>
+
+### BibTeX
+
+<small class="citation">`@article{TajDini_Sokolov_Kuzminykh_2023,
+  author    = {TajDini, Mahyar and Sokolov, Volodymyr and Kuzminykh, Ievgeniia and Ghita, Bogdan},
+  title     = {Brainwave-based Authentication using Features Fusion},
+  journal   = {Computers & Security},
+  volume    = {129},
+  number    = {103198},
+  publisher = {Elsevier},
+  year      = {2023},
+  month     = mar,
+  pages     = {103198},
+  doi       = {10.1016/j.cose.2023.103198},
+  url       = {https://www.sciencedirect.com/science/article/pii/S0167404823001086},
+  eid       = {2-s2.0-85150928741},
+  isi       = {001053816800001},
+  language  = {en},
+}`</small>

@@ -61,3 +61,20 @@ First Online: 9 April 2020
 ### CEUR-WS
 
 <small class="citation">`M. Vladymyrenko, et al., Analysis of Implementation Results of the Distributed Access Control System. in: IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (2019) 39–44. doi:10.1109/picst47496.2019.9061376`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Vladymyrenko_Sokolov_Buriachok_2019,
+  author    = {Vladymyrenko, Maksym and Sokolov, Volodymyr and Buriachok, Volodymyr and Platonenko, Artem and Ageyev, Dmytro},
+  title     = {Analysis of Implementation Results of the Distributed Access Control System},
+  booktitle = {2019 IEEE International Scientific-Practical Conference Problems of Infocommunications, Science and Technology (PIC S&T)},
+  address   = {Kyiv, Ukraine},
+  publisher = {IEEE},
+  year      = {2019},
+  month     = oct,
+  pages     = {1–-6},
+  doi       = {10.1109/PICST47496.2019.9061376},
+  url       = {https://ieeexplore.ieee.org/document/9061376},
+  eid       = {2-s2.0-85083654177},
+  language  = {en},
+}`</small>

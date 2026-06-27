@@ -62,3 +62,19 @@ First Online: 19 August 2023
 ### CEUR-WS
 
 <small class="citation">`R. Marusenko, V. Sokolov, P. Skladannyi, Social Engineering Penetration Testing in Higher Education Institutions, Advances in Computer Science for Engineering and Education VI, vol. 181 (2023) 1132–1147. doi:10.1007/978-3-031-36118-0_96`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Marusenko_Sokolov_Skladannyi_2023,
+  author    = {Marusenko, Roman and Sokolov, Volodymyr and Skladannyi, Pavlo},
+  title     = {Social Engineering Penetration Testing in Higher Education Institutions},
+  journal   = {Lecture Notes on Data Engineering and Communications Technologies},
+  publisher = {Springer Nature Switzerland},
+  year      = {2023},
+  pages     = {1132-–1147},
+  doi       = {10.1007/978-3-031-36118-0_96},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-031-36118-0_96},
+  eid       = {2-s2.0-85169039263},
+  language  = {en},
+}
+`</small>

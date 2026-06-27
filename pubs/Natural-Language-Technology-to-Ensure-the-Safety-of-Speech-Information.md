@@ -62,3 +62,19 @@ First Online: 16 August 2022
 ### CEUR-WS
 
 <small class="citation">`I. Iosifov, et al., Natural Language Technology to Ensure the Safety of Speech Information, in: Cybersecurity Providing in In-formation and Telecommunication Systems, vol. 3187, no. 1 (2022) 216–226.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Iosifov_Iosifova_Sokolov_2021,
+  author    = {Iosifov, Ievgen and Iosifova, Olena and Sokolov, Volodymyr and Skladannyi, Pavlo and Sukaylo, Igor},
+  title     = {Natural Language Technology to Ensure the Safety of Speech Information},
+  booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2021},
+  month     = oct,
+  pages     = {216-–226},
+  url       = {http://ceur-ws.org/Vol-3187/paper20.pdf},
+  eid       = {2-s2.0-85137139799},
+  language  = {en},
+}`</small>

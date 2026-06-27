@@ -58,3 +58,19 @@ First Online: 19 August 2020
 ### CEUR-WS
 
 <small class="citation">`Z. B. Hu, V. Buriachok, V. Sokolov, Implementation of Social Engineering Attack at Institution of Higher Education, in: 1st International Workshop on Cyber Hygiene & Conflict Management in Global Information Networks (CybHyg), vol. 2654 (2020) pp. 155–164.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Hu_Buriachok_Sokolov_2019,
+  author    = {Hu, Zhengbing and Buriachok, Volodymyr and Sokolov, Volodymyr},
+  title     = {Implementation of Social Engineering Attack at Institution of Higher Education},
+  booktitle = {2019 International Workshop on Cyber Hygiene (CybHyg)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2019},
+  month     = nov,
+  pages     = {155-–164},
+  url       = {http://ceur-ws.org/Vol-2654/paper12.pdf},
+  eid       = {2-s2.0-85091320429},
+  language  = {en},
+}`</small>

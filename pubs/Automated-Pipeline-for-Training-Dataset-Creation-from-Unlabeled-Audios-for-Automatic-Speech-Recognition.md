@@ -66,3 +66,18 @@ First Online: 21 July 2021
 ### CEUR-WS
 
 <small class="citation">`O. Romanovskyi, et al., Automated Pipeline for Training Dataset Creation from Unlabeled Audios for Automatic Speech Recognition, Advances in Computer Science for Engineering and Education IV, vol. 83 (2021) 25–36. doi:10.1007/978-3-030-80472-5_3`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Romanovskyi_Iosifov_Iosifova_2021,
+  author    = {Romanovskyi, Oleh and Iosifov, Ievgen and Iosifova, Olena and Sokolov, Volodymyr and Kipchuk, Feodosiy and Sukaylo, Igor},
+  title     = {Automated Pipeline for Training Dataset Creation from Unlabeled Audios for Automatic Speech Recognition},
+  journal   = {Lecture Notes on Data Engineering and Communications Technologies},
+  publisher = {Springer International Publishing},
+  year      = {2021},
+  pages     = {25–-36},
+  doi       = {10.1007/978-3-030-80472-5_3},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-030-80472-5_3},
+  eid       = {2-s2.0-85111941280},
+  language  = {en},
+}`</small>

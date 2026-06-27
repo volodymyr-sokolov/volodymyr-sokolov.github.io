@@ -63,3 +63,21 @@ First Online: 7 May 2020
 ### CEUR-WS
 
 <small class="citation">`A. Carlsson, et al., Sustainability Research of the Secure Wireless Communication System with Channel Reservation, in: IEEE 15th International Conference on Advanced Trends in Radioelectronics, Telecommunications and Computer Engineering (2020) 973–977. doi:10.1109/tcset49122.2020.235583`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Carlsson_Ageyev_Sadykov_2020,
+  author    = {Carlsson, Anders and Ageyev, Dmytro and Sadykov, Yaroslav and Sokolov, Volodymyr},
+  title     = {Sustainability Research of the Secure Wireless Communication System with Channel Reservation},
+  booktitle = {2020 IEEE 15th International Conference on Advanced Trends in Radioelectronics, Telecommunications and Computer Engineering (TCSET)},
+  address   = {Lviv-Slavske, Ukraine},
+  publisher = {IEEE},
+  year      = {2020},
+  month     = feb,
+  pages     = {973-–977},
+  doi       = {10.1109/TCSET49122.2020.235583},
+  url       = {https://ieeexplore.ieee.org/document/9088514},
+  eid       = {2-s2.0-85086313460},
+  isi       = {000578041000204},
+  language  = {en},
+}`</small>

@@ -63,3 +63,18 @@ First Online: 6 August 2020
 ### CEUR-WS
 
 <small class="citation">`R. Marusenko, V. Sokolov, V. Buriachok, Experimental Evaluation of Phishing Attack on High School Students, Advances in Computer Science for Engineering and Education III, vol. 1247 (2020) 668–680. doi:10.1007/978-3-030-55506-1_59`</small>
+
+### BibTeX
+
+<small class="citation">`@misc{Marusenko_Sokolov_Buriachok_2020,
+  author    = {Marusenko, Roman and Sokolov, Volodymyr and Buriachok, Volodymyr},
+  title     = {Experimental Evaluation of Phishing Attack on High School Students},
+  journal   = {Advances in Intelligent Systems and Computing},
+  publisher = {Springer International Publishing},
+  year      = {2020},
+  pages     = {668-–680},
+  doi       = {10.1007/978-3-030-55506-1_59},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-030-55506-1_59},
+  eid       = {2-s2.0-85089721650},
+  language  = {en},
+}`</small>

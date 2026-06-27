@@ -61,3 +61,20 @@ First Online: 27 November 2023
 ### CEUR-WS
 
 <small class="citation">`V. Sokolov, P. Skladannyi, A. Platonenko, Jump-Stay Jamming Attack on Wi-Fi Systems, in: IEEE 18th International Conference on Computer Science and Information Technologies (2023) 1–5. doi:10.1109/CSIT61576.2023.10324031`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Sokolov_Skladannyi_Platonenko_2023,
+  author    = {Sokolov, Volodymyr and Skladannyi, Pavlo and Platonenko, Artem},
+  title     = {Jump-Stay Jamming Attack on Wi-Fi Systems},
+  booktitle = {2023 IEEE 18th International Conference on Computer Science and Information Technologies (CSIT)},
+  address   = {Lviv, Ukraine},
+  publisher = {IEEE},
+  year      = {2023},
+  month     = oct,
+  pages     = {1-–5},
+  doi       = {10.1109/CSIT61576.2023.10324031},
+  url       = {https://ieeexplore.ieee.org/document/10324031},
+  eid       = {2-s2.0-85179844674},
+  language  = {en},
+}`</small>

@@ -57,3 +57,19 @@ First Online: 11 September 2025
 ### CEUR-WS
 
 <small class="citation">`A. Novytskyi, V. Sokolov, L. Kriuchkova, P. Skladannyi, Determining the Error Distribution of BLE Beacons at Antenna Near and Far Fields, in: Cyber Hygiene & Conflict Management in Global Information Networks (CH&CMiGIN), vol. 4024 (2025) 133–143.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Novytskyi_Sokolov_Kriuchkova_2025,
+  author    = {Novytskyi, Anton and Sokolov, Volodymyr and Kriuchkova, Larysa and Skladannyi, Pavlo},
+  title     = {Determining the Error Distribution of BLE Beacons at Antenna Near and Far Fields},
+  booktitle = {2025 4th International Conference on Cyber Hygiene & Conflict Management in Global Information Networks (CH&CMiGIN)},
+  address   = {Kyiv, Ukraine},
+  publisher = {CEUR},
+  year      = {2025},
+  month     = jun,
+  pages     = {133–-143},
+  url       = {https://ceur-ws.org/Vol-4024/paper11.pdf},
+  eid       = {2-s2.0-105017753952},
+  language  = {en},
+}`</small>

@@ -58,3 +58,19 @@ First Online: 1 August 2025
 ### CEUR-WS
 
 <small class="citation">`Y. Kostiuk, P. Skladannyi, V. Sokolov, M. Vorokhob, Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence, in: Modern Data Science Technologies Doctoral Consortium (MoDaST), vol. 4005 (2025) 82–96.`</small>
+
+### BibTeX
+
+<small class="citation">`@inproceedings{Kostiuk_Skladannyi_Sokolov_2025d,
+  author    = {Kostiuk, Yuliia and Skladannyi, Pavlo and Sokolov, Volodymyr and Vorokhob, Maksym},
+  title     = {Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence},
+  booktitle = {2025 Modern Data Science Technologies Doctoral Consortium (MoDaST)},
+  address   = {Lviv, Ukraine},
+  publisher = {CEUR},
+  year      = {2025},
+  month     = jun,
+  pages     = {82–-96},
+  url       = {https://ceur-ws.org/Vol-4005/paper7.pdf},
+  eid       = {2-s2.0-105013081157},
+  language  = {en},
+}`</small>
