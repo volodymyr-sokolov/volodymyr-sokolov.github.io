@@ -64,7 +64,7 @@ First Online: 3 February 2019
 
 ### BibTeX
 
-<pre class="citation">`
+<small class="citation">`
 @inproceedings{Bogachuk_Sokolov_Buriachok_2018,
  author    = {Bogachuk, Ivan and Sokolov, Volodymyr and Buriachok, Volodymyr},
  title     = {Monitoring Subsystem for Wireless Systems based on Miniature Spectrum Analyzers},
@@ -82,5 +82,4 @@ First Online: 3 February 2019
  keywords  = {Servers;Monitoring;Instruction sets;Browsers;Uniform resource locators;Wireless networks;dynamic channel allocation;access point;integrity;availability;spectrum analyzer}, 
  language  = {en}
 }
-`</pre>
-
+`</small>

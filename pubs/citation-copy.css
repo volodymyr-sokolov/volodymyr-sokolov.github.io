@@ -1,3 +1,7 @@
+.citation {
+	white-space: pre-wrap;
+}
+
 .citation-wrapper {
     position: relative;
     display: block;
