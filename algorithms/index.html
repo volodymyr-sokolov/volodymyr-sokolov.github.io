@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crypto Atlas — algorithm catalogue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="home">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Cryptographic algorithms · visual field guide" data-uk="Криптографічні алгоритми · візуальний путівник">Cryptographic algorithms · visual field guide</div>
+    <h1 data-en="An atlas of cryptographic algorithms" data-uk="Атлас криптографічних алгоритмів">An atlas of cryptographic algorithms</h1>
+    <p class="lede" data-en="Every algorithm from the course outline, grouped by topic and tagged by study level. Use the search box up top (it matches both English and Ukrainian), or browse the catalogue below. Interactive demos are linked where available."
+       data-uk="Усі алгоритми з конспекту курсу, згруповані за темами та позначені рівнем складності. Скористайтеся пошуком угорі (шукає і англійською, і українською) або переглядайте каталог нижче. Інтерактивні демо мають посилання, де вони доступні.">Every algorithm from the course outline…</p>
+    <div class="legend-lvls" id="lvlLegend"></div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <span class="count-pill" id="countPill"></span>
+</div>
+
+<main class="catalog" id="catalogRoot"></main>
+
+<footer class="wrap">
+  <p data-en="Study levels — I (light green) Bachelor · II (yellow) Master · III (light orange) PhD. Built on the visual language of the Edwards-curve demo."
+     data-uk="Рівні складності — I (світло-зелений) бакалаврат · II (жовтий) магістратура · III (світло-помаранчевий) PhD. Побудовано на візуальній мові демо кривих Едвардса.">Study levels…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+// ---- render the level legend -----------------------------------------
+function renderLegend(){
+  const L = I18N[window.LANG].lvlLegend;
+  document.getElementById('lvlLegend').innerHTML =
+    [1,2,3].map((n,i)=>`<span>${window.atlasBadge(n)} ${L[i]}</span>`).join('');
+}
+
+// ---- render the full catalogue ---------------------------------------
+function renderCatalog(){
+  const lang = window.LANG;
+  const root = document.getElementById('catalogRoot');
+  root.innerHTML = CATALOG.map(sec=>{
+    const items = sec.algos.map(a=>{
+      const name = lang==='uk'?a.uk:a.en;
+      const desc = lang==='uk'?a.dUk:a.dEn;
+      const impl = a.href ? ` <span class="impl">${I18N[lang].implemented} →</span>` : '';
+      const cls  = a.href ? 'algo-item link' : 'algo-item';
+      const open = a.href ? ` onclick="location.href='${a.href}'"` : '';
+      return `<div class="${cls}" id="algo-${a.id}"${open}
+                data-hay="${(a.en+' '+a.uk+' '+(a.alias||'')).toLowerCase()}">
+          ${window.atlasBadge(a.lvl)}
+          <div class="body">
+            <p class="name">${name}${impl}</p>
+            <p class="adesc">${desc}</p>
+          </div>
+        </div>`;
+    }).join('');
+    const secName = lang==='uk'?sec.uk:sec.en;
+    const secDesc = lang==='uk'?sec.descUk:sec.descEn;
+    return `<section class="cat-section" id="sec-${sec.id}">
+        <span class="num">${String(sec.id).padStart(2,'0')}</span>
+        <h2>${secName}</h2>
+        <p class="sec-desc">${secDesc}</p>
+        <div class="algo-grid">${items}</div>
+      </section>`;
+  }).join('');
+  const total = CATALOG.reduce((n,s)=>n+s.algos.length,0);
+  document.getElementById('countPill').textContent =
+    `${total} ${I18N[lang].of==='of'?'algorithms · 19 topics':'алгоритмів · 19 тем'}`;
+}
+
+// re-render whenever language changes (called by site.js)
+window.onLangChange = function(){
+  renderLegend();
+  renderCatalog();
+  // re-highlight deep link after re-render
+  if(location.hash.startsWith('#algo-')){
+    const el=document.getElementById(location.hash.slice(1));
+    if(el){ el.scrollIntoView({block:'center'}); el.classList.add('flash'); }
+  }
+};
+</script>
+</body>
+</html>
