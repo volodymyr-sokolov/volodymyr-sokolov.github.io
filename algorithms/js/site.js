@@ -35,9 +35,9 @@
   function applyI18n(root){
     (root||document).querySelectorAll('[data-en]').forEach(el=>{
       const v = el.getAttribute('data-'+LANG);
-      if(v!==null){
-        if(el.hasAttribute('data-i18n-html')) el.innerHTML=v; else el.textContent=v;
-      }
+      // Attribute values in this project may contain inline markup (<b>, <br>),
+      // so always swap via innerHTML rather than textContent.
+      if(v!==null) el.innerHTML=v;
     });
     (root||document).querySelectorAll('[data-ph-en]').forEach(el=>{
       const v = el.getAttribute('data-ph-'+LANG);
