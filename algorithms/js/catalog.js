@@ -27,8 +27,8 @@ const CATALOG = [
         dEn:"Used in PGP; notable for the algebraic structure of its operations.",
         dUk:"Використовувався в PGP, цікавий алгебраїчною структурою операцій."},
       {id:"gost",  lvl:2, en:"GOST 28147-89 / Kuznyechik", uk:"ГОСТ 28147-89 / «Кузнечик»", alias:"Кузнечик Kuznyechik",
-        dEn:"Soviet/Russian standard — an example of a different crypto-design school.",
-        dUk:"Радянський/російський стандарт, приклад іншої школи криптодизайну."},
+        dEn:"Soviet standard — an example of a different crypto-design school.",
+        dUk:"Радянський стандарт, приклад іншої школи криптодизайну."},
       {id:"camellia", lvl:2, en:"Camellia", uk:"Camellia",
         dEn:"Japanese standard, comparable to AES.",
         dUk:"Японський стандарт, порівнюваний з AES."}
