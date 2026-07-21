@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Symmetric ciphers — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="symmetric">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Sections 1 &amp; 3 · block ciphers &amp; modes of operation" data-uk="Розділи 1 і 3 · блокові шифри та режими роботи">Sections 1 &amp; 3 · block ciphers &amp; modes of operation</div>
+    <h1 data-en="Symmetric ciphers" data-uk="Симетричні шифри">Symmetric ciphers</h1>
+    <div class="eq-hero">c = E<sub>k</sub>(m) &nbsp;·&nbsp; m = D<sub>k</sub>(c)</div>
+    <p class="lede" data-en="One key both locks and unlocks. Below: the two construction schools — Feistel networks (DES, Blowfish, GOST, Camellia) and SP-networks (AES, Serpent) — plus the modes of operation that turn a 1-block primitive into real encryption. Live canvases: a Feistel ladder you can run backwards, an avalanche grid, and the ECB-leaks-the-picture experiment."
+       data-uk="Один ключ і замикає, і відмикає. Нижче — дві школи конструкцій: мережі Фейстеля (DES, Blowfish, ГОСТ, Camellia) та SP-мережі (AES, Serpent), а також режими роботи, що перетворюють примітив «один блок» на справжнє шифрування. Живі полотна: драбина Фейстеля, яку можна запустити назад, сітка лавинного ефекту та експеримент «ECB зливає картинку».">One key both locks and unlocks…</p>
+    <div class="legend-lvls" id="lvlLegend"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ============================================================ DES -->
+  <section id="des">
+    <div class="num" data-en="01 / DES · 3-DES" data-uk="01 / DES · 3-DES">01 / DES · 3-DES</div>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(n)</span>
+        <span data-en="DES / 3-DES — the Feistel classic" data-uk="DES / 3-DES — класика мереж Фейстеля">DES / 3-DES — the Feistel classic</span></h2>
+    <div class="formula">L<sub>i+1</sub> = R<sub>i</sub>,&nbsp;&nbsp; R<sub>i+1</sub> = L<sub>i</sub> ⊕ F(R<sub>i</sub>, k<sub>i</sub>)</div>
+    <p class="desc" data-en="DES (1977) encrypts a 64-bit block with a 56-bit key over <b>16 Feistel rounds</b>. The block splits into halves L and R; each round the right half runs through a keyed round function F and is XORed into the left half, then the halves swap. The magic of the construction: <b>F need not be invertible</b> — decryption is the same network with the round keys in reverse order. 3-DES chains DES three times (E-D-E) to stretch the key to 112/168 bits."
+       data-uk="DES (1977) шифрує 64-бітний блок 56-бітним ключем за <b>16 раундів Фейстеля</b>. Блок ділиться на половини L і R; щораунду права половина проходить через ключову раундову функцію F і XOR-иться в ліву, після чого половини міняються місцями. Магія конструкції: <b>F не мусить бути оборотною</b> — розшифрування є тією самою мережею з раундовими ключами у зворотному порядку. 3-DES з'єднує DES тричі (E-D-E), розтягуючи ключ до 112/168 біт.">DES (1977)…</p>
+    <div id="refs-des"></div>
+    <p class="hint" data-en="Toy Feistel: 16-bit block, subkeys kᵢ = (K ⋘ 3i) mod 256, F = S-box + rotation." data-uk="Іграшковий Фейстель: 16-бітний блок, підключі kᵢ = (K ⋘ 3i) mod 256, F = S-box + зсув.">Toy Feistel…</p>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="feiCanvas" width="420" height="420"></canvas>
+        <div class="controls">
+          <div class="ctrl">
+            <label><span data-en="rounds n" data-uk="раундів n">rounds n</span> <span class="val" id="feiRoundsVal">4</span></label>
+            <input type="range" id="feiRounds" min="1" max="16" step="1" value="4">
+          </div>
+          <div class="ctrl">
+            <label><span data-en="plaintext m (hex, 16 bit)" data-uk="відкритий текст m (hex, 16 біт)">plaintext m (hex, 16 bit)</span></label>
+            <input type="text" id="feiM" value="CAFE" maxlength="4" style="width:90px">
+          </div>
+          <div class="ctrl">
+            <label><span data-en="key K (hex, 16 bit)" data-uk="ключ K (hex, 16 біт)">key K (hex, 16 bit)</span></label>
+            <input type="text" id="feiK" value="3B6D" maxlength="4" style="width:90px">
+          </div>
+          <div class="ctrl">
+            <label><span data-en="direction" data-uk="напрямок">direction</span></label>
+            <select id="feiDir">
+              <option value="enc" data-en="encrypt ↓" data-uk="шифрування ↓">encrypt ↓</option>
+              <option value="dec" data-en="decrypt ↑ (keys reversed)" data-uk="розшифрування ↑ (ключі навпаки)">decrypt ↑ (keys reversed)</option>
+            </select>
+          </div>
+          <div class="hint" data-en="Switch to decrypt: the very same ladder, subkeys in reverse order, walks the ciphertext back to m — the Feistel involution." data-uk="Перемкніть на розшифрування: та сама драбина, підключі у зворотному порядку, повертає шифротекст назад у m — інволюція Фейстеля.">Switch to decrypt…</div>
+        </div>
+      </div>
+      <div class="readout" id="feiOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/openssl/openssl/tree/master/crypto/des" target="_blank" rel="noopener">openssl/crypto/des</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="The 56-bit key fell to brute force: the EFF <b>Deep Crack</b> machine (1998, ≈$250k of FPGAs) recovered a DES key in 56 hours; today a small cluster does it in under a day. 3-DES resists brute force (112-bit effective) but its 64-bit block enables the <b>Sweet32</b> birthday attack on long CBC sessions; NIST deprecated 3-DES and disallowed it after 2023. See <a class='ext' href='https://en.wikipedia.org/wiki/EFF_DES_cracker' target='_blank' rel='noopener'>EFF DES cracker</a> and <a class='ext' href='https://sweet32.info' target='_blank' rel='noopener'>sweet32.info</a>."
+            data-uk="56-бітний ключ упав під повним перебором: машина EFF <b>Deep Crack</b> (1998, ≈$250 тис. на FPGA) знайшла ключ DES за 56 годин; сьогодні невеликий кластер робить це менш ніж за добу. 3-DES тримається проти перебору (ефективні 112 біт), але його 64-бітний блок відкриває атаку днів народження <b>Sweet32</b> на довгі CBC-сесії; NIST вивів 3-DES з обігу та заборонив після 2023. Див. <a class='ext' href='https://en.wikipedia.org/wiki/EFF_DES_cracker' target='_blank' rel='noopener'>EFF DES cracker</a> і <a class='ext' href='https://sweet32.info' target='_blank' rel='noopener'>sweet32.info</a>.">…</span></div>
+    <div class="xrefs">
+      <a href="#modes" data-en="modes of operation" data-uk="режими роботи">modes of operation</a>
+      <a href="#gost" data-en="GOST — another Feistel" data-uk="ГОСТ — інший Фейстель">GOST — another Feistel</a>
+      <a href="lightweight.html#tea" data-en="TEA — minimal Feistel" data-uk="TEA — мінімальний Фейстель">TEA — minimal Feistel</a>
+      <a href="quantum.html#grover" data-en="Grover vs key size" data-uk="Гровер проти довжини ключа">Grover vs key size</a>
+    </div>
+  </section>
+
+  <!-- ============================================================ AES -->
+  <section id="aes">
+    <div class="num" data-en="02 / AES" data-uk="02 / AES">02 / AES</div>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(n)</span>
+        <span data-en="AES (Rijndael) — the SP-network standard" data-uk="AES (Rijndael) — стандарт на SP-мережі">AES (Rijndael) — the SP-network standard</span></h2>
+    <div class="formula">state ← AddKey(MixColumns(ShiftRows(SubBytes(state))))</div>
+    <p class="desc" data-en="AES (2001) is a <b>substitution–permutation network</b>: each of its 10/12/14 rounds substitutes every byte through one S-box (confusion), then shifts and mixes the 4×4 state matrix (diffusion), then XORs a round key. Two rounds already make every output bit depend on every input bit — the <b>avalanche effect</b>. The demo below builds a toy SP-network and shows the avalanche from a single flipped input bit growing round by round."
+       data-uk="AES (2001) — це <b>підстановчо-перестановча мережа</b>: кожен із 10/12/14 раундів заміняє кожен байт через один S-box (конфузія), потім зсуває та перемішує матрицю стану 4×4 (дифузія), потім XOR-ить раундовий ключ. Вже два раунди роблять кожен вихідний біт залежним від кожного вхідного — <b>лавинний ефект</b>. Демо нижче будує іграшкову SP-мережу й показує, як лавина від одного зміненого вхідного біта росте раунд за раундом.">AES (2001)…</p>
+    <div id="refs-aes"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="avCanvas" width="420" height="380"></canvas>
+        <div class="controls">
+          <div class="ctrl">
+            <label><span data-en="rounds" data-uk="раунди">rounds</span> <span class="val" id="avRoundsVal">4</span></label>
+            <input type="range" id="avRounds" min="1" max="8" step="1" value="4">
+          </div>
+          <div class="ctrl">
+            <label><span data-en="input bit to flip" data-uk="який вхідний біт змінити">input bit to flip</span> <span class="val" id="avBitVal">7</span></label>
+            <input type="range" id="avBit" min="0" max="15" step="1" value="7">
+          </div>
+          <div class="ctrl">
+            <label><span data-en="input x (hex, 16 bit)" data-uk="вхід x (hex, 16 біт)">input x (hex, 16 bit)</span></label>
+            <input type="text" id="avX" value="1234" maxlength="4" style="width:90px">
+          </div>
+          <div class="legend">
+            <div><span class="dot" style="background:#E8607A"></span><span data-en="bit changed by the flip" data-uk="біт, змінений фліпом">bit changed by the flip</span></div>
+            <div><span class="dot" style="background:#2C3A5C"></span><span data-en="bit = 1, unchanged" data-uk="біт = 1, без зміни">bit = 1, unchanged</span></div>
+          </div>
+          <div class="hint" data-en="Toy SP-network: 4-bit S-box on each nibble → PRESENT-style bit permutation → round-key XOR. Watch one rose cell become ~50% of the row." data-uk="Іграшкова SP-мережа: 4-бітний S-box на кожному ніблі → бітова перестановка в стилі PRESENT → XOR раундового ключа. Спостерігайте, як одна рожева клітинка стає ~50% рядка.">Toy SP-network…</div>
+        </div>
+      </div>
+      <div class="readout" id="avOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/openssl/openssl/tree/master/crypto/aes" target="_blank" rel="noopener">openssl/crypto/aes</a>
+      <a class="ext" href="https://github.com/google/boringssl/tree/master/crypto/fipsmodule/aes" target="_blank" rel="noopener">boringssl/aes</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical attack on full AES. The best single-key result is a biclique attack at ~2<sup>126</sup> for AES-128 — marginal. <b>Related-key</b> attacks break the AES-256 key schedule at 2<sup>99.5</sup> with 4 related keys (<a class='ext' href='https://eprint.iacr.org/2009/317' target='_blank' rel='noopener'>Biryukov–Khovratovich 2009</a>) — no threat to random keys, but a design blemish. Grover's quantum search halves effective key length: prefer AES-256 for long-term data. Cache-timing on table-based AES motivated the AES-NI instructions."
+            data-uk="Практичних атак на повний AES немає. Найкращий результат з одним ключем — biclique-атака ~2<sup>126</sup> для AES-128, суто маргінальна. Атаки <b>на пов'язаних ключах</b> ламають розклад ключів AES-256 за 2<sup>99.5</sup> із 4 пов'язаними ключами (<a class='ext' href='https://eprint.iacr.org/2009/317' target='_blank' rel='noopener'>Бірюков–Ховратович 2009</a>) — це не загрожує випадковим ключам, але є вадою дизайну. Пошук Гровера вдвічі зменшує ефективну довжину ключа: для довгострокових даних беріть AES-256. Cache-timing на табличному AES спричинив появу інструкцій AES-NI.">…</span></div>
+    <div class="xrefs">
+      <a href="#serpent" data-en="the other finalists" data-uk="інші фіналісти">the other finalists</a>
+      <a href="#camellia" data-en="Camellia — the peer" data-uk="Camellia — аналог">Camellia — the peer</a>
+      <a href="stream.html#chacha" data-en="ChaCha20 — the alternative" data-uk="ChaCha20 — альтернатива">ChaCha20 — the alternative</a>
+      <a href="lightweight.html#led" data-en="LED — AES in miniature" data-uk="LED — AES у мініатюрі">LED — AES in miniature</a>
+      <a href="quantum.html#grover" data-en="Grover's algorithm" data-uk="алгоритм Гровера">Grover's algorithm</a>
+    </div>
+  </section>
+
+  <!-- ======================================================= Blowfish -->
+  <section id="blowfish">
+    <div class="num" data-en="03 / Blowfish · Twofish" data-uk="03 / Blowfish · Twofish">03 / Blowfish · Twofish</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="Blowfish / Twofish — key-dependent S-boxes" data-uk="Blowfish / Twofish — S-box'и, залежні від ключа">Blowfish / Twofish — key-dependent S-boxes</span></h2>
+    <div class="formula">F(x) = ((S₀[a] + S₁[b]) ⊕ S₂[c]) + S₃[d]</div>
+    <p class="desc" data-en="Schneier's Blowfish (1993) is a 16-round Feistel cipher whose novelty is that the <b>S-boxes themselves are secret</b>: the P-array and four S-boxes are initialised with the hex digits of π and then repeatedly re-encrypted under the key — an expensive key setup (the very property bcrypt exploits for password hashing). Twofish (1998), its AES-finalist successor, keeps key-dependent S-boxes but adds an MDS diffusion matrix and a 128-bit block."
+       data-uk="Blowfish Шнаєра (1993) — 16-раундовий шифр Фейстеля, новизна якого в тому, що <b>S-box'и самі є секретними</b>: P-масив і чотири S-box'и ініціалізуються шістнадцятковими цифрами π і потім багаторазово перешифровуються ключем — дорога ініціалізація ключа (саме цю властивість bcrypt використовує для хешування паролів). Twofish (1998), його наступник-фіналіст AES, зберігає ключозалежні S-box'и, додаючи MDS-матрицю дифузії та 128-бітний блок.">Schneier's Blowfish…</p>
+    <div id="refs-blowfish"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="key K (hex)" data-uk="ключ K (hex)">key K (hex)</span></label><input type="text" id="bfK" value="1F2E" maxlength="4" style="width:90px"></div>
+        <div class="ctrl"><label><span data-en="block x (hex)" data-uk="блок x (hex)">block x (hex)</span></label><input type="text" id="bfX" value="A55A" maxlength="4" style="width:90px"></div>
+      </div>
+      <div class="readout" id="bfOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/openssl/openssl/tree/master/crypto/bf" target="_blank" rel="noopener">openssl/crypto/bf</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Blowfish itself is unbroken apart from weak-key classes on reduced rounds — but its <b>64-bit block</b> makes long sessions vulnerable to <a class='ext' href='https://sweet32.info' target='_blank' rel='noopener'>Sweet32</a> birthday collisions (demonstrated against Blowfish in OpenVPN). Twofish (128-bit block) has no practical attacks. Schneier himself recommends migrating to Twofish or AES."
+            data-uk="Сам Blowfish не зламано, окрім класів слабких ключів на скорочених раундах, — але його <b>64-бітний блок</b> робить довгі сесії вразливими до колізій днів народження <a class='ext' href='https://sweet32.info' target='_blank' rel='noopener'>Sweet32</a> (продемонстровано проти Blowfish в OpenVPN). Twofish (128-бітний блок) практичних атак не має. Сам Шнаєр радить мігрувати на Twofish або AES.">…</span></div>
+    <div class="xrefs">
+      <a href="#des" data-en="Feistel construction" data-uk="конструкція Фейстеля">Feistel construction</a>
+      <a href="#aes" data-en="AES — the winner" data-uk="AES — переможець">AES — the winner</a>
+      <a href="lightweight.html#xtea" data-en="XTEA — tiny Feistel" data-uk="XTEA — крихітний Фейстель">XTEA — tiny Feistel</a>
+    </div>
+  </section>
+
+  <!-- ======================================================== Serpent -->
+  <section id="serpent">
+    <div class="num" data-en="04 / Serpent · RC6 · MARS" data-uk="04 / Serpent · RC6 · MARS">04 / Serpent · RC6 · MARS</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="Serpent, RC6, MARS — the other AES finalists" data-uk="Serpent, RC6, MARS — інші фіналісти AES">Serpent, RC6, MARS — the other AES finalists</span></h2>
+    <div class="formula">R<sub>i</sub>(x) = L(S<sub>i mod 8</sub>(x ⊕ k<sub>i</sub>))</div>
+    <p class="desc" data-en="The AES finalists teach design trade-offs. <b>Serpent</b>: an ultra-conservative SP-network — 32 rounds (double what its authors thought needed), eight 4-bit S-boxes applied <b>bitsliced</b> 32 copies at a time. <b>RC6</b>: data-dependent rotations and 32-bit multiplication, elegantly simple. <b>MARS</b> (IBM): a heterogeneous mix of keyed and unkeyed rounds. Rijndael won on speed and hardware cost — not because the others were weaker."
+       data-uk="Фіналісти AES вчать дизайнерських компромісів. <b>Serpent</b>: ультраконсервативна SP-мережа — 32 раунди (вдвічі більше, ніж автори вважали потрібним), вісім 4-бітних S-box'ів, застосованих <b>bitsliced</b> по 32 копії одразу. <b>RC6</b>: залежні від даних зсуви та 32-бітне множення, елегантно простий. <b>MARS</b> (IBM): гетерогенна суміш ключових і безключових раундів. Rijndael переміг швидкістю та апаратною вартістю — не тому, що інші були слабшими.">The AES finalists…</p>
+    <div id="refs-serpent"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="input x (hex, 16 bit)" data-uk="вхід x (hex, 16 біт)">input x (hex, 16 bit)</span></label><input type="text" id="seX" value="BEEF" maxlength="4" style="width:90px"></div>
+      </div>
+      <div class="readout" id="seOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/torvalds/linux/blob/master/crypto/serpent_generic.c" target="_blank" rel="noopener">linux/crypto/serpent_generic.c</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Nothing approaches full 32-round Serpent — the best cryptanalysis reaches ~12 rounds, the widest security margin of all finalists. RC6 and MARS are likewise unbroken; they lost on hardware cost, simplicity and (for RC6) patent status, not on security. Serpent remains a popular 'paranoid' choice in disk-encryption software (VeraCrypt cascades)."
+            data-uk="Ніщо не наближається до повного 32-раундового Serpent — найкращий криптоаналіз сягає ~12 раундів, найширший запас стійкості серед усіх фіналістів. RC6 і MARS так само не зламані; вони програли через апаратну вартість, простоту та (для RC6) патентний статус, а не стійкість. Serpent лишається популярним «параноїдальним» вибором у програмах шифрування дисків (каскади VeraCrypt).">…</span></div>
+    <div class="xrefs">
+      <a href="#aes" data-en="AES — the winner" data-uk="AES — переможець">AES — the winner</a>
+      <a href="lightweight.html#present" data-en="PRESENT — 4-bit S-box heir" data-uk="PRESENT — спадкоємець 4-бітних S-box">PRESENT — 4-bit S-box heir</a>
+      <a href="lightweight.html#gift" data-en="GIFT — modern bitslice" data-uk="GIFT — сучасний bitslice">GIFT — modern bitslice</a>
+    </div>
+  </section>
+
+  <!-- =========================================================== IDEA -->
+  <section id="idea">
+    <div class="num" data-en="05 / IDEA" data-uk="05 / IDEA">05 / IDEA</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="IDEA — mixing incompatible algebras" data-uk="IDEA — змішування несумісних алгебр">IDEA — mixing incompatible algebras</span></h2>
+    <div class="formula">a ⊙ b = a·b mod (2¹⁶+1),&nbsp; a ⊞ b = a+b mod 2¹⁶,&nbsp; a ⊕ b</div>
+    <p class="desc" data-en="IDEA (Lai &amp; Massey, 1991) — famous as the cipher of classic PGP — gets its strength not from S-boxes but from <b>alternating three group operations that do not distribute over each other</b>: XOR, addition mod 2¹⁶, and multiplication mod the prime 2¹⁶+1 = 65537 (where the all-zero word represents 2¹⁶). Because the three algebras are mutually 'incompatible', no useful linear or differential structure survives across a round. Try the three operations live below."
+       data-uk="IDEA (Лай і Массі, 1991) — знаменитий як шифр класичного PGP — бере стійкість не з S-box'ів, а з <b>чергування трьох групових операцій, що не дистрибутивні одна щодо одної</b>: XOR, додавання mod 2¹⁶ і множення за модулем простого 2¹⁶+1 = 65537 (де нульове слово представляє 2¹⁶). Оскільки три алгебри взаємно «несумісні», жодна корисна лінійна чи диференціальна структура не переживає раунд. Спробуйте три операції наживо нижче.">IDEA (Lai &amp; Massey, 1991)…</p>
+    <div id="refs-idea"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label>a</label><input type="number" id="idA" value="30000" min="0" max="65535" style="width:110px"></div>
+        <div class="ctrl"><label>b</label><input type="number" id="idB" value="40000" min="0" max="65535" style="width:110px"></div>
+      </div>
+      <div class="readout" id="idOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/openssl/openssl/tree/master/crypto/idea" target="_blank" rel="noopener">openssl/crypto/idea</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Classes of <b>weak keys</b> (Daemen 1993, ~2<sup>51</sup> keys) are detectable; the best attack on full 8.5-round IDEA — narrow-biclique cryptanalysis — only shaves brute force to ~2<sup>126</sup>. What actually retired IDEA: its <b>64-bit block</b> (Sweet32-style collisions) and patents that blocked adoption. OpenPGP moved to AES."
+            data-uk="Класи <b>слабких ключів</b> (Дамен 1993, ~2<sup>51</sup> ключів) виявляються; найкраща атака на повний 8.5-раундовий IDEA — narrow-biclique — лише скорочує перебір до ~2<sup>126</sup>. Що насправді відправило IDEA на пенсію: <b>64-бітний блок</b> (колізії в стилі Sweet32) і патенти, що гальмували впровадження. OpenPGP перейшов на AES.">…</span></div>
+    <div class="xrefs">
+      <a href="asymmetric.html#rsa" data-en="RSA — PGP's other half" data-uk="RSA — друга половина PGP">RSA — PGP's other half</a>
+      <a href="#aes" data-en="AES — the successor" data-uk="AES — наступник">AES — the successor</a>
+    </div>
+  </section>
+
+  <!-- =========================================================== GOST -->
+  <section id="gost">
+    <div class="num" data-en="06 / GOST · Kuznyechik" data-uk="06 / ГОСТ · «Кузнечик»">06 / GOST · Kuznyechik</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="GOST 28147-89 / Kuznyechik — a different design school" data-uk="ГОСТ 28147-89 / «Кузнечик» — інша школа дизайну">GOST 28147-89 / Kuznyechik — a different design school</span></h2>
+    <div class="formula">N₁′ = N₂ ⊕ ((S(N₁ ⊞ kᵢ)) ⋘ 11),&nbsp; N₂′ = N₁</div>
+    <p class="desc" data-en="GOST 28147-89: a 32-round Feistel cipher on 64-bit blocks with a 256-bit key. Its round function is minimal — add subkey mod 2³², push each nibble through a 4-bit S-box, rotate left 11 — betting on <b>many cheap rounds</b> where DES bets on few expensive ones. The S-boxes were historically unspecified (issued per-organisation!). Kuznyechik (GOST R 34.12-2015) replaced it with a 128-bit SP-network. Below: one full GOST round, live."
+       data-uk="ГОСТ 28147-89: 32-раундовий шифр Фейстеля на 64-бітних блоках із 256-бітним ключем. Його раундова функція мінімальна — додати підключ mod 2³², пропустити кожен нібл через 4-бітний S-box, зсунути циклічно на 11 — ставка на <b>багато дешевих раундів</b> там, де DES ставить на кілька дорогих. S-box'и історично не були специфіковані (видавалися кожній організації!). «Кузнечик» (ГОСТ Р 34.12-2015) замінив його 128-бітною SP-мережею. Нижче — один повний раунд ГОСТ наживо.">GOST 28147-89…</p>
+    <div id="refs-gost"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label>N₁ (hex, 32 bit)</label><input type="text" id="goN1" value="FEDCBA98" maxlength="8" style="width:110px"></div>
+        <div class="ctrl"><label>N₂ (hex, 32 bit)</label><input type="text" id="goN2" value="76543210" maxlength="8" style="width:110px"></div>
+        <div class="ctrl"><label>kᵢ (hex, 32 bit)</label><input type="text" id="goK" value="0A1B2C3D" maxlength="8" style="width:110px"></div>
+      </div>
+      <div class="readout" id="goOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/gost-engine/engine" target="_blank" rel="noopener">gost-engine (OpenSSL)</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="GOST 28147-89: a reflection attack (Isobe 2011) recovers the key in 2<sup>225</sup> — academically fatal for a 256-bit claim, practically irrelevant; the 64-bit block invites Sweet32. Worse for trust: Kuznyechik's S-box π, claimed to be random, was shown by <a class='ext' href='https://eprint.iacr.org/2019/092' target='_blank' rel='noopener'>Perrin &amp; Udovenko</a> to hide a secret algebraic <b>TKlog</b> structure — an undisclosed design rationale in a national standard. Ukraine standardised its own cipher instead: <b>Kalyna, DSTU 7624:2014</b>."
+            data-uk="ГОСТ 28147-89: reflection-атака (Ісобе 2011) відновлює ключ за 2<sup>225</sup> — академічно фатально для заявлених 256 біт, практично неістотно; 64-бітний блок запрошує Sweet32. Гірше для довіри: S-box π «Кузнечика», заявлений як випадковий, як показали <a class='ext' href='https://eprint.iacr.org/2019/092' target='_blank' rel='noopener'>Перрен і Удовенко</a>, приховує таємну алгебраїчну структуру <b>TKlog</b> — нерозкриту логіку дизайну в національному стандарті. Україна натомість стандартизувала власний шифр: <b>«Калина», ДСТУ 7624:2014</b>.">…</span></div>
+    <div class="xrefs">
+      <a href="#des" data-en="DES — the other Feistel" data-uk="DES — інший Фейстель">DES — the other Feistel</a>
+      <a href="#aes" data-en="AES vs Kuznyechik" data-uk="AES проти «Кузнечика»">AES vs Kuznyechik</a>
+      <a href="lightweight.html#present" data-en="4-bit S-box design" data-uk="дизайн 4-бітних S-box">4-bit S-box design</a>
+    </div>
+  </section>
+
+  <!-- ======================================================= Camellia -->
+  <section id="camellia">
+    <div class="num" data-en="07 / Camellia" data-uk="07 / Camellia">07 / Camellia</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="Camellia — the Japanese standard" data-uk="Camellia — японський стандарт">Camellia — the Japanese standard</span></h2>
+    <div class="formula">F(x, k) = P(S(x ⊕ k))</div>
+    <p class="desc" data-en="Camellia (NTT &amp; Mitsubishi, 2000) matches AES parameters — 128-bit block, 128/192/256-bit keys — but is a <b>Feistel</b> cipher: 18/24 rounds whose F-function XORs the subkey, applies eight byte S-boxes, then a byte-wise linear P-layer; every 6 rounds keyed FL/FL⁻¹ layers break up structure. NESSIE- and CRYPTREC-approved, in ISO/IEC 18033-3 and TLS — proof the Feistel school meets the SP school head-on. Below: a toy F-function, live."
+       data-uk="Camellia (NTT і Mitsubishi, 2000) повторює параметри AES — 128-бітний блок, ключі 128/192/256 біт — але це шифр <b>Фейстеля</b>: 18/24 раунди, F-функція яких XOR-ить підключ, застосовує вісім байтових S-box'ів і побайтовий лінійний P-шар; кожні 6 раундів ключові шари FL/FL⁻¹ руйнують структуру. Схвалена NESSIE і CRYPTREC, в ISO/IEC 18033-3 і TLS — доказ, що школа Фейстеля рівна SP-школі. Нижче — іграшкова F-функція наживо.">Camellia…</p>
+    <div id="refs-camellia"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="half-block x (hex)" data-uk="півблок x (hex)">half-block x (hex)</span></label><input type="text" id="caX" value="7C41" maxlength="4" style="width:90px"></div>
+        <div class="ctrl"><label><span data-en="subkey k (hex)" data-uk="підключ k (hex)">subkey k (hex)</span></label><input type="text" id="caK" value="D2F0" maxlength="4" style="width:90px"></div>
+      </div>
+      <div class="readout" id="caOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/openssl/openssl/tree/master/crypto/camellia" target="_blank" rel="noopener">openssl/crypto/camellia</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical attacks on full 18/24-round Camellia; the best results (impossible-differential, MITM) stop around 11–12 rounds without the FL layers. Its security margin is regarded as comparable to AES — Camellia simply lost the popularity contest to a NIST standard with hardware acceleration."
+            data-uk="Практичних атак на повну 18/24-раундову Camellia немає; найкращі результати (impossible-differential, MITM) зупиняються близько 11–12 раундів без FL-шарів. Її запас стійкості вважається порівнянним з AES — Camellia просто програла конкурс популярності стандарту NIST з апаратним прискоренням.">…</span></div>
+    <div class="xrefs">
+      <a href="#aes" data-en="AES — same parameters" data-uk="AES — ті самі параметри">AES — same parameters</a>
+      <a href="#blowfish" data-en="Feistel with S-boxes" data-uk="Фейстель з S-box'ами">Feistel with S-boxes</a>
+      <a href="lightweight.html#clefia" data-en="CLEFIA — Sony's Feistel" data-uk="CLEFIA — Фейстель від Sony">CLEFIA — Sony's Feistel</a>
+    </div>
+  </section>
+
+  <!-- ========================================================== Modes -->
+  <section id="modes">
+    <div class="num" data-en="08 / modes of operation" data-uk="08 / режими роботи">08 / modes of operation</div>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(n)</span>
+        <span data-en="ECB · CBC · CFB · OFB · CTR" data-uk="ECB · CBC · CFB · OFB · CTR">ECB · CBC · CFB · OFB · CTR</span></h2>
+    <div class="formula">ECB: cᵢ = E<sub>k</sub>(mᵢ) &nbsp;·&nbsp; CBC: cᵢ = E<sub>k</sub>(mᵢ ⊕ cᵢ₋₁), c₀ = IV &nbsp;·&nbsp; CTR: cᵢ = mᵢ ⊕ E<sub>k</sub>(N‖i)</div>
+    <p class="desc" data-en="A block cipher encrypts exactly one block; a <b>mode of operation</b> extends it to a whole message. <b>ECB</b> encrypts each block independently — equal blocks give equal ciphertext, so structure leaks. <b>CBC</b> chains each block to the previous ciphertext, seeded by a random IV. <b>CTR</b> (like CFB/OFB) turns the block cipher into a keystream generator: encrypt a nonce‖counter and XOR. The experiment below encrypts a picture and lets you see the difference with your own eyes."
+       data-uk="Блоковий шифр шифрує рівно один блок; <b>режим роботи</b> поширює його на ціле повідомлення. <b>ECB</b> шифрує кожен блок незалежно — рівні блоки дають рівний шифротекст, тож структура протікає. <b>CBC</b> зчіплює кожен блок з попереднім шифротекстом, стартуючи з випадкового IV. <b>CTR</b> (як CFB/OFB) перетворює блоковий шифр на генератор гами: шифруємо nonce‖лічильник і XOR-имо. Експеримент нижче шифрує картинку й дає побачити різницю на власні очі.">A block cipher encrypts exactly one block…</p>
+    <div id="refs-modes"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="moCanvas" width="420" height="230"></canvas>
+        <div class="controls">
+          <div class="ctrl">
+            <label><span data-en="mode" data-uk="режим">mode</span></label>
+            <select id="moMode">
+              <option value="ecb" selected>ECB</option>
+              <option value="cbc">CBC</option>
+              <option value="ctr">CTR</option>
+            </select>
+          </div>
+          <button id="moIV" data-en="↻ new random IV / nonce" data-uk="↻ новий випадковий IV / nonce">↻ new random IV / nonce</button>
+          <button id="moReset" data-en="restore smiley" data-uk="повернути смайлик">restore smiley</button>
+          <button id="moClear" class="secondary" data-en="clear the picture" data-uk="очистити картинку">clear the picture</button>
+          <div class="legend">
+            <div><span class="dot" style="background:#7FDBCA"></span><span data-en="bit = 1" data-uk="біт = 1">bit = 1</span></div>
+            <div><span class="dot" style="background:#0E1626;border:1px solid #233150"></span><span data-en="bit = 0" data-uk="біт = 0">bit = 0</span></div>
+          </div>
+          <div class="hint" data-en="<b>Draw with the mouse on the left picture</b> — every stroke re-encrypts live. The pixels are cut into 8-bit blocks and encrypted with a toy (but bijective) block cipher. ECB: your drawing survives encryption. CBC/CTR: noise — and a fresh IV gives a different noise each time." data-uk="<b>Малюйте мишею на лівій картинці</b> — кожен штрих одразу перешифровується. Пікселі ріжуться на 8-бітні блоки й шифруються іграшковим (але бієктивним) блоковим шифром. ECB: ваш малюнок переживає шифрування. CBC/CTR: шум — і свіжий IV щоразу дає інший шум.">Draw with the mouse…</div>
+        </div>
+      </div>
+      <div class="readout" id="moOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/openssl/openssl/tree/master/crypto/modes" target="_blank" rel="noopener">openssl/crypto/modes</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>ECB</b> leaks block equality — the smiley above; never use it for structured data. <b>CBC</b> with padding is a minefield: Vaudenay's <b>padding-oracle</b> attack (2002) decrypts byte-by-byte through error messages and resurfaced as POODLE and Lucky Thirteen against TLS; predictable IVs enabled BEAST. <b>CTR</b> is malleable and fails totally when a counter value repeats. Modern guidance: don't hand-roll modes — use AEAD (<a href='#gcm'>GCM</a>, ChaCha20-Poly1305). See <a class='ext' href='https://en.wikipedia.org/wiki/Padding_oracle_attack' target='_blank' rel='noopener'>padding oracle attack</a>."
+            data-uk="<b>ECB</b> зливає рівність блоків — смайлик вище; ніколи не використовуйте його для структурованих даних. <b>CBC</b> з падінгом — мінне поле: атака <b>padding-oracle</b> Водене (2002) розшифровує байт за байтом через повідомлення про помилки й відродилася як POODLE та Lucky Thirteen проти TLS; передбачувані IV уможливили BEAST. <b>CTR</b> піддається модифікаціям і повністю ламається при повторі лічильника. Сучасна порада: не збирайте режими вручну — використовуйте AEAD (<a href='#gcm'>GCM</a>, ChaCha20-Poly1305). Див. <a class='ext' href='https://en.wikipedia.org/wiki/Padding_oracle_attack' target='_blank' rel='noopener'>padding oracle attack</a>.">…</span></div>
+    <div class="xrefs">
+      <a href="#gcm" data-en="GCM — mode + authentication" data-uk="GCM — режим + автентифікація">GCM — mode + authentication</a>
+      <a href="#des" data-en="the block primitive" data-uk="блоковий примітив">the block primitive</a>
+      <a href="stream.html#chacha" data-en="ChaCha20 — native keystream" data-uk="ChaCha20 — рідна гама">ChaCha20 — native keystream</a>
+      <a href="hash.html#cmac" data-en="CMAC — CBC as a MAC" data-uk="CMAC — CBC як MAC">CMAC — CBC as a MAC</a>
+    </div>
+  </section>
+
+  <!-- ============================================================ GCM -->
+  <section id="gcm">
+    <div class="num" data-en="09 / GCM · CCM" data-uk="09 / GCM · CCM">09 / GCM · CCM</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="GCM &amp; CCM — authenticated encryption (AEAD)" data-uk="GCM і CCM — автентифіковане шифрування (AEAD)">GCM &amp; CCM — authenticated encryption (AEAD)</span></h2>
+    <div class="formula">tag = GHASH<sub>H</sub>(A ‖ C ‖ len) ⊕ E<sub>k</sub>(J₀),&nbsp; H = E<sub>k</sub>(0)</div>
+    <p class="desc" data-en="Encryption without authentication is an invitation to tamper. <b>GCM</b> = CTR encryption + <b>GHASH</b>: the ciphertext blocks are folded into a polynomial evaluated at a secret point H = E<sub>k</sub>(0) in the field GF(2¹²⁸) — one multiplication per block, fully parallel. CCM does the same job with CTR + CBC-MAC, two passes. The worked example below runs the whole pipeline in a tiny field, GF(2⁸), so every multiplication is visible."
+       data-uk="Шифрування без автентифікації — запрошення до підробки. <b>GCM</b> = CTR-шифрування + <b>GHASH</b>: блоки шифротексту згортаються в поліном, обчислений у секретній точці H = E<sub>k</sub>(0) поля GF(2¹²⁸) — одне множення на блок, повністю паралельно. CCM робить ту саму роботу через CTR + CBC-MAC у два проходи. Розібраний приклад нижче проганяє весь конвеєр у крихітному полі GF(2⁸), тож кожне множення видно.">Encryption without authentication…</p>
+    <div id="refs-gcm"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="message (hex bytes)" data-uk="повідомлення (hex-байти)">message (hex bytes)</span></label><input type="text" id="gcMsg" value="CA FE 42" style="width:150px"></div>
+        <div class="ctrl"><label>nonce N (0–255)</label><input type="number" id="gcNonce" value="90" min="0" max="255" style="width:90px"></div>
+      </div>
+      <button id="gcRoll" data-en="↻ random nonce &amp; re-run" data-uk="↻ випадковий nonce і перерахунок">↻ random nonce &amp; re-run</button>
+      <div class="readout" id="gcOut"></div>
+      <div class="hint" data-en="Toy GCM: E is a keyed byte permutation, GHASH runs in GF(2⁸) with reduction polynomial x⁸+x⁴+x³+x+1 (0x11B). Real GCM: same algebra in GF(2¹²⁸)." data-uk="Іграшковий GCM: E — ключова перестановка байтів, GHASH працює в GF(2⁸) з поліномом редукції x⁸+x⁴+x³+x+1 (0x11B). Справжній GCM: та сама алгебра в GF(2¹²⁸).">Toy GCM…</div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/openssl/openssl/blob/master/crypto/modes/gcm128.c" target="_blank" rel="noopener">openssl/crypto/modes/gcm128.c</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Solid when used correctly — and catastrophic when the <b>nonce repeats</b>: two messages under one (key, nonce) share a keystream (XOR of plaintexts leaks) and, via Joux's <i>forbidden attack</i>, reveal the GHASH key H, enabling universal forgeries. Real-world nonce reuse was found in live HTTPS servers and VISA terminals (<a class='ext' href='https://eprint.iacr.org/2016/475' target='_blank' rel='noopener'>Böck et al. 2016</a>). Truncated tags (32/64 bit) also weaken GHASH. Mitigations: counter-based 96-bit nonces, or nonce-misuse-resistant AES-GCM-SIV."
+            data-uk="Надійний за коректного використання — і катастрофічний, коли <b>nonce повторюється</b>: два повідомлення під однією парою (ключ, nonce) ділять гаму (протікає XOR відкритих текстів) і через <i>заборонену атаку</i> Жу розкривають ключ GHASH H, уможливлюючи довільні підробки. Реальні повтори nonce знайдено в живих HTTPS-серверах і терміналах VISA (<a class='ext' href='https://eprint.iacr.org/2016/475' target='_blank' rel='noopener'>Бок та ін. 2016</a>). Обрізані теги (32/64 біти) також послаблюють GHASH. Захист: лічильникові 96-бітні nonce або стійкий до повторів AES-GCM-SIV.">…</span></div>
+    <div class="xrefs">
+      <a href="#modes" data-en="CTR — the encryption half" data-uk="CTR — шифрувальна половина">CTR — the encryption half</a>
+      <a href="hash.html#cmac" data-en="CMAC — CCM's MAC half" data-uk="CMAC — MAC-половина CCM">CMAC — CCM's MAC half</a>
+      <a href="hash.html#poly1305" data-en="Poly1305 — the rival MAC" data-uk="Poly1305 — MAC-суперник">Poly1305 — the rival MAC</a>
+      <a href="stream.html#chacha" data-en="ChaCha20-Poly1305 AEAD" data-uk="ChaCha20-Poly1305 AEAD">ChaCha20-Poly1305 AEAD</a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="<b>Note on the toys:</b> every demo on this page uses miniature parameters — 8/16-bit blocks, GF(2⁸) — so each intermediate value stays legible. The constructions (Feistel ladder, SP rounds, chaining, GHASH folding) are structurally faithful; real ciphers differ only in width (64–128-bit blocks, GF(2¹²⁸)) and round count."
+     data-uk="<b>Заувага про іграшки:</b> кожне демо на цій сторінці використовує мініатюрні параметри — 8/16-бітні блоки, GF(2⁸) — щоб кожне проміжне значення лишалося читабельним. Конструкції (драбина Фейстеля, SP-раунди, зчеплення, згортка GHASH) структурно точні; справжні шифри відрізняються лише шириною (блоки 64–128 біт, GF(2¹²⁸)) і кількістю раундів."
+     data-i18n-html="1">Note on the toys…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+// ======================= shared helpers ================================
+function UK(){ return window.LANG==='uk'; }
+const rotl8 =(x,n)=>((x<<n)|(x>>>(8-n)))&255;
+const rotl16=(x,n)=>((x<<n)|(x>>>(16-n)))&65535;
+const hex=(v,n)=>(v>>>0).toString(16).toUpperCase().padStart(n,'0');
+const bin=(v,n)=>(v>>>0).toString(2).padStart(n,'0');
+const pop=(v)=>{let c=0;while(v){c+=v&1;v>>>=1;}return c;};
+const S4=[0xC,5,6,0xB,9,0,0xA,0xD,3,0xE,0xF,8,4,7,1,2];         // PRESENT S-box
+function hx(el,def){ const v=parseInt(document.getElementById(el).value,16); return Number.isFinite(v)?(v>>>0):def; }
+// keyed byte permutations (bijective toy block ciphers)
+function mkPerm(seed){
+  const p=[...Array(256).keys()]; let s=seed>>>0;
+  for(let i=255;i>0;i--){ s=(s*0x9E37+0x79B9)&0xFFFF; const j=s%(i+1); const t=p[i]; p[i]=p[j]; p[j]=t; }
+  return p;
+}
+const PERM =mkPerm(0x3779);   // used by the modes demo
+const PERM2=mkPerm(0xB5C1);   // used by the GCM demo
+const EB =b=>PERM [b&255];
+const EB2=b=>PERM2[b&255];
+
+// ======================= refs ==========================================
+const REFS={
+  des:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Data_Encryption_Standard',label:'Wikipedia: DES'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/DES',label:'Вікіпедія: DES'}},
+    {tag:'fips', en:{href:'https://csrc.nist.gov/pubs/fips/46-3/final',label:'FIPS 46-3 (withdrawn)'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Feistel_cipher',label:'Feistel cipher'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/%D0%9C%D0%B5%D1%80%D0%B5%D0%B6%D0%B0_%D0%A4%D0%B5%D0%B9%D1%81%D1%82%D0%B5%D0%BB%D1%8F',label:'Мережа Фейстеля'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2016/798',label:'Sweet32 (Bhargavan–Leurent)'}}
+  ],
+  aes:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Advanced_Encryption_Standard',label:'Wikipedia: AES'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/Advanced_Encryption_Standard',label:'Вікіпедія: AES'}},
+    {tag:'fips', en:{href:'https://csrc.nist.gov/pubs/fips/197/final',label:'FIPS 197'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2009/317',label:'Related-key on AES-256'}},
+    {tag:'iso',  en:{href:'https://www.iso.org/standard/54531.html',label:'ISO/IEC 18033-3'}}
+  ],
+  blowfish:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Blowfish_(cipher)',label:'Wikipedia: Blowfish'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Twofish',label:'Wikipedia: Twofish'}},
+    {tag:'paper',en:{href:'https://www.schneier.com/academic/blowfish/',label:'Schneier: Blowfish (1994)'}},
+    {tag:'paper',en:{href:'https://sweet32.info',label:'Sweet32'}}
+  ],
+  serpent:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Serpent_(cipher)',label:'Wikipedia: Serpent'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/RC6',label:'Wikipedia: RC6'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/MARS_(cipher)',label:'Wikipedia: MARS'}},
+    {tag:'nist', en:{href:'https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/archived-crypto-projects/aes-development',label:'NIST AES development'}}
+  ],
+  idea:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/International_Data_Encryption_Algorithm',label:'Wikipedia: IDEA'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/IDEA',label:'Вікіпедія: IDEA'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-46877-3_35',label:'Lai–Massey: PES (1990)'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Pretty_Good_Privacy',label:'PGP'}}
+  ],
+  gost:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/GOST_(block_cipher)',label:'Wikipedia: GOST'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/%D0%93%D0%9E%D0%A1%D0%A2_28147-89',label:'Вікіпедія: ГОСТ 28147-89'}},
+    {tag:'rfc',  en:{href:'https://www.rfc-editor.org/rfc/rfc5830',label:'RFC 5830 (GOST 28147-89)'}},
+    {tag:'rfc',  en:{href:'https://www.rfc-editor.org/rfc/rfc7801',label:'RFC 7801 (Kuznyechik)'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2019/092',label:'Perrin: TKlog in π'}},
+    {tag:'dstu', en:{href:'https://en.wikipedia.org/wiki/Kalyna_(cipher)',label:'DSTU 7624 (Kalyna)'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/%D0%9A%D0%B0%D0%BB%D0%B8%D0%BD%D0%B0_(%D1%88%D0%B8%D1%84%D1%80)',label:'ДСТУ 7624 («Калина»)'}}
+  ],
+  camellia:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Camellia_(cipher)',label:'Wikipedia: Camellia'}},
+    {tag:'rfc',  en:{href:'https://www.rfc-editor.org/rfc/rfc3713',label:'RFC 3713'}},
+    {tag:'iso',  en:{href:'https://www.iso.org/standard/54531.html',label:'ISO/IEC 18033-3'}}
+  ],
+  modes:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation',label:'Modes of operation'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/%D0%A0%D0%B5%D0%B6%D0%B8%D0%BC_%D1%88%D0%B8%D1%84%D1%80%D1%83%D0%B2%D0%B0%D0%BD%D0%BD%D1%8F',label:'Режим шифрування'}},
+    {tag:'nist', en:{href:'https://csrc.nist.gov/pubs/sp/800/38/a/final',label:'NIST SP 800-38A'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Padding_oracle_attack',label:'Padding oracle attack'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-46035-7_35',label:'Vaudenay: CBC padding (2002)'}}
+  ],
+  gcm:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Galois/Counter_Mode',label:'Wikipedia: GCM'}},
+    {tag:'nist', en:{href:'https://csrc.nist.gov/pubs/sp/800/38/d/final',label:'NIST SP 800-38D'}},
+    {tag:'rfc',  en:{href:'https://www.rfc-editor.org/rfc/rfc5116',label:'RFC 5116 (AEAD)'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2016/475',label:'Nonce-disrespecting adversaries'}}
+  ]
+};
+function renderRefs(){
+  for(const id in REFS){
+    const el=document.getElementById('refs-'+id);
+    if(el) el.innerHTML=window.atlasRefs(REFS[id]);
+  }
+}
+
+// ======================= 1. Feistel demo (DES) =========================
+const feiCtx=document.getElementById('feiCanvas').getContext('2d');
+function fF(r,k){ let t=r^k; t=(S4[t>>4]<<4)|S4[t&15]; return rotl8(t,3); }
+function feiKeys(K,n){ const ks=[]; for(let i=0;i<n;i++) ks.push(rotl16(K,(3*i)%16)&255); return ks; }
+function feiEnc(m,ks){
+  let L=(m>>8)&255, R=m&255; const st=[[L,R]];
+  for(const k of ks){ const t=L^fF(R,k); L=R; R=t; st.push([L,R]); }
+  return st;
+}
+function feiDec(c,ks){ // ks already reversed; round (A,B) -> (B ^ F(A,k), A)
+  let L=(c>>8)&255, R=c&255; const st=[[L,R]];
+  for(const k of ks){ const t=R^fF(L,k); R=L; L=t; st.push([L,R]); }
+  return st;
+}
+function drawFei(states,keys,dec,n){
+  const ctx=feiCtx,W=420,H=420; ctx.clearRect(0,0,W,H);
+  ctx.font='12px "JetBrains Mono",monospace'; ctx.textAlign='center';
+  ctx.fillStyle='#8B97B4';
+  ctx.fillText('L',120,20); ctx.fillText('R',300,20);
+  ctx.fillText(dec?(UK()?'розшифрування: ключі у зворотному порядку':'decrypting: keys in reverse order')
+                  :(UK()?'шифрування: раунди згори вниз':'encrypting: rounds top to bottom'),210,H-8);
+  const y0=40,y1=H-30,rowH=(y1-y0)/n,xL=120,xR=300;
+  for(let i=0;i<n;i++){
+    const ya=y0+i*rowH, yb=y0+(i+1)*rowH, fy=(ya+yb)/2;
+    ctx.strokeStyle='#3A4A6B'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(xR,ya+9); ctx.lineTo(xL,yb-9); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xL,ya+9); ctx.lineTo(xR,yb-9); ctx.stroke();
+    ctx.fillStyle='#111A2E'; ctx.fillRect(210-37,fy-9,74,18);
+    ctx.strokeStyle='#2C4A45'; ctx.strokeRect(210-37,fy-9,74,18);
+    ctx.fillStyle='#F2A65A';
+    ctx.fillText('F·k'+(dec?n-1-i:i)+'='+hex(keys[i],2),210,fy+4);
+  }
+  states.forEach((st,i)=>{
+    const y=y0+i*rowH;
+    ctx.fillStyle='#0E1626'; ctx.fillRect(xL-22,y-8,44,16); ctx.fillRect(xR-22,y-8,44,16);
+    ctx.fillStyle=dec?'#E8607A':'#7FDBCA';
+    ctx.fillText(hex(st[0],2),xL,y+4); ctx.fillText(hex(st[1],2),xR,y+4);
+  });
+}
+function runFei(){
+  const n=parseInt(document.getElementById('feiRounds').value);
+  document.getElementById('feiRoundsVal').textContent=n;
+  const m=hx('feiM',0xCAFE)&0xFFFF, K=hx('feiK',0x3B6D)&0xFFFF;
+  const dec=document.getElementById('feiDir').value==='dec';
+  const ks=feiKeys(K,n);
+  const enc=feiEnc(m,ks);
+  const c=(enc[n][0]<<8)|enc[n][1];
+  const out=document.getElementById('feiOut');
+  const u=UK();
+  let s='<span class="k">'+(u?'підключі':'subkeys')+'</span> k₀..k'+(n-1)+' = '+ks.map(k=>hex(k,2)).join(' ')+'\n';
+  s+='<span class="a">'+(u?'шифрування':'encrypt')+'</span>: m = '+hex(m,4)+' → L₀='+hex(enc[0][0],2)+' R₀='+hex(enc[0][1],2)+'\n';
+  enc.slice(1).forEach((st,i)=>{ s+='  r'+i+': R←L⊕F(R,'+hex(ks[i],2)+')  →  L='+hex(st[0],2)+' R='+hex(st[1],2)+'\n'; });
+  s+='c = <span class="s">'+hex(c,4)+'</span>\n';
+  if(dec){
+    const kr=[...ks].reverse();
+    const dst=feiDec(c,kr);
+    const rec=(dst[n][0]<<8)|dst[n][1];
+    drawFei(dst,kr,true,n);
+    s+='\n<span class="b">'+(u?'розшифрування (та сама мережа, ключі навпаки)':'decrypt (same network, keys reversed)')+'</span>: c = '+hex(c,4)+'\n';
+    dst.slice(1).forEach((st,i)=>{ s+='  r'+i+': k='+hex(kr[i],2)+'  →  L='+hex(st[0],2)+' R='+hex(st[1],2)+'\n'; });
+    s+=(u?'відновлено m':'recovered m')+' = <span class="s">'+hex(rec,4)+'</span>  '+(rec===m?'✓ '+(u?'інволюція працює':'the involution works'):'✗');
+  } else {
+    drawFei(enc,ks,false,n);
+  }
+  out.innerHTML=s;
+}
+['feiRounds','feiM','feiK'].forEach(id=>document.getElementById(id).addEventListener('input',runFei));
+document.getElementById('feiDir').addEventListener('change',runFei);
+
+// ======================= 2. Avalanche demo (AES) =======================
+const avCtx=document.getElementById('avCanvas').getContext('2d');
+function spnTrace(x,rounds,key){
+  const tr=[x&0xFFFF];
+  for(let r=0;r<rounds;r++){
+    let s=0; for(let i=0;i<4;i++) s|=S4[(x>>(4*i))&15]<<(4*i);
+    let p=0; for(let i=0;i<16;i++) if((s>>i)&1) p|=1<<(i===15?15:(4*i)%15);
+    x=(p^rotl16(key,r))&0xFFFF; tr.push(x);
+  }
+  return tr;
+}
+// the genuine AES S-box, computed from scratch: inverse in GF(2^8) + affine map
+const AINV=(function(){
+  const v=new Array(256).fill(0);
+  for(let a=1;a<256;a++){ if(v[a]) continue;
+    for(let b=a;b<256;b++){ if(gmul(a,b)===1){ v[a]=b; v[b]=a; break; } } }
+  return v;
+})();
+const AESBOX=AINV.map(c=>{ let r=c,t=c; for(let i=0;i<4;i++){ t=((t<<1)|(t>>>7))&255; r^=t; } return r^0x63; });
+function runAv(){
+  const rounds=parseInt(document.getElementById('avRounds').value);
+  const bit=parseInt(document.getElementById('avBit').value);
+  document.getElementById('avRoundsVal').textContent=rounds;
+  document.getElementById('avBitVal').textContent=bit;
+  const x=hx('avX',0x1234)&0xFFFF, key=0x9C3F;
+  const a=spnTrace(x,rounds,key), b=spnTrace(x^(1<<bit),rounds,key);
+  const diffs=a.map((v,i)=>v^b[i]);
+  const ctx=avCtx,W=420,H=380; ctx.clearRect(0,0,W,H);
+  const rows=rounds+1, rowH=Math.min(40,(H-26)/rows);
+  ctx.font='11px "JetBrains Mono",monospace';
+  for(let r=0;r<rows;r++){
+    const y=14+r*rowH, cellH=Math.max(13,rowH-9);
+    ctx.fillStyle='#8B97B4'; ctx.textAlign='left';
+    ctx.fillText(r===0?(UK()?'вхід':'input'):'r'+r,6,y+cellH-3);
+    for(let i=15;i>=0;i--){
+      const cx=48+(15-i)*23;
+      const ch=(diffs[r]>>i)&1, on=(a[r]>>i)&1;
+      ctx.fillStyle=ch?'#E8607A':(on?'#2C3A5C':'#0E1626');
+      ctx.fillRect(cx,y,20,cellH);
+    }
+  }
+  const d=diffs[rounds], cnt=pop(d), pct=(cnt/16*100).toFixed(0);
+  const u=UK();
+  const b0=x&255, binv=AINV[b0], sb=AESBOX[b0];
+  const col=[sb,0x3C,0x9F,0x2B];
+  const mix=[gmul(col[0],2)^gmul(col[1],3)^col[2]^col[3],
+             col[0]^gmul(col[1],2)^gmul(col[2],3)^col[3],
+             col[0]^col[1]^gmul(col[2],2)^gmul(col[3],3),
+             gmul(col[0],3)^col[1]^col[2]^gmul(col[3],2)];
+  document.getElementById('avOut').innerHTML=
+    '<span class="k">x </span>= '+hex(x,4)+' → SPN → <span class="a">'+hex(a[rounds],4)+'</span>\n'+
+    '<span class="k">x′</span>= '+hex(x^(1<<bit),4)+' ('+(u?'біт':'bit')+' '+bit+' '+(u?'змінено':'flipped')+') → SPN → <span class="b">'+hex(b[rounds],4)+'</span>\n'+
+    '<span class="k">Δ </span>= '+bin(d,16)+'  →  <span class="s">'+cnt+'/16 '+(u?'бітів змінилося':'bits changed')+' = '+pct+'%</span>'+
+    (u?'  (ідеал ≈ 50%)':'  (ideal ≈ 50%)')+'\n\n'+
+    '<span class="k">'+(u?'справжній S-box AES у GF(2⁸)':'the real AES S-box in GF(2⁸)')+'</span>: b = x&amp;FF = '+hex(b0,2)+
+    ' → b⁻¹ = '+hex(binv,2)+' → '+(u?'афінне відображення':'affine map')+' ⊕ 63 → <span class="s">S(b) = '+hex(sb,2)+'</span>\n'+
+    '<span class="k">MixColumns</span> (·[2 3 1 1] '+(u?'над':'over')+' GF(2⁸)): [S(b) 3C 9F 2B]ᵀ → <span class="a">['+
+    mix.map(v=>hex(v,2)).join(' ')+']ᵀ</span>  '+(u?'— кожен вихідний байт залежить від усіх чотирьох вхідних':'— every output byte depends on all four inputs');
+}
+['avRounds','avBit','avX'].forEach(id=>document.getElementById(id).addEventListener('input',runAv));
+
+// ======================= 3. Modes-of-operation demo ====================
+const moCtx=document.getElementById('moCanvas').getContext('2d');
+const GRID=48;
+function pat(x,y){
+  const dx=x-24,dy=y-24,d2=dx*dx+dy*dy;
+  if(d2>400) return 0;
+  if((x-16)*(x-16)+(y-17)*(y-17)<9) return 0;
+  if((x-32)*(x-32)+(y-17)*(y-17)<9) return 0;
+  if(dy>5&&Math.abs(Math.sqrt(d2)-13)<1.7) return 0;
+  return 1;
+}
+function patBytes(){
+  const out=[];
+  for(let y=0;y<GRID;y++) for(let bx=0;bx<GRID/8;bx++){
+    let b=0; for(let i=0;i<8;i++) b=(b<<1)|pat(bx*8+i,y);
+    out.push(b);
+  }
+  return out;
+}
+let MO_BYTES=patBytes();
+let moIv=0x5A;
+function moKs(n0,i){ return PERM[(PERM[(n0+i)&255]^(i>>8))&255]; }
+function moEncrypt(mode){
+  const out=[]; let prev=moIv;
+  for(let i=0;i<MO_BYTES.length;i++){
+    const b=MO_BYTES[i]; let c;
+    if(mode==='ecb') c=EB(b);
+    else if(mode==='cbc'){ c=EB(b^prev); prev=c; }
+    else c=b^moKs(moIv,i);
+    out.push(c);
+  }
+  return out;
+}
+function drawBits(bytes,ox,oy,cell){
+  const ctx=moCtx;
+  for(let y=0;y<GRID;y++) for(let bx=0;bx<GRID/8;bx++){
+    const b=bytes[y*(GRID/8)+bx];
+    for(let i=0;i<8;i++){
+      const bit=(b>>(7-i))&1;
+      ctx.fillStyle=bit?'#7FDBCA':'#0E1626';
+      ctx.fillRect(ox+(bx*8+i)*cell,oy+y*cell,cell,cell);
+    }
+  }
+}
+function runModes(){
+  const mode=document.getElementById('moMode').value;
+  const enc=moEncrypt(mode);
+  const ctx=moCtx; ctx.clearRect(0,0,420,230);
+  ctx.font='11px "JetBrains Mono",monospace'; ctx.textAlign='left';
+  ctx.fillStyle='#8B97B4';
+  const u=UK();
+  ctx.fillText(u?'відкритий текст':'plaintext',24,20);
+  ctx.fillText((u?'шифротекст ':'ciphertext ')+'('+mode.toUpperCase()+')',228,20);
+  drawBits(MO_BYTES,24,28,3.5);
+  drawBits(enc,228,28,3.5);
+  const m4=MO_BYTES.slice(147,151), c4=enc.slice(147,151);
+  let s='';
+  if(mode==='ecb'){
+    s='<span class="k">ECB</span>: cᵢ = E(mᵢ) — '+(u?'без IV; той самий блок ⇒ той самий шифротекст, щоразу':'no IV; same block ⇒ same ciphertext, every time')+'\n';
+  } else if(mode==='cbc'){
+    s='<span class="k">CBC</span>: c₀ = E(m₀ ⊕ <span class="s">IV</span>), cᵢ = E(mᵢ ⊕ cᵢ₋₁)   <span class="s">IV = '+hex(moIv,2)+'</span> '+(u?'(випадковий, передається відкрито)':'(random, sent in the clear)')+'\n';
+  } else {
+    s='<span class="k">CTR</span>: cᵢ = mᵢ ⊕ E(<span class="s">N</span>‖i)   <span class="s">nonce N = '+hex(moIv,2)+'</span> '+(u?'(ніколи не повторювати під одним ключем!)':'(never reuse under one key!)')+'\n';
+  }
+  s+=(u?'блоки':'blocks')+' m₁₄₇..₁₅₀ = '+m4.map(b=>hex(b,2)).join(' ')+'  →  c = <span class="a">'+c4.map(b=>hex(b,2)).join(' ')+'</span>\n';
+  s+=(u?'однакові байти 00 усередині фону: ':'equal 00 bytes across the background: ')+
+     (mode==='ecb'
+       ?'<span class="b">'+(u?'усі шифруються в '+hex(EB(0),2)+' — силует видно':'all encrypt to '+hex(EB(0),2)+' — the silhouette shows')+'</span>'
+       :'<span class="a">'+(u?'кожен шифрується інакше — шум':'each encrypts differently — noise')+'</span>');
+  document.getElementById('moOut').innerHTML=s;
+}
+document.getElementById('moMode').addEventListener('change',runModes);
+document.getElementById('moIV').addEventListener('click',()=>{ moIv=Math.floor(Math.random()*256); runModes(); });
+document.getElementById('moReset').addEventListener('click',()=>{ MO_BYTES=patBytes(); runModes(); });
+document.getElementById('moClear').addEventListener('click',()=>{ MO_BYTES=MO_BYTES.map(()=>0); runModes(); });
+// --- paint on the plaintext half of the canvas -------------------------
+const moCv=document.getElementById('moCanvas');
+let moPaint=null;
+function moCell(e){
+  const r=moCv.getBoundingClientRect();
+  const x=(e.clientX-r.left)*(420/r.width), y=(e.clientY-r.top)*(230/r.height);
+  const gx=Math.floor((x-24)/3.5), gy=Math.floor((y-28)/3.5);
+  if(gx<0||gx>=GRID||gy<0||gy>=GRID) return null;
+  return [gy*(GRID/8)+(gx>>3), 7-(gx&7)];
+}
+function moSet(c){
+  MO_BYTES[c[0]] = moPaint ? (MO_BYTES[c[0]]|(1<<c[1])) : (MO_BYTES[c[0]]&~(1<<c[1]));
+}
+moCv.addEventListener('pointerdown',e=>{
+  const c=moCell(e); if(!c) return;
+  moPaint=((MO_BYTES[c[0]]>>c[1])&1)?0:1;
+  moSet(c); moCv.setPointerCapture(e.pointerId); runModes(); e.preventDefault();
+});
+moCv.addEventListener('pointermove',e=>{
+  if(moPaint===null) return;
+  const c=moCell(e); if(!c) return;
+  if(((MO_BYTES[c[0]]>>c[1])&1)===moPaint) return;
+  moSet(c); runModes();
+});
+['pointerup','pointercancel'].forEach(ev=>moCv.addEventListener(ev,()=>{ moPaint=null; }));
+
+// ======================= 4. GCM worked example =========================
+function gmul(a,b){ // GF(2^8), poly x^8+x^4+x^3+x+1
+  let r=0;
+  for(let i=0;i<8;i++){ if(b&1) r^=a; const hi=a&128; a=(a<<1)&255; if(hi) a^=0x1B; b>>=1; }
+  return r;
+}
+function runGCM(){
+  const raw=document.getElementById('gcMsg').value.replace(/[^0-9a-fA-F]/g,'').slice(0,16);
+  const m=[]; for(let i=0;i<raw.length;i+=2) m.push(parseInt(raw.substr(i,2),16));
+  let n0=parseInt(document.getElementById('gcNonce').value); if(!Number.isFinite(n0)) n0=90; n0&=255;
+  const out=document.getElementById('gcOut'), u=UK();
+  if(!m.length){ out.innerHTML='<span class="b">'+(u?'введіть hex-байти':'enter hex bytes')+'</span>'; return; }
+  const H=EB2(0);
+  const ks=m.map((_,i)=>EB2((n0+1+i)&255));
+  const c=m.map((b,i)=>b^ks[i]);
+  let s='<span class="k">H</span> = E(00) = <span class="a">'+hex(H,2)+'</span>   ·   nonce N = '+hex(n0,2)+'\n\n';
+  s+='<span class="a">'+(u?'CTR-шифрування':'CTR encryption')+'</span>:\n';
+  m.forEach((b,i)=>{ s+='  c'+(i+1)+' = m'+(i+1)+' ⊕ E(N+'+(i+1)+') = '+hex(b,2)+' ⊕ '+hex(ks[i],2)+' = <span class="s">'+hex(c[i],2)+'</span>\n'; });
+  s+='\n<span class="a">GHASH</span> '+(u?'над шифротекстом, у':'over the ciphertext, in')+' GF(2⁸):\n  Y₀ = 00\n';
+  let Y=0;
+  c.forEach((ci,i)=>{ const x=Y^ci; Y=gmul(x,H); s+='  Y'+(i+1)+' = (Y'+i+' ⊕ c'+(i+1)+')·H = ('+hex(x,2)+')·'+hex(H,2)+' = <span class="a">'+hex(Y,2)+'</span>\n'; });
+  const lenB=m.length&255, x=Y^lenB; Y=gmul(x,H);
+  s+='  Y = (Y ⊕ len='+hex(lenB,2)+')·H = <span class="a">'+hex(Y,2)+'</span>\n';
+  const tag=Y^EB2(n0);
+  s+='\n<span class="s">tag</span> = Y ⊕ E(N) = '+hex(Y,2)+' ⊕ '+hex(EB2(n0),2)+' = <span class="s">'+hex(tag,2)+'</span>\n';
+  s+=(u?'одержувач перераховує GHASH над c і звіряє tag — будь-яка зміна c його ламає':
+       'the receiver recomputes GHASH over c and checks the tag — any change to c breaks it');
+  out.innerHTML=s;
+}
+['gcMsg','gcNonce'].forEach(id=>document.getElementById(id).addEventListener('input',runGCM));
+document.getElementById('gcRoll').addEventListener('click',()=>{
+  document.getElementById('gcNonce').value=Math.floor(Math.random()*256); runGCM();
+});
+
+// ======================= worked examples ===============================
+// Blowfish: key-dependent boxes, one toy round
+function runBF(){
+  const K=hx('bfK',0x1F2E)&0xFFFF, X=hx('bfX',0xA55A)&0xFFFF, u=UK();
+  const PIW=[0x243F,0x6A88,0x85A3,0x08D3];             // hex digits of pi
+  const P=PIW.map(w=>(w^K)&0xFFFF);
+  const S0=i=>(i*73+(K&255))&255, S1=i=>(i*151+(K>>8))&255;
+  const F=x8=>(S0(x8>>4)+S1(x8&15))&255;
+  let L=X>>8, R=X&255;
+  const L1=L^(P[0]&255), f1=F(R), R1=R^f1;
+  document.getElementById('bfOut').innerHTML=
+    '<span class="k">'+(u?'розклад ключа':'key schedule')+'</span>: Pᵢ = π-'+(u?'слова':'words')+' ⊕ K = '+
+    PIW.map((w,i)=>hex(w,4)+'→<span class="a">'+hex(P[i],4)+'</span>').join('  ')+'\n'+
+    '<span class="k">'+(u?'ключозалежні S-box (фрагмент)':'key-dependent S-boxes (excerpt)')+'</span>: S₀[0..3] = '+
+    [0,1,2,3].map(i=>hex(S0(i),2)).join(' ')+' · S₁[0..3] = '+[0,1,2,3].map(i=>hex(S1(i),2)).join(' ')+'\n\n'+
+    (u?'раунд 1':'round 1')+':  L='+hex(L,2)+' R='+hex(R,2)+'\n'+
+    '  L ⊕ P₀ = '+hex(L,2)+' ⊕ '+hex(P[0]&255,2)+' = <span class="a">'+hex(L1,2)+'</span>\n'+
+    '  F(R) = S₀['+hex(R>>4,1)+'] + S₁['+hex(R&15,1)+'] = '+hex(S0(R>>4),2)+' + '+hex(S1(R&15),2)+' = <span class="a">'+hex(f1,2)+'</span>\n'+
+    '  R ⊕ F = <span class="s">'+hex(R1,2)+'</span>  →  '+(u?'обмін половин; у справжньому Blowfish — 16 таких раундів':'swap halves; real Blowfish runs 16 such rounds');
+}
+['bfK','bfX'].forEach(id=>document.getElementById(id).addEventListener('input',runBF));
+
+// Serpent: one bitsliced-style round
+const SER0=[3,8,15,1,10,6,5,11,14,13,4,2,7,0,9,12];
+function runSE(){
+  const x=hx('seX',0xBEEF)&0xFFFF, u=UK();
+  let s=0; for(let i=0;i<4;i++) s|=SER0[(x>>(4*i))&15]<<(4*i);
+  const r=rotl16(s,5);
+  document.getElementById('seOut').innerHTML=
+    '<span class="k">x</span> = '+hex(x,4)+' = '+bin(x,16)+'\n'+
+    'S₀ '+(u?'на кожному ніблі':'on each nibble')+': '+
+    [3,2,1,0].map(i=>hex((x>>(4*i))&15,1)+'→'+hex(SER0[(x>>(4*i))&15],1)).join('  ')+
+    '  ⇒  <span class="a">'+hex(s,4)+'</span>\n'+
+    (u?'лінійний шар (тут: ⋘ 5)':'linear layer (here: ⋘ 5)')+': <span class="s">'+hex(r,4)+'</span> = '+bin(r,16)+'\n'+
+    (u?'справжній Serpent: 128-бітний стан, 8 S-boxʼів, 32 раунди — подвійний запас стійкості':
+       'real Serpent: 128-bit state, 8 S-boxes, 32 rounds — a doubled security margin');
+}
+document.getElementById('seX').addEventListener('input',runSE);
+
+// IDEA: the three incompatible operations
+function runID(){
+  const a=Math.max(0,Math.min(65535,parseInt(document.getElementById('idA').value)||0));
+  const b=Math.max(0,Math.min(65535,parseInt(document.getElementById('idB').value)||0));
+  const u=UK();
+  const add=(a+b)&0xFFFF, xr=a^b;
+  const aa=a===0?65536n:BigInt(a), bb=b===0?65536n:BigInt(b);
+  const mm=(aa*bb)%65537n, mul=mm===65536n?0:Number(mm);
+  document.getElementById('idOut').innerHTML=
+    'a ⊞ b = ('+a+' + '+b+') mod 2¹⁶ = <span class="a">'+add+'</span>\n'+
+    'a ⊕ b = <span class="a">'+xr+'</span>   (hex: '+hex(a,4)+' ⊕ '+hex(b,4)+' = '+hex(xr,4)+')\n'+
+    'a ⊙ b = ('+(a===0?'2¹⁶':a)+' · '+(b===0?'2¹⁶':b)+') mod 65537 = <span class="s">'+mul+'</span>'+(mul===0?' (≡ 2¹⁶)':'')+'\n'+
+    (u?'65537 — просте, тож ⊙ є групою на 2¹⁶ значеннях; жодна з трьох операцій не «дружить» з іншими — у цьому вся стійкість IDEA':
+       '65537 is prime, so ⊙ forms a group on 2¹⁶ values; none of the three operations plays nicely with the others — that is IDEAʼs whole defence');
+}
+['idA','idB'].forEach(id=>document.getElementById(id).addEventListener('input',runID));
+
+// GOST: one full round, live
+const KPI=[12,4,6,2,10,5,11,9,14,8,13,7,0,3,15,1];   // id-tc26 pi0
+function runGO(){
+  const N1=hx('goN1',0xFEDCBA98), N2=hx('goN2',0x76543210), k=hx('goK',0x0A1B2C3D), u=UK();
+  const t=(N1+k)%4294967296;
+  let s=0; for(let i=0;i<8;i++) s+=KPI[Math.floor(t/Math.pow(16,i))&15]*Math.pow(16,i);
+  const r=(((s<<11)|(s>>>21))>>>0);
+  const out=((r^N2)>>>0);
+  document.getElementById('goOut').innerHTML=
+    '1. N₁ ⊞ kᵢ = '+hex(N1,8)+' + '+hex(k,8)+' mod 2³² = <span class="a">'+hex(t,8)+'</span>\n'+
+    '2. S('+(u?'ніблами':'nibble-wise')+', π₀ '+(u?'з':'from')+' RFC 7836) = <span class="a">'+hex(s,8)+'</span>\n'+
+    '3. ⋘ 11 = <span class="a">'+hex(r,8)+'</span>\n'+
+    '4. ⊕ N₂ = '+hex(r,8)+' ⊕ '+hex(N2,8)+' = <span class="s">'+hex(out,8)+'</span>\n'+
+    (u?'нові половини':'new halves')+': N₁′ = <span class="s">'+hex(out,8)+'</span>, N₂′ = '+hex(N1,8)+'  — ×32 '+(u?'раунди':'rounds');
+}
+['goN1','goN2','goK'].forEach(id=>document.getElementById(id).addEventListener('input',runGO));
+
+// Camellia: toy F-function
+function runCA(){
+  const x=hx('caX',0x7C41)&0xFFFF, k=hx('caK',0xD2F0)&0xFFFF, u=UK();
+  const t=x^k;
+  let s=0; for(let i=0;i<4;i++) s|=S4[(t>>(4*i))&15]<<(4*i);
+  const a=s>>8, b=s&255;
+  const a2=a^b, b2=a^rotl8(b,1);
+  const out=(a2<<8)|b2;
+  document.getElementById('caOut').innerHTML=
+    '1. x ⊕ k = '+hex(x,4)+' ⊕ '+hex(k,4)+' = <span class="a">'+hex(t,4)+'</span>\n'+
+    '2. S-'+(u?'шар (ніблові S-box)':'layer (nibble S-boxes)')+' = <span class="a">'+hex(s,4)+'</span>\n'+
+    '3. P-'+(u?'шар (байтові XOR)':'layer (byte XORs)')+': a′=a⊕b='+hex(a2,2)+', b′=a⊕(b⋘1)='+hex(b2,2)+' ⇒ F = <span class="s">'+hex(out,4)+'</span>\n'+
+    (u?'справжня Camellia: 64-бітна F-функція, 8 байтових S-box, P із 8 XOR-рівнянь':
+       'real Camellia: 64-bit F-function, 8 byte S-boxes, P made of 8 XOR equations');
+}
+['caX','caK'].forEach(id=>document.getElementById(id).addEventListener('input',runCA));
+
+// ======================= boot ==========================================
+function renderLegend(){
+  const Lg=I18N[window.LANG].lvlLegend;
+  document.getElementById('lvlLegend').innerHTML=[1,2,3].map((n,i)=>'<span>'+window.atlasBadge(n)+' '+Lg[i]+'</span>').join('');
+}
+function runAll(){ runFei(); runAv(); runModes(); runGCM(); runBF(); runSE(); runID(); runGO(); runCA(); }
+renderRefs(); runAll();
+window.onLangChange=function(){ renderLegend(); renderRefs(); runAll(); };
+</script>
+</body>
+</html>

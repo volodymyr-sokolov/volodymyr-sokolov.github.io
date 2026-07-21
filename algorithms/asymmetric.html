@@ -28,7 +28,8 @@
   <!-- ============================================================ RSA -->
   <section id="rsa">
     <div class="num">01 / RSA</div>
-    <h2><span class="badge l1 lg">I</span> <span data-en="RSA — factoring is hard" data-uk="RSA — факторизація складна">RSA — factoring is hard</span></h2>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c2">O(n³)</span> <span data-en="RSA — factoring is hard" data-uk="RSA — факторизація складна">RSA — factoring is hard</span></h2>
+    <div class="formula">c = mᵉ mod n &nbsp;·&nbsp; m = cᵈ mod n &nbsp;·&nbsp; d = e⁻¹ mod φ(n)</div>
     <p class="desc" data-en="Pick two primes <b>p, q</b>. Their product <b>n = p·q</b> is public; recovering p and q from n is the hard problem. The public exponent <b>e</b> encrypts, and its inverse <b>d = e⁻¹ mod φ(n)</b> — computable only if you know φ(n) = (p−1)(q−1) — decrypts. Change the inputs and watch every step recompute."
        data-uk="Оберіть два прості <b>p, q</b>. Їхній добуток <b>n = p·q</b> — відкритий; відновити p і q з n — складна задача. Відкритий показник <b>e</b> шифрує, а обернений <b>d = e⁻¹ mod φ(n)</b> — обчислюваний лише якщо відомо φ(n) = (p−1)(q−1) — розшифровує. Змінюйте вхідні дані та спостерігайте перерахунок.">Pick two primes…</p>
     <div class="panel">
@@ -40,12 +41,28 @@
       </div>
       <div class="readout" id="rsaOut"></div>
     </div>
+    <div id="refs-rsa"></div>
+    <div class="hint" data-en="Used in: OpenSSL, and virtually every TLS stack." data-uk="Використовується в: OpenSSL і майже кожному стеку TLS." data-i18n-html="1"></div>
+    <div class="refs"><a class="ext" href="https://github.com/openssl/openssl/tree/master/crypto/rsa" target="_blank" rel="noopener"><span class="ref-tag">code</span>OpenSSL crypto/rsa</a></div>
+    <div class="strength">
+      <div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Secure at <b>2048–4096-bit</b> moduli. Textbook RSA (no padding) is malleable and insecure — real use requires OAEP for encryption and PSS for signatures. Notable failures: low public-exponent and Coppersmith attacks (broadcast, partial key exposure), <b>ROCA</b> (weak key generation, CVE-2017-15361), and shared-prime/low-entropy factoring. Broken outright by Shor's algorithm on a large quantum computer."
+            data-uk="Безпечний при модулях <b>2048–4096 біт</b>. «Підручниковий» RSA (без доповнення) є малейбельним і небезпечним — реальне застосування вимагає OAEP для шифрування та PSS для підписів. Відомі провали: атаки з малим показником та Копперсміта (широкомовлення, часткове розкриття ключа), <b>ROCA</b> (слабка генерація ключів, CVE-2017-15361), факторизація за спільними простими. Повністю ламається алгоритмом Шора на великому квантовому комп'ютері." data-i18n-html="1"></span>
+    </div>
+    <div class="xrefs">
+      <a href="cryptanalysis.html#gnfs" data-en="→ factoring attacks" data-uk="→ атаки факторизації">→ factoring attacks</a>
+      <a href="signatures.html#rsapss" data-en="→ RSA-PSS signatures" data-uk="→ підписи RSA-PSS">→ RSA-PSS signatures</a>
+      <a href="numbertheory.html#miller" data-en="→ prime generation" data-uk="→ генерація простих">→ prime generation</a>
+      <a href="advanced.html#coppersmith" data-en="→ Coppersmith attack" data-uk="→ атака Копперсміта">→ Coppersmith</a>
+      <a href="quantum.html#shor-q" data-en="→ Shor's algorithm" data-uk="→ алгоритм Шора">→ Shor</a>
+    </div>
   </section>
 
   <!-- ======================================================== ElGamal -->
   <section id="elgamal">
     <div class="num">02 / ElGamal</div>
-    <h2><span class="badge l2 lg">II</span> <span data-en="ElGamal — discrete logarithm" data-uk="Ель-Гамаля — дискретний логарифм">ElGamal — discrete logarithm</span></h2>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span> <span data-en="ElGamal — discrete logarithm" data-uk="Ель-Гамаля — дискретний логарифм">ElGamal — discrete logarithm</span></h2>
+    <div class="formula">h = gˣ &nbsp;·&nbsp; (c₁,c₂) = (gᵏ, m·hᵏ) &nbsp;·&nbsp; m = c₂·(c₁ˣ)⁻¹ mod p</div>
     <p class="desc" data-en="Work in a prime field with generator <b>g</b>. The private key is a number <b>x</b>; the public key is <b>h = gˣ mod p</b>. Encryption picks a fresh random <b>k</b> each time, so the same message gives different ciphertexts — that randomness is what ElGamal adds over textbook RSA. Decryption undoes it with the private x."
        data-uk="Працюємо у простому полі з генератором <b>g</b>. Приватний ключ — число <b>x</b>; відкритий ключ — <b>h = gˣ mod p</b>. Шифрування щоразу бере нове випадкове <b>k</b>, тож те саме повідомлення дає різні шифротексти — саме цю випадковість Ель-Гамаль додає порівняно з «підручниковим» RSA. Розшифрування знімає її приватним x.">Work in a prime field…</p>
     <div class="panel">
@@ -58,12 +75,25 @@
       <button id="egRoll" data-en="↻ new random k &amp; encrypt" data-uk="↻ нове випадкове k і шифрувати">↻ new random k &amp; encrypt</button>
       <div class="readout" id="egOut"></div>
     </div>
+    <div id="refs-elgamal"></div>
+    <div class="strength">
+      <div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Rests on the <b>discrete-logarithm</b> problem in a prime field; needs a 2048–3072-bit prime for parity with RSA-2048. Ciphertext is twice the message size. <b>Fatal if the random k is reused or biased</b> — the private key falls out (the same flaw that broke the Sony PS3). Broken by index-calculus/NFS classically and by Shor quantumly."
+            data-uk="Спирається на задачу <b>дискретного логарифму</b> у простому полі; потребує 2048–3072-бітного простого для паритету з RSA-2048. Шифротекст удвічі більший за повідомлення. <b>Фатально, якщо випадкове k повторюється або зміщене</b> — приватний ключ відновлюється (та сама вада, що зламала Sony PS3). Ламається index-calculus/NFS класично та Шором квантово." data-i18n-html="1"></span>
+    </div>
+    <div class="xrefs">
+      <a href="keyexchange.html#dh" data-en="→ Diffie–Hellman" data-uk="→ Діффі–Хеллман">→ Diffie–Hellman</a>
+      <a href="signatures.html#dsa" data-en="→ DSA signatures" data-uk="→ підписи DSA">→ DSA</a>
+      <a href="cryptanalysis.html#index" data-en="→ index calculus" data-uk="→ index calculus">→ index calculus</a>
+      <a href="cryptanalysis.html#shanks" data-en="→ baby-step giant-step" data-uk="→ baby-step giant-step">→ BSGS</a>
+    </div>
   </section>
 
   <!-- ========================================================== Rabin -->
   <section id="rabin">
     <div class="num">03 / Rabin</div>
-    <h2><span class="badge l2 lg">II</span> <span data-en="Rabin — squaring, and four roots back" data-uk="Рабіна — піднесення до квадрата й чотири корені назад">Rabin — squaring, and four roots back</span></h2>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span> <span data-en="Rabin — squaring, and four roots back" data-uk="Рабіна — піднесення до квадрата й чотири корені назад">Rabin — squaring, and four roots back</span></h2>
+    <div class="formula">c = m² mod n &nbsp;·&nbsp; m = √c mod n &nbsp;(4 roots via CRT, p≡q≡3 mod 4)</div>
     <p class="desc" data-en="Encryption is just <b>c = m² mod n</b> — beautifully simple. The catch is decryption: every square modulo n = p·q has <b>four</b> square roots, so decryption returns four candidates and you need redundancy in the message to pick the right one. Rabin is special because breaking it is <b>provably</b> as hard as factoring n. Primes here satisfy p ≡ q ≡ 3 (mod 4) so roots are easy to compute."
        data-uk="Шифрування — це просто <b>c = m² mod n</b>, елегантно просто. Складність — у розшифруванні: кожен квадрат за модулем n = p·q має <b>чотири</b> квадратні корені, тож розшифрування повертає чотири кандидати, і потрібна надмірність у повідомленні, щоб обрати правильний. Рабіна особлива тим, що зламати її <b>доказово</b> так само складно, як факторизувати n. Прості тут задовольняють p ≡ q ≡ 3 (mod 4), тож корені легко обчислити.">Encryption is just c = m² mod n…</p>
     <div class="panel">
@@ -74,12 +104,24 @@
       </div>
       <div class="readout" id="rbOut"></div>
     </div>
+    <div id="refs-rabin"></div>
+    <div class="strength">
+      <div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Decryption is <b>provably equivalent to factoring n</b> — a rare, clean security reduction. The price is the four-way ambiguity of the square root, resolved with message redundancy. Note the reduction only holds against passive attackers; a chosen-ciphertext oracle that returns roots can itself be used to factor n, so padding is still required."
+            data-uk="Розшифрування <b>доказово еквівалентне факторизації n</b> — рідкісна, чиста редукція безпеки. Ціна — чотириразова неоднозначність кореня, що усувається надмірністю повідомлення. Редукція діє лише проти пасивного атакувальника; оракул на обраний шифротекст, що повертає корені, сам дозволяє факторизувати n, тож доповнення все одно потрібне." data-i18n-html="1"></span>
+    </div>
+    <div class="xrefs">
+      <a href="asymmetric.html#rsa" data-en="→ RSA" data-uk="→ RSA">→ RSA</a>
+      <a href="numbertheory.html#tonelli" data-en="→ square roots mod p" data-uk="→ квадратні корені mod p">→ Tonelli–Shanks</a>
+      <a href="cryptanalysis.html#fermat-f" data-en="→ factoring" data-uk="→ факторизація">→ factoring</a>
+    </div>
   </section>
 
   <!-- ======================================================= Paillier -->
   <section id="paillier">
     <div class="num">04 / Paillier</div>
-    <h2><span class="badge l3 lg">III</span> <span data-en="Paillier — encryption you can add" data-uk="Paillier — шифрування, яке можна додавати">Paillier — encryption you can add</span></h2>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(n³)</span> <span data-en="Paillier — encryption you can add" data-uk="Paillier — шифрування, яке можна додавати">Paillier — encryption you can add</span></h2>
+    <div class="formula">c = gᵐ·rⁿ mod n² &nbsp;·&nbsp; Dec(c₁·c₂) = m₁ + m₂ &nbsp;(mod n)</div>
     <p class="desc" data-en="Paillier is <b>additively homomorphic</b>: multiply two ciphertexts and you get an encryption of the <b>sum</b> of the plaintexts — without ever decrypting. That is the foundation of privacy-preserving voting, aggregation and federated statistics. The demo encrypts two numbers, multiplies the ciphertexts, and decrypts the product to show m₁ + m₂ falls out."
        data-uk="Paillier є <b>адитивно гомоморфним</b>: перемножте два шифротексти — і отримаєте шифрування <b>суми</b> відкритих текстів, жодного разу не розшифровуючи. Це основа приватного голосування, агрегації та федеративної статистики. Демо шифрує два числа, перемножує шифротексти й розшифровує добуток, показуючи, що виходить m₁ + m₂.">Paillier is additively homomorphic…</p>
     <div class="panel">
@@ -92,24 +134,48 @@
       <button id="paRun" data-en="↻ encrypt, add homomorphically" data-uk="↻ шифрувати та додати гомоморфно">↻ encrypt, add homomorphically</button>
       <div class="readout" id="paOut"></div>
     </div>
+    <div id="refs-paillier"></div>
+    <div class="strength">
+      <div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Semantically secure under the <b>Decisional Composite Residuosity</b> assumption (tied to factoring n). Additively homomorphic and re-randomisable, which is exactly what e-voting and private aggregation need — but the same malleability means it must never be used where ciphertext integrity matters without an added proof. Like RSA, factoring-based and thus quantum-broken."
+            data-uk="Семантично безпечний за припущенням <b>Decisional Composite Residuosity</b> (пов'язаним з факторизацією n). Адитивно гомоморфний і повторно рандомізовний — саме це потрібно для е-голосування та приватної агрегації — але та сама малейбельність означає, що без окремого доказу його не можна застосовувати там, де важлива цілісність шифротексту. Як і RSA, базується на факторизації й тому вразливий до квантових атак." data-i18n-html="1"></span>
+    </div>
+    <div class="xrefs">
+      <a href="advanced.html#gentry" data-en="→ fully homomorphic encryption" data-uk="→ повністю гомоморфне шифрування">→ FHE</a>
+      <a href="advanced.html#shamir" data-en="→ secret sharing" data-uk="→ розділення секрету">→ secret sharing</a>
+      <a href="advanced.html#snark" data-en="→ zero-knowledge proofs" data-uk="→ докази з нульовим розголошенням">→ ZKP</a>
+    </div>
   </section>
 
   <!-- ============================================================ ECC -->
   <section id="ecc">
     <div class="num">05 / ECC · ECIES</div>
-    <h2><span class="badge l2 lg">II</span> <span data-en="Elliptic-curve encryption" data-uk="Шифрування на еліптичних кривих">Elliptic-curve encryption</span></h2>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span> <span data-en="Elliptic-curve encryption" data-uk="Шифрування на еліптичних кривих">Elliptic-curve encryption</span></h2>
     <p class="desc" data-en="Elliptic curves give the same discrete-logarithm hardness as ElGamal but with far smaller keys. ECIES wraps an ephemeral ECDH key exchange around a symmetric cipher. The geometry — point addition, scalar multiplication, key exchange, and now <b>twisted Edwards curves</b> — has its own interactive page."
        data-uk="Еліптичні криві дають ту саму складність дискретного логарифму, що й Ель-Гамаль, але з набагато меншими ключами. ECIES огортає ефемерний обмін ключами ECDH навколо симетричного шифру. Геометрія — додавання точок, скалярне множення, обмін ключами і тепер <b>скручені криві Едвардса</b> — має власну інтерактивну сторінку.">Elliptic curves give the same…</p>
     <div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap">
       <div class="eq-hero" style="margin:0">x² + y² = 1 + d·x²·y²</div>
-      <a href="edwards.html"><button style="font-size:14px" data-en="Open the Edwards-curve lab →" data-uk="Відкрити лабораторію кривих Едвардса →">Open the Edwards-curve lab →</button></a>
+	  <a href="edwards.html"><button style="font-size:14px" data-en="Open the Edwards-curve lab →" data-uk="Відкрити лабораторію кривих Едвардса →">Open the Edwards-curve lab →</button></a>
+    </div>
+    <div id="refs-ecc"></div>
+    <div class="strength">
+      <div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Elliptic-curve discrete log has no known sub-exponential attack, so <b>256-bit curves match 3072-bit RSA</b>. Risks live in the details: weak or backdoored curve parameters, invalid-curve and small-subgroup attacks, and nonce/side-channel leakage. Curve25519/Ed25519 were designed to sidestep these. Quantum-broken by Shor."
+            data-uk="Для еліптичного дискретного логарифму немає відомої субекспоненційної атаки, тож <b>256-бітні криві еквівалентні 3072-бітному RSA</b>. Ризики — в деталях: слабкі або з «закладками» параметри кривих, атаки на невалідну криву та малу підгрупу, витік через nonce/побічні канали. Curve25519/Ed25519 спроектовані, щоб їх уникати. Ламається Шором." data-i18n-html="1"></span>
+    </div>
+    <div class="refs"><a class="ext" href="https://github.com/openssl/openssl/tree/master/crypto/ec" target="_blank" rel="noopener"><span class="ref-tag">code</span>OpenSSL crypto/ec</a></div>
+    <div class="xrefs">
+      <a href="edwards.html" data-en="→ Edwards & twisted curves" data-uk="→ криві Едвардса та скручені">→ Edwards curves</a>
+      <a href="keyexchange.html#ecdh" data-en="→ ECDH" data-uk="→ ECDH">→ ECDH</a>
+      <a href="signatures.html#eddsa" data-en="→ EdDSA / Ed25519" data-uk="→ EdDSA / Ed25519">→ EdDSA</a>
+      <a href="numbertheory.html#tonelli" data-en="→ point decompression" data-uk="→ декомпресія точок">→ point decompression</a>
     </div>
   </section>
 
   <!-- ============================================================ PQC -->
   <section id="pqc">
     <div class="num">06 / post-quantum</div>
-    <h2><span class="badge l3 lg">III</span> <span data-en="Post-quantum encryption (NIST PQC)" data-uk="Постквантове шифрування (NIST PQC)">Post-quantum encryption (NIST PQC)</span></h2>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c1">O(n log n)</span> <span data-en="Post-quantum encryption (NIST PQC)" data-uk="Постквантове шифрування (NIST PQC)">Post-quantum encryption (NIST PQC)</span></h2>
     <p class="desc" data-en="Shor's algorithm breaks RSA, ElGamal and ECC on a large quantum computer. These families rest on problems believed to survive it — lattices and error-correcting codes."
        data-uk="Алгоритм Шора ламає RSA, Ель-Гамаля та ECC на великому квантовому комп'ютері. Ці сімейства спираються на задачі, що, як вважають, його переживуть — решітки та коди, що виправляють помилки.">Shor's algorithm breaks RSA…</p>
     <div class="algo-grid">
@@ -136,6 +202,22 @@
       </div>
       <button id="lweRun" data-en="↻ generate keys &amp; encrypt bit" data-uk="↻ згенерувати ключі та зашифрувати біт">↻ generate keys &amp; encrypt bit</button>
       <div class="readout" id="lweOut"></div>
+    </div>
+    <div id="refs-pqc"></div>
+    <div class="refs">
+      <a class="ext" href="https://github.com/open-quantum-safe/liboqs" target="_blank" rel="noopener"><span class="ref-tag">code</span>liboqs</a>
+      <a class="ext" href="https://github.com/PQClean/PQClean" target="_blank" rel="noopener"><span class="ref-tag">code</span>PQClean</a>
+    </div>
+    <div class="strength">
+      <div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Kyber (ML-KEM) was standardised as <b>FIPS 203</b> in 2024; its security rests on module-LWE lattice hardness estimated via LLL/BKZ. McEliece is unbroken after 40+ years but has megabyte-sized keys. Caveats: implementation side-channels, decryption-failure attacks, and the fact that lattice hardness estimates are still maturing — hence hybrid (X25519 + ML-KEM) deployment today."
+            data-uk="Kyber (ML-KEM) стандартизовано як <b>FIPS 203</b> у 2024 році; його безпека спирається на складність module-LWE, оцінювану через LLL/BKZ. McEliece не зламано понад 40 років, але має ключі розміром у мегабайти. Застереження: побічні канали реалізації, атаки на збої розшифрування та те, що оцінки складності решіток ще дозрівають — звідси гібридне (X25519 + ML-KEM) впровадження сьогодні." data-i18n-html="1"></span>
+    </div>
+    <div class="xrefs">
+      <a href="advanced.html#lll" data-en="→ lattice reduction (LLL/BKZ)" data-uk="→ редукція решіток (LLL/BKZ)">→ LLL / BKZ</a>
+      <a href="quantum.html#shor-q" data-en="→ why: Shor's algorithm" data-uk="→ чому: алгоритм Шора">→ Shor</a>
+      <a href="signatures.html#dilithium" data-en="→ post-quantum signatures" data-uk="→ постквантові підписи">→ Dilithium / SPHINCS+</a>
+      <a href="stream.html#berlekamp-rs" data-en="→ code-based decoding" data-uk="→ декодування кодів">→ code decoding</a>
     </div>
   </section>
 
@@ -328,6 +410,43 @@ function runLWE(){
     `<span class="b">${UK()?'розшифрування':'decrypt'}</span>: v − u·s ≈ ${d}  (${UK()?'близько до':'near'} ${d<q/4||d>3*q/4?'0':'⌊q/2⌋'}) ⇒ <span class="s">${recovered}</span>  ${recovered===bit?'✓':'✗ (noise too large — retry)'}`;
 }
 
+// ---------------------------- references ------------------------------
+const REFS = {
+  rsa:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/RSA_(cryptosystem)',label:'RSA'}, uk:{href:'https://uk.wikipedia.org/wiki/RSA',label:'RSA'}},
+    {tag:'rfc',  en:{href:'https://www.rfc-editor.org/rfc/rfc8017',label:'RFC 8017 (PKCS#1)'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1145/359340.359342',label:'Rivest–Shamir–Adleman 1978'}}
+  ],
+  elgamal:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/ElGamal_encryption',label:'ElGamal'}, uk:{href:'https://uk.wikipedia.org/wiki/Схема_Ель-Гамаля',label:'Схема Ель-Гамаля'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1109/TIT.1985.1057074',label:'ElGamal 1985'}}
+  ],
+  rabin:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Rabin_cryptosystem',label:'Rabin cryptosystem'}, uk:{href:'https://uk.wikipedia.org/wiki/Криптосистема_Рабіна',label:'Криптосистема Рабіна'}},
+    {tag:'paper',en:{href:'https://apps.dtic.mil/sti/citations/ADA078415',label:'Rabin 1979 (MIT/LCS TR-212)'}}
+  ],
+  paillier:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Paillier_cryptosystem',label:'Paillier'}, uk:{href:'https://uk.wikipedia.org/wiki/Криптосистема_Пайє',label:'Криптосистема Пайє'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-48910-X_16',label:'Paillier 1999 (EUROCRYPT)'}}
+  ],
+  ecc:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Elliptic-curve_cryptography',label:'ECC'}, uk:{href:'https://uk.wikipedia.org/wiki/Криптографія_на_еліптичних_кривих',label:'ECC'}},
+    {tag:'rfc',  en:{href:'https://www.rfc-editor.org/rfc/rfc7748',label:'RFC 7748 (X25519)'}},
+    {tag:'sec',  en:{href:'https://www.secg.org/sec1-v2.pdf',label:'SEC 1 / ECIES'}}
+  ],
+  pqc:[
+    {tag:'fips', en:{href:'https://csrc.nist.gov/pubs/fips/203/final',label:'FIPS 203 (ML-KEM)'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Kyber',label:'Kyber'}},
+    {tag:'nist', en:{href:'https://csrc.nist.gov/projects/post-quantum-cryptography',label:'NIST PQC project'}}
+  ]
+};
+function renderRefs(){
+  Object.keys(REFS).forEach(id=>{
+    const el=document.getElementById('refs-'+id);
+    if(el) el.innerHTML=window.atlasRefs(REFS[id]);
+  });
+}
+
 // ---------------------------- boot ------------------------------------
 function renderLegend(){
   const Lg=I18N[window.LANG].lvlLegend;
@@ -335,7 +454,7 @@ function renderLegend(){
 }
 initRSA(); initElGamal(); initRabin(); initPaillier(); initLWE();
 window.onLangChange=function(){
-  renderLegend();
+  renderLegend(); renderRefs();
   runRSA(); runElGamal(); runRabin(); runPaillier(); runLWE();
 };
 </script>

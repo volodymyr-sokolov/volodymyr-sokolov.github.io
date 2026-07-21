@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Number theory toolbox — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="numtheory">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Sections 11 · 13 — residues &amp; primality" data-uk="Розділи 11 · 13 — лишки та простота">Sections 11 · 13 — residues &amp; primality</div>
+    <h1 data-en="Number theory toolbox" data-uk="Інструментарій теорії чисел">Number theory toolbox</h1>
+    <div class="eq-hero">x² ≡ n (mod p)&nbsp;&nbsp;·&nbsp;&nbsp;n−1 = 2ˢ·d</div>
+    <p class="lede" data-en="Two toolboxes the rest of the atlas quietly depends on. Quadratic residues — telling squares from non-squares and extracting square roots mod p — feed Rabin decryption, elliptic-curve point decompression and the quadratic sieve. And primality tests are where every RSA, DH or DSA key begins: three probabilistic tests with very different guarantees, plus the deterministic AKS."
+       data-uk="Два набори інструментів, на які мовчки спирається решта атласу. Квадратичні лишки — відрізнити квадрати від неквадратів і добути квадратний корінь за модулем p — потрібні для розшифрування Рабіна, розпакування точок еліптичних кривих і квадратичного решета. А тести простоти — початок кожного ключа RSA, DH чи DSA: три імовірнісні тести з дуже різними гарантіями плюс детермінований AKS.">Two toolboxes the rest of the atlas quietly depends on…</p>
+    <div class="legend-lvls" id="lvlLegend"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ================================================ Legendre / Jacobi -->
+  <section id="legendre">
+    <div class="num">01 / Legendre · Jacobi</div>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(log p)</span>
+        <span data-en="Legendre &amp; Jacobi symbols — residue or not?" data-uk="Символи Лежандра та Якобі — лишок чи ні?">Legendre &amp; Jacobi symbols — residue or not?</span></h2>
+    <div class="formula">(a/p) ≡ a^((p−1)/2) (mod p) ∈ {−1, 0, +1}</div>
+    <p class="desc" data-en="For an odd prime p, half the nonzero residues are squares (quadratic residues) and half are not. The Legendre symbol (a/p) records which side a falls on: +1, −1, or 0 when p | a. Euler’s criterion computes it with one exponentiation, and the <b>Jacobi symbol</b> extends it to any odd n through quadratic reciprocity — computable with a GCD-like loop <b>without factoring n</b>. That single fact turns it from a curiosity into a cryptographic tool: it drives the Solovay–Strassen test and the Goldwasser–Micali cryptosystem."
+       data-uk="Для непарного простого p половина ненульових лишків є квадратами (квадратичними лишками), а половина — ні. Символ Лежандра (a/p) фіксує, з якого боку опинилося a: +1, −1 або 0, коли p | a. Критерій Ейлера обчислює його одним піднесенням до степеня, а <b>символ Якобі</b> поширює це на будь-яке непарне n через квадратичну взаємність — обчислюється циклом на кшталт НСД <b>без факторизації n</b>. Саме цей факт робить його криптографічним інструментом: на ньому працюють тест Соловея–Штрассена та криптосистема Голдвассер–Мікалі.">For an odd prime p…</p>
+    <div id="refs-legendre"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="lgCanvas" width="420" height="420"></canvas>
+        <div class="controls">
+          <div class="ctrl">
+            <label><span data-en="prime p" data-uk="просте p">prime p</span> <span class="val" id="lgPVal">101</span></label>
+            <select id="lgP"><option>13</option><option>29</option><option>53</option><option selected>101</option><option>173</option></select>
+          </div>
+          <div class="hint" data-en="The map colours a = 1 … p−1: teal = quadratic residue (a is a square mod p), rose = non-residue. Click a cell to run Euler’s criterion on it."
+               data-uk="Карта розфарбовує a = 1 … p−1: бірюзовий = квадратичний лишок (a є квадратом mod p), рожевий = нелишок. Клікніть клітинку, щоб застосувати до неї критерій Ейлера.">The map colours a = 1 … p−1…</div>
+          <div class="legend">
+            <div><span class="dot" style="background:var(--teal)"></span><span data-en="residue (+1)" data-uk="лишок (+1)">residue (+1)</span></div>
+            <div><span class="dot" style="background:var(--rose)"></span><span data-en="non-residue (−1)" data-uk="нелишок (−1)">non-residue (−1)</span></div>
+          </div>
+          <div class="readout" id="lgOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub" data-en="Jacobi symbol calculator — reciprocity step by step" data-uk="Калькулятор символу Якобі — взаємність крок за кроком">Jacobi symbol calculator</h3>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label>a</label><input type="number" id="jaA" value="1001" style="width:110px"></div>
+        <div class="ctrl"><label data-en="odd n" data-uk="непарне n">odd n</label><input type="number" id="jaN" value="9907" min="3" step="2" style="width:110px"></div>
+      </div>
+      <div class="readout" id="jaOut"></div>
+    </div>
+
+    <p class="hint"><span data-en="Real-world code: " data-uk="Реальний код: ">Real-world code: </span><a class="ext" href="https://gmplib.org/repo/gmp/file/tip/mpz/jacobi.c" target="_blank" rel="noopener">gmp/mpz/jacobi.c</a></p>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en='These are analysis tools, not ciphers — but real assumptions sit on them. The Jacobi symbol (a/n) is computable fast <b>without</b> the factors of n; yet deciding whether an a with (a/n) = +1 is actually a square mod n = p·q is believed to require factoring — the <a class="ext" href="https://en.wikipedia.org/wiki/Quadratic_residuosity_problem" target="_blank" rel="noopener">quadratic residuosity assumption</a> behind the <a class="ext" href="https://en.wikipedia.org/wiki/Goldwasser%E2%80%93Micali_cryptosystem" target="_blank" rel="noopener">Goldwasser–Micali</a> cryptosystem. Euler’s criterion also warns: one exponentiation leaks a ciphertext’s residue class — the one bit textbook ElGamal leaks about its plaintext.'
+            data-uk='Це інструменти аналізу, а не шифри — але на них тримаються реальні припущення. Символ Якобі (a/n) швидко обчислюється <b>без</b> знання множників n; водночас визначити, чи a з (a/n) = +1 справді є квадратом mod n = p·q, як вважається, неможливо без факторизації — це <a class="ext" href="https://en.wikipedia.org/wiki/Quadratic_residuosity_problem" target="_blank" rel="noopener">припущення квадратичної лишковості</a>, на якому стоїть криптосистема <a class="ext" href="https://en.wikipedia.org/wiki/Goldwasser%E2%80%93Micali_cryptosystem" target="_blank" rel="noopener">Голдвассер–Мікалі</a>. Критерій Ейлера також застерігає: одне піднесення до степеня видає клас лишковості шифротексту — той самий біт, який «підручниковий» Ель-Гамаль зливає про відкритий текст.'>These are analysis tools…</span></div>
+
+    <div class="xrefs">
+      <a href="#tonelli" data-en="Tonelli–Shanks" data-uk="Тонеллі–Шенкс">Tonelli–Shanks</a>
+      <a href="#cipolla" data-en="Cipolla" data-uk="Cipolla">Cipolla</a>
+      <a href="#solovay" data-en="Solovay–Strassen" data-uk="Соловей–Штрассен">Solovay–Strassen</a>
+      <a href="asymmetric.html#rabin" data-en="Rabin cryptosystem" data-uk="Криптосистема Рабіна">Rabin cryptosystem</a>
+      <a href="cryptanalysis.html#qs" data-en="Quadratic sieve" data-uk="Квадратичне решето">Quadratic sieve</a>
+    </div>
+  </section>
+
+  <!-- ==================================================== Tonelli–Shanks -->
+  <section id="tonelli">
+    <div class="num">02 / Tonelli–Shanks</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(log²p)</span>
+        <span data-en="Tonelli–Shanks — square roots mod p" data-uk="Тонеллі–Шенкс — квадратні корені за модулем p">Tonelli–Shanks — square roots mod p</span></h2>
+    <div class="formula">p ≡ 3 (mod 4):&nbsp; x = n^((p+1)/4) &nbsp;·&nbsp; else: p−1 = q·2ˢ</div>
+    <p class="desc" data-en="Given a quadratic residue n mod prime p, find x with x² ≡ n. When p ≡ 3 (mod 4) one exponentiation suffices: x = n^((p+1)/4). The general case writes p − 1 = q·2ˢ and uses any non-residue z to walk the 2-Sylow subgroup, correcting the candidate root bit by bit until t = 1. This is how elliptic-curve libraries decompress points (recover y from x) and how the quadratic sieve extracts its roots."
+       data-uk="Для квадратичного лишку n за простим модулем p знайти x із x² ≡ n. Якщо p ≡ 3 (mod 4), досить одного піднесення: x = n^((p+1)/4). Загальний випадок записує p − 1 = q·2ˢ і використовує довільний неквадрат z, щоб «пройтися» 2-силовською підгрупою, виправляючи кандидата в корені біт за бітом, доки t = 1. Саме так бібліотеки еліптичних кривих розпаковують точки (відновлюють y з x) і так квадратичне решето добуває свої корені.">Given a quadratic residue n mod prime p…</p>
+    <div id="refs-tonelli"></div>
+
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label data-en="prime p" data-uk="просте p">prime p</label>
+          <input type="number" id="tsP" value="41" min="3" style="width:110px"></div>
+        <div class="ctrl"><label>n</label><input type="number" id="tsN" value="5" min="0" style="width:110px"></div>
+        <div class="ctrl"><label data-en="method" data-uk="метод">method</label>
+          <select id="tsMethod">
+            <option value="ts" selected>Tonelli–Shanks</option>
+            <option value="ci" data-en="Cipolla (alternate)" data-uk="Cipolla (альтернатива)">Cipolla (alternate)</option>
+          </select></div>
+      </div>
+      <div class="readout" id="tsOut"></div>
+      <div class="hint" data-en="Type any odd prime p up to 10⁹: p = 23 shows the p ≡ 3 (mod 4) shortcut; p = 97 or 113 (p−1 highly divisible by 2) iterates the full loop. The method switch runs Cipolla on the same inputs — same root, different route."
+           data-uk="Введіть будь-яке непарне просте p до 10⁹: p = 23 показує скорочення для p ≡ 3 (mod 4); p = 97 або 113 (p−1 сильно ділиться на 2) — ітерації повного циклу. Перемикач методу запускає Cipolla на тих самих входах — той самий корінь, інший шлях.">Type any odd prime p…</div>
+    </div>
+
+    <p class="hint"><span data-en="Real-world code: " data-uk="Реальний код: ">Real-world code: </span><a class="ext" href="https://github.com/openssl/openssl/blob/master/crypto/bn/bn_sqrt.c" target="_blank" rel="noopener">openssl/crypto/bn/bn_sqrt.c (BN_mod_sqrt)</a></p>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en='Always returns a correct root; the only randomized part is finding the non-residue z — each random try succeeds with probability 1/2, and no unconditional deterministic polynomial method is known (under GRH the least non-residue is &lt; 2·ln²p, <a class="ext" href="https://en.wikipedia.org/wiki/Quadratic_residue#Complexity_of_finding_square_roots" target="_blank" rel="noopener">Ankeny’s bound</a>). Operationally, variable-time square roots inside ECC point decompression have been a source of timing side channels, so production code such as OpenSSL’s BN_mod_sqrt is written to avoid secret-dependent branching.'
+            data-uk='Завжди повертає коректний корінь; єдина рандомізована частина — пошук неквадрата z: кожна випадкова спроба вдається з імовірністю 1/2, а безумовного детермінованого поліноміального методу не відомо (за GRH найменший неквадрат &lt; 2·ln²p, <a class="ext" href="https://en.wikipedia.org/wiki/Quadratic_residue#Complexity_of_finding_square_roots" target="_blank" rel="noopener">оцінка Анкені</a>). На практиці нерівномірний за часом корінь у розпакуванні точок ECC був джерелом часових витоків, тому код на кшталт BN_mod_sqrt в OpenSSL уникає гілкувань, залежних від секрету.'>Always returns a correct root…</span></div>
+
+    <div class="xrefs">
+      <a href="#legendre" data-en="Legendre symbol" data-uk="Символ Лежандра">Legendre symbol</a>
+      <a href="#cipolla" data-en="Cipolla" data-uk="Cipolla">Cipolla</a>
+      <a href="asymmetric.html#rabin" data-en="Rabin decryption" data-uk="Розшифрування Рабіна">Rabin decryption</a>
+      <a href="edwards.html#s2" data-en="Curve points mod p" data-uk="Точки кривої mod p">Curve points mod p</a>
+      <a href="cryptanalysis.html#qs" data-en="Quadratic sieve" data-uk="Квадратичне решето">Quadratic sieve</a>
+    </div>
+  </section>
+
+  <!-- =========================================================== Cipolla -->
+  <section id="cipolla">
+    <div class="num">03 / Cipolla</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c1">O(log p)</span>
+        <span data-en="Cipolla — square roots via F<sub>p²</sub>" data-uk="Cipolla — квадратні корені через F<sub>p²</sub>">Cipolla — square roots via F<sub>p²</sub></span></h2>
+    <div class="formula">x = (a + √ω)^((p+1)/2),&nbsp; ω = a²−n &nbsp;(non-residue)</div>
+    <p class="desc" data-en="An elegant alternative: pick a so that ω = a² − n is a non-residue, then adjoin √ω to build the field F<sub>p²</sub> — arithmetic on pairs u + v·√ω, exactly like complex numbers. In that field x = (a + √ω)^((p+1)/2) lands back in F<sub>p</sub> and squares to n. Cipolla costs O(log p) multiplications in F<sub>p²</sub> with no dependence on s, so it beats Tonelli–Shanks when p − 1 is divisible by a high power of two."
+       data-uk="Елегантна альтернатива: обираємо a так, щоб ω = a² − n було неквадратом, і приєднуємо √ω, будуючи поле F<sub>p²</sub> — арифметика на парах u + v·√ω, точно як із комплексними числами. У цьому полі x = (a + √ω)^((p+1)/2) повертається у F<sub>p</sub> і в квадраті дає n. Cipolla коштує O(log p) множень у F<sub>p²</sub> без залежності від s, тож виграє в Тонеллі–Шенкса, коли p − 1 ділиться на великий степінь двійки.">An elegant alternative…</p>
+    <div id="refs-cipolla"></div>
+
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label data-en="prime p" data-uk="просте p">prime p</label>
+          <select id="cpP"><option>13</option><option>37</option><option selected>41</option><option>97</option><option>193</option></select></div>
+        <div class="ctrl"><label>n</label><input type="number" id="cpN" value="10" min="0" style="width:110px"></div>
+      </div>
+      <div class="readout" id="cpOut"></div>
+    </div>
+
+    <p class="hint"><span data-en="Real-world code: " data-uk="Реальний код: ">Real-world code: </span><a class="ext" href="https://github.com/sympy/sympy/blob/master/sympy/ntheory/residue_ntheory.py" target="_blank" rel="noopener">sympy/ntheory/residue_ntheory.py (sqrt_mod)</a></p>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en='A Las Vegas algorithm, like Tonelli–Shanks: the answer is always correct, only the search for a is random (each a works with probability ≈ 1/2, so two tries expected). Complexity O(log p) multiplications in F<sub>p²</sub> versus O(log p + s²) in F<sub>p</sub> for Tonelli–Shanks — the crossover favours Cipolla for primes with large 2-adic valuation of p−1 (e.g. the FFT-friendly fields of zk-proof systems).'
+            data-uk='Алгоритм типу «Лас-Вегас», як і Тонеллі–Шенкс: відповідь завжди коректна, випадковим є лише пошук a (кожне a підходить з імовірністю ≈ 1/2, тобто очікувано дві спроби). Складність — O(log p) множень у F<sub>p²</sub> проти O(log p + s²) у F<sub>p</sub> для Тонеллі–Шенкса: перевага Cipolla настає для простих із великою 2-адичною валюацією p−1, наприклад у FFT-дружніх полях систем zk-доведень.'>A Las Vegas algorithm…</span></div>
+
+    <div class="xrefs">
+      <a href="#tonelli" data-en="Tonelli–Shanks" data-uk="Тонеллі–Шенкс">Tonelli–Shanks</a>
+      <a href="#legendre" data-en="Legendre symbol" data-uk="Символ Лежандра">Legendre symbol</a>
+      <a href="edwards.html#s2" data-en="Curve points mod p" data-uk="Точки кривої mod p">Curve points mod p</a>
+    </div>
+  </section>
+
+  <!-- ======================================================== Fermat test -->
+  <section id="fermat-p">
+    <div class="num" data-en="04 / Fermat test" data-uk="04 / тест Ферма">04 / Fermat test</div>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(k·log³n)</span>
+        <span data-en="Fermat test — necessary, not sufficient" data-uk="Тест Ферма — необхідно, але не достатньо">Fermat test — necessary, not sufficient</span></h2>
+    <div class="formula">aⁿ⁻¹ ≡ 1 (mod n)</div>
+    <p class="desc" data-en="Fermat’s little theorem: if n is prime, then a^(n−1) ≡ 1 (mod n) for every a coprime to n. The test runs this congruence for random bases and hopes the converse holds. It does not: 341 = 11·31 passes base 2, and <b>Carmichael numbers</b> such as 561 = 3·11·17 pass <b>every</b> coprime base — no number of rounds exposes them unless a base happens to share a factor with n. The map below colours every base at once, so pseudoprimes become visible at a glance."
+       data-uk="Мала теорема Ферма: якщо n просте, то a^(n−1) ≡ 1 (mod n) для кожного a, взаємно простого з n. Тест ганяє цю конгруенцію для випадкових основ, сподіваючись на обернене твердження. Але воно хибне: 341 = 11·31 проходить за основою 2, а <b>числа Кармайкла</b>, як-от 561 = 3·11·17, проходять за <b>всіма</b> взаємно простими основами — жодна кількість раундів їх не викриє, якщо основа випадково не поділяє з n спільний множник. Карта нижче розфарбовує всі основи одразу, тож псевдопрості видно з першого погляду.">Fermat’s little theorem…</p>
+    <div id="refs-fermat-p"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="feCanvas" width="420" height="420"></canvas>
+        <div class="controls">
+          <div class="ctrl">
+            <label>n <span class="val" id="feNVal">561</span></label>
+            <select id="feN">
+              <option value="97" data-en="97 (prime)" data-uk="97 (просте)">97 (prime)</option>
+              <option value="91" data-en="91 = 7·13" data-uk="91 = 7·13">91 = 7·13</option>
+              <option value="341" data-en="341 = 11·31 (pseudoprime base 2)" data-uk="341 = 11·31 (псевдопросте за основою 2)">341 = 11·31</option>
+              <option value="561" selected data-en="561 (Carmichael)" data-uk="561 (Кармайкла)">561 (Carmichael)</option>
+              <option value="1105" data-en="1105 (Carmichael)" data-uk="1105 (Кармайкла)">1105 (Carmichael)</option>
+              <option value="1729" data-en="1729 (Carmichael)" data-uk="1729 (Кармайкла)">1729 (Carmichael)</option>
+            </select>
+          </div>
+          <div class="hint" data-en="Each cell is a base a = 2 … n−1. Teal: a^(n−1) ≡ 1 — the test says «prime». Rose: witness of compositeness. Grey: gcd(a, n) > 1. Click a cell for the computation."
+               data-uk="Кожна клітинка — основа a = 2 … n−1. Бірюзовий: a^(n−1) ≡ 1 — тест каже «просте». Рожевий: свідок складеності. Сірий: gcd(a, n) > 1. Клікніть клітинку, щоб побачити обчислення.">Each cell is a base…</div>
+          <div class="legend">
+            <div><span class="dot" style="background:var(--teal)"></span><span data-en="passes (Fermat liar)" data-uk="проходить (брехун Ферма)">passes</span></div>
+            <div><span class="dot" style="background:var(--rose)"></span><span data-en="witness" data-uk="свідок">witness</span></div>
+            <div><span class="dot" style="background:#3A4A6B"></span>gcd &gt; 1</div>
+          </div>
+          <div class="readout" id="feOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint"><span data-en="Real-world code: used only as a cheap pre-filter before Miller–Rabin, e.g. in " data-uk="Реальний код: використовується лише як дешевий передфільтр перед Міллером–Рабіном, напр. у ">Real-world code: </span><a class="ext" href="https://github.com/openssl/openssl/tree/master/crypto/bn" target="_blank" rel="noopener">openssl/crypto/bn</a></p>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en='Broken as a standalone primality test. Beyond ordinary pseudoprimes, <a class="ext" href="https://en.wikipedia.org/wiki/Carmichael_number" target="_blank" rel="noopener">Carmichael numbers</a> fool it for all coprime bases, and Alford–Granville–Pomerance (<a class="ext" href="https://doi.org/10.2307/2118576" target="_blank" rel="noopener">1994</a>) proved there are infinitely many of them — so no fixed number of Fermat rounds gives a security guarantee. Libraries keep it only as a fast filter; the theorem itself lives on in the correctness proof of RSA, not in primality testing.'
+            data-uk='Як самостійний тест простоти — зламаний. Крім звичайних псевдопростих, <a class="ext" href="https://uk.wikipedia.org/wiki/Число_Кармайкла" target="_blank" rel="noopener">числа Кармайкла</a> обманюють його за всіма взаємно простими основами, а Алфорд–Ґренвілл–Померанс (<a class="ext" href="https://doi.org/10.2307/2118576" target="_blank" rel="noopener">1994</a>) довели, що їх нескінченно багато — отже жодна фіксована кількість раундів Ферма не дає гарантії. Бібліотеки тримають його лише як швидкий фільтр; сама теорема живе в доведенні коректності RSA, а не в тестуванні простоти.'>Broken as a standalone primality test…</span></div>
+
+    <div class="xrefs">
+      <a href="#miller" data-en="Miller–Rabin" data-uk="Міллер–Рабін">Miller–Rabin</a>
+      <a href="#solovay" data-en="Solovay–Strassen" data-uk="Соловей–Штрассен">Solovay–Strassen</a>
+      <a href="cryptanalysis.html#p1" data-en="Pollard’s p−1" data-uk="p−1 Полларда">Pollard’s p−1</a>
+      <a href="cryptanalysis.html#fermat-f" data-en="Fermat factoring" data-uk="Факторизація Ферма">Fermat factoring</a>
+      <a href="asymmetric.html#rsa" data-en="RSA" data-uk="RSA">RSA</a>
+    </div>
+  </section>
+
+  <!-- ======================================================= Miller–Rabin -->
+  <section id="miller">
+    <div class="num" data-en="05 / Miller–Rabin" data-uk="05 / Міллер–Рабін">05 / Miller–Rabin</div>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(k·log³n)</span>
+        <span data-en="Miller–Rabin — the workhorse" data-uk="Міллера–Рабіна — робоча конячка">Miller–Rabin — the workhorse</span></h2>
+    <div class="formula">n−1 = 2ˢ·d:&nbsp; aᵈ ≡ 1 &nbsp;or&nbsp; a^(2ʳd) ≡ −1 (mod n)</div>
+    <p class="desc" data-en="Strengthen Fermat: write n − 1 = 2ˢ·d with d odd. For prime n the chain a^d, a^2d, …, a^(n−1) must reach 1, and just before its first 1 must stand −1 — a prime field has no other square roots of 1. A base where the chain misbehaves is a <b>witness</b>; for any odd composite at least ¾ of all bases are witnesses, so k random rounds err with probability at most 4⁻ᵏ. This is the test behind essentially every RSA key ever generated."
+       data-uk="Підсилюємо Ферма: запишемо n − 1 = 2ˢ·d із непарним d. Для простого n ланцюжок a^d, a^2d, …, a^(n−1) мусить дійти до 1, а безпосередньо перед першою 1 має стояти −1 — у простому полі немає інших квадратних коренів з 1. Основа, де ланцюжок поводиться інакше, — <b>свідок</b>; для будь-якого непарного складеного щонайменше ¾ основ є свідками, тож k випадкових раундів помиляються з імовірністю не більше 4⁻ᵏ. Саме цей тест стоїть за фактично кожним згенерованим ключем RSA.">Strengthen Fermat…</p>
+    <div id="refs-miller"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="mrCanvas" width="420" height="420"></canvas>
+        <div class="controls">
+          <div class="ctrl">
+            <label>n <span class="val" id="mrNVal">561</span></label>
+            <select id="mrN">
+              <option value="101" data-en="101 (prime)" data-uk="101 (просте)">101 (prime)</option>
+              <option value="91">91 = 7·13</option>
+              <option value="121">121 = 11²</option>
+              <option value="325">325 = 5²·13</option>
+              <option value="561" selected data-en="561 (Carmichael)" data-uk="561 (Кармайкла)">561 (Carmichael)</option>
+              <option value="703">703 = 19·37</option>
+              <option value="1105" data-en="1105 (Carmichael)" data-uk="1105 (Кармайкла)">1105 (Carmichael)</option>
+            </select>
+          </div>
+          <div class="hint" data-en="Bases a = 2 … n−2. Teal: strong liar (test says «prime»). Rose: witness. Compare with the Fermat map — the same Carmichael 561 now lights up rose. Click a base to trace its squaring chain."
+               data-uk="Основи a = 2 … n−2. Бірюзовий: сильний брехун (тест каже «просте»). Рожевий: свідок. Порівняйте з картою Ферма — те саме число Кармайкла 561 тепер спалахує рожевим. Клікніть основу, щоб побачити ланцюжок піднесень до квадрата.">Bases a = 2 … n−2…</div>
+          <div class="legend">
+            <div><span class="dot" style="background:var(--teal)"></span><span data-en="strong liar" data-uk="сильний брехун">strong liar</span></div>
+            <div><span class="dot" style="background:var(--rose)"></span><span data-en="witness" data-uk="свідок">witness</span></div>
+            <div><span class="dot" style="background:#3A4A6B"></span>gcd &gt; 1</div>
+          </div>
+          <div class="readout" id="mrOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub" data-en="Run it like a library would" data-uk="Запуск, як у бібліотеці">Run it like a library would</h3>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label data-en="rounds k" data-uk="раундів k">rounds k</label><input type="number" id="mrK" value="5" min="1" max="20" style="width:80px"></div>
+        <div class="ctrl" style="align-self:flex-end"><button id="mrRun" data-en="↻ run k random rounds" data-uk="↻ запустити k випадкових раундів">↻ run k random rounds</button></div>
+      </div>
+      <div class="readout" id="mrOut2" data-en="Press «run k random rounds» — the tester uses the n selected above." data-uk="Натисніть «запустити k випадкових раундів» — тестер бере n, обране вище.">Press «run k random rounds»…</div>
+    </div>
+
+    <p class="hint"><span data-en="Real-world code: " data-uk="Реальний код: ">Real-world code: </span><a class="ext" href="https://github.com/openssl/openssl/blob/master/crypto/bn/bn_prime.c" target="_blank" rel="noopener">openssl/crypto/bn/bn_prime.c</a> · <a class="ext" href="https://gmplib.org/repo/gmp/file/tip/mpz/millerrabin.c" target="_blank" rel="noopener">gmp/mpz/millerrabin.c</a></p>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en='For odd composite n at most (n−1)/4 bases are strong liars, so k random rounds err with probability ≤ 4⁻ᵏ (much lower for random candidates). Testing the first 13 primes as bases is fully deterministic for n &lt; 3.3·10²⁴. The known danger is <b>fixed, public base sets</b>: Arnault (1995) constructed composites that pass many library defaults, which is why <a class="ext" href="https://csrc.nist.gov/pubs/fips/186-5/final" target="_blank" rel="noopener">FIPS 186-5</a> mandates random bases and fixes the round count per key size, and why GMP pairs it with a <a class="ext" href="https://en.wikipedia.org/wiki/Baillie%E2%80%93PSW_primality_test" target="_blank" rel="noopener">Baillie–PSW</a>-style Lucas step.'
+            data-uk='Для непарного складеного n сильних брехунів не більше (n−1)/4, тож k випадкових раундів помиляються з імовірністю ≤ 4⁻ᵏ (для випадкових кандидатів — значно менше). Перевірка перших 13 простих як основ повністю детермінована для n &lt; 3.3·10²⁴. Відома небезпека — <b>фіксовані публічні набори основ</b>: Арно (1995) побудував складені числа, що проходять типові бібліотечні набори, тому <a class="ext" href="https://csrc.nist.gov/pubs/fips/186-5/final" target="_blank" rel="noopener">FIPS 186-5</a> вимагає випадкових основ і фіксує кількість раундів для кожного розміру ключа, а GMP поєднує тест із кроком Лукаса в стилі <a class="ext" href="https://en.wikipedia.org/wiki/Baillie%E2%80%93PSW_primality_test" target="_blank" rel="noopener">Baillie–PSW</a>.'>For odd composite n…</span></div>
+
+    <div class="xrefs">
+      <a href="#fermat-p" data-en="Fermat test" data-uk="Тест Ферма">Fermat test</a>
+      <a href="#solovay" data-en="Solovay–Strassen" data-uk="Соловей–Штрассен">Solovay–Strassen</a>
+      <a href="#aks" data-en="AKS" data-uk="AKS">AKS</a>
+      <a href="asymmetric.html#rsa" data-en="RSA key generation" data-uk="Генерація ключів RSA">RSA key generation</a>
+      <a href="keyexchange.html#dh" data-en="DH safe primes" data-uk="Безпечні прості DH">DH safe primes</a>
+    </div>
+  </section>
+
+  <!-- =================================================== Solovay–Strassen -->
+  <section id="solovay">
+    <div class="num" data-en="06 / Solovay–Strassen" data-uk="06 / Соловей–Штрассен">06 / Solovay–Strassen</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(k·log³n)</span>
+        <span data-en="Solovay–Strassen — Euler’s criterion as a test" data-uk="Соловея–Штрассена — критерій Ейлера як тест">Solovay–Strassen — Euler’s criterion as a test</span></h2>
+    <div class="formula">a^((n−1)/2) ≡ (a/n) (mod n)</div>
+    <p class="desc" data-en="Run Euler’s criterion where it has no right to work: for odd n compute the Jacobi symbol (a/n) — which needs no factorisation — and compare it with a^((n−1)/2) mod n. Primes always agree; a composite n disagrees for at least half of the coprime bases, <b>Carmichael numbers included</b>. Historically decisive: the 1977 Solovay–Strassen paper made probabilistic primality testing — and therefore practical RSA key generation — respectable."
+       data-uk="Запускаємо критерій Ейлера там, де він не зобов’язаний працювати: для непарного n обчислюємо символ Якобі (a/n) — без факторизації — і порівнюємо з a^((n−1)/2) mod n. Прості завжди дають збіг; складене n розбігається щонайменше для половини взаємно простих основ, <b>включно з числами Кармайкла</b>. Історично вирішальний: стаття Соловея–Штрассена 1977 року зробила імовірнісні тести простоти — а отже й практичну генерацію ключів RSA — респектабельними.">Run Euler’s criterion…</p>
+    <div id="refs-solovay"></div>
+
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label data-en="odd n" data-uk="непарне n">odd n</label><input type="number" id="ssN" value="561" min="3" step="2" style="width:110px"></div>
+        <div class="ctrl"><label data-en="base a" data-uk="основа a">base a</label><input type="number" id="ssA" value="2" min="2" style="width:110px"></div>
+        <div class="ctrl" style="align-self:flex-end"><button id="ssRoll" data-en="↻ random base" data-uk="↻ випадкова основа">↻ random base</button></div>
+      </div>
+      <div class="readout" id="ssOut"></div>
+      <div class="hint" data-en="Default n = 561: the Carmichael number that fools Fermat for every coprime base is caught here already at a = 2."
+           data-uk="Типове n = 561: число Кармайкла, що обманює Ферма за всіма взаємно простими основами, тут ловиться вже при a = 2.">Default n = 561…</div>
+    </div>
+
+    <p class="hint"><span data-en="Superseded in practice — e.g. OpenJDK combines Miller–Rabin with a Lucas–Lehmer step: " data-uk="На практиці витіснений — напр., OpenJDK поєднує Міллера–Рабіна з кроком Лукаса–Лемера: ">Superseded in practice: </span><a class="ext" href="https://github.com/openjdk/jdk/blob/master/src/java.base/share/classes/java/math/BigInteger.java" target="_blank" rel="noopener">openjdk BigInteger.java</a></p>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en='Error probability ≤ 2⁻ᵏ after k rounds: at most half the coprime bases are Euler liars, with no Carmichael-style exceptions. Provably never stronger than Miller–Rabin — every strong liar is also an Euler liar, so Miller–Rabin’s ¼ bound beats the ½ bound at the same cost. Today the test is mainly of historical and pedagogical importance as the first practical probabilistic primality test (<a class="ext" href="https://doi.org/10.1137/0206006" target="_blank" rel="noopener">SIAM J. Comput., 1977</a>).'
+            data-uk='Імовірність помилки ≤ 2⁻ᵏ після k раундів: ейлерових брехунів не більше половини взаємно простих основ, і винятків на кшталт чисел Кармайкла немає. Доказово ніколи не сильніший за Міллера–Рабіна — кожен сильний брехун є й ейлеровим, тож межа ¼ у Міллера–Рабіна б’є межу ½ за тієї самої ціни. Сьогодні тест має переважно історичне й педагогічне значення як перший практичний імовірнісний тест простоти (<a class="ext" href="https://doi.org/10.1137/0206006" target="_blank" rel="noopener">SIAM J. Comput., 1977</a>).'>Error probability ≤ 2⁻ᵏ…</span></div>
+
+    <div class="xrefs">
+      <a href="#legendre" data-en="Jacobi symbol" data-uk="Символ Якобі">Jacobi symbol</a>
+      <a href="#miller" data-en="Miller–Rabin" data-uk="Міллер–Рабін">Miller–Rabin</a>
+      <a href="#fermat-p" data-en="Fermat test" data-uk="Тест Ферма">Fermat test</a>
+    </div>
+  </section>
+
+  <!-- =============================================================== AKS -->
+  <section id="aks">
+    <div class="num">07 / AKS</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(log⁶n)</span>
+        <span data-en="AKS — PRIMES is in P" data-uk="AKS — PRIMES ∈ P">AKS — PRIMES is in P</span></h2>
+    <div class="formula">(x+a)ⁿ ≡ xⁿ + a (mod xʳ−1, n)</div>
+    <p class="desc" data-en="The binomial identity (x+a)^n ≡ x^n + a (mod n) holds for all a exactly when n is prime — every inner binomial coefficient C(n,k) must vanish mod n. Checking all coefficients is exponential; the 2002 insight of Agrawal, Kayal and Saxena is that checking the identity modulo x^r − 1 for one well-chosen small r, and for only a few values of a, still suffices. The result: the first deterministic, unconditional, polynomial-time primality test. The demo runs the underlying coefficient test live on small n."
+       data-uk="Біноміальна тотожність (x+a)^n ≡ x^n + a (mod n) виконується для всіх a саме тоді, коли n просте — кожен внутрішній біноміальний коефіцієнт C(n,k) має занулитися за модулем n. Перевіряти всі коефіцієнти — експоненційно; ідея Агравала, Каяла і Саксени (2002) в тому, що перевірки тотожності за модулем x^r − 1 для одного вдало обраного малого r і лише для кількох значень a все ще достатньо. Результат: перший детермінований, безумовний, поліноміальний тест простоти. Демо наживо виконує базову перевірку коефіцієнтів для малих n.">The binomial identity…</p>
+    <div id="refs-aks"></div>
+
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label>n (2…120)</label><input type="number" id="akN" value="31" min="2" max="120" style="width:110px"></div>
+      </div>
+      <div class="readout" id="akOut"></div>
+      <div class="hint" data-en="Try n = 31 (prime), n = 32 (perfect power), n = 91 (composite — watch the first surviving coefficient)."
+           data-uk="Спробуйте n = 31 (просте), n = 32 (точний степінь), n = 91 (складене — зверніть увагу на перший невлучений коефіцієнт).">Try n = 31, 32, 91…</div>
+    </div>
+
+    <p class="hint"><span data-en="Real-world code: essentially none in crypto libraries; PARI/GP ships it for research as isprime(n,1): " data-uk="Реальний код: у криптобібліотеках практично відсутній; PARI/GP містить його для досліджень як isprime(n,1): ">Real-world code: </span><a class="ext" href="https://pari.math.u-bordeaux.fr/" target="_blank" rel="noopener">pari.math.u-bordeaux.fr</a></p>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en='Deterministic, unconditional and polynomial — the 2002 answer to a two-thousand-year-old question, with an almost elementary proof (<a class="ext" href="https://doi.org/10.4007/annals.2004.160.781" target="_blank" rel="noopener">Annals of Mathematics, 2004</a>). But it is a “galactic” algorithm: even the Lenstra–Pomerance variant at Õ(log⁶n) loses badly in practice to Miller–Rabin for probable primes and to <a class="ext" href="https://en.wikipedia.org/wiki/Elliptic_curve_primality" target="_blank" rel="noopener">ECPP</a> for certified primes. No cryptographic library generates keys with AKS — its value is the complexity-theoretic guarantee, not speed.'
+            data-uk='Детермінований, безумовний і поліноміальний — відповідь 2002 року на питання віком дві тисячі років, із майже елементарним доведенням (<a class="ext" href="https://doi.org/10.4007/annals.2004.160.781" target="_blank" rel="noopener">Annals of Mathematics, 2004</a>). Але це «галактичний» алгоритм: навіть варіант Ленстри–Померанса з Õ(log⁶n) на практиці програє Міллеру–Рабіну для ймовірно простих і <a class="ext" href="https://en.wikipedia.org/wiki/Elliptic_curve_primality" target="_blank" rel="noopener">ECPP</a> для сертифікованих простих. Жодна криптобібліотека не генерує ключі через AKS — його цінність у теоретико-складнісній гарантії, а не у швидкості.'>Deterministic, unconditional and polynomial…</span></div>
+
+    <div class="xrefs">
+      <a href="#miller" data-en="Miller–Rabin" data-uk="Міллер–Рабін">Miller–Rabin</a>
+      <a href="#fermat-p" data-en="Fermat test" data-uk="Тест Ферма">Fermat test</a>
+      <a href="asymmetric.html#rsa" data-en="RSA" data-uk="RSA">RSA</a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="<b>Note on parameters:</b> everything on this page uses toy numbers (p, n up to a few thousand) so every intermediate value stays legible. Real key generation tests 1024–2048-bit candidates: the same Miller–Rabin code, just with BigInts thousands of bits wide — which is exactly why its O(k·log³n) complexity, not correctness, dictates how many rounds libraries run."
+     data-uk="<b>Заувага про параметри:</b> усе на цій сторінці використовує іграшкові числа (p, n до кількох тисяч), щоб кожне проміжне значення лишалося читабельним. Реальна генерація ключів тестує кандидатів на 1024–2048 біт: той самий код Міллера–Рабіна, лише з BigInt на тисячі бітів — саме тому кількість раундів у бібліотеках диктує складність O(k·log³n), а не коректність."
+     data-i18n-html="1">Note on parameters…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+// ==================== helpers: BigInt modular arithmetic =====================
+function UK(){ return window.LANG==='uk'; }
+function modpow(b,e,m){ b%=m; if(b<0n)b+=m; let r=1n; while(e>0n){ if(e&1n) r=r*b%m; b=b*b%m; e>>=1n; } return r; }
+function gcdB(a,b){ a=a<0n?-a:a; b=b<0n?-b:b; while(b){ [a,b]=[b,a%b]; } return a; }
+function factorNum(n){ const fs=[]; let m=n; for(let d=2;d*d<=m;d++){ while(m%d===0){ fs.push(d); m/=d; } } if(m>1) fs.push(m); return fs; }
+function isPrimeNum(n){ return n>1 && factorNum(n).length===1; }
+function sgn(v){ return v===1n?'+1':(v===-1n?'−1':'0'); }
+
+/* Jacobi symbol; if log is an array, localized derivation steps are pushed */
+function jacobiCompute(a,n,log){
+  a=((a%n)+n)%n; let s=1n; const u=UK();
+  while(a!==0n){
+    let k=0n;
+    while(a%2n===0n){ a/=2n; k++; }
+    if(k>0n){
+      const m=n%8n, neg=(m===3n||m===5n);
+      const eff=(neg&&k%2n===1n)?-1n:1n;
+      if(eff===-1n) s=-s;
+      if(log) log.push(`(2/${n})^${k} = ${eff===1n?'+1':'−1'}   (n mod 8 = ${m})`);
+    }
+    if(a===1n){ if(log) log.push(`(1/${n}) = 1`); return s; }
+    const flip=(a%4n===3n&&n%4n===3n);
+    if(flip) s=-s;
+    if(log) log.push(`(${a}/${n}) = ${flip?'−':''}(${n}/${a})   ${u?'взаємність':'reciprocity'}${flip?(u?' — обидва ≡ 3 (mod 4)':' — both ≡ 3 (mod 4)'):''}`);
+    const t=n%a;
+    if(log) log.push(`${n} mod ${a} = ${t}`);
+    n=a; a=t;
+  }
+  if(log) log.push(UK()?`нуль ⇒ спільний дільник ⇒ символ = 0`:`hit zero ⇒ common factor ⇒ symbol = 0`);
+  return 0n;
+}
+
+// ==================== shared cell-map canvas drawing =========================
+function gridDims(count){ const cols=Math.max(1,Math.ceil(Math.sqrt(count))); return {cols, rows:Math.ceil(count/cols)}; }
+function drawCellMap(ctx,colors,sel){
+  const size=420, m=12;
+  ctx.fillStyle='#0E1626'; ctx.fillRect(0,0,size,size);
+  const {cols,rows}=gridDims(colors.length);
+  const cw=(size-2*m)/cols, ch=(size-2*m)/rows;
+  for(let i=0;i<colors.length;i++){
+    const x=m+(i%cols)*cw, y=m+Math.floor(i/cols)*ch;
+    ctx.fillStyle=colors[i];
+    ctx.fillRect(x+0.5, y+0.5, Math.max(cw-1,1), Math.max(ch-1,1));
+  }
+  if(sel!=null && sel>=0 && sel<colors.length){
+    const x=m+(sel%cols)*cw, y=m+Math.floor(sel/cols)*ch;
+    ctx.strokeStyle='#E8ECF4'; ctx.lineWidth=2;
+    ctx.strokeRect(x+0.5, y+0.5, Math.max(cw-1,2), Math.max(ch-1,2));
+  }
+}
+function cellFromClick(canvas,e,count){
+  const rect=canvas.getBoundingClientRect();
+  const px=(e.clientX-rect.left)*(canvas.width/rect.width);
+  const py=(e.clientY-rect.top)*(canvas.height/rect.height);
+  const size=420, m=12, {cols,rows}=gridDims(count);
+  const cw=(size-2*m)/cols, ch=(size-2*m)/rows;
+  const cx=Math.floor((px-m)/cw), cy=Math.floor((py-m)/ch);
+  if(cx<0||cy<0||cx>=cols||cy>=rows) return null;
+  const idx=cy*cols+cx;
+  return idx<count?idx:null;
+}
+const COL={teal:'#7FDBCA', rose:'#E8607A', grey:'#3A4A6B'};
+
+// ==================== 01 Legendre / Jacobi ===================================
+const lgCanvas=document.getElementById('lgCanvas'), lgCtx=lgCanvas.getContext('2d');
+let lgSel=null;
+function lgState(){ return BigInt(document.getElementById('lgP').value); }
+function drawLegendre(){
+  const p=lgState(); const pn=Number(p);
+  document.getElementById('lgPVal').textContent=pn;
+  const colors=[];
+  for(let a=1n;a<p;a++) colors.push(modpow(a,(p-1n)/2n,p)===1n?COL.teal:COL.rose);
+  drawCellMap(lgCtx,colors,lgSel);
+  const u=UK(), out=document.getElementById('lgOut');
+  let html=`<span class="k">p = ${pn}</span>:  ${(pn-1)/2} ${u?'лишків':'residues'} <span class="a">■</span>, ${(pn-1)/2} ${u?'нелишків':'non-residues'} <span class="b">■</span>\n`;
+  if(lgSel!=null){
+    const a=BigInt(lgSel+1);
+    const e=modpow(a,(p-1n)/2n,p);
+    const isQR=e===1n;
+    html+=`\n<span class="k">a = ${a}</span>:  a^((p−1)/2) = ${a}^${(pn-1)/2} mod ${pn} = <span class="s">${e===p-1n?'−1':e}</span>`+
+          `  ⇒  (${a}/${pn}) = ${isQR?'+1':'−1'} — ${isQR?(u?'квадратичний лишок':'quadratic residue'):(u?'нелишок':'non-residue')}\n`;
+    if(isQR){
+      const roots=[];
+      for(let x=0n;x<p;x++) if(x*x%p===a) roots.push(x);
+      html+=`<span class="a">${u?'корені':'roots'}</span>: x² ≡ ${a} (mod ${pn})  ⇒  x = ${roots.join(', ')}`;
+    } else {
+      html+=`<span class="b">${u?'квадратного кореня не існує':'no square root exists'}</span>`;
+    }
+  } else {
+    html+=`<span class="k">${u?'клікніть клітинку, щоб перевірити її критерієм Ейлера':'click a cell to run Euler’s criterion on it'}</span>`;
+  }
+  out.innerHTML=html;
+}
+lgCanvas.addEventListener('click',e=>{
+  const p=Number(lgState());
+  const idx=cellFromClick(lgCanvas,e,p-1);
+  if(idx!=null){ lgSel=idx; drawLegendre(); }
+});
+document.getElementById('lgP').addEventListener('change',()=>{ lgSel=null; drawLegendre(); });
+
+function runJacobi(){
+  const u=UK(), out=document.getElementById('jaOut');
+  const aRaw=document.getElementById('jaA').value, nRaw=document.getElementById('jaN').value;
+  const a=BigInt(aRaw||'0'), n=BigInt(nRaw||'0');
+  if(n<3n||n%2n===0n){ out.innerHTML=`<span class="b">${u?'n має бути непарним і ≥ 3.':'n must be odd and ≥ 3.'}</span>`; return; }
+  const log=[];
+  const r=((a%n)+n)%n;
+  if(r!==a) log.push(`${a} mod ${n} = ${r}`);
+  const val=jacobiCompute(a,n,log);
+  out.innerHTML=`<span class="k">(${a}/${n})</span>\n  `+log.map(s=>`<span class="k">·</span> ${s}`).join('\n  ')+
+    `\n<span class="s">(${a}/${n}) = ${sgn(val)}</span>`+
+    (val===0n?`   <span class="b">gcd(${a},${n}) &gt; 1</span>`:'');
+}
+['jaA','jaN'].forEach(id=>document.getElementById(id).addEventListener('input',runJacobi));
+
+// ==================== 02 Tonelli–Shanks ======================================
+function runTonelli(){
+  const u=UK(), out=document.getElementById('tsOut');
+  const pv=Number(document.getElementById('tsP').value||'0');
+  if(!(Number.isInteger(pv) && pv>=3 && pv<=1e9 && pv%2===1 && isPrimeNum(pv))){
+    out.innerHTML=`<span class="b">${u?'p має бути непарним простим (3 … 10⁹).':'p must be an odd prime (3 … 10⁹).'}</span>`; return;
+  }
+  const p=BigInt(pv);
+  const nRaw=BigInt(document.getElementById('tsN').value||'0');
+  if(document.getElementById('tsMethod').value==='ci'){
+    out.innerHTML=cipollaLines(p,nRaw).join('\n'); return;
+  }
+  const n=((nRaw%p)+p)%p;
+  const L=[];
+  L.push(`<span class="k">p = ${p},  n = ${nRaw}${n!==nRaw?' ≡ '+n+' (mod p)':''}</span>`);
+  if(n===0n){ L.push(`√0 = <span class="s">0</span>`); out.innerHTML=L.join('\n'); return; }
+  const ls=modpow(n,(p-1n)/2n,p);
+  L.push(`(${n}/${p}) = n^((p−1)/2) mod p = <span class="a">${ls===p-1n?'−1':ls}</span>`);
+  if(ls===p-1n){
+    L.push(`<span class="b">${u?'нелишок — квадратного кореня не існує. Спробуйте інше n.':'non-residue — no square root exists. Try another n.'}</span>`);
+    out.innerHTML=L.join('\n'); return;
+  }
+  let R;
+  if(p%4n===3n){
+    R=modpow(n,(p+1n)/4n,p);
+    L.push(`p ≡ 3 (mod 4) ⇒ ${u?'скорочення':'shortcut'}:  x = n^((p+1)/4) = ${n}^${(p+1n)/4n} mod ${p} = <span class="s">${R}</span>`);
+  } else {
+    let q=p-1n, s=0n;
+    while(q%2n===0n){ q/=2n; s++; }
+    L.push(`p − 1 = ${q} · 2^${s}   (q = ${q}, s = ${s})`);
+    let z=2n;
+    while(modpow(z,(p-1n)/2n,p)!==p-1n) z++;
+    L.push(`${u?'неквадрат':'non-residue'} z = ${z}   (${u?'перше z із':'first z with'} (z/p) = −1)`);
+    let M=s, c=modpow(z,q,p), t=modpow(n,q,p);
+    R=modpow(n,(q+1n)/2n,p);
+    L.push(`M = ${M},  c = z^q = ${c},  t = n^q = ${t},  R = n^((q+1)/2) = ${R}`);
+    let it=0;
+    while(t!==1n && it<64){
+      let i=0n, tt=t;
+      while(tt!==1n){ tt=tt*tt%p; i++; }
+      const b=modpow(c, 1n<<(M-i-1n), p);
+      M=i; c=b*b%p; t=t*c%p; R=R*b%p;
+      it++;
+      L.push(`<span class="k">${u?'ітерація':'iteration'} ${it}:</span>  i = ${i},  b = ${b}  →  M = ${M},  c = ${c},  t = ${t},  R = <span class="a">${R}</span>`);
+    }
+  }
+  const ok=R*R%p===n;
+  L.push(`\n<span class="s">${u?'перевірка':'verify'}: ${R}² mod ${p} = ${R*R%p}  ${ok?'✓':'✗'}</span>   ${u?'обидва корені':'both roots'}: <span class="s">${R}</span>, <span class="s">${p-R}</span>`);
+  out.innerHTML=L.join('\n');
+}
+['tsP','tsN'].forEach(id=>document.getElementById(id).addEventListener('input',runTonelli));
+document.getElementById('tsMethod').addEventListener('change',runTonelli);
+
+// ==================== 03 Cipolla =============================================
+function f2mul(A,B,w,p){
+  return [ (A[0]*B[0] + A[1]*B[1]%p*w) % p, (A[0]*B[1] + A[1]*B[0]) % p ];
+}
+function cipollaLines(p,nRaw){
+  const u=UK();
+  const n=((nRaw%p)+p)%p;
+  const L=[];
+  L.push(`<span class="k">Cipolla:  p = ${p},  n = ${nRaw}${n!==nRaw?' ≡ '+n+' (mod p)':''}</span>`);
+  if(n===0n){ L.push(`√0 = <span class="s">0</span>`); return L; }
+  if(modpow(n,(p-1n)/2n,p)===p-1n){
+    L.push(`(${n}/${p}) = −1 — <span class="b">${u?'нелишок, кореня немає. Спробуйте інше n.':'non-residue, no root. Try another n.'}</span>`);
+    return L;
+  }
+  let a=0n, w=0n; const tried=[];
+  for(;;a++){
+    w=((a*a-n)%p+p)%p;
+    if(w===0n){ // a itself is a root
+      L.push(`a = ${a}:  a² − n ≡ 0 ⇒ <span class="s">x = ${a}</span> ${u?'одразу є коренем':'is already a root'} (${u?'та':'and'} ${p-a})`);
+      return L;
+    }
+    if(modpow(w,(p-1n)/2n,p)===p-1n){ tried.push(`a=${a} ✓`); break; }
+    tried.push(`a=${a} ✗`);
+  }
+  L.push(`${u?'пошук a з нелишком':'search for a with non-residue'} ω = a²−n:  ${tried.join(', ')}`);
+  L.push(`ω = ${a}² − ${n} ≡ <span class="a">${w}</span> (mod ${p}),  (ω/p) = −1  ⇒  F<sub>p²</sub> = F<sub>p</sub>(√ω)`);
+  const e=(p+1n)/2n;
+  L.push(`${u?'обчислюємо':'compute'} (${a} + √ω)^((p+1)/2) = (…)^${e}:`);
+  const bits=e.toString(2);
+  let r=[1n,0n]; const base=[a,1n];
+  const long=bits.length>18;
+  for(let i=0;i<bits.length;i++){
+    r=f2mul(r,r,w,p);
+    let step=`  ${u?'біт':'bit'} ${bits[i]}: ${u?'квадрат':'square'} → (${r[0]}, ${r[1]})`;
+    if(bits[i]==='1'){ r=f2mul(r,base,w,p); step+=`,  ·(${a}+√ω) → (${r[0]}, ${r[1]})`; }
+    if(!long || i<6 || i>=bits.length-6) L.push(`<span class="k">${step}</span>`);
+    else if(i===6) L.push(`<span class="k">  … ${bits.length-12} ${u?'бітів пропущено':'bits elided'} …</span>`);
+  }
+  const x=r[0];
+  const ok=(x*x%p===n) && r[1]===0n;
+  L.push(`\n${u?'уявна частина':'imaginary part'} = ${r[1]}  (${u?'мусить бути 0':'must be 0'})   <span class="s">x = ${x}</span>`);
+  L.push(`<span class="s">${u?'перевірка':'verify'}: ${x}² mod ${p} = ${x*x%p}  ${ok?'✓':'✗'}</span>   ${u?'обидва корені':'both roots'}: <span class="s">${x}</span>, <span class="s">${p-x}</span>`);
+  return L;
+}
+function runCipolla(){
+  const out=document.getElementById('cpOut');
+  const p=BigInt(document.getElementById('cpP').value);
+  const nRaw=BigInt(document.getElementById('cpN').value||'0');
+  out.innerHTML=cipollaLines(p,nRaw).join('\n');
+}
+['cpP','cpN'].forEach(id=>document.getElementById(id).addEventListener('input',runCipolla));
+
+// ==================== 04 Fermat test =========================================
+const feCanvas=document.getElementById('feCanvas'), feCtx=feCanvas.getContext('2d');
+let feSel=null;
+function drawFermat(){
+  const u=UK();
+  const n=BigInt(document.getElementById('feN').value);
+  const nn=Number(n);
+  document.getElementById('feNVal').textContent=nn;
+  const colors=[]; let pass=0, coprime=0;
+  for(let a=2n;a<n;a++){
+    if(gcdB(a,n)!==1n){ colors.push(COL.grey); continue; }
+    coprime++;
+    if(modpow(a,n-1n,n)===1n){ colors.push(COL.teal); pass++; }
+    else colors.push(COL.rose);
+  }
+  drawCellMap(feCtx,colors,feSel);
+  const fs=factorNum(nn), prime=fs.length===1;
+  const out=document.getElementById('feOut');
+  let html=`<span class="k">n = ${nn}${prime?'':' = '+fs.join('·')}</span> — ${prime?(u?'просте':'prime'):(u?'складене':'composite')}\n`+
+    `${u?'проходять тест':'pass the test'}: <span class="a">${pass}</span> ${u?'з':'of'} ${coprime} ${u?'взаємно простих основ':'coprime bases'} (${coprime?Math.round(100*pass/coprime):0}%)\n`;
+  if(!prime && pass===coprime) html+=`<span class="b">${u?'число Кармайкла: обманює Ферма за КОЖНОЮ взаємно простою основою!':'Carmichael number: fools Fermat for EVERY coprime base!'}</span>\n`;
+  if(feSel!=null){
+    const a=BigInt(feSel+2);
+    if(gcdB(a,n)!==1n){
+      html+=`\n<span class="k">a = ${a}</span>:  gcd(${a}, ${nn}) = ${gcdB(a,n)} — ${u?'спільний дільник розкриває множник напряму':'a shared factor reveals a divisor directly'}`;
+    } else {
+      const r=modpow(a,n-1n,n);
+      html+=`\n<span class="k">a = ${a}</span>:  a^(n−1) = ${a}^${nn-1} mod ${nn} = <span class="s">${r}</span>  ⇒  `+
+        (r===1n?`<span class="a">${u?'«ймовірно просте» (брехун Ферма, якщо n складене)':'«probably prime» (Fermat liar if n is composite)'}</span>`
+               :`<span class="b">${u?'свідок складеності':'witness of compositeness'}</span>`);
+    }
+  } else {
+    html+=`<span class="k">${u?'клікніть основу для обчислення':'click a base for its computation'}</span>`;
+  }
+  out.innerHTML=html;
+}
+feCanvas.addEventListener('click',e=>{
+  const n=Number(document.getElementById('feN').value);
+  const idx=cellFromClick(feCanvas,e,n-2);
+  if(idx!=null){ feSel=idx; drawFermat(); }
+});
+document.getElementById('feN').addEventListener('change',()=>{ feSel=null; drawFermat(); });
+
+// ==================== 05 Miller–Rabin ========================================
+const mrCanvas=document.getElementById('mrCanvas'), mrCtx=mrCanvas.getContext('2d');
+let mrSel=null;
+function mrDecompose(n){ let d=n-1n, s=0n; while(d%2n===0n){ d/=2n; s++; } return {d,s}; }
+function mrClassify(a,n,d,s){
+  if(gcdB(a,n)!==1n) return 'gcd';
+  let x=modpow(a,d,n);
+  if(x===1n||x===n-1n) return 'liar';
+  for(let i=1n;i<s;i++){ x=x*x%n; if(x===n-1n) return 'liar'; }
+  return 'witness';
+}
+function drawMiller(){
+  const u=UK();
+  const n=BigInt(document.getElementById('mrN').value);
+  const nn=Number(n);
+  document.getElementById('mrNVal').textContent=nn;
+  const {d,s}=mrDecompose(n);
+  const colors=[]; let liars=0, wits=0;
+  for(let a=2n;a<=n-2n;a++){
+    const c=mrClassify(a,n,d,s);
+    if(c==='gcd'){ colors.push(COL.grey); wits++; }
+    else if(c==='liar'){ colors.push(COL.teal); liars++; }
+    else { colors.push(COL.rose); wits++; }
+  }
+  drawCellMap(mrCtx,colors,mrSel);
+  const fs=factorNum(nn), prime=fs.length===1;
+  const total=colors.length;
+  const out=document.getElementById('mrOut');
+  let html=`<span class="k">n = ${nn}${prime?'':' = '+fs.join('·')}</span>,   n − 1 = 2^${s} · ${d}\n`;
+  if(prime){
+    html+=`${u?'просте: усі':'prime: all'} ${total} ${u?'основ проходять':'bases pass'} ✓\n`;
+  } else {
+    html+=`${u?'сильні брехуни':'strong liars'}: <span class="a">${liars}</span> ${u?'з':'of'} ${total} (${Math.round(100*liars/total)}%)  ≤ 25% — ${u?'межа Рабіна':'Rabin’s bound'}\n`;
+  }
+  if(mrSel!=null){
+    const a=BigInt(mrSel+2);
+    if(gcdB(a,n)!==1n){
+      html+=`\n<span class="k">a = ${a}</span>:  gcd(${a}, ${nn}) = ${gcdB(a,n)} &gt; 1`;
+    } else {
+      let x=modpow(a,d,n);
+      const chain=[`a^d = ${a}^${d} mod ${nn} = ${x===n-1n?'−1':x}`];
+      let verdict=(x===1n||x===n-1n);
+      let xx=x;
+      for(let i=1n;i<s && !verdict;i++){
+        xx=xx*xx%n;
+        chain.push(`${u?'квадрат':'square'} ${i}: ${xx===n-1n?'−1':xx}`);
+        if(xx===n-1n) verdict=true;
+      }
+      html+=`\n<span class="k">a = ${a}</span>:\n  `+chain.join('\n  ')+`\n  ⇒ `+
+        (verdict?`<span class="a">${u?'сильний брехун / проходить':'strong liar / passes'}</span>`
+                :`<span class="b">${u?'свідок: ланцюжок не дав −1 перед 1':'witness: the chain never hit −1 before 1'}</span>`);
+    }
+  } else {
+    html+=`<span class="k">${u?'клікніть основу, щоб побачити її ланцюжок':'click a base to trace its chain'}</span>`;
+  }
+  out.innerHTML=html;
+}
+mrCanvas.addEventListener('click',e=>{
+  const n=Number(document.getElementById('mrN').value);
+  const idx=cellFromClick(mrCanvas,e,n-3);
+  if(idx!=null){ mrSel=idx; drawMiller(); }
+});
+document.getElementById('mrN').addEventListener('change',()=>{ mrSel=null; drawMiller(); });
+
+function runMillerRounds(){
+  const u=UK(), out=document.getElementById('mrOut2');
+  const n=BigInt(document.getElementById('mrN').value);
+  const {d,s}=mrDecompose(n);
+  let k=parseInt(document.getElementById('mrK').value)||5;
+  k=Math.min(20,Math.max(1,k));
+  const nn=Number(n);
+  const L=[`<span class="k">n = ${nn},  k = ${k} ${u?'випадкових основ':'random bases'}</span>`];
+  let witness=null;
+  for(let i=1;i<=k;i++){
+    const a=BigInt(2+Math.floor(Math.random()*(nn-3)));
+    const c=mrClassify(a,n,d,s);
+    const passTxt=c==='liar';
+    L.push(`${u?'раунд':'round'} ${i}:  a = ${a}  →  ${passTxt?'<span class="a">'+(u?'проходить':'passes')+'</span>':'<span class="b">'+(u?'свідок!':'witness!')+'</span>'}`);
+    if(!passTxt){ witness=a; break; }
+  }
+  if(witness!==null){
+    L.push(`\n<span class="b">${u?'СКЛАДЕНЕ — знайдено свідка':'COMPOSITE — witness found'} (a = ${witness})</span>`);
+  } else {
+    L.push(`\n<span class="s">${u?'ЙМОВІРНО ПРОСТЕ':'PROBABLY PRIME'} — ${u?'імовірність помилки':'error probability'} ≤ 4^−${k} ≈ ${(Math.pow(4,-k)).toExponential(1)}</span>`);
+  }
+  out.innerHTML=L.join('\n');
+}
+document.getElementById('mrRun').addEventListener('click',runMillerRounds);
+
+// ==================== 06 Solovay–Strassen ====================================
+function runSolovay(){
+  const u=UK(), out=document.getElementById('ssOut');
+  const n=BigInt(document.getElementById('ssN').value||'0');
+  let a=BigInt(document.getElementById('ssA').value||'2');
+  if(n<3n||n%2n===0n){ out.innerHTML=`<span class="b">${u?'n має бути непарним і ≥ 3.':'n must be odd and ≥ 3.'}</span>`; return; }
+  a=((a%n)+n)%n; if(a<2n) a=2n;
+  const j=jacobiCompute(a,n,null);
+  const e=modpow(a,(n-1n)/2n,n);
+  const jm=j===-1n?n-1n:j;                        // Jacobi value represented mod n
+  const L=[];
+  L.push(`<span class="k">n = ${n},  a = ${a}</span>`);
+  L.push(`${u?'символ Якобі':'Jacobi symbol'}:  (a/n) = (${a}/${n}) = <span class="a">${sgn(j)}</span>`);
+  L.push(`${u?'частина Ейлера':'Euler part'}:  a^((n−1)/2) = ${a}^${(n-1n)/2n} mod ${n} = <span class="a">${e===n-1n?'−1':e}</span>`);
+  if(j===0n){
+    L.push(`\n<span class="b">(a/n) = 0 ⇒ gcd(${a}, ${n}) = ${gcdB(a,n)} — ${u?'СКЛАДЕНЕ (знайдено дільник)':'COMPOSITE (divisor found)'}</span>`);
+  } else if(e===jm){
+    L.push(`\n<span class="s">${u?'збіг':'match'}: a^((n−1)/2) ≡ (a/n) (mod n)  ⇒  ${u?'ЙМОВІРНО ПРОСТЕ за цією основою':'PROBABLY PRIME for this base'}</span>`);
+    L.push(`<span class="k">${u?'кожна така основа зменшує ймовірність помилки вдвічі (≤ 2⁻ᵏ після k раундів)':'each such base halves the error probability (≤ 2⁻ᵏ after k rounds)'}</span>`);
+  } else {
+    L.push(`\n<span class="b">${e===n-1n?'−1':e} ≠ ${sgn(j)} (mod n)  ⇒  ${u?'СКЛАДЕНЕ — ейлерів свідок':'COMPOSITE — Euler witness'}</span>`);
+  }
+  out.innerHTML=L.join('\n');
+}
+['ssN','ssA'].forEach(id=>document.getElementById(id).addEventListener('input',runSolovay));
+document.getElementById('ssRoll').addEventListener('click',()=>{
+  const n=Number(document.getElementById('ssN').value)||561;
+  if(n>4) document.getElementById('ssA').value=2+Math.floor(Math.random()*(n-3));
+  runSolovay();
+});
+
+// ==================== 07 AKS =================================================
+function runAKS(){
+  const u=UK(), out=document.getElementById('akOut');
+  let n=parseInt(document.getElementById('akN').value)||31;
+  n=Math.min(120,Math.max(2,n));
+  const N=BigInt(n);
+  const L=[`<span class="k">n = ${n}</span>`];
+  // step 1: perfect power?
+  let pp=null;
+  for(let b=2;b<=Math.log2(n)+1e-9;b++){
+    const g=Math.round(Math.pow(n,1/b));
+    for(const c of [g-1,g,g+1]) if(c>=2 && BigInt(c)**BigInt(b)===N) pp=[c,b];
+  }
+  L.push(`${u?'крок 1 — точний степінь':'step 1 — perfect power'}: `+(pp?`n = ${pp[0]}^${pp[1]}  ⇒  <span class="b">${u?'СКЛАДЕНЕ':'COMPOSITE'}</span>`:`${u?'ні':'no'} ✓`));
+  if(pp){ out.innerHTML=L.join('\n'); return; }
+  // step 2: find r with ord_r(n) > log2(n)^2
+  const lim=Math.ceil(Math.pow(Math.log2(n),2));
+  let r=2, gWit=null;
+  for(;r<10000;r++){
+    const g=Number(gcdB(BigInt(r),N));
+    if(g>1){ if(g<n && !gWit) gWit=[r,g]; continue; }
+    let v=n%r, x=v, ord=1;
+    if(v===0) continue;
+    while(x!==1 && ord<=r){ x=(x*v)%r; ord++; }
+    if(x===1 && ord>lim) break;
+  }
+  L.push(`${u?'крок 2 — пошук r':'step 2 — find r'}:  r = ${r}  (ord_r(n) &gt; ⌈log²n⌉ = ${lim})`+(gWit?`   <span class="b">gcd(${gWit[0]}, n) = ${gWit[1]} — ${u?'дільник знайдено вже тут':'a divisor already surfaced here'}</span>`:''));
+  // step 3 (idea): child’s binomial test — C(n,k) mod n for 0 < k < n
+  let c=1n; const bad=[];
+  for(let k=1;k<n;k++){
+    c=c*BigInt(n-k+1)/BigInt(k);
+    if(c%N!==0n) bad.push([k, c%N]);
+  }
+  L.push(`${u?'крок 3 — тотожність (x+1)ⁿ ≡ xⁿ + 1 (mod n): коефіцієнти C(n,k) mod n, 0 &lt; k &lt; n':'step 3 — identity (x+1)ⁿ ≡ xⁿ + 1 (mod n): coefficients C(n,k) mod n, 0 &lt; k &lt; n'}`);
+  if(bad.length===0){
+    L.push(`  ${u?'усі':'all'} ${n-1} ${u?'коефіцієнтів ≡ 0 (mod n)':'coefficients ≡ 0 (mod n)'} ✓`);
+    L.push(`\n<span class="s">${n} — ${u?'ПРОСТЕ':'PRIME'}</span>   <span class="k">${u?'(справжній AKS перевіряє це mod xʳ−1 лише для кількох a — і тому поліноміальний)':'(real AKS checks this mod xʳ−1 for a few a only — hence polynomial)'}</span>`);
+  } else {
+    const show=bad.slice(0,8).map(([k,v])=>`C(${n},${k}) ≡ ${v}`).join(',  ');
+    L.push(`  <span class="b">${u?'ненульових':'nonzero'}: ${bad.length}</span> — ${show}${bad.length>8?', …':''}`);
+    L.push(`\n<span class="b">${n} — ${u?'СКЛАДЕНЕ':'COMPOSITE'}</span>   <span class="k">${u?'перший «живий» коефіцієнт — свідок':'the first surviving coefficient is the witness'}</span>`);
+  }
+  out.innerHTML=L.join('\n');
+}
+document.getElementById('akN').addEventListener('input',runAKS);
+
+// ==================== references ============================================
+const REFS={
+  legendre:[
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Legendre_symbol',label:'Legendre symbol'},uk:{href:'https://uk.wikipedia.org/wiki/Символ_Лежандра',label:'Символ Лежандра'}},
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Jacobi_symbol',label:'Jacobi symbol'},uk:{href:'https://uk.wikipedia.org/wiki/Символ_Якобі',label:'Символ Якобі'}},
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Euler%27s_criterion',label:'Euler’s criterion'}},
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Quadratic_reciprocity',label:'Quadratic reciprocity'},uk:{href:'https://uk.wikipedia.org/wiki/Квадратичний_закон_взаємності',label:'Квадратичний закон взаємності'}}
+  ],
+  tonelli:[
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm',label:'Tonelli–Shanks algorithm'}},
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Quadratic_residue',label:'Quadratic residue'},uk:{href:'https://uk.wikipedia.org/wiki/Квадратичний_лишок',label:'Квадратичний лишок'}},
+    {tag:'code',en:{href:'https://github.com/openssl/openssl/blob/master/crypto/bn/bn_sqrt.c',label:'OpenSSL BN_mod_sqrt'}}
+  ],
+  cipolla:[
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Cipolla%27s_algorithm',label:'Cipolla’s algorithm'}},
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Finite_field',label:'Finite field'},uk:{href:'https://uk.wikipedia.org/wiki/Скінченне_поле',label:'Скінченне поле'}},
+    {tag:'code',en:{href:'https://github.com/sympy/sympy/blob/master/sympy/ntheory/residue_ntheory.py',label:'SymPy sqrt_mod'}}
+  ],
+  'fermat-p':[
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Fermat_primality_test',label:'Fermat primality test'}},
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Carmichael_number',label:'Carmichael number'},uk:{href:'https://uk.wikipedia.org/wiki/Число_Кармайкла',label:'Число Кармайкла'}},
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Fermat%27s_little_theorem',label:'Fermat’s little theorem'},uk:{href:'https://uk.wikipedia.org/wiki/Мала_теорема_Ферма',label:'Мала теорема Ферма'}},
+    {tag:'paper',en:{href:'https://doi.org/10.2307/2118576',label:'Alford–Granville–Pomerance 1994'}}
+  ],
+  miller:[
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test',label:'Miller–Rabin primality test'},uk:{href:'https://uk.wikipedia.org/wiki/Тест_Міллера_—_Рабіна',label:'Тест Міллера — Рабіна'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1016/S0022-0000(76)80043-8',label:'Miller 1976'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1016/0022-314X(80)90084-0',label:'Rabin 1980'}},
+    {tag:'fips',en:{href:'https://csrc.nist.gov/pubs/fips/186-5/final',label:'FIPS 186-5'}},
+    {tag:'code',en:{href:'https://github.com/openssl/openssl/blob/master/crypto/bn/bn_prime.c',label:'OpenSSL bn_prime.c'}}
+  ],
+  solovay:[
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Solovay%E2%80%93Strassen_primality_test',label:'Solovay–Strassen primality test'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1137/0206006',label:'Solovay &amp; Strassen 1977'}},
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Euler%E2%80%93Jacobi_pseudoprime',label:'Euler–Jacobi pseudoprime'}}
+  ],
+  aks:[
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/AKS_primality_test',label:'AKS primality test'}},
+    {tag:'paper',en:{href:'https://doi.org/10.4007/annals.2004.160.781',label:'Agrawal–Kayal–Saxena: PRIMES is in P'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1090/S0273-0979-04-01037-7',label:'Granville 2004 (exposition)'}},
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Elliptic_curve_primality',label:'ECPP (practical alternative)'}}
+  ]
+};
+function renderRefs(){
+  Object.keys(REFS).forEach(id=>{
+    const el=document.getElementById('refs-'+id);
+    if(el) el.innerHTML=window.atlasRefs(REFS[id]);
+  });
+}
+
+// ==================== boot ===================================================
+function renderLegend(){
+  const Lg=I18N[window.LANG].lvlLegend;
+  document.getElementById('lvlLegend').innerHTML=[1,2,3].map((n,i)=>`<span>${window.atlasBadge(n)} ${Lg[i]}</span>`).join('');
+}
+function renderAll(){
+  renderLegend(); renderRefs();
+  drawLegendre(); runJacobi();
+  runTonelli(); runCipolla();
+  drawFermat(); drawMiller();
+  runSolovay(); runAKS();
+}
+renderAll();
+window.onLangChange=function(){ renderAll(); };
+</script>
+</body>
+</html>

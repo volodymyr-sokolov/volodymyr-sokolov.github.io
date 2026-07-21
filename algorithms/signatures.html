@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital signatures — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="signatures">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 7 · digital signatures" data-uk="Розділ 7 · цифрові підписи">Section 7 · digital signatures</div>
+    <h1 data-en="Digital signatures" data-uk="Цифрові підписи">Digital signatures</h1>
+    <div class="eq-hero">σ = Sign(priv, H(m)),&nbsp; Verify(pub, m, σ) ∈ {0,1}</div>
+    <p class="lede" data-en="A signature proves <b>who</b> wrote a message and that <b>nobody changed it</b> — using the private key to sign, the public key to check. Below, three schemes are fully live: <b>Schnorr</b> over a prime-order subgroup, a toy <b>ECDSA</b> curve (including the fatal nonce-reuse attack that broke the PlayStation 3), and the <b>Lamport</b> one-time signature that explains hash-based post-quantum signing. RSA-PSS, EdDSA, Dilithium and SPHINCS+ round out the section."
+       data-uk="Підпис доводить, <b>хто</b> написав повідомлення і що його <b>ніхто не змінив</b> — приватним ключем підписують, відкритим перевіряють. Нижче три схеми повністю живі: <b>Шнорра</b> над підгрупою простого порядку, іграшкова крива <b>ECDSA</b> (разом із фатальною атакою повторення nonce, що зламала PlayStation 3) та одноразовий підпис <b>Лампорта</b>, що пояснює хеш-підписи. RSA-PSS, EdDSA, Dilithium і SPHINCS+ завершують розділ." data-i18n-html="1">A signature proves…</p>
+    <div class="legend-lvls" id="lvlLegend"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ========================================================== DSA / ECDSA -->
+  <section id="dsa">
+    <div class="num">01 / DSA · ECDSA</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+        <span data-en="DSA / ECDSA — the discrete-log signature" data-uk="DSA / ECDSA — підпис на дискретному логарифмі">DSA / ECDSA — the discrete-log signature</span></h2>
+    <div class="formula">r = (k·G)ₓ mod n,&nbsp; s = k⁻¹(z + r·d) mod n</div>
+    <p class="desc" data-en="DSA signs in a prime-order subgroup; <b>ECDSA</b> is the same idea on an elliptic curve, with far smaller keys. The signer picks a one-time random <b>nonce k</b>, publishes <b>r</b> = x-coordinate of k·G, and binds the message hash <b>z</b> and private key <b>d</b> into <b>s</b>. The verifier recomputes the point from public data alone. The nonce is the whole game: if k ever leaks or repeats, the private key falls out with a line of algebra. This demo runs a real curve — sign, verify, then reuse a nonce and watch d get recovered."
+       data-uk="DSA підписує в підгрупі простого порядку; <b>ECDSA</b> — та сама ідея на еліптичній кривій, з набагато меншими ключами. Підписант обирає одноразовий випадковий <b>nonce k</b>, публікує <b>r</b> = x-координата k·G і вплітає хеш повідомлення <b>z</b> та приватний ключ <b>d</b> у <b>s</b>. Перевіряч відновлює точку лише з відкритих даних. Уся суть — у nonce: якщо k витік або повторився, приватний ключ обчислюється в один рядок. Це демо працює на справжній кривій — підпишіть, перевірте, потім повторіть nonce і побачите, як відновлюється d." data-i18n-html="1">DSA signs in a prime-order subgroup…</p>
+    <div id="refs-dsa"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="ecdsaCanvas" width="380" height="380"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Curve E: y² = x³ + 2x + 14 (mod 97). Base point G = (3, 12) has prime order n = 101. White = G; teal = public key Q = d·G; amber = R = k·G from the last signature."
+               data-uk="Крива E: y² = x³ + 2x + 14 (mod 97). Базова точка G = (3, 12) має простий порядок n = 101. Білий = G; бірюзовий = відкритий ключ Q = d·G; янтарний = R = k·G з останнього підпису.">Curve E…</div>
+          <div class="actor-row" style="margin:0">
+            <div class="ctrl"><label data-en="message z₁" data-uk="повідомлення z₁">message z₁</label><input type="number" id="ecdsaZ1" value="20" min="1" max="100" style="width:90px"></div>
+            <div class="ctrl"><label data-en="nonce k" data-uk="nonce k">nonce k</label><input type="number" id="ecdsaK" value="17" min="1" max="100" style="width:90px"></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="ecdsaNew" data-en="↻ new keys" data-uk="↻ нові ключі">↻ new keys</button>
+            <button id="ecdsaSign" data-en="sign" data-uk="підписати">sign</button>
+            <button id="ecdsaVerify" data-en="verify" data-uk="перевірити">verify</button>
+          </div>
+          <div class="actor-row" style="margin:0">
+            <div class="ctrl"><label data-en="second message z₂" data-uk="друге повідомлення z₂">second message z₂</label><input type="number" id="ecdsaZ2" value="55" min="1" max="100" style="width:90px"></div>
+          </div>
+          <button id="ecdsaAttack" class="secondary" data-en="⚠ reuse nonce → recover d (PS3 attack)" data-uk="⚠ повторити nonce → відновити d (атака PS3)">⚠ reuse nonce → recover d</button>
+        </div>
+      </div>
+      <div class="readout" id="ecdsaOut"></div>
+    </div>
+    <div class="hint" data-en="Implementations: " data-uk="Реалізації: "></div>
+    <div class="refs" id="impl-dsa"></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Secure at 256-bit curves (≈128-bit strength) <b>only with a perfect nonce</b>. A repeated k instantly leaks d (Sony PlayStation 3 firmware, 2010). Even tiny <b>nonce bias</b> is fatal: lattice attacks recover keys from a few leaked bits (<b>Minerva</b>, 2019; <b>TPM-Fail</b>). RFC 6979 deterministic nonces and EdDSA remove the RNG from the loop. Classic DSA additionally needs a large prime field; quantum computers break both via Shor."
+            data-uk="Стійкий на 256-бітних кривих (≈128-бітна стійкість) <b>лише з ідеальним nonce</b>. Повторення k миттєво розкриває d (прошивка Sony PlayStation 3, 2010). Навіть мінімальне <b>зміщення nonce</b> фатальне: решіткові атаки відновлюють ключ із кількох відомих бітів (<b>Minerva</b>, 2019; <b>TPM-Fail</b>). Детерміновані nonce за RFC 6979 та EdDSA прибирають RNG із циклу. Класичний DSA додатково потребує великого простого поля; квантові комп'ютери ламають обидва через алгоритм Шора." data-i18n-html="1"></span></div>
+    <div class="xrefs">
+      <a href="signatures.html#schnorr" data-en="Schnorr (linear s)" data-uk="Шнорр (лінійне s)">Schnorr</a>
+      <a href="signatures.html#eddsa" data-en="EdDSA (deterministic k)" data-uk="EdDSA (детермінований k)">EdDSA</a>
+      <a href="edwards.html" data-en="Edwards-curve geometry" data-uk="Геометрія кривих Едвардса">Edwards geometry</a>
+      <a href="hash.html#sha2" data-en="hash-then-sign" data-uk="хешувати-й-підписати">hash-then-sign</a>
+      <a href="keyexchange.html#ecdh" data-en="ECDH" data-uk="ECDH">ECDH</a>
+      <a href="quantum.html#shor-q" data-en="Shor's algorithm" data-uk="Алгоритм Шора">Shor</a>
+    </div>
+  </section>
+
+  <!-- ============================================================== RSA-PSS -->
+  <section id="rsapss">
+    <div class="num">02 / RSA-PSS</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+        <span data-en="RSA signature — signing is decryption" data-uk="RSA-підпис — підписати означає розшифрувати">RSA signature — signing is decryption</span></h2>
+    <div class="formula">σ = H(m)ᵈ mod n,&nbsp; H(m) ≟ σᵉ mod n</div>
+    <p class="desc" data-en="An RSA signature is an RSA <b>private-key operation on the message hash</b>: σ = μ(m)ᵈ mod n, where μ is a padding function. Anyone can raise σ to the public e and recover μ(m). The naming below: <b>PKCS#1 v1.5</b> is a fixed, deterministic padding — simple but historically brittle. <b>PSS</b> (Probabilistic Signature Scheme) injects a fresh random <b>salt</b> and a mask-generation function, giving a randomised signature with a tight security proof. Below is a live worked example on small numbers."
+       data-uk="RSA-підпис — це <b>операція приватним ключем над хешем повідомлення</b>: σ = μ(m)ᵈ mod n, де μ — функція доповнення. Будь-хто підносить σ до відкритого e і відновлює μ(m). Щодо назв нижче: <b>PKCS#1 v1.5</b> — фіксоване детерміноване доповнення, просте, але історично крихке. <b>PSS</b> (Probabilistic Signature Scheme) додає свіжу випадкову <b>сіль</b> і функцію генерації маски, даючи рандомізований підпис із суворим доказом стійкості. Нижче — живий приклад на малих числах." data-i18n-html="1">An RSA signature is a private-key operation…</p>
+    <div id="refs-rsapss"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label>p</label><select id="rsaP"></select></div>
+        <div class="ctrl"><label>q</label><select id="rsaQ"></select></div>
+        <div class="ctrl"><label>e</label><select id="rsaE"></select></div>
+        <div class="ctrl"><label data-en="hash H(m)" data-uk="хеш H(m)">hash H(m)</label><input type="number" id="rsaM" value="42" min="0" style="width:100px"></div>
+      </div>
+      <button id="rsaTamper" class="secondary" data-en="⚠ tamper: verify a forged hash" data-uk="⚠ підробка: перевірити змінений хеш">⚠ tamper: verify a forged hash</button>
+      <div class="readout" id="rsaOut"></div>
+    </div>
+    <h3 class="sub" data-en="⚠ Textbook-RSA forgery — signatures multiply" data-uk="⚠ Підробка «підручникового» RSA — підписи множаться">⚠ Textbook-RSA forgery — signatures multiply</h3>
+    <p class="desc" data-en="Raw RSA with <b>no hash</b> is multiplicatively malleable: since σ = mᵈ, we get σ₁·σ₂ = (m₁·m₂)ᵈ. So anyone can forge a valid signature on <b>m₁·m₂</b> out of two existing signatures — <b>no private key needed</b> (existential forgery via multiplicativity, Davida 1982). Hashing first breaks the homomorphism, because H(m₁·m₂) ≠ H(m₁)·H(m₂)."
+       data-uk="Сирий RSA <b>без хешу</b> мультиплікативно піддатливий: оскільки σ = mᵈ, маємо σ₁·σ₂ = (m₁·m₂)ᵈ. Тож будь-хто підробить дійсний підпис на <b>m₁·m₂</b> з двох наявних підписів — <b>без приватного ключа</b> (екзистенційна підробка через мультиплікативність, Davida 1982). Хешування спершу руйнує гомоморфізм, бо H(m₁·m₂) ≠ H(m₁)·H(m₂)." data-i18n-html="1">Raw RSA with no hash is multiplicatively malleable…</p>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label data-en="message m₁" data-uk="повідомлення m₁">message m₁</label><input type="number" id="rsaFm1" value="9" min="1" style="width:90px"></div>
+        <div class="ctrl"><label data-en="message m₂" data-uk="повідомлення m₂">message m₂</label><input type="number" id="rsaFm2" value="11" min="1" style="width:90px"></div>
+      </div>
+      <button id="rsaForge" class="secondary" data-en="⚠ forge σ(m₁·m₂) = σ₁·σ₂ — no private key" data-uk="⚠ підробити σ(m₁·m₂) = σ₁·σ₂ — без приватного ключа">⚠ forge σ(m₁·m₂) = σ₁·σ₂</button>
+      <div class="readout" id="rsaFOut"></div>
+      <div class="hint" data-en="Uses the same p, q, e chosen above. Toy hash H(m) = (m²·7 + 13) mod n — a stand-in only." data-uk="Використовує ті самі p, q, e, обрані вище. Іграшковий хеш H(m) = (m²·7 + 13) mod n — лише замінник.">Uses the same p, q, e…</div>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <div class="actor-row" style="margin:0">
+        <div class="actor alice" style="flex:1">
+          <h3>PKCS#1 v1.5</h3>
+          <p class="adesc" data-en="Deterministic: EM = 0x00 01 FF…FF 00 ‖ DigestInfo ‖ H(m). Same message → same signature. Vulnerable to <b>Bleichenbacher's e=3 forgery</b> when verifiers parse padding loosely."
+             data-uk="Детерміноване: EM = 0x00 01 FF…FF 00 ‖ DigestInfo ‖ H(m). Те саме повідомлення → той самий підпис. Вразливе до <b>підробки Блейхенбахера при e=3</b>, коли перевіряч ліниво розбирає доповнення." data-i18n-html="1">Deterministic…</p>
+        </div>
+        <div class="actor bob" style="flex:1">
+          <h3>PSS</h3>
+          <p class="adesc" data-en="Randomised: pick salt → M' = pad ‖ H(m) ‖ salt → H' = H(M') → DB = masked(salt) → EM = maskedDB ‖ H' ‖ 0xBC. Fresh salt each time, provably secure in the random-oracle model."
+             data-uk="Рандомізоване: обрати сіль → M' = pad ‖ H(m) ‖ salt → H' = H(M') → DB = masked(salt) → EM = maskedDB ‖ H' ‖ 0xBC. Свіжа сіль щоразу, доказово стійке в моделі випадкового оракула." data-i18n-html="1">Randomised…</p>
+        </div>
+      </div>
+    </div>
+    <div class="hint" data-en="Implementations: " data-uk="Реалізації: "></div>
+    <div class="refs" id="impl-rsapss"></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Signing rests on the factoring of n — 2048-bit minimum, 3072+ recommended. <b>Textbook RSA</b> (no padding) is universally forgeable: multiply two signatures to sign the product. <b>Bleichenbacher (2006)</b> forged low-exponent (e=3) PKCS#1 v1.5 signatures against sloppy verifiers; the same 2006 flaw resurfaced in many libraries. Prefer <b>PSS</b> for new designs. Shor's algorithm breaks RSA entirely on a quantum computer."
+            data-uk="Стійкість спирається на факторизацію n — мінімум 2048 біт, рекомендовано 3072+. <b>«Підручниковий» RSA</b> (без доповнення) універсально підробний: перемножте два підписи — отримаєте підпис добутку. <b>Блейхенбахер (2006)</b> підробляв підписи PKCS#1 v1.5 з малим показником (e=3) проти недбалих перевірячів; той самий дефект 2006 року знову виринав у багатьох бібліотеках. Для нових систем обирайте <b>PSS</b>. Алгоритм Шора повністю ламає RSA на квантовому комп'ютері." data-i18n-html="1"></span></div>
+    <div class="xrefs">
+      <a href="asymmetric.html#rsa" data-en="RSA encryption" data-uk="Шифрування RSA">RSA encryption</a>
+      <a href="hash.html#sha2" data-en="the hash H(m)" data-uk="хеш H(m)">hash H(m)</a>
+      <a href="cryptanalysis.html#gnfs" data-en="factoring (GNFS)" data-uk="факторизація (GNFS)">factoring</a>
+      <a href="quantum.html#shor-q" data-en="Shor's algorithm" data-uk="Алгоритм Шора">Shor</a>
+    </div>
+  </section>
+
+  <!-- ============================================================== Schnorr -->
+  <section id="schnorr">
+    <div class="num">03 / Schnorr</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+        <span data-en="Schnorr — the simplest good signature" data-uk="Шнорр — найпростіший хороший підпис">Schnorr — the simplest good signature</span></h2>
+    <div class="formula">r = gᵏ,&nbsp; e = H(r‖m),&nbsp; s = k − x·e,&nbsp; gˢ·yᵉ ≟ r</div>
+    <p class="desc" data-en="Schnorr is the cleanest discrete-log signature: <b>linear</b> in the secret, so unlike ECDSA there is no modular inverse and the security proof is tight. The signer commits to a random nonce <b>r = gᵏ</b>, hashes it with the message to a challenge <b>e</b>, and answers <b>s = k − x·e</b>. Verification checks <b>gˢ·yᵉ = r</b>. It is exactly the Schnorr zero-knowledge identification protocol made non-interactive by the Fiat–Shamir hash — and the basis of Bitcoin Taproot. This demo runs the full protocol in a prime-order subgroup with BigInt."
+       data-uk="Шнорр — найчистіший підпис на дискретному логарифмі: <b>лінійний</b> за секретом, тож на відміну від ECDSA немає модульного обернення, а доказ стійкості суворий. Підписант фіксує випадковий nonce <b>r = gᵏ</b>, хешує його з повідомленням у виклик <b>e</b> й відповідає <b>s = k − x·e</b>. Перевірка контролює <b>gˢ·yᵉ = r</b>. Це рівно протокол ідентифікації Шнорра з нульовим розголошенням, зроблений неінтерактивним хешем Фіата–Шаміра — і основа Bitcoin Taproot. Демо виконує повний протокол у підгрупі простого порядку на BigInt." data-i18n-html="1">Schnorr is the cleanest discrete-log signature…</p>
+    <div id="refs-schnorr"></div>
+    <div class="panel">
+      <div class="hint" data-en="Group: p = 467, prime-order subgroup q = 233, generator g = 4 (g^q ≡ 1). Toy hash H(r‖m) = (131·r + 977·m + 7) mod q."
+           data-uk="Група: p = 467, підгрупа простого порядку q = 233, генератор g = 4 (g^q ≡ 1). Іграшковий хеш H(r‖m) = (131·r + 977·m + 7) mod q.">Group: p = 467…</div>
+      <div class="actor-row" style="margin:14px 0 0">
+        <div class="ctrl"><label data-en="message m₁" data-uk="повідомлення m₁">message m₁</label><input type="number" id="schM" value="42" min="0" style="width:100px"></div>
+        <div class="ctrl"><label data-en="message m₂ (for reuse)" data-uk="повідомлення m₂ (для повтору)">message m₂ (for reuse)</label><input type="number" id="schM2" value="99" min="0" style="width:100px"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+        <button id="schKeys" data-en="new keys" data-uk="нові ключі">new keys</button>
+        <button id="schSign" data-en="sign" data-uk="підписати">sign</button>
+        <button id="schVerify" data-en="verify" data-uk="перевірити">verify</button>
+        <button id="schTamper" class="secondary" data-en="⚠ tamper with message" data-uk="⚠ змінити повідомлення">⚠ tamper with message</button>
+        <button id="schReuse" class="secondary" data-en="⚠ reuse nonce k → recover x" data-uk="⚠ повторити nonce k → відновити x">⚠ reuse nonce → recover x</button>
+      </div>
+      <div class="readout" id="schOut"></div>
+    </div>
+    <div class="hint" data-en="Implementations: " data-uk="Реалізації: "></div>
+    <div class="refs" id="impl-schnorr"></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Provably secure under the discrete-log assumption in the random-oracle model — a <b>tighter</b> reduction than ECDSA. Same nonce discipline applies: reuse or bias of <b>k</b> leaks x. Its linearity enables <b>key aggregation</b> and multisignatures (MuSig2, Bitcoin BIP-340/Taproot, 2021). Quantum-broken by Shor, like all discrete-log schemes. Long patent-encumbered (expired 2008), which is why DSA was standardised first."
+            data-uk="Доказово стійкий за припущенням дискретного логарифму в моделі випадкового оракула — <b>суворіша</b> редукція, ніж в ECDSA. Дисципліна nonce та сама: повторення чи зміщення <b>k</b> розкриває x. Лінійність дає <b>агрегацію ключів</b> і мультипідписи (MuSig2, Bitcoin BIP-340/Taproot, 2021). Ламається Шором, як усі схеми на дискретному логарифмі. Довго був під патентом (сплив 2008), тому спершу стандартизували DSA." data-i18n-html="1"></span></div>
+    <div class="xrefs">
+      <a href="advanced.html#schnorr-zk" data-en="Schnorr ZKP (signature minus Fiat–Shamir)" data-uk="ZKP Шнорра (підпис без Фіата–Шаміра)">Schnorr ZKP</a>
+      <a href="signatures.html#dsa" data-en="ECDSA" data-uk="ECDSA">ECDSA</a>
+      <a href="signatures.html#eddsa" data-en="EdDSA" data-uk="EdDSA">EdDSA</a>
+      <a href="hash.html#sha2" data-en="Fiat–Shamir hash" data-uk="хеш Фіата–Шаміра">Fiat–Shamir hash</a>
+      <a href="quantum.html#shor-q" data-en="Shor's algorithm" data-uk="Алгоритм Шора">Shor</a>
+    </div>
+  </section>
+
+  <!-- ================================================================ EdDSA -->
+  <section id="eddsa">
+    <div class="num">04 / EdDSA · Ed25519</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+        <span data-en="EdDSA — Schnorr with a deterministic nonce" data-uk="EdDSA — Шнорр із детермінованим nonce">EdDSA — Schnorr with a deterministic nonce</span></h2>
+    <div class="formula">r = H(prefix ‖ m) mod ℓ,&nbsp; R = r·B,&nbsp; S = r + H(R‖A‖m)·s</div>
+    <p class="desc" data-en="EdDSA is a Schnorr signature on a <b>twisted Edwards curve</b> (Ed25519 uses Curve25519's Edwards form). Its headline fix: the nonce is <b>not random</b> — it is derived deterministically by hashing a secret key-prefix together with the message, <b>r = H(prefix‖m)</b>. Two consequences follow directly from the ECDSA demo above: (1) a broken RNG can never repeat a nonce, because there is no RNG at signing time; (2) the same message always produces the same signature. The demo shows the derivation with a toy hash — change m and the nonce moves; sign the same m twice and it does not."
+       data-uk="EdDSA — це підпис Шнорра на <b>скрученій кривій Едвардса</b> (Ed25519 бере форму Едвардса для Curve25519). Головне виправлення: nonce <b>не випадковий</b> — його детерміновано виводять хешуванням секретного префікса ключа разом із повідомленням, <b>r = H(prefix‖m)</b>. Звідси прямо випливають два наслідки з демо ECDSA вище: (1) зламаний RNG ніколи не повторить nonce, бо під час підписання RNG узагалі немає; (2) те саме повідомлення завжди дає той самий підпис. Демо показує виведення з іграшковим хешем — змініть m, і nonce зсунеться; підпишіть те саме m двічі — не зсунеться." data-i18n-html="1">EdDSA is a Schnorr signature on a twisted Edwards curve…</p>
+    <div id="refs-eddsa"></div>
+    <div class="panel">
+      <div class="hint" data-en="Deterministic nonce r = H(prefix ‖ m) mod ℓ. Same secret prefix + same m ⇒ identical r, always. This is what removes the ECDSA nonce catastrophe entirely."
+           data-uk="Детермінований nonce r = H(prefix ‖ m) mod ℓ. Той самий секретний префікс + те саме m ⇒ завжди однаковий r. Саме це повністю усуває катастрофу nonce з ECDSA.">Deterministic nonce…</div>
+      <div class="actor-row" style="margin:14px 0 0">
+        <div class="ctrl"><label data-en="secret prefix" data-uk="секретний префікс">secret prefix</label><input type="number" id="edPrefix" value="88" min="1" style="width:100px"></div>
+        <div class="ctrl"><label data-en="message m" data-uk="повідомлення m">message m</label><input type="number" id="edM" value="42" min="0" style="width:100px"></div>
+      </div>
+      <button id="edRun" style="margin-top:14px" data-en="derive nonce &amp; sign" data-uk="вивести nonce і підписати">derive nonce &amp; sign</button>
+      <div class="readout" id="edOut"></div>
+    </div>
+    <div class="hint" data-en="Implementations: " data-uk="Реалізації: "></div>
+    <div class="refs" id="impl-eddsa"></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Ed25519 gives ≈128-bit security with 32-byte keys and no RNG dependence at signing — immune to the nonce-reuse and nonce-bias attacks that plague ECDSA. Uses complete Edwards addition (no special-case branches), aiding constant-time, side-channel-resistant code. Caveats: <b>fault attacks</b> can still leak keys if a signature is computed twice under injected faults; some libraries mishandle non-canonical points / cofactor. Standardised in RFC 8032 and FIPS 186-5. Quantum-broken by Shor."
+            data-uk="Ed25519 дає ≈128-бітну стійкість із 32-байтними ключами й без залежності від RNG при підписанні — імунний до атак повторення та зміщення nonce, що мучать ECDSA. Використовує повне додавання Едвардса (без окремих гілок), що сприяє сталочасовому коду, стійкому до атак сторонніми каналами. Застереження: <b>атаки збоями</b> все ще можуть розкрити ключ, якщо підпис обчислено двічі за впровадженого збою; деякі бібліотеки неправильно обробляють неканонічні точки / кофактор. Стандартизовано в RFC 8032 і FIPS 186-5. Ламається Шором." data-i18n-html="1"></span></div>
+    <div class="xrefs">
+      <a href="edwards.html" data-en="Edwards-curve geometry (the group)" data-uk="Геометрія кривих Едвардса (група)">Edwards geometry</a>
+      <a href="signatures.html#schnorr" data-en="Schnorr (the template)" data-uk="Шнорр (шаблон)">Schnorr</a>
+      <a href="signatures.html#dsa" data-en="ECDSA (the nonce problem)" data-uk="ECDSA (проблема nonce)">ECDSA</a>
+      <a href="keyexchange.html#ecdh" data-en="X25519 / ECDH" data-uk="X25519 / ECDH">X25519</a>
+      <a href="hash.html#sha2" data-en="SHA-512 nonce derivation" data-uk="виведення nonce на SHA-512">hash</a>
+    </div>
+  </section>
+
+  <!-- ============================================================ Dilithium -->
+  <section id="dilithium">
+    <div class="num">05 / Dilithium · Falcon</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(n log n)</span>
+        <span data-en="Dilithium — post-quantum lattice signature" data-uk="Dilithium — постквантовий решітковий підпис">Dilithium — post-quantum lattice signature</span></h2>
+    <div class="formula">z = y + c·s,&nbsp; reject if ‖z‖∞ ≥ γ − β&nbsp; (Fiat–Shamir with aborts)</div>
+    <p class="desc" data-en="CRYSTALS-Dilithium (standardised as <b>ML-DSA / FIPS 204</b>) is a Fiat–Shamir signature over <b>module lattices</b>. Like Schnorr it commits, challenges, and responds — but over vectors of polynomials, where security rests on Module-LWE and Module-SIS. The twist is <b>rejection sampling (“aborts”)</b>: the response z = y + c·s would leak the secret s through its distribution, so the signer <b>discards and retries</b> any z whose coefficients fall outside a safe range, until the output is independent of s. Falcon reaches smaller signatures using NTRU lattices and Gaussian sampling. The demo runs the abort loop on toy scalars."
+       data-uk="CRYSTALS-Dilithium (стандартизований як <b>ML-DSA / FIPS 204</b>) — підпис Фіата–Шаміра над <b>модульними решітками</b>. Як і Шнорр, він фіксує, викликає й відповідає — але над векторами многочленів, де стійкість спирається на Module-LWE та Module-SIS. Родзинка — <b>вибірка з відхиленням («аборти»)</b>: відповідь z = y + c·s розкривала б секрет s через свій розподіл, тож підписант <b>відкидає й повторює</b> будь-який z, чиї коефіцієнти виходять за безпечний діапазон, поки вихід не стане незалежним від s. Falcon дає менші підписи через NTRU-решітки й гаусову вибірку. Демо виконує цикл відхилення на іграшкових скалярах." data-i18n-html="1">CRYSTALS-Dilithium…</p>
+    <div id="refs-dilithium"></div>
+    <div class="panel">
+      <div class="hint" data-en="Toy scalar model: secret s, challenge c, bound (γ−β). Sample y uniformly, form z = y + c·s, accept only if |z| < bound — else abort and resample. Watch the attempt counter."
+           data-uk="Іграшкова скалярна модель: секрет s, виклик c, межа (γ−β). Вибираємо y рівномірно, формуємо z = y + c·s, приймаємо лише якщо |z| < межі — інакше аборт і нова вибірка. Слідкуйте за лічильником спроб.">Toy scalar model…</div>
+      <button id="dilRun" style="margin-top:14px" data-en="run Fiat–Shamir with aborts" data-uk="запустити Фіата–Шаміра з абортами">run Fiat–Shamir with aborts</button>
+      <div class="readout" id="dilOut"></div>
+    </div>
+    <div class="hint" data-en="Implementations: " data-uk="Реалізації: "></div>
+    <div class="refs" id="impl-dilithium"></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Selected by NIST (2022) and standardised as <b>ML-DSA (FIPS 204, 2024)</b>; the primary post-quantum signature. Security reduces to Module-LWE / Module-SIS, believed hard for quantum computers. Larger than ECC: signatures ~2–4 KB, public keys ~1.3–2.5 KB. Main risks are <b>implementation</b>: the rejection loop and polynomial arithmetic must be constant-time, or side channels leak s. Falcon is compact but its floating-point Gaussian sampler is notoriously hard to implement safely."
+            data-uk="Обраний NIST (2022) і стандартизований як <b>ML-DSA (FIPS 204, 2024)</b>; основний постквантовий підпис. Стійкість зводиться до Module-LWE / Module-SIS, які вважають складними для квантових комп'ютерів. Більший за ECC: підписи ~2–4 КБ, відкриті ключі ~1.3–2.5 КБ. Головні ризики — <b>реалізаційні</b>: цикл відхилення та арифметика многочленів мають бути сталочасовими, інакше сторонні канали розкриють s. Falcon компактний, але його гаусів семплер із рухомою комою сумнозвісно складно реалізувати безпечно." data-i18n-html="1"></span></div>
+    <div class="xrefs">
+      <a href="asymmetric.html#pqc" data-en="Kyber / lattice KEM" data-uk="Kyber / решітковий KEM">lattice PQC</a>
+      <a href="signatures.html#schnorr" data-en="Fiat–Shamir template" data-uk="шаблон Фіата–Шаміра">Fiat–Shamir</a>
+      <a href="advanced.html#lll" data-en="lattice reduction (LLL/BKZ)" data-uk="редукція решіток (LLL/BKZ)">lattice reduction</a>
+      <a href="signatures.html#sphincs" data-en="SPHINCS+ (hash-based PQC)" data-uk="SPHINCS+ (хеш-PQC)">SPHINCS+</a>
+      <a href="quantum.html#shor-q" data-en="the quantum threat" data-uk="квантова загроза">quantum threat</a>
+    </div>
+  </section>
+
+  <!-- ============================================================== SPHINCS+ -->
+  <section id="sphincs">
+    <div class="num">06 / SPHINCS+</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(n)</span>
+        <span data-en="SPHINCS+ — signatures from hashing alone" data-uk="SPHINCS+ — підписи лише з хешування">SPHINCS+ — signatures from hashing alone</span></h2>
+    <div class="formula">reveal secretᵢ,bit(i)&nbsp; for each bit → verify H(secret) = public</div>
+    <p class="desc" data-en="SPHINCS+ (standardised as <b>SLH-DSA / FIPS 205</b>) needs <b>no</b> number theory and <b>no</b> lattices — only a hash function. Its foundation is the <b>Lamport one-time signature</b> below: for each message bit you publish two hashes and later reveal one preimage per bit. Chaining many one-time keys under Merkle trees (WOTS+, FORS, a hypertree) makes it <b>stateless</b> and reusable. The catch that motivates all that machinery: a Lamport key is safe for exactly <b>one</b> signature — sign twice and you leak secrets. The demo builds a real Lamport key, signs an 8-bit message, verifies it, then counts how the second signature bleeds the private key."
+       data-uk="SPHINCS+ (стандартизований як <b>SLH-DSA / FIPS 205</b>) не потребує <b>жодної</b> теорії чисел і <b>жодних</b> решіток — лише хеш-функцію. Його основа — <b>одноразовий підпис Лампорта</b> нижче: для кожного біта повідомлення публікують два хеші й пізніше розкривають один прообраз на біт. Ланцюжок багатьох одноразових ключів під деревами Меркла (WOTS+, FORS, гіпердерево) робить схему <b>stateless</b> і придатною до повторного використання. Пастка, що виправдовує всю цю машинерію: ключ Лампорта безпечний рівно для <b>одного</b> підпису — підпишіть двічі, і секрети витечуть. Демо будує справжній ключ Лампорта, підписує 8-бітне повідомлення, перевіряє його, потім рахує, як другий підпис зливає приватний ключ." data-i18n-html="1">SPHINCS+ needs no number theory…</p>
+    <div id="refs-sphincs"></div>
+    <div class="panel">
+      <div class="hint" data-en="Lamport OTS: private key = 2×8 random values sk[b][i]. Public key = H(sk[b][i]). To sign bit i (value bᵢ), reveal sk[bᵢ][i]. Verify by hashing each revealed value against the public key. Toy hash H(v) = (1103515245·v + 12345) mod 2³¹."
+           data-uk="Lamport OTS: приватний ключ = 2×8 випадкових значень sk[b][i]. Відкритий ключ = H(sk[b][i]). Щоб підписати біт i (значення bᵢ), розкривають sk[bᵢ][i]. Перевірка — хешуванням кожного розкритого значення проти відкритого ключа. Іграшковий хеш H(v) = (1103515245·v + 12345) mod 2³¹.">Lamport OTS…</div>
+      <div class="actor-row" style="margin:14px 0 0">
+        <div class="ctrl"><label data-en="8-bit message" data-uk="8-бітне повідомлення">8-bit message</label><input type="number" id="lampM" value="182" min="0" max="255" style="width:100px"></div>
+        <div class="ctrl"><label data-en="second message (reuse)" data-uk="друге повідомлення (повтор)">second message</label><input type="number" id="lampM2" value="75" min="0" max="255" style="width:100px"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+        <button id="lampKeys" data-en="new key" data-uk="новий ключ">new key</button>
+        <button id="lampSign" data-en="sign &amp; verify" data-uk="підписати й перевірити">sign &amp; verify</button>
+        <button id="lampReuse" class="secondary" data-en="⚠ sign a second message (reuse)" data-uk="⚠ підписати друге повідомлення (повтор)">⚠ sign a second message</button>
+      </div>
+      <div class="readout" id="lampOut"></div>
+    </div>
+    <div class="hint" data-en="Implementations: " data-uk="Реалізації: "></div>
+    <div class="refs" id="impl-sphincs"></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Standardised as <b>SLH-DSA (FIPS 205, 2024)</b>. The most <b>conservative</b> post-quantum choice: its only assumption is that the hash function is secure (second-preimage / collision resistance), so it survives even if lattices are broken. Costs: large signatures (~8–50 KB) and slow signing. Lamport itself is strictly <b>one-time</b> — reuse leaks one secret per differing bit, as the demo counts; SPHINCS+ solves this with few-time FORS keys and a huge hypertree so no single one-time key is ever reused. No known quantum attack beyond Grover's √ speed-up (handled by doubling the hash output)."
+            data-uk="Стандартизований як <b>SLH-DSA (FIPS 205, 2024)</b>. Найбільш <b>консервативний</b> постквантовий вибір: єдине припущення — що хеш-функція стійка (стійкість до другого прообразу / колізій), тож він виживе, навіть якщо зламають решітки. Ціна: великі підписи (~8–50 КБ) і повільне підписання. Сам Lamport суто <b>одноразовий</b> — повтор розкриває один секрет на кожен відмінний біт, як рахує демо; SPHINCS+ розв'язує це нечастими ключами FORS і величезним гіпердеревом, тож жоден одноразовий ключ не використовується двічі. Немає відомих квантових атак, окрім √-прискорення Гровера (компенсується подвоєнням довжини хешу)." data-i18n-html="1"></span></div>
+    <div class="xrefs">
+      <a href="hash.html#sha2" data-en="the underlying hash" data-uk="базовий хеш">underlying hash</a>
+      <a href="signatures.html#dilithium" data-en="Dilithium (lattice PQC)" data-uk="Dilithium (решітковий PQC)">Dilithium</a>
+      <a href="hash.html#sha3" data-en="SHAKE / Haraka" data-uk="SHAKE / Haraka">SHAKE</a>
+      <a href="quantum.html#grover" data-en="Grover's algorithm" data-uk="Алгоритм Гровера">Grover</a>
+      <a href="asymmetric.html#pqc" data-en="post-quantum family" data-uk="постквантове сімейство">post-quantum</a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="<b>The one rule of signatures:</b> you never sign the message, you sign its <b>hash</b> (hash-then-sign). That makes signatures fast and fixed-size, but it also means a hash collision is a signature forgery — which is why MD5 and SHA-1 were retired from signing. Every scheme here uses small toy parameters so each number is legible; real deployments use 256-bit curves, 3072-bit RSA, or NIST post-quantum parameter sets."
+     data-uk="<b>Головне правило підписів:</b> ви ніколи не підписуєте повідомлення — ви підписуєте його <b>хеш</b> (hash-then-sign). Це робить підписи швидкими й фіксованого розміру, але й означає, що колізія хешу — це підробка підпису; саме тому MD5 і SHA-1 вивели з підписання. Кожна схема тут використовує малі іграшкові параметри, щоб кожне число було читабельним; реальні системи беруть 256-бітні криві, 3072-бітний RSA або постквантові набори параметрів NIST."
+     data-i18n-html="1">The one rule of signatures…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+// ================= BigInt modular arithmetic helpers ==================
+function egcd(a,b){ if(b===0n) return [a,1n,0n]; const [g,x,y]=egcd(b,a%b); return [g,y,x-(a/b)*y]; }
+function modinv(a,m){ a=((a%m)+m)%m; const [g,x]=egcd(a,m); if(g!==1n) return null; return ((x%m)+m)%m; }
+function modpow(b,e,m){ b%=m; if(b<0n)b+=m; let r=1n; while(e>0n){ if(e&1n) r=r*b%m; b=b*b%m; e>>=1n; } return r; }
+function gcd(a,b){ a=a<0n?-a:a; b=b<0n?-b:b; while(b){ [a,b]=[b,a%b]; } return a; }
+function UK(){ return window.LANG==='uk'; }
+function fillSelect(id, arr, def){
+  const el=document.getElementById(id);
+  el.innerHTML=arr.map(v=>`<option ${String(v)===String(def)?'selected':''}>${v}</option>`).join('');
+}
+const PRIMES = [11n,13n,17n,19n,23n,29n,31n,37n,41n,43n,47n,53n,59n,61n,67n,71n,73n,79n,83n,89n,97n,101n,103n];
+
+// ============================ ECDSA (#dsa) ============================
+// Curve E: y^2 = x^3 + 2x + 14 mod 97; G=(3,12), prime order n=101
+const EC = {p:97, a:2, b:14, n:101, G:[3,12]};
+function ecInv(a,m){ a=((a%m)+m)%m; let [g,x]=(function e(a,b){ if(b===0)return[a,1,0]; const [G,x,y]=e(b,a%b); return[G,y,x-Math.floor(a/b)*y]; })(a,m); return g!==1?null:((x%m)+m)%m; }
+function ecAdd(P,Q){
+  const p=EC.p;
+  if(P===null) return Q; if(Q===null) return P;
+  const [x1,y1]=P,[x2,y2]=Q;
+  if(x1===x2 && (y1+y2)%p===0) return null;
+  let lam;
+  if(x1===x2 && y1===y2){ lam=((3*x1*x1+EC.a)%p)*ecInv(2*y1,p)%p; }
+  else { lam=(((y2-y1)%p+p)%p)*ecInv(((x2-x1)%p+p)%p,p)%p; }
+  lam=((lam%p)+p)%p;
+  const x3=((lam*lam-x1-x2)%p+p)%p;
+  const y3=((lam*(x1-x3)-y1)%p+p)%p;
+  return [x3,y3];
+}
+function ecMul(k,P){ let R=null,A=P; k=((k%EC.n)+EC.n)%EC.n; while(k>0){ if(k&1) R=ecAdd(R,A); A=ecAdd(A,A); k>>=1; } return R; }
+function ecAllPoints(){ const pts=[],p=EC.p; for(let x=0;x<p;x++){ const r=((x*x*x+EC.a*x+EC.b)%p+p)%p; for(let y=0;y<p;y++){ if((y*y)%p===r) pts.push([x,y]); } } return pts; }
+const ecPts=ecAllPoints();
+let ecdsaState={d:42, Q:ecMul(42,EC.G), R:null, sig:null};
+
+const ecCanvas=document.getElementById('ecdsaCanvas');
+const ecCtx=ecCanvas.getContext('2d');
+function ecDraw(){
+  const size=380, p=EC.p, margin=14, scale=(size-margin*2)/p;
+  ecCtx.clearRect(0,0,size,size);
+  ecCtx.strokeStyle='#1B2740'; ecCtx.lineWidth=1;
+  for(let i=0;i<=size;i+=size/10){ ecCtx.beginPath(); ecCtx.moveTo(i,0); ecCtx.lineTo(i,size); ecCtx.stroke(); ecCtx.beginPath(); ecCtx.moveTo(0,i); ecCtx.lineTo(size,i); ecCtx.stroke(); }
+  ecPts.forEach(([x,y])=>{ ecCtx.fillStyle='#2C3A5C'; ecCtx.beginPath(); ecCtx.arc(margin+x*scale, size-margin-y*scale, 2.3,0,Math.PI*2); ecCtx.fill(); });
+  function big(pt,color,r){ if(!pt) return; ecCtx.fillStyle=color; ecCtx.beginPath(); ecCtx.arc(margin+pt[0]*scale, size-margin-pt[1]*scale, r,0,Math.PI*2); ecCtx.fill(); ecCtx.strokeStyle='#06110F'; ecCtx.lineWidth=1.4; ecCtx.stroke(); }
+  big(ecdsaState.Q,'#7FDBCA',6);
+  big(ecdsaState.R,'#F2A65A',6);
+  big(EC.G,'#E8ECF4',5.5);
+}
+function ecSign(z,k){ const R=ecMul(k,EC.G); const r=((R[0]%EC.n)+EC.n)%EC.n; const s=(BigInt(ecInv(((k%EC.n)+EC.n)%EC.n,EC.n))*(BigInt(z)+BigInt(r)*BigInt(ecdsaState.d)))%BigInt(EC.n); return {r, s:Number((s+BigInt(EC.n))%BigInt(EC.n)), R}; }
+function ecVerify(z,r,s,Q){ const n=EC.n; const w=ecInv(s,n); if(w===null) return false; const u1=(z*w)%n, u2=(r*w)%n; const X=ecAdd(ecMul(u1,EC.G), ecMul(u2,Q)); if(X===null) return false; return ((X[0]%n)+n)%n===((r%n)+n)%n; }
+function ecdsaRender(msg){ document.getElementById('ecdsaOut').innerHTML=msg; ecDraw(); }
+function ecdsaNewKeys(){
+  ecdsaState.d = 2+Math.floor(Math.random()*(EC.n-3));
+  ecdsaState.Q = ecMul(ecdsaState.d, EC.G);
+  ecdsaState.R=null; ecdsaState.sig=null;
+  const u=UK();
+  ecdsaRender(
+    `<span class="k">${u?'параметри':'params'}</span>: E: y² = x³ + 2x + 14 (mod 97),  G = (3, 12),  n = 101\n`+
+    `<span class="k">${u?'приватний ключ':'private key'}</span> d = <span class="b">${ecdsaState.d}</span>   (${u?'секрет':'secret'})\n`+
+    `<span class="a">${u?'відкритий ключ':'public key'}</span> Q = d·G = <span class="a">(${ecdsaState.Q[0]}, ${ecdsaState.Q[1]})</span>\n\n`+
+    `${u?'Тепер натисніть «підписати».':'Now press “sign”.'}`
+  );
+}
+function ecdsaDoSign(){
+  const z=parseInt(document.getElementById('ecdsaZ1').value)||1;
+  const k=parseInt(document.getElementById('ecdsaK').value)||1;
+  const u=UK();
+  if(k%EC.n===0){ ecdsaRender(`<span class="b">${u?'k не може бути кратним n':'k must not be a multiple of n'}</span>`); return; }
+  const sig=ecSign(z,k); ecdsaState.R=sig.R; ecdsaState.sig={z,...sig};
+  if(sig.r===0||sig.s===0){ ecdsaRender(`<span class="b">${u?'вироджений r або s — оберіть інший k':'degenerate r or s — pick another k'}</span>`); return; }
+  ecdsaRender(
+    `<span class="k">d</span> = ${ecdsaState.d},  Q = (${ecdsaState.Q[0]}, ${ecdsaState.Q[1]})\n`+
+    `<span class="s">${u?'nonce':'nonce'} k</span> = ${k}   →   R = k·G = <span class="s">(${sig.R[0]}, ${sig.R[1]})</span>\n`+
+    `<span class="a">r</span> = Rₓ mod n = <span class="a">${sig.r}</span>\n`+
+    `<span class="a">s</span> = k⁻¹(z + r·d) mod n = k⁻¹(${z} + ${sig.r}·${ecdsaState.d}) mod ${EC.n} = <span class="a">${sig.s}</span>\n\n`+
+    `${u?'Підпис':'Signature'} σ = (r, s) = (${sig.r}, ${sig.s}).  ${u?'Натисніть «перевірити».':'Press “verify”.'}`
+  );
+}
+function ecdsaDoVerify(){
+  const u=UK();
+  if(!ecdsaState.sig){ ecdsaRender(`<span class="b">${u?'Спершу підпишіть.':'Sign first.'}</span>`); return; }
+  const {z,r,s}=ecdsaState.sig;
+  const n=EC.n, w=ecInv(s,n), u1=(z*w)%n, u2=(r*w)%n;
+  const X=ecAdd(ecMul(u1,EC.G), ecMul(u2,ecdsaState.Q));
+  const ok=X && ((X[0]%n)+n)%n===r;
+  ecdsaRender(
+    `<span class="k">${u?'перевірка':'verify'}</span> σ = (${r}, ${s}),  z = ${z}\n`+
+    `w = s⁻¹ mod n = ${w}\n`+
+    `u₁ = z·w = ${u1},   u₂ = r·w = ${u2}\n`+
+    `X = u₁·G + u₂·Q = <span class="s">(${X[0]}, ${X[1]})</span>\n`+
+    `Xₓ mod n = ${((X[0]%n)+n)%n}  ${ok?'=':'≠'}  r = ${r}\n\n`+
+    (ok?`<span class="a">${u?'ВАЛІДНИЙ ✓':'VALID ✓'}</span>`:`<span class="b">${u?'НЕВАЛІДНИЙ ✗':'INVALID ✗'}</span>`)
+  );
+}
+function ecdsaAttack(){
+  const u=UK();
+  const z1=parseInt(document.getElementById('ecdsaZ1').value)||1;
+  const z2=parseInt(document.getElementById('ecdsaZ2').value)||1;
+  const k=parseInt(document.getElementById('ecdsaK').value)||1;
+  if(z1===z2){ ecdsaRender(`<span class="b">${u?'Оберіть різні z₁ та z₂.':'Choose distinct z₁ and z₂.'}</span>`); return; }
+  const s1=ecSign(z1,k), s2=ecSign(z2,k);
+  const n=EC.n;
+  // k = (z1 - z2) / (s1 - s2) mod n ; d = (s*k - z)/r mod n
+  const num=((z1-z2)%n+n)%n, den=(((s1.s-s2.s)%n)+n)%n;
+  const kRec=(num*ecInv(den,n))%n;
+  const dRec=((((s1.s*kRec-z1)%n)+n)%n * ecInv(s1.r,n))%n;
+  ecdsaState.R=s1.R;
+  ecdsaRender(
+    `<span class="b">⚠ ${u?'той самий nonce k для двох повідомлень':'same nonce k for two messages'}</span>  (k = ${k})\n`+
+    `σ₁ = (r=${s1.r}, s=${s1.s})  ${u?'на':'on'} z₁=${z1}\n`+
+    `σ₂ = (r=${s2.r}, s=${s2.s})  ${u?'на':'on'} z₂=${z2}   ← r ${u?'однакове!':'is identical!'}\n\n`+
+    `<span class="k">${u?'відновлюємо nonce':'recover nonce'}</span>: k = (z₁−z₂)·(s₁−s₂)⁻¹ mod n = <span class="s">${kRec}</span>\n`+
+    `<span class="k">${u?'відновлюємо ключ':'recover key'}</span>:   d = (s₁·k − z₁)·r⁻¹ mod n = <span class="b">${dRec}</span>\n\n`+
+    `${u?'справжній приватний ключ':'actual private key'} d = ${ecdsaState.d}   ${dRec===ecdsaState.d?`<span class="a">${u?'ВІДНОВЛЕНО ✓ — приватний ключ повністю зламано':'RECOVERED ✓ — private key fully broken'}</span>`:'✗'}`
+  );
+}
+document.getElementById('ecdsaNew').addEventListener('click',ecdsaNewKeys);
+document.getElementById('ecdsaSign').addEventListener('click',ecdsaDoSign);
+document.getElementById('ecdsaVerify').addEventListener('click',ecdsaDoVerify);
+document.getElementById('ecdsaAttack').addEventListener('click',ecdsaAttack);
+
+// ============================ RSA-PSS (#rsapss) =======================
+function initRSA(){
+  fillSelect('rsaP', PRIMES.map(String), '61');
+  fillSelect('rsaQ', PRIMES.map(String), '53');
+  fillSelect('rsaE', ['3','5','7','11','13','17','65537'], '17');
+  ['rsaP','rsaQ','rsaE','rsaM'].forEach(id=>document.getElementById(id).addEventListener('input',runRSA));
+  document.getElementById('rsaTamper').addEventListener('click',()=>{ rsaTampered=true; runRSA(); });
+  ['rsaP','rsaQ','rsaE','rsaM'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{ rsaTampered=false; }));
+  runRSA();
+}
+let rsaTampered=false;
+function runRSA(){
+  const p=BigInt(document.getElementById('rsaP').value);
+  const q=BigInt(document.getElementById('rsaQ').value);
+  const e=BigInt(document.getElementById('rsaE').value);
+  let h=BigInt(document.getElementById('rsaM').value||'0');
+  const out=document.getElementById('rsaOut'); const u=UK();
+  if(p===q){ out.innerHTML=`<span class="b">${u?'Оберіть різні p та q.':'Choose distinct p and q.'}</span>`; return; }
+  const n=p*q, phi=(p-1n)*(q-1n);
+  if(gcd(e,phi)!==1n){ out.innerHTML=`<span class="b">gcd(e, φ) ≠ 1 — ${u?'оберіть інше e.':'pick another e.'}</span>`; return; }
+  const d=modinv(e,phi);
+  if(h>=n){ out.innerHTML=`<span class="b">${u?'Хеш H(m) має бути менше n = '+n+'.':'Hash H(m) must be smaller than n = '+n+'.'}</span>`; return; }
+  const sig=modpow(h,d,n);
+  const recovered=modpow(sig,e,n);
+  const claimed = rsaTampered ? (h+1n)%n : h;
+  const ok = recovered===claimed;
+  out.innerHTML =
+    `<span class="k">n</span> = p·q = ${p}·${q} = <span class="a">${n}</span>   ·   φ(n) = ${phi}\n`+
+    `<span class="k">${u?'відкритий ключ':'public key'}</span> = (e=${e}, n=${n})   ·   <span class="k">${u?'приватний':'private'}</span> d = e⁻¹ mod φ = <span class="b">${d}</span>\n\n`+
+    `<span class="a">${u?'підпис':'sign'}</span>:   σ = H(m)ᵈ mod n = ${h}^${d} mod ${n} = <span class="s">${sig}</span>\n`+
+    `<span class="a">${u?'перевірка':'verify'}</span>: σᵉ mod n = ${sig}^${e} mod ${n} = <span class="s">${recovered}</span>\n`+
+    (rsaTampered
+      ? `<span class="b">${u?'зловмисник заявляє H(m) =':'attacker claims H(m) ='} ${claimed}</span>  →  ${recovered} ${ok?'=':'≠'} ${claimed}  <span class="b">${u?'ПІДРОБКУ ВІДХИЛЕНО ✗':'FORGERY REJECTED ✗'}</span>`
+      : `${u?'очікуваний':'expected'} H(m) = ${claimed}  →  ${recovered} = ${claimed}  <span class="a">${ok?(u?'ВАЛІДНИЙ ✓':'VALID ✓'):'✗'}</span>`);
+}
+function initRSAForge(){
+  ['rsaP','rsaQ','rsaE','rsaFm1','rsaFm2'].forEach(id=>document.getElementById(id).addEventListener('input',runRSAForge));
+  document.getElementById('rsaForge').addEventListener('click',runRSAForge);
+  runRSAForge();
+}
+function runRSAForge(){
+  const p=BigInt(document.getElementById('rsaP').value);
+  const q=BigInt(document.getElementById('rsaQ').value);
+  const e=BigInt(document.getElementById('rsaE').value);
+  const out=document.getElementById('rsaFOut'); const u=UK();
+  if(p===q){ out.innerHTML=`<span class="b">${u?'Оберіть різні p та q.':'Choose distinct p and q.'}</span>`; return; }
+  const n=p*q, phi=(p-1n)*(q-1n);
+  if(gcd(e,phi)!==1n){ out.innerHTML=`<span class="b">gcd(e, φ) ≠ 1 — ${u?'оберіть інше e.':'pick another e.'}</span>`; return; }
+  const d=modinv(e,phi);
+  let m1=((BigInt(document.getElementById('rsaFm1').value||'1')%n)+n)%n;
+  let m2=((BigInt(document.getElementById('rsaFm2').value||'1')%n)+n)%n;
+  const s1=modpow(m1,d,n), s2=modpow(m2,d,n);
+  const m3=(m1*m2)%n;
+  const forged=(s1*s2)%n;               // attacker multiplies — no private key used
+  const check=modpow(forged,e,n);
+  const ok=check===m3;
+  const Hn=x=>((x*x*7n+13n)%n);
+  const hForged=(modpow(Hn(m1),d,n)*modpow(Hn(m2),d,n))%n;
+  const hCheck=modpow(hForged,e,n);
+  const hDefeated=hCheck!==Hn(m3);
+  out.innerHTML =
+    `<span class="k">n</span> = ${n},   d = <span class="b">${d}</span>  (${u?'секрет — атакувальник його НЕ знає':'secret — the attacker does NOT know it'})\n\n`+
+    `σ₁ = m₁ᵈ = ${m1}^${d} mod ${n} = <span class="a">${s1}</span>\n`+
+    `σ₂ = m₂ᵈ = ${m2}^${d} mod ${n} = <span class="a">${s2}</span>\n\n`+
+    `<span class="s">${u?'ПІДРОБКА без ключа':'FORGERY without key'}</span>: σ* = σ₁·σ₂ mod n = <span class="s">${forged}</span>\n`+
+    `${u?'дійсна на':'valid on'} m* = m₁·m₂ mod n = ${m3}?   (σ*)ᵉ = ${check} ${ok?`= ${m3}  <span class="a">✓ ${u?'ПІДРОБЛЕНО':'FORGED'}</span>`:'✗'}\n\n`+
+    `<span class="a">${u?'з хешуванням':'hash-then-sign'}</span>: ${u?'той самий трюк дає':'the same trick gives'} (σ*)ᵉ = ${hCheck}, ${u?'але перевіряч чекає':'but the verifier expects'} H(m*) = ${Hn(m3)}  ${hDefeated?`<span class="b">✗ ${u?'підробка провалюється':'forgery fails'}</span>`:'✓'}`;
+}
+
+// ============================ Schnorr (#schnorr) ======================
+const SCH={p:467n, q:233n, g:4n};
+function schHash(r,m){ return (131n*r + 977n*m + 7n) % SCH.q; }
+let schState={x:null,y:null,sig:null,tampered:false};
+function schNewKeys(){
+  schState.x = 1n + BigInt(Math.floor(Math.random()*(Number(SCH.q)-2)));
+  schState.y = modpow(SCH.g, schState.x, SCH.p);
+  schState.sig=null; schState.tampered=false;
+  const u=UK();
+  document.getElementById('schOut').innerHTML=
+    `<span class="k">${u?'параметри':'params'}</span>: p = 467, q = 233, g = 4\n`+
+    `<span class="b">${u?'приватний ключ':'private key'}</span> x = ${schState.x}   (${u?'секрет':'secret'})\n`+
+    `<span class="a">${u?'відкритий ключ':'public key'}</span> y = gˣ mod p = 4^${schState.x} mod 467 = <span class="a">${schState.y}</span>\n\n`+
+    `${u?'Натисніть «підписати».':'Press “sign”.'}`;
+}
+function schSign(){
+  const u=UK();
+  if(schState.x===null){ schNewKeys(); }
+  const m=BigInt(document.getElementById('schM').value||'0');
+  let k;
+  do { k = 1n + BigInt(Math.floor(Math.random()*(Number(SCH.q)-2))); } while(k===0n);
+  const r=modpow(SCH.g,k,SCH.p);
+  const e=schHash(r,m);
+  const s=((k - schState.x*e)%SCH.q + SCH.q)%SCH.q;
+  schState.sig={m,k,r,e,s}; schState.tampered=false;
+  document.getElementById('schOut').innerHTML=
+    `<span class="k">x</span> = ${schState.x},  y = ${schState.y},  m = ${m}\n`+
+    `<span class="s">${u?'nonce':'nonce'} k</span> = ${k}\n`+
+    `<span class="a">r</span> = gᵏ mod p = 4^${k} mod 467 = <span class="a">${r}</span>\n`+
+    `<span class="a">e</span> = H(r‖m) = (131·${r} + 977·${m} + 7) mod 233 = <span class="a">${e}</span>\n`+
+    `<span class="a">s</span> = (k − x·e) mod q = (${k} − ${schState.x}·${e}) mod 233 = <span class="a">${s}</span>\n\n`+
+    `${u?'Підпис':'Signature'} σ = (e, s) = (${e}, ${s}).  ${u?'Натисніть «перевірити».':'Press “verify”.'}`;
+}
+function schVerify(){
+  const u=UK();
+  if(!schState.sig){ document.getElementById('schOut').innerHTML=`<span class="b">${u?'Спершу підпишіть.':'Sign first.'}</span>`; return; }
+  const {m,r,e,s}=schState.sig;
+  // check message tampering: verifier uses whatever m the box currently shows
+  const mNow = schState.tampered ? BigInt(document.getElementById('schM').value||'0') : m;
+  const rv=(modpow(SCH.g,s,SCH.p)*modpow(schState.y,e,SCH.p))%SCH.p;
+  const ev=schHash(rv,mNow);
+  const ok = ev===e;
+  document.getElementById('schOut').innerHTML=
+    `<span class="k">${u?'перевірка':'verify'}</span> σ = (e=${e}, s=${s}),  m = ${mNow}\n`+
+    `r' = gˢ·yᵉ mod p = 4^${s}·${schState.y}^${e} mod 467 = <span class="s">${rv}</span>\n`+
+    `e' = H(r'‖m) = <span class="s">${ev}</span>\n`+
+    `e' ${ok?'=':'≠'} e  (${ev} ${ok?'=':'≠'} ${e})\n\n`+
+    (ok?`<span class="a">${u?'ВАЛІДНИЙ ✓':'VALID ✓'}</span>`:`<span class="b">${u?'НЕВАЛІДНИЙ ✗ — підпис не відповідає повідомленню':'INVALID ✗ — signature does not match the message'}</span>`);
+}
+function schTamper(){
+  const u=UK();
+  if(!schState.sig){ document.getElementById('schOut').innerHTML=`<span class="b">${u?'Спершу підпишіть.':'Sign first.'}</span>`; return; }
+  const orig=Number(schState.sig.m);
+  const forged=orig+1;
+  document.getElementById('schM').value=forged;
+  schState.tampered=true;
+  document.getElementById('schOut').innerHTML=
+    `<span class="b">⚠ ${u?'повідомлення змінено':'message tampered'}</span>: ${orig} → ${forged}, ${u?'а підпис (e, s) лишився старий':'while the signature (e, s) is left unchanged'}.\n`+
+    `${u?'Тепер натисніть «перевірити» — перевірка має провалитися.':'Now press “verify” — verification must fail.'}`;
+  schVerify();
+}
+function schReuse(){
+  const u=UK();
+  if(schState.x===null){ schNewKeys(); }
+  const m1=BigInt(document.getElementById('schM').value||'0');
+  const m2=BigInt(document.getElementById('schM2').value||'0');
+  if(m1%SCH.q===m2%SCH.q){ document.getElementById('schOut').innerHTML=`<span class="b">${u?'m₁ та m₂ мають відрізнятися (mod 233), інакше e₁ = e₂.':'m₁ and m₂ must differ (mod 233), else e₁ = e₂.'}</span>`; return; }
+  // ONE nonce k reused for both signatures — the fatal mistake
+  const k = 1n + BigInt(Math.floor(Math.random()*(Number(SCH.q)-2)));
+  const r=modpow(SCH.g,k,SCH.p);
+  const e1=schHash(r,m1), e2=schHash(r,m2);
+  const s1=((k - schState.x*e1)%SCH.q + SCH.q)%SCH.q;
+  const s2=((k - schState.x*e2)%SCH.q + SCH.q)%SCH.q;
+  // s1 − s2 = −x·(e1 − e2)  ⇒  x = (s2 − s1)·(e1 − e2)⁻¹ mod q  — no discrete log
+  const num=((s2 - s1)%SCH.q + SCH.q)%SCH.q;
+  const den=((e1 - e2)%SCH.q + SCH.q)%SCH.q;
+  const xRec=(num*modinv(den,SCH.q))%SCH.q;
+  const ok=xRec===schState.x;
+  document.getElementById('schOut').innerHTML=
+    `<span class="b">⚠ ${u?'той самий nonce k для двох повідомлень':'same nonce k for two messages'}</span>  (k = ${k})  →  r = <span class="a">${r}</span> ${u?'(спільний)':'(shared)'}\n`+
+    `σ₁: e₁ = ${e1},  s₁ = k − x·e₁ = <span class="a">${s1}</span>   ${u?'на':'on'} m₁=${m1}\n`+
+    `σ₂: e₂ = ${e2},  s₂ = k − x·e₂ = <span class="a">${s2}</span>   ${u?'на':'on'} m₂=${m2}\n\n`+
+    `<span class="k">${u?'атака':'attack'}</span>: s₁ − s₂ = −x·(e₁ − e₂)  ⇒  x = (s₂ − s₁)·(e₁ − e₂)⁻¹ mod q\n`+
+    `        = (${num})·(${den})⁻¹ mod 233 = <span class="b">${xRec}</span>\n\n`+
+    `${u?'справжній приватний ключ':'actual private key'} x = ${schState.x}   ${ok?`<span class="a">${u?'ВІДНОВЛЕНО ✓ — приватний ключ повністю зламано':'RECOVERED ✓ — private key fully broken'}</span>`:'✗'}`;
+}
+document.getElementById('schKeys').addEventListener('click',schNewKeys);
+document.getElementById('schSign').addEventListener('click',schSign);
+document.getElementById('schVerify').addEventListener('click',schVerify);
+document.getElementById('schTamper').addEventListener('click',schTamper);
+document.getElementById('schReuse').addEventListener('click',schReuse);
+document.getElementById('schM').addEventListener('input',()=>{ schState.tampered=false; });
+
+// ============================ EdDSA (#eddsa) ==========================
+// toy Schnorr over the same subgroup, deterministic nonce r = H(prefix||m) mod q
+function edHash(prefix,m){ return (73n*prefix + 977n*m + 41n) % SCH.q; }
+function edRun(){
+  const u=UK();
+  const prefix=BigInt(document.getElementById('edPrefix').value||'1');
+  const m=BigInt(document.getElementById('edM').value||'0');
+  const rNonce=edHash(prefix,m);                       // deterministic
+  const R=modpow(SCH.g, rNonce, SCH.p);
+  const s=prefix % SCH.q;                              // toy secret scalar
+  const A=modpow(SCH.g, s, SCH.p);                     // public key
+  const c=(53n*R + 977n*m + 3n) % SCH.q;               // challenge H(R||A||m)
+  const S=(rNonce + c*s) % SCH.q;
+  // show it is deterministic: recompute nonce for same m and for m+1
+  const rSame=edHash(prefix,m);
+  const rOther=edHash(prefix,(m+1n)%SCH.q);
+  document.getElementById('edOut').innerHTML=
+    `<span class="k">${u?'параметри':'params'}</span>: p = 467, q = 233, g = 4\n`+
+    `<span class="b">${u?'секретний скаляр':'secret scalar'}</span> s = ${s},  <span class="a">${u?'відкритий ключ':'public key'}</span> A = gˢ = ${A}\n\n`+
+    `<span class="s">${u?'ДЕТЕРМІНОВАНИЙ nonce':'DETERMINISTIC nonce'}</span> r = H(prefix‖m) mod q = H(${prefix}‖${m}) = <span class="s">${rNonce}</span>\n`+
+    `R = r·B (тут gʳ) = <span class="a">${R}</span>\n`+
+    `c = H(R‖A‖m) = ${c}\n`+
+    `S = (r + c·s) mod q = <span class="a">${S}</span>\n`+
+    `${u?'Підпис':'Signature'} σ = (R, S) = (${R}, ${S})\n\n`+
+    `<span class="k">${u?'чому це безпечно':'why this is safe'}</span>:\n`+
+    `  ${u?'той самий m знову':'same m again'} → r = ${rSame}   <span class="a">${rSame===rNonce?(u?'ІДЕНТИЧНИЙ ✓ (жодного RNG)':'IDENTICAL ✓ (no RNG)'):''}</span>\n`+
+    `  m+1 → r = ${rOther}   <span class="b">${u?'зовсім інший — nonce ніколи не повторюється між повідомленнями':'completely different — nonce never repeats across messages'}</span>\n`+
+    `  ${u?'зламаний RNG не може повторити nonce — його тут просто немає (пор. атаку ECDSA вище)':'a broken RNG cannot repeat the nonce — there is none at signing time (cf. the ECDSA attack above)'}.`;
+}
+document.getElementById('edRun').addEventListener('click',edRun);
+
+// ============================ Dilithium (#dilithium) ==================
+function dilRun(){
+  const u=UK();
+  const s=3, c=7, bound=20;   // toy: |z| < bound = gamma - beta
+  let attempts=0, lines=[], z, y;
+  const maxShow=8;
+  while(true){
+    attempts++;
+    y=Math.floor(Math.random()*61)-30;   // y uniform in [-30,30]
+    z=y+c*s;
+    const accept=Math.abs(z)<bound;
+    if(attempts<=maxShow) lines.push(`  #${attempts}: y=${y>=0?' ':''}${y}  →  z = y + c·s = ${y} + ${c}·${s} = ${z>=0?' ':''}${z}   ${accept?`<span class="a">|z|<${bound} ✓ ${u?'ПРИЙНЯТО':'ACCEPT'}</span>`:`<span class="b">|z|≥${bound} ✗ ${u?'аборт':'abort'}</span>`}`);
+    if(accept) break;
+    if(attempts>200) break;
+  }
+  document.getElementById('dilOut').innerHTML=
+    `<span class="k">${u?'секрет':'secret'}</span> s = ${s},  <span class="k">${u?'виклик':'challenge'}</span> c = ${c},  <span class="k">${u?'межа':'bound'}</span> (γ−β) = ${bound}\n`+
+    `<span class="k">${u?'вибірка з відхиленням':'rejection sampling'}</span>:\n`+
+    lines.join('\n')+
+    (attempts>maxShow?`\n  … (${attempts-maxShow} ${u?'ще спроб приховано':'more attempts hidden'})`:'')+
+    `\n\n<span class="s">${u?'прийнято за':'accepted after'} ${attempts} ${u?(attempts===1?'спробу':'спроб'):(attempts===1?'attempt':'attempts')}</span>,  z = <span class="a">${z}</span>\n`+
+    `<span class="k">${u?'ключ':'point'}</span>: ${u?'приймається лише z, розподіл якого НЕ залежить від s — інакше підпис зливав би секрет. Це і є Фіат–Шамір з абортами.':'only a z whose distribution is INDEPENDENT of s is released — otherwise the signature would leak the secret. That is Fiat–Shamir with aborts.'}`;
+}
+document.getElementById('dilRun').addEventListener('click',dilRun);
+
+// ============================ Lamport OTS (#sphincs) ==================
+function lampHash(v){ // toy hash, LCG-style over BigInt, returns positive BigInt
+  const b=BigInt(v);
+  return ((1103515245n*b + 12345n) % 2147483648n + 2147483648n) % 2147483648n;
+}
+let lampKey=null, lampRevealed=null;
+function lampNewKeys(){
+  lampKey={sk:[[],[]], pk:[[],[]]};
+  for(let b=0;b<2;b++) for(let i=0;i<8;i++){
+    const v=Math.floor(Math.random()*2000000000)+1;
+    lampKey.sk[b][i]=v; lampKey.pk[b][i]=lampHash(v);
+  }
+  lampRevealed=new Set();
+  const u=UK();
+  document.getElementById('lampOut').innerHTML=
+    `<span class="a">${u?'згенеровано новий ключ Лампорта':'generated a fresh Lamport key'}</span>\n`+
+    `<span class="k">${u?'приватний ключ':'private key'}</span> sk[0], sk[1]: 2×8 = 16 ${u?'секретних значень':'secret values'}\n`+
+    `<span class="k">${u?'відкритий ключ':'public key'}</span> pk[b][i] = H(sk[b][i]):\n`+
+    `  pk[0] = [${lampKey.pk[0].map(x=>x%100000n).join(', ')} …]\n`+
+    `  pk[1] = [${lampKey.pk[1].map(x=>x%100000n).join(', ')} …]\n\n`+
+    `${u?'Оберіть 8-бітне повідомлення й натисніть «підписати й перевірити».':'Choose an 8-bit message and press “sign & verify”.'}`;
+}
+function bits8(n){ n=((n%256)+256)%256; return Array.from({length:8},(_,i)=>(n>>(7-i))&1); }
+function lampSign(m, track){
+  const bits=bits8(m), sig=[];
+  for(let i=0;i<8;i++){ const b=bits[i]; sig.push({b,i,val:lampKey.sk[b][i]}); if(track) lampRevealed.add(b+'-'+i); }
+  return {bits,sig};
+}
+function lampSignVerify(){
+  const u=UK();
+  if(!lampKey){ lampNewKeys(); }
+  const m=parseInt(document.getElementById('lampM').value)||0;
+  const {bits,sig}=lampSign(m,true);
+  // verify each revealed value hashes to the public key
+  let ok=true;
+  const rows=sig.map(({b,i,val})=>{ const good=lampHash(val)===lampKey.pk[b][i]; if(!good) ok=false;
+    return `  bit ${i} = ${b}: ${u?'розкрито':'reveal'} sk[${b}][${i}]=${val%100000}…  H=${(lampHash(val)%100000n)} ${good?`<span class="a">= pk[${b}][${i}] ✓</span>`:'<span class="b">✗</span>'}`; });
+  document.getElementById('lampOut').innerHTML=
+    `<span class="k">${u?'повідомлення':'message'}</span> m = ${m} = <span class="s">${bits.join('')}</span> (binary)\n`+
+    `<span class="a">${u?'підпис: розкриваємо один прообраз на біт':'signature: reveal one preimage per bit'}</span>:\n`+
+    rows.join('\n')+
+    `\n\n<span class="k">${u?'перевірка':'verify'}</span>: ${ok?`<span class="a">${u?'ВСІ 8 ЗБІГЛИСЯ ✓ — підпис валідний':'ALL 8 MATCH ✓ — signature valid'}</span>`:`<span class="b">✗</span>`}\n`+
+    `<span class="k">${u?'розкрито секретів':'secrets revealed'}</span>: <span class="s">${lampRevealed.size} / 16</span>   (${u?'ключ безпечний рівно для ОДНОГО підпису':'the key is safe for exactly ONE signature'})`;
+}
+function lampReuse(){
+  const u=UK();
+  if(!lampKey || lampRevealed.size===0){ document.getElementById('lampOut').innerHTML=`<span class="b">${u?'Спершу підпишіть перше повідомлення.':'Sign the first message first.'}</span>`; return; }
+  const m1=parseInt(document.getElementById('lampM').value)||0;
+  const m2=parseInt(document.getElementById('lampM2').value)||0;
+  const before=lampRevealed.size;
+  const {bits:b2}=lampSign(m2,true);
+  const after=lampRevealed.size;
+  const b1=bits8(m1);
+  // for every position where the two messages differ, BOTH preimages are now public
+  const leaked=[];
+  for(let i=0;i<8;i++){ if(b1[i]!==b2[i]) leaked.push(i); }
+  document.getElementById('lampOut').innerHTML=
+    `<span class="b">⚠ ${u?'той самий ключ використано для другого повідомлення':'the same key signed a second message'}</span>\n`+
+    `m₁ = ${m1} = ${b1.join('')}\n`+
+    `m₂ = ${m2} = ${b2.join('')}\n\n`+
+    `<span class="k">${u?'розкрито секретів усього':'total secrets revealed'}</span>: ${before} → <span class="b">${after} / 16</span>\n`+
+    `<span class="b">${u?'позиції, де відрито ОБИДВА прообрази':'positions where BOTH preimages are now public'}</span>: [${leaked.join(', ')}]\n\n`+
+    `<span class="k">${u?'наслідок':'consequence'}</span>: ${u?`для кожної з цих ${leaked.length} позицій зловмисник знає sk[0][i] І sk[1][i] — тож може підробити підпис на будь-якому повідомленні, що збігається з m₁,m₂ у решті бітів і має довільне значення в цих. Ось чому Lamport СУВОРО одноразовий, і чому SPHINCS+ будує гіпердерево одноразових ключів.`:`for each of these ${leaked.length} positions the attacker now knows BOTH sk[0][i] AND sk[1][i] — so it can forge a signature on any message matching m₁,m₂ on the other bits and arbitrary here. This is why Lamport is STRICTLY one-time, and why SPHINCS+ builds a hypertree of one-time keys.`}`;
+}
+document.getElementById('lampKeys').addEventListener('click',lampNewKeys);
+document.getElementById('lampSign').addEventListener('click',lampSignVerify);
+document.getElementById('lampReuse').addEventListener('click',lampReuse);
+
+// ============================ references ==============================
+const REFS={
+  dsa:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm', label:'ECDSA'}, uk:{href:'https://uk.wikipedia.org/wiki/ECDSA', label:'ECDSA'}},
+    {tag:'fips', en:{href:'https://csrc.nist.gov/pubs/fips/186-5/final', label:'FIPS 186-5 (DSA/ECDSA)'}},
+    {tag:'rfc', en:{href:'https://www.rfc-editor.org/rfc/rfc6979', label:'RFC 6979 deterministic k'}},
+    {tag:'paper', en:{href:'https://minerva.crocs.fi.muni.cz/', label:'Minerva nonce-leak attack'}}
+  ],
+  rsapss:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Probabilistic_signature_scheme', label:'RSA-PSS'}},
+    {tag:'rfc', en:{href:'https://www.rfc-editor.org/rfc/rfc8017', label:'RFC 8017 (PKCS#1 v2.2)'}},
+    {tag:'paper', en:{href:'https://www.iacr.org/archive/eurocrypt96/1070/10700399.pdf', label:'Bellare–Rogaway PSS'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Bleichenbacher%27s_attack', label:'Bleichenbacher e=3 forgery'}}
+  ],
+  schnorr:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Schnorr_signature', label:'Schnorr signature'}, uk:{href:'https://uk.wikipedia.org/wiki/%D0%9F%D1%96%D0%B4%D0%BF%D0%B8%D1%81_%D0%A8%D0%BD%D0%BE%D1%80%D1%80%D0%B0', label:'Підпис Шнорра'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1007/BF00196725', label:'Schnorr 1991'}},
+    {tag:'code', en:{href:'https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki', label:'BIP-340 (Taproot)'}}
+  ],
+  eddsa:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/EdDSA', label:'EdDSA'}, uk:{href:'https://uk.wikipedia.org/wiki/EdDSA', label:'EdDSA'}},
+    {tag:'rfc', en:{href:'https://www.rfc-editor.org/rfc/rfc8032', label:'RFC 8032 (Ed25519)'}},
+    {tag:'paper', en:{href:'https://ed25519.cr.yp.to/ed25519-20110926.pdf', label:'Bernstein et al. Ed25519'}},
+    {tag:'fips', en:{href:'https://csrc.nist.gov/pubs/fips/186-5/final', label:'FIPS 186-5'}}
+  ],
+  dilithium:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Dilithium_(cryptography)', label:'CRYSTALS-Dilithium'}},
+    {tag:'fips', en:{href:'https://csrc.nist.gov/pubs/fips/204/final', label:'FIPS 204 (ML-DSA)'}},
+    {tag:'paper', en:{href:'https://eprint.iacr.org/2017/633', label:'Dilithium spec'}}
+  ],
+  sphincs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/SPHINCS%2B', label:'SPHINCS+'}},
+    {tag:'fips', en:{href:'https://csrc.nist.gov/pubs/fips/205/final', label:'FIPS 205 (SLH-DSA)'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Lamport_signature', label:'Lamport signature'}},
+    {tag:'paper', en:{href:'https://sphincs.org/data/sphincs+-r3.1-specification.pdf', label:'SPHINCS+ spec'}}
+  ]
+};
+const IMPL={
+  dsa:[{href:'https://github.com/openssl/openssl/tree/master/crypto/ec', label:'openssl/crypto/ec'},{href:'https://github.com/openssl/openssl/tree/master/crypto/dsa', label:'openssl/crypto/dsa'}],
+  rsapss:[{href:'https://github.com/openssl/openssl/tree/master/crypto/rsa', label:'openssl/crypto/rsa'}],
+  schnorr:[{href:'https://github.com/bitcoin-core/secp256k1/tree/master/src/modules/schnorrsig', label:'libsecp256k1/schnorrsig'}],
+  eddsa:[{href:'https://github.com/openssl/openssl/blob/master/crypto/ec/curve25519.c', label:'openssl curve25519.c'},{href:'https://github.com/jedisct1/libsodium', label:'libsodium'}],
+  dilithium:[{href:'https://github.com/open-quantum-safe/liboqs', label:'liboqs'},{href:'https://github.com/PQClean/PQClean', label:'PQClean'}],
+  sphincs:[{href:'https://github.com/open-quantum-safe/liboqs', label:'liboqs'},{href:'https://github.com/PQClean/PQClean', label:'PQClean'}]
+};
+function renderRefs(){
+  Object.keys(REFS).forEach(id=>{ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  Object.keys(IMPL).forEach(id=>{ const el=document.getElementById('impl-'+id); if(el) el.innerHTML=IMPL[id].map(r=>window.atlasExt(r.href,r.label)).join(' '); });
+}
+function renderLegend(){
+  const Lg=I18N[window.LANG].lvlLegend;
+  document.getElementById('lvlLegend').innerHTML=[1,2,3].map((n,i)=>`<span>${window.atlasBadge(n)} ${Lg[i]}</span>`).join('');
+}
+
+// ============================ boot ===================================
+renderRefs(); renderLegend();
+ecdsaNewKeys();
+schNewKeys();
+edRun();
+document.getElementById('dilOut').innerHTML = UK()?'Натисніть кнопку, щоб запустити цикл відхилення.':'Press the button to run the rejection loop.';
+lampNewKeys();
+runRSAInit();
+function runRSAInit(){ initRSA(); initRSAForge(); }
+
+window.onLangChange=function(){
+  renderRefs(); renderLegend();
+  runRSA(); runRSAForge();
+  // refresh readouts that carry language-dependent labels
+  ecdsaNewKeys();
+  schNewKeys();
+  edRun();
+  lampNewKeys();
+  document.getElementById('dilOut').innerHTML = UK()?'Натисніть кнопку, щоб запустити цикл відхилення.':'Press the button to run the rejection loop.';
+};
+</script>
+</body>
+</html>

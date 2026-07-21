@@ -11,12 +11,30 @@
 
   const ROMAN = ['','I','II','III'];
 
+  /* every page of the project — used for the header nav */
+  const NAVPAGES = [
+    {p:'home',       href:'index.html',        en:'Catalogue',    uk:'Каталог'},
+    {p:'symmetric',  href:'symmetric.html',    en:'Symmetric',    uk:'Симетричні'},
+    {p:'stream',     href:'stream.html',       en:'Stream',       uk:'Потокові'},
+    {p:'hash',       href:'hash.html',         en:'Hash & MAC',   uk:'Хеші та MAC'},
+    {p:'asym',       href:'asymmetric.html',   en:'Asymmetric',   uk:'Асиметричні'},
+    {p:'signatures', href:'signatures.html',   en:'Signatures',   uk:'Підписи'},
+    {p:'kex',        href:'keyexchange.html',  en:'Key exchange', uk:'Обмін ключами'},
+    {p:'analysis',   href:'cryptanalysis.html',en:'Cryptanalysis',uk:'Криптоаналіз'},
+    {p:'numtheory',  href:'numbertheory.html', en:'Number theory',uk:'Теорія чисел'},
+    {p:'advanced',   href:'advanced.html',     en:'Advanced',     uk:'Поглиблене'},
+    {p:'quantum',    href:'quantum.html',      en:'Quantum',      uk:'Квантові'},
+    {p:'lightweight',href:'lightweight.html',  en:'Lightweight',  uk:'Легковагові'},
+    {p:'edwards',    href:'edwards.html',      en:'Edwards',      uk:'Едвардса'}
+  ];
+
   /* flat searchable index of every algorithm */
   const INDEX = [];
   CATALOG.forEach(sec=>{
     sec.algos.forEach(a=>{
       INDEX.push({
-        id:a.id, lvl:a.lvl, href:a.href||null,
+        id:a.id, lvl:a.lvl,
+        href:a.href || ((typeof HREFS!=='undefined') && HREFS[a.id]) || null,
         en:a.en, uk:a.uk, alias:a.alias||'',
         secEn:sec.en, secUk:sec.uk, secId:sec.id,
         hay:(a.en+' '+a.uk+' '+(a.alias||'')+' '+sec.en+' '+sec.uk).toLowerCase()
@@ -51,11 +69,7 @@
     const holder = document.getElementById('site-header');
     if(!holder) return;
     const page = document.body.getAttribute('data-page')||'';
-    const nav = [
-      {p:'home',    href:'index.html',      key:'navHome'},
-      {p:'asym',    href:'asymmetric.html', key:'navAsym'},
-      {p:'edwards', href:'edwards.html',    key:'navEdwards'}
-    ].map(n=>`<a href="${n.href}" class="${page===n.p?'active':''}" data-en="${I18N.en[n.key]}" data-uk="${I18N.uk[n.key]}">${I18N[LANG][n.key]}</a>`).join('');
+    const nav = NAVPAGES.map(n=>`<a href="${n.href}" class="${page===n.p?'active':''}" data-en="${n.en}" data-uk="${n.uk}">${LANG==='uk'?n.uk:n.en}</a>`).join('');
 
     holder.innerHTML = `
       <div class="site-header">
@@ -97,7 +111,7 @@
         const sec  = LANG==='uk'?r.secUk:r.secEn;
         return `<div class="r" data-i="${i}">
             <span class="badge l${r.lvl}" title="Level">${ROMAN[r.lvl]}</span>
-            <div><div class="rt">${name}${r.href?' <span style="color:var(--teal)">→</span>':''}</div>
+            <div><div class="rt">${name}${cxChip(r.id)}${r.href?' <span style="color:var(--teal)">→</span>':''}</div>
             <div class="rs">${r.secId}. ${sec}</div></div>
           </div>`;
       }).join('');
@@ -144,6 +158,28 @@
     applyI18n();
     if(typeof window.onLangChange==='function') window.onLangChange(LANG);
   }
+
+  /* ---- shared helpers for content pages ------------------------------- */
+  function cxChip(id){
+    const c=(typeof CX!=='undefined')&&CX[id];
+    return c?' <span class="cx c'+c[1]+'" title="complexity">'+c[0]+'</span>':'';
+  }
+  /* external link with ↗ icon, opens in a new window */
+  function atlasExt(href,label){
+    return '<a class="ext" href="'+href+'" target="_blank" rel="noopener">'+label+'</a>';
+  }
+  /* locale-aware reference chips: [{tag, en:{href,label}, uk?:{href,label}}]
+     — if a Ukrainian source is missing, the English one is used. */
+  function atlasRefs(list){
+    return '<div class="refs">'+list.map(r=>{
+      const loc=(LANG==='uk'&&r.uk)?r.uk:r.en;
+      const tag=r.tag?'<span class="ref-tag">'+r.tag+'</span>':'';
+      return '<a class="ext" href="'+loc.href+'" target="_blank" rel="noopener">'+tag+loc.label+'</a>';
+    }).join('')+'</div>';
+  }
+  window.atlasCx=cxChip;
+  window.atlasExt=atlasExt;
+  window.atlasRefs=atlasRefs;
 
   /* ---- expose + boot -------------------------------------------------- */
   window.LANG=LANG;

@@ -148,6 +148,30 @@
     </div>
   </section>
 
+  <section id="ecc">
+    <div class="num" data-en="05 / references & security" data-uk="05 / джерела та безпека">05 / references &amp; security</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span> <span data-en="Edwards curves in practice" data-uk="Криві Едвардса на практиці">Edwards curves in practice</span></h2>
+    <p class="desc" data-en="Twisted Edwards curves underpin <b>Ed25519</b> signatures and <b>X25519</b> key exchange — among the most-deployed asymmetric primitives on the internet. Their complete, branch-free addition law is what makes constant-time, side-channel-resistant implementations tractable."
+       data-uk="Скручені криві Едвардса лежать в основі підписів <b>Ed25519</b> та обміну ключами <b>X25519</b> — одних з найпоширеніших асиметричних примітивів в інтернеті. Їхній повний закон додавання без розгалужень робить реалізації сталого часу, стійкі до побічних каналів, здійсненними." data-i18n-html="1">Twisted Edwards curves…</p>
+    <div id="refs-ecc"></div>
+    <div class="refs">
+      <a class="ext" href="https://github.com/openssl/openssl/tree/master/crypto/ec/curve25519.c" target="_blank" rel="noopener"><span class="ref-tag">code</span>OpenSSL curve25519.c</a>
+      <a class="ext" href="https://github.com/jedisct1/libsodium" target="_blank" rel="noopener"><span class="ref-tag">code</span>libsodium</a>
+    </div>
+    <div class="strength">
+      <div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="256-bit Edwards curves give ~128-bit security — matching 3072-bit RSA. The completeness of the addition law removes the special-case branches that leak timing on Weierstrass curves. Residual risks: cofactor/small-subgroup issues (mitigated by clamping), bad RNG for the per-signature nonce, and — like all discrete-log schemes — a full break by Shor's algorithm on a quantum computer."
+            data-uk="256-бітні криві Едвардса дають ~128 біт безпеки — як 3072-бітний RSA. Повнота закону додавання усуває особливі випадки-розгалуження, що витікають через таймінг на кривих Вейєрштрасса. Залишкові ризики: проблеми кофактора/малої підгрупи (пом'якшуються clamping), поганий ГВЧ для nonce підпису, і — як усі схеми на дискретному логарифмі — повний злам алгоритмом Шора на квантовому комп'ютері." data-i18n-html="1"></span>
+    </div>
+    <div class="xrefs">
+      <a href="asymmetric.html#ecc" data-en="→ ECC / ECIES encryption" data-uk="→ шифрування ECC / ECIES">→ ECC / ECIES</a>
+      <a href="signatures.html#eddsa" data-en="→ EdDSA / Ed25519" data-uk="→ EdDSA / Ed25519">→ EdDSA</a>
+      <a href="keyexchange.html#ecdh" data-en="→ ECDH / X25519" data-uk="→ ECDH / X25519">→ ECDH</a>
+      <a href="cryptanalysis.html#rho-dl" data-en="→ Pollard's rho for ECDLP" data-uk="→ ρ-Полларда для ECDLP">→ Pollard's rho</a>
+      <a href="quantum.html#shor-q" data-en="→ Shor's algorithm" data-uk="→ алгоритм Шора">→ Shor</a>
+    </div>
+  </section>
+
 </div>
 
 <footer class="wrap">
@@ -384,8 +408,22 @@ document.getElementById('runEcdh').addEventListener('click', ()=>{
     '<span class="s">'+(u?'Спільний секрет':'Shared secret')+(match? (u?' збігся ✓':' matches ✓') : (u?' НЕ збігся (edge case на малому полі)':' did NOT match (edge case on a small field)'))+'</span>';
 });
 
+// ---------- references ----------
+const REFS_ECC = [
+  {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Twisted_Edwards_curve',label:'Twisted Edwards curve'}, uk:{href:'https://uk.wikipedia.org/wiki/Крива_Едвардса',label:'Крива Едвардса'}},
+  {tag:'rfc',  en:{href:'https://www.rfc-editor.org/rfc/rfc8032',label:'RFC 8032 (EdDSA)'}},
+  {tag:'rfc',  en:{href:'https://www.rfc-editor.org/rfc/rfc7748',label:'RFC 7748 (X25519)'}},
+  {tag:'paper',en:{href:'https://eprint.iacr.org/2008/013',label:'Bernstein et al., Twisted Edwards Curves'}}
+];
+function renderRefs(){
+  const el=document.getElementById('refs-ecc');
+  if(el) el.innerHTML=window.atlasRefs(REFS_ECC);
+}
+renderRefs();
+
 // re-render language-dependent readouts on switch
 window.onLangChange = function(){
+  renderRefs();
   drawFieldPoints();
   drawAddCanvas();
 };

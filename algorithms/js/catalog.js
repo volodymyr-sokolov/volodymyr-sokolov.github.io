@@ -150,7 +150,7 @@ const CATALOG = [
       {id:"schnorr", lvl:2, en:"Schnorr signature", uk:"Підпис Шнорра",
         dEn:"Simple, elegant, the basis of modern protocols (Bitcoin Taproot).",
         dUk:"Базовий, елегантний, основа для сучасних протоколів (Bitcoin Taproot)."},
-      {id:"eddsa", lvl:2, en:"EdDSA (Ed25519)", uk:"EdDSA (Ed25519)", href:"edwards.html", alias:"Edwards",
+      {id:"eddsa", lvl:2, en:"EdDSA (Ed25519)", uk:"EdDSA (Ed25519)", href:"signatures.html#eddsa", alias:"Edwards",
         dEn:"Deterministic signature based on Edwards curves.",
         dUk:"Детермінований підпис на основі кривих Едвардса."},
       {id:"dilithium", lvl:3, en:"Dilithium, Falcon", uk:"Dilithium, Falcon",
@@ -169,7 +169,7 @@ const CATALOG = [
       {id:"dh", lvl:1, en:"Diffie–Hellman (DH)", uk:"Діффі–Хеллмана (DH)",
         dEn:"The basic discrete-logarithm protocol.",
         dUk:"Базовий протокол на дискретному логарифмі."},
-      {id:"ecdh", lvl:2, en:"ECDH", uk:"ECDH", href:"edwards.html", alias:"Edwards",
+      {id:"ecdh", lvl:2, en:"ECDH", uk:"ECDH", href:"keyexchange.html#ecdh", alias:"Edwards",
         dEn:"The elliptic-curve version.",
         dUk:"Версія на еліптичних кривих."},
       {id:"mqv", lvl:3, en:"MQV, HMQV", uk:"MQV, HMQV",
@@ -283,7 +283,8 @@ const CATALOG = [
     descEn:"Lattice reduction, foundational for PQC and its attacks.",
     descUk:"Редукція решіток — основа постквантової криптографії та атак на неї.",
     algos:[
-      {id:"lll", lvl:3, en:"LLL (Lenstra–Lenstra–Lovász)", uk:"Алгоритм LLL (Ленстра–Ленстра–Ловаса)",
+    /*
+	  {id:"lll", lvl:3, en:"LLL (Lenstra–Lenstra–Lovász)", uk:"Алгоритм LLL (Ленстра–Ленстра–Ловаса)",
         dEn:"Lattice basis reduction, used in attacks and cryptosystems.",
         dUk:"Редукція базису решітки, використовується в атаках і криптосистемах."},
       {id:"bkz", lvl:3, en:"BKZ", uk:"BKZ-алгоритм",
@@ -292,13 +293,15 @@ const CATALOG = [
       {id:"coppersmith", lvl:3, en:"Coppersmith's attack", uk:"Атака Копперсміта",
         dEn:"Small roots of polynomial equations; attacks on low-exponent RSA.",
         dUk:"Знаходження малих коренів поліноміальних рівнянь, атаки на RSA з малими показниками."}
+	*/
     ]
   },
   {
     id:15, en:"Secret sharing & MPC", uk:"Розділення секрету та багатосторонні обчислення",
     descEn:"Split a secret among parties; compute jointly without revealing inputs.",
     descUk:"Розділяють секрет між сторонами; обчислюють спільно, не розкриваючи входів.",
-    algos:[
+	algos:[
+    /*
       {id:"shamir", lvl:2, en:"Shamir's Secret Sharing", uk:"Схема Шаміра",
         dEn:"Threshold scheme via polynomial interpolation.",
         dUk:"Порогова схема на поліноміальній інтерполяції."},
@@ -308,6 +311,7 @@ const CATALOG = [
       {id:"mpc", lvl:3, en:"Secure MPC", uk:"Багатосторонні обчислення (MPC)", alias:"Yao GMW garbled",
         dEn:"Yao's Garbled Circuits, the GMW protocol.",
         dUk:"Yao's Garbled Circuits, GMW-протокол."}
+	*/
     ]
   },
   {
@@ -315,6 +319,7 @@ const CATALOG = [
     descEn:"Prove a statement is true while revealing nothing else.",
     descUk:"Доводять істинність твердження, не розкриваючи нічого іншого.",
     algos:[
+	/*
       {id:"ffs", lvl:2, en:"Feige–Fiat–Shamir", uk:"Протокол Фейге–Фіата–Шаміра",
         dEn:"An interactive ZKP.",
         dUk:"Інтерактивний ZKP."},
@@ -324,6 +329,7 @@ const CATALOG = [
       {id:"snark", lvl:3, en:"zk-SNARKs, zk-STARKs", uk:"zk-SNARKs, zk-STARKs",
         dEn:"Modern non-interactive systems, important for blockchain courses.",
         dUk:"Сучасні неінтерактивні системи, важливі для блокчейн-курсів."}
+	*/
     ]
   },
   {
@@ -349,13 +355,15 @@ const CATALOG = [
     id:18, en:"Homomorphic encryption", uk:"Гомоморфне шифрування",
     descEn:"Compute directly on ciphertexts without decrypting.",
     descUk:"Обчислення безпосередньо над шифротекстами без розшифрування.",
-    algos:[
+	algos:[
+    /*
       {id:"gentry", lvl:3, en:"Gentry's scheme", uk:"Схема Гентрі (Gentry)",
         dEn:"The first fully homomorphic (FHE) scheme, lattice-based.",
         dUk:"Перша повністю гомоморфна схема (FHE) на решітках."},
       {id:"bgv", lvl:3, en:"BGV, BFV, CKKS", uk:"BGV, BFV, CKKS",
         dEn:"Modern practical FHE schemes.",
         dUk:"Сучасні практичні FHE-схеми."}
+	*/
     ]
   },
   {
@@ -411,7 +419,8 @@ const I18N = {
     navHome:"Catalogue", navAsym:"Asymmetric", navEdwards:"Edwards curves",
     searchPlaceholder:"Search algorithms…",
     noResults:"Nothing found",
-    lvlLegend:["I — Bachelor","II — Master","III — PhD"],
+    lvlLegend:["Bachelor","Master","PhD"],
+    cxLegend:["light computation","moderate cost","resource-intensive"],
     catalogTitle:"Full algorithm catalogue",
     catalogLede:"Every algorithm from the course outline, grouped by topic. Each item is tagged with its study level; implemented interactive demos are linked.",
     implemented:"demo",
@@ -425,6 +434,7 @@ const I18N = {
     searchPlaceholder:"Пошук алгоритмів…",
     noResults:"Нічого не знайдено",
     lvlLegend:["I — Бакалаврат","II — Магістратура","III — PhD"],
+    cxLegend:["легкі обчислення","помірна вартість","ресурсоємний"],
     catalogTitle:"Повний каталог алгоритмів",
     catalogLede:"Усі алгоритми з конспекту курсу, згруповані за темами. Кожен елемент позначено рівнем складності; реалізовані інтерактивні демо мають посилання.",
     implemented:"демо",
@@ -433,4 +443,80 @@ const I18N = {
   }
 };
 
-if(typeof window!=='undefined'){ window.CATALOG=CATALOG; window.I18N=I18N; }
+/* =========================================================================
+   CX — asymptotic complexity per algorithm: [label, colourClass]
+   colour: 1 = light computation (green), 2 = moderate (yellow),
+           3 = resource-intensive (orange). n = operand/key size in bits,
+   L[x] = sub-exponential L-notation, [q] = requires a quantum computer.
+   ========================================================================= */
+const CX = {
+  // symmetric block + modes
+  des:['O(n)',1], aes:['O(n)',1], blowfish:['O(n)',1], serpent:['O(n)',1],
+  idea:['O(n)',1], gost:['O(n)',1], camellia:['O(n)',1],
+  modes:['O(n)',1], gcm:['O(n)',1],
+  // stream
+  rc4:['O(n)',1], a5:['O(n)',1], chacha:['O(n)',1], trivium:['O(n)',1],
+  // hashes + MAC
+  md5:['O(n)',1], sha1:['O(n)',1], sha2:['O(n)',1], sha3:['O(n)',1], blake:['O(n)',1],
+  hmac:['O(n)',1], cmac:['O(n)',1], poly1305:['O(n)',1],
+  // asymmetric encryption
+  rsa:['O(n³)',2], elgamal:['O(n³)',2], rabin:['O(n³)',2], ecc:['O(n³)',2],
+  paillier:['O(n³)',2], kyber:['O(n log n)',1], ntru:['O(n log n)',1], mceliece:['O(n²)',2],
+  // signatures
+  dsa:['O(n³)',2], rsapss:['O(n³)',2], schnorr:['O(n³)',2], eddsa:['O(n³)',2],
+  dilithium:['O(n log n)',2], sphincs:['O(n)',2],
+  // key exchange
+  dh:['O(n³)',2], ecdh:['O(n³)',2], mqv:['O(n³)',2], sts:['O(n³)',2],
+  // discrete log cryptanalysis
+  shanks:['O(√n)',3], 'rho-dl':['O(√n)',3], kangaroo:['O(√w)',3],
+  pohlig:['O(Σ√pᵢ)',2], index:['L[1/2]',3], 'nfs-dl':['L[1/3]',3],
+  // factoring
+  'fermat-f':['O(|p−q|)',2], 'rho-f':['O(n^¼)',3], p1:['O(B log B)',2],
+  qs:['L[1/2]',3], gnfs:['L[1/3]',3], 'shor-f':['O(n³) [q]',3],
+  // fields & residues
+  tonelli:['O(log²p)',1], legendre:['O(log p)',1], cipolla:['O(log p)',1],
+  // codes & recurrences
+  'berlekamp-massey':['O(n²)',1], 'berlekamp-rs':['O(n²)',2],
+  // primality
+  'fermat-p':['O(k·log³n)',1], miller:['O(k·log³n)',1], solovay:['O(k·log³n)',1],
+  aks:['O(log⁶n)',2],
+  // lattices
+  //////lll:['O(n⁵ log³B)',2], bkz:['2^O(β)',3], coppersmith:['poly(n)',2],
+  // secret sharing & MPC
+  //////shamir:['O(k²)',1], blakley:['O(k³)',1], mpc:['O(gates)',3],
+  // ZKP
+  //////ffs:['O(k·n²)',2], 'schnorr-zk':['O(n³)',2], snark:['O(C log C)',3],
+  // quantum
+  'shor-q':['O(n³) [q]',3], grover:['O(√N) [q]',3], bb84:['O(n)',1], e91:['O(n)',1],
+  // homomorphic
+  //////gentry:['poly(λ)',3], bgv:['Õ(λ)',3],
+  // lightweight
+  tea:['O(n)',1], xtea:['O(n)',1], xxtea:['O(n)',1], present:['O(n)',1],
+  simon:['O(n)',1], clefia:['O(n)',1], prince:['O(n)',1], led:['O(n)',1],
+  katan:['O(n)',1], gift:['O(n)',1], ascon:['O(n)',1], chaskey:['O(n)',1]
+};
+
+/* =========================================================================
+   HREFS — default page anchor per algorithm id (used when the catalogue
+   entry has no explicit href). Anchor id === algorithm id.
+   ========================================================================= */
+const HREFS = (function(){
+  const map={}, put=(page,ids)=>ids.forEach(id=>map[id]=page+'#'+id);
+  put('symmetric.html',   ['des','aes','blowfish','serpent','idea','gost','camellia','modes','gcm']);
+  put('stream.html',      ['rc4','a5','chacha','trivium','berlekamp-massey','berlekamp-rs']);
+  put('hash.html',        ['md5','sha1','sha2','sha3','blake','hmac','cmac','poly1305']);
+  put('signatures.html',  ['dsa','rsapss','schnorr','dilithium','sphincs']);
+  put('keyexchange.html', ['dh','mqv','sts']);
+  put('cryptanalysis.html',['shanks','rho-dl','kangaroo','pohlig','index','nfs-dl',
+                            'fermat-f','rho-f','p1','qs','gnfs','shor-f']);
+  put('numbertheory.html',['tonelli','legendre','cipolla','fermat-p','miller','solovay','aks']);
+  put('advanced.html',    [/*'lll','bkz','coppersmith','shamir','blakley','mpc',
+                           'ffs','schnorr-zk','snark','gentry','bgv'*/]);
+  put('quantum.html',     ['shor-q','grover','bb84','e91']);
+  put('lightweight.html', ['tea','xtea','xxtea','present','simon','clefia','prince',
+                           'led','katan','gift','ascon','chaskey']);
+  map.kyber='asymmetric.html#pqc'; map.ntru='asymmetric.html#pqc'; map.mceliece='asymmetric.html#pqc';
+  return map;
+})();
+
+if(typeof window!=='undefined'){ window.CATALOG=CATALOG; window.I18N=I18N; window.CX=CX; window.HREFS=HREFS; }

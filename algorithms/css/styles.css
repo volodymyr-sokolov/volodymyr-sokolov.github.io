@@ -65,11 +65,12 @@ a:hover{text-decoration:underline;}
 .hsearch input{
   font-family:'JetBrains Mono',monospace; font-size:12.5px;
   background:var(--panel2); color:var(--ink); border:1px solid var(--line);
-  border-radius:6px; padding:8px 10px 8px 30px; width:210px; outline:none;
+  border-radius:6px; padding:8px 10px 8px 34px; width:220px; outline:none;
 }
 .hsearch input:focus{border-color:#2C4A45;}
-.hsearch::before{content:"⌕"; position:absolute; left:9px; top:6px;
-  color:var(--dim); font-size:15px;}
+.hsearch::before{content:"⌕"; position:absolute; left:11px; top:50%;
+  transform:translateY(-50%); color:var(--dim); font-size:14px; line-height:1;
+  pointer-events:none;}
 .hsearch .results{
   position:absolute; top:calc(100% + 6px); right:0; width:340px; max-height:60vh;
   overflow:auto; background:var(--panel); border:1px solid var(--line);
@@ -98,7 +99,7 @@ a:hover{text-decoration:underline;}
 .badge.l3{background:var(--lvl3);}
 .badge.lg{width:24px; height:24px; min-width:24px; font-size:12.5px; border-radius:6px;}
 
-.legend-lvls{display:flex; gap:18px; flex-wrap:wrap; align-items:center;
+.legend-lvls{display:flex; gap:10px; flex-wrap:wrap; align-items:center;
   font-size:12.5px; color:var(--dim); margin:8px 0 0;}
 .legend-lvls span{display:inline-flex; align-items:center; gap:7px;}
 
@@ -134,7 +135,7 @@ h1{
 .lede{color:var(--dim); font-size:16.5px; line-height:1.6; max-width:680px;}
 
 /* ------------------------------------------------------------ sections */
-section{padding:52px 24px; border-bottom:1px solid var(--line);}
+section{padding:24px 24px; border-bottom:1px solid var(--line);}
 section:last-of-type{border-bottom:none;}
 .num{font-family:'JetBrains Mono',monospace; color:var(--teal); font-size:13px;
   letter-spacing:.1em;}
@@ -228,6 +229,63 @@ footer b{color:var(--ink);}
   display:flex; gap:16px; align-items:center; flex-wrap:wrap;
 }
 .count-pill{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--dim);}
+
+/* ------------------------------------------------- complexity badges */
+.cx{
+  display:inline-flex; align-items:center; height:20px; padding:0 8px;
+  border-radius:5px; font-family:'JetBrains Mono',monospace;
+  font-size:10.5px; font-weight:700; color:#0B1220; flex:0 0 auto;
+  vertical-align:middle; white-space:nowrap;
+}
+.cx.c1{background:var(--lvl1);}   /* light computation      */
+.cx.c2{background:var(--lvl2);}   /* moderate cost          */
+.cx.c3{background:var(--lvl3);}   /* resource-intensive     */
+h2 .cx{margin-left:2px;}
+
+/* ------------------------------------------------- external links */
+a.ext::after{content:"↗"; font-size:.85em; margin-left:4px; opacity:.75;}
+
+/* ------------------------------------------------- reference chips */
+.refs{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 4px;}
+.refs a{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--teal);
+  border:1px solid var(--line); border-radius:6px; padding:5px 9px;
+  background:var(--panel2);
+}
+.refs a:hover{border-color:#2C4A45; text-decoration:none;}
+.ref-tag{
+  font-size:9.5px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--dim); border:1px solid var(--line); border-radius:4px; padding:1px 4px;
+}
+
+/* ------------------------------------------------- formula block */
+.formula{
+  font-family:'JetBrains Mono',monospace; font-size:15px; color:var(--amber);
+  background:var(--panel2); border:1px solid var(--line); border-radius:6px;
+  padding:8px 14px; display:inline-block; margin:0 0 18px;
+}
+
+/* ------------------------------------------------- strength / cryptanalysis */
+.strength{
+  border:1px solid var(--line); border-left:3px solid var(--rose);
+  background:var(--panel2); border-radius:8px; padding:14px 16px;
+  margin-top:16px; font-size:13.5px; line-height:1.6; color:var(--dim);
+}
+.strength b{color:var(--ink);}
+.strength .st-title{
+  font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--rose); margin-bottom:6px;
+}
+
+/* ------------------------------------------------- cross-references */
+.xrefs{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;}
+.xrefs a{
+  font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--teal);
+  border:1px solid var(--line); border-radius:999px; padding:4px 11px;
+  background:var(--panel);
+}
+.xrefs a:hover{border-color:#2C4A45; text-decoration:none;}
 
 /* --------------------------------------------------------- responsive */
 @media (max-width:640px){
