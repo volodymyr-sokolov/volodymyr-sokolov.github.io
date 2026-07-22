@@ -102,6 +102,28 @@ a:hover{text-decoration:underline;}
 .legend-lvls{display:flex; gap:10px; flex-wrap:wrap; align-items:center;
   font-size:12.5px; color:var(--dim); margin:8px 0 0;}
 .legend-lvls span{display:inline-flex; align-items:center; gap:7px;}
+.legend-lvls .flt-break{flex-basis:100%; height:0; gap:0;}
+
+/* legend acting as a filter — clickable level / cost chips */
+.filter-note{font-family:'JetBrains Mono',monospace; font-size:11.5px;
+  letter-spacing:.02em; color:var(--dim); margin:18px 0 8px;}
+.legend-lvls.filterable .flt{
+  cursor:pointer; padding:4px 9px; border:1px solid var(--line); border-radius:999px;
+  background:var(--panel2); user-select:none; transition:border-color .12s, opacity .12s;
+}
+.legend-lvls.filterable .flt:hover{border-color:#2C4A45;}
+.legend-lvls.filterable .flt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.legend-lvls.filterable .flt.off{opacity:.4; text-decoration:line-through;
+  text-decoration-color:var(--dim);}
+.legend-lvls.filterable .flt.off .badge,
+.legend-lvls.filterable .flt.off .cx{filter:grayscale(1); text-decoration:none;}
+
+/* view switch (by topic / A–Z) — mirrors .lang-switch */
+.view-switch{display:flex; gap:2px; font-family:'JetBrains Mono',monospace;
+  font-size:12px; border:1px solid var(--line); border-radius:6px; overflow:hidden;}
+.view-switch a{padding:5px 12px; color:var(--dim);}
+.view-switch a:hover{background:var(--panel); text-decoration:none;}
+.view-switch a.active{background:var(--teal); color:#06110F;}
 
 /* ------------------------------------------------------------- hero */
 header.hero{

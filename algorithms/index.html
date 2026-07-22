@@ -18,11 +18,16 @@
     <h1 data-en="An atlas of cryptographic algorithms" data-uk="Атлас криптографічних алгоритмів">An Atlas of Cryptographic Algorithms</h1>
     <!--p class="lede" data-en="Every algorithm from the course outline, grouped by topic and tagged by study level. Use the search box up top (it matches both English and Ukrainian), or browse the catalogue below. Interactive demos are linked where available."
        data-uk="Усі алгоритми з конспекту курсу, згруповані за темами та позначені рівнем складності. Скористайтеся пошуком угорі (шукає і англійською, і українською) або переглядайте каталог нижче. Інтерактивні демо мають посилання, де вони доступні.">Every algorithm from the course outline…</p-->
-    <div class="legend-lvls" id="lvlLegend"></div>
+    <div class="filter-note" id="filterNote"></div>
+    <div class="legend-lvls filterable" id="lvlLegend"></div>
   </div>
 </header>
 
 <div class="toolbar">
+  <div class="view-switch" id="viewSwitch">
+    <a href="#" data-view="topic"></a>
+    <a href="#" data-view="alpha"></a>
+  </div>
   <span class="count-pill" id="countPill"></span>
 </div>
 
@@ -36,54 +41,138 @@
 <script src="js/catalog.js"></script>
 <script src="js/site.js"></script>
 <script>
-// ---- render the level legend -----------------------------------------
+// ---- catalogue view + level/complexity filter state ------------------
+const FILT_KEY='atlas-filter';
+const FILT = { lvl:new Set([1,2,3]), cx:new Set([1,2,3]), view:'topic' };
+(function loadFilt(){
+  try{
+    const s=JSON.parse(localStorage.getItem(FILT_KEY)||'{}');
+    if(Array.isArray(s.lvl)&&s.lvl.length) FILT.lvl=new Set(s.lvl);
+    if(Array.isArray(s.cx)&&s.cx.length)   FILT.cx=new Set(s.cx);
+    if(s.view==='alpha'||s.view==='topic') FILT.view=s.view;
+  }catch(e){}
+})();
+function saveFilt(){
+  localStorage.setItem(FILT_KEY, JSON.stringify(
+    {lvl:[...FILT.lvl], cx:[...FILT.cx], view:FILT.view}));
+}
+// an algorithm is visible when both its level and its cost class are enabled
+function algoVisible(a){
+  const cx = (window.CX && CX[a.id]) ? CX[a.id][1] : 1;
+  return FILT.lvl.has(a.lvl) && FILT.cx.has(cx);
+}
+
+// ---- render the level / complexity legend as a clickable filter ------
 function renderLegend(){
   const L = I18N[window.LANG].lvlLegend;
   const C = I18N[window.LANG].cxLegend;
+  const lvlChips = [1,2,3].map((n,i)=>
+    `<span class="flt${FILT.lvl.has(n)?'':' off'}" data-g="lvl" data-v="${n}"
+       role="button" tabindex="0">${window.atlasBadge(n)} ${L[i]}</span>`).join('');
+  const cxChips = ['O(n)','O(n³)','L[1/3]'].map((s,i)=>
+    `<span class="flt${FILT.cx.has(i+1)?'':' off'}" data-g="cx" data-v="${i+1}"
+       role="button" tabindex="0"><span class="cx c${i+1}">${s}</span> ${C[i]}</span>`).join('');
   document.getElementById('lvlLegend').innerHTML =
-    [1,2,3].map((n,i)=>`<span>${window.atlasBadge(n)} ${L[i]}</span>`).join('')
-    + '<span style="flex-basis:100%;height:0"></span>'
-    + ['O(n)','O(n³)','L[1/3]'].map((s,i)=>`<span><span class="cx c${i+1}">${s}</span> ${C[i]}</span>`).join('');
+    lvlChips + '<span class="flt-break"></span>' + cxChips;
+  document.querySelectorAll('#lvlLegend .flt').forEach(el=>{
+    const act=()=>toggleFilter(el.getAttribute('data-g'), +el.getAttribute('data-v'));
+    el.addEventListener('click', act);
+    el.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); } });
+  });
+  document.getElementById('filterNote').textContent = I18N[window.LANG].filterNote;
+}
+// toggle one filter chip; never allow the last enabled chip of a group off
+function toggleFilter(g,v){
+  const set = FILT[g];
+  if(!set) return;
+  if(set.has(v)){ if(set.size<=1) return; set.delete(v); }
+  else set.add(v);
+  saveFilt();
+  renderLegend();
+  renderCatalog();
+}
+
+// ---- view switch (by topic / alphabetical) ---------------------------
+function renderViewSwitch(){
+  const sw=document.getElementById('viewSwitch');
+  const a=sw.querySelectorAll('a');
+  a[0].textContent=I18N[window.LANG].viewTopic;
+  a[1].textContent=I18N[window.LANG].viewAlpha;
+  a.forEach(el=>el.classList.toggle('active', el.getAttribute('data-view')===FILT.view));
+}
+function wireViewSwitch(){
+  document.querySelectorAll('#viewSwitch a').forEach(el=>{
+    el.addEventListener('click', e=>{
+      e.preventDefault();
+      FILT.view = el.getAttribute('data-view');
+      saveFilt(); renderViewSwitch(); renderCatalog();
+    });
+  });
+}
+
+// ---- one algorithm tile ----------------------------------------------
+function algoTile(a, lang){
+  const name = lang==='uk'?a.uk:a.en;
+  const desc = lang==='uk'?a.dUk:a.dEn;
+  const href = a.href || (window.HREFS && HREFS[a.id]) || null;
+  const impl = href ? ` <span class="impl">${I18N[lang].implemented} →</span>` : '';
+  const cls  = href ? 'algo-item link' : 'algo-item';
+  const open = href ? ` onclick="location.href='${href}'"` : '';
+  return `<div class="${cls}" id="algo-${a.id}"${open}
+            data-hay="${(a.en+' '+a.uk+' '+(a.alias||'')).toLowerCase()}">
+      ${window.atlasBadge(a.lvl)}
+      <div class="body">
+        <p class="name">${name}${window.atlasCx(a.id)}${impl}</p>
+        <p class="adesc">${desc}</p>
+      </div>
+    </div>`;
 }
 
 // ---- render the full catalogue ---------------------------------------
 function renderCatalog(){
   const lang = window.LANG;
   const root = document.getElementById('catalogRoot');
-  root.innerHTML = CATALOG.map(sec=>{
-    const items = sec.algos.map(a=>{
-      const name = lang==='uk'?a.uk:a.en;
-      const desc = lang==='uk'?a.dUk:a.dEn;
-      const href = a.href || (window.HREFS && HREFS[a.id]) || null;
-      const impl = href ? ` <span class="impl">${I18N[lang].implemented} →</span>` : '';
-      const cls  = href ? 'algo-item link' : 'algo-item';
-      const open = href ? ` onclick="location.href='${href}'"` : '';
-      return `<div class="${cls}" id="algo-${a.id}"${open}
-                data-hay="${(a.en+' '+a.uk+' '+(a.alias||'')).toLowerCase()}">
-          ${window.atlasBadge(a.lvl)}
-          <div class="body">
-            <p class="name">${name}${window.atlasCx(a.id)}${impl}</p>
-            <p class="adesc">${desc}</p>
-          </div>
-        </div>`;
+  let total=0, shown=0;
+  CATALOG.forEach(s=>s.algos.forEach(a=>{ total++; if(algoVisible(a)) shown++; }));
+
+  if(FILT.view==='alpha'){
+    // single sorted tile grid, no section grouping
+    const all=[];
+    CATALOG.forEach(s=>s.algos.forEach(a=>{ if(algoVisible(a)) all.push(a); }));
+    all.sort((x,y)=>{
+      const nx=(lang==='uk'?x.uk:x.en), ny=(lang==='uk'?y.uk:y.en);
+      return nx.localeCompare(ny, lang==='uk'?'uk':'en', {sensitivity:'base'});
+    });
+    root.innerHTML = `<div class="algo-grid">${all.map(a=>algoTile(a,lang)).join('')}</div>`;
+  } else {
+    // grouped by topic; a topic with no visible items is hidden, but the
+    // fixed section numbers (sec.id) of the remaining topics never shift.
+    root.innerHTML = CATALOG.map(sec=>{
+      const vis = sec.algos.filter(algoVisible);
+      if(!vis.length) return '';
+      const items = vis.map(a=>algoTile(a,lang)).join('');
+      const secName = lang==='uk'?sec.uk:sec.en;
+      const secDesc = lang==='uk'?sec.descUk:sec.descEn;
+      return `<section class="cat-section" id="sec-${sec.id}">
+          <span class="num">${String(sec.id).padStart(2,'0')}</span>
+          <h2>${secName}</h2>
+          <p class="sec-desc">${secDesc}</p>
+          <div class="algo-grid">${items}</div>
+        </section>`;
     }).join('');
-    const secName = lang==='uk'?sec.uk:sec.en;
-    const secDesc = lang==='uk'?sec.descUk:sec.descEn;
-    return `<section class="cat-section" id="sec-${sec.id}">
-        <span class="num">${String(sec.id).padStart(2,'0')}</span>
-        <h2>${secName}</h2>
-        <p class="sec-desc">${secDesc}</p>
-        <div class="algo-grid">${items}</div>
-      </section>`;
-  }).join('');
-  const total = CATALOG.reduce((n,s)=>n+s.algos.length,0);
+  }
+
+  const topics = CATALOG.length;
+  const T = I18N[lang];
+  const cnt = (shown===total) ? `${total}` : `${shown} / ${total}`;
   document.getElementById('countPill').textContent =
-    `${total} ${I18N[lang].of==='of'?'algorithms · 19 topics':'алгоритмів · 19 тем'}`;
+    `${cnt} ${T.algorithms} · ${topics} ${T.topics}`;
 }
 
 // re-render whenever language changes (called by site.js)
 window.onLangChange = function(){
   renderLegend();
+  renderViewSwitch();
   renderCatalog();
   // re-highlight deep link after re-render
   if(location.hash.startsWith('#algo-')){
@@ -91,6 +180,8 @@ window.onLangChange = function(){
     if(el){ el.scrollIntoView({block:'center'}); el.classList.add('flash'); }
   }
 };
+
+wireViewSwitch();
 </script>
 </body>
 </html>

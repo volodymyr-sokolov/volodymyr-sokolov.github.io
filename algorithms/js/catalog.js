@@ -26,9 +26,18 @@ const CATALOG = [
       {id:"idea",  lvl:2, en:"IDEA", uk:"IDEA",
         dEn:"Used in PGP; notable for the algebraic structure of its operations.",
         dUk:"Використовувався в PGP, цікавий алгебраїчною структурою операцій."},
-      {id:"gost",  lvl:2, en:"GOST 28147-89 / Kuznyechik", uk:"ГОСТ 28147-89 / «Кузнечик»", alias:"Кузнечик Kuznyechik",
-        dEn:"Soviet standard — an example of a different crypto-design school.",
-        dUk:"Радянський стандарт, приклад іншої школи криптодизайну."},
+      {id:"gost",  lvl:2, en:"DSTU GOST 28147:2009", uk:"ДСТУ ГОСТ 28147:2009", href:"symmetric.html#gost",
+        alias:"GOST 28147-89 ГОСТ Магма Magma",
+        dEn:"Ukraine's adoption of the Soviet GOST 28147-89 — a 64-bit, 32-round Feistel cipher.",
+        dUk:"Українське прийняття радянського ГОСТ 28147-89 — 64-бітний 32-раундовий шифр Фейстеля."},
+      {id:"kuznyechik", lvl:2, en:"Kuznyechik («Konyk»)", uk:"«Коник» (Kuznyechik)",
+        alias:"Кузнечик Grasshopper GOST R 34.12-2015",
+        dEn:"Modern Russian SP-network cipher (GOST R 34.12-2015, 2016), 128-bit block.",
+        dUk:"Сучасний російський шифр — SP-мережа (ГОСТ Р 34.12-2015, 2016), блок 128 біт."},
+      {id:"kalyna", lvl:2, en:"Kalyna (DSTU 7624:2014)", uk:"«Калина» (ДСТУ 7624:2014)",
+        alias:"Kalyna Ukrainian standard AES",
+        dEn:"Ukraine's national block-cipher standard — an AES-like SP-network with 128/256/512-bit blocks.",
+        dUk:"Національний стандарт блокового шифрування України — AES-подібна SP-мережа з блоками 128/256/512 біт."},
       {id:"camellia", lvl:2, en:"Camellia", uk:"Camellia",
         dEn:"Japanese standard, comparable to AES.",
         dUk:"Японський стандарт, порівнюваний з AES."}
@@ -48,6 +57,13 @@ const CATALOG = [
       {id:"chacha", lvl:1, en:"Salsa20 / ChaCha20", uk:"Salsa20 / ChaCha20",
         dEn:"Modern fast stream ciphers (TLS, Google).",
         dUk:"Сучасні швидкі потокові шифри (TLS, Google)."},
+      {id:"snow2", lvl:2, en:"SNOW 2.0 / SNOW 3G", uk:"SNOW 2.0 / SNOW 3G", alias:"3GPP LTE",
+        dEn:"Word-oriented LFSR + FSM stream cipher; SNOW 3G protects 3G/LTE mobile traffic.",
+        dUk:"Слово-орієнтований потоковий шифр (LFSR + FSM); SNOW 3G захищає трафік 3G/LTE."},
+      {id:"strumok", lvl:2, en:"Strumok (DSTU 8845:2019)", uk:"«Струмок» (ДСТУ 8845:2019)",
+        alias:"Strumok Ukrainian standard SNOW",
+        dEn:"Ukraine's national stream-cipher standard, a SNOW-2-like word-oriented design.",
+        dUk:"Національний стандарт потокового шифрування України, слово-орієнтована конструкція типу SNOW-2."},
       {id:"trivium", lvl:3, en:"Grain, Trivium", uk:"Grain, Trivium",
         dEn:"Lightweight ciphers from the eSTREAM project.",
         dUk:"Легковагові шифри з проекту eSTREAM."}
@@ -67,7 +83,42 @@ const CATALOG = [
     ]
   },
   {
-    id:4, en:"Cryptographic hash functions", uk:"Криптографічні хеш-функції",
+    id:4, en:"Pseudorandom generators (PRNG)", uk:"Генератори псевдовипадкових послідовностей",
+    descEn:"Deterministic algorithms that stretch a short seed into a long pseudorandom sequence.",
+    descUk:"Детерміновані алгоритми, що розгортають короткий сід у довгу псевдовипадкову послідовність.",
+    algos:[
+      {id:"lcg", lvl:1, en:"Linear congruential generator (LCG)", uk:"Лінійний конгруентний генератор (LCG)",
+        dEn:"Xₙ₊₁ = (aXₙ + c) mod m — fast and simple, but predictable and not cryptographically secure.",
+        dUk:"Xₙ₊₁ = (aXₙ + c) mod m — швидкий і простий, але передбачуваний і криптографічно нестійкий."},
+      {id:"mt", lvl:1, en:"Mersenne Twister", uk:"Вихор Мерсенна (Mersenne Twister)",
+        dEn:"Long-period general-purpose PRNG (2¹⁹⁹³⁷−1); excellent statistics, but not secure.",
+        dUk:"Генератор загального призначення з великим періодом (2¹⁹⁹³⁷−1); чудова статистика, але не криптостійкий."},
+      {id:"bbs", lvl:2, en:"Blum–Blum–Shub", uk:"Генератор Блюма–Блюма–Шуба",
+        dEn:"xₙ₊₁ = xₙ² mod M — a CSPRNG whose security rests on quadratic residuosity / factoring.",
+        dUk:"xₙ₊₁ = xₙ² mod M — криптостійкий генератор, стійкість спирається на квадратичну лишковість / факторизацію."},
+      {id:"drbg", lvl:2, en:"NIST DRBG (Hash / HMAC / CTR)", uk:"NIST DRBG (Hash / HMAC / CTR)", alias:"SP 800-90A",
+        dEn:"Standardised deterministic random-bit generators built from hashes or block ciphers (SP 800-90A).",
+        dUk:"Стандартизовані детерміновані генератори випадкових бітів на основі хешів або блокових шифрів (SP 800-90A)."},
+      {id:"fortuna", lvl:2, en:"Fortuna / Yarrow", uk:"Fortuna / Yarrow",
+        dEn:"Entropy-accumulating CSPRNG designs used in operating-system randomness sources.",
+        dUk:"Криптостійкі генератори з накопиченням ентропії, застосовуються у джерелах випадковості ОС."}
+    ]
+  },
+  {
+    id:5, en:"Probabilistic encryption", uk:"Імовірнісне шифрування",
+    descEn:"Schemes that randomise every encryption, so identical plaintexts yield different ciphertexts (ElGamal and Paillier are probabilistic too).",
+    descUk:"Схеми, що вносять випадковість у кожне шифрування, тож однакові відкриті тексти дають різні шифротексти (Ель-Гамаля та Paillier також імовірнісні).",
+    algos:[
+      {id:"gm", lvl:2, en:"Goldwasser–Micali", uk:"Схема Голдвассер–Мікалі",
+        dEn:"The first provably-secure probabilistic PKE, based on the quadratic-residuosity problem.",
+        dUk:"Перша доказово стійка імовірнісна схема з відкритим ключем, на основі задачі квадратичної лишковості."},
+      {id:"blum-goldwasser", lvl:2, en:"Blum–Goldwasser", uk:"Схема Блюма–Голдвассер",
+        dEn:"Efficient probabilistic PKE using a Blum–Blum–Shub keystream; IND-CPA secure under factoring.",
+        dUk:"Ефективна імовірнісна схема з гамою Блюма–Блюма–Шуба; IND-CPA стійка за припущення факторизації."}
+    ]
+  },
+  {
+    id:6, en:"Cryptographic hash functions", uk:"Криптографічні хеш-функції",
     descEn:"One-way compression of arbitrary data into a fixed-size digest.",
     descUk:"Однобічне стиснення довільних даних у дайджест фіксованого розміру.",
     algos:[
@@ -85,17 +136,24 @@ const CATALOG = [
         dUk:"Заснований на губчастій конструкції (sponge construction)."},
       {id:"blake", lvl:2, en:"BLAKE2 / BLAKE3", uk:"BLAKE2 / BLAKE3",
         dEn:"Fast modern alternatives.",
-        dUk:"Швидкі сучасні альтернативи."}
+        dUk:"Швидкі сучасні альтернативи."},
+      {id:"kupyna", lvl:2, en:"Kupyna (DSTU 7564:2014)", uk:"«Купина» (ДСТУ 7564:2014)",
+        alias:"Kupyna Ukrainian standard hash",
+        dEn:"Ukraine's national hash standard — a wide-pipe, Grøstl-like double-permutation design related to Kalyna.",
+        dUk:"Національний стандарт гешування України — конструкція типу Grøstl (wide-pipe, дві перестановки), споріднена з «Калиною»."}
     ]
   },
   {
-    id:5, en:"Message authentication codes (MAC)", uk:"Коди автентифікації повідомлень (MAC)",
+    id:7, en:"Message authentication codes (MAC)", uk:"Коди автентифікації повідомлень (MAC)",
     descEn:"Keyed tags that prove a message's integrity and origin.",
     descUk:"Ключові теги, що доводять цілісність і походження повідомлення.",
     algos:[
       {id:"hmac", lvl:1, en:"HMAC", uk:"HMAC",
         dEn:"Built on hash functions.",
         dUk:"На основі хеш-функцій."},
+      {id:"descbcmac", lvl:1, en:"DES-CBC-MAC", uk:"DES-CBC-MAC", alias:"CBC-MAC block cipher",
+        dEn:"The simplest block-cipher MAC: the last CBC ciphertext block of a DES encryption is the tag.",
+        dUk:"Найпростіший MAC на основі блокового шифру: тегом є останній блок шифротексту DES у режимі CBC."},
       {id:"cmac", lvl:2, en:"CMAC", uk:"CMAC",
         dEn:"Built on block ciphers.",
         dUk:"На основі блокових шифрів."},
@@ -105,7 +163,7 @@ const CATALOG = [
     ]
   },
   {
-    id:6, en:"Asymmetric cryptography (encryption)", uk:"Асиметрична криптографія (шифрування)",
+    id:8, en:"Asymmetric cryptography (encryption)", uk:"Асиметрична криптографія (шифрування)",
     descEn:"Public-key encryption: a public key locks, a private key unlocks.",
     descUk:"Шифрування з відкритим ключем: відкритий ключ шифрує, приватний — розшифровує.",
     algos:[
@@ -137,7 +195,7 @@ const CATALOG = [
     ]
   },
   {
-    id:7, en:"Digital signatures", uk:"Цифрові підписи",
+    id:9, en:"Digital signatures", uk:"Цифрові підписи",
     descEn:"Prove authorship of a message with a private key, verify with a public one.",
     descUk:"Доводять авторство повідомлення приватним ключем, перевіряються відкритим.",
     algos:[
@@ -153,6 +211,9 @@ const CATALOG = [
       {id:"eddsa", lvl:2, en:"EdDSA (Ed25519)", uk:"EdDSA (Ed25519)", href:"signatures.html#eddsa", alias:"Edwards",
         dEn:"Deterministic signature based on Edwards curves.",
         dUk:"Детермінований підпис на основі кривих Едвардса."},
+      {id:"dstu4145", lvl:2, en:"DSTU 4145-2002", uk:"ДСТУ 4145-2002", alias:"Ukrainian standard elliptic GF(2m)",
+        dEn:"Ukraine's national digital-signature standard, on elliptic curves over binary fields GF(2ᵐ).",
+        dUk:"Національний стандарт цифрового підпису України на еліптичних кривих над двійковими полями GF(2ᵐ)."},
       {id:"dilithium", lvl:3, en:"Dilithium, Falcon", uk:"Dilithium, Falcon",
         dEn:"Post-quantum lattice signatures (NIST PQC).",
         dUk:"Постквантові підписи на решітках (NIST PQC)."},
@@ -162,7 +223,7 @@ const CATALOG = [
     ]
   },
   {
-    id:8, en:"Key-agreement protocols", uk:"Протоколи узгодження ключів",
+    id:10, en:"Key-agreement protocols", uk:"Протоколи узгодження ключів",
     descEn:"Two parties derive a shared secret over a public channel.",
     descUk:"Дві сторони отримують спільний секрет через відкритий канал.",
     algos:[
@@ -181,7 +242,26 @@ const CATALOG = [
     ]
   },
   {
-    id:9, en:"Discrete-log algorithms (cryptanalysis)", uk:"Алгоритми розв'язання дискретного логарифму",
+    id:11, en:"Subscriber authentication protocols", uk:"Протоколи автентифікації абонентів ІС",
+    descEn:"Protocols by which an information system verifies a subscriber's claimed identity.",
+    descUk:"Протоколи, якими інформаційна система перевіряє заявлену особу абонента.",
+    algos:[
+      {id:"auth-rsa", lvl:2, en:"RSA-based authentication", uk:"Автентифікація на основі RSA",
+        dEn:"Challenge–response identity proof using an RSA key pair (asymmetric cryptosystem).",
+        dUk:"Доведення особи за схемою «виклик–відповідь» на парі ключів RSA (асиметрична криптосистема)."},
+      {id:"auth-ecc", lvl:2, en:"ECC-based authentication", uk:"Автентифікація на основі ECC",
+        dEn:"The same challenge–response idea on elliptic curves — shorter keys, faster operations.",
+        dUk:"Та сама ідея «виклик–відповідь» на еліптичних кривих — коротші ключі, швидші операції."},
+      {id:"auth-fs", lvl:2, en:"Fiat–Shamir identification", uk:"Протокол Фіата–Шаміра",
+        dEn:"Zero-knowledge identification proving knowledge of a modular square root.",
+        dUk:"Ідентифікація з нульовим розголошенням: доведення знання квадратного кореня за модулем."},
+      {id:"auth-ffs", lvl:2, en:"Feige–Fiat–Shamir", uk:"Протокол Фейге–Фіата–Шаміра",
+        dEn:"A parallel, multi-secret extension of Fiat–Shamir with a tunable soundness error.",
+        dUk:"Паралельне багатосекретне розширення Фіата–Шаміра з керованою похибкою."}
+    ]
+  },
+  {
+    id:12, en:"Discrete-log algorithms (cryptanalysis)", uk:"Алгоритми дискретного логарифмування",
     descEn:"Methods that attack the discrete-logarithm assumption.",
     descUk:"Методи, що атакують припущення про складність дискретного логарифму.",
     algos:[
@@ -206,7 +286,7 @@ const CATALOG = [
     ]
   },
   {
-    id:10, en:"Factorisation algorithms (RSA cryptanalysis)", uk:"Алгоритми факторизації (криптоаналіз RSA)",
+    id:13, en:"Factorisation algorithms (RSA cryptanalysis)", uk:"Алгоритми факторизації (криптоаналіз RSA)",
     descEn:"Methods that recover the prime factors behind an RSA modulus.",
     descUk:"Методи, що відновлюють прості множники модуля RSA.",
     algos:[
@@ -231,7 +311,7 @@ const CATALOG = [
     ]
   },
   {
-    id:11, en:"Fields and quadratic residues", uk:"Робота з полями та квадратичними лишками",
+    id:14, en:"Fields and quadratic residues", uk:"Робота з полями та квадратичними лишками",
     descEn:"Tools for square roots and residues in finite fields.",
     descUk:"Інструменти для квадратних коренів та лишків у скінченних полях.",
     algos:[
@@ -247,7 +327,7 @@ const CATALOG = [
     ]
   },
   {
-    id:12, en:"Codes & linear recurrences", uk:"Коди та лінійні рекуренти",
+    id:15, en:"Codes & linear recurrences", uk:"Коди та лінійні рекуренти",
     descEn:"Algorithms for error-correcting codes and LFSR analysis.",
     descUk:"Алгоритми для кодів, що виправляють помилки, та аналізу LFSR.",
     algos:[
@@ -260,7 +340,7 @@ const CATALOG = [
     ]
   },
   {
-    id:13, en:"Primality tests", uk:"Тести на простоту",
+    id:16, en:"Primality tests", uk:"Тести на простоту",
     descEn:"Decide whether a number is prime — the backbone of key generation.",
     descUk:"Визначають, чи число просте — основа генерації ключів.",
     algos:[
@@ -279,61 +359,58 @@ const CATALOG = [
     ]
   },
   {
-    id:14, en:"Lattice cryptography & cryptanalysis", uk:"Решіткова криптографія та криптоаналіз",
+    id:17, en:"Lattice cryptography & cryptanalysis", uk:"Решіткова криптографія та криптоаналіз",
     descEn:"Lattice reduction, foundational for PQC and its attacks.",
     descUk:"Редукція решіток — основа постквантової криптографії та атак на неї.",
     algos:[
-    /*
-	  {id:"lll", lvl:3, en:"LLL (Lenstra–Lenstra–Lovász)", uk:"Алгоритм LLL (Ленстра–Ленстра–Ловаса)",
+      {id:"lll", lvl:3, en:"LLL (Lenstra–Lenstra–Lovász)", uk:"Алгоритм LLL (Ленстра–Ленстра–Ловаса)",
+        href:"advanced.html#lll",
         dEn:"Lattice basis reduction, used in attacks and cryptosystems.",
         dUk:"Редукція базису решітки, використовується в атаках і криптосистемах."},
-      {id:"bkz", lvl:3, en:"BKZ", uk:"BKZ-алгоритм",
+      {id:"bkz", lvl:3, en:"BKZ", uk:"BKZ-алгоритм", href:"advanced.html#bkz",
         dEn:"Improved basis reduction for estimating lattice-scheme strength.",
         dUk:"Покращена редукція базису для оцінки стійкості решіткових схем."},
-      {id:"coppersmith", lvl:3, en:"Coppersmith's attack", uk:"Атака Копперсміта",
+      {id:"coppersmith", lvl:3, en:"Coppersmith's attack", uk:"Атака Копперсміта", href:"advanced.html#coppersmith",
         dEn:"Small roots of polynomial equations; attacks on low-exponent RSA.",
         dUk:"Знаходження малих коренів поліноміальних рівнянь, атаки на RSA з малими показниками."}
-	*/
     ]
   },
   {
-    id:15, en:"Secret sharing & MPC", uk:"Розділення секрету та багатосторонні обчислення",
+    id:18, en:"Secret sharing & MPC", uk:"Розділення секрету та багатосторонні обчислення",
     descEn:"Split a secret among parties; compute jointly without revealing inputs.",
     descUk:"Розділяють секрет між сторонами; обчислюють спільно, не розкриваючи входів.",
-	algos:[
-    /*
-      {id:"shamir", lvl:2, en:"Shamir's Secret Sharing", uk:"Схема Шаміра",
+    algos:[
+      {id:"shamir", lvl:2, en:"Shamir's Secret Sharing", uk:"Схема Шаміра", href:"advanced.html#shamir",
         dEn:"Threshold scheme via polynomial interpolation.",
         dUk:"Порогова схема на поліноміальній інтерполяції."},
-      {id:"blakley", lvl:2, en:"Blakley's scheme", uk:"Схема Блеклі",
+      {id:"blakley", lvl:2, en:"Blakley's scheme", uk:"Схема Блеклі", href:"advanced.html#blakley",
         dEn:"A geometric approach to secret sharing.",
         dUk:"Геометричний підхід до розділення секрету."},
-      {id:"mpc", lvl:3, en:"Secure MPC", uk:"Багатосторонні обчислення (MPC)", alias:"Yao GMW garbled",
+      {id:"mpc", lvl:3, en:"Secure MPC", uk:"Багатосторонні обчислення (MPC)", href:"advanced.html#mpc",
+        alias:"Yao GMW garbled",
         dEn:"Yao's Garbled Circuits, the GMW protocol.",
         dUk:"Yao's Garbled Circuits, GMW-протокол."}
-	*/
     ]
   },
   {
-    id:16, en:"Zero-knowledge proofs (ZKP)", uk:"Криптографія з нульовим розголошенням (ZKP)",
+    id:19, en:"Zero-knowledge proofs (ZKP)", uk:"Криптографія з нульовим розголошенням (ZKP)",
     descEn:"Prove a statement is true while revealing nothing else.",
     descUk:"Доводять істинність твердження, не розкриваючи нічого іншого.",
     algos:[
-	/*
-      {id:"ffs", lvl:2, en:"Feige–Fiat–Shamir", uk:"Протокол Фейге–Фіата–Шаміра",
+      {id:"ffs", lvl:2, en:"Feige–Fiat–Shamir", uk:"Протокол Фейге–Фіата–Шаміра", href:"advanced.html#ffs",
         dEn:"An interactive ZKP.",
         dUk:"Інтерактивний ZKP."},
       {id:"schnorr-zk", lvl:2, en:"Schnorr protocol (ZKP)", uk:"Протокол Шнорра (ZKP-версія)",
+        href:"advanced.html#schnorr-zk",
         dEn:"Proof of knowledge of a discrete logarithm.",
         dUk:"Доведення знання дискретного логарифму."},
-      {id:"snark", lvl:3, en:"zk-SNARKs, zk-STARKs", uk:"zk-SNARKs, zk-STARKs",
+      {id:"snark", lvl:3, en:"zk-SNARKs, zk-STARKs", uk:"zk-SNARKs, zk-STARKs", href:"advanced.html#snark",
         dEn:"Modern non-interactive systems, important for blockchain courses.",
         dUk:"Сучасні неінтерактивні системи, важливі для блокчейн-курсів."}
-	*/
     ]
   },
   {
-    id:17, en:"Quantum algorithms", uk:"Квантові алгоритми",
+    id:20, en:"Quantum algorithms", uk:"Квантові алгоритми",
     descEn:"Algorithms that reshape cryptographic hardness on a quantum computer.",
     descUk:"Алгоритми, що змінюють криптографічну складність на квантовому комп'ютері.",
     algos:[
@@ -352,22 +429,20 @@ const CATALOG = [
     ]
   },
   {
-    id:18, en:"Homomorphic encryption", uk:"Гомоморфне шифрування",
+    id:21, en:"Homomorphic encryption", uk:"Гомоморфне шифрування",
     descEn:"Compute directly on ciphertexts without decrypting.",
     descUk:"Обчислення безпосередньо над шифротекстами без розшифрування.",
-	algos:[
-    /*
-      {id:"gentry", lvl:3, en:"Gentry's scheme", uk:"Схема Гентрі (Gentry)",
+    algos:[
+      {id:"gentry", lvl:3, en:"Gentry's scheme", uk:"Схема Гентрі (Gentry)", href:"advanced.html#gentry",
         dEn:"The first fully homomorphic (FHE) scheme, lattice-based.",
         dUk:"Перша повністю гомоморфна схема (FHE) на решітках."},
-      {id:"bgv", lvl:3, en:"BGV, BFV, CKKS", uk:"BGV, BFV, CKKS",
+      {id:"bgv", lvl:3, en:"BGV, BFV, CKKS", uk:"BGV, BFV, CKKS", href:"advanced.html#bgv",
         dEn:"Modern practical FHE schemes.",
         dUk:"Сучасні практичні FHE-схеми."}
-	*/
     ]
   },
   {
-    id:19, en:"Lightweight ciphers", uk:"Легковагові (lightweight) шифри",
+    id:22, en:"Lightweight ciphers", uk:"Легковагові (lightweight) шифри",
     descEn:"Ciphers for constrained devices (IoT, smart cards, RFID).",
     descUk:"Шифри для пристроїв з обмеженими ресурсами (IoT, смарт-карти, RFID).",
     algos:[
@@ -425,7 +500,10 @@ const I18N = {
     catalogLede:"Every algorithm from the course outline, grouped by topic. Each item is tagged with its study level; implemented interactive demos are linked.",
     implemented:"demo",
     showing:"showing",
-    of:"of"
+    of:"of",
+    algorithms:"algorithms", topics:"topics",
+    viewTopic:"By topic", viewAlpha:"A–Z",
+    filterNote:"Filter the catalogue — click a level or a cost to toggle it on/off:"
   },
   uk:{
     brand:"Крипто-Атлас",
@@ -439,7 +517,10 @@ const I18N = {
     catalogLede:"Усі алгоритми з конспекту курсу, згруповані за темами. Кожен елемент позначено рівнем складності; реалізовані інтерактивні демо мають посилання.",
     implemented:"демо",
     showing:"показано",
-    of:"з"
+    of:"з",
+    algorithms:"алгоритмів", topics:"тем",
+    viewTopic:"За темами", viewAlpha:"А–Я",
+    filterNote:"Фільтр каталогу — натисніть рівень або вартість, щоб увімкнути/вимкнути:"
   }
 };
 
@@ -452,21 +533,27 @@ const I18N = {
 const CX = {
   // symmetric block + modes
   des:['O(n)',1], aes:['O(n)',1], blowfish:['O(n)',1], serpent:['O(n)',1],
-  idea:['O(n)',1], gost:['O(n)',1], camellia:['O(n)',1],
+  idea:['O(n)',1], gost:['O(n)',1], kuznyechik:['O(n)',1], kalyna:['O(n)',1], camellia:['O(n)',1],
   modes:['O(n)',1], gcm:['O(n)',1],
   // stream
-  rc4:['O(n)',1], a5:['O(n)',1], chacha:['O(n)',1], trivium:['O(n)',1],
+  rc4:['O(n)',1], a5:['O(n)',1], chacha:['O(n)',1], snow2:['O(n)',1], strumok:['O(n)',1], trivium:['O(n)',1],
+  // prng
+  lcg:['O(1)',1], mt:['O(n)',1], bbs:['O(n²)',2], drbg:['O(n)',1], fortuna:['O(n)',1],
+  // probabilistic encryption
+  gm:['O(n³)',2], 'blum-goldwasser':['O(n³)',2],
   // hashes + MAC
-  md5:['O(n)',1], sha1:['O(n)',1], sha2:['O(n)',1], sha3:['O(n)',1], blake:['O(n)',1],
-  hmac:['O(n)',1], cmac:['O(n)',1], poly1305:['O(n)',1],
+  md5:['O(n)',1], sha1:['O(n)',1], sha2:['O(n)',1], sha3:['O(n)',1], blake:['O(n)',1], kupyna:['O(n)',1],
+  hmac:['O(n)',1], descbcmac:['O(n)',1], cmac:['O(n)',1], poly1305:['O(n)',1],
   // asymmetric encryption
   rsa:['O(n³)',2], elgamal:['O(n³)',2], rabin:['O(n³)',2], ecc:['O(n³)',2],
   paillier:['O(n³)',2], kyber:['O(n log n)',1], ntru:['O(n log n)',1], mceliece:['O(n²)',2],
   // signatures
-  dsa:['O(n³)',2], rsapss:['O(n³)',2], schnorr:['O(n³)',2], eddsa:['O(n³)',2],
+  dsa:['O(n³)',2], rsapss:['O(n³)',2], schnorr:['O(n³)',2], eddsa:['O(n³)',2], dstu4145:['O(n³)',2],
   dilithium:['O(n log n)',2], sphincs:['O(n)',2],
   // key exchange
   dh:['O(n³)',2], ecdh:['O(n³)',2], mqv:['O(n³)',2], sts:['O(n³)',2],
+  // subscriber authentication
+  'auth-rsa':['O(n³)',2], 'auth-ecc':['O(n³)',2], 'auth-fs':['O(k·n²)',2], 'auth-ffs':['O(k·n²)',2],
   // discrete log cryptanalysis
   shanks:['O(√n)',3], 'rho-dl':['O(√n)',3], kangaroo:['O(√w)',3],
   pohlig:['O(Σ√pᵢ)',2], index:['L[1/2]',3], 'nfs-dl':['L[1/3]',3],
@@ -481,15 +568,15 @@ const CX = {
   'fermat-p':['O(k·log³n)',1], miller:['O(k·log³n)',1], solovay:['O(k·log³n)',1],
   aks:['O(log⁶n)',2],
   // lattices
-  //////lll:['O(n⁵ log³B)',2], bkz:['2^O(β)',3], coppersmith:['poly(n)',2],
+  lll:['O(n⁵ log³B)',2], bkz:['2^O(β)',3], coppersmith:['poly(n)',2],
   // secret sharing & MPC
-  //////shamir:['O(k²)',1], blakley:['O(k³)',1], mpc:['O(gates)',3],
+  shamir:['O(k²)',1], blakley:['O(k³)',1], mpc:['O(gates)',3],
   // ZKP
-  //////ffs:['O(k·n²)',2], 'schnorr-zk':['O(n³)',2], snark:['O(C log C)',3],
+  ffs:['O(k·n²)',2], 'schnorr-zk':['O(n³)',2], snark:['O(C log C)',3],
   // quantum
   'shor-q':['O(n³) [q]',3], grover:['O(√N) [q]',3], bb84:['O(n)',1], e91:['O(n)',1],
   // homomorphic
-  //////gentry:['poly(λ)',3], bgv:['Õ(λ)',3],
+  gentry:['poly(λ)',3], bgv:['Õ(λ)',3],
   // lightweight
   tea:['O(n)',1], xtea:['O(n)',1], xxtea:['O(n)',1], present:['O(n)',1],
   simon:['O(n)',1], clefia:['O(n)',1], prince:['O(n)',1], led:['O(n)',1],
@@ -510,11 +597,14 @@ const HREFS = (function(){
   put('cryptanalysis.html',['shanks','rho-dl','kangaroo','pohlig','index','nfs-dl',
                             'fermat-f','rho-f','p1','qs','gnfs','shor-f']);
   put('numbertheory.html',['tonelli','legendre','cipolla','fermat-p','miller','solovay','aks']);
-  put('advanced.html',    [/*'lll','bkz','coppersmith','shamir','blakley','mpc',
-                           'ffs','schnorr-zk','snark','gentry','bgv'*/]);
+  put('advanced.html',    ['lll','bkz','coppersmith','shamir','blakley','mpc',
+                           'ffs','schnorr-zk','snark','gentry','bgv']);
   put('quantum.html',     ['shor-q','grover','bb84','e91']);
   put('lightweight.html', ['tea','xtea','xxtea','present','simon','clefia','prince',
                            'led','katan','gift','ascon','chaskey']);
+  put('prng.html',        ['lcg','mt','bbs','drbg','fortuna','gm','blum-goldwasser']);
+  put('authprotocols.html',['auth-rsa','auth-ecc','auth-fs','auth-ffs']);
+  put('standards.html',   ['kuznyechik','kalyna','snow2','strumok','kupyna','descbcmac','dstu4145']);
   map.kyber='asymmetric.html#pqc'; map.ntru='asymmetric.html#pqc'; map.mceliece='asymmetric.html#pqc';
   return map;
 })();

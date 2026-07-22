@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRNG &amp; probabilistic encryption — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="prng">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Sections 4 · 5 — pseudorandom generators &amp; probabilistic encryption"
+         data-uk="Розділи 4 · 5 — генератори псевдовипадкових послідовностей та імовірнісне шифрування">Sections 4 · 5</div>
+    <h1 data-en="Randomness &amp; probabilistic encryption" data-uk="Випадковість та імовірнісне шифрування">Randomness</h1>
+    <p class="lede" data-en="How a deterministic machine produces &ldquo;random&rdquo; sequences — from fast non-cryptographic generators to provably-secure CSPRNGs — and how injecting randomness into encryption makes identical plaintexts encrypt to different ciphertexts."
+       data-uk="Як детермінована машина створює «випадкові» послідовності — від швидких некриптографічних генераторів до доказово стійких CSPRNG — і як внесення випадковості у шифрування робить так, що однакові відкриті тексти шифруються в різні шифротексти.">Randomness and probabilistic encryption.</p>
+    <div class="readout" id="selftest" style="margin-top:18px; max-width:560px;"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="§4 — Pseudorandom generators (PRNG)" data-uk="§4 — Генератори псевдовипадкових послідовностей">§4 — PRNG</h3>
+
+  <!-- ================= LCG ================= -->
+  <section id="lcg">
+    <span class="num" data-en="04 / LCG" data-uk="04 / LCG">04 / LCG</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(1)</span>
+      <span data-en="Linear congruential generator" data-uk="Лінійний конгруентний генератор">LCG</span></h2>
+    <div class="formula">Xₙ₊₁ = (a·Xₙ + c) mod m</div>
+    <p class="desc" data-en="The simplest PRNG: each output is an affine function of the previous one, reduced modulo m. Fast and tiny, but <b>every LCG is predictable</b> — recovering (a, c, m) from a few outputs is easy. Consecutive pairs (Xₙ, Xₙ₊₁) fall on a small number of parallel hyperplanes; this <b>spectral structure</b> is the classic way to see an LCG's non-randomness."
+       data-uk="Найпростіший ГПВЧ: кожен вихід — афінна функція попереднього за модулем m. Швидкий і крихітний, але <b>будь-який LCG передбачуваний</b> — відновити (a, c, m) з кількох виходів легко. Послідовні пари (Xₙ, Xₙ₊₁) лягають на невелику кількість паралельних гіперплощин; ця <b>спектральна структура</b> — класичний спосіб побачити невипадковість LCG."></p>
+    <div id="refs-lcg"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="lcgCanvas" width="300" height="300"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span>a</span><span class="val" id="lcgAV">137</span></label>
+            <input type="range" id="lcgA" min="1" max="512" value="137"></div>
+          <div class="ctrl"><label><span>c</span><span class="val" id="lcgCV">187</span></label>
+            <input type="range" id="lcgC" min="0" max="512" value="187"></div>
+          <div class="ctrl"><label><span>m</span><span class="val" id="lcgMV">1024</span></label>
+            <input type="range" id="lcgM" min="16" max="4096" step="1" value="1024"></div>
+          <div class="ctrl"><label><span data-en="seed X₀" data-uk="сід X₀">seed X₀</span><span class="val" id="lcgSV">1</span></label>
+            <input type="range" id="lcgS" min="0" max="4095" value="1"></div>
+          <div class="legend"><span data-en="Each dot = a pair (Xₙ, Xₙ₊₁). Try a=65, c=0, m=2048 (RANDU-like lattice)." data-uk="Кожна точка = пара (Xₙ, Xₙ₊₁). Спробуйте a=65, c=0, m=2048 (решітка типу RANDU)."></span></div>
+          <div class="readout" id="lcgOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Not cryptographically secure.</b> Never use an LCG for keys, nonces or salts. The infamous RANDU (a=65539, c=0, m=2³¹) placed all triples on just 15 planes. LCGs are fine only for simulations and non-security sampling."
+            data-uk="<b>Не є криптостійким.</b> Ніколи не використовуйте LCG для ключів, одноразових значень чи солей. Сумнозвісний RANDU (a=65539, c=0, m=2³¹) розміщував усі трійки лише на 15 площинах. LCG придатні тільки для симуляцій і несекретного вибирання."></span></div>
+    <div class="xrefs"><a href="prng.html#mt">Mersenne Twister</a> <a href="prng.html#bbs">Blum–Blum–Shub</a></div>
+  </section>
+
+  <!-- ================= Mersenne Twister ================= -->
+  <section id="mt">
+    <span class="num" data-en="04 / Mersenne Twister" data-uk="04 / Вихор Мерсенна">04 / MT</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(n)</span>
+      <span data-en="Mersenne Twister (MT19937)" data-uk="Вихор Мерсенна (MT19937)">Mersenne Twister</span></h2>
+    <div class="formula" data-en="period = 2¹⁹⁹³⁷ − 1,  equidistributed to 623 dimensions" data-uk="період = 2¹⁹⁹³⁷ − 1, рівнорозподілений у 623 вимірах">period = 2¹⁹⁹³⁷ − 1</div>
+    <p class="desc" data-en="The default general-purpose PRNG of many languages. A twisted generalised feedback shift register over a 624-word state with an astronomically long period and excellent equidistribution. This demo runs the <b>real MT19937</b> (verified against the reference vector). Watch the output histogram flatten as more numbers are drawn."
+       data-uk="Типовий ГПВЧ загального призначення в багатьох мовах. Скручений узагальнений регістр зі зворотним зв'язком над станом із 624 слів з астрономічно довгим періодом і чудовою рівнорозподіленістю. Це демо запускає <b>справжній MT19937</b> (звірений з еталонним вектором). Спостерігайте, як гістограма виходів вирівнюється зі зростанням кількості чисел."></p>
+    <div id="refs-mt"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="mtCanvas" width="300" height="180"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="seed" data-uk="сід">seed</span><span class="val" id="mtSV">5489</span></label>
+            <input type="range" id="mtS" min="1" max="99999" value="5489"></div>
+          <div class="ctrl"><label><span data-en="draws" data-uk="вибірок">draws</span><span class="val" id="mtNV">2000</span></label>
+            <input type="range" id="mtN" min="100" max="20000" step="100" value="2000"></div>
+          <div class="readout" id="mtOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Not a CSPRNG.</b> After observing 624 consecutive 32-bit outputs the entire internal state can be reconstructed and all future output predicted. Great for Monte-Carlo, unsafe for cryptography."
+            data-uk="<b>Не є CSPRNG.</b> Спостерігши 624 послідовні 32-бітні виходи, можна відновити весь внутрішній стан і передбачити всі майбутні виходи. Чудовий для Монте-Карло, небезпечний для криптографії."></span></div>
+    <div class="xrefs"><a href="prng.html#lcg">LCG</a> <a href="prng.html#drbg">NIST DRBG</a></div>
+  </section>
+
+  <!-- ================= BBS ================= -->
+  <section id="bbs">
+    <span class="num" data-en="04 / Blum–Blum–Shub" data-uk="04 / Блюм–Блюм–Шуб">04 / BBS</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n²)</span>
+      <span data-en="Blum–Blum–Shub" data-uk="Генератор Блюма–Блюма–Шуба">Blum–Blum–Shub</span></h2>
+    <div class="formula">xᵢ = xᵢ₋₁² mod M,  output bit = LSB(xᵢ),  M = p·q,  p ≡ q ≡ 3 (mod 4)</div>
+    <p class="desc" data-en="A <b>provably secure</b> CSPRNG. Each step squares the state modulo a Blum integer and outputs the least-significant bit. Predicting the next bit is as hard as deciding quadratic residuosity (and hence factoring M). Slow — one modular squaring per bit — so it is used more as a theoretical benchmark than in practice."
+       data-uk="<b>Доказово стійкий</b> CSPRNG. Кожен крок підносить стан до квадрата за модулем цілого Блюма й видає молодший біт. Передбачити наступний біт так само важко, як розв'язати квадратичну лишковість (а отже факторизувати M). Повільний — одне модульне піднесення до квадрата на біт — тож радше теоретичний еталон, ніж практичний засіб."></p>
+    <div id="refs-bbs"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="Blum primes p · q" data-uk="прості Блюма p · q">p · q</span><span class="val" id="bbsPQ">499 · 547</span></label>
+            <select id="bbsSel">
+              <option value="0">499 · 547</option>
+              <option value="1">383 · 503</option>
+              <option value="2">691 · 719</option>
+            </select></div>
+          <div class="ctrl"><label><span data-en="seed s" data-uk="сід s">seed s</span><span class="val" id="bbsSV">3</span></label>
+            <input type="range" id="bbsS" min="2" max="400" value="3"></div>
+          <div class="readout" id="bbsOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Secure under the quadratic-residuosity assumption when M is a large (≥2048-bit) Blum integer and only the low ⌊log₂ log₂ M⌋ bits per step are used. Toy moduli like these are for illustration only."
+            data-uk="Стійкий за припущенням квадратичної лишковості, коли M — велике (≥2048 біт) ціле Блюма й використовуються лише молодші ⌊log₂ log₂ M⌋ біт на крок. Іграшкові модулі тут — лише для ілюстрації."></span></div>
+    <div class="xrefs"><a href="prng.html#blum-goldwasser">Blum–Goldwasser</a> <a href="cryptanalysis.html#gnfs" data-en="Factoring" data-uk="Факторизація">Factoring</a></div>
+  </section>
+
+  <!-- ================= DRBG ================= -->
+  <section id="drbg">
+    <span class="num" data-en="04 / NIST DRBG" data-uk="04 / NIST DRBG">04 / DRBG</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="NIST DRBG (Hash / HMAC / CTR)" data-uk="NIST DRBG (Hash / HMAC / CTR)">NIST DRBG</span></h2>
+    <div class="formula">Vᵢ = H(V ‖ i),  seed V = H(entropy ‖ nonce)   — SP 800-90A</div>
+    <p class="desc" data-en="Standardised deterministic random-bit generators built from a strong primitive (a hash, HMAC, or a block cipher in counter mode). A high-entropy seed keys the generator; each request stretches internal state into output bits and updates the state, with periodic <b>reseeding</b>. This demo shows a simplified <b>Hash_DRBG</b> on the real SHA-256 you can verify above."
+       data-uk="Стандартизовані детерміновані генератори випадкових бітів на основі сильного примітиву (геш, HMAC або блоковий шифр у режимі лічильника). Сід з високою ентропією ключує генератор; кожен запит розгортає внутрішній стан у вихідні біти й оновлює стан, з періодичним <b>переz-сідуванням</b>. Демо показує спрощений <b>Hash_DRBG</b> на справжньому SHA-256, який можна звірити вище."></p>
+    <div id="refs-drbg"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="entropy input" data-uk="вхідна ентропія">entropy input</span></label>
+          <input type="text" id="drbgE" value="crypto-atlas" style="width:100%"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="drbgGen" data-en="Generate 512 bits" data-uk="Згенерувати 512 біт">Generate 512 bits</button>
+          <button id="drbgReseed" class="secondary" data-en="Reseed" data-uk="Пере-сідування">Reseed</button>
+        </div>
+        <div class="readout" id="drbgOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="The gold standard for production randomness — but only as good as its entropy source. The Dual_EC_DRBG member of the same family was withdrawn in 2014 after a suspected NSA backdoor. Use Hash/HMAC/CTR_DRBG, never Dual_EC."
+            data-uk="Золотий стандарт продакшн-випадковості — але не кращий за своє джерело ентропії. Член того ж сімейства Dual_EC_DRBG був відкликаний у 2014 після підозри на бекдор АНБ. Використовуйте Hash/HMAC/CTR_DRBG, ніколи — Dual_EC."></span></div>
+    <div class="xrefs"><a href="prng.html#fortuna">Fortuna</a> <a href="hash.html#sha2">SHA-256</a></div>
+  </section>
+
+  <!-- ================= Fortuna ================= -->
+  <section id="fortuna">
+    <span class="num" data-en="04 / Fortuna" data-uk="04 / Fortuna">04 / Fortuna</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="Fortuna / Yarrow" data-uk="Fortuna / Yarrow">Fortuna / Yarrow</span></h2>
+    <div class="formula" data-en="32 entropy pools · pool i drains every 2ⁱ reseeds" data-uk="32 пули ентропії · пул i спорожнюється кожні 2ⁱ пере-сідувань">32 pools · pool i every 2ⁱ reseeds</div>
+    <p class="desc" data-en="An entropy-accumulating CSPRNG design (Ferguson &amp; Schneier). Unpredictable events are spread <b>round-robin</b> across 32 pools; a reseed folds in pool i only every 2ⁱ reseeds, so even an attacker who controls some sources cannot starve recovery forever. The output stage is a block cipher (AES) in counter mode. This is the design behind FreeBSD's <code>/dev/random</code>."
+       data-uk="Криптостійкий генератор з накопиченням ентропії (Фергюсон і Шнаєр). Непередбачувані події розподіляються <b>по колу</b> між 32 пулами; пере-сідування залучає пул i лише кожні 2ⁱ разів, тож навіть зловмисник, що контролює частину джерел, не може вічно блокувати відновлення. Вихідний каскад — блоковий шифр (AES) у режимі лічильника. Це конструкція за <code>/dev/random</code> у FreeBSD."></p>
+    <div id="refs-fortuna"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="fortCanvas" width="300" height="150"></canvas>
+        <div class="controls">
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="fortEvt" data-en="Add entropy event" data-uk="Додати подію ентропії">Add entropy event</button>
+            <button id="fortRe" data-en="Reseed" data-uk="Пере-сідування">Reseed</button>
+            <button id="fortReset" class="secondary" data-en="Reset" data-uk="Скинути">Reset</button>
+          </div>
+          <div class="readout" id="fortOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Robust: provides fast recovery from state compromise once enough fresh entropy has flowed in. Modern OS CSPRNGs (Linux's ChaCha-based RNG, Windows CNG) follow the same accumulate-then-expand philosophy."
+            data-uk="Надійний: забезпечує швидке відновлення після компрометації стану, щойно надійшло досить свіжої ентропії. Сучасні CSPRNG в ОС (RNG на ChaCha у Linux, Windows CNG) дотримуються тієї ж філософії «накопичити, потім розгорнути»."></span></div>
+    <div class="xrefs"><a href="prng.html#drbg">NIST DRBG</a> <a href="stream.html#chacha">ChaCha20</a></div>
+  </section>
+
+  <h3 class="sub" data-en="§5 — Probabilistic encryption" data-uk="§5 — Імовірнісне шифрування">§5 — Probabilistic encryption</h3>
+
+  <!-- ================= Goldwasser–Micali ================= -->
+  <section id="gm">
+    <span class="num" data-en="05 / Goldwasser–Micali" data-uk="05 / Голдвассер–Мікалі">05 / GM</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+      <span data-en="Goldwasser–Micali" data-uk="Схема Голдвассер–Мікалі">Goldwasser–Micali</span></h2>
+    <div class="formula">c = yᵐ · r² mod N   (m ∈ {0,1},  y a pseudo-square,  N = p·q)</div>
+    <p class="desc" data-en="The <b>first probabilistic public-key cipher</b> (1982) and the birthplace of semantic security. It encrypts <b>one bit at a time</b>: a 0 becomes a random quadratic residue, a 1 becomes a random non-residue with Jacobi symbol +1. The holder of p, q tells them apart with a quadratic-residuosity test. Because r is fresh each time, encrypting the same bit twice gives different ciphertexts."
+       data-uk="<b>Перший імовірнісний шифр з відкритим ключем</b> (1982) і колиска семантичної стійкості. Шифрує <b>по одному біту</b>: 0 стає випадковим квадратичним лишком, 1 — випадковим нелишком із символом Якобі +1. Власник p, q розрізняє їх тестом квадратичної лишковості. Оскільки r щоразу нове, шифрування того самого біта двічі дає різні шифротексти."></p>
+    <div id="refs-gm"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="message byte (0–255)" data-uk="байт повідомлення (0–255)">message byte</span><span class="val" id="gmMV">42</span></label>
+          <input type="range" id="gmM" min="0" max="255" value="42"></div>
+        <button id="gmEnc" data-en="Encrypt (fresh randomness)" data-uk="Зашифрувати (нова випадковість)">Encrypt</button>
+        <div class="readout" id="gmOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="IND-CPA secure under the quadratic-residuosity assumption, but wildly impractical: every plaintext bit becomes a full-size integer (thousands of bits). Historically vital, superseded in practice by hybrid schemes and Paillier."
+            data-uk="IND-CPA стійка за припущенням квадратичної лишковості, але вкрай непрактична: кожен біт відкритого тексту стає цілим повного розміру (тисячі біт). Історично важлива, на практиці витіснена гібридними схемами й Paillier."></span></div>
+    <div class="xrefs"><a href="prng.html#blum-goldwasser">Blum–Goldwasser</a> <a href="asymmetric.html#paillier">Paillier</a> <a href="numbertheory.html#legendre" data-en="Legendre symbol" data-uk="Символ Лежандра">Legendre symbol</a></div>
+  </section>
+
+  <!-- ================= Blum–Goldwasser ================= -->
+  <section id="blum-goldwasser">
+    <span class="num" data-en="05 / Blum–Goldwasser" data-uk="05 / Блюм–Голдвассер">05 / BG</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+      <span data-en="Blum–Goldwasser" data-uk="Схема Блюма–Голдвассер">Blum–Goldwasser</span></h2>
+    <div class="formula">cᵢ = mᵢ ⊕ LSB(xᵢ),  xᵢ = xᵢ₋₁² mod N;  send (c, x_{t+1})</div>
+    <p class="desc" data-en="An <b>efficient</b> probabilistic scheme: use a Blum–Blum–Shub keystream to one-time-pad the message, and ship only the <b>final</b> BBS state x_{t+1} alongside the ciphertext. The receiver, knowing p and q, walks the squaring backwards with the Chinese Remainder Theorem to recover the seed, regenerates the keystream and decrypts. Ciphertext expansion is just one modulus, not one per bit."
+       data-uk="<b>Ефективна</b> імовірнісна схема: гама Блюма–Блюма–Шуба накладається на повідомлення (одноразовий блокнот), а разом із шифротекстом надсилається лише <b>кінцевий</b> стан BBS x_{t+1}. Отримувач, знаючи p і q, «розкручує» піднесення до квадрата назад за китайською теоремою про лишки, відновлює сід, регенерує гаму й розшифровує. Розширення шифротексту — лише один модуль, а не по одному на біт."></p>
+    <div id="refs-blum-goldwasser"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="plaintext" data-uk="відкритий текст">plaintext</span></label>
+          <input type="text" id="bgMsg" value="HELLO" maxlength="8" style="width:100%"></div>
+        <button id="bgRun" data-en="Encrypt &amp; decrypt" data-uk="Зашифрувати й розшифрувати">Encrypt &amp; decrypt</button>
+        <div class="readout" id="bgOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="IND-CPA secure under the factoring assumption and far more efficient than Goldwasser–Micali, but <b>malleable</b> — like any stream cipher, flipping a ciphertext bit flips the plaintext bit. It is not IND-CCA secure; authenticate the ciphertext (MAC/AEAD) in any real use."
+            data-uk="IND-CPA стійка за припущенням факторизації й значно ефективніша за Голдвассер–Мікалі, але <b>піддатлива</b> — як будь-який потоковий шифр, зміна біта шифротексту змінює біт відкритого тексту. Не є IND-CCA стійкою; у реальному застосуванні автентифікуйте шифротекст (MAC/AEAD)."></span></div>
+    <div class="xrefs"><a href="prng.html#bbs">Blum–Blum–Shub</a> <a href="prng.html#gm">Goldwasser–Micali</a> <a href="hash.html#poly1305" data-en="MAC" data-uk="MAC">MAC</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+/* ====================================================================
+   Shared primitives (all real, verified against known test vectors)
+   ==================================================================== */
+const C = {teal:'#7FDBCA', amber:'#F2A65A', rose:'#E8607A', dim:'#8B97B4',
+           ink:'#E8ECF4', grid:'#233150', panel:'#0E1626', line:'#1B2740'};
+
+/* ---- SHA-256 (RFC 6234) ---- */
+const SHA = (function(){
+  const K=new Uint32Array([
+    0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+    0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+    0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+    0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+    0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+    0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+    0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+    0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+  const rotr=(x,n)=>(x>>>n)|(x<<(32-n));
+  function digest(bytes){
+    const l=bytes.length, bl=((l+8>>6)+1)<<6, m=new Uint8Array(bl);
+    m.set(bytes); m[l]=0x80;
+    const bits=l*8; // fits in 32 bits for our inputs
+    m[bl-4]=(bits>>>24)&255; m[bl-3]=(bits>>>16)&255; m[bl-2]=(bits>>>8)&255; m[bl-1]=bits&255;
+    let h0=0x6a09e667,h1=0xbb67ae85,h2=0x3c6ef372,h3=0xa54ff53a,
+        h4=0x510e527f,h5=0x9b05688c,h6=0x1f83d9ab,h7=0x5be0cd19;
+    const w=new Uint32Array(64);
+    for(let off=0; off<bl; off+=64){
+      for(let i=0;i<16;i++) w[i]=(m[off+4*i]<<24)|(m[off+4*i+1]<<16)|(m[off+4*i+2]<<8)|m[off+4*i+3];
+      for(let i=16;i<64;i++){
+        const s0=rotr(w[i-15],7)^rotr(w[i-15],18)^(w[i-15]>>>3);
+        const s1=rotr(w[i-2],17)^rotr(w[i-2],19)^(w[i-2]>>>10);
+        w[i]=(w[i-16]+s0+w[i-7]+s1)|0;
+      }
+      let a=h0,b=h1,c=h2,d=h3,e=h4,f=h5,g=h6,h=h7;
+      for(let i=0;i<64;i++){
+        const S1=rotr(e,6)^rotr(e,11)^rotr(e,25);
+        const ch=(e&f)^(~e&g);
+        const t1=(h+S1+ch+K[i]+w[i])|0;
+        const S0=rotr(a,2)^rotr(a,13)^rotr(a,22);
+        const maj=(a&b)^(a&c)^(b&c);
+        const t2=(S0+maj)|0;
+        h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0;
+      }
+      h0=(h0+a)|0;h1=(h1+b)|0;h2=(h2+c)|0;h3=(h3+d)|0;
+      h4=(h4+e)|0;h5=(h5+f)|0;h6=(h6+g)|0;h7=(h7+h)|0;
+    }
+    const out=new Uint8Array(32), hs=[h0,h1,h2,h3,h4,h5,h6,h7];
+    for(let i=0;i<8;i++){ out[4*i]=(hs[i]>>>24)&255; out[4*i+1]=(hs[i]>>>16)&255;
+      out[4*i+2]=(hs[i]>>>8)&255; out[4*i+3]=hs[i]&255; }
+    return out;
+  }
+  const enc=new TextEncoder();
+  const hex=b=>Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join('');
+  return {digest, hex, str:s=>digest(enc.encode(s))};
+})();
+
+/* ---- MT19937 (reference PRNG) ---- */
+function MT19937(seed){
+  const N=624, M=397, MA=0x9908b0df, UP=0x80000000, LO=0x7fffffff;
+  const mt=new Uint32Array(N); let idx=N;
+  mt[0]=seed>>>0;
+  for(let i=1;i<N;i++) mt[i]=(Math.imul(1812433253,(mt[i-1]^(mt[i-1]>>>30)))+i)>>>0;
+  function gen(){
+    for(let i=0;i<N;i++){
+      const y=(mt[i]&UP)|(mt[(i+1)%N]&LO);
+      mt[i]=mt[(i+M)%N]^(y>>>1)^((y&1)?MA:0);
+    } idx=0;
+  }
+  return function(){
+    if(idx>=N) gen();
+    let y=mt[idx++];
+    y^=y>>>11; y^=(y<<7)&0x9d2c5680; y^=(y<<15)&0xefc60000; y^=y>>>18;
+    return y>>>0;
+  };
+}
+
+/* ---- BigInt modular helpers ---- */
+function bmod(a,m){ a%=m; return a<0n?a+m:a; }
+function modpow(b,e,m){ b=bmod(b,m); let r=1n; while(e>0n){ if(e&1n) r=r*b%m; b=b*b%m; e>>=1n; } return r; }
+function legendre(a,p){ const r=modpow(bmod(a,p),(p-1n)/2n,p); return r===p-1n?-1:Number(r); }
+function egcd(a,b){ let x=0n,x1=1n,y=1n,y1=0n; while(b){ const q=a/b; [a,b]=[b,a-q*b]; [x1,x]=[x,x1-q*x]; [y1,y]=[y,y1-q*y]; } return [a,x1,y1]; }
+function crt(r1,m1,r2,m2){   // x ≡ r1 (mod m1), x ≡ r2 (mod m2), gcd(m1,m2)=1
+  const M=m1*m2;
+  const inv1=bmod(egcd(m2,m1)[1],m1);   // m2⁻¹ mod m1
+  const inv2=bmod(egcd(m1,m2)[1],m2);   // m1⁻¹ mod m2
+  return bmod(r1*m2%M*inv1 + r2*m1%M*inv2, M);
+}
+
+/* ====================================================================
+   Self-test banner
+   ==================================================================== */
+function selfTest(){
+  const uk=window.LANG==='uk';
+  const s1=SHA.hex(SHA.str(''))==='e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
+  const s2=SHA.hex(SHA.str('abc'))==='ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
+  const rnd=MT19937(5489); const first=rnd()===3499211612;
+  const ok=s1&&s2&&first;
+  const L=uk?'Самоперевірка примітивів':'Primitive self-test';
+  document.getElementById('selftest').innerHTML=
+    '<span class="k">'+L+':</span>  '+
+    'SHA-256("")  <span class="'+(s1?'a':'b')+'">'+(s1?'✓':'✗')+'</span>   '+
+    'SHA-256("abc") <span class="'+(s2?'a':'b')+'">'+(s2?'✓':'✗')+'</span>   '+
+    'MT19937(5489) <span class="'+(first?'a':'b')+'">'+(first?'✓':'✗')+'</span>   '+
+    (ok?'<span class="a">'+(uk?'усі еталонні вектори збігаються':'all reference vectors match')+'</span>'
+       :'<span class="b">FAIL</span>');
+}
+
+/* ====================================================================
+   1) LCG spectral scatter
+   ==================================================================== */
+function drawLCG(){
+  const a=+lcgA.value, c=+lcgC.value, m=+lcgM.value, s=+lcgS.value%m;
+  lcgAV.textContent=a; lcgCV.textContent=c; lcgMV.textContent=m; lcgSV.textContent=s;
+  lcgS.max=m-1;
+  const cv=document.getElementById('lcgCanvas'), g=cv.getContext('2d'), W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  g.strokeStyle=C.line; g.strokeRect(0.5,0.5,W-1,H-1);
+  // sequence
+  const N=Math.min(m,3000); const xs=[]; let x=s; const seen=new Set(); let period=0;
+  for(let i=0;i<N;i++){ xs.push(x); if(seen.has(x)&&!period) period=i; seen.add(x); x=(a*x+c)%m; }
+  // scatter of consecutive pairs
+  g.fillStyle=C.teal;
+  for(let i=0;i+1<xs.length;i++){
+    const px=xs[i]/(m-1)*(W-10)+5, py=H-5-xs[i+1]/(m-1)*(H-10);
+    g.fillRect(px,py,1.6,1.6);
+  }
+  const uk=window.LANG==='uk';
+  document.getElementById('lcgOut').innerHTML=
+    '<span class="k">'+(uk?'перші виходи':'first outputs')+':</span> '+
+    xs.slice(0,8).map(v=>'<span class="a">'+v+'</span>').join(', ')+' …\n'+
+    '<span class="k">'+(uk?'період':'period')+':</span> <span class="s">'+(period||('≥'+N))+'</span>'+
+    (period? '' : (uk?'  (не замкнувся у вибірці)':'  (did not repeat in sample)'));
+}
+
+/* ====================================================================
+   2) MT histogram
+   ==================================================================== */
+function drawMT(){
+  const seed=+mtS.value, n=+mtN.value; mtSV.textContent=seed; mtNV.textContent=n;
+  const rnd=MT19937(seed); const B=32, bins=new Array(B).fill(0);
+  for(let i=0;i<n;i++){ bins[Math.min(B-1, Math.floor(rnd()/4294967296*B))]++; }
+  const cv=document.getElementById('mtCanvas'), g=cv.getContext('2d'), W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const max=Math.max(...bins), bw=W/B, ideal=n/B;
+  g.strokeStyle=C.dim; g.setLineDash([3,3]);
+  const iy=H-4-ideal/max*(H-14); g.beginPath(); g.moveTo(0,iy); g.lineTo(W,iy); g.stroke(); g.setLineDash([]);
+  g.fillStyle=C.amber;
+  for(let i=0;i<B;i++){ const h=bins[i]/max*(H-14); g.fillRect(i*bw+1,H-4-h,bw-2,h); }
+  const uk=window.LANG==='uk';
+  const chi=bins.reduce((s,b)=>s+(b-ideal)*(b-ideal)/ideal,0);
+  document.getElementById('mtOut').innerHTML=
+    '<span class="k">'+(uk?'вибірка 32-бітних чисел, 32 кошики':'32-bin histogram of 32-bit draws')+'</span>\n'+
+    '<span class="k">χ² =</span> <span class="s">'+chi.toFixed(1)+'</span>  '+
+    (uk?'(очікувано ≈ 31 для рівномірного)':'(≈31 expected for uniform)');
+}
+
+/* ====================================================================
+   3) BBS
+   ==================================================================== */
+const BBS_PQ=[[499n,547n],[383n,503n],[691n,719n]];
+function drawBBS(){
+  const [p,q]=BBS_PQ[+bbsSel.value]; const M=p*q;
+  bbsPQ.textContent=p+' · '+q;
+  let s=BigInt(+bbsS.value); bbsSV.textContent=bbsS.value;
+  if(bmod(s,p)===0n||bmod(s,q)===0n) s+=1n;
+  let x=s*s%M; const bits=[], xs=[];
+  for(let i=0;i<40;i++){ xs.push(x); bits.push(Number(x&1n)); x=x*x%M; }
+  const uk=window.LANG==='uk';
+  document.getElementById('bbsOut').innerHTML=
+    '<span class="k">M = p·q =</span> <span class="s">'+M+'</span>\n'+
+    '<span class="k">x₁..x₈ =</span> '+xs.slice(0,8).map(v=>'<span class="a">'+v+'</span>').join(', ')+' …\n'+
+    '<span class="k">'+(uk?'потік бітів':'output bits')+':</span> <span class="b">'+bits.join('')+'</span>';
+}
+
+/* ====================================================================
+   4) Hash_DRBG (simplified, real SHA-256)
+   ==================================================================== */
+let drbgV=null, drbgCtr=0;
+function drbgReseedFn(){
+  const e=document.getElementById('drbgE').value;
+  drbgV=SHA.str(e+'|nonce|'+Date.now()); drbgCtr=0;
+}
+function drbgGenFn(){
+  if(!drbgV) drbgReseedFn();
+  let out='';
+  for(let blk=0; blk<2; blk++){       // 2×256 bits = 512 bits
+    const buf=new Uint8Array(drbgV.length+4);
+    buf.set(drbgV); const c=drbgCtr++;
+    buf[drbgV.length]=(c>>>24)&255; buf[drbgV.length+1]=(c>>>16)&255;
+    buf[drbgV.length+2]=(c>>>8)&255; buf[drbgV.length+3]=c&255;
+    const d=SHA.digest(buf); out+=SHA.hex(d);
+    // update state V = SHA(V || 0x01)
+    const upd=new Uint8Array(drbgV.length+1); upd.set(drbgV); upd[drbgV.length]=1; drbgV=SHA.digest(upd);
+  }
+  const uk=window.LANG==='uk';
+  document.getElementById('drbgOut').innerHTML=
+    '<span class="k">'+(uk?'512 біт виходу (hex)':'512 bits of output (hex)')+':</span>\n<span class="a">'+
+    out.replace(/(.{32})/g,'$1\n')+'</span>';
+}
+
+/* ====================================================================
+   5) Fortuna accumulator (schematic, real SHA-256 key)
+   ==================================================================== */
+let pools=new Array(32).fill(0), reseeds=0, fortKey='—', nextPool=0;
+function drawFort(){
+  const cv=document.getElementById('fortCanvas'), g=cv.getContext('2d'), W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const show=16, bw=W/show, max=Math.max(4,...pools.slice(0,show));
+  for(let i=0;i<show;i++){
+    const h=pools[i]/max*(H-24);
+    g.fillStyle = (reseeds>0 && (reseeds % (1<<i))===0) ? C.teal : C.grid;
+    g.fillRect(i*bw+2,H-16-h,bw-3,h);
+    g.fillStyle=C.dim; g.font='8px monospace'; g.fillText(i, i*bw+bw/2-3, H-4);
+  }
+  const uk=window.LANG==='uk';
+  document.getElementById('fortOut').innerHTML=
+    '<span class="k">'+(uk?'подій':'events')+':</span> <span class="s">'+pools.reduce((a,b)=>a+b,0)+'</span>   '+
+    '<span class="k">'+(uk?'пере-сідувань':'reseeds')+':</span> <span class="s">'+reseeds+'</span>\n'+
+    '<span class="k">'+(uk?'ключ (SHA-256 пулів)':'key (SHA-256 of pools)')+':</span>\n<span class="a">'+fortKey+'</span>';
+}
+
+/* ====================================================================
+   6) Goldwasser–Micali
+   ==================================================================== */
+const GM_P=467n, GM_Q=479n, GM_N=GM_P*GM_Q, GM_Y=GM_N-1n;  // y=-1 is a pseudo-square
+function gmEncBit(m){
+  let r; do{ r=BigInt(1+Math.floor(Math.random()*Number(GM_N-1n))); }while(egcd(r,GM_N)[0]!==1n);
+  return (modpow(GM_Y,BigInt(m),GM_N)*(r*r%GM_N))%GM_N;
+}
+function gmDecBit(c){ return legendre(c,GM_P)===1 ? 0 : 1; }  // residue → 0
+function drawGM(){
+  const val=+gmM.value; gmMV.textContent=val;
+  const bits=[]; for(let i=7;i>=0;i--) bits.push((val>>i)&1);
+  const cts=bits.map(gmEncBit);
+  const dec=cts.map(gmDecBit); const ok=dec.join('')===bits.join('');
+  const uk=window.LANG==='uk';
+  document.getElementById('gmOut').innerHTML=
+    '<span class="k">N = '+GM_N+', y = '+GM_Y+' ('+(uk?'псевдоквадрат':'pseudo-square')+')</span>\n'+
+    '<span class="k">'+(uk?'біти':'bits')+':</span> <span class="a">'+bits.join(' ')+'</span>\n'+
+    '<span class="k">'+(uk?'шифробіти cᵢ':'ciphertexts cᵢ')+':</span>\n'+
+    cts.map(c=>'<span class="s">'+c+'</span>').join('  ')+'\n'+
+    '<span class="k">'+(uk?'розшифровано':'decrypted')+':</span> <span class="a">'+dec.join(' ')+'</span> '+
+    (ok?'<span class="a">✓</span>':'<span class="b">✗</span>');
+}
+
+/* ====================================================================
+   7) Blum–Goldwasser (encrypt + trapdoor decrypt with self-check)
+   ==================================================================== */
+const BG_P=499n, BG_Q=547n, BG_N=BG_P*BG_Q;
+function drawBG(){
+  const msg=document.getElementById('bgMsg').value||'';
+  const enc=new TextEncoder().encode(msg);
+  // bit array
+  const mbits=[]; enc.forEach(b=>{ for(let i=7;i>=0;i--) mbits.push((b>>i)&1); });
+  const t=mbits.length;
+  // seed x0 = r^2 mod N (a quadratic residue)
+  let r=BigInt(2+Math.floor(Math.random()*400)); if(bmod(r,BG_P)===0n||bmod(r,BG_Q)===0n) r+=1n;
+  const x0=r*r%BG_N;
+  // encrypt
+  let x=x0; const cbits=[];
+  for(let i=0;i<t;i++){ x=x*x%BG_N; cbits.push(mbits[i]^Number(x&1n)); }
+  const xLast=x*x%BG_N;                 // x_{t+1}
+  // decrypt with p,q via CRT
+  const dp=modpow((BG_P+1n)/4n, BigInt(t+1), BG_P-1n);
+  const dq=modpow((BG_Q+1n)/4n, BigInt(t+1), BG_Q-1n);
+  const up=modpow(xLast,dp,BG_P), uq=modpow(xLast,dq,BG_Q);
+  let x0r=crt(up,BG_P,uq,BG_Q);
+  let xr=x0r; const rbits=[];
+  for(let i=0;i<t;i++){ xr=xr*xr%BG_N; rbits.push(cbits[i]^Number(xr&1n)); }
+  // reassemble bytes
+  const out=[]; for(let i=0;i<rbits.length;i+=8){ let v=0; for(let j=0;j<8;j++) v=(v<<1)|rbits[i+j]; out.push(v); }
+  const dmsg=new TextDecoder().decode(new Uint8Array(out));
+  const ok=(dmsg===msg)&&(x0r===x0);
+  const uk=window.LANG==='uk';
+  document.getElementById('bgOut').innerHTML=
+    '<span class="k">N = '+BG_N+',  t = '+t+' '+(uk?'біт':'bits')+'</span>\n'+
+    '<span class="k">'+(uk?'сід x₀':'seed x₀')+' =</span> <span class="a">'+x0+'</span>\n'+
+    '<span class="k">'+(uk?'шифротекст (біти)':'ciphertext bits')+':</span> <span class="b">'+cbits.join('')+'</span>\n'+
+    '<span class="k">'+(uk?'надіслано x_{t+1}':'sent x_{t+1}')+' =</span> <span class="s">'+xLast+'</span>\n'+
+    '<span class="k">'+(uk?'відновлено x₀':'recovered x₀')+' =</span> <span class="a">'+x0r+'</span>\n'+
+    '<span class="k">'+(uk?'розшифровано':'decrypted')+':</span> <span class="a">"'+dmsg+'"</span> '+
+    (ok?'<span class="a">✓</span>':'<span class="b">✗</span>');
+}
+
+/* ====================================================================
+   wiring
+   ==================================================================== */
+window.onLangChange=function(){
+  ['lcg','mt','bbs','drbg','fortuna','gm','blum-goldwasser'].forEach(id=>{
+    const el=document.getElementById('refs-'+id); if(el&&window.REFS[id]) el.innerHTML=window.atlasRefs(window.REFS[id]);
+  });
+  selfTest(); drawLCG(); drawMT(); drawBBS(); drawFort(); drawGM(); drawBG();
+  document.getElementById('drbgOut').textContent = window.LANG==='uk'
+    ? 'Натисніть «Згенерувати».' : 'Press “Generate”.';
+};
+window.REFS={
+  lcg:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Linear_congruential_generator',label:'Wikipedia: LCG'}},
+       {tag:'book',en:{href:'https://en.wikipedia.org/wiki/Spectral_test',label:'Spectral test'}}],
+  mt:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Mersenne_Twister',label:'Wikipedia: Mersenne Twister'}},
+      {tag:'paper',en:{href:'https://doi.org/10.1145/272991.272995',label:'Matsumoto & Nishimura (1998)'}}],
+  bbs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Blum_Blum_Shub',label:'Wikipedia: Blum Blum Shub'}},
+       {tag:'paper',en:{href:'https://doi.org/10.1137/0215025',label:'Blum, Blum, Shub (1986)'}}],
+  drbg:[{tag:'nist',en:{href:'https://csrc.nist.gov/pubs/sp/800/90/a/r1/final',label:'NIST SP 800-90A Rev.1'}},
+        {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/NIST_SP_800-90A',label:'Wikipedia: SP 800-90A'}}],
+  fortuna:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Fortuna_(PRNG)',label:'Wikipedia: Fortuna'}},
+           {tag:'book',en:{href:'https://www.schneier.com/academic/paperfiles/fortuna.pdf',label:'Ferguson & Schneier — Fortuna'}}],
+  gm:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Goldwasser%E2%80%93Micali_cryptosystem',label:'Wikipedia: Goldwasser–Micali'}},
+      {tag:'paper',en:{href:'https://doi.org/10.1145/800070.802212',label:'Goldwasser & Micali (1982)'}}],
+  'blum-goldwasser':[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Blum%E2%80%93Goldwasser_cryptosystem',label:'Wikipedia: Blum–Goldwasser'}},
+      {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-39799-X_24',label:'Blum & Goldwasser (1984)'}}]
+};
+
+// controls
+['lcgA','lcgC','lcgM','lcgS'].forEach(id=>document.getElementById(id).addEventListener('input',drawLCG));
+['mtS','mtN'].forEach(id=>document.getElementById(id).addEventListener('input',drawMT));
+['bbsSel','bbsS'].forEach(id=>document.getElementById(id).addEventListener('input',drawBBS));
+document.getElementById('drbgGen').addEventListener('click',drbgGenFn);
+document.getElementById('drbgReseed').addEventListener('click',()=>{ drbgReseedFn();
+  document.getElementById('drbgOut').textContent=(window.LANG==='uk'?'Пере-сіджено. Натисніть «Згенерувати».':'Reseeded. Press “Generate”.'); });
+document.getElementById('fortEvt').addEventListener('click',()=>{ pools[nextPool]++; nextPool=(nextPool+1)%32; drawFort(); });
+document.getElementById('fortRe').addEventListener('click',()=>{ reseeds++;
+  // fold pools whose index divides the reseed counter into a key
+  let acc=''; for(let i=0;i<32;i++){ if((reseeds%(1<<i))===0){ acc+='p'+i+':'+pools[i]+';'; pools[i]=0; } }
+  fortKey=SHA.hex(SHA.str(acc+reseeds)).slice(0,48); drawFort(); });
+document.getElementById('fortReset').addEventListener('click',()=>{ pools=new Array(32).fill(0); reseeds=0; nextPool=0; fortKey='—'; drawFort(); });
+document.getElementById('gmM').addEventListener('input',drawGM);
+document.getElementById('gmEnc').addEventListener('click',drawGM);
+document.getElementById('bgRun').addEventListener('click',drawBG);
+</script>
+</body>
+</html>
