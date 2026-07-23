@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy &amp; anonymity — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="privacy">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 29 — cryptography that hides who did what, while still proving it was allowed"
+         data-uk="Розділ 29 — криптографія, що приховує, хто що зробив, водночас доводячи, що це було дозволено">Section 29</div>
+    <h1 data-en="Privacy &amp; anonymity" data-uk="Приватність та анонімність">Privacy &amp; anonymity</h1>
+    <p class="lede" data-en="E-voting, e-cash and e-government need a strange combination: strong authentication with strong anonymity. A bank must sign a coin without seeing it; a voter must prove eligibility without revealing a ballot; a reader must query a database without disclosing the query. Below are six building blocks — one of them, Chaum's blind signature, is computed for real with toy RSA so you can verify every step."
+       data-uk="Е-голосування, е-готівка та е-урядування потребують дивного поєднання: сильної автентифікації із сильною анонімністю. Банк має підписати монету, не бачачи її; виборець має довести право голосу, не розкриваючи бюлетень; читач має запитати базу даних, не розкриваючи запит. Нижче — шість будівельних блоків; один із них, сліпий підпис Чаума, обчислюється по-справжньому на іграшковому RSA, тож ви можете перевірити кожен крок.">Cryptography for anonymity with accountability.</p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ================= 1. Blind signatures ================= -->
+  <section id="blindsig">
+    <span class="num" data-en="29 / Blind signatures" data-uk="29 / Сліпі підписи">29 / Blind signatures</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+      <span data-en="Chaum blind signatures" data-uk="Сліпі підписи Чаума">Chaum blind signatures</span></h2>
+    <div class="formula">blind b = m·rᵉ mod N;  sign s' = bᵈ mod N;  unblind s = s'·r⁻¹ mod N;  verify sᵉ ≡ m</div>
+    <p class="desc" data-en="A blind signature lets a signer authorise a message <b>without seeing it</b>. The user multiplies the message m by a random blinding factor rᵉ, sends the blinded value b; the signer raises it to the private exponent d and returns s'; the user divides out r to obtain s = mᵈ — a perfectly valid RSA signature on m that the signer never observed. This is the engine of untraceable e-cash (the bank signs a coin it cannot later link to the spender) and of e-voting (an authority validates a ballot it cannot read)."
+       data-uk="Сліпий підпис дозволяє підписанту засвідчити повідомлення, <b>не бачачи його</b>. Користувач множить повідомлення m на випадковий засліплювальний множник rᵉ й надсилає засліплене значення b; підписант підносить його до приватного показника d і повертає s'; користувач ділить на r та отримує s = mᵈ — цілком дійсний RSA-підпис на m, якого підписант ніколи не бачив. Це рушій невідстежуваної е-готівки (банк підписує монету, яку згодом не може прив'язати до платника) та е-голосування (орган засвідчує бюлетень, який не може прочитати)."></p>
+    <div id="refs-blindsig"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="bsCanvas" width="300" height="190"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Real toy RSA: p=61, q=53, N=3233, e=17, d=2753. Everything below is computed with BigInt." data-uk="Справжній іграшковий RSA: p=61, q=53, N=3233, e=17, d=2753. Усе нижче обчислено на BigInt."></div>
+          <div class="ctrl"><label><span data-en="message m" data-uk="повідомлення m">message m</span><span class="val" id="bsMV">42</span></label>
+            <input type="range" id="bsM" min="2" max="3232" value="42"></div>
+          <div class="ctrl"><label><span data-en="blinding r" data-uk="засліплення r">blinding r</span><span class="val" id="bsRV">705</span></label>
+            <input type="range" id="bsR" min="2" max="3232" value="705"></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="bsRandR" data-en="Random r" data-uk="Випадкове r">Random r</button>
+            <button id="bsRandM" class="secondary" data-en="Random m" data-uk="Випадкове m">Random m</button>
+          </div>
+          <div class="readout" id="bsOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Chaum's scheme is unforgeable under RSA and unlinkable because r is uniformly random. The danger is exactly RSA's multiplicative malleability: signing raw values enables one-more-forgery and blinding attacks, so deployments sign H(m) with full-domain hashing (RSA-FDH / PSS), and the classic e-cash protocols add cut-and-choose so the bank cannot be tricked into signing a false denomination."
+            data-uk="Схема Чаума непідробна за припущенням RSA й незв'язувана, бо r рівномірно випадкове. Небезпека — саме мультиплікативна піддатливість RSA: підпис «сирих» значень уможливлює підробку «на один більше» та атаки засліплення, тож на практиці підписують H(m) з повнодоменним гешуванням (RSA-FDH / PSS), а класичні протоколи е-готівки додають «розріж-і-обери», щоб банк не підписав фальшивий номінал."></span></div>
+    <div class="xrefs"><a href="asymmetric.html#rsa">RSA</a> <a href="signatures.html#rsapss">RSA-PSS</a> <a href="privacy.html#anoncred" data-en="Anonymous credentials" data-uk="Анонімні посвідчення">Anonymous credentials</a></div>
+  </section>
+
+  <!-- ================= 2. Ring & group signatures ================= -->
+  <section id="ringsig">
+    <span class="num" data-en="29 / Ring &amp; group signatures" data-uk="29 / Кільцеві та групові підписи">29 / Ring signatures</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(n)</span>
+      <span data-en="Ring &amp; group signatures" data-uk="Кільцеві та групові підписи">Ring &amp; group signatures</span></h2>
+    <div class="formula">Cₖ,ᵥ(y₁,…,y_n) = v  where  yᵢ = gᵢ(xᵢ);  the signer inverts only its own gₛ</div>
+    <p class="desc" data-en="A <b>ring signature</b> proves that <i>some</i> member of an ad-hoc set signed, revealing nothing about which one — no setup, no manager. The signer chooses random xᵢ for every other member, then uses its own trapdoor to solve the one remaining value so the ring &lsquo;closes&rsquo; (Rivest–Shamir–Tauman). A <b>group signature</b> is the managed cousin: a group manager can, if compelled, open a signature to reveal the actual signer. Monero uses ring signatures to hide the true spender among decoys."
+       data-uk="<b>Кільцевий підпис</b> доводить, що підписав <i>якийсь</i> член довільної множини, не розкриваючи, хто саме — без налаштування й адміністратора. Підписант обирає випадкові xᵢ для всіх інших членів, а тоді своїм секретним «люком» розв'язує єдине значення, що лишилось, щоб кільце «замкнулось» (Рівест–Шамір–Тауман). <b>Груповий підпис</b> — керована версія: адміністратор групи за потреби може «відкрити» підпис і дізнатись справжнього підписанта. Monero кільцевими підписами ховає справжнього платника серед приманок."></p>
+    <div id="refs-ringsig"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="rgCanvas" width="300" height="220"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Toy / illustrative: gᵢ(x)=(aᵢx+cᵢ) mod 2¹⁶ with combining Cₖ,ᵥ. It genuinely closes and verifies, but parameters are far too small for security — a schematic of the real RST construction." data-uk="Іграшкове / ілюстративне: gᵢ(x)=(aᵢx+cᵢ) mod 2¹⁶ зі зшивальною функцією Cₖ,ᵥ. Кільце справді замикається й перевіряється, але параметри надто малі для стійкості — схема справжньої конструкції RST."></div>
+          <div class="ctrl"><label><span data-en="ring size n" data-uk="розмір кільця n">ring size n</span><span class="val" id="rgNV">5</span></label>
+            <input type="range" id="rgN" min="2" max="7" value="5"></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="rgSign" data-en="Sign (random hidden signer)" data-uk="Підписати (випадковий прихований підписант)">Sign</button>
+            <button id="rgPeek" class="secondary" data-en="Reveal signer (teaching only)" data-uk="Показати підписанта (лише для навчання)">Reveal signer</button>
+          </div>
+          <div class="readout" id="rgOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Real ring signatures are anonymous and unforgeable under the trapdoor-permutation (or discrete-log) assumption; linkable variants (LSAG, used by Monero) let verifiers detect if one key signed twice, stopping double-spends while preserving anonymity. Group signatures add an opening authority, so &lsquo;anonymity&rsquo; is conditional on that authority being honest."
+            data-uk="Справжні кільцеві підписи анонімні й непідробні за припущенням про трапдорну перестановку (або дискретний логарифм); зв'язувані варіанти (LSAG у Monero) дозволяють перевірячам виявити, чи один ключ підписав двічі, зупиняючи подвійні витрати без втрати анонімності. Групові підписи додають орган «відкриття», тож «анонімність» умовна щодо чесності цього органу."></span></div>
+    <div class="xrefs"><a href="signatures.html#schnorr">Schnorr</a> <a href="pairings.html#bls">BLS</a> <a href="privacy.html#blindsig" data-en="Blind signatures" data-uk="Сліпі підписи">Blind signatures</a></div>
+  </section>
+
+  <!-- ================= 3. Onion routing ================= -->
+  <section id="onion">
+    <span class="num" data-en="29 / Onion routing (Tor)" data-uk="29 / Цибулева маршрутизація (Tor)">29 / Onion routing</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n)</span>
+      <span data-en="Onion routing (Tor)" data-uk="Цибулева маршрутизація (Tor)">Onion routing (Tor)</span></h2>
+    <div class="formula">c₀ = E_{k₁}(E_{k₂}(…E_{k_L}(M)…));  relay i strips one layer: c_i = D_{k_i}(c_{i−1})</div>
+    <p class="desc" data-en="The sender wraps a message in <b>nested layers of encryption</b>, one per relay. Each relay peels exactly one layer with its own key, learning only the next hop — never both the origin and the final destination together. No single relay can link sender to receiver; an observer would have to control the whole path. The plot draws the layers being peeled from the outside in."
+       data-uk="Відправник загортає повідомлення у <b>вкладені шари шифрування</b>, по одному на кожен вузол. Кожен вузол знімає рівно один шар своїм ключем, дізнаючись лише наступний перехід — ніколи одночасно і джерело, і кінцеву ціль. Жоден окремий вузол не може пов'язати відправника з отримувачем; спостерігачеві довелося б контролювати весь маршрут. На графіку показано, як шари знімаються ззовні всередину."></p>
+    <div id="refs-onion"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="onCanvas" width="300" height="220"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Toy layer cipher E_k(x)=(x+k) mod 256 — illustrative; real Tor uses AES-128 in counter mode inside authenticated cells." data-uk="Іграшковий шаровий шифр E_k(x)=(x+k) mod 256 — ілюстративний; справжній Tor використовує AES-128 у режимі лічильника всередині автентифікованих комірок."></div>
+          <div class="ctrl"><label><span data-en="message byte M" data-uk="байт повідомлення M">message byte M</span><span class="val" id="onMV">200</span></label>
+            <input type="range" id="onM" min="0" max="255" value="200"></div>
+          <div class="ctrl"><label><span data-en="relays L" data-uk="вузлів L">relays L</span><span class="val" id="onLV">3</span></label>
+            <input type="range" id="onL" min="1" max="5" value="3"></div>
+          <button id="onKeys" data-en="New relay keys" data-uk="Нові ключі вузлів">New relay keys</button>
+          <div class="readout" id="onOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Onion routing defeats a local observer but not a global passive adversary who watches both ends: end-to-end <b>traffic-correlation</b> attacks (timing and volume) can de-anonymise Tor flows. Circuits use ephemeral keys (forward secrecy) and per-cell authentication; padding and mix-style batching are added defences against correlation."
+            data-uk="Цибулева маршрутизація перемагає локального спостерігача, але не глобального пасивного супротивника, що бачить обидва кінці: наскрізні атаки <b>кореляції трафіку</b> (за часом і обсягом) можуть деанонімізувати потоки Tor. Ланцюги використовують ефемерні ключі (пряма секретність) та автентифікацію кожної комірки; доповнення й пакетне перемішування — додатковий захист від кореляції."></span></div>
+    <div class="xrefs"><a href="protocols.html#tls13">TLS 1.3</a> <a href="privacy.html#mixnet" data-en="Mix networks" data-uk="Мережі-мікшери">Mix networks</a> <a href="keyexchange.html#ecdh">ECDH</a></div>
+  </section>
+
+  <!-- ================= 4. Mix networks ================= -->
+  <section id="mixnet">
+    <span class="num" data-en="29 / Mix networks" data-uk="29 / Мережі-мікшери">29 / Mix networks</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(n)</span>
+      <span data-en="Mix networks" data-uk="Мережі-мікшери">Mix networks</span></h2>
+    <div class="formula">each mix: decrypt/re-encrypt a batch, then output in a random permutation π</div>
+    <p class="desc" data-en="A mix collects a <b>batch</b> of messages, strips or re-randomises one encryption layer, and emits them in a <b>shuffled</b> order, so the input and output positions cannot be matched. Chained mixes (Chaum, 1981) hide the sender–receiver relation as long as one mix is honest. Unlike onion routing, mixes deliberately add latency and batching to resist timing correlation — the design behind anonymous remailers and modern verifiable e-voting shuffles."
+       data-uk="Мікшер збирає <b>пакет</b> повідомлень, знімає або перерандомізовує один шар шифрування й видає їх у <b>перемішаному</b> порядку, тож позиції входу й виходу не зіставити. Ланцюг мікшерів (Чаум, 1981) приховує зв'язок відправник–отримувач, доки чесний хоч один мікшер. На відміну від цибулевої маршрутизації, мікшери навмисно додають затримку й пакетування, щоб протистояти кореляції за часом — це основа анонімних ремейлерів і сучасних верифікованих перемішувань у е-голосуванні."></p>
+    <div id="refs-mixnet"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="mxCanvas" width="320" height="240"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Schematic: each column is a mix applying a real random permutation; the tangled lines show how input→output linkage is lost." data-uk="Схема: кожен стовпець — мікшер, що застосовує справжню випадкову перестановку; заплутані лінії показують, як втрачається зв'язок вхід→вихід."></div>
+          <div class="ctrl"><label><span data-en="messages n" data-uk="повідомлень n">messages n</span><span class="val" id="mxNV">6</span></label>
+            <input type="range" id="mxN" min="3" max="8" value="6"></div>
+          <div class="ctrl"><label><span data-en="mixes L" data-uk="мікшерів L">mixes L</span><span class="val" id="mxLV">3</span></label>
+            <input type="range" id="mxL" min="1" max="4" value="3"></div>
+          <button id="mxShuffle" data-en="Re-shuffle batch" data-uk="Перемішати пакет">Re-shuffle batch</button>
+          <div class="readout" id="mxOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Anonymity holds if at least one mix is honest and the batch (anonymity set) is large; small batches leak through intersection and (n−1) attacks. Verifiable mixnets attach zero-knowledge <b>proofs of shuffle</b> so anyone can check the permutation was a genuine re-encryption without learning it — essential for auditable e-voting."
+            data-uk="Анонімність зберігається, якщо чесний хоча б один мікшер і пакет (множина анонімності) великий; малі пакети розкриваються через атаки перетину та (n−1). Верифіковані мікс-мережі додають <b>докази перемішування</b> з нульовим розголошенням, щоб будь-хто перевірив, що перестановка була справжнім перешифруванням, не дізнаючись її — необхідне для аудитованого е-голосування."></span></div>
+    <div class="xrefs"><a href="asymmetric.html#elgamal">ElGamal</a> <a href="privacy.html#onion" data-en="Onion routing" data-uk="Цибулева маршрутизація">Onion routing</a> <a href="advanced.html#shamir" data-en="Secret sharing" data-uk="Розділення секрету">Secret sharing</a></div>
+  </section>
+
+  <!-- ================= 5. PIR ================= -->
+  <section id="pir">
+    <span class="num" data-en="29 / Private information retrieval" data-uk="29 / Приватне отримання інформації">29 / PIR</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(√n)</span>
+      <span data-en="Private information retrieval (PIR)" data-uk="Приватне отримання інформації (PIR)">Private information retrieval</span></h2>
+    <div class="formula">2 servers: q₁ ⊂ [n] random,  q₂ = q₁ △ {i};  answer aⱼ = ⊕_{k∈qⱼ} DB[k];  DB[i] = a₁ ⊕ a₂</div>
+    <p class="desc" data-en="PIR lets a client fetch record i <b>without the server learning i</b>. The elegant information-theoretic trick uses two non-colluding servers holding the same database: the client sends each a random-looking subset of indices; the two subsets differ in exactly bit i. Each server returns the XOR (parity) of the records it was asked for, and the client XORs the two answers — everything cancels except DB[i]. Each server alone sees a uniformly random query, so it learns nothing about i."
+       data-uk="PIR дозволяє клієнту отримати запис i, <b>щоб сервер не дізнався i</b>. Елегантний інформаційно-теоретичний прийом використовує два сервери, що не змовляються й тримають однакову базу: клієнт надсилає кожному «випадкову на вигляд» підмножину індексів; дві підмножини відрізняються рівно в біті i. Кожен сервер повертає XOR (парність) запитаних записів, а клієнт XOR-ить дві відповіді — усе скорочується, крім DB[i]. Кожен сервер окремо бачить рівномірно випадковий запит, тож нічого не дізнається про i."></p>
+    <div id="refs-pir"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="pirCanvas" width="300" height="170"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Real 2-server information-theoretic PIR (Chor–Goldreich–Kushilevitz–Sudan). The recovered bit is computed live and checked against DB[i]." data-uk="Справжній 2-серверний інформаційно-теоретичний PIR (Чор–Голдрайх–Кушилевіц–Судан). Відновлений біт обчислюється наживо й звіряється з DB[i]."></div>
+          <div class="ctrl"><label><span data-en="wanted index i" data-uk="потрібний індекс i">wanted index i</span><span class="val" id="pirIV">5</span></label>
+            <input type="range" id="pirI" min="0" max="11" value="5"></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="pirRand" data-en="New query randomness" data-uk="Нова випадковість запиту">New randomness</button>
+            <button id="pirDB" class="secondary" data-en="New database" data-uk="Нова база">New database</button>
+          </div>
+          <div class="readout" id="pirOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Two-server PIR is <b>information-theoretically</b> private provided the servers do not collude; if they compare queries, i leaks. Single-server PIR is possible only with computational assumptions (homomorphic encryption / lattices) and is far heavier. The naïve alternative — download the whole database — is the only perfectly private single-server scheme, which is exactly what PIR improves on."
+            data-uk="Двосерверний PIR <b>інформаційно-теоретично</b> приватний за умови, що сервери не змовляються; якщо вони порівняють запити, i розкриється. Односерверний PIR можливий лише з обчислювальними припущеннями (гомоморфне шифрування / решітки) і значно важчий. Наївна альтернатива — завантажити всю базу — єдина ідеально приватна односерверна схема, і саме її PIR покращує."></span></div>
+    <div class="xrefs"><a href="asymmetric.html#paillier" data-en="Homomorphic encryption" data-uk="Гомоморфне шифрування">Homomorphic encryption</a> <a href="privacy.html#anoncred" data-en="Anonymous credentials" data-uk="Анонімні посвідчення">Anonymous credentials</a></div>
+  </section>
+
+  <!-- ================= 6. Anonymous credentials ================= -->
+  <section id="anoncred">
+    <span class="num" data-en="29 / Anonymous credentials" data-uk="29 / Анонімні посвідчення">29 / Anonymous credentials</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(n³)</span>
+      <span data-en="Anonymous credentials" data-uk="Анонімні посвідчення">Anonymous credentials</span></h2>
+    <div class="formula">commit C = gᵃᵍᵉ·hʳ mod p;  issuer signs C;  holder proves &lsquo;age ≥ 18&rsquo; revealing nothing else</div>
+    <p class="desc" data-en="An anonymous credential lets a holder prove <b>predicates about attributes</b> — &lsquo;over 18&rsquo;, &lsquo;a resident&rsquo;, &lsquo;a licensed driver&rsquo; — without revealing the attributes themselves or being tracked across uses. The attribute is hidden inside a <b>commitment</b> C = gᵃᵍᵉ·hʳ (the same commitment is never shown twice), the issuer signs it once, and each presentation is a fresh zero-knowledge proof about C. This is the machinery behind Idemix, U-Prove, and privacy-preserving digital identity wallets."
+       data-uk="Анонімне посвідчення дозволяє власнику доводити <b>твердження про атрибути</b> — «понад 18», «резидент», «має посвідчення водія» — не розкриваючи самих атрибутів і не даючи відстежувати себе між використаннями. Атрибут заховано у <b>зобов'язанні</b> C = gᵃᵍᵉ·hʳ (те саме зобов'язання ніколи не показують двічі), видавець підписує його один раз, а кожне пред'явлення — це свіжий доказ із нульовим розголошенням про C. Це механіка Idemix, U-Prove та приватних гаманців цифрової особистості."></p>
+    <div id="refs-anoncred"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="hint" data-en="Toy Pedersen commitment with real modular math (p=1019, g=2, h=3); the range proof itself is shown schematically — a real system would attach a zero-knowledge proof, not the cleartext boolean." data-uk="Іграшкове зобов'язання Педерсена зі справжньою модульною арифметикою (p=1019, g=2, h=3); сам доказ діапазону показано схематично — реальна система додала б доказ із нульовим розголошенням, а не відкритий булевий результат."></div>
+        <div class="ctrl"><label><span data-en="age (private)" data-uk="вік (приватний)">age (private)</span><span class="val" id="acAgeV">25</span></label>
+          <input type="range" id="acAge" min="0" max="99" value="25"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="acR" data-en="New blinding r" data-uk="Нове засліплення r">New blinding r</button>
+          <button id="acPresent" data-en="Present: prove age ≥ 18" data-uk="Пред'явити: довести вік ≥ 18">Prove age ≥ 18</button>
+        </div>
+        <div class="readout" id="acOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Security rests on the binding/hiding of the commitment and the soundness of the zero-knowledge proof (Camenisch–Lysyanskaya signatures, or BBS+ over pairings). Done right, presentations are <b>unlinkable</b> and reveal only the proven predicate; the classic pitfalls are re-using randomness (links two showings) and unique attribute combinations that re-identify a holder despite the crypto."
+            data-uk="Стійкість спирається на зв'язуючі/приховуючі властивості зобов'язання й коректність доказу з нульовим розголошенням (підписи Каменіш–Лисянської або BBS+ на спарюваннях). Зроблені правильно, пред'явлення <b>незв'язувані</b> й розкривають лише доведене твердження; класичні пастки — повторне використання випадковості (зв'язує два покази) та унікальні комбінації атрибутів, що переідентифікують власника попри криптографію."></span></div>
+    <div class="xrefs"><a href="advanced.html#snark">zk-SNARKs</a> <a href="pairings.html#pairing" data-en="Pairings" data-uk="Спарювання">Pairings</a> <a href="privacy.html#blindsig" data-en="Blind signatures" data-uk="Сліпі підписи">Blind signatures</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+const T=(en,uk)=>window.LANG==='uk'?uk:en;
+const $=id=>document.getElementById(id);
+/* ---- BigInt modular helpers ---- */
+function bmod(a,m){a%=m;return a<0n?a+m:a;}
+function modpow(b,e,m){b=bmod(b,m);let r=1n;while(e>0n){if(e&1n)r=r*b%m;b=b*b%m;e>>=1n;}return r;}
+function egcd(a,b){let x=0n,x1=1n,y=1n,y1=0n;while(b){const q=a/b;[a,b]=[b,a-q*b];[x1,x]=[x,x1-q*x];[y1,y]=[y,y1-q*y];}return[a,x1,y1];}
+function modinv(a,m){const[g,x]=egcd(bmod(a,m),m);return g===1n?bmod(x,m):null;}
+function gcdB(a,b){a=a<0n?-a:a;b=b<0n?-b:b;while(b){[a,b]=[b,a%b];}return a;}
+const ri=n=>Math.floor(Math.random()*n);
+
+/* ================= 1. Chaum blind signature (REAL toy RSA) ================= */
+const N=3233n,E=17n,D=2753n;
+function nextCoprime(r){ while(gcdB(r,N)!==1n){ r=r+1n; if(r>=N)r=2n; } return r; }
+function drawBlind(){
+  let m=BigInt(+bsM.value);
+  let r=nextCoprime(BigInt(+bsR.value));
+  bsR.value=Number(r); bsMV.textContent=m; bsRV.textContent=r;
+  const re=modpow(r,E,N);
+  const b=(m*re)%N;                 // blinded message the signer sees
+  const sp=modpow(b,D,N);           // signer signs blindly (never sees m)
+  const rinv=modinv(r,N);
+  const s=(sp*rinv)%N;              // user unblinds
+  const check=modpow(s,E,N);        // verify s^e == m
+  const direct=modpow(m,D,N);       // the signature the signer never computed
+  const ok=(check===m), self=(s===direct);
+  let r2=nextCoprime(r+7n); const b2=(m*modpow(r2,E,N))%N;
+  // scatter b vs r for fixed m -> shows b looks unrelated to m
+  const cv=bsCanvas,g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  g.strokeStyle=C.line; g.strokeRect(24,8,W-32,H-30);
+  const RMAX=600, sx=v=>24+v/RMAX*(W-32), sy=v=>H-22-Number(v)/3233*(H-30);
+  for(let rr=2;rr<=RMAX;rr++){ if(gcdB(BigInt(rr),N)!==1n)continue; const bb=(m*modpow(BigInt(rr),E,N))%N;
+    g.fillStyle=C.grid; g.beginPath(); g.arc(sx(rr),sy(bb),1.4,0,7); g.fill(); }
+  if(Number(r)<=RMAX){ g.fillStyle=C.amber; g.beginPath(); g.arc(sx(Number(r)),sy(b),4,0,7); g.fill(); }
+  g.fillStyle=C.dim; g.font='9px monospace'; g.textAlign='left';
+  g.fillText('b=m·rᵉ mod N', 28, 20); g.fillText('r →', W-34, H-8);
+  g.save(); g.translate(10,H/2); g.rotate(-Math.PI/2); g.fillText('b', 0,0); g.restore();
+  bsOut.innerHTML=
+    '<span class="k">'+T('message','повідомлення')+' m=</span><span class="s">'+m+'</span>   <span class="k">'+T('blinding','засліплення')+' r=</span><span class="s">'+r+'</span>  (gcd(r,N)=1)\n'+
+    '<span class="k">1 '+T('blind','засліплення')+':</span> b = m·rᵉ mod N = <span class="a">'+b+'</span>\n'+
+    '<span class="k">2 '+T('sign (blind)','підпис (сліпий)')+':</span> s′ = bᵈ mod N = <span class="a">'+sp+'</span>  <span class="k">'+T('signer never sees m','підписант не бачить m')+'</span>\n'+
+    '<span class="k">3 '+T('unblind','зняття')+':</span> s = s′·r⁻¹ mod N = <span class="a">'+s+'</span>\n'+
+    '<span class="k">4 '+T('verify','перевірка')+':</span> sᵉ mod N = <span class="a">'+check+'</span> '+(ok?'= m <span class="a">✓</span>':'≠ m <span class="b">✗</span>')+'\n'+
+    '<span class="k">'+T('self-test','самоперевірка')+': s == mᵈ mod N ?</span> '+direct+' '+(self?'<span class="a">✓ '+T('valid signature the signer never saw','дійсний підпис, якого підписант не бачив')+'</span>':'<span class="b">✗</span>')+'\n'+
+    '<span class="k">'+T('blindness','сліпість')+': m '+T('same','те саме')+', r′='+r2+' → b′=</span><span class="s">'+b2+'</span> '+(b2!==b?'<span class="a">≠ b</span>':'')+' <span class="k">'+T('b reveals nothing about m','b не розкриває нічого про m')+'</span>';
+}
+
+/* ================= 2. Ring signature (toy RST-style, genuinely closes) ================= */
+const MASK=0xFFFF;
+function inv16(a){ let t=0,nt=1,r=65536,nr=a&MASK; while(nr!==0){ const q=Math.floor(r/nr); [t,nt]=[nt,t-q*nt]; [r,nr]=[nr,r-q*nr]; } return ((t%65536)+65536)%65536; }
+let rgSigner=-1, rgPeekOn=false, rgData=null;
+function rgDoSign(){
+  const n=+rgN.value; rgNV.textContent=n;
+  const mem=[]; for(let i=0;i<n;i++){ let a=(ri(32768)*2+1)&MASK; const c=ri(65536); mem.push({a,c,ai:inv16(a),key:ri(65536)}); }
+  const gk=ri(65536);                       // symmetric ring key (from message hash, toy)
+  const v=ri(65536);                        // glue value
+  const s=ri(n);                            // hidden signer
+  const x=new Array(n), y=new Array(n);
+  for(let i=0;i<n;i++){ if(i!==s){ x[i]=ri(65536); y[i]=((mem[i].a*x[i]+mem[i].c)&MASK); } }
+  const E_=(z)=> (z^gk)&MASK;               // toy layer permutation (its own inverse)
+  // forward accumulator z[0..s-1]
+  const zf=new Array(n+1); zf[0]=v; for(let i=1;i<=s;i++){ if(i-1<s) zf[i]=E_(zf[i-1]^y[i-1]); }
+  // backward accumulator from z[n]=v down to z[s+1]
+  const zb=new Array(n+1); zb[n]=v; for(let i=n;i>s+1;i--){ zb[i-1]=E_(zb[i])^y[i-1]; }
+  const zPrev=(s===0)?v:zf[s];              // z just before signer
+  const zNext=(s===n-1)?v:zb[s+1];          // z required just after signer
+  y[s]=E_(zPrev^0)^0;                        // placeholder replaced below
+  // need E_(zPrev ^ y[s]) == zNext  -> y[s] = E_(zNext) ^ zPrev  (E_ self-inverse)
+  y[s]=E_(zNext)^zPrev;
+  x[s]=((( (y[s]-mem[s].c) & MASK) * mem[s].ai) & MASK);
+  // verify: walk the whole ring
+  let acc=v; for(let i=0;i<n;i++){ const yi=((mem[i].a*x[i]+mem[i].c)&MASK); acc=E_(acc^yi); }
+  const ok=(acc===v);
+  rgData={n,s,x,mem,v,gk,ok}; rgSigner=s;
+  drawRing();
+}
+function drawRing(){
+  if(!rgData){ return; }
+  const {n,s,x,ok}=rgData;
+  const cv=rgCanvas,g=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2-4,R=Math.min(W,H)/2-30;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const pos=i=>[cx+R*Math.cos(-Math.PI/2+2*Math.PI*i/n), cy+R*Math.sin(-Math.PI/2+2*Math.PI*i/n)];
+  g.strokeStyle=C.line; g.beginPath();
+  for(let i=0;i<n;i++){ const[px,py]=pos(i); if(i===0)g.moveTo(px,py); else g.lineTo(px,py);} g.closePath(); g.stroke();
+  for(let i=0;i<n;i++){ const[px,py]=pos(i); const isS=(i===s&&rgPeekOn);
+    g.fillStyle=isS?C.amber:C.grid; g.beginPath(); g.arc(px,py,13,0,7); g.fill();
+    g.fillStyle=isS?C.panel:C.ink; g.font='10px monospace'; g.textAlign='center'; g.fillText('P'+(i+1),px,py+3); }
+  g.textAlign='left';
+  rgOut.innerHTML=
+    '<span class="k">'+T('ring of','кільце з')+' '+n+' '+T('members; each xᵢ published','членів; кожен xᵢ опубліковано')+':</span>\n'+
+    x.map((v,i)=>'x'+(i+1)+'=<span class="s">'+v+'</span>').join('  ')+'\n'+
+    '<span class="k">'+T('ring closes  Cₖ,ᵥ(…) = v ?','кільце замикається  Cₖ,ᵥ(…) = v ?')+'</span> '+(ok?'<span class="a">✓ '+T('ACCEPT','ПРИЙНЯТО')+'</span>':'<span class="b">✗</span>')+'\n'+
+    (rgPeekOn
+      ? '<span class="b">'+T('actual signer: P','справжній підписант: P')+(s+1)+' — '+T('hidden in a real verification','прихований при справжній перевірці')+'</span>'
+      : '<span class="k">'+T('signer is one of P1…P'+n+' — indistinguishable','підписант — один із P1…P'+n+' — нерозрізнювані')+'</span>');
+}
+
+/* ================= 3. Onion routing (toy additive layer cipher) ================= */
+let onKeysArr=[]; function onNewKeys(){ onKeysArr=[]; for(let i=0;i<5;i++)onKeysArr.push(ri(256)); }
+onNewKeys();
+function drawOnion(){
+  const M=+onM.value, L=+onL.value; onMV.textContent=M; onLV.textContent=L;
+  const ks=onKeysArr.slice(0,L);
+  const Ef=(x,k)=>(x+k)&255, Df=(x,k)=>((x-k)%256+256)&255;
+  const c=new Array(L+1); c[L]=M; for(let i=L-1;i>=0;i--)c[i]=Ef(c[i+1],ks[i]); // c[0]=sent onion
+  const cv=onCanvas,g=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cols=[C.rose,C.amber,C.teal,'#6FA8DC','#B48EAD'];
+  for(let i=0;i<L;i++){ const rad=(L-i)/L*(Math.min(W,H)/2-14)+16;
+    g.fillStyle=cols[i%cols.length]; g.globalAlpha=0.20; g.beginPath(); g.arc(cx,cy,rad,0,7); g.fill(); g.globalAlpha=1;
+    g.strokeStyle=cols[i%cols.length]; g.beginPath(); g.arc(cx,cy,rad,0,7); g.stroke();
+    g.fillStyle=cols[i%cols.length]; g.font='9px monospace'; g.textAlign='center'; g.fillText('k'+(i+1), cx, cy-rad+11); }
+  g.fillStyle=C.ink; g.font='11px monospace'; g.textAlign='center'; g.fillText('M='+M, cx, cy+3);
+  let peel=T('relay peels one layer','вузол знімає один шар')+':\n';
+  for(let i=0;i<L;i++){ peel+='  '+T('relay','вузол')+' '+(i+1)+': D_{k'+(i+1)+'}('+c[i]+')='+c[i+1]+'  →  '+(i<L-1?''+T('next','далі'):('<span class="a">M='+c[i+1]+' ✓</span>'))+'\n'; }
+  onOut.innerHTML=
+    '<span class="k">'+T('sender wraps','відправник загортає')+':</span> c₀ = <span class="s">'+c[0]+'</span>  ('+L+' '+T('layers','шарів')+')\n'+
+    '<span class="k">'+T('keys','ключі')+':</span> '+ks.map((k,i)=>'k'+(i+1)+'='+k).join(', ')+'\n'+peel;
+}
+
+/* ================= 4. Mix network (schematic, real permutations) ================= */
+let mxPerms=[];
+function mxNew(){ const n=+mxN.value, L=+mxL.value; mxPerms=[]; for(let l=0;l<L;l++){ const p=[...Array(n).keys()]; for(let i=n-1;i>0;i--){ const j=ri(i+1); [p[i],p[j]]=[p[j],p[i]]; } mxPerms.push(p); } }
+function drawMix(){
+  const n=+mxN.value, L=+mxL.value; mxNV.textContent=n; mxLV.textContent=L;
+  if(mxPerms.length!==L||mxPerms[0].length!==n) mxNew();
+  const cv=mxCanvas,g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cx=l=>20+l*(W-40)/L, cy=i=>20+i*(H-40)/(n-1||1);
+  // position of each original message id at every layer (p maps input pos i -> output pos p[i])
+  const posByLayer=[]; let order=[...Array(n).keys()]; posByLayer.push(order.slice());
+  for(let l=0;l<L;l++){ const p=mxPerms[l]; const out=new Array(n); for(let i=0;i<n;i++){ out[p[i]]=order[i]; } order=out; posByLayer.push(order.slice()); }
+  // draw lines: for each original id, its row across layers
+  const rowOf=(layer,id)=>posByLayer[layer].indexOf(id);
+  for(let id=0;id<n;id++){ g.strokeStyle=`hsl(${id*360/n} 60% 60%)`; g.lineWidth=1.6; g.beginPath();
+    for(let l=0;l<=L;l++){ const x=cx(l), y=cy(rowOf(l,id)); if(l===0)g.moveTo(x,y); else g.lineTo(x,y); } g.stroke(); }
+  g.lineWidth=1;
+  for(let l=0;l<=L;l++){ for(let i=0;i<n;i++){ g.fillStyle=C.ink; g.beginPath(); g.arc(cx(l),cy(i),4,0,7); g.fill(); } g.fillStyle=C.dim; g.font='9px monospace'; g.textAlign='center'; g.fillText(l===0?(window.LANG==='uk'?'вхід':'in'):(l===L?(window.LANG==='uk'?'вихід':'out'):(window.LANG==='uk'?'мікс':'mix')+l), cx(l), H-6); }
+  const finalPos=posByLayer[L]; // finalPos[row]=id
+  mxOut.innerHTML=
+    '<span class="k">'+T('input msg → output slot (after','вхідне повід. → вихідний слот (після')+' '+L+' '+T('mixes)','мікшерів)')+':</span>\n'+
+    Array.from({length:n},(_,id)=>'m'+(id+1)+'→'+(rowOf(L,id)+1)).join('  ')+'\n'+
+    '<span class="k">'+T('link input↔output is hidden by the composed shuffle','зв\'язок вхід↔вихід прихований складеним перемішуванням')+'</span>';
+}
+
+/* ================= 5. Two-server PIR (REAL, information-theoretic) ================= */
+const DBN=12; let PIRdb=[], PIRq1=[];
+function pirNewDB(){ PIRdb=Array.from({length:DBN},()=>ri(2)); }
+function pirNewQ(){ PIRq1=Array.from({length:DBN},()=>ri(2)); }
+pirNewDB(); pirNewQ();
+function parity(db,q){ let a=0; for(let k=0;k<DBN;k++) a^=(db[k]&q[k]); return a; }
+function drawPIR(){
+  const i=+pirI.value; pirIV.textContent=i;
+  const q1=PIRq1.slice(); const q2=q1.slice(); q2[i]^=1;      // differ in exactly bit i
+  const a1=parity(PIRdb,q1), a2=parity(PIRdb,q2);
+  const rec=a1^a2, actual=PIRdb[i], ok=(rec===actual);
+  const cv=pirCanvas,g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cw=(W-40)/DBN, y0=24, rh=34;
+  const rows=[['DB',PIRdb,C.ink],['q₁',q1,C.teal],['q₂',q2,C.amber]];
+  g.font='10px monospace';
+  rows.forEach((row,r)=>{ const[lab,arr,col]=row; g.fillStyle=C.dim; g.textAlign='right'; g.fillText(lab,34,y0+r*rh+13);
+    for(let k=0;k<DBN;k++){ const on=arr[k]; g.fillStyle=on?col:C.grid; g.globalAlpha=(r>0&&k===i)?1:(on?0.9:0.35);
+      g.fillRect(40+k*cw+1,y0+r*rh,cw-2,rh-10); g.globalAlpha=1;
+      g.fillStyle=on?C.panel:C.dim; g.textAlign='center'; g.fillText(arr[k],40+k*cw+cw/2,y0+r*rh+13);
+      if(r===0){ g.fillStyle=(k===i)?C.rose:C.line; g.fillRect(40+k*cw+1,y0-6,cw-2,3); } } });
+  g.textAlign='left';
+  pirOut.innerHTML=
+    '<span class="k">'+T('server 1 ← q₁, server 2 ← q₂  (differ only in bit i='+i+')','сервер 1 ← q₁, сервер 2 ← q₂  (різні лише в біті i='+i+')')+'</span>\n'+
+    '<span class="k">a₁ = ⊕DB[q₁] =</span> <span class="a">'+a1+'</span>   <span class="k">a₂ = ⊕DB[q₂] =</span> <span class="a">'+a2+'</span>\n'+
+    '<span class="k">'+T('client: a₁ ⊕ a₂ =','клієнт: a₁ ⊕ a₂ =')+'</span> <span class="a">'+rec+'</span>   <span class="k">DB['+i+'] =</span> '+actual+'  '+(ok?'<span class="a">✓</span>':'<span class="b">✗</span>')+'\n'+
+    '<span class="k">'+T('each server alone sees a uniform query → learns nothing about i','кожен сервер окремо бачить рівномірний запит → нічого не знає про i')+'</span>';
+}
+
+/* ================= 6. Anonymous credentials (toy Pedersen, schematic proof) ================= */
+const P=1019n,G=2n,Hh=3n; let acRnd=BigInt(1+ri(1000));
+function drawAnon(){
+  const age=BigInt(+acAge.value); acAgeV.textContent=acAge.value;
+  const Ccom=(modpow(G,age,P)*modpow(Hh,acRnd,P))%P;
+  acOut.innerHTML=
+    '<span class="k">'+T('attribute age (private) =','атрибут вік (приватний) =')+'</span> <span class="s">'+age+'</span>   <span class="k">r =</span> <span class="s">'+acRnd+'</span>\n'+
+    '<span class="k">'+T('commitment','зобов\'язання')+' C = gᵃᵍᵉ·hʳ mod p =</span> <span class="a">'+Ccom+'</span>\n'+
+    '<span class="k">'+T('same age, new r → different C: C hides the age','той самий вік, нове r → інше C: C приховує вік')+'</span>\n'+
+    '<span class="k">'+T('press “Prove age ≥ 18” to present the credential','натисніть «Довести вік ≥ 18», щоб пред\'явити посвідчення')+'</span>';
+}
+function acPresentFn(){
+  const age=+acAge.value; const holds=age>=18;
+  const Ccom=(modpow(G,BigInt(age),P)*modpow(Hh,acRnd,P))%P;
+  acOut.innerHTML=
+    '<span class="k">'+T('holder shows commitment','власник показує зобов\'язання')+' C=</span> <span class="a">'+Ccom+'</span>  '+T('(issuer-signed)','(підписане видавцем)')+'\n'+
+    '<span class="k">'+T('zero-knowledge range proof: “the age inside C is ≥ 18”','доказ діапазону з нульовим розголошенням: «вік у C ≥ 18»')+'</span>  <span class="b">['+T('schematic','схематично')+']</span>\n'+
+    '<span class="k">'+T('verifier accepts:','перевіряч приймає:')+'</span> '+(holds?'<span class="a">✓ '+T('age ≥ 18','вік ≥ 18')+'</span>':'<span class="b">✗ '+T('age < 18','вік < 18')+'</span>')+'\n'+
+    '<span class="k">'+T('verifier learns ONLY this boolean — not the age ('+age+'), not r','перевіряч дізнається ЛИШЕ цей булевий результат — не вік ('+age+'), не r')+'</span>';
+}
+
+/* ================= refs + wiring ================= */
+const W='https://en.wikipedia.org/wiki/';
+window.REFS={
+  blindsig:[{tag:'wiki',en:{href:W+'Blind_signature',label:'Wikipedia: blind signature'}},
+            {tag:'paper',en:{href:'https://doi.org/10.1007/978-1-4757-0602-4_18',label:'Chaum, Blind signatures for untraceable payments (1982)'}},
+            {tag:'wiki',en:{href:W+'Ecash',label:'Wikipedia: ecash (DigiCash)'}}],
+  ringsig:[{tag:'wiki',en:{href:W+'Ring_signature',label:'Wikipedia: ring signature'}},
+           {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-45682-1_32',label:'Rivest, Shamir, Tauman, How to leak a secret (2001)'}},
+           {tag:'wiki',en:{href:W+'Group_signature',label:'Wikipedia: group signature'}}],
+  onion:[{tag:'wiki',en:{href:W+'Onion_routing',label:'Wikipedia: onion routing'},uk:{href:'https://uk.wikipedia.org/wiki/Tor',label:'Вікіпедія: Tor'}},
+         {tag:'wiki',en:{href:W+'Tor_(network)',label:'Wikipedia: Tor'}},
+         {tag:'paper',en:{href:'https://www.usenix.org/legacy/publications/library/proceedings/sec04/tech/dingledine.html',label:'Dingledine et al., Tor: the second-generation onion router (2004)'}}],
+  mixnet:[{tag:'wiki',en:{href:W+'Mix_network',label:'Wikipedia: mix network'}},
+          {tag:'paper',en:{href:'https://doi.org/10.1145/358549.358563',label:'Chaum, Untraceable electronic mail (1981)'}}],
+  pir:[{tag:'wiki',en:{href:W+'Private_information_retrieval',label:'Wikipedia: private information retrieval'}},
+       {tag:'paper',en:{href:'https://doi.org/10.1109/SFCS.1995.492461',label:'Chor, Goldreich, Kushilevitz, Sudan, PIR (1995)'}}],
+  anoncred:[{tag:'wiki',en:{href:W+'Digital_credential',label:'Wikipedia: digital / anonymous credential'}},
+            {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-44987-6_7',label:'Camenisch, Lysyanskaya, Anonymous credentials (2001)'}},
+            {tag:'wiki',en:{href:W+'IBM_Identity_Mixer',label:'Wikipedia: Idemix'}}]
+};
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=$('refs-'+id); if(el)el.innerHTML=window.atlasRefs(REFS[id]); });
+  drawBlind(); drawRing(); drawOnion(); drawMix(); drawPIR(); drawAnon();
+};
+['bsM','bsR'].forEach(id=>$(id).addEventListener('input',drawBlind));
+$('bsRandR').addEventListener('click',()=>{ bsR.value=2+ri(3230); drawBlind(); });
+$('bsRandM').addEventListener('click',()=>{ bsM.value=2+ri(3230); drawBlind(); });
+$('rgN').addEventListener('input',rgDoSign);
+$('rgSign').addEventListener('click',rgDoSign);
+$('rgPeek').addEventListener('click',()=>{ rgPeekOn=!rgPeekOn; drawRing(); });
+['onM','onL'].forEach(id=>$(id).addEventListener('input',drawOnion));
+$('onKeys').addEventListener('click',()=>{ onNewKeys(); drawOnion(); });
+['mxN','mxL'].forEach(id=>$(id).addEventListener('input',()=>{ mxNew(); drawMix(); }));
+$('mxShuffle').addEventListener('click',()=>{ mxNew(); drawMix(); });
+$('pirI').addEventListener('input',drawPIR);
+$('pirRand').addEventListener('click',()=>{ pirNewQ(); drawPIR(); });
+$('pirDB').addEventListener('click',()=>{ pirNewDB(); drawPIR(); });
+$('acAge').addEventListener('input',drawAnon);
+$('acR').addEventListener('click',()=>{ acRnd=BigInt(1+ri(1000)); drawAnon(); });
+$('acPresent').addEventListener('click',acPresentFn);
+rgDoSign();
+</script>
+</body>
+</html>

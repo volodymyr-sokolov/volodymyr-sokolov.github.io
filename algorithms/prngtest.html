@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Randomness testing — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="prngtest">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 4 — evaluating pseudorandom generators"
+         data-uk="Розділ 4 — оцінювання генераторів псевдовипадкових послідовностей">Section 4 — evaluating PRNGs</div>
+    <h1 data-en="Randomness testing" data-uk="Тестування випадковості">Randomness testing</h1>
+    <p class="lede" data-en="You cannot prove a sequence is random — but you can look for structure that a random one would almost never show. These are the statistical batteries (NIST SP 800-22), entropy estimators (SP 800-90B) and heavy-duty suites (Dieharder, TestU01) that decide whether a generator is fit for cryptography, plus the fast non-cryptographic generators and the physical sources that seed the whole chain."
+       data-uk="Не можна довести, що послідовність випадкова — але можна шукати структуру, якої випадкова майже ніколи не показала б. Це статистичні батареї (NIST SP 800-22), оцінювачі ентропії (SP 800-90B) та потужні набори (Dieharder, TestU01), що вирішують, чи придатний генератор для криптографії, а також швидкі некриптографічні генератори й фізичні джерела, що засівають увесь ланцюг.">Deciding whether a generator is fit for cryptography.</p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="§4 — Testing &amp; evaluation of PRNGs" data-uk="§4 — Тестування та оцінювання ГПВЧ">§4 — Testing PRNGs</h3>
+
+  <!-- ================= NIST STS ================= -->
+  <section id="niststs">
+    <span class="num" data-en="04 / NIST STS" data-uk="04 / NIST STS">04 / NIST STS</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">—</span>
+      <span data-en="NIST STS (SP 800-22) statistical test suite" data-uk="Набір статистичних тестів NIST (SP 800-22)">NIST STS (SP 800-22)</span></h2>
+    <div class="formula">P-value = P[ statistic ≥ observed | H₀ ] ;  reject H₀ (random) when P &lt; α = 0.01</div>
+    <p class="desc" data-en="A battery of tests, each measuring one feature a truly random bit stream must have. Every test reduces the sample to a statistic with a known null distribution and reports a <b>P-value</b>; a stream passes a test when P ≥ 0.01. The demo below runs the <b>real</b> LCG, MT19937 and Blum–Blum–Shub generators through the same four tests, computed live: <b>monobit frequency</b>, <b>runs</b>, <b>block frequency</b> (χ²) and a two-dimensional <b>serial / spectral</b> test. Watch the payoff — the LCG passes the one-dimensional tests but its pairs (uₙ, uₙ₊₁) lie on a lattice that the serial test exposes."
+       data-uk="Батарея тестів, кожен вимірює одну властивість, яку мусить мати справді випадковий потік бітів. Кожен тест зводить вибірку до статистики з відомим нульовим розподілом і повідомляє <b>P-значення</b>; потік проходить тест, коли P ≥ 0.01. Демо нижче проганяє <b>справжні</b> генератори LCG, MT19937 і Блюма–Блюма–Шуба через ті самі чотири тести наживо: <b>частотний монобітний</b>, <b>серій</b>, <b>блоково-частотний</b> (χ²) і двовимірний <b>серійний / спектральний</b> тест. Ось і висновок — LCG проходить одновимірні тести, але його пари (uₙ, uₙ₊₁) лежать на решітці, яку викриває серійний тест."></p>
+    <div id="refs-niststs"></div>
+
+    <div class="readout" id="nsSelf" style="margin-bottom:14px"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="nsScatter" width="300" height="300"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="stream length n (bits)" data-uk="довжина потоку n (біт)">stream length n</span><span class="val" id="nsNV">4000</span></label>
+            <input type="range" id="nsN" min="1000" max="5000" step="200" value="4000"></div>
+          <div class="ctrl"><label><span>LCG a</span><span class="val" id="nsAV">129</span></label>
+            <input type="range" id="nsA" min="1" max="512" value="129"></div>
+          <div class="ctrl"><label><span>LCG c</span><span class="val" id="nsCV">1</span></label>
+            <input type="range" id="nsC" min="0" max="512" value="1"></div>
+          <div class="ctrl"><label><span>LCG m</span></label>
+            <select id="nsM">
+              <option value="4096">4096 = 2¹²</option>
+              <option value="16384" selected>16384 = 2¹⁴</option>
+              <option value="65536">65536 = 2¹⁶</option>
+              <option value="262144">262144 = 2¹⁸</option>
+              <option value="1048576">1048576 = 2²⁰</option>
+            </select></div>
+          <div class="ctrl"><label><span data-en="LCG seed X₀" data-uk="LCG сід X₀">LCG seed X₀</span><span class="val" id="nsSeedV">1</span></label>
+            <input type="range" id="nsSeed" min="0" max="16383" value="1"></div>
+          <div class="hint" data-en="Scatter = LCG pairs (uₙ, uₙ₊₁). The lattice lines are the spectral defect. Raise m to spread the lattice until the serial test passes." data-uk="Точки = пари LCG (uₙ, uₙ₊₁). Лінії решітки — спектральний дефект. Збільшуйте m, щоб розсіяти решітку, доки серійний тест не пройде."></div>
+        </div>
+      </div>
+      <div id="nsTable" style="margin-top:16px"></div>
+      <canvas id="nsBar" width="620" height="190" style="max-width:100%;margin-top:14px"></canvas>
+      <div class="legend" style="margin-top:8px">
+        <span><span class="dot" style="background:#F2A65A"></span>LCG</span>
+        <span><span class="dot" style="background:#7FDBCA"></span>MT19937</span>
+        <span><span class="dot" style="background:#C9A0FF"></span>Blum–Blum–Shub</span>
+        <span data-en="dashed line = pass threshold α = 0.01" data-uk="пунктир = поріг проходження α = 0.01"></span>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="In practice" data-uk="На практиці">In practice</div>
+      <span data-en="Passing SP 800-22 is <b>necessary but not sufficient</b>: it certifies the absence of the specific defects it tests for, not cryptographic security. A broken generator can still pass a small battery (MT19937 sails through the basic tests yet is trivially predictable). Use STS to catch gross flaws, then rely on a CSPRNG design and an audited entropy source — never on a passing P-value alone."
+            data-uk="Проходження SP 800-22 <b>необхідне, але не достатнє</b>: воно засвідчує відсутність саме тих дефектів, які перевіряє, а не криптостійкість. Зламаний генератор усе одно може пройти малу батарею (MT19937 легко проходить базові тести, хоча тривіально передбачуваний). Використовуйте STS, щоб виловити грубі вади, а далі покладайтеся на конструкцію CSPRNG та аудитоване джерело ентропії — ніколи на саме лише прохідне P-значення."></span></div>
+    <div class="xrefs"><a href="prng.html#lcg">LCG</a> <a href="prng.html#mt">Mersenne Twister</a> <a href="prng.html#bbs">Blum–Blum–Shub</a> <a href="prng.html#drbg">NIST DRBG</a></div>
+  </section>
+
+  <!-- ================= Entropy (SP 800-90B) ================= -->
+  <section id="entropy">
+    <span class="num" data-en="04 / Entropy (SP 800-90B)" data-uk="04 / Ентропія (SP 800-90B)">04 / Entropy</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">—</span>
+      <span data-en="SP 800-90B entropy estimation" data-uk="Оцінювання ентропії за SP 800-90B">SP 800-90B entropy estimation</span></h2>
+    <div class="formula">H_Shannon = −Σ pᵢ·log₂ pᵢ    vs.    H∞ = −log₂( max pᵢ )</div>
+    <p class="desc" data-en="A key is only as strong as the entropy behind it — and the right measure is <b>min-entropy</b> H∞, not Shannon entropy. Min-entropy scores a source by its <b>most likely</b> output: the guessing probability of the best attacker. SP 800-90B credits a noise source with H∞ only. Slide the bias of a coin below and watch Shannon entropy stay optimistic while min-entropy — the number that actually counts — collapses. An empirical <b>most-common-value</b> estimate (with a 99% upper confidence bound, exactly the SP 800-90B MCV estimator) is computed live from a real sample."
+       data-uk="Ключ не сильніший за ентропію, що за ним стоїть — і правильна міра це <b>мін-ентропія</b> H∞, а не ентропія Шеннона. Мін-ентропія оцінює джерело за його <b>найімовірнішим</b> виходом: імовірністю вгадування для найкращого зловмисника. SP 800-90B зараховує джерелу лише H∞. Змінюйте зсув монети нижче й спостерігайте, як ентропія Шеннона лишається оптимістичною, а мін-ентропія — число, що справді важить — обвалюється. Емпірична оцінка <b>найчастішого значення</b> (з 99% верхньою довірчою межею, саме оцінювач MCV із SP 800-90B) рахується наживо з реальної вибірки."></p>
+    <div id="refs-entropy"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="enCanvas" width="300" height="200"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="bias  P(bit = 1)" data-uk="зсув  P(біт = 1)">bias P(bit=1)</span><span class="val" id="enBiasV">0.85</span></label>
+            <input type="range" id="enBias" min="1" max="99" value="85"></div>
+          <div class="ctrl"><label><span data-en="sample size" data-uk="розмір вибірки">sample size</span><span class="val" id="enNV">4000</span></label>
+            <input type="range" id="enN" min="500" max="20000" step="500" value="4000"></div>
+          <div class="readout" id="enOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="In practice" data-uk="На практиці">In practice</div>
+      <span data-en="A source that looks &lsquo;62% random&rsquo; by Shannon may give an attacker a far better guess than that suggests. Real designs therefore <b>over-collect</b> raw entropy and run it through a conditioner (hash / extractor) so that the min-entropy per output bit approaches 1, before it ever reaches the DRBG. SP 800-90B validation requires passing health tests plus this conservative min-entropy estimate."
+            data-uk="Джерело, що виглядає «на 62% випадковим» за Шенноном, може дати зловмисникові значно кращу здогадку, ніж здається. Тому реальні конструкції <b>надмірно збирають</b> сиру ентропію й проганяють її через кондиціонер (геш / екстрактор), щоб мін-ентропія на вихідний біт наближалася до 1, ще до DRBG. Валідація SP 800-90B вимагає проходження тестів справності плюс цю консервативну оцінку мін-ентропії."></span></div>
+    <div class="xrefs"><a href="prng.html#drbg">NIST DRBG</a> <a href="prng.html#bbs">Blum–Blum–Shub</a></div>
+  </section>
+
+  <!-- ================= Dieharder / TestU01 ================= -->
+  <section id="dieharder">
+    <span class="num" data-en="04 / Dieharder · TestU01" data-uk="04 / Dieharder · TestU01">04 / Dieharder</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">—</span>
+      <span data-en="Dieharder / TestU01" data-uk="Dieharder / TestU01">Dieharder / TestU01</span></h2>
+    <div class="formula" data-en="TestU01 batteries: SmallCrush · Crush · BigCrush (≈160 tests, ~10¹¹ bits)" data-uk="Батареї TestU01: SmallCrush · Crush · BigCrush (≈160 тестів, ~10¹¹ біт)">SmallCrush · Crush · BigCrush</div>
+    <p class="desc" data-en="Heavier successors to STS. <b>Dieharder</b> (Brown) bundles Marsaglia's Diehard tests with many more; <b>TestU01</b> (L'Ecuyer &amp; Simard) offers the graded <b>Crush</b> batteries — BigCrush consumes on the order of 10¹¹ bits and applies ~160 tests. They routinely fail generators that pass STS: MT19937, for instance, <b>fails the linear-complexity and matrix-rank tests</b> in Crush because of its GF(2)-linear structure. The chart below is an illustrative summary of how each generator fares as the battery grows."
+       data-uk="Важчі наступники STS. <b>Dieharder</b> (Браун) поєднує тести Diehard Марсальї з багатьма іншими; <b>TestU01</b> (Л'Екюйє й Сімар) пропонує градуйовані батареї <b>Crush</b> — BigCrush споживає порядку 10¹¹ біт і застосовує ~160 тестів. Вони регулярно провалюють генератори, що проходять STS: MT19937, наприклад, <b>провалює тести лінійної складності й рангу матриці</b> в Crush через свою GF(2)-лінійну структуру. Діаграма нижче — ілюстративне зведення того, як тримається кожен генератор зі зростанням батареї."></p>
+    <div id="refs-dieharder"></div>
+
+    <div class="panel"><div class="canvas-row">
+      <canvas id="ddCanvas" width="300" height="180"></canvas>
+      <div class="controls">
+        <div class="readout" id="ddOut"></div>
+      </div>
+    </div></div>
+
+    <div class="strength"><div class="st-title" data-en="In practice" data-uk="На практиці">In practice</div>
+      <span data-en="Surviving BigCrush is the informal bar for a good <b>non-cryptographic</b> generator (PCG, xoshiro256** and the like clear it). It is still not a security proof — a generator can pass every empirical test and remain predictable. For keys, always move from &lsquo;passes BigCrush&rsquo; to a CSPRNG whose predictability reduces to a hard problem."
+            data-uk="Пережити BigCrush — неформальна планка для доброго <b>некриптографічного</b> генератора (PCG, xoshiro256** тощо її долають). Це все ще не доказ стійкості — генератор може пройти всі емпіричні тести й лишитися передбачуваним. Для ключів завжди переходьте від «проходить BigCrush» до CSPRNG, чия передбачуваність зводиться до складної задачі."></span></div>
+    <div class="xrefs"><a href="prng.html#mt">Mersenne Twister</a> <a href="prng.html#lcg">LCG</a> <a href="prng.html#bbs">Blum–Blum–Shub</a></div>
+  </section>
+
+  <!-- ================= PCG / xoshiro ================= -->
+  <section id="pcg">
+    <span class="num" data-en="04 / PCG · xoshiro" data-uk="04 / PCG · xoshiro">04 / PCG</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(1)</span>
+      <span data-en="PCG / xoshiro" data-uk="PCG / xoshiro">PCG / xoshiro</span></h2>
+    <div class="formula">PCG: state ← state·a + c (64-bit LCG);  output = XSH-RR( state )  (permuted, 32-bit)</div>
+    <p class="desc" data-en="Modern <b>fast, statistically excellent, non-cryptographic</b> generators. <b>PCG</b> (O'Neill) runs a large LCG and applies an output <b>permutation</b> (xor-shift then random rotate) that hides the LCG's lattice — small state, passes BigCrush. <b>xoshiro / xoroshiro</b> (Blackman &amp; Vigna) use xor/shift/rotate over a 256- or 128-bit state. Both are O(1) per output and ideal for simulation and games. The worked example runs a real <b>PCG-XSH-RR 32-bit</b> below."
+       data-uk="Сучасні <b>швидкі, статистично відмінні, некриптографічні</b> генератори. <b>PCG</b> (О'Ніл) проганяє великий LCG і застосовує вихідну <b>перестановку</b> (xor-зсув, потім випадковий поворот), що приховує решітку LCG — малий стан, проходить BigCrush. <b>xoshiro / xoroshiro</b> (Блекмен і Віньya) використовують xor/зсув/поворот над станом на 256 чи 128 біт. Обидва O(1) на вихід та ідеальні для симуляцій і ігор. Робочий приклад нижче проганяє справжній <b>PCG-XSH-RR 32-біт</b>."></p>
+    <div id="refs-pcg"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="pcgStep" data-en="Draw 6 more" data-uk="Ще 6 виходів">Draw 6 more</button>
+          <button id="pcgReset" class="secondary" data-en="Reset seed" data-uk="Скинути сід">Reset seed</button>
+        </div>
+        <div class="readout" id="pcgOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="In practice" data-uk="На практиці">In practice</div>
+      <span data-en="<b>Fast, not secure.</b> PCG's permutation resists casual prediction but is <b>invertible with effort</b>, and the underlying LCG is recoverable; xoshiro is linear over GF(2). Excellent defaults for numpy-style sampling and simulations — never for keys, nonces, tokens or password salts. When in doubt, call the OS CSPRNG."
+            data-uk="<b>Швидко, але не стійко.</b> Перестановка PCG опирається побіжному передбаченню, але <b>оборотна з зусиллям</b>, а базовий LCG відновлюваний; xoshiro лінійний над GF(2). Чудові типові вибори для вибірки в стилі numpy й симуляцій — ніколи для ключів, одноразових значень, токенів чи солей паролів. Якщо сумніваєтесь — викликайте CSPRNG операційної системи."></span></div>
+    <div class="xrefs"><a href="prng.html#lcg">LCG</a> <a href="prng.html#mt">Mersenne Twister</a> <a href="prng.html#drbg">NIST DRBG</a></div>
+  </section>
+
+  <!-- ================= Hardware RNG / QRNG ================= -->
+  <section id="hwrng">
+    <span class="num" data-en="04 / Hardware RNG" data-uk="04 / Апаратний ГВЧ">04 / Hardware RNG</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">—</span>
+      <span data-en="Hardware RNG / QRNG" data-uk="Апаратний ГВЧ / QRNG">Hardware RNG / QRNG</span></h2>
+    <div class="formula" data-en="physical noise → digitise → health tests → conditioner → DRBG → output" data-uk="фізичний шум → оцифрування → тести справності → кондиціонер → DRBG → вихід">noise → digitise → conditioner → DRBG → output</div>
+    <p class="desc" data-en="Software alone is deterministic; genuine unpredictability must be harvested from <b>physics</b>. A hardware source samples thermal (Johnson) noise, ring-oscillator jitter, avalanche/shot noise or — for a <b>QRNG</b> — a truly random quantum event such as which way a single photon splits at a beam-splitter. The raw bits are biased and correlated, so they pass through continuous <b>health tests</b> (SP 800-90B), an <b>entropy extractor / conditioner</b>, and finally seed a fast, backtracking-resistant <b>DRBG</b> (SP 800-90A). The schematic below labels every stage of that pipeline."
+       data-uk="Саме програмне забезпечення детерміноване; справжню непередбачуваність треба збирати з <b>фізики</b>. Апаратне джерело семплює тепловий (джонсонівський) шум, джитер кільцевого генератора, лавинний/дробовий шум або — для <b>QRNG</b> — справді випадкову квантову подію, як-от у який бік розділиться одиночний фотон на світлодільнику. Сирі біти зсунуті й корельовані, тож проходять неперервні <b>тести справності</b> (SP 800-90B), <b>екстрактор ентропії / кондиціонер</b> і, нарешті, засівають швидкий, стійкий до відкату <b>DRBG</b> (SP 800-90A). Схема нижче підписує кожен етап конвеєра."></p>
+    <div id="refs-hwrng"></div>
+
+    <div class="panel">
+      <canvas id="hwCanvas" width="620" height="200" style="max-width:100%"></canvas>
+      <div class="readout" id="hwOut" style="margin-top:10px"></div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="In practice" data-uk="На практиці">In practice</div>
+      <span data-en="Modern CPUs expose this as <b>RDSEED / RDRAND</b> (Intel/AMD) feeding the OS pool; QRNG devices (ID Quantique and others) target high-assurance use. The hard part is not the physics but <b>continuous validation</b>: a source that silently fails (a stuck oscillator, a dead diode) must be caught by the health tests before its output ever keys anything — which is exactly why the raw source is never used directly."
+            data-uk="Сучасні процесори надають це як <b>RDSEED / RDRAND</b> (Intel/AMD), що живлять пул ОС; пристрої QRNG (ID Quantique та інші) націлені на застосування з високими гарантіями. Складне тут не фізика, а <b>неперервна валідація</b>: джерело, що тихо відмовило (застряглий генератор, мертвий діод), мусять виловити тести справності, перш ніж його вихід щось заключить — саме тому сире джерело ніколи не використовують напряму."></span></div>
+    <div class="xrefs"><a href="prng.html#drbg">NIST DRBG</a> <a href="prng.html#bbs">Blum–Blum–Shub</a> <a href="quantum.html#bb84">BB84</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+/* ====================================================================
+   Randomness testing — all statistics computed live and self-checked.
+   erfc: Numerical Recipes erfcc (|err|<1.2e-7).
+   igamc: regularised upper incomplete gamma Q(a,x) via series + CF.
+   Cross-checked against scipy.special.erfc / gammaincc.
+   ==================================================================== */
+const C = {teal:'#7FDBCA', amber:'#F2A65A', rose:'#E8607A', violet:'#C9A0FF',
+           dim:'#8B97B4', ink:'#E8ECF4', grid:'#233150', panel:'#0E1626', line:'#1B2740'};
+const uk=()=>window.LANG==='uk';
+
+/* ---- special functions ---- */
+function erfc(x){
+  const z=Math.abs(x), t=1/(1+0.5*z);
+  const ans=t*Math.exp(-z*z-1.26551223+t*(1.00002368+t*(0.37409196+t*(0.09678418+
+    t*(-0.18628806+t*(0.27886807+t*(-1.13520398+t*(1.48851587+
+    t*(-0.82215223+t*0.17087277)))))))));
+  return x>=0?ans:2-ans;
+}
+function gammln(xx){
+  const cof=[76.18009172947146,-86.50532032941677,24.01409824083091,
+    -1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];
+  let x=xx,y=xx,tmp=x+5.5; tmp-=(x+0.5)*Math.log(tmp); let ser=1.000000000190015;
+  for(let j=0;j<6;j++){ y+=1; ser+=cof[j]/y; }
+  return -tmp+Math.log(2.5066282746310005*ser/x);
+}
+function igamc(a,x){                       // Q(a,x) = 1 - P(a,x)
+  if(x<0||a<=0) return NaN;
+  if(x===0) return 1;
+  if(x<a+1){                               // series for P, return 1-P
+    let ap=a,sum=1/a,del=1/a;
+    for(let n=0;n<400;n++){ ap+=1; del*=x/ap; sum+=del; if(Math.abs(del)<Math.abs(sum)*1e-15) break; }
+    return 1-sum*Math.exp(-x+a*Math.log(x)-gammln(a));
+  } else {                                 // continued fraction for Q
+    const gln=gammln(a); let b=x+1-a,c=1e300,d=1/b,h=d;
+    for(let i=1;i<400;i++){ const an=-i*(i-a); b+=2; d=an*d+b;
+      if(Math.abs(d)<1e-300)d=1e-300; c=b+an/c; if(Math.abs(c)<1e-300)c=1e-300;
+      d=1/d; const del=d*c; h*=del; if(Math.abs(del-1)<1e-15) break; }
+    return Math.exp(-x+a*Math.log(x)-gln)*h;
+  }
+}
+
+/* ====================================================================
+   Generators (LCG, MT19937 and Blum–Blum–Shub — as on prng.html)
+   ==================================================================== */
+/* MT19937 — reference PRNG, verified against mt19937(5489)[0]=3499211612 */
+function MT19937(seed){
+  const N=624,M=397,MA=0x9908b0df,UP=0x80000000,LO=0x7fffffff;
+  const mt=new Uint32Array(N); let idx=N; mt[0]=seed>>>0;
+  for(let i=1;i<N;i++) mt[i]=(Math.imul(1812433253,(mt[i-1]^(mt[i-1]>>>30)))+i)>>>0;
+  function gen(){ for(let i=0;i<N;i++){ const y=(mt[i]&UP)|(mt[(i+1)%N]&LO);
+    mt[i]=mt[(i+M)%N]^(y>>>1)^((y&1)?MA:0); } idx=0; }
+  return function(){ if(idx>=N) gen(); let y=mt[idx++];
+    y^=y>>>11; y^=(y<<7)&0x9d2c5680; y^=(y<<15)&0xefc60000; y^=y>>>18; return y>>>0; };
+}
+/* u-streams in [0,1) for each generator */
+function lcgU(a,c,m,seed,n){ let x=((seed%m)+m)%m; const out=new Float64Array(n);
+  for(let i=0;i<n;i++){ out[i]=x/m; x=(a*x+c)%m; } return out; }
+function mtU(seed,n){ const rnd=MT19937(seed); const out=new Float64Array(n);
+  for(let i=0;i<n;i++) out[i]=rnd()/4294967296; return out; }
+/* Blum–Blum–Shub: xᵢ = xᵢ₋₁² mod M, output bit = LSB(xᵢ); M = p·q, p≡q≡3 (mod 4).
+   A larger Blum modulus than prng.html's toy one is used so the period comfortably
+   exceeds the battery length; 16 low bits are packed into each u-value. */
+const BBS_P=100003n, BBS_Q=99991n, BBS_M=BBS_P*BBS_Q;   // both ≡ 3 (mod 4)
+let _bbsCache={n:-1,u:null};
+function bbsU(n){
+  if(_bbsCache.n===n) return _bbsCache.u;
+  let x=(3n*3n)%BBS_M; const out=new Float64Array(n);
+  for(let i=0;i<n;i++){ let v=0; for(let b=0;b<16;b++){ x=(x*x)%BBS_M; v=(v<<1)|Number(x&1n); } out[i]=v/65536; }
+  _bbsCache={n,u:out}; return out;
+}
+/* leading bit — 1-D bit stream shared by monobit / runs / block-frequency */
+function bitsOf(u){ const b=new Uint8Array(u.length); for(let i=0;i<u.length;i++) b[i]=u[i]>=0.5?1:0; return b; }
+
+/* ====================================================================
+   The four real SP 800-22-style tests
+   ==================================================================== */
+/* (1) Monobit frequency: S=Σ(2bᵢ−1); p = erfc(|S|/√(2n)) */
+function tMonobit(b){ let S=0; for(let i=0;i<b.length;i++) S+=2*b[i]-1;
+  return erfc(Math.abs(S)/Math.sqrt(2*b.length)); }
+/* (2) Runs test (SP 800-22): precondition |π−½|<2/√n, then
+   p = erfc(|Vₙ − 2nπ(1−π)| / (2√(2n)·π(1−π))) */
+function tRuns(b){ const n=b.length; let ones=0; for(let i=0;i<n;i++) ones+=b[i];
+  const pi=ones/n; if(Math.abs(pi-0.5)>=2/Math.sqrt(n)) return 0;
+  let V=1; for(let i=0;i<n-1;i++) if(b[i]!==b[i+1]) V++;
+  const num=Math.abs(V-2*n*pi*(1-pi)), den=2*Math.sqrt(2*n)*pi*(1-pi);
+  return erfc(num/den); }
+/* (3) Block frequency (χ²): N blocks of M bits, χ²=4M Σ(πᵢ−½)²; p=igamc(N/2, χ²/2) */
+function tBlock(b,Mb){ const N=Math.floor(b.length/Mb); if(N<1) return 0; let chi=0;
+  for(let i=0;i<N;i++){ let s=0; for(let j=0;j<Mb;j++) s+=b[i*Mb+j]; const pi=s/Mb; chi+=(pi-0.5)*(pi-0.5); }
+  chi*=4*Mb; return igamc(N/2, chi/2); }
+/* (4) Serial / spectral 2-D test: bin pairs (uᵢ,uᵢ₊₁) into g×g cells,
+   χ²=Σ(O−E)²/E with E=(n−1)/g², dof=g²−1; p=igamc(dof/2, χ²/2).
+   Exposes the LCG lattice: pairs cluster on lines, leaving cells empty. */
+const NS_G=12;
+function tSerial2D(u){ const g=NS_G, cnt=new Int32Array(g*g), n=u.length;
+  for(let i=0;i<n-1;i++){ let gx=Math.min(g-1,(u[i]*g)|0), gy=Math.min(g-1,(u[i+1]*g)|0); cnt[gx*g+gy]++; }
+  const E=(n-1)/(g*g); let chi=0; for(let k=0;k<cnt.length;k++){ const d=cnt[k]-E; chi+=d*d/E; }
+  return {p:igamc((g*g-1)/2, chi/2), chi}; }
+
+function battery(u){ const b=bitsOf(u);
+  return {mono:tMonobit(b), runs:tRuns(b), block:tBlock(b,100), serial:tSerial2D(u).p}; }
+
+/* ====================================================================
+   Self-test banner: balanced stream → p≈1, all-ones stream → p≈0
+   ==================================================================== */
+function nsSelfTest(){
+  const n=1024, bal=new Uint8Array(n), one=new Uint8Array(n);
+  for(let i=0;i<n;i++){ bal[i]=i&1; one[i]=1; }
+  const pB=tMonobit(bal), pO=tMonobit(one);
+  const okB=pB>0.999, okO=pO<1e-6, ok=okB&&okO;
+  const L=uk()?'Самоперевірка тестів':'Test self-check';
+  document.getElementById('nsSelf').innerHTML=
+    '<span class="k">'+L+':</span>  '+
+    (uk()?'збалансований потік':'balanced stream')+' → p='+pB.toFixed(4)+' <span class="'+(okB?'a':'b')+'">'+(okB?'✓':'✗')+'</span>   '+
+    (uk()?'усі одиниці':'all-ones')+' → p='+pO.toExponential(1)+' <span class="'+(okO?'a':'b')+'">'+(okO?'✓':'✗')+'</span>   '+
+    (ok?'<span class="a">'+(uk()?'erfc/χ² відкалібровані':'erfc/χ² calibrated')+'</span>':'<span class="b">FAIL</span>');
+}
+
+/* ====================================================================
+   NIST STS flagship demo
+   ==================================================================== */
+let nsRes=null;
+function drawScatter(u){
+  const cv=document.getElementById('nsScatter'), g=cv.getContext('2d'), W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H); g.strokeStyle=C.line; g.strokeRect(0.5,0.5,W-1,H-1);
+  g.fillStyle=C.amber;
+  for(let i=0;i+1<u.length;i++){ const px=u[i]*(W-8)+4, py=H-4-u[i+1]*(H-8); g.fillRect(px,py,1.6,1.6); }
+  g.fillStyle=C.dim; g.font='10px monospace';
+  g.fillText('uₙ',W/2-6,H-3); g.save(); g.translate(9,H/2+6); g.rotate(-Math.PI/2); g.fillText('uₙ₊₁',0,0); g.restore();
+}
+function drawBar(res){
+  const cv=document.getElementById('nsBar'), g=cv.getContext('2d'), W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const tests=['mono','runs','block','serial'];
+  const labs=uk()?['монобіт','серії','блок-χ²','серій-2D']:['monobit','runs','block-χ²','serial-2D'];
+  const gens=[['LCG',C.amber,res.LCG],['MT',C.teal,res.MT],['BBS',C.violet,res.BBS]];
+  const padL=8,padR=8,padB=26,padT=10, plotH=H-padB-padT, plotW=W-padL-padR;
+  const gw=plotW/tests.length;                      // per-test group width
+  const bw=Math.min(26,(gw-16)/3);
+  const yOf=p=>padT+plotH-Math.max(0,Math.min(1,p))*plotH;
+  // pass threshold line α=0.01
+  g.strokeStyle=C.dim; g.setLineDash([4,3]); g.beginPath(); g.moveTo(padL,yOf(0.01)); g.lineTo(W-padR,yOf(0.01)); g.stroke(); g.setLineDash([]);
+  g.fillStyle=C.dim; g.font='9px monospace';
+  for(let ti=0;ti<tests.length;ti++){
+    const x0=padL+ti*gw+8;
+    gens.forEach((gen,gi)=>{ const p=gen[2][tests[ti]]; const x=x0+gi*(bw+3); const y=yOf(p);
+      g.fillStyle=gen[1]; g.fillRect(x,y,bw,padT+plotH-y);
+      if(p<0.01){ g.strokeStyle=C.rose; g.lineWidth=1.4; g.strokeRect(x-0.5,padT+plotH-3,bw+1,3); g.lineWidth=1;
+        g.fillStyle=C.rose; g.fillText('✗',x+bw/2-3,padT+plotH-5); }
+    });
+    g.fillStyle=C.ink; g.font='10px monospace'; g.textAlign='center';
+    g.fillText(labs[ti], x0+((bw+3)*3)/2-1, H-10); g.textAlign='left';
+  }
+  g.fillStyle=C.dim; g.font='9px monospace'; g.fillText('P',padL+2,padT+8); g.fillText('1',padL+2,padT+8);
+}
+function nsTable(res){
+  const tests=[['mono','monobit','монобіт'],['runs','runs','серії'],['block','block-freq χ²','блок-частота χ²'],['serial','serial 2-D','серійний 2-D']];
+  const gens=[['LCG','LCG'],['MT','MT19937'],['BBS','Blum–Blum–Shub']];
+  const fmt=p=>p<1e-3?p.toExponential(2):p.toFixed(3);
+  const cell=p=>{ const pass=p>=0.01; return '<td style="padding:3px 10px"><span class="'+(pass?'a':'b')+'">'+fmt(p)+' '+(pass?'✓':'✗')+'</span></td>'; };
+  let h='<table style="border-collapse:collapse;font-family:JetBrains Mono,monospace;font-size:12px">'+
+    '<tr><th style="text-align:left;padding:3px 10px;color:'+C.dim+'">'+(uk()?'тест \\ генератор':'test \\ generator')+'</th>'+
+    gens.map(gn=>'<th style="text-align:left;padding:3px 10px;color:'+C.ink+'">'+gn[1]+'</th>').join('')+'</tr>';
+  tests.forEach(t=>{ h+='<tr><td style="padding:3px 10px;color:'+C.dim+'">'+(uk()?t[2]:t[1])+'</td>'+
+    gens.map(gn=>cell(res[gn[0]][t[0]])).join('')+'</tr>'; });
+  h+='</table>';
+  document.getElementById('nsTable').innerHTML=h;
+}
+function runNS(){
+  const n=+nsN.value, a=+nsA.value, c=+nsC.value, m=+nsM.value;
+  const mm=m-1; nsSeed.max=mm; if(+nsSeed.value>mm) nsSeed.value=mm;
+  const seed=+nsSeed.value;
+  nsNV.textContent=n; nsAV.textContent=a; nsCV.textContent=c; nsSeedV.textContent=seed;
+  const lu=lcgU(a,c,m,seed,n);
+  nsRes={LCG:battery(lu), MT:battery(mtU(5489,n)), BBS:battery(bbsU(n))};
+  drawScatter(lu); nsTable(nsRes); drawBar(nsRes);
+}
+
+/* ====================================================================
+   Entropy — Shannon vs min-entropy + live SP 800-90B MCV estimate
+   ==================================================================== */
+function drawEntropy(){
+  const p=(+enBias.value)/100, N=+enN.value;
+  enBiasV.textContent=p.toFixed(2); enNV.textContent=N;
+  const H=(q)=>q<=0||q>=1?0:-q*Math.log2(q)-(1-q)*Math.log2(1-q);
+  const shannon=H(p), minH=-Math.log2(Math.max(p,1-p));
+  // empirical MCV estimate from a real biased sample (MT-driven)
+  const rnd=MT19937(20260722); let ones=0;
+  for(let i=0;i<N;i++){ if(rnd()/4294967296<p) ones++; }
+  const cmax=Math.max(ones,N-ones), phat=cmax/N;
+  const pu=Math.min(1, phat+2.5758*Math.sqrt(phat*(1-phat)/N));   // 99% upper bound
+  const mcv=-Math.log2(pu);
+  const cv=document.getElementById('enCanvas'), g=cv.getContext('2d'), W=cv.width,Hh=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,Hh);
+  const bars=[[uk()?'Шеннон':'Shannon',shannon,C.teal],[uk()?'мін-ент. H∞':'min-ent. H∞',minH,C.amber],[uk()?'MCV оцінка':'MCV est.',mcv,C.violet]];
+  const bw=64, gap=34, base=Hh-30, top=16, sc=(base-top);
+  bars.forEach((bar,i)=>{ const x=30+i*(bw+gap), h=bar[1]*sc;
+    g.fillStyle=bar[2]; g.fillRect(x,base-h,bw,h);
+    g.fillStyle=C.ink; g.font='11px monospace'; g.textAlign='center';
+    g.fillText(bar[1].toFixed(3),x+bw/2,base-h-5);
+    g.fillStyle=C.dim; g.font='9px monospace'; g.fillText(bar[0],x+bw/2,base+14); });
+  g.textAlign='left'; g.strokeStyle=C.line; g.beginPath(); g.moveTo(20,base); g.lineTo(W-8,base); g.stroke();
+  g.fillStyle=C.dim; g.font='9px monospace'; g.fillText(uk()?'біт / біт':'bits / bit',W-70,top+2); g.fillText('1.0',22,top+2);
+  const cr=uk()?'кредитовано (SP 800-90B)':'credited (SP 800-90B)';
+  document.getElementById('enOut').innerHTML=
+    '<span class="k">P(1)=</span><span class="s">'+p.toFixed(2)+'</span>   '+
+    '<span class="k">'+(uk()?'ентропія Шеннона':'Shannon entropy')+':</span> <span class="a">'+shannon.toFixed(4)+'</span> '+(uk()?'біт/біт':'bits/bit')+'\n'+
+    '<span class="k">'+(uk()?'мін-ентропія H∞':'min-entropy H∞')+':</span> <span class="s">'+minH.toFixed(4)+'</span> ← '+cr+'\n'+
+    '<span class="k">'+(uk()?'емпірична MCV':'empirical MCV')+' (p̂='+phat.toFixed(3)+', 99%↑ p_u='+pu.toFixed(3)+'):</span> <span class="b">'+mcv.toFixed(4)+'</span>\n'+
+    '<span class="k">'+(uk()?'втрата проти Шеннона':'shortfall vs Shannon')+':</span> <span class="b">'+((1-minH/(shannon||1))*100).toFixed(0)+'%</span>';
+}
+
+/* ====================================================================
+   Dieharder / TestU01 — illustrative battery-strength summary
+   ==================================================================== */
+function drawDD(){
+  const cv=document.getElementById('ddCanvas'), g=cv.getContext('2d'), W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const rows=[['LCG',[1,0,0],C.amber],['MT19937',[1,1,0],C.teal],['BBS',[1,1,1],C.violet]];
+  const cols=uk()?['STS','Crush','BigCrush']:['STS','Crush','BigCrush'];
+  const x0=92, cw=52, y0=34, rh=38, bs=20;
+  g.font='10px monospace'; g.fillStyle=C.dim; g.textAlign='center';
+  for(let j=0;j<3;j++) g.fillText(cols[j],x0+j*cw+bs/2,20);
+  g.textAlign='left';
+  rows.forEach((r,i)=>{ g.fillStyle=r[2]; g.font='11px monospace'; g.fillText(r[0],6,y0+i*rh+bs-4);
+    for(let j=0;j<3;j++){ const pass=r[1][j]; g.fillStyle=pass?'rgba(127,219,202,.18)':'rgba(232,96,122,.20)';
+      g.fillRect(x0+j*cw,y0+i*rh-4,bs+8,bs+4);
+      g.fillStyle=pass?C.teal:C.rose; g.font='12px monospace'; g.textAlign='center';
+      g.fillText(pass?'✓':'✗',x0+j*cw+(bs+8)/2,y0+i*rh+bs-6); g.textAlign='left'; } });
+  document.getElementById('ddOut').innerHTML=
+    '<span class="k">'+(uk()?'ілюстративне зведення':'illustrative summary')+':</span>\n'+
+    '<span class="a">LCG</span> '+(uk()?'провалює вже Crush (решітка).':'fails from Crush on (lattice).')+'\n'+
+    '<span class="a">MT19937</span> '+(uk()?'проходить STS, але провалює тести лінійної складності / рангу в Crush.':'passes STS but fails linear-complexity / rank tests in Crush.')+'\n'+
+    '<span class="a">BBS</span> '+(uk()?'проходить усі емпіричні батареї.':'passes all empirical batteries.');
+}
+
+/* ====================================================================
+   PCG-XSH-RR 32-bit (real) — fast, non-cryptographic
+   ==================================================================== */
+const PCG_MUL=6364136223846793005n, PCG_INC=1442695040888963407n, PCG_MASK=(1n<<64n)-1n;
+let pcgState, pcgLog;
+function pcgSeed(){ pcgState=(0x853c49e6748fea9bn); pcgLog=[]; }
+function pcgNext(){
+  const old=pcgState;
+  pcgState=(old*PCG_MUL+PCG_INC)&PCG_MASK;
+  const xorshifted=Number(((old>>18n)^old)>>27n & 0xffffffffn)>>>0;
+  const rot=Number(old>>59n);
+  const out=((xorshifted>>>rot)|(xorshifted<<((-rot)&31)))>>>0;
+  return out;
+}
+function drawPCG(){
+  const rows=pcgLog.map(v=>'<span class="a">'+v.toString().padStart(10,' ')+'</span>  0x'+('00000000'+v.toString(16)).slice(-8)).join('\n');
+  document.getElementById('pcgOut').innerHTML=
+    '<span class="k">'+(uk()?'PCG-XSH-RR, стан 64 біт, вихід 32 біт':'PCG-XSH-RR, 64-bit state, 32-bit output')+'</span>\n'+
+    '<span class="k">'+(uk()?'виходи':'outputs')+':</span>\n'+(rows||'—')+'\n'+
+    '<span class="k">'+(uk()?'кроків зроблено':'steps taken')+':</span> <span class="s">'+pcgLog.length+'</span> '+
+    (uk()?'— швидко, але LCG-стан відновлюваний':'— fast, but the LCG state is recoverable');
+}
+
+/* ====================================================================
+   Hardware RNG / QRNG — labelled pipeline schematic
+   ==================================================================== */
+function drawHW(){
+  const cv=document.getElementById('hwCanvas'), g=cv.getContext('2d'), W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const u=uk();
+  const stages=[
+    {en:'Physical noise',uk:'Фізичний шум', sub:u?'тепловий / квантовий':'thermal / quantum', col:C.amber},
+    {en:'Digitiser',uk:'Оцифрувач', sub:u?'семплер / АЦП':'sampler / ADC', col:C.dim},
+    {en:'Health tests',uk:'Тести справності', sub:'SP 800-90B', col:C.rose},
+    {en:'Conditioner',uk:'Кондиціонер', sub:u?'екстрактор / геш':'extractor / hash', col:C.teal},
+    {en:'DRBG',uk:'DRBG', sub:'SP 800-90A', col:C.violet},
+    {en:'Output',uk:'Вихід', sub:u?'ключі / нонси':'keys / nonces', col:C.ink}
+  ];
+  const n=stages.length, m=10, bw=(W-m*2-(n-1)*14)/n, bh=76, y=44;
+  g.textAlign='center';
+  stages.forEach((s,i)=>{ const x=m+i*(bw+14);
+    g.fillStyle='rgba(255,255,255,.03)'; g.strokeStyle=s.col; g.lineWidth=1.4;
+    g.beginPath(); g.rect(x,y,bw,bh); g.fill(); g.stroke(); g.lineWidth=1;
+    g.fillStyle=s.col; g.font='bold 11px monospace';
+    wrap(g, u?s.uk:s.en, x+bw/2, y+24, bw-8, 12);
+    g.fillStyle=C.dim; g.font='9px monospace'; wrap(g, s.sub, x+bw/2, y+bh-20, bw-6, 11);
+    if(i<n-1){ const ax=x+bw+2, ay=y+bh/2; g.strokeStyle=C.dim; g.beginPath();
+      g.moveTo(ax,ay); g.lineTo(ax+10,ay); g.stroke();
+      g.beginPath(); g.moveTo(ax+10,ay); g.lineTo(ax+5,ay-3); g.lineTo(ax+5,ay+3); g.closePath(); g.fillStyle=C.dim; g.fill(); }
+  });
+  g.fillStyle=C.dim; g.font='10px monospace'; g.textAlign='left';
+  g.fillText(u?'сире (зсунуте, корельоване)':'raw (biased, correlated)', m, y-10);
+  g.fillText(u?'кондиціоноване (H∞ ≈ 1)':'conditioned (H∞ ≈ 1)', W-220, y+bh+22);
+  g.textAlign='left';
+  const list=[
+    [u?'Фізичний шум':'Physical noise', u?'ентропійне джерело: тепловий шум, джитер, лавинний діод або квантовий фотонний вибір.':'entropy source: thermal noise, jitter, avalanche diode, or a quantum photon choice.'],
+    [u?'Оцифрувач':'Digitiser', u?'семплує аналоговий сигнал у сирі біти.':'samples the analogue signal into raw bits.'],
+    [u?'Тести справності':'Health tests', u?'неперервні перевірки (SP 800-90B) виявляють відмову джерела.':'continuous checks (SP 800-90B) catch a failed source.'],
+    [u?'Кондиціонер':'Conditioner', u?'екстрактор/геш прибирає зсув і кореляцію.':'extractor/hash removes bias and correlation.'],
+    [u?'DRBG':'DRBG', u?'детермінований генератор (SP 800-90A) розгортає сід.':'deterministic generator (SP 800-90A) expands the seed.'],
+    [u?'Вихід':'Output', u?'придатні для криптографії ключі, нонси, солі.':'crypto-ready keys, nonces, salts.']
+  ];
+  document.getElementById('hwOut').innerHTML=list.map(e=>'<span class="k">'+e[0]+':</span> '+e[1]).join('\n');
+}
+function wrap(g,text,cx,cy,maxw,lh){ const words=String(text).split(' '); let line='',lines=[];
+  words.forEach(w=>{ const t=line?line+' '+w:w; if(g.measureText(t).width>maxw&&line){ lines.push(line); line=w; } else line=t; });
+  if(line) lines.push(line); const oy=cy-(lines.length-1)*lh/2;
+  lines.forEach((ln,i)=>g.fillText(ln,cx,oy+i*lh)); }
+
+/* ====================================================================
+   References + wiring
+   ==================================================================== */
+const WK='https://en.wikipedia.org/wiki/';
+window.REFS={
+  niststs:[{tag:'nist',en:{href:'https://csrc.nist.gov/pubs/sp/800/22/r1a/final',label:'NIST SP 800-22 Rev.1a'}},
+    {tag:'wiki',en:{href:WK+'Randomness_tests',label:'Wikipedia: Randomness tests'}},
+    {tag:'wiki',en:{href:WK+'Statistical_randomness',label:'Statistical randomness'}}],
+  entropy:[{tag:'nist',en:{href:'https://csrc.nist.gov/pubs/sp/800/90/b/final',label:'NIST SP 800-90B'}},
+    {tag:'wiki',en:{href:WK+'Min-entropy',label:'Wikipedia: Min-entropy'}},
+    {tag:'wiki',en:{href:WK+'Entropy_(information_theory)',label:'Shannon entropy'}}],
+  dieharder:[{tag:'code',en:{href:'https://webhome.phy.duke.edu/~rgb/General/dieharder.php',label:'Dieharder (R. G. Brown)'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1145/1268776.1268777',label:"L'Ecuyer & Simard — TestU01 (2007)"}},
+    {tag:'wiki',en:{href:WK+'Diehard_tests',label:'Wikipedia: Diehard tests'}}],
+  pcg:[{tag:'paper',en:{href:'https://www.pcg-random.org/paper.html',label:"O'Neill — PCG (2014)"}},
+    {tag:'code',en:{href:'https://prng.di.unimi.it/',label:'Blackman & Vigna — xoshiro/xoroshiro'}},
+    {tag:'wiki',en:{href:WK+'Permuted_congruential_generator',label:'Wikipedia: PCG'}}],
+  hwrng:[{tag:'wiki',en:{href:WK+'Hardware_random_number_generator',label:'Wikipedia: Hardware RNG'}},
+    {tag:'nist',en:{href:'https://csrc.nist.gov/pubs/sp/800/90/b/final',label:'NIST SP 800-90B (entropy sources)'}},
+    {tag:'wiki',en:{href:WK+'RDRAND',label:'RDRAND / RDSEED'}}]
+};
+window.onLangChange=function(){
+  ['niststs','entropy','dieharder','pcg','hwrng'].forEach(id=>{
+    const el=document.getElementById('refs-'+id); if(el&&window.REFS[id]) el.innerHTML=window.atlasRefs(window.REFS[id]);
+  });
+  nsSelfTest(); runNS(); drawEntropy(); drawDD(); drawPCG(); drawHW();
+};
+
+['nsN','nsA','nsC','nsM','nsSeed'].forEach(id=>document.getElementById(id).addEventListener('input',runNS));
+['enBias','enN'].forEach(id=>document.getElementById(id).addEventListener('input',drawEntropy));
+document.getElementById('pcgStep').addEventListener('click',()=>{ for(let i=0;i<6;i++) pcgLog.push(pcgNext()); if(pcgLog.length>12) pcgLog=pcgLog.slice(-12); drawPCG(); });
+document.getElementById('pcgReset').addEventListener('click',()=>{ pcgSeed(); for(let i=0;i<6;i++) pcgLog.push(pcgNext()); drawPCG(); });
+pcgSeed(); for(let i=0;i<6;i++) pcgLog.push(pcgNext());
+</script>
+</body>
+</html>

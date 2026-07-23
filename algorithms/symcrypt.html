@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Symmetric cryptanalysis — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="symanalysis">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 25 — how block ciphers, stream ciphers and hashes actually fall"
+         data-uk="Розділ 25 — як насправді падають блокові, потокові шифри та геші">Section 25</div>
+    <h1 data-en="Symmetric cryptanalysis" data-uk="Симетричний криптоаналіз">Symmetric cryptanalysis</h1>
+    <div class="eq-hero">Adv = |Pr[real] − Pr[ideal]|  ≫  0</div>
+    <p class="lede" data-en="A cipher is broken when some computation distinguishes it from a random permutation with less work than brute force. This page builds the core symmetric attacks as live pictures: the difference-distribution and linear-approximation tables of a real S-box, the meet-in-the-middle that halves double-encryption, slide and boomerang tricks, the birthday bound behind every collision, Hellman's time-memory trade-off, and the Merkle–Damgård length-extension forgery."
+       data-uk="Шифр зламано, коли якесь обчислення відрізняє його від випадкової перестановки за меншу працю, ніж повний перебір. Ця сторінка будує основні симетричні атаки як живі картини: таблиці розподілу різниць і лінійних наближень справжнього S-боксу, зустріч посередині, що вдвічі зменшує подвійне шифрування, slide- і boomerang-прийоми, межу днів народжень за кожною колізією, компроміс «час-пам'ять» Геллмана та підробку подовженням Меркла–Дамґарда.">The core attacks that retire DES, RC4 and SHA-1 — shown as live pictures.</p>
+    <div class="readout" id="selftest" style="margin-top:18px; max-width:600px;"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ============ 1. Differential ============ -->
+  <section id="differential">
+    <span class="num" data-en="25 / Differential" data-uk="25 / Диференціальний">25 / Differential</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">2^k CP</span>
+      <span data-en="Differential cryptanalysis (Biham–Shamir)" data-uk="Диференціальний криптоаналіз (Біхам–Шамір)">Differential cryptanalysis</span></h2>
+    <div class="formula">DDT[Δx][Δy] = #{ x : S(x) ⊕ S(x ⊕ Δx) = Δy };   characteristic prob p = DDT/2ⁿ</div>
+    <p class="desc" data-en="Track a fixed input <b>difference</b> Δx as it passes through the rounds. Because the linear layers are difference-transparent, everything hinges on the S-box: its <b>Difference Distribution Table</b> counts, for each input difference Δx, how many of the 2ⁿ inputs map to each output difference Δy. A single tall entry means a difference propagates with high probability — chain such steps into a <b>characteristic</b>, gather ~1/p chosen-plaintext pairs, and the last-round key that makes the predicted difference appear too often is revealed. This is the attack that shaped DES's S-boxes (IBM/NSA knew it in the 1970s) and later broke FEAL."
+       data-uk="Простежте фіксовану вхідну <b>різницю</b> Δx крізь раунди. Оскільки лінійні шари прозорі для різниць, усе залежить від S-боксу: його <b>таблиця розподілу різниць</b> рахує для кожної вхідної різниці Δx, скільки з 2ⁿ входів дають кожну вихідну різницю Δy. Один високий елемент означає, що різниця поширюється з великою ймовірністю — з'єднайте такі кроки в <b>характеристику</b>, зберіть ~1/p пар обраного відкритого тексту, і ключ останнього раунду, що робить прогнозовану різницю надто частою, розкривається. Саме ця атака сформувала S-бокси DES (IBM/NSA знали про неї у 1970-х) і згодом зламала FEAL."></p>
+    <div id="refs-differential"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="ddtCanvas" width="300" height="300"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="4-bit S-box" data-uk="4-бітний S-бокс">4-bit S-box</span></label>
+            <select id="ddtBox">
+              <option value="0">PRESENT — C56B90AD3EF84712</option>
+              <option value="1">Piccolo — E4B238091A7F6C5D</option>
+              <option value="2" data-en="Identity x→x (linear, degenerate)" data-uk="Тотожність x→x (лінійна, вироджена)">Identity x→x (linear)</option>
+            </select></div>
+          <div class="ctrl"><label><span data-en="input difference Δx (row)" data-uk="вхідна різниця Δx (рядок)">Δx (row)</span><span class="val" id="ddtDxV">1</span></label>
+            <input type="range" id="ddtDx" min="1" max="15" value="1"></div>
+          <div class="hint" data-en="Hover the heatmap to read any cell. Rows = Δx, columns = Δy. The amber ring marks the best non-trivial differential." data-uk="Наведіть на теплокарту, щоб прочитати клітинку. Рядки = Δx, стовпці = Δy. Бурштинове кільце — найкращий нетривіальний диференціал."></div>
+          <div class="readout" id="ddtOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Real victims:</b> FEAL fell completely; <b>DES</b> needs 2⁴⁷ chosen plaintexts (Biham–Shamir) — its S-boxes were secretly hardened against exactly this, which is why the attack is only borderline. Modern ciphers prove a <b>maximum differential probability</b> bound: AES's wide-trail design caps any 4-round characteristic, so no useful differential exists. A large single DDT entry is a red flag for any new S-box."
+            data-uk="<b>Справжні жертви:</b> FEAL упав повністю; <b>DES</b> потребує 2⁴⁷ обраних відкритих текстів (Біхам–Шамір) — його S-бокси таємно зміцнили саме проти цього, тому атака лише гранична. Сучасні шифри доводять межу <b>максимальної диференціальної ймовірності</b>: широкосмугова конструкція AES обмежує будь-яку 4-раундову характеристику, тож корисного диференціала не існує. Великий одиничний елемент DDT — тривожний сигнал для будь-якого нового S-боксу."></span></div>
+    <div class="xrefs"><a href="symmetric.html#des">DES</a> <a href="symmetric.html#aes">AES</a> <a href="symcrypt.html#linear" data-en="Linear cryptanalysis" data-uk="Лінійний криптоаналіз">Linear</a> <a href="symcrypt.html#boomerang">Boomerang</a></div>
+  </section>
+
+  <!-- ============ 2. Linear ============ -->
+  <section id="linear">
+    <span class="num" data-en="25 / Linear" data-uk="25 / Лінійний">25 / Linear</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">2^k KP</span>
+      <span data-en="Linear cryptanalysis (Matsui)" data-uk="Лінійний криптоаналіз (Мацуї)">Linear cryptanalysis</span></h2>
+    <div class="formula">LAT[a][b] = #{ x : a·x = b·S(x) } − 2ⁿ⁻¹;   bias ε = LAT/2ⁿ;   piling-up: ε = 2ⁿ⁻¹ ∏ εᵢ</div>
+    <p class="desc" data-en="Instead of differences, approximate the S-box by a <b>linear equation</b>: pick an input mask a and output mask b and ask how often a·x = b·S(x) (dot products mod 2). A random map holds half the time; the <b>Linear Approximation Table</b> measures the deviation, or <b>bias</b> ε, of every (a,b) pair. Matsui's <b>piling-up lemma</b> chains one-round biases — the total bias of an r-round trail is 2^{r−1}∏εᵢ — and about 1/ε² known plaintexts then recover a key bit by a majority vote. This is the attack that first broke full DES faster than brute force."
+       data-uk="Замість різниць наблизьте S-бокс <b>лінійним рівнянням</b>: оберіть вхідну маску a та вихідну маску b і запитайте, як часто a·x = b·S(x) (скалярні добутки за модулем 2). Випадкове відображення справджує це у половині випадків; <b>таблиця лінійних наближень</b> вимірює відхилення, або <b>зсув</b> ε, кожної пари (a,b). <b>Лема нагромадження</b> Мацуї з'єднує однораундові зсуви — сумарний зсув r-раундового шляху дорівнює 2^{r−1}∏εᵢ — і близько 1/ε² відомих відкритих текстів відновлюють біт ключа голосуванням більшості. Саме ця атака вперше зламала повний DES швидше за перебір."></p>
+    <div id="refs-linear"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="latCanvas" width="300" height="300"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="4-bit S-box" data-uk="4-бітний S-бокс">4-bit S-box</span></label>
+            <select id="latBox">
+              <option value="0">PRESENT — C56B90AD3EF84712</option>
+              <option value="1">Piccolo — E4B238091A7F6C5D</option>
+              <option value="2" data-en="Identity x→x (linear, degenerate)" data-uk="Тотожність x→x (лінійна, вироджена)">Identity x→x (linear)</option>
+            </select></div>
+          <div class="ctrl"><label><span data-en="input mask a (row)" data-uk="вхідна маска a (рядок)">mask a (row)</span><span class="val" id="latAV">1</span></label>
+            <input type="range" id="latA" min="1" max="15" value="1"></div>
+          <div class="hint" data-en="Blue = biased toward equal, red = toward unequal. Rows = a, columns = b; the amber ring marks the strongest approximation." data-uk="Синє = зсув до рівності, червоне = до нерівності. Рядки = a, стовпці = b; бурштинове кільце — найсильніше наближення."></div>
+          <div class="readout" id="latOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Real victims:</b> Matsui recovered a full <b>DES</b> key with 2⁴³ known plaintexts (1993–94) — the first experimental break of DES. FEAL again collapses. Modern designs bound the <b>maximum linear bias</b>; AES's branch number guarantees no low-bias trail survives four rounds. A new S-box with any (a,b) bias near ½·2⁻¹ would be rejected outright."
+            data-uk="<b>Справжні жертви:</b> Мацуї відновив повний ключ <b>DES</b> за 2⁴³ відомих відкритих текстів (1993–94) — перший експериментальний злом DES. FEAL знову падає. Сучасні конструкції обмежують <b>максимальний лінійний зсув</b>; число розгалуження AES гарантує, що жоден шлях із малим зсувом не переживе чотирьох раундів. Новий S-бокс із будь-яким зсувом (a,b) близьким до ½·2⁻¹ відхилили б одразу."></span></div>
+    <div class="xrefs"><a href="symmetric.html#des">DES</a> <a href="symmetric.html#aes">AES</a> <a href="symcrypt.html#differential">Differential</a></div>
+  </section>
+
+  <!-- ============ 3. MITM ============ -->
+  <section id="mitm">
+    <span class="num" data-en="25 / Meet-in-the-middle" data-uk="25 / Зустріч посередині">25 / Meet-in-the-middle</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(2ᵏ)</span>
+      <span data-en="Meet-in-the-middle / biclique" data-uk="Зустріч посередині / biclique">Meet-in-the-middle</span></h2>
+    <div class="formula">C = E_{k₂}(E_{k₁}(P))  ⟹  E_{k₁}(P) = D_{k₂}(C):  match a table of 2ᵏ values, cost ≈ 2·2ᵏ ≪ 2²ᵏ</div>
+    <p class="desc" data-en="Double encryption <i>looks</i> like it doubles the key, but it does not. Compute a table of E_{k₁}(P) for every guess k₁, then for every k₂ compute D_{k₂}(C) and look for a match: the middle value must agree. This <b>meets in the middle</b>, trading memory for time so that <b>2·2ᵏ</b> operations beat the naïve <b>2²ᵏ</b> — which is exactly why <b>Double-DES buys almost nothing</b> over single DES, and why Triple-DES keys at 112, not 168, bits. The demo runs a real MITM against a toy 3-round Feistel (16-bit block, two 8-bit keys): it recovers both keys and counts the work."
+       data-uk="Подвійне шифрування <i>здається</i> подвоєнням ключа, але це не так. Обчисліть таблицю E_{k₁}(P) для кожного припущення k₁, потім для кожного k₂ обчисліть D_{k₂}(C) і шукайте збіг: середнє значення має співпасти. Це <b>зустріч посередині</b>, що міняє пам'ять на час, тож <b>2·2ᵏ</b> операцій перемагають наївні <b>2²ᵏ</b> — саме тому <b>Double-DES майже нічого не дає</b> порівняно з одинарним DES, а Triple-DES має 112, а не 168 біт стійкості. Демо виконує справжню MITM проти іграшкового 3-раундового Фейстеля (блок 16 біт, два 8-бітні ключі): воно відновлює обидва ключі й рахує працю."></p>
+    <div id="refs-mitm"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="key size (bits, each of k₁,k₂)" data-uk="розмір ключа (біт, кожен з k₁,k₂)">key bits</span><span class="val" id="mmBV">8</span></label>
+          <input type="range" id="mmB" min="4" max="10" value="8"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="mmRun" data-en="New keys → recover by MITM" data-uk="Нові ключі → відновити MITM">New keys → recover</button>
+        </div>
+        <div class="readout" id="mmOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Real victims:</b> <b>2DES / Double-DES</b> (Diffie–Hellman, 1977) — MITM keeps it at ~57-bit security, so it was never standardised; <b>3DES</b> is likewise pinned to 112 bits, not 168. The <b>biclique</b> generalisation (Bogdanov–Khovratovich–Rechberger, 2011) gave the first attack on <i>full</i> AES-128/192/256, shaving the key search by a factor ≈4 (to ≈2¹²⁶·¹) — theoretically significant, operationally irrelevant."
+            data-uk="<b>Справжні жертви:</b> <b>2DES / Double-DES</b> (Діффі–Хеллман, 1977) — MITM тримає його на ~57 бітах стійкості, тож його ніколи не стандартизували; <b>3DES</b> так само має 112, а не 168 біт. Узагальнення <b>biclique</b> (Богданов–Ховратович–Рехбергер, 2011) дало першу атаку на <i>повний</i> AES-128/192/256, зменшивши перебір приблизно вчетверо (до ≈2¹²⁶·¹) — теоретично значуще, практично несуттєве."></span></div>
+    <div class="xrefs"><a href="symmetric.html#des">DES / 3-DES</a> <a href="symmetric.html#aes">AES</a> <a href="symcrypt.html#tmto">TMTO</a></div>
+  </section>
+
+  <!-- ============ 4. Slide ============ -->
+  <section id="slide">
+    <span class="num" data-en="25 / Slide attacks" data-uk="25 / Slide-атаки">25 / Slide attacks</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(2^{n/2})</span>
+      <span data-en="Slide attacks" data-uk="Slide-атаки">Slide attacks</span></h2>
+    <div class="formula">E = Fₖ ∘ Fₖ ∘ … ∘ Fₖ;   slid pair P* = Fₖ(P)  ⟹  C* = Fₖ(C)   — independent of round count r</div>
+    <p class="desc" data-en="When every round uses the <b>same</b> key-dependent function Fₖ (a weak or periodic key schedule), the number of rounds stops mattering. Find a <b>slid pair</b> — two plaintexts P, P* with P* = Fₖ(P). Because E commutes with Fₖ, their ciphertexts satisfy C* = Fₖ(C) as well. Two equations over a single round Fₖ then reveal the key. A birthday search over ~2^{n/2} texts finds a slid pair. The demo hides a key, builds a genuine slid pair for a self-similar toy cipher, and recovers the key from one round — no matter how many rounds you set."
+       data-uk="Коли кожен раунд використовує <b>ту саму</b> залежну від ключа функцію Fₖ (слабкий або періодичний розклад ключів), кількість раундів перестає мати значення. Знайдіть <b>slid-пару</b> — два відкриті тексти P, P* з P* = Fₖ(P). Оскільки E комутує з Fₖ, їхні шифротексти теж задовольняють C* = Fₖ(C). Два рівняння над одним раундом Fₖ розкривають ключ. Пошук днів народжень серед ~2^{n/2} текстів знаходить slid-пару. Демо ховає ключ, будує справжню slid-пару для самоподібного іграшкового шифру й відновлює ключ з одного раунду — попри будь-яку кількість раундів."></p>
+    <div id="refs-slide"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="rounds r (attack ignores this!)" data-uk="раундів r (атака це ігнорує!)">rounds r</span><span class="val" id="slRV">12</span></label>
+          <input type="range" id="slR" min="2" max="64" value="12"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="slRun" data-en="Hide key → find slid pair → recover" data-uk="Сховати ключ → знайти slid-пару → відновити">Hide key → recover</button>
+        </div>
+        <div class="readout" id="slOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Real victims:</b> the classic targets are ciphers with self-similar rounds — the <b>TREYFER</b> cipher, <b>Even–Mansour</b> and <b>DESX</b>-style constructions, and reduced/periodic-key variants such as the Brown–Seberry DES and 2K/4K-DES (Biryukov–Wagner, 1999). The defence is a strong, round-varying key schedule with distinct round constants, so that no two rounds are identical."
+            data-uk="<b>Справжні жертви:</b> класичні цілі — шифри із самоподібними раундами: шифр <b>TREYFER</b>, конструкції типу <b>Even–Mansour</b> та <b>DESX</b>, а також варіанти зі зменшеним/періодичним ключем, як-от Brown–Seberry DES і 2K/4K-DES (Бірюков–Вагнер, 1999). Захист — сильний розклад ключів, що змінюється щораунду, з різними раундовими константами, аби жодні два раунди не збігалися."></span></div>
+    <div class="xrefs"><a href="symmetric.html#des">DES</a> <a href="symmetric.html#aes">AES key schedule</a> <a href="symcrypt.html#boomerang">Related-key</a></div>
+  </section>
+
+  <!-- ============ 5. Boomerang ============ -->
+  <section id="boomerang">
+    <span class="num" data-en="25 / Boomerang &amp; related-key" data-uk="25 / Boomerang та зв'язані ключі">25 / Boomerang</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">2^k</span>
+      <span data-en="Boomerang &amp; related-key" data-uk="Boomerang та зв'язані ключі">Boomerang &amp; related-key</span></h2>
+    <div class="formula">split E = E₁ ∘ E₀;   two short trails p (over E₀), q (over E₁);   boomerang prob ≈ p²q²,  data ≈ (pq)⁻²</div>
+    <p class="desc" data-en="Sometimes no single high-probability differential spans the whole cipher, but two <b>short</b> ones do. Wagner's <b>boomerang</b> splits E into halves E₀,E₁ and uses a differential p over the top and q over the bottom, joined by an adaptive quartet of plaintexts/ciphertexts. The quartet returns like a boomerang with probability about <b>p²q²</b>, distinguishing E with roughly (pq)⁻² data — far better than the (pq) trail linear analysis would need. The demo reuses the S-box DDT: pick a top and bottom input difference, read each trail's probability, and watch the boomerang cost assemble."
+       data-uk="Іноді жоден єдиний високоймовірний диференціал не покриває весь шифр, але два <b>короткі</b> — покривають. <b>Boomerang</b> Вагнера ділить E на половини E₀,E₁ і використовує диференціал p зверху та q знизу, з'єднані адаптивним квартетом відкритих/шифротекстів. Квартет повертається як бумеранг з імовірністю близько <b>p²q²</b>, відрізняючи E приблизно за (pq)⁻² даних — набагато краще за (pq), який знадобився б наскрізному аналізу. Демо повторно використовує DDT S-боксу: оберіть верхню й нижню вхідні різниці, прочитайте ймовірність кожного шляху й спостерігайте, як складається вартість бумеранга."></p>
+    <div id="refs-boomerang"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="S-box (shared DDT)" data-uk="S-бокс (спільний DDT)">S-box</span></label>
+          <select id="bmBox">
+            <option value="0">PRESENT — C56B90AD3EF84712</option>
+            <option value="1">Piccolo — E4B238091A7F6C5D</option>
+          </select></div>
+        <div class="ctrl"><label><span data-en="top trail Δin (→ prob p)" data-uk="верхній Δвх (→ ймов. p)">top Δin → p</span><span class="val" id="bmUV">1</span></label>
+          <input type="range" id="bmU" min="1" max="15" value="1"></div>
+        <div class="ctrl"><label><span data-en="bottom trail ∇in (→ prob q)" data-uk="нижній ∇вх (→ ймов. q)">bottom ∇in → q</span><span class="val" id="bmLV">2</span></label>
+          <input type="range" id="bmL" min="1" max="15" value="2"></div>
+        <div class="readout" id="bmOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Real victims:</b> boomerang and its amplified/rectangle forms broke reduced <b>Serpent, KASUMI</b> and others; combined with <b>related-key</b> differentials, Biryukov–Khovratovich (2009) produced the headline attack on the <b>full AES-256 key schedule</b> at ≈2⁹⁹·⁵ — a genuine break in the related-key model (an attacker who can flip chosen key bits), though not the single-key security AES actually promises. KASUMI's related-key break (Dunkelman–Keller–Shamir, 2010; ≈2³² data, practical time) is why 3G moved sensitive functions to SNOW 3G."
+            data-uk="<b>Справжні жертви:</b> boomerang та його підсилені/rectangle-форми зламали зменшені <b>Serpent, KASUMI</b> та інші; у поєднанні зі <b>зв'язаними ключами</b> Бірюков–Ховратович (2009) отримали гучну атаку на <b>повний розклад ключів AES-256</b> за ≈2⁹⁹·⁵ — справжній злом у моделі зв'язаних ключів (супротивник, що змінює обрані біти ключа), хоч і не однокключова стійкість, яку насправді обіцяє AES. Злом KASUMI на зв'язаних ключах (Дункельман–Келлер–Шамір, 2010; ≈2³² даних, практичний час) — причина, чому 3G перевів чутливі функції на SNOW 3G."></span></div>
+    <div class="xrefs"><a href="symmetric.html#aes">AES-256</a> <a href="symcrypt.html#differential">Differential</a> <a href="standards.html#snow2">SNOW 2.0/3G</a></div>
+  </section>
+
+  <!-- ============ 6. Birthday ============ -->
+  <section id="birthday">
+    <span class="num" data-en="25 / Birthday bound" data-uk="25 / Межа днів народжень">25 / Birthday bound</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(2^{n/2})</span>
+      <span data-en="Birthday bound &amp; collisions" data-uk="Межа днів народжень і колізії">Birthday bound &amp; collisions</span></h2>
+    <div class="formula">P(collision after k draws) ≈ 1 − e^{−k²/2ⁿ⁺¹};   50% at k ≈ 1.177·2^{n/2}</div>
+    <p class="desc" data-en="A hash with an n-bit output is <b>not</b> safe up to 2ⁿ — collisions appear far sooner. Model each output as a uniform draw from 2ⁿ boxes: the chance two of k draws land together climbs as k², crossing ½ at only about <b>2^{n/2}</b> outputs. That square-root is why a 128-bit hash gives just 64-bit collision resistance, and why digests are sized at 256+ bits. The demo runs a <b>real trial</b>: it hashes random inputs with SHA-256, truncates to n bits, and reports the draw at which the first collision actually appeared, next to the theoretical curve."
+       data-uk="Геш з n-бітним виходом <b>не</b> безпечний до 2ⁿ — колізії з'являються значно раніше. Уявіть кожен вихід як рівномірний вибір з 2ⁿ комірок: шанс, що два з k виборів збіжаться, зростає як k², перетинаючи ½ вже приблизно за <b>2^{n/2}</b> виходів. Цей корінь пояснює, чому 128-бітний геш дає лише 64 біти стійкості до колізій і чому дайджести роблять від 256 біт. Демо виконує <b>справжній дослід</b>: гешує випадкові входи через SHA-256, скорочує до n біт і повідомляє, на якому виборі справді з'явилася перша колізія, поряд із теоретичною кривою."></p>
+    <div id="refs-birthday"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="bdCanvas" width="300" height="220"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="output width n (bits)" data-uk="ширина виходу n (біт)">n bits</span><span class="val" id="bdNV">16</span></label>
+            <input type="range" id="bdN" min="8" max="24" value="16"></div>
+          <div class="ctrl"><label><span data-en="samples k drawn" data-uk="вибірок k">samples k</span><span class="val" id="bdKV">300</span></label>
+            <input type="range" id="bdK" min="1" max="2000" value="300"></div>
+          <button id="bdRun" data-en="Run empirical SHA-256 trial" data-uk="Запустити емпіричний дослід SHA-256">Run trial</button>
+          <div class="readout" id="bdOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Real victims:</b> <b>MD5</b> — practical collisions since 2004, used to forge a rogue CA certificate (2008) and by the Flame malware (2012); <b>SHA-1</b> — the <b>SHAttered</b> collision (2017, ≈2⁶³ work) retired it from TLS and Git object naming. The birthday bound also caps block-cipher modes: 64-bit blocks (3DES, Blowfish) leak after ~2³² blocks (the <b>Sweet32</b> attack), pushing everyone to 128-bit blocks and AEAD nonce discipline."
+            data-uk="<b>Справжні жертви:</b> <b>MD5</b> — практичні колізії з 2004, застосовані для підробки шахрайського сертифіката CA (2008) і зловмисним ПЗ Flame (2012); <b>SHA-1</b> — колізія <b>SHAttered</b> (2017, ≈2⁶³ праці) вивела його з TLS і найменування об'єктів Git. Межа днів народжень також обмежує режими блокових шифрів: 64-бітні блоки (3DES, Blowfish) протікають після ~2³² блоків (атака <b>Sweet32</b>), змушуючи всіх переходити на 128-бітні блоки та дисципліну нонсів AEAD."></span></div>
+    <div class="xrefs"><a href="hash.html#md5">MD5</a> <a href="hash.html#sha1">SHA-1</a> <a href="symcrypt.html#tmto">TMTO</a></div>
+  </section>
+
+  <!-- ============ 7. TMTO ============ -->
+  <section id="tmto">
+    <span class="num" data-en="25 / TMTO &amp; rainbow tables" data-uk="25 / TMTO та райдужні таблиці">25 / TMTO</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">T·M²=N²</span>
+      <span data-en="Hellman TMTO &amp; rainbow tables" data-uk="TMTO Геллмана та райдужні таблиці">Hellman TMTO</span></h2>
+    <div class="formula">precompute m chains of length t over f;   T·M² = N²  (T ≈ t², M ≈ mt,  cover N ≈ mt)</div>
+    <p class="desc" data-en="Brute force is 2ᵏ time and O(1) memory; a lookup table is O(1) time and 2ᵏ memory. Hellman's <b>time-memory trade-off</b> sits between them. Offline, iterate a one-way function f into m <b>chains</b> of length t and store only each chain's (start, end). Online, to invert a target y, walk f from y until you hit a stored endpoint, then re-walk that chain from its start to land on the preimage. It obeys <b>T·M² = N²</b>: spend more memory M to cut online time T. <b>Rainbow tables</b> (Oechslin) swap the reduction function each step to kill chain merges. The demo builds a real Hellman table over a toy f = SHA-256 truncated to n bits and inverts a random target."
+       data-uk="Повний перебір — це 2ᵏ часу й O(1) пам'яті; таблиця пошуку — O(1) часу й 2ᵏ пам'яті. <b>Компроміс «час-пам'ять»</b> Геллмана лежить між ними. Офлайн ітеруйте однобічну функцію f у m <b>ланцюгів</b> довжини t і зберігайте лише (початок, кінець) кожного. Онлайн, щоб обернути ціль y, ідіть f від y, доки не влучите у збережений кінець, потім пройдіть той ланцюг від початку — і потрапите у прообраз. Це підкоряється <b>T·M² = N²</b>: більше пам'яті M скорочує онлайн-час T. <b>Райдужні таблиці</b> (Оеклін) міняють функцію редукції щокроку, щоб убити злиття ланцюгів. Демо будує справжню таблицю Геллмана над іграшковою f = SHA-256, скороченою до n біт, і обертає випадкову ціль."></p>
+    <div id="refs-tmto"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="space N = 2ⁿ (n bits)" data-uk="простір N = 2ⁿ (n біт)">n bits</span><span class="val" id="tmNV">14</span></label>
+          <input type="range" id="tmN" min="8" max="18" value="14"></div>
+        <div class="ctrl"><label><span data-en="chains m" data-uk="ланцюгів m">chains m</span><span class="val" id="tmMV">64</span></label>
+          <input type="range" id="tmM" min="8" max="256" value="64"></div>
+        <div class="ctrl"><label><span data-en="chain length t" data-uk="довжина t">length t</span><span class="val" id="tmTV">64</span></label>
+          <input type="range" id="tmT" min="8" max="256" value="64"></div>
+        <button id="tmRun" data-en="Build table → invert random target" data-uk="Побудувати таблицю → обернути ціль">Build → invert</button>
+        <div class="readout" id="tmOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Real victims:</b> unsalted password hashes — <b>LM/NTLM</b> Windows hashes and <b>plain MD5/SHA-1</b> password databases are inverted in seconds by downloadable rainbow tables; A5/1 GSM voice encryption fell to TMTO. The universal defence is a per-password <b>salt</b> (which multiplies table cost by 2^{salt}) plus a deliberately <b>slow</b> KDF (bcrypt, scrypt, Argon2). TMTO cannot beat a random salt."
+            data-uk="<b>Справжні жертви:</b> несолені геші паролів — <b>LM/NTLM</b> геші Windows і бази <b>простих MD5/SHA-1</b> паролів обертаються за секунди завантажуваними райдужними таблицями; шифрування голосу GSM A5/1 упало під TMTO. Універсальний захист — індивідуальна <b>сіль</b> (що множить вартість таблиці на 2^{сіль}) плюс навмисно <b>повільна</b> KDF (bcrypt, scrypt, Argon2). TMTO не долає випадкову сіль."></span></div>
+    <div class="xrefs"><a href="symcrypt.html#mitm">Meet-in-the-middle</a> <a href="symcrypt.html#birthday">Birthday</a> <a href="hash.html#sha1">Password hashing</a></div>
+  </section>
+
+  <!-- ============ 8. Length-extension ============ -->
+  <section id="lenext">
+    <span class="num" data-en="25 / Length-extension" data-uk="25 / Подовження">25 / Length-extension</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(1)</span>
+      <span data-en="Merkle–Damgård length-extension" data-uk="Подовження Меркла–Дамґарда">Length-extension</span></h2>
+    <div class="formula">given H(secret‖m) and |secret|:  H(secret‖m‖pad‖extra) = C*( H(secret‖m), extra )  — no secret needed</div>
+    <p class="desc" data-en="A Merkle–Damgård hash outputs its <b>internal state</b>, and that state is exactly what you'd feed the compression function C to keep hashing. So <b>H(secret‖m) is a resumable checkpoint</b>: knowing only the digest and the length of the secret, an attacker appends the glue padding plus arbitrary <b>extra</b> bytes and computes a valid digest of the longer message — <b>forging a MAC without the key</b>. This breaks the naïve MAC(k,m)=H(k‖m). The demo runs a toy MD hash (compression = AES-S-box mixing over a 16-bit state, clearly labelled toy) end to end: it forges the extended MAC, self-checks it against the true digest, and shows that the same trick fails against <b>HMAC</b>, whose nested structure hides the resumable state."
+       data-uk="Геш Меркла–Дамґарда видає свій <b>внутрішній стан</b>, а саме цей стан ви й подали б у функцію стиснення C, щоб гешувати далі. Тож <b>H(secret‖m) — це відновлювана контрольна точка</b>: знаючи лише дайджест і довжину секрету, супротивник дописує склеювальне доповнення плюс довільні <b>додаткові</b> байти й обчислює дійсний дайджест довшого повідомлення — <b>підробляючи MAC без ключа</b>. Це ламає наївний MAC(k,m)=H(k‖m). Демо запускає іграшковий MD-геш (стиснення = змішування S-боксом AES над 16-бітним станом, явно позначене як іграшкове): воно підробляє подовжений MAC, самоперевіряє його проти справжнього дайджесту й показує, що той самий трюк не працює проти <b>HMAC</b>, вкладена структура якого ховає відновлюваний стан."></p>
+    <div id="refs-lenext"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="secret (unknown to attacker)" data-uk="секрет (невідомий супротивнику)">secret</span></label>
+          <input type="text" id="leSecret" value="s3cr3t" maxlength="16" style="width:100%"></div>
+        <div class="ctrl"><label><span data-en="original message m" data-uk="оригінальне повідомлення m">message m</span></label>
+          <input type="text" id="leMsg" value="amount=100" maxlength="24" style="width:100%"></div>
+        <div class="ctrl"><label><span data-en="attacker's appended extra" data-uk="дописане супротивником">extra</span></label>
+          <input type="text" id="leExtra" value="&amp;admin=1" maxlength="24" style="width:100%"></div>
+        <button id="leRun" data-en="Forge extended MAC (no secret)" data-uk="Підробити подовжений MAC (без секрету)">Forge</button>
+        <div class="readout" id="leOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Real victims:</b> the <b>Flickr API signature</b> forgery (2009) used exactly this against a secret-prefix MD5 MAC; the same flaw hit early cloud APIs such as AWS Signature v1 and other secret-prefix schemes. Vulnerable: MD5, SHA-1, SHA-256/512 as raw H(k‖m). <b>Not</b> vulnerable: <b>HMAC</b> (RFC 2104, nested keying), truncated <b>SHA-512/256</b>, and <b>SHA-3 / KMAC</b> (the sponge absorbs the whole input before squeezing, so there is no exposed state). Never build a MAC as H(secret‖message)."
+            data-uk="<b>Справжні жертви:</b> підробка <b>підпису API Flickr</b> (2009) використала саме це проти MD5-MAC із секретним префіксом; та сама вада вразила ранні хмарні API, як-от AWS Signature v1, та інші схеми з секретним префіксом. Вразливі: MD5, SHA-1, SHA-256/512 як «сирий» H(k‖m). <b>Не</b> вразливі: <b>HMAC</b> (RFC 2104, вкладене ключування), скорочений <b>SHA-512/256</b> та <b>SHA-3 / KMAC</b> (губка поглинає весь вхід перед видавлюванням, тож немає відкритого стану). Ніколи не будуйте MAC як H(secret‖message)."></span></div>
+    <div class="xrefs"><a href="hash.html#hmac">HMAC</a> <a href="hash.html#sha3">SHA-3 / sponge</a> <a href="standards.html#descbcmac">DES-CBC-MAC</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+const UK=()=>window.LANG==='uk';
+const hex2=v=>v.toString(16).padStart(2,'0');
+const hex4=v=>(v&0xFFFF).toString(16).padStart(4,'0');
+const popcount=n=>{ let c=0; while(n){ c+=n&1; n>>>=1; } return c; };
+const parityDot=(a,b)=>popcount(a&b)&1;     // dot product mod 2
+
+/* ---- real AES GF(2^8) S-box (poly 0x11B) — used as a byte permutation ---- */
+function gmul(a,b){ let p=0; for(let i=0;i<8;i++){ if(b&1)p^=a; const hi=a&0x80; a=(a<<1)&0xFF; if(hi)a^=0x1b; b>>=1; } return p; }
+const SBOX=(function(){
+  const anti=new Array(256),log=new Array(256); let x=1;
+  for(let i=0;i<255;i++){ anti[i]=x; log[x]=i; x=gmul(x,3); }
+  const minv=a=>a===0?0:anti[(255-log[a])%255];
+  const box=new Array(256);
+  for(let i=0;i<256;i++){ let b=minv(i),s=b; for(let c=0;c<4;c++){ b=((b<<1)|(b>>7))&0xFF; s^=b; } box[i]=s^0x63; }
+  return box;
+})();
+
+/* ---- real SHA-256 (used by birthday trial and TMTO one-way function) ---- */
+const SHA=(function(){
+  const K=new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+  const rr=(x,n)=>(x>>>n)|(x<<(32-n));
+  function digest(bytes){
+    const l=bytes.length,bl=((l+8>>6)+1)<<6,m=new Uint8Array(bl); m.set(bytes); m[l]=0x80;
+    const bits=l*8; m[bl-4]=(bits>>>24)&255;m[bl-3]=(bits>>>16)&255;m[bl-2]=(bits>>>8)&255;m[bl-1]=bits&255;
+    let h0=0x6a09e667,h1=0xbb67ae85,h2=0x3c6ef372,h3=0xa54ff53a,h4=0x510e527f,h5=0x9b05688c,h6=0x1f83d9ab,h7=0x5be0cd19;
+    const w=new Uint32Array(64);
+    for(let o=0;o<bl;o+=64){
+      for(let i=0;i<16;i++) w[i]=(m[o+4*i]<<24)|(m[o+4*i+1]<<16)|(m[o+4*i+2]<<8)|m[o+4*i+3];
+      for(let i=16;i<64;i++){ const s0=rr(w[i-15],7)^rr(w[i-15],18)^(w[i-15]>>>3), s1=rr(w[i-2],17)^rr(w[i-2],19)^(w[i-2]>>>10); w[i]=(w[i-16]+s0+w[i-7]+s1)|0; }
+      let a=h0,b=h1,c=h2,d=h3,e=h4,f=h5,g=h6,h=h7;
+      for(let i=0;i<64;i++){ const S1=rr(e,6)^rr(e,11)^rr(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[i]+w[i])|0,S0=rr(a,2)^rr(a,13)^rr(a,22),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)|0; h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0; }
+      h0=(h0+a)|0;h1=(h1+b)|0;h2=(h2+c)|0;h3=(h3+d)|0;h4=(h4+e)|0;h5=(h5+f)|0;h6=(h6+g)|0;h7=(h7+h)|0;
+    }
+    const out=new Uint8Array(32),hs=[h0,h1,h2,h3,h4,h5,h6,h7];
+    for(let i=0;i<8;i++){ out[4*i]=(hs[i]>>>24)&255;out[4*i+1]=(hs[i]>>>16)&255;out[4*i+2]=(hs[i]>>>8)&255;out[4*i+3]=hs[i]&255; }
+    return out;
+  }
+  const enc=new TextEncoder(),hex=b=>Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join('');
+  return {digest,hex,str:s=>digest(enc.encode(s))};
+})();
+
+/* ==================================================================
+   4-bit S-boxes and their DDT / LAT (real construction)
+   ================================================================== */
+const SBOXES4=[
+  {name:'PRESENT', box:[0xC,0x5,0x6,0xB,0x9,0x0,0xA,0xD,0x3,0xE,0xF,0x8,0x4,0x7,0x1,0x2]},
+  {name:'Piccolo', box:[0xE,0x4,0xB,0x2,0x3,0x8,0x0,0x9,0x1,0xA,0x7,0xF,0x6,0xC,0x5,0xD]},
+  {name:'Identity',box:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]}
+];
+function buildDDT(box){
+  const D=Array.from({length:16},()=>new Array(16).fill(0));
+  for(let dx=0;dx<16;dx++) for(let x=0;x<16;x++) D[dx][(box[x]^box[x^dx])]++;
+  return D;
+}
+function buildLAT(box){
+  const L=Array.from({length:16},()=>new Array(16).fill(0));
+  for(let a=0;a<16;a++) for(let b=0;b<16;b++){ let c=0; for(let x=0;x<16;x++) if(parityDot(a,x)===parityDot(b,box[x])) c++; L[a][b]=c-8; }
+  return L;
+}
+const DDT=SBOXES4.map(s=>buildDDT(s.box));
+const LAT=SBOXES4.map(s=>buildLAT(s.box));
+// best non-trivial differential/linear entry (ignoring row/col 0)
+function bestDDT(D){ let m=0,bx=1,by=0; for(let dx=1;dx<16;dx++)for(let dy=0;dy<16;dy++) if(D[dx][dy]>m){m=D[dx][dy];bx=dx;by=dy;} return {v:m,dx:bx,dy:by}; }
+function bestLAT(L){ let m=0,ba=1,bb=0; for(let a=1;a<16;a++)for(let b=1;b<16;b++) if(Math.abs(L[a][b])>m){m=Math.abs(L[a][b]);ba=a;bb=b;} return {v:m,a:ba,b:bb}; }
+
+/* ---------- generic 16x16 heatmap with hover ---------- */
+function heat(canvasId, matrix, colorFn, ring, onHover){
+  const cv=document.getElementById(canvasId),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const M=20, cell=(Math.min(W,H)-M)/16;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  g.font='7px monospace'; g.textAlign='center';
+  for(let r=0;r<16;r++)for(let c=0;c<16;c++){
+    g.fillStyle=colorFn(matrix[r][c]); g.fillRect(M+c*cell, M+r*cell, cell-0.5, cell-0.5);
+  }
+  g.fillStyle=C.dim;
+  for(let i=0;i<16;i++){ g.fillText(i.toString(16), M+i*cell+cell/2, 13); g.fillText(i.toString(16), 10, M+i*cell+cell/2+3); }
+  if(ring){ g.strokeStyle=C.amber; g.lineWidth=2; g.strokeRect(M+ring.c*cell, M+ring.r*cell, cell-0.5, cell-0.5); g.lineWidth=1; }
+  cv.onmousemove=e=>{ const rect=cv.getBoundingClientRect(); const x=(e.clientX-rect.left)*W/rect.width-M, y=(e.clientY-rect.top)*H/rect.height-M;
+    const c=Math.floor(x/cell), r=Math.floor(y/cell); if(r>=0&&r<16&&c>=0&&c<16) onHover(r,c); };
+}
+
+let ddtSel={r:1,c:0}, latSel={r:1,c:0};
+function drawDDT(){
+  const bi=+document.getElementById('ddtBox').value; const D=DDT[bi];
+  const dx=+document.getElementById('ddtDx').value; document.getElementById('ddtDxV').textContent=dx;
+  const best=bestDDT(D);
+  heat('ddtCanvas', D, v=>{ if(v===0) return C.grid; const t=v/16; return 'rgb('+(30+t*30|0)+','+(90+t*140|0)+','+(120+t*70|0)+')'; },
+       {r:best.dx,c:best.dy}, (r,c)=>{ ddtSel={r,c}; reportDDT(bi,D,best,r,c); });
+  reportDDT(bi,D,best,dx, (function(){ let bc=0,bv=0; for(let dy=0;dy<16;dy++) if(D[dx][dy]>bv){bv=D[dx][dy];bc=dy;} return bc; })());
+}
+function reportDDT(bi,D,best,r,c){
+  const uk=UK(), v=D[r][c];
+  document.getElementById('ddtOut').innerHTML=
+    '<span class="k">'+(SBOXES4[bi].name)+' '+(uk?'DDT':'DDT')+' — 16×16, '+(uk?'кожен рядок сумується до 16':'each row sums to 16')+'</span>\n'+
+    '<span class="k">'+(uk?'клітинка':'cell')+' Δx='+r.toString(16)+' Δy='+c.toString(16)+':</span> '+v+'/16  p = <span class="a">'+(v/16).toFixed(4)+'</span>'+(v&&r?'  (2^'+(Math.log2(v/16)).toFixed(2)+')':'')+'\n'+
+    '<span class="k">'+(uk?'найкращий диференціал':'best differential')+':</span> Δx=<span class="s">'+best.dx.toString(16)+'</span> → Δy=<span class="s">'+best.dy.toString(16)+'</span>  <span class="a">'+best.v+'/16 = '+(best.v/16).toFixed(3)+'</span>'+
+    (best.v===16?'  ('+(uk?'лінійний S-бокс — марний':'linear S-box — useless')+')':'');
+}
+
+function drawLAT(){
+  const bi=+document.getElementById('latBox').value; const L=LAT[bi];
+  const a=+document.getElementById('latA').value; document.getElementById('latAV').textContent=a;
+  const best=bestLAT(L);
+  heat('latCanvas', L, v=>{ if(v===0) return C.grid; const t=v/8; return v>0?'rgb('+(40+t*40|0)+','+(120+t*100|0)+','+(150+t*60|0)+')':'rgb('+(150+(-t)*80|0)+','+(70+t*40|0)+','+(90+t*30|0)+')'; },
+       {r:best.a,c:best.b}, (r,c)=>{ latSel={r,c}; reportLAT(bi,L,best,r,c); });
+  let bc=0,bv=0; for(let b=1;b<16;b++) if(Math.abs(L[a][b])>bv){bv=Math.abs(L[a][b]);bc=b;}
+  reportLAT(bi,L,best,a,bc);
+}
+function reportLAT(bi,L,best,r,c){
+  const uk=UK(), v=L[r][c], eps=v/16, bias=best.v/16;
+  document.getElementById('latOut').innerHTML=
+    '<span class="k">'+(SBOXES4[bi].name)+' LAT — LAT[a][b] = #{a·x = b·S(x)} − 8</span>\n'+
+    '<span class="k">'+(uk?'клітинка':'cell')+' a='+r.toString(16)+' b='+c.toString(16)+':</span> LAT=<span class="s">'+(v>0?'+':'')+v+'</span>  '+(uk?'зсув':'bias')+' ε = <span class="a">'+eps.toFixed(4)+'</span>\n'+
+    '<span class="k">'+(uk?'найкраще наближення':'best approximation')+':</span> a=<span class="s">'+best.a.toString(16)+'</span> b=<span class="s">'+best.b.toString(16)+'</span>  |ε| = <span class="a">'+bias.toFixed(4)+'</span>'+(bias?'  (2^'+Math.log2(bias).toFixed(2)+')':'')+'\n'+
+    '<span class="k">'+(uk?'нагромадження (2 копії):':'piling-up (2 copies):')+'</span> ε₂ = 2·ε² = <span class="a">'+(2*bias*bias).toFixed(5)+'</span>'+
+    ((bias)?'  ·  1/ε² ≈ <span class="s">'+Math.round(1/(bias*bias))+'</span> '+(uk?'відомих текстів/раунд':'known texts/round'):'');
+}
+
+/* ==================================================================
+   MITM — real recovery against a toy 3-round Feistel (16-bit block)
+   ================================================================== */
+function feistelEnc(k, p){
+  let L=(p>>8)&0xFF, R=p&0xFF;
+  for(let r=0;r<3;r++){ const F=SBOX[(R + k + r*0x9E)&0xFF]; const nL=R, nR=L^F; L=nL; R=nR; }
+  return ((L<<8)|R)&0xFFFF;
+}
+function feistelDec(k, c){
+  let L=(c>>8)&0xFF, R=c&0xFF;
+  for(let r=2;r>=0;r--){ const pL=R^SBOX[(L + k + r*0x9E)&0xFF], pR=L; L=pL; R=pR; }
+  return ((L<<8)|R)&0xFFFF;
+}
+function drawMITM(){
+  const bits=+document.getElementById('mmB').value; document.getElementById('mmBV').textContent=bits;
+  const KS=1<<bits, mask=KS-1;
+  const k1=(Math.random()*KS)|0, k2=(Math.random()*KS)|0;
+  // two known plaintext/ciphertext pairs to disambiguate false hits
+  const P0=0x1234, P1=0xABCD;
+  const enc=(k1,k2,p)=>feistelEnc(k2&mask, feistelEnc(k1&mask, p));
+  const C0=enc(k1,k2,P0), C1=enc(k1,k2,P1);
+  // MITM: table of E_{k1}(P0)  ->  k1
+  const table=new Map(); let work=0;
+  for(let g1=0; g1<KS; g1++){ table.set(feistelEnc(g1,P0), g1); work++; }
+  let found=null;
+  for(let g2=0; g2<KS; g2++){ work++; const mid=feistelDec(g2, C0);
+    if(table.has(mid)){ const g1=table.get(mid);
+      if(feistelEnc(g2, feistelEnc(g1, P1))===C1){ found=[g1,g2]; break; } } }
+  const brute=KS*KS, uk=UK();
+  document.getElementById('mmOut').innerHTML=
+    '<span class="k">'+(uk?'ціль (приховано)':'target (hidden)')+':</span> k₁=<span class="s">'+k1+'</span> k₂=<span class="s">'+k2+'</span>  ('+bits+'+'+bits+' '+(uk?'біт':'bit')+')\n'+
+    '<span class="k">'+(uk?'відомі пари':'known pairs')+':</span> E(k,'+hex4(P0)+')='+hex4(C0)+',  E(k,'+hex4(P1)+')='+hex4(C1)+'\n'+
+    '<span class="k">'+(uk?'відновлено MITM':'MITM recovered')+':</span> '+(found?'<span class="a">k₁='+found[0]+' k₂='+found[1]+' '+(found[0]===k1&&found[1]===k2?'✓':'(equiv.)')+'</span>':'<span class="b">—</span>')+'\n'+
+    '<span class="k">'+(uk?'робота':'work')+':</span> MITM ≈ <span class="a">'+work.toLocaleString()+'</span> '+(uk?'операцій':'ops')+'  vs  '+(uk?'перебір':'brute')+' 2ᵏ·2ᵏ = 2²ᵏ = <span class="b">'+brute.toLocaleString()+'</span>  → 2^'+Math.log2(work).toFixed(1)+' vs 2^'+Math.log2(brute).toFixed(1);
+}
+
+/* ==================================================================
+   Slide — real key recovery on a self-similar toy cipher
+   E = F_k^r,  F_k(x) = SBOX[x] ^ k   (same k every round -> slide works)
+   ================================================================== */
+const Fk=(x,k)=>SBOX[x]^k;
+function slideEnc(x,k,r){ for(let i=0;i<r;i++) x=Fk(x,k); return x&0xFF; }
+function drawSlide(){
+  const r=+document.getElementById('slR').value; document.getElementById('slRV').textContent=r;
+  const k=(Math.random()*256)|0;                     // hidden key
+  const P=(Math.random()*256)|0;
+  const Pstar=Fk(P,k);                               // genuine slid pair: P* = F_k(P)
+  const C=slideEnc(P,k,r), Cstar=slideEnc(Pstar,k,r);
+  const kRec=SBOX[P]^Pstar;                          // recover from top round: SBOX[P]^k = P*
+  const check=(Fk(C,kRec)===Cstar);                  // verify against bottom round: F_k(C) = C*
+  const uk=UK();
+  document.getElementById('slOut').innerHTML=
+    '<span class="k">'+(uk?'приховано':'hidden')+':</span> k = <span class="s">'+hex2(k)+'</span>,  r = '+r+' '+(uk?'раундів':'rounds')+'\n'+
+    '<span class="k">'+(uk?'slid-пара':'slid pair')+':</span> P=<span class="a">'+hex2(P)+'</span>, P*=F_k(P)=<span class="a">'+hex2(Pstar)+'</span>  →  C=<span class="a">'+hex2(C)+'</span>, C*=<span class="a">'+hex2(Cstar)+'</span>\n'+
+    '<span class="k">'+(uk?'відновлення з 1 раунду:':'recover from 1 round:')+'</span> k = SBOX[P]⊕P* = <span class="a">'+hex2(kRec)+'</span> '+(kRec===k?(uk?'✓ вірно':'✓ correct'):'✗')+'\n'+
+    '<span class="k">'+(uk?'перевірка F_k(C)=C*:':'check F_k(C)=C*:')+'</span> '+(check?'<span class="a">✓ '+(uk?'slid-пара підтверджена — r не має значення':'slid pair confirmed — r irrelevant')+'</span>':'<span class="b">✗</span>');
+}
+
+/* ==================================================================
+   Boomerang — reuse the S-box DDT: prob = p^2 q^2
+   ================================================================== */
+function bestRow(D,dx){ let bv=0,by=0; for(let dy=1;dy<16;dy++) if(D[dx][dy]>bv){bv=D[dx][dy];by=dy;} return {v:bv,dy:by}; }
+function drawBoom(){
+  const bi=+document.getElementById('bmBox').value; const D=DDT[bi];
+  const du=+document.getElementById('bmU').value; document.getElementById('bmUV').textContent=du;
+  const dl=+document.getElementById('bmL').value; document.getElementById('bmLV').textContent=dl;
+  const top=bestRow(D,du), bot=bestRow(D,dl);
+  const p=top.v/16, q=bot.v/16, boom=p*p*q*q;
+  const uk=UK();
+  document.getElementById('bmOut').innerHTML=
+    '<span class="k">'+(uk?'верхній шлях E₀':'top trail E₀')+':</span> Δin='+du.toString(16)+' → Δout='+top.dy.toString(16)+'  p = <span class="a">'+p.toFixed(4)+'</span>'+(p?' (2^'+Math.log2(p).toFixed(2)+')':'')+'\n'+
+    '<span class="k">'+(uk?'нижній шлях E₁':'bottom trail E₁')+':</span> ∇in='+dl.toString(16)+' → ∇out='+bot.dy.toString(16)+'  q = <span class="a">'+q.toFixed(4)+'</span>'+(q?' (2^'+Math.log2(q).toFixed(2)+')':'')+'\n'+
+    '<span class="k">'+(uk?'ймовірність бумеранга':'boomerang probability')+' p²q² =</span> <span class="s">'+boom.toExponential(3)+'</span>'+(boom?' (2^'+Math.log2(boom).toFixed(2)+')':'')+'\n'+
+    '<span class="k">'+(uk?'дані для розрізнення (pq)⁻²:':'data to distinguish (pq)⁻²:')+'</span> ≈ <span class="a">'+(p&&q?Math.round(1/(p*p*q*q)).toLocaleString():'∞')+'</span> '+(uk?'квартетів':'quartets')+
+    (top.v===16&&bot.v===16?'\n<span class="b">'+(uk?'(вироджено — оберіть шифр із нелінійним S-боксом)':'(degenerate — choose a nonlinear S-box)')+'</span>':'');
+}
+
+/* ==================================================================
+   Birthday — real SHA-256 collision trial, truncated to n bits
+   ================================================================== */
+let bdLast=null;
+function truncHash(i, nbits){
+  const b=new Uint8Array(4); b[0]=i&255;b[1]=(i>>8)&255;b[2]=(i>>16)&255;b[3]=(i>>24)&255;
+  const d=SHA.digest(b);
+  let v=(d[0]<<16)|(d[1]<<8)|d[2];   // top 24 bits available
+  return (v>>>(24-nbits)) & ((1<<nbits)-1);
+}
+function bdTrial(nbits){
+  const seen=new Map(); const N=Math.pow(2,nbits); const cap=Math.min(200000, 20*Math.ceil(Math.sqrt(N))+50);
+  for(let k=1;k<=cap;k++){
+    const r=(Math.random()*0x7fffffff)|0; const h=truncHash(r,nbits);
+    if(seen.has(h)) return {k, N};
+    seen.set(h,r);
+  }
+  return {k:null, N};
+}
+function drawBirthday(){
+  const n=+document.getElementById('bdN').value; document.getElementById('bdNV').textContent=n;
+  const kMax=+document.getElementById('bdK').value; document.getElementById('bdKV').textContent=kMax;
+  const N=Math.pow(2,n), sqrtN=Math.sqrt(N);
+  const cv=document.getElementById('bdCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const M=26; g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const axMax=Math.max(kMax, Math.ceil(3*sqrtN));
+  const X=k=>M+k/axMax*(W-M-8), Y=p=>H-M-p*(H-2*M);
+  g.strokeStyle=C.line; for(let i=0;i<=4;i++){ const yy=Y(i/4); g.beginPath(); g.moveTo(M,yy); g.lineTo(W-8,yy); g.stroke(); }
+  g.strokeStyle=C.dim; g.beginPath(); g.moveTo(M,Y(0)); g.lineTo(W-8,Y(0)); g.moveTo(M,Y(0)); g.lineTo(M,Y(1)); g.stroke();
+  // theoretical curve 1 - e^{-k^2 / 2^{n+1}}
+  g.strokeStyle=C.teal; g.lineWidth=1.8; g.beginPath();
+  for(let px=0;px<=W-M-8;px++){ const k=px/(W-M-8)*axMax; const p=1-Math.exp(-k*k/(2*N)); if(px===0)g.moveTo(X(k),Y(p)); else g.lineTo(X(k),Y(p)); } g.stroke(); g.lineWidth=1;
+  // sqrt(N) marker
+  g.strokeStyle=C.amber; g.setLineDash([4,3]); g.beginPath(); g.moveTo(X(sqrtN),Y(0)); g.lineTo(X(sqrtN),Y(1)); g.stroke(); g.setLineDash([]);
+  // current k marker on curve
+  const pk=1-Math.exp(-kMax*kMax/(2*N));
+  g.fillStyle=C.rose; g.beginPath(); g.arc(X(kMax),Y(pk),4,0,7); g.fill();
+  if(bdLast && bdLast.n===n && bdLast.k){ g.strokeStyle=C.rose; g.setLineDash([2,2]); g.beginPath(); g.moveTo(X(bdLast.k),Y(0)); g.lineTo(X(bdLast.k),Y(1)); g.stroke(); g.setLineDash([]); }
+  g.fillStyle=C.dim; g.font='8px monospace'; g.textAlign='left';
+  g.fillText('2^(n/2)≈'+Math.round(sqrtN), X(sqrtN)+3, Y(1)+10); g.fillText('P=1',M+2,Y(1)+8); g.fillText('k→',W-24,Y(0)-3);
+  const uk=UK();
+  document.getElementById('bdOut').innerHTML=
+    '<span class="k">n =</span> '+n+' '+(uk?'біт':'bit')+',  N = 2ⁿ = <span class="a">'+N.toLocaleString()+'</span>,  2^(n/2) ≈ <span class="s">'+Math.round(sqrtN)+'</span>\n'+
+    '<span class="k">P('+(uk?'колізія за':'collision by')+' k='+kMax+') =</span> <span class="a">'+(pk*100).toFixed(1)+'%</span>  (50% '+(uk?'при':'at')+' k≈'+Math.round(1.177*sqrtN)+')\n'+
+    (bdLast&&bdLast.n===n ? '<span class="k">'+(uk?'емпіричний дослід SHA-256:':'empirical SHA-256 trial:')+'</span> '+
+        (bdLast.k? '<span class="s">'+(uk?'перша колізія на вибірці':'first collision at draw')+' '+bdLast.k+'</span>  = <span class="a">'+(bdLast.k/sqrtN).toFixed(2)+'·2^(n/2)</span>' : '<span class="b">'+(uk?'колізії немає в межах ліміту':'no collision within cap')+'</span>')
+      : '<span class="k">'+(uk?'натисніть «Запустити» для справжнього досліду':'press Run for a real trial')+'</span>');
+}
+
+/* ==================================================================
+   TMTO — real Hellman table over f = SHA-256 truncated to n bits
+   ================================================================== */
+function tmtoF(x, nbits){
+  const b=new Uint8Array(4); b[0]=x&255;b[1]=(x>>8)&255;b[2]=(x>>16)&255;b[3]=(x>>24)&255;
+  const d=SHA.digest(b); let v=(d[0]<<16)|(d[1]<<8)|d[2];
+  return (v>>>(24-nbits)) & ((1<<nbits)-1);
+}
+function drawTMTO(){
+  const n=+document.getElementById('tmN').value; document.getElementById('tmNV').textContent=n;
+  let m=+document.getElementById('tmM').value, t=+document.getElementById('tmT').value;
+  document.getElementById('tmMV').textContent=m; document.getElementById('tmTV').textContent=t;
+  const N=Math.pow(2,n), nb=n;
+  // build table: m chains of length t; store end -> start
+  const ends=new Map(); const starts=[]; let build=0;
+  for(let i=0;i<m;i++){ let s=(Math.random()*N)|0; starts.push(s); let x=s;
+    for(let j=0;j<t;j++){ x=tmtoF(x,nb); build++; } ends.set(x, s); }
+  // pick a random preimage x* and target y=f(x*); try to invert y
+  const xStar=(Math.random()*N)|0, y=tmtoF(xStar,nb);
+  let inv=null, online=0; let yj=y;
+  for(let j=0;j<t;j++){
+    if(ends.has(yj)){ let x=ends.get(yj);          // walk chain from start
+      for(let s=0;s<t-1-j;s++){ x=tmtoF(x,nb); online++; }
+      if(tmtoF(x,nb)===y){ inv=x; break; } }
+    yj=tmtoF(yj,nb); online++;
+  }
+  const cover=m*t, TM2=(t*t)*(m*t)*(m*t), N2=N*N, uk=UK();
+  document.getElementById('tmOut').innerHTML=
+    '<span class="k">f = SHA-256 → '+n+' '+(uk?'біт':'bit')+',  N = <span class="a">'+N.toLocaleString()+'</span></span>\n'+
+    '<span class="k">'+(uk?'таблиця':'table')+':</span> m='+m+' '+(uk?'ланцюгів ×':'chains ×')+' t='+t+'  → '+(uk?'побудова':'precompute')+' <span class="s">'+build.toLocaleString()+'</span> f-'+(uk?'викликів':'evals')+',  '+(uk?'покриття':'coverage')+' m·t ≈ <span class="a">'+cover.toLocaleString()+'</span> ('+(cover/N*100).toFixed(1)+'% N)\n'+
+    '<span class="k">'+(uk?'обернути y = f(x*):':'invert y = f(x*):')+'</span> '+(inv!==null?'<span class="a">'+(uk?'знайдено прообраз':'preimage found')+' x=0x'+inv.toString(16)+', f(x)=y ✓</span>':'<span class="b">'+(uk?'промах (поза покриттям — збільште m·t)':'miss (outside coverage — raise m·t)')+'</span>')+'\n'+
+    '<span class="k">'+(uk?'онлайн-робота':'online work')+':</span> <span class="a">'+online+'</span> f-'+(uk?'викликів':'evals')+' (≪ N)   <span class="k">T·M² =</span> '+TM2.toExponential(1)+'  ~  N² = '+N2.toExponential(1);
+}
+
+/* ==================================================================
+   Length-extension — TOY Merkle-Damgard hash (16-bit state)
+   compression C: mixes a 2-byte block into state with the AES S-box
+   ================================================================== */
+const MD_IV=0x6A09;
+function mdCompress(state, hi, lo){    // state 16-bit, block = (hi,lo)
+  let a=(state>>8)&0xFF, b=state&0xFF;
+  for(let r=0;r<3;r++){
+    a=SBOX[a ^ hi ^ (r*0x3B & 0xFF)];
+    b=SBOX[b ^ lo ^ a];
+    a=(a + b) & 0xFF;
+    b=((b<<1)|(b>>7)) & 0xFF;
+    const tmp=a; a=b; b=tmp;           // swap halves each round
+  }
+  return ((a<<8)|b) & 0xFFFF;
+}
+function mdProcess(state, bytes){ for(let i=0;i<bytes.length;i+=2) state=mdCompress(state, bytes[i], bytes[i+1]||0); return state; }
+function mdPad(msgLen){                 // Merkle-Damgard padding: 0x80, zeros, 16-bit length
+  const p=[0x80]; let tot=msgLen+1; while(tot%2!==0){ p.push(0); tot++; }
+  p.push((msgLen>>8)&0xFF, msgLen&0xFF); return p;
+}
+function mdHash(bytes){ const full=bytes.concat(mdPad(bytes.length)); return mdProcess(MD_IV, full); }
+const enc=new TextEncoder();
+const B=s=>Array.from(enc.encode(s));
+
+/* HMAC over the toy compression (block size = 2 bytes) — resists extension */
+function mdHmac(keyBytes, msgBytes){
+  const Bsz=2; let k=keyBytes.slice(0,Bsz); while(k.length<Bsz) k.push(0);
+  const ipad=k.map(x=>x^0x36), opad=k.map(x=>x^0x5c);
+  const inner=mdHash(ipad.concat(msgBytes));
+  const innerBytes=[(inner>>8)&0xFF, inner&0xFF];
+  return mdHash(opad.concat(innerBytes));
+}
+function drawLenext(){
+  const secret=B(document.getElementById('leSecret').value||'');
+  const m=B(document.getElementById('leMsg').value||'');
+  const extra=B(document.getElementById('leExtra').value||'');
+  const uk=UK();
+  // legitimate MAC the attacker observes:
+  const mac=mdHash(secret.concat(m));                        // = H(secret || m)
+  // ATTACK (no secret, only |secret| and mac):
+  const glue=mdPad(secret.length + m.length);               // padding that followed (secret||m)
+  const P=secret.length + m.length + glue.length;           // block-aligned prefix length
+  const tail=extra.concat(mdPad(P + extra.length));          // extra + fresh MD padding for full length
+  const forged=mdProcess(mac, tail);                         // resume from the observed digest!
+  // TRUTH the verifier computes (prepends the secret it holds):
+  const forgedMsg=m.concat(glue).concat(extra);             // message as seen by verifier
+  const truth=mdHash(secret.concat(forgedMsg));             // H(secret || m || glue || extra)
+  const okForge=(forged===truth);
+  // HMAC resistance: same trick on an HMAC tag does not verify
+  const hmacTag=mdHmac(secret, m);
+  const hmacTruth=mdHmac(secret, forgedMsg);
+  const hmacResist=(hmacTag!==hmacTruth);                    // attacker cannot predict hmacTruth from hmacTag
+  const hx=a=>a.map(hex2).join(' ');
+  document.getElementById('leOut').innerHTML=
+    '<span class="k">'+(uk?'спостережено':'observed')+':  MAC = H(secret‖m) =</span> <span class="a">'+hex4(mac)+'</span>   (|secret|='+secret.length+' '+(uk?'відомо':'known')+')\n'+
+    '<span class="k">'+(uk?'склейка pad(secret‖m):':'glue pad(secret‖m):')+'</span> '+hx(glue)+'\n'+
+    '<span class="k">'+(uk?'підроблене повідомлення m‖pad‖extra:':'forged message m‖pad‖extra:')+'</span>\n  '+hx(forgedMsg)+'\n'+
+    '<span class="k">'+(uk?'підроблено (resume від MAC):':'forged (resume from MAC):')+'</span> <span class="'+(okForge?'a':'b')+'">'+hex4(forged)+'</span>\n'+
+    '<span class="k">'+(uk?'справжній H(secret‖m‖pad‖extra):':'true H(secret‖m‖pad‖extra):')+'</span> <span class="a">'+hex4(truth)+'</span>\n'+
+    '<span class="k">'+(uk?'самоперевірка:':'self-check:')+'</span> '+(okForge?'<span class="b">'+(uk?'ЗБІГ → MAC підроблено без ключа!':'MATCH → MAC forged without the key!')+'</span>':'<span class="b">mismatch</span>')+'\n'+
+    '<span class="k">'+(uk?'проти HMAC тим самим трюком:':'same trick vs HMAC:')+'</span> tag='+hex4(hmacTag)+', '+(uk?'ціль':'target')+'='+hex4(hmacTruth)+' → '+(hmacResist?'<span class="a">'+(uk?'РІЗНІ → HMAC стійкий ✓':'DIFFER → HMAC resists ✓')+'</span>':'<span class="b">?</span>');
+}
+
+/* ==================================================================
+   self-test banner
+   ================================================================== */
+function selfTest(){
+  const uk=UK();
+  const sb=(SBOX[0]===0x63 && SBOX[1]===0x7c && SBOX[16]===0xca);
+  const sh=SHA.hex(SHA.str('abc'))==='ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
+  // DDT rows each sum to 16; PRESENT best differential = 4/16
+  const D=DDT[0]; let rowsOK=true; for(let dx=0;dx<16;dx++){ let s=0; for(let dy=0;dy<16;dy++) s+=D[dx][dy]; if(s!==16) rowsOK=false; }
+  const ddtOK=rowsOK && bestDDT(D).v===4;
+  const latOK=bestLAT(LAT[0]).v===4;   // PRESENT best |LAT| = 4 (bias 1/4)
+  // length-extension forge must equal true extended digest
+  const s=B('key'),m=B('data'),x=B('!!');
+  const mac=mdHash(s.concat(m)), glue=mdPad(s.length+m.length), P=s.length+m.length+glue.length;
+  const forged=mdProcess(mac, x.concat(mdPad(P+x.length)));
+  const truth=mdHash(s.concat(m).concat(glue).concat(x));
+  const leOK=(forged===truth);
+  const all=sb&&sh&&ddtOK&&latOK&&leOK;
+  document.getElementById('selftest').innerHTML=
+    '<span class="k">'+(uk?'Самоперевірка':'Self-test')+':</span>  '+
+    'AES S-box <span class="'+(sb?'a':'b')+'">'+(sb?'✓':'✗')+'</span>   '+
+    'SHA-256("abc") <span class="'+(sh?'a':'b')+'">'+(sh?'✓':'✗')+'</span>   '+
+    'PRESENT DDT/LAT <span class="'+(ddtOK&&latOK?'a':'b')+'">'+(ddtOK&&latOK?'✓':'✗')+'</span>   '+
+    (uk?'подовження=істина':'lenext=truth')+' <span class="'+(leOK?'a':'b')+'">'+(leOK?'✓':'✗')+'</span>   '+
+    (all?'<span class="a">'+(uk?'усі примітиви коректні':'all primitives correct')+'</span>':'<span class="b">FAIL</span>');
+}
+
+/* ==================================================================
+   refs + wiring
+   ================================================================== */
+const WK='https://en.wikipedia.org/wiki/', WU='https://uk.wikipedia.org/wiki/';
+window.REFS={
+  differential:[{tag:'wiki',en:{href:WK+'Differential_cryptanalysis',label:'Wikipedia: Differential cryptanalysis'},uk:{href:WU+'%D0%94%D0%B8%D1%84%D0%B5%D1%80%D0%B5%D0%BD%D1%86%D1%96%D0%B0%D0%BB%D1%8C%D0%BD%D0%B8%D0%B9_%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%BE%D0%B0%D0%BD%D0%B0%D0%BB%D1%96%D0%B7',label:'Вікіпедія: Диференціальний криптоаналіз'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/BF00630563',label:'Biham & Shamir (1991), J. Cryptology'}},
+    {tag:'wiki',en:{href:WK+'PRESENT_(cipher)',label:'PRESENT S-box'}}],
+  linear:[{tag:'wiki',en:{href:WK+'Linear_cryptanalysis',label:'Wikipedia: Linear cryptanalysis'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-48285-7_33',label:'Matsui (1993), EUROCRYPT'}},
+    {tag:'wiki',en:{href:WK+'Piling-up_lemma',label:"Piling-up lemma"}}],
+  mitm:[{tag:'wiki',en:{href:WK+'Meet-in-the-middle_attack',label:'Wikipedia: Meet-in-the-middle'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1109/C-M.1977.217750',label:'Diffie & Hellman (1977), exhaustive DES cryptanalysis'}},
+    {tag:'eprint',en:{href:'https://eprint.iacr.org/2011/449',label:'Biclique attack on full AES (2011)'}}],
+  slide:[{tag:'wiki',en:{href:WK+'Slide_attack',label:'Wikipedia: Slide attack'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-48519-8_18',label:'Biryukov & Wagner (1999), FSE'}}],
+  boomerang:[{tag:'wiki',en:{href:WK+'Boomerang_attack',label:'Wikipedia: Boomerang attack'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-48519-8_12',label:'Wagner (1999), the boomerang attack'}},
+    {tag:'eprint',en:{href:'https://eprint.iacr.org/2009/317',label:'Biryukov & Khovratovich — related-key AES-256'}}],
+  birthday:[{tag:'wiki',en:{href:WK+'Birthday_attack',label:'Wikipedia: Birthday attack'}},
+    {tag:'wiki',en:{href:WK+'Birthday_problem',label:'Birthday problem'}},
+    {tag:'paper',en:{href:'https://shattered.io/',label:'SHAttered — first SHA-1 collision'}}],
+  tmto:[{tag:'wiki',en:{href:WK+'Rainbow_table',label:'Wikipedia: Rainbow table'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1109/TIT.1980.1056220',label:'Hellman (1980), time-memory trade-off'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/978-3-540-45146-4_36',label:'Oechslin (2003), rainbow tables'}}],
+  lenext:[{tag:'wiki',en:{href:WK+'Length_extension_attack',label:'Wikipedia: Length-extension attack'}},
+    {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc2104',label:'RFC 2104 — HMAC'}},
+    {tag:'code',en:{href:'https://github.com/iagox86/hash_extender',label:'hash_extender (reference tool)'}}]
+};
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  selfTest(); drawDDT(); drawLAT(); drawMITM(); drawSlide(); drawBoom(); drawBirthday(); drawTMTO(); drawLenext();
+};
+
+/* controls */
+['ddtBox','ddtDx'].forEach(id=>document.getElementById(id).addEventListener('input',drawDDT));
+['latBox','latA'].forEach(id=>document.getElementById(id).addEventListener('input',drawLAT));
+document.getElementById('mmB').addEventListener('input',()=>{ document.getElementById('mmBV').textContent=document.getElementById('mmB').value; });
+document.getElementById('mmRun').addEventListener('click',drawMITM);
+document.getElementById('slR').addEventListener('input',()=>{ document.getElementById('slRV').textContent=document.getElementById('slR').value; });
+document.getElementById('slRun').addEventListener('click',drawSlide);
+['bmBox','bmU','bmL'].forEach(id=>document.getElementById(id).addEventListener('input',drawBoom));
+['bdN','bdK'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{ bdLast=null; drawBirthday(); }));
+document.getElementById('bdRun').addEventListener('click',()=>{ const n=+document.getElementById('bdN').value; const r=bdTrial(n); bdLast={n, k:r.k}; drawBirthday(); });
+['tmN','tmM','tmT'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{ ['tmN','tmM','tmT'].forEach(x=>document.getElementById(x+'V').textContent=document.getElementById(x).value); }));
+document.getElementById('tmRun').addEventListener('click',drawTMTO);
+['leSecret','leMsg','leExtra'].forEach(id=>document.getElementById(id).addEventListener('input',drawLenext));
+document.getElementById('leRun').addEventListener('click',drawLenext);
+</script>
+</body>
+</html>

@@ -28,8 +28,8 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
 a{color:var(--teal);text-decoration:none;}
 a:hover{text-decoration:underline;}
 
-.wrap{max-width:920px;margin:0 auto;padding:0 24px 120px;}
-.wrap-wide{max-width:1080px;margin:0 auto;padding:0 24px 120px;}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px 20px;}
+.wrap-wide{max-width:1080px;margin:0 auto;padding:0 24px 20px;}
 
 /* ---------------------------------------------------------------- header */
 .site-header{
@@ -222,7 +222,7 @@ footer{padding:48px 24px 0; color:var(--dim); font-size:13.5px; line-height:1.7;
 footer b{color:var(--ink);}
 
 /* ------------------------------------------------ catalog / menu page */
-.catalog{max-width:1080px; margin:0 auto; padding:8px 24px 120px;}
+.catalog{max-width:1080px; margin:0 auto; padding:8px 24px 20px;}
 .cat-section{margin-top:40px;}
 .cat-section > .num{display:block; margin-bottom:4px;}
 .cat-section h2{font-size:23px; margin:0 0 4px;}
@@ -263,6 +263,29 @@ footer b{color:var(--ink);}
 .cx.c2{background:var(--lvl2);}   /* moderate cost          */
 .cx.c3{background:var(--lvl3);}   /* resource-intensive     */
 h2 .cx{margin-left:2px;}
+
+/* ------------------------------------------------- status tags + refs */
+.st-tag{
+  display:inline-flex; align-items:center; height:17px; padding:0 6px;
+  border-radius:4px; font-family:'JetBrains Mono',monospace; font-size:9.5px;
+  font-weight:700; letter-spacing:.03em; text-transform:uppercase;
+  vertical-align:middle; white-space:nowrap; color:#0B1220;
+}
+.st-current{background:var(--teal);}
+.st-legacy{background:var(--amber);}
+.st-broken{background:var(--rose); color:#fff;}
+.st-pq{background:#B39DDB;}
+.ref-chip{
+  display:inline-flex; align-items:center; height:17px; padding:0 6px;
+  border-radius:4px; font-family:'JetBrains Mono',monospace; font-size:9.5px;
+  color:var(--dim); border:1px solid var(--line); background:var(--panel2);
+  vertical-align:middle; white-space:nowrap;
+}
+.algo-item .usedby{
+  font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--dim);
+  margin:6px 0 0;
+}
+.algo-item .usedby a{color:var(--teal);}
 
 /* ------------------------------------------------- external links */
 a.ext::after{content:"↗"; font-size:.85em; margin-left:4px; opacity:.75;}

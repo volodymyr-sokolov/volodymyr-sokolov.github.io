@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Field engineering — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="fieldeng">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 23 — the arithmetic engineering that makes crypto fast"
+         data-uk="Розділ 23 — арифметична інженерія, що робить криптографію швидкою">Section 23</div>
+    <h1 data-en="Field engineering" data-uk="Інженерія обчислень у полі">Field engineering</h1>
+    <div class="eq-hero">a·b·R⁻¹ mod N  ·  ĉ = INTT(NTT(â)∘NTT(b̂))  ·  #E = q + 1 − t</div>
+    <p class="lede" data-en="Once the field and the group are fixed, everything reduces to two questions: how do you multiply fast, and how do you reduce fast? These six algorithms — Montgomery and Barrett reduction, Karatsuba splitting, the number-theoretic transform, sliding-window exponentiation and Schoof's point counting — are the engineering layer that turns textbook formulas into working RSA, ECC and post-quantum code. Each is shown here with a live, self-checking computation."
+       data-uk="Щойно поле й групу зафіксовано, усе зводиться до двох питань: як швидко множити і як швидко зводити за модулем? Ці шість алгоритмів — зведення Монтгомері та Барретта, розбиття Карацуби, теоретико-числове перетворення, піднесення ковзним вікном і підрахунок точок Схоофа — це інженерний шар, що перетворює підручникові формули на робочий код RSA, ECC та постквантової криптографії. Кожен показано тут живим обчисленням із самоперевіркою.">The engineering layer that makes public-key cryptography fast.</p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ========== 8. Montgomery reduction ========== -->
+  <section id="montgomery">
+    <span class="num">23 / 8</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n²)</span>
+      <span data-en="Montgomery reduction" data-uk="Зведення Монтгомері">Montgomery reduction</span></h2>
+    <div class="formula">REDC(T) = (T + (T·N′ mod R)·N) / R  ≡  T·R⁻¹ (mod N),   N′ = −N⁻¹ mod R</div>
+    <p class="desc" data-en="Ordinary modular reduction needs a trial division by N; Montgomery replaces it with a division by <b>R = 2ᵏ</b>, which is a free bit-shift. Numbers are kept in <b>Montgomery form</b> ā = a·R mod N, and the REDC step turns a product ā·b̄ back into (a·b)·R mod N using only shifts, multiplies and one conditional subtraction. Over a long exponentiation the one-time conversions pay for themselves many times over."
+       data-uk="Звичайне зведення за модулем потребує пробного ділення на N; Монтгомері замінює його діленням на <b>R = 2ᵏ</b>, яке є безкоштовним зсувом бітів. Числа тримають у <b>формі Монтгомері</b> ā = a·R mod N, і крок REDC перетворює добуток ā·b̄ назад на (a·b)·R mod N лише зсувами, множеннями й одним умовним відніманням. За довгого піднесення до степеня разові перетворення окупаються багаторазово."></p>
+    <div id="refs-montgomery"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="mgCanvas" width="300" height="220"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>a</span><span class="val" id="mgAV">17</span></label>
+          <input type="range" id="mgA" min="0" max="200" value="17"></div>
+        <div class="ctrl"><label><span>b</span><span class="val" id="mgBV">23</span></label>
+          <input type="range" id="mgB" min="0" max="200" value="23"></div>
+        <div class="ctrl"><label><span data-en="N (odd modulus)" data-uk="N (непарний модуль)">N (odd)</span><span class="val" id="mgNV">97</span></label>
+          <input type="range" id="mgN" min="3" max="255" step="2" value="97"></div>
+        <div class="hint" data-en="R is the smallest power of two above N; the REDC output is self-checked against (a·b) mod N." data-uk="R — найменший степінь двійки над N; результат REDC самоперевіряється проти (a·b) mod N."></div>
+        <div class="readout" id="mgOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="Montgomery multiplication is the inner loop of almost every RSA and ECC implementation — OpenSSL, BoringSSL and mbedTLS all keep big integers in Montgomery form during modular exponentiation and scalar multiplication. Because the conditional subtraction can leak timing, hardened code uses the constant-time <b>Montgomery ladder</b> and always-subtract variants." data-uk="Множення Монтгомері — це внутрішній цикл майже кожної реалізації RSA та ECC — OpenSSL, BoringSSL і mbedTLS тримають великі числа у формі Монтгомері під час модульного піднесення до степеня та скалярного множення. Оскільки умовне віднімання може виказувати час, захищений код використовує сталочасову <b>драбину Монтгомері</b> та варіанти з безумовним відніманням."></span></div>
+    <div class="xrefs"><a href="arithmetic.html#gffield" data-en="GF(p) arithmetic" data-uk="Арифметика GF(p)">GF(p) arithmetic</a> <a href="asymmetric.html#rsa">RSA</a> <a href="fieldeng.html#barrett" data-en="Barrett reduction" data-uk="Зведення Барретта">Barrett</a></div>
+  </section>
+
+  <!-- ========== 9. Barrett reduction ========== -->
+  <section id="barrett">
+    <span class="num">23 / 9</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n²)</span>
+      <span data-en="Barrett reduction" data-uk="Зведення Барретта">Barrett reduction</span></h2>
+    <div class="formula">μ = ⌊2²ᵏ / N⌋;   q = ⌊(⌊x / 2ᵏ⁻¹⌋ · μ) / 2ᵏ⁺¹⌋;   r = x − q·N   (then subtract N ≤ 2×)</div>
+    <p class="desc" data-en="Barrett reduces x mod N with <b>no division at all</b> at run time: it precomputes a single reciprocal μ ≈ 2²ᵏ / N, then estimates the quotient q with two multiplications and two shifts. The estimate is off by at most one, so at most two corrective subtractions finish the job. Unlike Montgomery it needs no change of representation, which is why it dominates lattice PQC where inputs arrive in ordinary form."
+       data-uk="Барретт зводить x mod N <b>зовсім без ділення</b> під час виконання: він заздалегідь обчислює одну обернену величину μ ≈ 2²ᵏ / N, а тоді оцінює частку q двома множеннями й двома зсувами. Оцінка помиляється щонайбільше на одиницю, тож щонайбільше два коригувальні віднімання завершують справу. На відміну від Монтгомері, не потрібна зміна подання, тому він домінує в решітковій PQC, де входи надходять у звичайній формі."></p>
+    <div id="refs-barrett"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="brCanvas" width="300" height="160"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>x</span><span class="val" id="brXV">5000</span></label>
+          <input type="range" id="brX" min="0" max="16000" value="5000"></div>
+        <div class="ctrl"><label><span>N</span><span class="val" id="brNV">127</span></label>
+          <input type="range" id="brN" min="3" max="255" value="127"></div>
+        <div class="hint" data-en="q is the quotient estimate; r is corrected to lie in [0, N) and checked against x mod N." data-uk="q — оцінка частки; r коригується до [0, N) і звіряється з x mod N."></div>
+        <div class="readout" id="brOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="Barrett is the reduction of choice inside Kyber and Dilithium, where every coefficient is reduced mod q = 3329 (Kyber) or 8380417 (Dilithium) after each multiply. Reference implementations (PQClean, liboqs) use a signed Barrett with fixed shifts so the whole reduction is branch-free and constant-time." data-uk="Барретт — це зведення за замовчуванням усередині Kyber і Dilithium, де кожен коефіцієнт зводиться за модулем q = 3329 (Kyber) або 8380417 (Dilithium) після кожного множення. Еталонні реалізації (PQClean, liboqs) використовують знаковий Барретт зі сталими зсувами, тож усе зведення безгалузеве й сталочасове."></span></div>
+    <div class="xrefs"><a href="arithmetic.html#gffield" data-en="GF(p) arithmetic" data-uk="Арифметика GF(p)">GF(p) arithmetic</a> <a href="asymmetric.html#rsa">RSA</a> <a href="fieldeng.html#ntt">NTT</a></div>
+  </section>
+
+  <!-- ========== 10. Karatsuba / Toom-Cook ========== -->
+  <section id="karatsuba">
+    <span class="num">23 / 10</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n^1.58)</span>
+      <span data-en="Karatsuba / Toom-Cook multiplication" data-uk="Множення Карацуби / Тоома-Кука">Karatsuba / Toom-Cook</span></h2>
+    <div class="formula">x·y = z₂·B² + z₁·B + z₀,   z₂ = xₕyₕ,  z₀ = xₗyₗ,  z₁ = (xₕ+xₗ)(yₕ+yₗ) − z₂ − z₀</div>
+    <p class="desc" data-en="Schoolbook multiplication of two n-digit numbers costs n² digit products. Karatsuba splits each operand into a high and low half and observes that <b>three</b> half-size products — not four — suffice, because the cross term is recovered by subtraction. Recursing gives O(n<sup>1.58</sup>). <b>Toom-Cook</b> generalises the split into k parts for even lower exponents; both hand off to FFT/NTT once the operands are huge."
+       data-uk="Підручникове множення двох n-цифрових чисел коштує n² цифрових добутків. Карацуба ділить кожен операнд на старшу й молодшу половини й помічає, що досить <b>трьох</b> половинних добутків, а не чотирьох, бо перехресний член відновлюється відніманням. Рекурсія дає O(n<sup>1.58</sup>). <b>Тоом-Кук</b> узагальнює поділ на k частин задля ще нижчих показників; обидва передають естафету FFT/NTT, щойно операнди стають величезними."></p>
+    <div id="refs-karatsuba"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="kaCanvas" width="300" height="220"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>x</span><span class="val" id="kaXV">1234</span></label>
+          <input type="range" id="kaX" min="0" max="9999" value="1234"></div>
+        <div class="ctrl"><label><span>y</span><span class="val" id="kaYV">5678</span></label>
+          <input type="range" id="kaY" min="0" max="9999" value="5678"></div>
+        <div class="hint" data-en="The readout is the live recursion tree; the final product is checked against x·y." data-uk="Вивід — це живе дерево рекурсії; кінцевий добуток звіряється з x·y."></div>
+        <div class="readout" id="kaOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="Every big-integer library that RSA and Diffie–Hellman depend on — GMP, OpenSSL's BN, Go's math/big — switches from schoolbook to Karatsuba (then Toom-Cook, then FFT) as operands cross size thresholds. The crossover point is a real security-relevant tuning parameter: it decides how fast a 4096-bit modular exponentiation runs." data-uk="Кожна бібліотека великих чисел, від якої залежать RSA і Діффі–Хеллман — GMP, BN в OpenSSL, math/big у Go — перемикається з підручникового на Карацубу (далі Тоом-Кук, далі FFT), коли операнди перетинають порогові розміри. Точка перемикання — це реальний параметр налаштування, дотичний до стійкості: він вирішує, наскільки швидко виконується 4096-бітне модульне піднесення до степеня."></span></div>
+    <div class="xrefs"><a href="fieldeng.html#ntt">NTT</a> <a href="arithmetic.html#gfpoly" data-en="Polynomials over GF(pᵏ)" data-uk="Многочлени над GF(pᵏ)">Polynomials</a> <a href="asymmetric.html#rsa">RSA</a></div>
+  </section>
+
+  <!-- ========== 11. NTT (FLAGSHIP) ========== -->
+  <section id="ntt">
+    <span class="num">23 / 11</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(n log n)</span>
+      <span data-en="Number-theoretic transform (NTT)" data-uk="Теоретико-числове перетворення (NTT)">Number-theoretic transform</span></h2>
+    <div class="formula">Âₖ = Σⱼ aⱼ·ωʲᵏ mod p;   a∗b mod (xⁿ+1):  twist by ψ → NTT → pointwise × → INTT → untwist</div>
+    <p class="desc" data-en="The NTT is the discrete Fourier transform carried out in a finite field GF(p): the complex root of unity is replaced by an integer <b>ω</b> of order n. It turns the convolution needed to multiply two polynomials into cheap <b>pointwise multiplication</b>, dropping n² coefficient products to O(n log n). Kyber and Dilithium multiply polynomials mod xⁿ+1 (negacyclic), so before the transform each coefficient is twisted by ψⁱ, where ψ is a primitive 2n-th root with ψⁿ ≡ −1; after the inverse transform it is untwisted by ψ⁻ⁱ. The demo below performs a real negacyclic multiply over p = 7681 and <b>self-tests</b> it against a schoolbook convolution."
+       data-uk="NTT — це дискретне перетворення Фур'є, виконане у скінченному полі GF(p): комплексний корінь з одиниці замінено цілим <b>ω</b> порядку n. Воно перетворює згортку, потрібну для множення двох многочленів, на дешеве <b>поточкове множення</b>, знижуючи n² добутків коефіцієнтів до O(n log n). Kyber і Dilithium множать многочлени за модулем xⁿ+1 (негациклічно), тож перед перетворенням кожен коефіцієнт домножують на ψⁱ, де ψ — первісний корінь 2n-го степеня з ψⁿ ≡ −1; після оберненого перетворення його розкручують назад через ψ⁻ⁱ. Демонстрація нижче виконує справжнє негациклічне множення над p = 7681 і <b>самоперевіряє</b> його проти підручникової згортки."></p>
+    <div id="refs-ntt"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="nttCanvas" width="300" height="240"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>a = [a₀,a₁,a₂,a₃]</span></label></div>
+        <div class="ctrl"><label><span>a₀</span><span class="val" id="na0V">1</span></label><input type="range" id="na0" min="0" max="12" value="1"></div>
+        <div class="ctrl"><label><span>a₁</span><span class="val" id="na1V">2</span></label><input type="range" id="na1" min="0" max="12" value="2"></div>
+        <div class="ctrl"><label><span>a₂</span><span class="val" id="na2V">3</span></label><input type="range" id="na2" min="0" max="12" value="3"></div>
+        <div class="ctrl"><label><span>a₃</span><span class="val" id="na3V">4</span></label><input type="range" id="na3" min="0" max="12" value="4"></div>
+        <div class="ctrl"><label><span>b₀</span><span class="val" id="nb0V">5</span></label><input type="range" id="nb0" min="0" max="12" value="5"></div>
+        <div class="ctrl"><label><span>b₁</span><span class="val" id="nb1V">6</span></label><input type="range" id="nb1" min="0" max="12" value="6"></div>
+        <div class="ctrl"><label><span>b₂</span><span class="val" id="nb2V">7</span></label><input type="range" id="nb2" min="0" max="12" value="7"></div>
+        <div class="ctrl"><label><span>b₃</span><span class="val" id="nb3V">8</span></label><input type="range" id="nb3" min="0" max="12" value="8"></div>
+        <div class="readout" id="nttOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="The NTT is the single biggest reason ML-KEM (Kyber) and ML-DSA (Dilithium) are fast enough to ship: their moduli q = 3329 and 8380417 are chosen precisely for fast NTTs. Dilithium (q = 8380417) has a primitive 512th root, so a full 256-point negacyclic NTT with a ψ-twist works exactly as in this demo; Kyber (q = 3329) has only a 256th root, so it uses an <b>incomplete</b> NTT that stops at 128 degree-2 factors. Public keys are even transmitted already in the NTT domain. The same transform powers Falcon, NTRU and FHE schemes; a bug in the twiddle factors silently corrupts every ciphertext, so implementations ship known-answer tests." data-uk="NTT — найголовніша причина, чому ML-KEM (Kyber) та ML-DSA (Dilithium) достатньо швидкі для впровадження: їхні модулі q = 3329 і 8380417 обрано саме заради швидких NTT. Dilithium (q = 8380417) має первісний корінь 512-го степеня, тож повне 256-точкове негациклічне NTT з ψ-крутінням працює точно як у цьому демо; Kyber (q = 3329) має лише корінь 256-го степеня, тож використовує <b>неповне</b> NTT, що зупиняється на 128 множниках степеня 2. Відкриті ключі навіть передають уже в NTT-домені. Те саме перетворення живить Falcon, NTRU та схеми FHE; помилка у twiddle-множниках тихо псує кожен шифротекст, тож реалізації постачають тести відомих відповідей."></span></div>
+    <div class="xrefs"><a href="asymmetric.html#pqc" data-en="Post-quantum" data-uk="Постквантові">Post-quantum</a> <a href="signatures.html#dilithium">Dilithium</a> <a href="arithmetic.html#gfpoly" data-en="Polynomials over GF(pᵏ)" data-uk="Многочлени над GF(pᵏ)">Polynomials</a></div>
+  </section>
+
+  <!-- ========== 12. Sliding-window exponentiation ========== -->
+  <section id="slidingwindow">
+    <span class="num">23 / 12</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n³)</span>
+      <span data-en="Sliding-window exponentiation" data-uk="Піднесення ковзним вікном">Sliding-window exponentiation</span></h2>
+    <div class="formula">gᵉ mod N:  precompute {g¹, g³, …, g^(2ʷ−1)},  scan e in windows of ≤ w bits</div>
+    <p class="desc" data-en="Left-to-right binary exponentiation squares once per bit and multiplies once per set bit — about 1.5n operations for an n-bit exponent. <b>Sliding windows</b> pre-compute a small table of odd powers of g, then consume several exponent bits per multiply, cutting the number of multiplications while keeping the squarings. The bigger the window w, the smaller the multiply count, at the cost of a larger table. The readout counts real squarings and multiplications and checks the result against a direct power."
+       data-uk="Двійкове піднесення зліва направо підносить до квадрата раз на біт і множить раз на одиничний біт — близько 1.5n операцій для n-бітного показника. <b>Ковзні вікна</b> заздалегідь обчислюють невелику таблицю непарних степенів g, а тоді споживають кілька біт показника за одне множення, зменшуючи кількість множень і зберігаючи піднесення до квадрата. Що більше вікно w, то менше множень ціною більшої таблиці. Вивід рахує справжні піднесення до квадрата й множення та звіряє результат із прямим степенем."></p>
+    <div id="refs-slidingwindow"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="swCanvas" width="300" height="160"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>g</span><span class="val" id="swGV">7</span></label>
+          <input type="range" id="swG" min="2" max="50" value="7"></div>
+        <div class="ctrl"><label><span>e</span><span class="val" id="swEV">173</span></label>
+          <input type="range" id="swE" min="1" max="255" value="173"></div>
+        <div class="ctrl"><label><span>N</span><span class="val" id="swNV">1000</span></label>
+          <input type="range" id="swN" min="3" max="4096" value="1000"></div>
+        <div class="ctrl"><label><span data-en="window w" data-uk="вікно w">window w</span><span class="val" id="swWV">3</span></label>
+          <input type="range" id="swW" min="1" max="5" value="3"></div>
+        <div class="readout" id="swOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="Every RSA signature/decryption and every classical Diffie–Hellman is a modular exponentiation, and sliding windows (typically w = 4–6) are the standard speed-up in OpenSSL and libgcrypt. But a data-dependent window schedule leaks the exponent through cache and branch timing — the basis of the <b>Flush+Reload</b> and <b>Sliding-right</b> attacks on RSA — so signing code now uses fixed-window, constant-time ladders." data-uk="Кожен підпис/розшифрування RSA і кожен класичний Діффі–Хеллман — це модульне піднесення до степеня, і ковзні вікна (зазвичай w = 4–6) — стандартне пришвидшення в OpenSSL і libgcrypt. Але залежний від даних розклад вікон виказує показник через час кешу й галужень — основа атак <b>Flush+Reload</b> та <b>Sliding-right</b> на RSA — тож код підписування тепер використовує сталочасові драбини зі сталим вікном."></span></div>
+    <div class="xrefs"><a href="asymmetric.html#rsa">RSA</a> <a href="keyexchange.html#dh">Diffie–Hellman</a> <a href="arithmetic.html#gffield" data-en="GF(p) arithmetic" data-uk="Арифметика GF(p)">GF(p)</a></div>
+  </section>
+
+  <!-- ========== 13. Schoof / SEA point counting ========== -->
+  <section id="schoof">
+    <span class="num">23 / 13</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(log⁵q)</span>
+      <span data-en="Schoof / SEA point counting" data-uk="Підрахунок точок Схоофа / SEA">Schoof / SEA point counting</span></h2>
+    <div class="formula">#E(𝔽q) = q + 1 − t,   |t| ≤ 2√q (Hasse);   Schoof: find t mod ℓ for small primes ℓ, then CRT</div>
+    <p class="desc" data-en="A secure elliptic curve needs its group order #E known and (nearly) prime — but the order can be astronomically large, so you cannot count points one by one. <b>Schoof's</b> insight: the Frobenius map φ satisfies φ² − t·φ + q = 0, and you can compute the trace <b>t mod ℓ</b> for many small primes ℓ by working in the ℓ-torsion, then reassemble t by the Chinese Remainder Theorem. Since |t| ≤ 2√q, enough small primes pin t exactly. <b>SEA</b> (Schoof–Elkies–Atkin) accelerates this to make 256-bit curves practical. The demo counts a small curve directly, then <b>illustrates</b> the CRT reassembly of t."
+       data-uk="Стійкій еліптичній кривій потрібен відомий і (майже) простий порядок групи #E — але порядок може бути астрономічно великим, тож не можна лічити точки поодинці. Ідея <b>Схоофа</b>: відображення Фробеніуса φ задовольняє φ² − t·φ + q = 0, і можна обчислити слід <b>t mod ℓ</b> для багатьох малих простих ℓ, працюючи в ℓ-крутінні, а тоді зібрати t китайською теоремою про лишки. Оскільки |t| ≤ 2√q, достатньої кількості малих простих досить, щоб точно визначити t. <b>SEA</b> (Схооф–Елкіс–Аткін) пришвидшує це, роблячи практичними 256-бітні криві. Демонстрація рахує малу криву напряму, а тоді <b>ілюструє</b> збирання t за КТЛ."></p>
+    <div id="refs-schoof"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="scCanvas" width="300" height="300"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>p</span></label>
+          <select id="scP"><option>23</option><option selected>31</option><option>47</option></select></div>
+        <div class="ctrl"><label><span>a</span><span class="val" id="scAV">2</span></label>
+          <input type="range" id="scA" min="0" max="46" value="2"></div>
+        <div class="ctrl"><label><span>b</span><span class="val" id="scBV">3</span></label>
+          <input type="range" id="scB" min="0" max="46" value="3"></div>
+        <div class="hint" data-en="Dots are the affine points of y² = x³ + ax + b over 𝔽p; the group also has the point at infinity." data-uk="Крапки — це афінні точки y² = x³ + ax + b над 𝔽p; група також має точку на нескінченності."></div>
+        <div class="readout" id="scOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="Point counting is how secure curves are <b>built</b> and validated: NIST P-256, Curve25519, the Brainpool curves and Ukraine's DSTU 4145 curves all had their group orders computed with Schoof–Elkies–Atkin, then checked to be prime (or prime × small cofactor) so that the ECDLP has no small-subgroup shortcut. A curve whose order factors into small primes would be fatally weak under Pohlig–Hellman — counting is what rules that out." data-uk="Підрахунок точок — це те, як <b>будують</b> і перевіряють стійкі криві: NIST P-256, Curve25519, криві Brainpool та криві ДСТУ 4145 України мали свої порядки груп обчислені алгоритмом Схооф–Елкіс–Аткін, а тоді перевірені на простоту (або простий × малий кофактор), щоб ECDLP не мав скорочення через малу підгрупу. Крива, порядок якої розкладається на малі прості, була б фатально слабкою за Похліга–Хеллмана — саме підрахунок це виключає."></span></div>
+    <div class="xrefs"><a href="arithmetic.html#ecgroup" data-en="EC group law" data-uk="Груповий закон EC">EC group law</a> <a href="standards.html#dstu4145">DSTU 4145</a> <a href="arithmetic.html#crt">CRT</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740',purple:'#B39DDB'};
+const $=id=>document.getElementById(id);
+
+/* ============ generic BigInt modular helpers ============ */
+function bmod(a,m){ a%=m; return a<0n?a+m:a; }
+function bpow(b,e,m){ b=bmod(b,m); let r=1n; while(e>0n){ if(e&1n) r=r*b%m; b=b*b%m; e>>=1n; } return r; }
+function bmodinv(a,m){ // extended Euclid, returns a^{-1} mod m or null
+  let [old_r,r]=[bmod(a,m),m], [old_s,s]=[1n,0n];
+  while(r){ const q=old_r/r; [old_r,r]=[r,old_r-q*r]; [old_s,s]=[s,old_s-q*s]; }
+  return old_r===1n ? bmod(old_s,m) : null;
+}
+
+/* ================= 8. Montgomery REDC ================= */
+function drawMont(){
+  const a=BigInt(+$('mgA').value), b=BigInt(+$('mgB').value);
+  let N=BigInt(+$('mgN').value); if(N%2n===0n) N+=1n;   // keep N odd
+  $('mgAV').textContent=a; $('mgBV').textContent=b; $('mgNV').textContent=N;
+  // clamp a,b < N for a legible worked example
+  const aa=a%N, bb=b%N;
+  const Rbits=BigInt(N.toString(2).length), R=1n<<Rbits;
+  const Ninv=bmodinv(N,R);                    // exists because N is odd
+  const Nprime=bmod(-Ninv,R);
+  function redc(T){ const m=bmod((T%R)*Nprime,R); let t=(T+m*N)/R; if(t>=N) t-=N; return {m,t}; }
+  const aR=bmod(aa*R,N), bR=bmod(bb*R,N);     // Montgomery forms
+  const T=aR*bR;
+  const step=redc(T);                          // = a*b*R mod N (Montgomery form of product)
+  const back=redc(step.t);                     // = a*b mod N
+  const truth=bmod(aa*bb,N);
+  const ok=(back.t===truth);
+  // canvas: number line 0..N showing a, b, a*b mod N
+  const cv=$('mgCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const NN=Number(N), pad=16, y0=H-40, sc=(W-2*pad)/NN;
+  g.strokeStyle=C.line; g.beginPath(); g.moveTo(pad,y0); g.lineTo(W-pad,y0); g.stroke();
+  const uk=window.LANG==='uk';
+  const tick=(v,col,lbl)=>{ const x=pad+Number(v)*sc; g.strokeStyle=col; g.beginPath(); g.moveTo(x,y0-10); g.lineTo(x,y0+10); g.stroke();
+    g.fillStyle=col; g.font='10px monospace'; g.textAlign='center'; g.fillText(lbl,x,y0+24); };
+  // bars for Montgomery forms vs plain
+  g.fillStyle=C.dim; g.font='10px monospace'; g.textAlign='left';
+  g.fillText('0',pad-3,y0+24); g.fillText(NN+'',W-pad-8,y0+24);
+  tick(aa,C.teal,'a'); tick(bb,C.teal,'b'); tick(truth,C.amber,'ab');
+  g.fillStyle=C.ink; g.font='11px monospace'; g.textAlign='left';
+  g.fillText((uk?'форма Монтгомері':'Montgomery form'),pad,26);
+  g.fillStyle=C.teal; g.fillText('āR='+aR,pad,44); g.fillStyle=C.rose; g.fillText('b̄R='+bR,pad,60);
+  $('mgOut').innerHTML=
+    '<span class="k">N =</span> '+N+'   <span class="k">R = 2^'+Rbits+' =</span> '+R+'   <span class="k">N′ =</span> '+Nprime+'\n'+
+    '<span class="k">ā = aR mod N =</span> '+aR+'   <span class="k">b̄ =</span> '+bR+'\n'+
+    '<span class="k">T = ā·b̄ =</span> '+T+'   <span class="k">m =</span> '+step.m+'\n'+
+    '<span class="k">REDC(T) = (T+mN)/R =</span> <span class="s">'+step.t+'</span>  (= abR mod N)\n'+
+    '<span class="k">REDC again =</span> <span class="a">'+back.t+'</span>   <span class="k">'+(uk?'звірка':'check')+' (a·b) mod N =</span> '+truth+
+    (ok?' <span class="a">✓</span>':' <span class="b">✗</span>');
+}
+
+/* ================= 9. Barrett reduction ================= */
+function drawBarrett(){
+  const x=BigInt(+$('brX').value), N=BigInt(+$('brN').value);
+  $('brXV').textContent=x; $('brNV').textContent=N;
+  const k=BigInt(N.toString(2).length);
+  const mu=(1n<<(2n*k))/N;                      // ⌊2^{2k}/N⌋
+  const q=((x>>(k-1n))*mu)>>(k+1n);             // quotient estimate
+  let r=x-q*N, subs=0;
+  while(r>=N){ r-=N; subs++; }
+  const truth=x%N, ok=(r===truth);
+  const cv=$('brCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  // draw x as stacked multiples of N, remainder highlighted
+  const NN=Number(N), xx=Number(x), qn=Number(q);
+  const pad=14, y0=H-24, barW=W-2*pad, sc=barW/Math.max(xx,1);
+  g.fillStyle=C.grid; g.fillRect(pad,40,barW,26);
+  for(let i=1;i<=qn && i*NN<=xx;i++){ const px=pad+i*NN*sc; g.strokeStyle=C.line; g.beginPath(); g.moveTo(px,40); g.lineTo(px,66); g.stroke(); }
+  g.fillStyle=C.amber; g.fillRect(pad+qn*NN*sc,40,Math.max(2,Number(r)*sc),26);   // remainder
+  const uk=window.LANG==='uk';
+  g.fillStyle=C.ink; g.font='10px monospace'; g.textAlign='left';
+  g.fillText('x = q·N + r   ('+(uk?'q блоків по N':'q blocks of N')+', r '+(uk?'жовтий':'amber')+')',pad,26);
+  $('brOut').innerHTML=
+    '<span class="k">k = bits(N) =</span> '+k+'   <span class="k">μ = ⌊2^'+(2n*k)+'/N⌋ =</span> '+mu+'\n'+
+    '<span class="k">q = ⌊(⌊x/2^'+(k-1n)+'⌋·μ)/2^'+(k+1n)+'⌋ =</span> <span class="s">'+q+'</span>   ('+(uk?'корекцій':'corrections')+': '+subs+')\n'+
+    '<span class="k">r = x − q·N =</span> <span class="a">'+r+'</span>   <span class="k">'+(uk?'звірка':'check')+' x mod N =</span> '+truth+
+    (ok?' <span class="a">✓</span>':' <span class="b">✗</span>');
+}
+
+/* ================= 10. Karatsuba ================= */
+function karat(x,y,depth,log){
+  const pad='  '.repeat(depth);
+  if(x<10||y<10){ log.push(pad+x+'×'+y+' = '+(x*y)+(depth>0?'  ('+(window.LANG==='uk'?'база':'base')+')':'')); return x*y; }
+  const m=Math.max((''+x).length,(''+y).length), h=Math.floor(m/2), B=Math.pow(10,h);
+  const xh=Math.floor(x/B), xl=x%B, yh=Math.floor(y/B), yl=y%B;
+  log.push(pad+x+'×'+y+':  split @10^'+h+'  → ('+xh+','+xl+') ('+yh+','+yl+')');
+  const z2=karat(xh,yh,depth+1,log);
+  const z0=karat(xl,yl,depth+1,log);
+  const z1=karat(xh+xl,yh+yl,depth+1,log)-z2-z0;
+  const res=z2*B*B+z1*B+z0;
+  log.push(pad+'z₂='+z2+' z₁='+z1+' z₀='+z0+' → '+res);
+  return res;
+}
+function drawKarat(){
+  const x=+$('kaX').value, y=+$('kaY').value; $('kaXV').textContent=x; $('kaYV').textContent=y;
+  const log=[]; const res=karat(x,y,0,log); const ok=(res===x*y);
+  const uk=window.LANG==='uk';
+  // canvas: schoolbook n^2 grid vs karatsuba 3-call illustration
+  const cv=$('kaCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const nx=(''+x).length, ny=(''+y).length, cell=Math.min(28,(W-40)/Math.max(nx,ny,1));
+  g.fillStyle=C.dim; g.font='10px monospace'; g.textAlign='left';
+  g.fillText((uk?'підручник: '+nx+'×'+ny+'='+(nx*ny)+' добутків':'schoolbook: '+nx+'×'+ny+'='+(nx*ny)+' products'),12,18);
+  for(let i=0;i<ny;i++)for(let j=0;j<nx;j++){ g.fillStyle=C.grid; g.fillRect(12+j*cell,28+i*cell,cell-2,cell-2); }
+  g.fillStyle=C.teal; g.textAlign='left';
+  g.fillText((uk?'Карацуба: 3 напів-добутки z₂,z₁,z₀':'Karatsuba: 3 half-products z₂,z₁,z₀'),12,H-58);
+  ['z₂','z₁','z₀'].forEach((z,i)=>{ g.fillStyle=[C.teal,C.amber,C.rose][i]; g.fillRect(12+i*70,H-48,60,24); g.fillStyle=C.panel; g.font='11px monospace'; g.textAlign='center'; g.fillText(z,12+i*70+30,H-32); });
+  $('kaOut').innerHTML='<span class="k">'+(uk?'рекурсія':'recursion')+':</span>\n'+log.map(l=>l.replace(/→ (\d+)/,'→ <span class="s">$1</span>')).join('\n')+
+    '\n<span class="k">x·y =</span> <span class="a">'+res+'</span>   <span class="k">'+(uk?'звірка':'check')+':</span> '+(x*y)+(ok?' <span class="a">✓</span>':' <span class="b">✗</span>');
+}
+
+/* ================= 11. NTT (real negacyclic multiply) ================= */
+const NP=7681, NN=4;
+const npmod=v=>{ v%=NP; return v<0?v+NP:v; };
+function nmpow(b,e){ b=npmod(b); let r=1; while(e>0){ if(e&1) r=r*b%NP; b=b*b%NP; e>>=1; } return r; }
+const nminv=a=>nmpow(a,NP-2);                    // Fermat inverse (NP prime)
+function findPsi(){ for(let c=2;c<NP;c++){ if(nmpow(c,NN)===NP-1) return c; } return -1; } // ψ^n ≡ −1 ⇒ order 2n
+const PSI=findPsi(), OMEGA=npmod(PSI*PSI);        // ω = ψ² has order n
+function ntt(a,root){ const A=[]; for(let k=0;k<NN;k++){ let s=0; for(let j=0;j<NN;j++) s=(s+a[j]*nmpow(root,(j*k)%NN))%NP; A.push(s); } return A; }
+function intt(A,root){ const inv=nminv(root), nInv=nminv(NN); const a=[]; for(let j=0;j<NN;j++){ let s=0; for(let k=0;k<NN;k++) s=(s+A[k]*nmpow(inv,(j*k)%NN))%NP; a.push(s*nInv%NP); } return a; }
+function negamul(a,b){
+  const ip=nminv(PSI); const pp=[],pi=[]; for(let i=0;i<NN;i++){ pp.push(nmpow(PSI,i)); pi.push(nmpow(ip,i)); }
+  const ah=a.map((v,i)=>npmod(v*pp[i])), bh=b.map((v,i)=>npmod(v*pp[i]));
+  const A=ntt(ah,OMEGA), B=ntt(bh,OMEGA);
+  const Cp=A.map((v,i)=>npmod(v*B[i]));
+  const ch=intt(Cp,OMEGA);
+  const c=ch.map((v,i)=>npmod(v*pi[i]));
+  return {ah,bh,A,B,Cp,c};
+}
+function schoolbookNega(a,b){                     // (a·b) mod (x^n+1), reference
+  const f=new Array(2*NN-1).fill(0);
+  for(let i=0;i<NN;i++)for(let j=0;j<NN;j++) f[i+j]=(f[i+j]+a[i]*b[j])%NP;
+  const c=new Array(NN).fill(0);
+  for(let i=0;i<NN;i++){ c[i]=f[i]; if(i+NN<f.length) c[i]=npmod(c[i]-f[i+NN]); }
+  return c;
+}
+function eqArr(u,v){ if(u.length!==v.length) return false; for(let i=0;i<u.length;i++) if(npmod(u[i])!==npmod(v[i])) return false; return true; }
+function drawNTT(){
+  const a=[+$('na0').value,+$('na1').value,+$('na2').value,+$('na3').value];
+  const b=[+$('nb0').value,+$('nb1').value,+$('nb2').value,+$('nb3').value];
+  [0,1,2,3].forEach(i=>{ $('na'+i+'V').textContent=a[i]; $('nb'+i+'V').textContent=b[i]; });
+  const R=negamul(a,b);
+  const ref=schoolbookNega(a,b);
+  const test1=eqArr(R.c,ref);                     // NTT-mult == schoolbook
+  const idA=intt(ntt(a,OMEGA),OMEGA);
+  const test2=eqArr(idA,a);                        // INTT(NTT(a)) == a
+  const uk=window.LANG==='uk';
+  // canvas: bar charts of a, b, and product c (coefficients)
+  const cv=$('nttCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const rows=[['a',a,C.teal],['b',b,C.rose],['c = a∗b',R.c,C.amber]];
+  const rowH=H/3, maxc=Math.max(1,...a,...b), maxp=Math.max(1,...R.c);
+  rows.forEach((row,ri)=>{
+    const [lbl,arr,col]=row; const y=ri*rowH, mx=(ri===2?maxp:maxc);
+    g.fillStyle=C.dim; g.font='10px monospace'; g.textAlign='left'; g.fillText(lbl,8,y+14);
+    const bw=(W-70)/NN;
+    arr.forEach((v,i)=>{ const hh=(Number(v)/mx)*(rowH-30); g.fillStyle=col;
+      g.fillRect(64+i*bw+4,y+rowH-8-hh,bw-8,hh);
+      g.fillStyle=C.ink; g.font='9px monospace'; g.textAlign='center'; g.fillText(v,64+i*bw+bw/2,y+rowH-2); });
+  });
+  $('nttOut').innerHTML=
+    '<span class="k">p =</span> '+NP+'  <span class="k">n =</span> '+NN+'  <span class="k">ψ =</span> '+PSI+'  <span class="k">ω = ψ² =</span> '+OMEGA+'  ('+(uk?'ψⁿ ≡ −1':'ψⁿ ≡ −1')+')\n'+
+    '<span class="k">â (twist) =</span> ['+R.ah.join(', ')+']\n'+
+    '<span class="k">NTT(â) =</span> ['+R.A.join(', ')+']\n'+
+    '<span class="k">NTT(b̂) =</span> ['+R.B.join(', ')+']\n'+
+    '<span class="k">Â∘B̂ =</span> ['+R.Cp.join(', ')+']\n'+
+    '<span class="k">c = untwist·INTT =</span> <span class="a">['+R.c.join(', ')+']</span>\n'+
+    '<span class="k">'+(uk?'підручникова згортка':'schoolbook conv')+' =</span> ['+ref.join(', ')+']\n'+
+    '<span class="k">'+(uk?'самоперевірка':'self-test')+' 1  NTT-mult == '+(uk?'підручник':'schoolbook')+':</span> '+(test1?'<span class="a">✓</span>':'<span class="b">✗</span>')+
+    '   <span class="k">2  INTT∘NTT == id:</span> '+(test2?'<span class="a">✓</span>':'<span class="b">✗</span>');
+}
+
+/* ================= 12. Sliding-window exponentiation ================= */
+function slideWindow(g,e,N,w){
+  // precompute odd powers g^1,g^3,...,g^(2^w-1)
+  const gg=BigInt(g), NN2=BigInt(N);
+  const g2=bmod(gg*gg,NN2); const odd={1:bmod(gg,NN2)};
+  for(let i=3;i<(1<<w);i+=2) odd[i]=bmod(odd[i-2]*g2,NN2);
+  const bits=e.toString(2); let sq=0,mul=0,res=1n,i=0,steps=[];
+  while(i<bits.length){
+    if(bits[i]==='0'){ res=bmod(res*res,NN2); sq++; i++; }
+    else{
+      // longest window of ≤ w bits ending in a 1
+      let j=Math.min(i+w-1,bits.length-1); while(bits[j]==='0') j--;
+      const chunk=bits.substring(i,j+1), val=parseInt(chunk,2), len=j-i+1;
+      for(let s=0;s<len;s++){ res=bmod(res*res,NN2); sq++; }
+      res=bmod(res*odd[val],NN2); mul++;
+      steps.push((window.LANG==='uk'?'вікно ':'window ')+chunk+' (='+val+')');
+      i=j+1;
+    }
+  }
+  return {res,sq,mul,odd,steps,tableSize:Object.keys(odd).length};
+}
+function drawSlide(){
+  const g=+$('swG').value, e=+$('swE').value, N=+$('swN').value, w=+$('swW').value;
+  $('swGV').textContent=g; $('swEV').textContent=e; $('swNV').textContent=N; $('swWV').textContent=w;
+  const r=slideWindow(g,e,N,w);
+  const truth=bpow(BigInt(g),BigInt(e),BigInt(N)); const ok=(r.res===truth);
+  // binary square-and-multiply cost for comparison
+  const bits=e.toString(2); const binSq=bits.length-1, binMul=(bits.split('1').length-1)-1;
+  const uk=window.LANG==='uk';
+  const cv=$('swCanvas'),gx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  gx.fillStyle=C.panel; gx.fillRect(0,0,W,H);
+  // draw exponent bits with window groupings
+  const bw=Math.min(26,(W-20)/bits.length), y=54;
+  gx.fillStyle=C.dim; gx.font='10px monospace'; gx.textAlign='left'; gx.fillText('e = '+e+' = '+bits+'₂',12,24);
+  for(let i=0;i<bits.length;i++){ gx.fillStyle=bits[i]==='1'?C.teal:C.grid; gx.fillRect(12+i*bw,y,bw-3,bw-3);
+    gx.fillStyle=bits[i]==='1'?C.panel:C.dim; gx.font='11px monospace'; gx.textAlign='center'; gx.fillText(bits[i],12+i*bw+(bw-3)/2,y+bw-7); }
+  gx.fillStyle=C.amber; gx.textAlign='left'; gx.font='10px monospace';
+  gx.fillText((uk?'таблиця непарних степенів: ':'odd-power table: ')+r.tableSize+(uk?' записів':' entries'),12,H-16);
+  $('swOut').innerHTML=
+    '<span class="k">'+(uk?'таблиця':'table')+' {g¹..g^'+((1<<w)-1)+'}:</span> '+r.tableSize+' '+(uk?'записів':'entries')+'   <span class="k">'+(uk?'вікна':'windows')+':</span> '+r.steps.join(', ')+'\n'+
+    '<span class="k">'+(uk?'ковзне вікно':'sliding-window')+':</span> <span class="s">'+r.sq+'</span> '+(uk?'квадратів':'squarings')+' + <span class="s">'+r.mul+'</span> '+(uk?'множень':'mults')+'\n'+
+    '<span class="k">'+(uk?'двійкове':'plain binary')+':</span> '+binSq+' '+(uk?'квадратів':'squarings')+' + '+binMul+' '+(uk?'множень':'mults')+'\n'+
+    '<span class="k">gᵉ mod N =</span> <span class="a">'+r.res+'</span>   <span class="k">'+(uk?'звірка':'check')+':</span> '+truth+(ok?' <span class="a">✓</span>':' <span class="b">✗</span>');
+}
+
+/* ================= 13. Schoof / SEA (count + CRT illustration) ================= */
+function mpN(b,e,m){ b%=m; if(b<0)b+=m; let r=1; while(e>0){ if(e&1) r=r*b%m; b=b*b%m; e=Math.floor(e/2); } return r; }
+function drawSchoof(){
+  const p=+$('scP').value;
+  $('scA').max=p-1; $('scB').max=p-1;
+  if(+$('scA').value>p-1) $('scA').value=p-1; if(+$('scB').value>p-1) $('scB').value=p-1;
+  const a=+$('scA').value, b=+$('scB').value; $('scAV').textContent=a; $('scBV').textContent=b;
+  const disc=(4*mpN(a,3,p)+27*mpN(b,2,p))%p;      // 4a³+27b² mod p
+  const singular=(disc===0);
+  // brute-force affine points + point at infinity
+  const pts=[]; let count=0;
+  for(let x=0;x<p;x++){ const rhs=((mpN(x,3,p)+a*x+b)%p+p)%p;
+    for(let y=0;y<p;y++){ if(y*y%p===rhs){ pts.push([x,y]); count++; } } }
+  const order=count+1;                              // + O (point at infinity)
+  const t=p+1-order;                                // trace of Frobenius
+  // Schoof illustration: t mod ℓ for small primes, CRT reassembly
+  const primes=[2,3,5,7]; const rems=primes.map(l=>((t%l)+l)%l);
+  let M=1; primes.forEach(l=>M*=l);                 // 2*3*5*7 = 210 > 4√p
+  // CRT reconstruct t (mod M), map into Hasse interval
+  let X=0; for(let i=0;i<primes.length;i++){ const Mi=M/primes[i];
+    // proper inverse of Mi mod primes[i]
+    let ii=1; for(let k=1;k<primes[i];k++){ if(Mi*k%primes[i]===1){ ii=k; break; } }
+    X=(X+rems[i]*Mi*ii)%M; }
+  let tCrt=X%M; const hasse=Math.floor(2*Math.sqrt(p));
+  while(tCrt>hasse) tCrt-=M; while(tCrt<-hasse) tCrt+=M;
+  const crtOk=(tCrt===t);
+  // canvas: plot points over 𝔽p
+  const cv=$('scCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const pad=18, cell=(Math.min(W,H)-2*pad)/p;
+  g.strokeStyle=C.line;
+  for(let i=0;i<=p;i++){ g.beginPath(); g.moveTo(pad+i*cell,pad); g.lineTo(pad+i*cell,pad+p*cell); g.moveTo(pad,pad+i*cell); g.lineTo(pad+p*cell,pad+i*cell); g.stroke(); }
+  pts.forEach(([x,y])=>{ g.fillStyle=C.teal; g.beginPath(); g.arc(pad+x*cell+cell/2,pad+(p-1-y)*cell+cell/2,Math.max(1.6,cell*0.32),0,7); g.fill(); });
+  const uk=window.LANG==='uk';
+  if(singular){ $('scOut').innerHTML='<span class="b">'+(uk?'крива вироджена (4a³+27b² ≡ 0) — оберіть інші a,b':'singular curve (4a³+27b² ≡ 0) — pick other a,b')+'</span>'; return; }
+  $('scOut').innerHTML=
+    '<span class="k">E: y² = x³ + '+a+'x + '+b+'  '+(uk?'над':'over')+' 𝔽'+p+'</span>\n'+
+    '<span class="k">#E(𝔽'+p+') = '+count+' + 1 =</span> <span class="a">'+order+'</span>   <span class="k">t = p+1−#E =</span> <span class="s">'+t+'</span>  (|t| ≤ '+hasse+')\n'+
+    '<span class="k">'+(uk?'слід за модулем ℓ (Схооф)':'trace mod ℓ (Schoof)')+':</span> '+primes.map((l,i)=>'t≡'+rems[i]+' (mod '+l+')').join(', ')+'\n'+
+    '<span class="k">CRT '+(uk?'збирає':'reassembles')+' t (mod '+M+') →</span> <span class="a">'+tCrt+'</span>'+(crtOk?' <span class="a">✓</span>':' <span class="b">✗</span>')+'   <span class="k">'+(uk?'схема':'schematic')+'</span>';
+}
+
+/* ================= refs ================= */
+const W='https://en.wikipedia.org/wiki/';
+window.REFS={
+  montgomery:[{tag:'wiki',en:{href:W+'Montgomery_modular_multiplication',label:'Wikipedia: Montgomery multiplication'}},
+              {tag:'paper',en:{href:'https://doi.org/10.1090/S0025-5718-1985-0777282-X',label:'Montgomery 1985 — Modular multiplication without trial division'}}],
+  barrett:[{tag:'wiki',en:{href:W+'Barrett_reduction',label:'Wikipedia: Barrett reduction'}},
+           {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-47721-7_24',label:'Barrett 1986 — CRYPTO'}}],
+  karatsuba:[{tag:'wiki',en:{href:W+'Karatsuba_algorithm',label:'Wikipedia: Karatsuba algorithm'}},
+             {tag:'wiki',en:{href:W+'Toom%E2%80%93Cook_multiplication',label:'Toom–Cook multiplication'}},
+             {tag:'code',en:{href:'https://gmplib.org/manual/Karatsuba-Multiplication',label:'GMP: Karatsuba multiplication'}}],
+  ntt:[{tag:'wiki',en:{href:W+'Number-theoretic_transform',label:'Wikipedia: number-theoretic transform'}},
+       {tag:'paper',en:{href:'https://eprint.iacr.org/2016/504',label:'Longa & Naehrig — Speeding up the NTT for lattice crypto'}},
+       {tag:'code',en:{href:'https://github.com/pq-crystals/kyber/blob/master/ref/ntt.c',label:'CRYSTALS-Kyber: ntt.c'}}],
+  slidingwindow:[{tag:'wiki',en:{href:W+'Exponentiation_by_squaring',label:'Wikipedia: exponentiation by squaring'}},
+                 {tag:'wiki',en:{href:W+'Modular_exponentiation',label:'Modular exponentiation'}},
+                 {tag:'paper',en:{href:'https://eprint.iacr.org/2017/627',label:'Bernstein et al. — Sliding right into disaster (CHES 2017)'}}],
+  schoof:[{tag:'wiki',en:{href:W+'Schoof%27s_algorithm',label:"Wikipedia: Schoof's algorithm"}},
+          {tag:'wiki',en:{href:W+'Schoof%E2%80%93Elkies%E2%80%93Atkin_algorithm',label:'Schoof–Elkies–Atkin'}},
+          {tag:'paper',en:{href:'https://doi.org/10.1090/S0025-5718-1985-0777280-6',label:'Schoof 1985 — Elliptic curves over finite fields'}}]
+};
+
+/* ================= wiring ================= */
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=$('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  drawMont(); drawBarrett(); drawKarat(); drawNTT(); drawSlide(); drawSchoof();
+};
+['mgA','mgB','mgN'].forEach(id=>$(id).addEventListener('input',drawMont));
+['brX','brN'].forEach(id=>$(id).addEventListener('input',drawBarrett));
+['kaX','kaY'].forEach(id=>$(id).addEventListener('input',drawKarat));
+['na0','na1','na2','na3','nb0','nb1','nb2','nb3'].forEach(id=>$(id).addEventListener('input',drawNTT));
+['swG','swE','swN','swW'].forEach(id=>$(id).addEventListener('input',drawSlide));
+['scP','scA','scB'].forEach(id=>$(id).addEventListener('input',drawSchoof));
+</script>
+</body>
+</html>

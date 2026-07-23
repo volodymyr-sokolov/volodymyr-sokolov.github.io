@@ -41,25 +41,33 @@
 <script src="js/catalog.js"></script>
 <script src="js/site.js"></script>
 <script>
-// ---- catalogue view + level/complexity filter state ------------------
+// ---- catalogue view + level/complexity/status filter state -----------
+const STATUSES=['current','legacy','broken','pq'];
+const STLABEL={en:{current:'current',legacy:'legacy',broken:'broken',pq:'PQ-ready'},
+               uk:{current:'актуальний',legacy:'застарілий',broken:'зламаний',pq:'PQ-готовий'}};
 const FILT_KEY='atlas-filter';
-const FILT = { lvl:new Set([1,2,3]), cx:new Set([1,2,3]), view:'topic' };
+const FILT = { lvl:new Set([1,2,3]), cx:new Set([1,2,3]), status:new Set(STATUSES), view:'topic' };
 (function loadFilt(){
   try{
     const s=JSON.parse(localStorage.getItem(FILT_KEY)||'{}');
     if(Array.isArray(s.lvl)&&s.lvl.length) FILT.lvl=new Set(s.lvl);
     if(Array.isArray(s.cx)&&s.cx.length)   FILT.cx=new Set(s.cx);
+    if(Array.isArray(s.status)&&s.status.length) FILT.status=new Set(s.status.filter(x=>STATUSES.includes(x)));
     if(s.view==='alpha'||s.view==='topic') FILT.view=s.view;
   }catch(e){}
 })();
 function saveFilt(){
   localStorage.setItem(FILT_KEY, JSON.stringify(
-    {lvl:[...FILT.lvl], cx:[...FILT.cx], view:FILT.view}));
+    {lvl:[...FILT.lvl], cx:[...FILT.cx], status:[...FILT.status], view:FILT.view}));
 }
-// an algorithm is visible when both its level and its cost class are enabled
+// id → localized name, for "used by" cross-links
+const ID2NAME={};
+CATALOG.forEach(s=>s.algos.forEach(a=>{ ID2NAME[a.id]={en:a.en,uk:a.uk}; }));
+// an algorithm is visible when its level, cost class AND status are all enabled
 function algoVisible(a){
   const cx = (window.CX && CX[a.id]) ? CX[a.id][1] : 1;
-  return FILT.lvl.has(a.lvl) && FILT.cx.has(cx);
+  const st = a.status || 'current';
+  return FILT.lvl.has(a.lvl) && FILT.cx.has(cx) && FILT.status.has(st);
 }
 
 // ---- render the level / complexity legend as a clickable filter ------
@@ -72,19 +80,23 @@ function renderLegend(){
   const cxChips = ['O(n)','O(n³)','L[1/3]'].map((s,i)=>
     `<span class="flt${FILT.cx.has(i+1)?'':' off'}" data-g="cx" data-v="${i+1}"
        role="button" tabindex="0"><span class="cx c${i+1}">${s}</span> ${C[i]}</span>`).join('');
+  const stChips = STATUSES.map(st=>
+    `<span class="flt${FILT.status.has(st)?'':' off'}" data-g="status" data-v="${st}"
+       role="button" tabindex="0"><span class="st-tag st-${st}">${STLABEL[window.LANG][st]}</span></span>`).join('');
   document.getElementById('lvlLegend').innerHTML =
-    lvlChips + '<span class="flt-break"></span>' + cxChips;
+    lvlChips + '<span class="flt-break"></span>' + cxChips + '<span class="flt-break"></span>' + stChips;
   document.querySelectorAll('#lvlLegend .flt').forEach(el=>{
-    const act=()=>toggleFilter(el.getAttribute('data-g'), +el.getAttribute('data-v'));
+    const act=()=>toggleFilter(el.getAttribute('data-g'), el.getAttribute('data-v'));
     el.addEventListener('click', act);
     el.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); } });
   });
   document.getElementById('filterNote').textContent = I18N[window.LANG].filterNote;
 }
 // toggle one filter chip; never allow the last enabled chip of a group off
-function toggleFilter(g,v){
+function toggleFilter(g,rawV){
   const set = FILT[g];
   if(!set) return;
+  const v = (g==='status') ? rawV : Number(rawV);   // status values are strings
   if(set.has(v)){ if(set.size<=1) return; set.delete(v); }
   else set.add(v);
   saveFilt();
@@ -118,12 +130,19 @@ function algoTile(a, lang){
   const impl = href ? ` <span class="impl">${I18N[lang].implemented} →</span>` : '';
   const cls  = href ? 'algo-item link' : 'algo-item';
   const open = href ? ` onclick="location.href='${href}'"` : '';
+  const st   = a.status || 'current';
+  const stag = st!=='current' ? ` <span class="st-tag st-${st}">${STLABEL[lang][st]}${a.broken?' '+a.broken:''}</span>` : '';
+  const ref  = a.ref ? ` <span class="ref-chip">${a.ref}</span>` : '';
+  const used = (a.usedBy&&a.usedBy.length)
+    ? `<p class="usedby">${lang==='uk'?'застосовується у':'used by'} → ${a.usedBy.map(id=>
+        ID2NAME[id]?`<a href="index.html#algo-${id}" onclick="event.stopPropagation()">${lang==='uk'?ID2NAME[id].uk:ID2NAME[id].en}</a>`:id).join(', ')}</p>` : '';
   return `<div class="${cls}" id="algo-${a.id}"${open}
-            data-hay="${(a.en+' '+a.uk+' '+(a.alias||'')).toLowerCase()}">
+            data-hay="${(a.en+' '+a.uk+' '+(a.alias||'')+' '+(a.ref||'')).toLowerCase()}">
       ${window.atlasBadge(a.lvl)}
       <div class="body">
-        <p class="name">${name}${window.atlasCx(a.id)}${impl}</p>
+        <p class="name">${name}${window.atlasCx(a.id)}${stag}${ref}${impl}</p>
         <p class="adesc">${desc}</p>
+        ${used}
       </div>
     </div>`;
 }

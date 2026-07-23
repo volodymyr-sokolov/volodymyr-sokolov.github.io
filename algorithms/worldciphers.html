@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>National standards worldwide (RU / CN / KR) — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="worldciphers">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="National standards — Russia (ГОСТ), China (国密 / ShangMi) &amp; Korea"
+         data-uk="Національні стандарти — Росія (ГОСТ), Китай (国密 / ShangMi) та Корея">National standards worldwide</div>
+    <h1 data-en="National standards worldwide" data-uk="Національні стандарти світу">National standards worldwide</h1>
+    <p class="lede" data-en="Every state that takes cryptography seriously ships its own suite. Here are the Russian GOST family (Magma, Streebog), China's ShangMi set (SM4, SM2, SM3) and Korea's national ciphers (ARIA, SEED, LEA) — the international companions to Ukraine's DSTU stack. Each carries a working toy demonstration of its core structure: an SP-network, a Feistel network, an ARX design, an elliptic-curve group or a hash avalanche."
+       data-uk="Кожна держава, що серйозно ставиться до криптографії, випускає власний набір. Тут — російське сімейство ГОСТ («Магма», «Стрибог»), китайський набір ShangMi (SM4, SM2, SM3) і національні шифри Кореї (ARIA, SEED, LEA) — міжнародні супутники українського стеку ДСТУ. Кожен має робочу іграшкову демонстрацію своєї основної структури: SP-мережі, мережі Фейстеля, ARX-конструкції, еліптичної групи чи лавини гешу.">National cipher suites worldwide.</p>
+    <div class="readout" id="selftest" style="margin-top:18px; max-width:640px;"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="Block ciphers" data-uk="Блокові шифри">Block ciphers</h3>
+
+  <!-- ============ Magma (Feistel) ============ -->
+  <section id="magma">
+    <span class="num" data-en="01 / Magma" data-uk="01 / «Магма»">01 / Magma</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="Magma (GOST R 34.12-2015)" data-uk="«Магма» (ГОСТ Р 34.12-2015)">Magma</span></h2>
+    <div class="formula">(Lᵢ, Rᵢ) → (Rᵢ, Lᵢ ⊕ f(Rᵢ, kᵢ)),  64-bit block, 32 rounds  (Feistel)</div>
+    <p class="desc" data-en="Russia's 64-bit legacy block cipher — the 2015 formalisation of the Soviet <b>GOST 28147-89</b>. It is a classic <b>Feistel network</b>: each round splits the block in two, pushes one half through an S-box round function <b>f</b>, XORs it into the other half and swaps. The demo below runs a <b>real toy Feistel</b> — the same structure, with the AES S-box standing in for the GOST S-boxes — so you can watch the avalanche and confirm the round-trip decrypt∘encrypt = identity."
+       data-uk="Російський 64-бітний застарілий блоковий шифр — формалізація 2015 року радянського <b>ГОСТ 28147-89</b>. Це класична <b>мережа Фейстеля</b>: кожен раунд ділить блок навпіл, проганяє одну половину через раундову функцію з S-боксом <b>f</b>, XOR-ить її в іншу половину і міняє їх місцями. Демо нижче виконує <b>справжній іграшковий Фейстель</b> — та сама структура, де S-бокс AES заміняє S-бокси ГОСТ — тож можна побачити лавину й переконатися, що обіг дешифр∘шифр = тотожність."></p>
+    <div id="refs-magma"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="mgCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Toy Feistel structural model — not the real GOST S-boxes. Flip one input bit and count how many of the 128 output bits change." data-uk="Іграшкова структурна модель Фейстеля — не справжні S-бокси ГОСТ. Змініть один вхідний біт і полічіть, скільки зі 128 вихідних бітів зміниться."></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="mgFlip" data-en="Flip 1 input bit" data-uk="Змінити 1 вхідний біт">Flip 1 input bit</button>
+          </div>
+          <div class="readout" id="mgOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical break of full Magma, but its <b>64-bit block</b> is its weakness: birthday-bound collisions appear after ~2³² blocks (the Sweet32 problem), so it is unsafe for high-volume traffic. Several classes of the original secret S-boxes were also weak. Modern use is discouraged in favour of Kuznyechik."
+            data-uk="Практичного злому повної «Магми» немає, але її вада — <b>64-бітний блок</b>: колізії межі днів народжень з'являються після ~2³² блоків (проблема Sweet32), тож вона небезпечна для великих обсягів трафіку. Деякі класи первісних секретних S-боксів також були слабкими. Сучасне використання не рекомендують на користь «Коника»."></span></div>
+    <div class="xrefs"><a href="standards.html#gost">ДСТУ ГОСТ 28147</a> <a href="standards.html#kuznyechik">Kuznyechik</a> <a href="standards.html#kalyna">Kalyna</a></div>
+  </section>
+
+  <!-- ============ SM4 (SP-network) — FLAGSHIP avalanche panel ============ -->
+  <section id="sm4">
+    <span class="num" data-en="01 / SM4" data-uk="01 / SM4">01 / SM4</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="SM4 (China, GM/T 0002)" data-uk="SM4 (Китай, GM/T 0002)">SM4</span></h2>
+    <div class="formula">Xᵢ₊₄ = Xᵢ ⊕ T(Xᵢ₊₁ ⊕ Xᵢ₊₂ ⊕ Xᵢ₊₃ ⊕ rkᵢ),  T = S-box + linear L  (SP-network)</div>
+    <p class="desc" data-en="China's national block cipher (formerly SMS4), used in WAPI Wi-Fi and TLS 1.3 (RFC 8998). It is an <b>SP-network</b> in a 32-round generalised-Feistel wrapper: confusion from a single 8-bit S-box, diffusion from a linear transform <b>L</b>. The <b>flagship demo</b> below runs a real toy round for all three structural families on this page — pick <b>SP-network</b> (SM4 / ARIA), <b>Feistel</b> (Magma / SEED) or <b>ARX</b> (LEA), flip one input bit, and watch roughly half of the 128 output bits flip as the rounds compound."
+       data-uk="Національний блоковий шифр Китаю (раніше SMS4), застосовується у WAPI Wi-Fi та TLS 1.3 (RFC 8998). Це <b>SP-мережа</b> в обгортці узагальненого Фейстеля з 32 раундів: конфузія від одного 8-бітного S-боксу, дифузія від лінійного перетворення <b>L</b>. <b>Флагманське демо</b> нижче виконує справжній іграшковий раунд для всіх трьох структурних сімейств цієї сторінки — оберіть <b>SP-мережу</b> (SM4 / ARIA), <b>Фейстель</b> (Magma / SEED) чи <b>ARX</b> (LEA), змініть один вхідний біт і дивіться, як приблизно половина зі 128 вихідних бітів змінюється зі зростанням числа раундів."></p>
+    <div id="refs-sm4"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="fCanvas" width="300" height="150"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="toy structure" data-uk="іграшкова структура">structure</span></label>
+            <select id="fStruct" style="width:100%">
+              <option value="sp" data-en="SP-network (SM4 / ARIA)" data-uk="SP-мережа (SM4 / ARIA)">SP-network (SM4 / ARIA)</option>
+              <option value="fe" data-en="Feistel (Magma / SEED)" data-uk="Фейстель (Magma / SEED)">Feistel (Magma / SEED)</option>
+              <option value="arx" data-en="ARX (LEA)" data-uk="ARX (LEA)">ARX (LEA)</option>
+            </select></div>
+          <div class="ctrl"><label><span data-en="input block (hex, 32 nibbles)" data-uk="вхідний блок (hex, 32 ніблі)">input block (hex)</span></label>
+            <input type="text" id="fIn" value="00112233445566778899aabbccddeeff" maxlength="32" style="width:100%; font-size:11px"></div>
+          <div class="ctrl"><label><span data-en="rounds" data-uk="раундів">rounds</span><span class="val" id="fRV">4</span></label>
+            <input type="range" id="fR" min="1" max="12" value="4"></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="fFlip" data-en="Flip 1 input bit" data-uk="Змінити 1 вхідний біт">Flip 1 input bit</button>
+            <button id="fRand" class="secondary" data-en="Random block" data-uk="Випадковий блок">Random block</button>
+          </div>
+          <div class="hint" data-en="Toy structural model — not the real S-boxes / constants of any cipher." data-uk="Іграшкова структурна модель — не справжні S-бокси / константи жодного шифру."></div>
+          <div class="readout" id="fOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical attack on full 32-round SM4; the best cryptanalysis reaches far fewer rounds with a comfortable margin. Its 128-bit block avoids Magma's Sweet32 issue. As with every software S-box cipher, guard against cache-timing side channels."
+            data-uk="Практичних атак на повний 32-раундовий SM4 немає; найкращий криптоаналіз досягає значно меншої кількості раундів із комфортним запасом. Його 128-бітний блок уникає проблеми Sweet32 «Магми». Як і для будь-якого шифру з програмним S-боксом, слід стерегтися побічних каналів за часом кешу."></span></div>
+    <div class="xrefs"><a href="symmetric.html#aes">AES</a> <a href="symmetric.html#des">DES</a></div>
+  </section>
+
+  <!-- ============ ARIA (SP-network) ============ -->
+  <section id="aria">
+    <span class="num" data-en="01 / ARIA" data-uk="01 / ARIA">01 / ARIA</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="ARIA (Korea, RFC 5794)" data-uk="ARIA (Корея, RFC 5794)">ARIA</span></h2>
+    <div class="formula">round = SubBytes (two S-boxes S, S⁻¹) → Diffusion (16×16 involution) → AddRoundKey</div>
+    <p class="desc" data-en="South Korea's national block cipher — an <b>AES-like involutional SP-network</b> with a 128-bit block. It alternates two S-box layers and a binary 16×16 diffusion matrix that is its own inverse, so encryption and decryption share hardware. The demo runs the SP-network toy round (AES S-box + MixColumns as a faithful stand-in): flip one bit, watch the avalanche, and see the round-trip self-check."
+       data-uk="Національний блоковий шифр Південної Кореї — <b>AES-подібна інволюційна SP-мережа</b> з блоком 128 біт. Він чергує два шари S-боксів і двійкову матрицю дифузії 16×16, що є власною оберненою, тож шифрування й дешифрування ділять апаратуру. Демо виконує іграшковий SP-раунд (S-бокс AES + MixColumns як точний замінник): змініть один біт, дивіться лавину й самоперевірку обігу."></p>
+    <div id="refs-aria"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="arCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Toy SP-network model — not ARIA's real S-boxes or diffusion matrix." data-uk="Іграшкова модель SP-мережі — не справжні S-бокси чи матриця дифузії ARIA."></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="arFlip" data-en="Flip 1 input bit" data-uk="Змінити 1 вхідний біт">Flip 1 input bit</button>
+          </div>
+          <div class="readout" id="arOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical attack on full ARIA; it was co-designed by Korean academia and standardised (KS X 1213, RFC 5794) with a solid margin against differential and linear cryptanalysis. Its involutional structure is a hardware convenience, not a weakness."
+            data-uk="Практичних атак на повний ARIA немає; його спільно розробила корейська академія і стандартизували (KS X 1213, RFC 5794) з надійним запасом проти диференціального й лінійного криптоаналізу. Його інволюційна структура — апаратна зручність, а не вада."></span></div>
+    <div class="xrefs"><a href="symmetric.html#aes">AES</a> <a href="symmetric.html#des">DES</a></div>
+  </section>
+
+  <!-- ============ SEED (Feistel) ============ -->
+  <section id="seed">
+    <span class="num" data-en="01 / SEED" data-uk="01 / SEED">01 / SEED</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="SEED (Korea, RFC 4269)" data-uk="SEED (Корея, RFC 4269)">SEED</span></h2>
+    <div class="formula">16-round Feistel,  F = two S-boxes + mixing,  128-bit block / 128-bit key</div>
+    <p class="desc" data-en="Korea's older national cipher (1998), for years mandated in Korean online banking and government sites. It is a <b>16-round Feistel network</b> with a heavy round function <b>F</b> built from two 8-bit S-boxes and a GF(2⁸) mixing step. The demo runs the same toy Feistel as Magma (the structure is identical; only the round function and block size differ), showing the avalanche and the exact decrypt∘encrypt round-trip."
+       data-uk="Старіший національний шифр Кореї (1998), роками обов'язковий у корейському онлайн-банкінгу та на держсайтах. Це <b>16-раундова мережа Фейстеля</b> з важкою раундовою функцією <b>F</b> із двох 8-бітних S-боксів і кроку змішування над GF(2⁸). Демо запускає той самий іграшковий Фейстель, що й «Магма» (структура ідентична; різняться лише раундова функція та розмір блоку), показуючи лавину й точний обіг дешифр∘шифр."></p>
+    <div id="refs-seed"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="sdCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Toy Feistel model — not SEED's real S-boxes or key schedule." data-uk="Іграшкова модель Фейстеля — не справжні S-бокси чи розклад ключів SEED."></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="sdFlip" data-en="Flip 1 input bit" data-uk="Змінити 1 вхідний біт">Flip 1 input bit</button>
+          </div>
+          <div class="readout" id="sdOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical break of full SEED; it is considered secure but dated. Its historical baggage was ecosystem, not cryptography — Korean banking long required it via ActiveX plug-ins, a security liability in itself. Modern deployments prefer AES or ARIA."
+            data-uk="Практичного злому повного SEED немає; він вважається стійким, але застарілим. Його історичний тягар був у екосистемі, а не в криптографії — корейський банкінг довго вимагав його через плагіни ActiveX, що само собою було загрозою. Сучасні впровадження надають перевагу AES чи ARIA."></span></div>
+    <div class="xrefs"><a href="symmetric.html#aes">AES</a> <a href="symmetric.html#des">DES</a></div>
+  </section>
+
+  <!-- ============ LEA (ARX) ============ -->
+  <section id="lea">
+    <span class="num" data-en="01 / LEA" data-uk="01 / LEA">01 / LEA</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="LEA (Korea, ISO/IEC 29192-2)" data-uk="LEA (Корея, ISO/IEC 29192-2)">LEA</span></h2>
+    <div class="formula">Xᵢ₊₁ = ( rol/ror of ((Xᵢ ⊕ rk) ⊞ (Xᵢ₊₁ ⊕ rk)) ),  add–rotate–xor, no S-box</div>
+    <p class="desc" data-en="Korea's fast lightweight cipher — a pure <b>ARX design</b> (add, rotate, XOR) with a 128-bit block and no S-boxes at all, so it runs quickly on general CPUs and is naturally constant-time. The demo runs the <b>real LEA round function</b> on toy 32-bit words (with a simplified key schedule): the avalanche is driven entirely by modular addition and rotation, and the round-trip self-check confirms the round is exactly invertible."
+       data-uk="Швидкий легковаговий шифр Кореї — чиста <b>ARX-конструкція</b> (додавання, обертання, XOR) з блоком 128 біт і зовсім без S-боксів, тож він швидко працює на звичайних процесорах і природно сталий у часі. Демо виконує <b>справжню раундову функцію LEA</b> на іграшкових 32-бітних словах (зі спрощеним розкладом ключів): лавину повністю рухають модульне додавання й обертання, а самоперевірка обігу підтверджує, що раунд точно оборотний."></p>
+    <div id="refs-lea"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="leCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Real LEA round on toy 32-bit words with a simplified (non-standard) key schedule." data-uk="Справжній раунд LEA на іграшкових 32-бітних словах зі спрощеним (нестандартним) розкладом ключів."></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="leFlip" data-en="Flip 1 input bit" data-uk="Змінити 1 вхідний біт">Flip 1 input bit</button>
+          </div>
+          <div class="readout" id="leOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical attack on full 24/28/32-round LEA; it standardised in ISO/IEC 29192-2 for lightweight use. ARX ciphers avoid S-box cache leaks but must be analysed carefully for differential/linear trails through carry chains — LEA's designers left a wide margin."
+            data-uk="Практичних атак на повний LEA (24/28/32 раунди) немає; він стандартизований у ISO/IEC 29192-2 для легковагового застосування. ARX-шифри уникають витоків кешу від S-боксів, але потребують ретельного аналізу диференціальних/лінійних слідів крізь ланцюги перенесень — розробники LEA лишили широкий запас."></span></div>
+    <div class="xrefs"><a href="symmetric.html#aes">AES</a> <a href="symmetric.html#des">DES</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Digital signature" data-uk="Цифровий підпис">Digital signature</h3>
+
+  <!-- ============ SM2 (elliptic curve) ============ -->
+  <section id="sm2">
+    <span class="num" data-en="06 / SM2" data-uk="06 / SM2">06 / SM2</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+      <span data-en="SM2 (China, GM/T 0003)" data-uk="SM2 (Китай, GM/T 0003)">SM2</span></h2>
+    <div class="formula">Q = d·G;  sign: r = (e + x₁) mod n,  s = (1+d)⁻¹(k − r·d) mod n  (over Fp)</div>
+    <p class="desc" data-en="China's national elliptic-curve scheme (encryption, signature and key exchange), analogous to ECDSA but over its own recommended 256-bit prime curve with a distinct signature equation. The demo runs <b>real prime-field EC arithmetic</b> (BigInt point add / double / scalar multiply) over a tiny <b>toy curve</b> y² = x³ + 4x + 1 mod 263: it plots every point, picks a generator G, forms the key pair Q = d·G, and runs a working SM2-style sign/verify. Only the field size is a toy; the group law and signature algebra are exact."
+       data-uk="Національна схема Китаю на еліптичних кривих (шифрування, підпис та обмін ключами), аналогічна ECDSA, але над власною рекомендованою 256-бітною простою кривою з окремим рівнянням підпису. Демо виконує <b>справжню арифметику EC над простим полем</b> (додавання / подвоєння / скалярне множення точок на BigInt) над крихітною <b>іграшковою кривою</b> y² = x³ + 4x + 1 mod 263: воно креслить кожну точку, обирає генератор G, формує пару ключів Q = d·G і виконує робочий підпис/перевірку у стилі SM2. Іграшковий лише розмір поля; груповий закон і алгебра підпису точні."></p>
+    <div id="refs-sm2"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="sm2Canvas" width="300" height="300"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="secret key d" data-uk="секретний ключ d">secret d</span><span class="val" id="sm2DV">7</span></label>
+            <input type="range" id="sm2D" min="1" max="40" value="7"></div>
+          <div class="ctrl"><label><span data-en="message" data-uk="повідомлення">message</span></label>
+            <input type="text" id="sm2Msg" value="SM2" maxlength="12" style="width:100%"></div>
+          <div class="hint" data-en="Toy curve over Fp (p=263). e is a toy hash (sum of bytes mod n)." data-uk="Іграшкова крива над Fp (p=263). e — іграшковий геш (сума байтів mod n)."></div>
+          <button id="sm2Sign" data-en="Key pair, sign &amp; verify" data-uk="Пара ключів, підпис і перевірка">Key pair, sign &amp; verify</button>
+          <div class="readout" id="sm2Out"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Secure at the standard 256-bit curve; no break of SM2 itself. Like all ECDSA-family schemes it is <b>fatally sensitive to nonce reuse or bias</b> — a repeated k leaks the private key. Early implementations also leaked through side channels; constant-time scalar multiplication is mandatory."
+            data-uk="Стійкий на стандартній 256-бітній кривій; злому самого SM2 немає. Як усі схеми сімейства ECDSA, він <b>фатально чутливий до повторення чи зсуву нонса</b> — повторний k розкриває приватний ключ. Ранні реалізації також витікали через побічні канали; стале в часі скалярне множення обов'язкове."></span></div>
+    <div class="xrefs"><a href="asymmetric.html#ecc">ECC</a> <a href="arithmetic.html#ecgroup" data-en="EC group law" data-uk="Груповий закон EC">EC group law</a> <a href="standards.html#dstu4145">DSTU 4145</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Hash functions" data-uk="Геш-функції">Hash functions</h3>
+
+  <!-- ============ Streebog (hash) ============ -->
+  <section id="streebog">
+    <span class="num" data-en="06 / Streebog" data-uk="06 / «Стрибог»">06 / Streebog</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="Streebog (GOST R 34.11-2012)" data-uk="«Стрибог» (ГОСТ Р 34.11-2012)">Streebog</span></h2>
+    <div class="formula">h = g_N(h, m);  g_N(h,m) = E(K(h,N), LPS(m)) ⊕ h ⊕ m,  256/512-bit digest</div>
+    <p class="desc" data-en="The Russian hash standard (RFC 6986), the companion to Kuznyechik and Magma, producing 256- or 512-bit digests through a Miyaguchi–Preneel-style compression built on an AES-like LPS permutation. Its defining property — shared by every good hash — is the <b>avalanche effect</b>. The demo shows it directly using SHA-256 as an <b>illustrative stand-in</b>: flip one input bit and about half of the digest bits change. Streebog has its own compression, but the avalanche behaviour is the same."
+       data-uk="Російський стандарт гешування (RFC 6986), супутник «Коника» та «Магми», що дає дайджести 256 чи 512 біт через стиснення у стилі Міягуті–Пренеля на AES-подібній перестановці LPS. Його визначальна властивість — спільна для кожного доброго гешу — <b>лавинний ефект</b>. Демо показує його напряму, використовуючи SHA-256 як <b>ілюстративний замінник</b>: змініть один вхідний біт — і близько половини бітів дайджесту зміняться. «Стрибог» має власне стиснення, але поведінка лавини така сама."></p>
+    <div id="refs-streebog"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="stCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="message" data-uk="повідомлення">message</span></label>
+            <input type="text" id="stIn" value="Streebog" style="width:100%"></div>
+          <div class="hint" data-en="Illustrative hash (SHA-256); Streebog has its own compression function." data-uk="Ілюстративний геш (SHA-256); «Стрибог» має власну функцію стиснення."></div>
+          <div class="readout" id="stOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical collision or preimage attack on full Streebog. As with Kuznyechik, the origin of its S-box constants drew scrutiny (a hidden structure was later found), a transparency concern rather than a break. Reduced-round rebound attacks exist only academically."
+            data-uk="Практичних атак на колізії чи прообраз повного «Стрибога» немає. Як і з «Коником», походження констант його S-боксу викликало запитання (пізніше знайшли приховану структуру) — це проблема прозорості, а не злом. Атаки rebound на зменшену кількість раундів існують лише академічно."></span></div>
+    <div class="xrefs"><a href="standards.html#kupyna">Kupyna</a> <a href="hash.html#sha3">SHA-3</a></div>
+  </section>
+
+  <!-- ============ SM3 (hash) ============ -->
+  <section id="sm3">
+    <span class="num" data-en="06 / SM3" data-uk="06 / SM3">06 / SM3</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="SM3 (China, GM/T 0004)" data-uk="SM3 (Китай, GM/T 0004)">SM3</span></h2>
+    <div class="formula">Merkle–Damgård, 512-bit blocks, 64 rounds → 256-bit digest  (SHA-256-like)</div>
+    <p class="desc" data-en="China's national hash function, a <b>Merkle–Damgård design</b> very close in spirit to SHA-256: 512-bit message blocks, a 256-bit digest and 64 rounds of a message-expansion + compression function with its own Boolean functions and constants. The demo reuses the <b>real SHA-256</b> as an illustrative stand-in for the avalanche grid: flip one bit of the message and roughly half of the 256 digest bits flip. SM3's own round function differs, but the diffusion goal is identical."
+       data-uk="Національна геш-функція Китаю, <b>конструкція Меркла–Дамґарда</b>, дуже близька за духом до SHA-256: блоки повідомлення 512 біт, дайджест 256 біт і 64 раунди розширення повідомлення + функції стиснення з власними булевими функціями та константами. Демо повторно використовує <b>справжній SHA-256</b> як ілюстративний замінник для сітки лавини: змініть один біт повідомлення — і приблизно половина зі 256 бітів дайджесту зміниться. Раундова функція SM3 інша, але мета дифузії ідентична."></p>
+    <div id="refs-sm3"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="s3Canvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="message" data-uk="повідомлення">message</span></label>
+            <input type="text" id="s3In" value="abc" style="width:100%"></div>
+          <div class="hint" data-en="Illustrative hash (SHA-256); SM3 has its own compression function." data-uk="Ілюстративний геш (SHA-256); SM3 має власну функцію стиснення."></div>
+          <div class="readout" id="s3Out"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical collision or preimage attack on full SM3; published cryptanalysis reaches only reduced rounds. It is standardised in ISO/IEC 10118-3 and used across Chinese PKI and TLS 1.3 (RFC 8998), typically paired with SM2 signatures."
+            data-uk="Практичних атак на колізії чи прообраз повного SM3 немає; опублікований криптоаналіз досягає лише зменшеної кількості раундів. Він стандартизований у ISO/IEC 10118-3 і застосовується в китайській PKI та TLS 1.3 (RFC 8998), зазвичай у парі з підписами SM2."></span></div>
+    <div class="xrefs"><a href="hash.html#sha2">SHA-2</a> <a href="standards.html#kupyna">Kupyna</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+
+/* ---- helpers ---- */
+const hex2=v=>(v&0xFF).toString(16).padStart(2,'0');
+const parseHex=s=>{ const b=[]; s=(s||'').replace(/[^0-9a-fA-F]/g,'').padEnd(32,'0').slice(0,32); for(let i=0;i<32;i+=2) b.push(parseInt(s.substr(i,2),16)); return b; };
+const popcount=n=>{ let c=0; n&=0xFF; while(n){ c+=n&1; n>>=1; } return c; };
+
+/* ---- GF(2^8) for AES (poly 0x11B) + computed AES S-box and its inverse ---- */
+function gmul(a,b){ let p=0; for(let i=0;i<8;i++){ if(b&1)p^=a; const hi=a&0x80; a=(a<<1)&0xFF; if(hi)a^=0x1b; b>>=1; } return p&0xFF; }
+const SBOX=(function(){
+  const anti=new Array(256),log=new Array(256); let x=1;
+  for(let i=0;i<255;i++){ anti[i]=x; log[x]=i; x=gmul(x,3); }
+  const minv=a=> a===0?0:anti[(255-log[a])%255];
+  const box=new Array(256);
+  for(let i=0;i<256;i++){ let b=minv(i),s=b;
+    for(let c=0;c<4;c++){ b=((b<<1)|(b>>7))&0xFF; s^=b; }
+    box[i]=s^0x63;
+  }
+  return box;
+})();
+const INV_SBOX=(function(){ const inv=new Array(256); for(let i=0;i<256;i++) inv[SBOX[i]]=i; return inv; })();
+const xt=a=>gmul(a,2);
+
+/* ====================================================================
+   TOY STRUCTURE 1 — invertible SP-network (AES-like round)  [SM4 / ARIA]
+   ==================================================================== */
+function subBytes(s,box){ return s.map(b=>box[b]); }
+function shiftRows(s){ const t=new Array(16); for(let r=0;r<4;r++)for(let c=0;c<4;c++) t[c*4+r]=s[((c+r)%4)*4+r]; return t; }
+function invShiftRows(s){ const t=new Array(16); for(let r=0;r<4;r++)for(let c=0;c<4;c++) t[c*4+r]=s[((c-r+4)%4)*4+r]; return t; }
+function mixCols(t){ const o=new Array(16); for(let c=0;c<4;c++){ const a0=t[c*4],a1=t[c*4+1],a2=t[c*4+2],a3=t[c*4+3];
+  o[c*4]  =xt(a0)^(xt(a1)^a1)^a2^a3;
+  o[c*4+1]=a0^xt(a1)^(xt(a2)^a2)^a3;
+  o[c*4+2]=a0^a1^xt(a2)^(xt(a3)^a3);
+  o[c*4+3]=(xt(a0)^a0)^a1^a2^xt(a3);
+} return o; }
+function invMixCols(t){ const o=new Array(16),M=(x,n)=>gmul(x,n); for(let c=0;c<4;c++){ const a0=t[c*4],a1=t[c*4+1],a2=t[c*4+2],a3=t[c*4+3];
+  o[c*4]  =M(a0,14)^M(a1,11)^M(a2,13)^M(a3,9);
+  o[c*4+1]=M(a0,9)^M(a1,14)^M(a2,11)^M(a3,13);
+  o[c*4+2]=M(a0,13)^M(a1,9)^M(a2,14)^M(a3,11);
+  o[c*4+3]=M(a0,11)^M(a1,13)^M(a2,9)^M(a3,14);
+} return o; }
+const rkSP=r=>new Array(16).fill(0).map((_,i)=>(r*17+i*31+0x63)&0xFF);
+function spEnc(block,rounds){ let st=block.slice(); for(let r=0;r<rounds;r++){ st=st.map((b,i)=>b^rkSP(r)[i]); st=subBytes(st,SBOX); st=shiftRows(st); st=mixCols(st); } return st; }
+function spDec(block,rounds){ let st=block.slice(); for(let r=rounds-1;r>=0;r--){ st=invMixCols(st); st=invShiftRows(st); st=subBytes(st,INV_SBOX); st=st.map((b,i)=>b^rkSP(r)[i]); } return st; }
+
+/* ====================================================================
+   TOY STRUCTURE 2 — invertible Feistel (128-bit block, 64-bit halves) [Magma / SEED]
+   ==================================================================== */
+const rkF=r=>new Array(8).fill(0).map((_,i)=>(r*23+i*13+7)&0xFF);
+function F8(half,rk){ const o=new Array(8); for(let i=0;i<8;i++) o[i]=SBOX[(half[i]^rk[i])&0xFF]; const m=new Array(8); for(let i=0;i<8;i++) m[i]=o[i]^o[(i+1)&7]^((o[(i+3)&7]<<1)&0xFF); return m; }
+function feEnc(block,rounds){ let L=block.slice(0,8),R=block.slice(8,16); for(let r=0;r<rounds;r++){ const f=F8(R,rkF(r)); const nR=L.map((b,i)=>b^f[i]); L=R; R=nR; } return L.concat(R); }
+function feDec(block,rounds){ let L=block.slice(0,8),R=block.slice(8,16); for(let r=rounds-1;r>=0;r--){ const f=F8(L,rkF(r)); const nL=R.map((b,i)=>b^f[i]); R=L; L=nL; } return L.concat(R); }
+
+/* ====================================================================
+   TOY STRUCTURE 3 — real LEA round on toy 32-bit words  [LEA]
+   ==================================================================== */
+const rol=(x,n)=>((x<<n)|(x>>>(32-n)))>>>0, ror=(x,n)=>((x>>>n)|(x<<(32-n)))>>>0;
+const add32=(a,b)=>((a+b)>>>0), sub32=(a,b)=>((a-b)>>>0);
+const rkA=r=>[ (r*0x9e3779b9)>>>0,(r*0x3c6ef372+1)>>>0,(r*0x1b0caf11+2)>>>0,(r*0x78dde6a4+3)>>>0,(r*0x2f1e8c3d+5)>>>0,(r*0x517cc1b7+7)>>>0 ];
+function bytesToWords(b){ const w=[]; for(let i=0;i<4;i++) w.push(((b[4*i]<<24)|(b[4*i+1]<<16)|(b[4*i+2]<<8)|b[4*i+3])>>>0); return w; }
+function wordsToBytes(w){ const b=new Array(16); for(let i=0;i<4;i++){ b[4*i]=(w[i]>>>24)&255;b[4*i+1]=(w[i]>>>16)&255;b[4*i+2]=(w[i]>>>8)&255;b[4*i+3]=w[i]&255; } return b; }
+function leaEncRound(X,rk){
+  const T0=rol(add32(X[0]^rk[0],X[1]^rk[1]),9);
+  const T1=ror(add32(X[1]^rk[2],X[2]^rk[3]),5);
+  const T2=ror(add32(X[2]^rk[4],X[3]^rk[5]),3);
+  return [T0,T1,T2,X[0]>>>0];
+}
+function leaDecRound(T,rk){
+  const X0=T[3]>>>0;
+  const X1=(sub32(ror(T[0],9),(X0^rk[0])>>>0)^rk[1])>>>0;
+  const X2=(sub32(rol(T[1],5),(X1^rk[2])>>>0)^rk[3])>>>0;
+  const X3=(sub32(rol(T[2],3),(X2^rk[4])>>>0)^rk[5])>>>0;
+  return [X0,X1,X2,X3];
+}
+function arxEnc(block,rounds){ let X=bytesToWords(block); for(let r=0;r<rounds;r++) X=leaEncRound(X,rkA(r)); return wordsToBytes(X); }
+function arxDec(block,rounds){ let X=bytesToWords(block); for(let r=rounds-1;r>=0;r--) X=leaDecRound(X,rkA(r)); return wordsToBytes(X); }
+
+/* ---- dispatcher + avalanche + round-trip ---- */
+function toyEnc(s,b,r){ return s==='sp'?spEnc(b,r):s==='fe'?feEnc(b,r):arxEnc(b,r); }
+function toyDec(s,b,r){ return s==='sp'?spDec(b,r):s==='fe'?feDec(b,r):arxDec(b,r); }
+function roundTrip(s,block,rounds){ const e=toyEnc(s,block,rounds),d=toyDec(s,e,rounds); for(let i=0;i<16;i++) if(d[i]!==block[i]) return false; return true; }
+function avalanche(s,block,rounds){ const out=toyEnc(s,block,rounds); const b2=block.slice(); b2[0]^=1; const out2=toyEnc(s,b2,rounds); let diff=0; for(let i=0;i<16;i++) diff+=popcount(out[i]^out2[i]); return {out,out2,diff}; }
+
+/* ---- shared 128-bit diff heatmap (16 cols × 8 bit-rows) ---- */
+function paintDiff(canvasId,out,out2,yTop){
+  const cv=document.getElementById(canvasId),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cw=W/16, y0=yTop||18, ch=Math.min(10,(H-y0-12)/8);
+  for(let i=0;i<16;i++){ const d=out[i]^out2[i];
+    for(let bit=0;bit<8;bit++){ const on=(d>>(7-bit))&1; g.fillStyle=on?C.rose:C.grid; g.fillRect(i*cw+1,y0+bit*ch,cw-2,ch-1); } }
+  g.fillStyle=C.dim; g.font='9px monospace';
+  g.fillText(window.LANG==='uk'?'128 вихідних бітів — рожеві змінилися':'128 output bits — pink ones changed',4,y0-5);
+}
+
+/* ---- FLAGSHIP demo (in #sm4) ---- */
+function drawFlag(){
+  const s=document.getElementById('fStruct').value;
+  const rounds=+document.getElementById('fR').value; document.getElementById('fRV').textContent=rounds;
+  const inp=parseHex(document.getElementById('fIn').value);
+  const {out,out2,diff}=avalanche(s,inp,rounds);
+  paintDiff('fCanvas',out,out2,26);
+  const rt=roundTrip(s,inp,rounds);
+  const uk=window.LANG==='uk';
+  const name=s==='sp'?'SP-network':s==='fe'?'Feistel':'ARX';
+  document.getElementById('fOut').innerHTML=
+    '<span class="k">'+(uk?'структура':'structure')+':</span> '+name+'\n'+
+    '<span class="k">'+(uk?'вихід':'output')+':</span> <span class="a">'+out.map(hex2).join('')+'</span>\n'+
+    '<span class="k">'+(uk?'лавина (1 біт входу)':'avalanche (1 input bit)')+':</span> <span class="s">'+diff+' / 128</span> ('+(diff/128*100).toFixed(0)+'%)\n'+
+    '<span class="k">'+(uk?'обіг дешифр∘шифр':'round-trip dec∘enc')+':</span> '+(rt?'<span class="a">'+(uk?'= вхід ✓':'= input ✓')+'</span>':'<span class="b">✗</span>');
+}
+
+/* ---- per-cipher mini avalanche demo ---- */
+function makeMini(struct,canvasId,outId,initHex,rounds){
+  let block=parseHex(initHex);
+  function draw(){
+    const {out,out2,diff}=avalanche(struct,block,rounds);
+    paintDiff(canvasId,out,out2,20);
+    const rt=roundTrip(struct,block,rounds);
+    const uk=window.LANG==='uk';
+    document.getElementById(outId).innerHTML=
+      '<span class="k">'+(uk?'вхід':'input')+':</span> '+block.map(hex2).join('')+'\n'+
+      '<span class="k">'+(uk?'вихід':'output')+' ('+rounds+'r):</span> <span class="a">'+out.map(hex2).join('')+'</span>\n'+
+      '<span class="k">'+(uk?'лавина':'avalanche')+':</span> <span class="s">'+diff+' / 128</span> ('+(diff/128*100).toFixed(0)+'%)  '+
+      '<span class="k">'+(uk?'обіг':'round-trip')+':</span> '+(rt?'<span class="a">✓</span>':'<span class="b">✗</span>');
+  }
+  function flip(){ const bit=(Math.random()*128)|0; block[bit>>3]^=(1<<(bit&7)); draw(); }
+  return {draw,flip};
+}
+
+/* ====================================================================
+   SHA-256 (real) — for the hash avalanche stand-in (Streebog / SM3)
+   ==================================================================== */
+const SHA=(function(){
+  const K=new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+  const rr=(x,n)=>(x>>>n)|(x<<(32-n));
+  function digest(bytes){
+    const l=bytes.length,bl=((l+8>>6)+1)<<6,m=new Uint8Array(bl); m.set(bytes); m[l]=0x80;
+    const bits=l*8; m[bl-4]=(bits>>>24)&255;m[bl-3]=(bits>>>16)&255;m[bl-2]=(bits>>>8)&255;m[bl-1]=bits&255;
+    let h0=0x6a09e667,h1=0xbb67ae85,h2=0x3c6ef372,h3=0xa54ff53a,h4=0x510e527f,h5=0x9b05688c,h6=0x1f83d9ab,h7=0x5be0cd19;
+    const w=new Uint32Array(64);
+    for(let o=0;o<bl;o+=64){
+      for(let i=0;i<16;i++) w[i]=(m[o+4*i]<<24)|(m[o+4*i+1]<<16)|(m[o+4*i+2]<<8)|m[o+4*i+3];
+      for(let i=16;i<64;i++){ const s0=rr(w[i-15],7)^rr(w[i-15],18)^(w[i-15]>>>3), s1=rr(w[i-2],17)^rr(w[i-2],19)^(w[i-2]>>>10); w[i]=(w[i-16]+s0+w[i-7]+s1)|0; }
+      let a=h0,b=h1,c=h2,d=h3,e=h4,f=h5,g=h6,h=h7;
+      for(let i=0;i<64;i++){ const S1=rr(e,6)^rr(e,11)^rr(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[i]+w[i])|0,S0=rr(a,2)^rr(a,13)^rr(a,22),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)|0; h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0; }
+      h0=(h0+a)|0;h1=(h1+b)|0;h2=(h2+c)|0;h3=(h3+d)|0;h4=(h4+e)|0;h5=(h5+f)|0;h6=(h6+g)|0;h7=(h7+h)|0;
+    }
+    const out=new Uint8Array(32),hs=[h0,h1,h2,h3,h4,h5,h6,h7];
+    for(let i=0;i<8;i++){ out[4*i]=(hs[i]>>>24)&255;out[4*i+1]=(hs[i]>>>16)&255;out[4*i+2]=(hs[i]>>>8)&255;out[4*i+3]=hs[i]&255; }
+    return out;
+  }
+  const enc=new TextEncoder(),hex=b=>Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join('');
+  return {digest,hex,str:s=>digest(enc.encode(s))};
+})();
+
+function makeHash(inId,canvasId,outId){
+  function draw(){
+    const msg=document.getElementById(inId).value||'';
+    const bytes=new TextEncoder().encode(msg);
+    const d1=SHA.digest(bytes);
+    const b2=bytes.slice(); if(b2.length) b2[0]^=1;
+    const d2=SHA.digest(b2);
+    let diff=0; for(let i=0;i<32;i++) diff+=popcount(d1[i]^d2[i]);
+    const cv=document.getElementById(canvasId),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+    g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+    const bw=W/256;
+    for(let i=0;i<32;i++)for(let bit=0;bit<8;bit++){ const idx=i*8+bit,on=((d1[i]^d2[i])>>(7-bit))&1; g.fillStyle=on?C.rose:C.grid; g.fillRect(idx*bw,22,bw-0.2,74); }
+    const uk=window.LANG==='uk';
+    document.getElementById(outId).innerHTML=
+      '<span class="k">H(m)  =</span> <span class="a">'+SHA.hex(d1).slice(0,32)+'…</span>\n'+
+      '<span class="k">H(m′) =</span> <span class="a">'+SHA.hex(d2).slice(0,32)+'…</span>\n'+
+      '<span class="k">'+(uk?'бітів змінено (рожеві)':'bits changed (pink)')+':</span> <span class="s">'+diff+' / 256</span> ('+(diff/256*100).toFixed(0)+'%)';
+  }
+  return {draw};
+}
+
+/* ====================================================================
+   SM2 — real prime-field EC arithmetic (BigInt) over a toy curve
+   ==================================================================== */
+const P=263n, EA=4n, EB=1n;
+function egcdB(a,b){ let old_r=a,r=b,old_s=1n,s=0n; while(r!==0n){ const q=old_r/r; [old_r,r]=[r,old_r-q*r]; [old_s,s]=[s,old_s-q*s]; } return [old_r,old_s]; }
+function modinvB(a,m){ a=((a%m)+m)%m; const [g,x]=egcdB(a,m); return g===1n?((x%m)+m)%m:null; }
+function ecAdd(A,B){
+  if(!A)return B; if(!B)return A;
+  const [x1,y1]=A,[x2,y2]=B;
+  if(x1===x2 && ((y1+y2)%P)===0n) return null;
+  let m;
+  if(x1===x2 && y1===y2){ m=((3n*x1*x1+EA)%P*modinvB(2n*y1,P))%P; }
+  else { m=(((y2-y1)%P+P)%P*modinvB(((x2-x1)%P+P)%P,P))%P; }
+  m=((m%P)+P)%P;
+  const x3=(((m*m-x1-x2)%P)+P)%P, y3=(((m*(x1-x3)-y1)%P)+P)%P;
+  return [x3,y3];
+}
+function ecMul(k,Pt){ let R=null,Q=Pt; k=BigInt(k); while(k>0n){ if(k&1n) R=ecAdd(R,Q); Q=ecAdd(Q,Q); k>>=1n; } return R; }
+function ecPoints(){ const pts=[]; for(let x=0n;x<P;x++){ const rhs=((x*x*x+EA*x+EB)%P+P)%P; for(let y=0n;y<P;y++){ if((y*y)%P===rhs) pts.push([x,y]); } } return pts; }
+function ecOrder(G){ let o=1n,Q=G; while(Q!==null){ Q=ecAdd(Q,G); o++; if(o>400n) break; } return o; }
+const EPTS=ecPoints();
+const GEN=(function(){ let best=null,bo=0n; for(const pt of EPTS){ const o=ecOrder(pt); if(o>bo){ bo=o; best=pt; } } return {G:best,n:bo}; })();
+function sm2Sign(d,e,n,G,Q){
+  // ensure (1+d) invertible mod n
+  let dd=BigInt(d); while(modinvB(1n+dd,n)===null) dd=(dd%n)+1n;
+  let k=((BigInt(e)*7n+13n)%(n-1n))+1n;
+  let r,s,R1;
+  for(let tries=0;tries<Number(n)+2;tries++){
+    R1=ecMul(k,G);
+    if(R1===null){ k=(k%(n-1n))+1n; continue; }
+    r=((BigInt(e)+R1[0])%n+n)%n;
+    if(r===0n || (r+k)%n===0n){ k=(k%(n-1n))+1n; continue; }
+    const inv=modinvB(1n+dd,n);
+    s=((inv*(((k-r*dd)%n)+n))%n+n)%n;
+    if(s===0n){ k=(k%(n-1n))+1n; continue; }
+    break;
+  }
+  return {d:dd,k,r,s,R1};
+}
+function sm2Verify(e,r,s,n,G,Q){
+  if(r<=0n||r>=n||s<=0n||s>=n) return false;
+  const t=(r+s)%n; if(t===0n) return false;
+  const Pt=ecAdd(ecMul(s,G),ecMul(t,Q));
+  if(Pt===null) return false;
+  const R=((BigInt(e)+Pt[0])%n+n)%n;
+  return R===r;
+}
+function drawSM2(){
+  const uk=window.LANG==='uk';
+  const cv=document.getElementById('sm2Canvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const G=GEN.G,n=GEN.n;
+  const pad=18, sc=(W-2*pad)/262;
+  const sx=v=>pad+Number(v)*sc, sy=v=>H-pad-Number(v)*sc;
+  g.strokeStyle=C.line;
+  for(let i=0;i<=262;i+=32){ g.beginPath(); g.moveTo(sx(i),sy(0)); g.lineTo(sx(i),sy(262)); g.moveTo(sx(0),sy(i)); g.lineTo(sx(262),sy(i)); g.stroke(); }
+  g.fillStyle=C.grid; EPTS.forEach(p=>{ g.beginPath(); g.arc(sx(p[0]),sy(p[1]),2,0,7); g.fill(); });
+  if(!G){ document.getElementById('sm2Out').innerHTML='<span class="b">'+(uk?'крива вироджена':'singular curve')+'</span>'; return; }
+  const d=((+document.getElementById('sm2D').value-1)%(Number(n)-1))+1; document.getElementById('sm2DV').textContent=d;
+  const msg=document.getElementById('sm2Msg').value||'';
+  let sum=0; for(const ch of msg) sum+=ch.charCodeAt(0);
+  const e=((sum%Number(n))+Number(n))%Number(n);
+  const sg=sm2Sign(d,e,n,G,null);
+  const Q=ecMul(sg.d,G);                 // public key from the ACTUAL signing key (sg.d)
+  const ok=sm2Verify(e,sg.r,sg.s,n,G,Q);
+  const mark=(p,col,r)=>{ if(!p)return; g.fillStyle=col; g.beginPath(); g.arc(sx(p[0]),sy(p[1]),4.5,0,7); g.fill(); };
+  mark(G,C.dim,4.5); mark(Q,C.amber,4.5); mark(sg.R1,C.teal,4.5);
+  document.getElementById('sm2Out').innerHTML=
+    '<span class="k">'+(uk?'крива':'curve')+' y²=x³+4x+1 mod 263,  '+EPTS.length+' '+(uk?'точок':'points')+'</span>\n'+
+    '<span class="k">G=</span>('+G[0]+','+G[1]+'), |G|=<span class="s">'+n+'</span>\n'+
+    '<span class="k">'+(uk?'ключі':'keys')+': d=</span>'+sg.d+'  <span class="k">Q=d·G=</span>'+(Q?'('+Q[0]+','+Q[1]+')':'∞')+'\n'+
+    '<span class="k">'+(uk?'підпис':'signature')+' (e='+e+'): r=</span><span class="a">'+sg.r+'</span> <span class="k">s=</span><span class="a">'+sg.s+'</span>\n'+
+    '<span class="k">'+(uk?'перевірка s·G+t·Q':'verify s·G+t·Q')+' →</span> '+(ok?'<span class="a">'+(uk?'ДІЙСНИЙ ✓':'VALID ✓')+'</span>':'<span class="b">✗</span>');
+}
+
+/* ====================================================================
+   self-test banner + wiring
+   ==================================================================== */
+const mgMini=makeMini('fe','mgCanvas','mgOut','0f1e2d3c4b5a69788796a5b4c3d2e1f0',6);
+const arMini=makeMini('sp','arCanvas','arOut','fedcba98765432100123456789abcdef',6);
+const sdMini=makeMini('fe','sdCanvas','sdOut','00000000000000010000000000000000',6);
+const leMini=makeMini('arx','leCanvas','leOut','89abcdef0123456776543210fedcba98',8);
+const stHash=makeHash('stIn','stCanvas','stOut');
+const s3Hash=makeHash('s3In','s3Canvas','s3Out');
+
+function selfTest(){
+  const uk=window.LANG==='uk';
+  const sb=(SBOX[0]===0x63 && SBOX[1]===0x7c && SBOX[16]===0xca && INV_SBOX[SBOX[123]]===123);
+  const sh=SHA.hex(SHA.str('abc'))==='ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
+  const sample=parseHex('00112233445566778899aabbccddeeff');
+  const rt=roundTrip('sp',sample,7)&&roundTrip('fe',sample,7)&&roundTrip('arx',sample,7);
+  document.getElementById('selftest').innerHTML=
+    '<span class="k">'+(uk?'Самоперевірка':'Self-test')+':</span>  '+
+    'AES S-box <span class="'+(sb?'a':'b')+'">'+(sb?'✓':'✗')+'</span>   '+
+    'SHA-256("abc") <span class="'+(sh?'a':'b')+'">'+(sh?'✓':'✗')+'</span>   '+
+    (uk?'обіг SP/Феєстель/ARX':'round-trip SP/Feistel/ARX')+' <span class="'+(rt?'a':'b')+'">'+(rt?'✓':'✗')+'</span>   '+
+    ((sb&&sh&&rt)?'<span class="a">'+(uk?'усі примітиви коректні':'all primitives correct')+'</span>':'<span class="b">FAIL</span>');
+}
+
+const W='https://en.wikipedia.org/wiki/';
+window.REFS={
+  magma:[{tag:'wiki',en:{href:W+'GOST_(block_cipher)',label:'Wikipedia: GOST / Magma'}},
+         {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc8891',label:'RFC 8891 (GOST R 34.12-2015 Magma)'}}],
+  sm4:[{tag:'wiki',en:{href:W+'SM4_(cipher)',label:'Wikipedia: SM4'}},
+       {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc8998',label:'RFC 8998 (ShangMi in TLS 1.3)'}}],
+  aria:[{tag:'wiki',en:{href:W+'ARIA_(cipher)',label:'Wikipedia: ARIA'}},
+        {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc5794',label:'RFC 5794 (ARIA)'}}],
+  seed:[{tag:'wiki',en:{href:W+'SEED',label:'Wikipedia: SEED'}},
+        {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc4269',label:'RFC 4269 (SEED)'}}],
+  lea:[{tag:'wiki',en:{href:W+'LEA_(cipher)',label:'Wikipedia: LEA'}},
+       {tag:'paper',en:{href:'https://doi.org/10.1007/978-3-319-05149-9_1',label:'LEA design paper (WISA 2013)'}}],
+  sm2:[{tag:'wiki',en:{href:W+'Elliptic-curve_cryptography',label:'Wikipedia: elliptic-curve cryptography'}},
+       {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc8998',label:'RFC 8998 (SM2/SM3/SM4 in TLS 1.3)'}},
+       {tag:'iso',en:{href:'https://www.iso.org/standard/76382.html',label:'ISO/IEC 14888-3 (SM2 DSA)'}}],
+  streebog:[{tag:'wiki',en:{href:W+'Streebog',label:'Wikipedia: Streebog'}},
+            {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc6986',label:'RFC 6986 (GOST R 34.11-2012)'}}],
+  sm3:[{tag:'wiki',en:{href:W+'SM3_(hash_function)',label:'Wikipedia: SM3'}},
+       {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc8998',label:'RFC 8998 (ShangMi in TLS 1.3)'}}]
+};
+
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  selfTest();
+  drawFlag();
+  mgMini.draw(); arMini.draw(); sdMini.draw(); leMini.draw();
+  drawSM2();
+  stHash.draw(); s3Hash.draw();
+};
+
+/* controls */
+['fStruct','fIn','fR'].forEach(id=>document.getElementById(id).addEventListener('input',drawFlag));
+document.getElementById('fFlip').addEventListener('click',()=>{ const b=parseHex(document.getElementById('fIn').value); const bit=(Math.random()*128)|0; b[bit>>3]^=(1<<(bit&7)); document.getElementById('fIn').value=b.map(hex2).join(''); drawFlag(); });
+document.getElementById('fRand').addEventListener('click',()=>{ const b=new Array(16).fill(0).map(()=>(Math.random()*256)|0); document.getElementById('fIn').value=b.map(hex2).join(''); drawFlag(); });
+document.getElementById('mgFlip').addEventListener('click',mgMini.flip);
+document.getElementById('arFlip').addEventListener('click',arMini.flip);
+document.getElementById('sdFlip').addEventListener('click',sdMini.flip);
+document.getElementById('leFlip').addEventListener('click',leMini.flip);
+['sm2D','sm2Msg'].forEach(id=>document.getElementById(id).addEventListener('input',drawSM2));
+document.getElementById('sm2Sign').addEventListener('click',drawSM2);
+document.getElementById('stIn').addEventListener('input',stHash.draw);
+document.getElementById('s3In').addEventListener('input',s3Hash.draw);
+</script>
+</body>
+</html>

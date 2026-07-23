@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Secure computation &amp; commitments — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="mpc">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Sections 18 · 19 — computing on secrets you never reveal"
+         data-uk="Розділи 18 · 19 — обчислення над секретами, які ви ніколи не розкриваєте">Sections 18 · 19</div>
+    <h1 data-en="Secure computation &amp; commitments" data-uk="Захищені обчислення та зобов'язання">Secure computation &amp; commitments</h1>
+    <p class="lede" data-en="Multi-party computation lets mutually distrustful parties evaluate a function of their private inputs and learn only the result. Its building blocks — garbled circuits, oblivious transfer and multiplication triples — sit on top of one small primitive: the <b>commitment</b>, a cryptographic envelope that is hiding until opened and binding once sealed. Each idea below is a real toy computation you can step through."
+       data-uk="Багатосторонні обчислення дозволяють взаємно недовірливим сторонам обчислити функцію своїх приватних входів і дізнатися лише результат. Їхні будівельні блоки — заплутані схеми, забудькувата передача та трійки множення — стоять на одному малому примітиві: <b>зобов'язанні</b>, криптографічному конверті, що приховує до відкриття й зв'язує після запечатування. Кожна ідея нижче — це реальне іграшкове обчислення, яке можна покроково пройти.">Secure multi-party computation and commitment schemes.</p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="§18 — Secure multi-party computation" data-uk="§18 — Багатосторонні обчислення">§18 — Secure MPC</h3>
+
+  <!-- ================= Yao's garbled circuits ================= -->
+  <section id="yao">
+    <span class="num" data-en="18 / Yao's garbled circuits" data-uk="18 / Заплутані схеми Яо">18 / Yao</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(gates)</span>
+      <span data-en="Yao's garbled circuits" data-uk="Заплутані схеми Яо">Yao's garbled circuits</span></h2>
+    <div class="formula">G[i,j] = Enc(A_i, B_j) ⟶ C_{f(i,j)};  evaluator holds one label per wire</div>
+    <p class="desc" data-en="Two-party computation by <b>encrypting a Boolean circuit gate by gate</b>. The garbler assigns each wire two random <b>labels</b> (one per bit) and, for every gate, builds a table whose four rows encrypt the correct output label under the two matching input labels. The evaluator receives exactly one label per input wire (its own via choice, the other via <b>oblivious transfer</b>) and can decrypt only the single valid row — learning the output bit without learning either party's inputs."
+       data-uk="Двостороннє обчислення шляхом <b>шифрування булевої схеми вентиль за вентилем</b>. «Заплутувач» призначає кожному дроту дві випадкові <b>мітки</b> (по одній на біт) і для кожного вентиля будує таблицю, чотири рядки якої шифрують правильну вихідну мітку під двома відповідними вхідними мітками. Обчислювач отримує рівно одну мітку на вхідний дріт (свою — за вибором, іншу — через <b>забудькувату передачу</b>) і може розшифрувати лише один правильний рядок — дізнаючись вихідний біт, не дізнаючись входів жодної сторони."></p>
+    <div id="refs-yao"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="yaoCanvas" width="300" height="200"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Toy garbling of one AND gate. The mask below is a simple keyed mixing function standing in for AES — the circuit logic is real; the cipher is a schematic placeholder." data-uk="Іграшкове заплутування одного вентиля AND. Маска нижче — проста ключова функція перемішування замість AES: логіка схеми справжня, шифр — схематичний замінник."></div>
+          <label style="display:flex;gap:8px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--dim)">
+            <input type="checkbox" id="yaoA"> <span data-en="Alice's input bit a" data-uk="вхідний біт Аліси a">Alice's input bit a</span></label>
+          <label style="display:flex;gap:8px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--dim)">
+            <input type="checkbox" id="yaoB"> <span data-en="Bob's input bit b" data-uk="вхідний біт Боба b">Bob's input bit b</span></label>
+          <button id="yaoNew" data-en="New garbling (fresh labels)" data-uk="Нове заплутування (свіжі мітки)">New garbling (fresh labels)</button>
+          <div class="readout" id="yaoOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Secure against a <b>semi-honest</b> evaluator: labels are indistinguishable from random, and point-and-permute plus a real cipher (AES with the free-XOR and half-gates optimisations) hide which row decrypts. A <b>malicious</b> garbler can build a wrong circuit, so real systems add cut-and-choose or authenticated garbling (BMR, HSS). This demo's mask is <b>not</b> a secure cipher — it only illustrates the data flow."
+            data-uk="Стійкі проти <b>напівчесного</b> обчислювача: мітки невідрізнювані від випадкових, а point-and-permute разом зі справжнім шифром (AES з оптимізаціями free-XOR та half-gates) приховують, який рядок розшифровується. <b>Зловмисний</b> заплутувач може побудувати хибну схему, тож реальні системи додають cut-and-choose або автентифіковане заплутування (BMR, HSS). Маска в цьому демо <b>не</b> є стійким шифром — вона лише ілюструє потік даних."></span></div>
+    <div class="xrefs">
+      <a href="advanced.html#mpc">MPC</a>
+      <a href="mpc.html#ot" data-en="Oblivious transfer" data-uk="Забудькувата передача">Oblivious transfer</a>
+      <a href="mpc.html#beaver" data-en="Beaver triples" data-uk="Трійки Бівера">Beaver triples</a>
+    </div>
+  </section>
+
+  <!-- ================= Oblivious transfer ================= -->
+  <section id="ot">
+    <span class="num" data-en="18 / Oblivious transfer" data-uk="18 / Забудькувата передача">18 / OT</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n)</span>
+      <span data-en="Oblivious transfer (Rabin, 1-of-2, IKNP)" data-uk="Забудькувата передача (Рабін, 1-з-2, IKNP)">Oblivious transfer</span></h2>
+    <div class="formula">PK_b = gᵏ,  PK_{1−b} = C · gᵏ⁻¹;  sender ElGamal-encrypts m₀,m₁ under PK₀,PK₁</div>
+    <p class="desc" data-en="The primitive at the <b>root of MPC</b>. The sender holds two messages m₀, m₁; the receiver holds a choice bit b and must learn <b>m_b and nothing about m_{1−b}</b>, while the sender learns <b>nothing about b</b>. This toy uses the Bellare–Micali / ElGamal construction: the receiver builds one public key it can decrypt (PK_b = gᵏ) and one it cannot (PK_{1−b} = C·g⁻ᵏ, whose discrete log needs log_g C). The sender encrypts each message under the matching key; only the chosen ciphertext opens."
+       data-uk="Примітив у <b>корені MPC</b>. Відправник має два повідомлення m₀, m₁; отримувач має біт вибору b і має дізнатися <b>m_b і нічого про m_{1−b}</b>, тоді як відправник не дізнається <b>нічого про b</b>. Це демо використовує конструкцію Белларе–Мікалі / Ель-Гамаля: отримувач будує один відкритий ключ, який може розшифрувати (PK_b = gᵏ), і один, який не може (PK_{1−b} = C·g⁻ᵏ, чий дискретний логарифм потребує log_g C). Відправник шифрує кожне повідомлення під відповідним ключем; відкривається лише обраний шифротекст."></p>
+    <div id="refs-ot"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="hint" data-en="Group: p = 2039, subgroup generator g = 4 (order 1019), common element C = g⁹⁹⁹ with log unknown to both parties." data-uk="Група: p = 2039, генератор підгрупи g = 4 (порядок 1019), спільний елемент C = g⁹⁹⁹ з логарифмом, невідомим обом сторонам."></div>
+        <div class="ctrl"><label><span data-en="choice bit b" data-uk="біт вибору b">choice bit b</span><span class="val" id="otBV">1</span></label>
+          <input type="range" id="otB" min="0" max="1" value="1"></div>
+        <div class="ctrl"><label><span data-en="sender's m₀" data-uk="m₀ відправника">sender's m₀</span><span class="val" id="otM0V">111</span></label>
+          <input type="range" id="otM0" min="1" max="2000" value="111"></div>
+        <div class="ctrl"><label><span data-en="sender's m₁" data-uk="m₁ відправника">sender's m₁</span><span class="val" id="otM1V">222</span></label>
+          <input type="range" id="otM1" min="1" max="2000" value="222"></div>
+        <button id="otRun" data-en="Run the transfer" data-uk="Виконати передачу">Run the transfer</button>
+        <div class="readout" id="otOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Receiver privacy is perfect (PK₀ is uniformly random for either b); sender privacy rests on the <b>Diffie–Hellman assumption</b> in the group. Rabin's original OT (1981) delivered a message with probability ½; Even–Goldreich–Lempel gave the 1-of-2 form. <b>OT extension</b> (IKNP, 2003) turns a few base OTs into millions using only symmetric crypto — this is what makes modern MPC fast."
+            data-uk="Приватність отримувача досконала (PK₀ рівномірно випадковий за будь-якого b); приватність відправника спирається на <b>припущення Діффі–Хеллмана</b> у групі. Оригінальна OT Рабіна (1981) доставляла повідомлення з імовірністю ½; Івен–Голдрайх–Лемпель дали форму 1-з-2. <b>Розширення OT</b> (IKNP, 2003) перетворює кілька базових OT на мільйони, використовуючи лише симетричну криптографію — саме це робить сучасні MPC швидкими."></span></div>
+    <div class="xrefs">
+      <a href="authprotocols.html#auth-fs" data-en="Fiat–Shamir" data-uk="Фіат–Шамір">Fiat–Shamir</a>
+      <a href="mpc.html#yao">Yao</a>
+      <a href="mpc.html#beaver" data-en="Beaver triples" data-uk="Трійки Бівера">Beaver triples</a>
+    </div>
+  </section>
+
+  <!-- ================= Beaver triples ================= -->
+  <section id="beaver">
+    <span class="num" data-en="18 / Beaver triples" data-uk="18 / Трійки Бівера">18 / Beaver</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(gates)</span>
+      <span data-en="Beaver triples" data-uk="Трійки Бівера">Beaver triples</span></h2>
+    <div class="formula">d = x − a,  e = y − b;  x·y = c + e·a + d·b + d·e</div>
+    <p class="desc" data-en="Secret-shared <b>addition</b> is free, but <b>multiplication</b> needs interaction. Beaver's trick precomputes, in an offline phase, a random <b>multiplication triple</b> (a, b, c = a·b), shared among the parties. To multiply shared x and y online, the parties open the masked values d = x − a and e = y − b (these leak nothing — a and b are uniform), then locally combine z = c + e·a + d·b + d·e. Only two public openings per multiplication, and the expensive work is pushed offline."
+       data-uk="Спільно розділене <b>додавання</b> безкоштовне, але <b>множення</b> потребує взаємодії. Хитрість Бівера заздалегідь, в офлайн-фазі, обчислює випадкову <b>трійку множення</b> (a, b, c = a·b), розділену між сторонами. Щоб перемножити розділені x і y онлайн, сторони відкривають замасковані значення d = x − a та e = y − b (вони нічого не розкривають — a і b рівномірні), потім локально складають z = c + e·a + d·b + d·e. Лише два відкриття на множення, а дорога робота винесена в офлайн."></p>
+    <div id="refs-beaver"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <div class="controls">
+          <div class="hint" data-en="Two parties, additive shares over the field ℤ₂₅₁. x = x₁+x₂, y = y₁+y₂; the triple (a,b,c) is shared the same way. Party 1 adds the public d·e term." data-uk="Дві сторони, адитивні частки над полем ℤ₂₅₁. x = x₁+x₂, y = y₁+y₂; трійка (a,b,c) розділена так само. Сторона 1 додає публічний доданок d·e."></div>
+          <div class="ctrl"><label><span data-en="secret x" data-uk="секрет x">secret x</span><span class="val" id="bvXV">6</span></label>
+            <input type="range" id="bvX" min="0" max="15" value="6"></div>
+          <div class="ctrl"><label><span data-en="secret y" data-uk="секрет y">secret y</span><span class="val" id="bvYV">7</span></label>
+            <input type="range" id="bvY" min="0" max="15" value="7"></div>
+          <button id="bvNew" data-en="New random sharing &amp; triple" data-uk="Нове випадкове розділення й трійка">New random sharing &amp; triple</button>
+        </div>
+        <div style="flex:1; min-width:260px;">
+          <div class="readout" id="bvOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Information-theoretically secure in the offline/online model: the openings d, e are uniformly random masks, so they reveal nothing about x, y. Security reduces entirely to <b>how the triples are generated</b> — via OT (semi-honest, e.g. MASCOT) or homomorphic encryption, with MACs added for a malicious majority (SPDZ). A triple is consumed by every multiplication and can never be reused."
+            data-uk="Теоретико-інформаційно стійкі в офлайн/онлайн-моделі: відкриття d, e — рівномірно випадкові маски, тож вони нічого не розкривають про x, y. Стійкість повністю зводиться до того, <b>як генеруються трійки</b> — через OT (напівчесно, напр. MASCOT) або гомоморфне шифрування, з MAC-ами для зловмисної більшості (SPDZ). Трійку споживає кожне множення, і її не можна використати повторно."></span></div>
+    <div class="xrefs">
+      <a href="advanced.html#mpc">MPC</a>
+      <a href="mpc.html#ot" data-en="Oblivious transfer" data-uk="Забудькувата передача">Oblivious transfer</a>
+      <a href="advanced.html#shamir" data-en="Shamir sharing" data-uk="Схема Шаміра">Shamir sharing</a>
+    </div>
+  </section>
+
+  <!-- ================= Private set intersection ================= -->
+  <section id="psi">
+    <span class="num" data-en="18 / Private set intersection" data-uk="18 / Приватний перетин множин">18 / PSI</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(n)</span>
+      <span data-en="Private set intersection" data-uk="Приватний перетин множин">Private set intersection</span></h2>
+    <div class="formula">Alice, Bob ⟶ A ∩ B  revealing nothing about the non-shared elements</div>
+    <p class="desc" data-en="Two parties each hold a private set and want to learn <b>only their common elements</b> — the classic case is contact discovery (which of my contacts already use this app?). The naive protocol below hashes every element under a common function and compares digests; the intersection of the digest sets reveals the shared items. Real PSI replaces the plain hash with an <b>oblivious pseudorandom function</b> (Diffie–Hellman or OT-based) so that neither party can brute-force the other's small-domain items."
+       data-uk="Дві сторони мають приватні множини й хочуть дізнатися <b>лише спільні елементи</b> — класичний випадок це виявлення контактів (хто з моїх контактів уже користується застосунком?). Наївний протокол нижче гешує кожен елемент під спільною функцією та порівнює дайджести; перетин множин дайджестів розкриває спільні елементи. Справжня PSI замінює простий геш на <b>забудькувату псевдовипадкову функцію</b> (на основі Діффі–Хеллмана або OT), щоб жодна сторона не могла перебрати елементи іншої з малої області."></p>
+    <div id="refs-psi"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="hint" data-en="SCHEMATIC privacy: this toy hashes in the clear (vulnerable to a dictionary attack on small inputs). It faithfully computes the intersection; it does not hide the non-shared items. Enter comma-separated numbers." data-uk="СХЕМАТИЧНА приватність: це демо гешує у відкриту (вразливе до словникової атаки на малих входах). Воно правильно обчислює перетин; воно не приховує неспільні елементи. Введіть числа через кому."></div>
+        <div class="ctrl"><label><span data-en="Alice's set A" data-uk="множина Аліси A">Alice's set A</span></label>
+          <input type="text" id="psiA" value="3, 8, 15, 21, 42" spellcheck="false"></div>
+        <div class="ctrl"><label><span data-en="Bob's set B" data-uk="множина Боба B">Bob's set B</span></label>
+          <input type="text" id="psiB" value="1, 8, 15, 30, 42, 99" spellcheck="false"></div>
+        <div class="readout" id="psiOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Hashing in the clear is <b>insecure</b> whenever the input domain is small or guessable (phone numbers, emails) — an adversary simply hashes the whole dictionary. Production PSI (Meadows' DH protocol, and OT-extension protocols such as KKRT / PSZ) achieves linear cost while provably hiding the non-intersecting elements; unbalanced variants use homomorphic encryption for a tiny client set against a huge server set."
+            data-uk="Гешування у відкриту <b>небезпечне</b>, коли область входів мала або вгадувана (номери телефонів, email) — супротивник просто гешує весь словник. Робоча PSI (DH-протокол Мідоуз і протоколи на розширенні OT, як-от KKRT / PSZ) досягає лінійної вартості, доказово приховуючи неспільні елементи; незбалансовані варіанти використовують гомоморфне шифрування для малої множини клієнта проти величезної множини сервера."></span></div>
+    <div class="xrefs">
+      <a href="hash.html#sha2">SHA-2</a>
+      <a href="mpc.html#ot" data-en="Oblivious transfer" data-uk="Забудькувата передача">Oblivious transfer</a>
+    </div>
+  </section>
+
+  <h3 class="sub" data-en="§19 — Commitment schemes" data-uk="§19 — Схеми зобов'язань">§19 — Commitments</h3>
+
+  <!-- ================= Pedersen commitment ================= -->
+  <section id="pedersen">
+    <span class="num" data-en="19 / Pedersen commitment" data-uk="19 / Зобов'язання Педерсена">19 / Pedersen</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+      <span data-en="Pedersen commitment" data-uk="Зобов'язання Педерсена">Pedersen commitment</span></h2>
+    <div class="formula">c = gᵐ · hʳ mod p,  h = gˢ (s unknown);  open by revealing (m, r)</div>
+    <p class="desc" data-en="A <b>hiding</b> and <b>binding</b> commitment. Two group generators g and h are fixed, with h = gˢ for an s that <b>nobody knows</b>. To commit to a message m, the sender picks random blinding r and publishes c = gᵐ·hʳ. It is <b>perfectly hiding</b> (for any m a suitable r gives any c, so c leaks nothing) and <b>computationally binding</b> (opening c to a different m′ would reveal s = log_g h). It is also <b>additively homomorphic</b>: multiplying two commitments commits to the sum of the messages — the property that makes it the backbone of confidential transactions and Bulletproofs."
+       data-uk="<b>Приховуюче</b> та <b>зв'язуюче</b> зобов'язання. Фіксують два генератори групи g і h, де h = gˢ для s, якого <b>ніхто не знає</b>. Щоб зафіксувати повідомлення m, відправник обирає випадкове засліплення r і публікує c = gᵐ·hʳ. Воно <b>досконало приховуюче</b> (для будь-якого m відповідне r дає будь-яке c, тож c нічого не розкриває) і <b>обчислювально зв'язуюче</b> (відкрити c на інше m′ означало б розкрити s = log_g h). Воно також <b>адитивно гомоморфне</b>: перемноження двох зобов'язань фіксує суму повідомлень — властивість, що робить його основою конфіденційних транзакцій і Bulletproofs."></p>
+    <div id="refs-pedersen"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <div class="controls">
+          <div class="hint" data-en="Group: p = 2039, g = 4, h = g⁷⁷⁷ mod p (the secret s = 777 stands in for an unknown log). Two commitments are opened and combined." data-uk="Група: p = 2039, g = 4, h = g⁷⁷⁷ mod p (секрет s = 777 замінює невідомий логарифм). Два зобов'язання відкриваються та поєднуються."></div>
+          <div class="ctrl"><label><span>m₁</span><span class="val" id="pedM1V">9</span></label>
+            <input type="range" id="pedM1" min="0" max="50" value="9"></div>
+          <div class="ctrl"><label><span>r₁</span><span class="val" id="pedR1V">14</span></label>
+            <input type="range" id="pedR1" min="0" max="50" value="14"></div>
+          <div class="ctrl"><label><span>m₂</span><span class="val" id="pedM2V">5</span></label>
+            <input type="range" id="pedM2" min="0" max="50" value="5"></div>
+          <div class="ctrl"><label><span>r₂</span><span class="val" id="pedR2V">23</span></label>
+            <input type="range" id="pedR2" min="0" max="50" value="23"></div>
+        </div>
+        <div style="flex:1; min-width:260px;">
+          <div class="readout" id="pedOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Perfectly hiding and computationally binding under the <b>discrete-log assumption</b>. The one fatal setup error is a <b>known relation between g and h</b>: if anyone learns s = log_g h they can open a commitment two ways, so h must come from a nothing-up-my-sleeve hash-to-group. (The dual, Elgamal-style commitment gᵐhʳ with h a real key is perfectly binding but only computationally hiding — you pick which property is unconditional.)"
+            data-uk="Досконало приховуюче й обчислювально зв'язуюче за <b>припущенням дискретного логарифма</b>. Єдина фатальна помилка налаштування — <b>відоме співвідношення між g і h</b>: якщо хтось дізнається s = log_g h, він зможе відкрити зобов'язання двома способами, тож h має походити з nothing-up-my-sleeve геш-у-групу. (Двоїста, Ель-Гамаль-подібна форма з h як справжнім ключем — досконало зв'язуюча, але лише обчислювально приховуюча — ви обираєте, яка властивість безумовна.)"></span></div>
+    <div class="xrefs">
+      <a href="signatures.html#schnorr" data-en="Schnorr signature" data-uk="Підпис Шнорра">Schnorr signature</a>
+      <a href="advanced.html#schnorr-zk">Schnorr ZK</a>
+      <a href="mpc.html#vss">VSS</a>
+    </div>
+  </section>
+
+  <!-- ================= Verifiable secret sharing ================= -->
+  <section id="vss">
+    <span class="num" data-en="19 / Verifiable secret sharing" data-uk="19 / Верифіковане розділення секрету">19 / VSS</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(k·n)</span>
+      <span data-en="Verifiable secret sharing (Feldman/Pedersen)" data-uk="Верифіковане розділення секрету (Фелдман/Педерсен)">Verifiable secret sharing</span></h2>
+    <div class="formula">shares f(i);  commitments C_j = g^{a_j};  verify g^{f(i)} = ∏_j C_j^{iʲ}</div>
+    <p class="desc" data-en="Plain Shamir sharing trusts the dealer: a malicious dealer can hand out inconsistent shares that reconstruct different secrets. <b>Feldman VSS</b> fixes this by publishing a commitment C_j = g^{a_j} to every coefficient of the sharing polynomial. Each party then checks its share against the public commitments — g^{f(i)} must equal ∏ C_j^{iʲ} — so a bad share is caught immediately, without revealing the secret (which stays hidden by the discrete log). This is the foundation of <b>distributed key generation</b>."
+       data-uk="Звичайна схема Шаміра довіряє дилеру: зловмисний дилер може роздати неузгоджені частки, що відновлюють різні секрети. <b>Схема Фелдмана VSS</b> це виправляє, публікуючи зобов'язання C_j = g^{a_j} до кожного коефіцієнта полінома розділення. Кожна сторона перевіряє свою частку проти публічних зобов'язань — g^{f(i)} має дорівнювати ∏ C_j^{iʲ} — тож погана частка виявляється миттєво, не розкриваючи секрет (що лишається прихованим дискретним логарифмом). Це основа <b>розподіленої генерації ключів</b>."></p>
+    <div id="refs-vss"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="Secret s" data-uk="Секрет s">Secret s</span><span class="val" id="vssSV">42</span></label>
+            <input type="range" id="vssS" min="0" max="200" value="42"></div>
+          <div class="ctrl"><label><span data-en="Threshold t" data-uk="Поріг t">Threshold t</span><span class="val" id="vssTV">3</span></label>
+            <input type="range" id="vssT" min="2" max="4" value="3"></div>
+          <div class="ctrl"><label><span data-en="Shares n" data-uk="Часток n">Shares n</span><span class="val" id="vssNV">5</span></label>
+            <input type="range" id="vssN" min="2" max="6" value="5"></div>
+          <button id="vssNew" data-en="New random polynomial" data-uk="Новий випадковий поліном">New random polynomial</button>
+          <div class="hint" data-en="Prime-order group: p = 2039, subgroup order q = 1019, g = 4. Polynomial over ℤ_q; commitments in the group mod p." data-uk="Група простого порядку: p = 2039, порядок підгрупи q = 1019, g = 4. Поліном над ℤ_q; зобов'язання у групі mod p."></div>
+        </div>
+        <div style="flex:1; min-width:260px;">
+          <div class="readout" id="vssOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Feldman VSS is computationally hiding (the commitments leak g^{a_j}, which is safe under discrete log) and unconditionally binding. If perfect hiding is required, <b>Pedersen VSS</b> commits with C_j = g^{a_j}·h^{b_j}, adding a blinding polynomial so the commitments reveal nothing information-theoretically. Both underpin threshold signatures and DKG (e.g. GG18/20, FROST) where no single party ever holds the key."
+            data-uk="Схема Фелдмана обчислювально приховуюча (зобов'язання розкривають g^{a_j}, що безпечно за дискретним логарифмом) і безумовно зв'язуюча. Якщо потрібне досконале приховування, <b>схема Педерсена VSS</b> фіксує C_j = g^{a_j}·h^{b_j}, додаючи засліплюючий поліном, тож зобов'язання нічого не розкривають теоретико-інформаційно. Обидві лежать в основі порогових підписів і DKG (напр. GG18/20, FROST), де жодна сторона ніколи не тримає ключ цілком."></span></div>
+    <div class="xrefs">
+      <a href="advanced.html#shamir" data-en="Shamir sharing" data-uk="Схема Шаміра">Shamir sharing</a>
+      <a href="mpc.html#pedersen" data-en="Pedersen commitment" data-uk="Зобов'язання Педерсена">Pedersen commitment</a>
+      <a href="advanced.html#mpc">MPC</a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+
+/* ---------- BigInt modular helpers ---------- */
+function bmod(a,m){a%=m;return a<0n?a+m:a;}
+function modpow(b,e,m){b=bmod(b,m);let r=1n;e=BigInt(e);while(e>0n){if(e&1n)r=r*b%m;b=b*b%m;e>>=1n;}return r;}
+function egcd(a,b){let x=0n,x1=1n,y=1n,y1=0n;while(b){const q=a/b;[a,b]=[b,a-q*b];[x1,x]=[x,x1-q*x];[y1,y]=[y,y1-q*y];}return[a,x1,y1];}
+function modinv(a,m){return bmod(egcd(bmod(a,m),m)[1],m);}
+function rnd(n){return BigInt(1+Math.floor(Math.random()*(Number(n)-2)));}   // 1 .. n-2
+function el(id){return document.getElementById(id);}
+
+/* ---------- shared prime-order group (Pedersen, OT, VSS) ---------- */
+const P=2039n, Q=1019n, G=4n;          // p = 2q+1 safe prime, g of order q
+const H=modpow(G,777n,P);              // Pedersen 2nd generator, secret s=777 "unknown"
+const OT_C=modpow(G,999n,P);           // OT common element, discrete log unknown to parties
+
+/* ================= 1) Yao's garbled AND gate ================= */
+let yA0,yA1,yB0,yB1,yO0,yO1;
+function yaoNewGarble(){ const rl=()=>Math.floor(Math.random()*65536);
+  yA0=rl(); yA1=rl(); yB0=rl(); yB1=rl(); yO0=rl(); yO1=rl(); }
+yaoNewGarble();
+/* toy keyed mask (schematic stand-in for AES) -> 16-bit */
+function yPRF(kA,kB){ return ((Math.imul(kA,2654435761) ^ Math.imul(kB,40503) ^ 0x9E3779B1) >>> 0) & 0xFFFF; }
+function h4(v){ return ('0000'+(v>>>0).toString(16)).slice(-4); }
+function drawYao(a,b,okLabel){
+  const cv=el('yaoCanvas'),g=cv.getContext('2d'),W=cv.width,Hh=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,Hh);
+  // input wires
+  g.strokeStyle=C.line; g.lineWidth=2;
+  g.beginPath(); g.moveTo(20,55); g.lineTo(150,55); g.moveTo(20,135); g.lineTo(150,135); g.stroke();
+  // AND gate body (D-shape)
+  g.strokeStyle=C.teal; g.fillStyle='#132420'; g.beginPath();
+  g.moveTo(150,35); g.lineTo(195,35); g.arc(195,95,60,-Math.PI/2,Math.PI/2); g.lineTo(150,155); g.closePath(); g.fill(); g.stroke();
+  // output wire
+  g.beginPath(); g.moveTo(255,95); g.lineTo(285,95); g.stroke(); g.lineWidth=1;
+  // labels
+  g.font='11px monospace'; g.textAlign='left';
+  g.fillStyle=(a? C.amber:C.dim); g.fillText('a='+a,24,48);
+  g.fillStyle=(b? C.amber:C.dim); g.fillText('b='+b,24,128);
+  g.fillStyle=C.ink; g.font='12px monospace'; g.fillText('AND',168,99);
+  g.fillStyle=(okLabel? C.teal:C.rose); g.font='11px monospace'; g.textAlign='right';
+  g.fillText('out='+(a&b),282,88);
+}
+function yaoRender(){
+  const uk=window.LANG==='uk';
+  const a=el('yaoA').checked?1:0, b=el('yaoB').checked?1:0;
+  const A=[yA0,yA1], B=[yB0,yB1], O=[yO0,yO1];
+  const Grows=[];
+  for(let i=0;i<2;i++)for(let j=0;j<2;j++){ Grows.push({i,j,g:(O[i&j]^yPRF(A[i],B[j]))>>>0}); }
+  const dec=(Grows.find(r=>r.i===a&&r.j===b).g ^ yPRF(A[a],B[b]))>>>0;
+  const bit = dec===O[1]?1:(dec===O[0]?0:-1);
+  const ok = bit===(a&b);
+  drawYao(a,b,ok);
+  const L=uk
+    ? {lab:'Мітки дротів (0/1)', tab:'Заплутана таблиця G[i,j]', ev:'Обчислювач має мітки', dec:'розшифрований рядок', out:'вихідна мітка → біт', ok:'✓ збігається з a AND b', bad:'✗ помилка'}
+    : {lab:'Wire labels (0/1)', tab:'Garbled table G[i,j]', ev:'Evaluator holds labels', dec:'decrypted row', out:'output label → bit', ok:'✓ matches a AND b', bad:'✗ mismatch'};
+  el('yaoOut').innerHTML=
+    '<span class="k">'+L.lab+':</span>\n'+
+    '  A: '+h4(yA0)+' / '+h4(yA1)+'   B: '+h4(yB0)+' / '+h4(yB1)+'   O: '+h4(yO0)+' / '+h4(yO1)+'\n'+
+    '<span class="k">'+L.tab+':</span>\n'+
+    Grows.map(r=>'  ['+r.i+','+r.j+'] → <span class="s">'+h4(r.g)+'</span>'+((r.i===a&&r.j===b)?'  <span class="a">←</span>':'')).join('\n')+'\n'+
+    '<span class="k">'+L.ev+':</span> A['+a+']='+h4(A[a])+', B['+b+']='+h4(B[b])+'\n'+
+    '<span class="k">'+L.dec+':</span> <span class="a">'+h4(dec)+'</span>  '+
+    '<span class="k">'+L.out+':</span> <span class="a">'+bit+'</span>  '+
+    (ok?'<span class="a">'+L.ok+'</span>':'<span class="b">'+L.bad+'</span>');
+}
+
+/* ================= 2) 1-of-2 Oblivious Transfer (ElGamal / Bellare–Micali) ================= */
+function otRun(){
+  const uk=window.LANG==='uk';
+  const b=BigInt(+el('otB').value), m0=BigInt(+el('otM0').value), m1=BigInt(+el('otM1').value);
+  el('otBV').textContent=el('otB').value; el('otM0V').textContent=el('otM0').value; el('otM1V').textContent=el('otM1').value;
+  // Receiver: knows dlog of PK_b only
+  const k=rnd(Q);
+  const PKb=modpow(G,k,P);
+  const PKother=bmod(OT_C*modinv(PKb,P),P);
+  const PK0=(b===0n)?PKb:PKother;
+  // Sender: derives PK1 = C / PK0, ElGamal-encrypts under each key
+  const PK1=bmod(OT_C*modinv(PK0,P),P);
+  const r0=rnd(Q), r1=rnd(Q);
+  const u0=modpow(G,r0,P), v0=bmod(m0*modpow(PK0,r0,P),P);
+  const u1=modpow(G,r1,P), v1=bmod(m1*modpow(PK1,r1,P),P);
+  // Receiver decrypts branch b with k
+  const ub=(b===0n)?u0:u1, vb=(b===0n)?v0:v1;
+  const rec=bmod(vb*modinv(modpow(ub,k,P),P),P);
+  // Same key applied to the OTHER branch -> garbage
+  const uo=(b===0n)?u1:u0, vo=(b===0n)?v1:v0;
+  const recOther=bmod(vo*modinv(modpow(uo,k,P),P),P);
+  const mb=(b===0n)?m0:m1, other=(b===0n)?m1:m0;
+  const ok=(rec===mb);
+  el('otOut').innerHTML=
+    '<span class="k">'+(uk?'Отримувач: k=':'Receiver: k=')+'</span><span class="s">'+k+'</span>, PK'+b+'=gᵏ=<span class="a">'+PKb+'</span>, PK'+(1n-b)+'=C·g⁻ᵏ=<span class="a">'+PKother+'</span>\n'+
+    '<span class="k">'+(uk?'Відправник шифрує':'Sender encrypts')+':</span>\n'+
+    '  CT₀=(u=<span class="s">'+u0+'</span>, v=<span class="s">'+v0+'</span>)   CT₁=(u=<span class="s">'+u1+'</span>, v=<span class="s">'+v1+'</span>)\n'+
+    '<span class="k">'+(uk?'Отримувач розшифровує гілку':'Receiver decrypts branch')+' b='+b+':</span> m_b = v/uᵏ = <span class="a">'+rec+'</span>\n'+
+    '  '+(ok?'<span class="a">'+(uk?'= обране m — ВІДНОВЛЕНО ✓':'= chosen m — RECOVERED ✓')+'</span>':'<span class="b">✗</span>')+'\n'+
+    '<span class="k">'+(uk?'Та сама k на інший шифротекст':'Same k on the other ciphertext')+':</span> <span class="b">'+recOther+'</span> '+
+    '<span class="k">'+(uk?'(≠ прихованого m':'(≠ hidden m')+' '+other+' — '+(uk?'нічого не витекло)':'nothing leaked)')+'</span>';
+}
+
+/* ================= 3) Beaver triple multiplication ================= */
+const BP=251n;
+let bvX1,bvY1,bvA,bvB,bvA1,bvB1,bvC1;
+function bvNewSharing(){ bvA=rnd(BP); bvB=rnd(BP); bvX1=rnd(BP); bvY1=rnd(BP); bvA1=rnd(BP); bvB1=rnd(BP); bvC1=rnd(BP); }
+bvNewSharing();
+function bvRender(){
+  const uk=window.LANG==='uk';
+  const x=BigInt(+el('bvX').value), y=BigInt(+el('bvY').value);
+  el('bvXV').textContent=el('bvX').value; el('bvYV').textContent=el('bvY').value;
+  const x2=bmod(x-bvX1,BP), y2=bmod(y-bvY1,BP);
+  const a=bvA, b=bvB, c=bmod(a*b,BP);
+  const a2=bmod(a-bvA1,BP), b2=bmod(b-bvB1,BP), c2=bmod(c-bvC1,BP);
+  // open masked values (each party broadcasts its share)
+  const d=bmod((bvX1-bvA1)+(x2-a2),BP);
+  const e=bmod((bvY1-bvB1)+(y2-b2),BP);
+  // local shares of z; party 1 adds the public d·e term
+  const z1=bmod(bvC1 + e*bvA1 + d*bvB1 + d*e, BP);
+  const z2=bmod(c2 + e*a2 + d*b2, BP);
+  const z=bmod(z1+z2,BP);
+  const xy=bmod(x*y,BP);
+  const ok=(z===xy);
+  const L=uk
+    ? {sh:'Частки (сторона 1 | сторона 2)', tr:'Трійка a·b=c', op:'Відкрито', rec:'z = c + e·a + d·b + d·e', chk:'x·y mod 251', ok:'✓ z = x·y', bad:'✗ помилка'}
+    : {sh:'Shares (party 1 | party 2)', tr:'Triple a·b=c', op:'Opened', rec:'z = c + e·a + d·b + d·e', chk:'x·y mod 251', ok:'✓ z = x·y', bad:'✗ mismatch'};
+  el('bvOut').innerHTML=
+    '<span class="k">'+L.sh+':</span>\n'+
+    '  x = <span class="s">'+bvX1+'</span> | <span class="s">'+x2+'</span>   y = <span class="s">'+bvY1+'</span> | <span class="s">'+y2+'</span>\n'+
+    '<span class="k">'+L.tr+':</span> a='+a+', b='+b+', c='+c+'  ('+bvA1+'|'+a2+', '+bvB1+'|'+b2+', '+bvC1+'|'+c2+')\n'+
+    '<span class="k">'+L.op+':</span> d = x−a = <span class="a">'+d+'</span>,  e = y−b = <span class="a">'+e+'</span>\n'+
+    '<span class="k">'+L.rec+':</span>\n'+
+    '  z₁=<span class="s">'+z1+'</span> + z₂=<span class="s">'+z2+'</span> = <span class="a">'+z+'</span>\n'+
+    '<span class="k">'+L.chk+' =</span> <span class="a">'+xy+'</span>  '+
+    (ok?'<span class="a">'+L.ok+'</span>':'<span class="b">'+L.bad+'</span>');
+}
+
+/* ================= 4) Private set intersection (schematic) ================= */
+function psiHash(x){ let h=2166136261>>>0; const s=String(x);
+  for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619)>>>0; } return h>>>0; }
+function psiParse(str){ return str.split(',').map(t=>t.trim()).filter(t=>t.length).map(Number).filter(n=>Number.isFinite(n)); }
+function psiRender(){
+  const uk=window.LANG==='uk';
+  const A=psiParse(el('psiA').value), B=psiParse(el('psiB').value);
+  const hA=A.map(psiHash), hB=B.map(psiHash);
+  const setB=new Set(hB);
+  const inter=A.filter((x,i)=>setB.has(hA[i]));
+  const L=uk
+    ? {ha:'H(A) — дайджести Аліси', hb:'H(B) — дайджести Боба', it:'Перетин A ∩ B (за спільними дайджестами)', none:'(порожній)'}
+    : {ha:'H(A) — Alice’s digests', hb:'H(B) — Bob’s digests', it:'Intersection A ∩ B (common digests)', none:'(empty)'};
+  el('psiOut').innerHTML=
+    '<span class="k">'+L.ha+':</span>\n  '+A.map((x,i)=>x+'→<span class="s">'+h4(hA[i]&0xFFFF)+'</span>').join('  ')+'\n'+
+    '<span class="k">'+L.hb+':</span>\n  '+B.map((x,i)=>x+'→<span class="s">'+h4(hB[i]&0xFFFF)+'</span>').join('  ')+'\n'+
+    '<span class="k">'+L.it+':</span> '+(inter.length?'<span class="a">{ '+inter.join(', ')+' }</span>':'<span class="b">'+L.none+'</span>');
+}
+
+/* ================= 5) Pedersen commitment ================= */
+function pedRender(){
+  const uk=window.LANG==='uk';
+  const m1=BigInt(+el('pedM1').value), r1=BigInt(+el('pedR1').value),
+        m2=BigInt(+el('pedM2').value), r2=BigInt(+el('pedR2').value);
+  el('pedM1V').textContent=el('pedM1').value; el('pedR1V').textContent=el('pedR1').value;
+  el('pedM2V').textContent=el('pedM2').value; el('pedR2V').textContent=el('pedR2').value;
+  const commit=(m,r)=>bmod(modpow(G,m,P)*modpow(H,r,P),P);
+  const c1=commit(m1,r1), c2=commit(m2,r2);
+  const c1alt=commit(m1,r1+7n);                 // hiding: same m, different r
+  const openChk=commit(m1,r1);                  // verifier recomputes from the claimed (m1,r1)
+  const openOK=(openChk===c1);
+  const wrongOpen=commit(m1+1n,r1);             // binding: try to open the SAME c1 to m1+1
+  const bindOK=(wrongOpen!==c1);
+  const prod=bmod(c1*c2,P);
+  const homo=commit(m1+m2, r1+r2);
+  const homoOK=(prod===homo);
+  const hideOK=(c1!==c1alt);
+  const L=uk
+    ? {com:'Зобов’язання', open:'Відкриття (m₁,r₁): перевіряч перерахував c₁', bind:'Зв’язування: відкрити c₁ як m₁+1', hide:'Приховування: те саме m₁, r=r₁+7', hom:'Гомоморфізм: c₁·c₂ = g^{m₁+m₂}·h^{r₁+r₂}', ok:'✓', bad:'✗'}
+    : {com:'Commit', open:'Open (m₁,r₁): verifier recomputes c₁', bind:'Binding: try to open c₁ as m₁+1', hide:'Hiding: same m₁, r=r₁+7', hom:'Homomorphism: c₁·c₂ = g^{m₁+m₂}·h^{r₁+r₂}', ok:'✓', bad:'✗'};
+  el('pedOut').innerHTML=
+    '<span class="k">h = g⁷⁷⁷ mod p =</span> <span class="s">'+H+'</span>\n'+
+    '<span class="k">'+L.com+':</span> c₁ = g^'+m1+'·h^'+r1+' = <span class="a">'+c1+'</span>   c₂ = <span class="a">'+c2+'</span>\n'+
+    '<span class="k">'+L.open+':</span> '+openChk+' '+(openOK?'<span class="a">= c₁ '+L.ok+'</span>':'<span class="b">'+L.bad+'</span>')+'\n'+
+    '<span class="k">'+L.bind+':</span> '+wrongOpen+' '+(bindOK?'<span class="a">≠ c₁ '+L.ok+' ('+(uk?'не відкрити двояко':'cannot open two ways')+')</span>':'<span class="b">'+L.bad+'</span>')+'\n'+
+    '<span class="k">'+L.hide+':</span> c₁′ = <span class="s">'+c1alt+'</span> '+(hideOK?'<span class="a">≠ c₁ '+L.ok+'</span>':'<span class="b">'+L.bad+'</span>')+'\n'+
+    '<span class="k">'+L.hom+':</span>\n'+
+    '  c₁·c₂ mod p = <span class="a">'+prod+'</span>,  g^'+(m1+m2)+'·h^'+(r1+r2)+' = <span class="a">'+homo+'</span> '+
+    (homoOK?'<span class="a">'+L.ok+'</span>':'<span class="b">'+L.bad+'</span>');
+}
+
+/* ================= 6) Feldman verifiable secret sharing ================= */
+let vssCoef=[];
+function vssNewPoly(){ vssCoef=[]; const t=+el('vssT').value; for(let i=1;i<t;i++) vssCoef.push(rnd(Q)); }
+function vssEval(s,x){ let y=bmod(BigInt(s),Q), xp=1n; const X=BigInt(x);
+  for(const c of vssCoef){ xp=bmod(xp*X,Q); y=bmod(y+c*xp,Q); } return y; }
+function vssVerify(x,fx,comm){ const X=BigInt(x); let rhs=1n, xp=1n;
+  for(let j=0;j<comm.length;j++){ rhs=bmod(rhs*modpow(comm[j],xp,P),P); xp=bmod(xp*X,Q); }
+  return modpow(G,fx,P)===rhs; }
+function vssLagrange(shares){ let sec=0n;
+  for(let i=0;i<shares.length;i++){ let num=1n,den=1n;
+    for(let j=0;j<shares.length;j++){ if(i===j)continue;
+      num=bmod(num*(-BigInt(shares[j][0])),Q);
+      den=bmod(den*(BigInt(shares[i][0])-BigInt(shares[j][0])),Q); }
+    sec=bmod(sec + shares[i][1]*bmod(num*modinv(den,Q),Q), Q); }
+  return sec; }
+function vssRender(){
+  const uk=window.LANG==='uk';
+  const s=+el('vssS').value; let t=+el('vssT').value, n=+el('vssN').value;
+  if(n<t){ n=t; el('vssN').value=n; }
+  el('vssSV').textContent=s; el('vssTV').textContent=t; el('vssNV').textContent=n;
+  if(vssCoef.length!==t-1) vssNewPoly();
+  const coeffs=[BigInt(s)].concat(vssCoef);
+  const comm=coeffs.map(c=>modpow(G,c,P));
+  const shares=[]; for(let x=1;x<=n;x++) shares.push([x, vssEval(s,x)]);
+  const allOK=shares.every(([x,fx])=>vssVerify(x,fx,comm));
+  const rec=vssLagrange(shares.slice(0,t));
+  const recOK=(rec===bmod(BigInt(s),Q));
+  // tamper: corrupt share 1 -> verification must fail
+  const tamperOK=vssVerify(shares[0][0], bmod(shares[0][1]+1n,Q), comm);
+  const L=uk
+    ? {poly:'Поліном f(x) mod q', com:'Зобов’язання C_j = g^{a_j}', sh:'Частки (i, f(i)) — перевірка', use:'Відновлення з перших '+t, got:'секрет f(0)', ok:'✓', bad:'✗', tam:'Підроблена частка P1+1 проходить перевірку?', no:'НІ ✓ (виявлено)', yes:'ТАК ✗'}
+    : {poly:'Polynomial f(x) mod q', com:'Commitments C_j = g^{a_j}', sh:'Shares (i, f(i)) — verify', use:'Reconstruct from first '+t, got:'secret f(0)', ok:'✓', bad:'✗', tam:'Tampered share P1+1 passes verify?', no:'NO ✓ (caught)', yes:'YES ✗'};
+  const polyStr='f(x) = '+s+vssCoef.map((c,i)=>' + '+c+'·x'+(i===0?'':'^'+(i+1))).join('')+'  (mod '+Q+')';
+  el('vssOut').innerHTML=
+    '<span class="k">'+L.poly+':</span> <span class="s">'+polyStr+'</span>\n'+
+    '<span class="k">'+L.com+':</span> '+comm.map(c=>'<span class="s">'+c+'</span>').join(', ')+'\n'+
+    '<span class="k">'+L.sh+':</span>\n'+
+    shares.map(([x,fx],i)=>'  P'+x+' = ('+x+', '+fx+')  '+(vssVerify(x,fx,comm)?'<span class="a">'+L.ok+'</span>':'<span class="b">'+L.bad+'</span>')+(i<t?'  <span class="a">←</span>':'')).join('\n')+'\n'+
+    '<span class="k">'+(uk?'усі частки коректні':'all shares valid')+':</span> '+(allOK?'<span class="a">'+L.ok+'</span>':'<span class="b">'+L.bad+'</span>')+'\n'+
+    '<span class="k">'+L.use+':</span> '+L.got+' = <span class="a">'+rec+'</span> '+(recOK?'<span class="a">'+L.ok+'</span>':'<span class="b">'+L.bad+'</span>')+'\n'+
+    '<span class="k">'+L.tam+'</span> '+(tamperOK?'<span class="b">'+L.yes+'</span>':'<span class="a">'+L.no+'</span>');
+}
+
+/* ================= references ================= */
+const WEN='https://en.wikipedia.org/wiki/';
+window.REFS={
+  yao:[{tag:'wiki',en:{href:WEN+'Garbled_circuit',label:'Wikipedia: garbled circuit'}},
+       {tag:'paper',en:{href:'https://doi.org/10.1109/SFCS.1986.25',label:'Yao — How to generate and exchange secrets (1986)'}}],
+  ot:[{tag:'wiki',en:{href:WEN+'Oblivious_transfer',label:'Wikipedia: oblivious transfer'}},
+      {tag:'paper',en:{href:'https://doi.org/10.1145/3812.3818',label:'Even, Goldreich, Lempel — 1-of-2 OT (1985)'}},
+      {tag:'paper',en:{href:'https://doi.org/10.1007/978-3-540-45146-4_9',label:'Ishai, Kilian, Nissim, Petrank — OT extension (IKNP, 2003)'}}],
+  beaver:[{tag:'wiki',en:{href:WEN+'Secure_multi-party_computation',label:'Wikipedia: secure MPC'}},
+          {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-46766-1_34',label:'Beaver — Efficient multiparty protocols using circuit randomization (1991)'}}],
+  psi:[{tag:'wiki',en:{href:WEN+'Private_set_intersection',label:'Wikipedia: private set intersection'}},
+       {tag:'eprint',en:{href:'https://eprint.iacr.org/2016/930',label:'Kolesnikov, Kumaresan, Rosulek, Trieu — efficient batched OT PSI'}}],
+  pedersen:[{tag:'wiki',en:{href:WEN+'Commitment_scheme',label:'Wikipedia: commitment scheme'}},
+            {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-46766-1_9',label:'Pedersen — Non-interactive verifiable secret sharing (1991)'}}],
+  vss:[{tag:'wiki',en:{href:WEN+'Verifiable_secret_sharing',label:'Wikipedia: verifiable secret sharing'}},
+       {tag:'paper',en:{href:'https://doi.org/10.1109/SFCS.1987.4',label:'Feldman — A practical scheme for non-interactive VSS (1987)'}}]
+};
+
+/* ================= language-driven (re)render ================= */
+window.onLangChange=function(){
+  Object.keys(window.REFS).forEach(id=>{ const e=el('refs-'+id); if(e) e.innerHTML=window.atlasRefs(window.REFS[id]); });
+  yaoRender(); bvRender(); psiRender(); pedRender(); vssRender();
+  otRun();
+};
+
+/* ================= wiring ================= */
+['yaoA','yaoB'].forEach(id=>el(id).addEventListener('change',yaoRender));
+el('yaoNew').addEventListener('click',()=>{ yaoNewGarble(); yaoRender(); });
+['otB','otM0','otM1'].forEach(id=>el(id).addEventListener('input',otRun));
+el('otRun').addEventListener('click',otRun);
+['bvX','bvY'].forEach(id=>el(id).addEventListener('input',bvRender));
+el('bvNew').addEventListener('click',()=>{ bvNewSharing(); bvRender(); });
+['psiA','psiB'].forEach(id=>el(id).addEventListener('input',psiRender));
+['pedM1','pedR1','pedM2','pedR2'].forEach(id=>el(id).addEventListener('input',pedRender));
+el('vssT').addEventListener('input',()=>{ vssCoef=[]; vssRender(); });   // new degree → new polynomial
+['vssS','vssN'].forEach(id=>el(id).addEventListener('input',vssRender));
+el('vssNew').addEventListener('click',()=>{ vssNewPoly(); vssRender(); });
+</script>
+</body>
+</html>
