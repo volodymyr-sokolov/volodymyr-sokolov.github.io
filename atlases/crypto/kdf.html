@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Key derivation &amp; password hashing — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="kdf">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 24 — turning secrets and passwords into keys"
+         data-uk="Розділ 24 — перетворення секретів і паролів на ключі">Section 24</div>
+    <h1 data-en="Key Derivation &amp; Password Hashing" data-uk="Виведення ключів та гешування паролів">Key derivation &amp; password hashing</h1>
+    <p class="lede" data-en="Two problems, one toolbox. A key-agreement protocol ends with a shared secret that must be split into many independent keys — that is <b>key derivation</b> (HKDF). And a human password has far too little entropy to be a key at all, so it must be made <b>expensive to guess</b> — that is <b>password hashing</b> (PBKDF2, bcrypt, scrypt, Argon2, Balloon). The story of the second half is a slow arms race: make the function not just slow, but <b>memory-hard</b>, so a warehouse of GPUs and ASICs buys the attacker almost nothing."
+       data-uk="Дві задачі, один інструментарій. Протокол узгодження ключів завершується спільним секретом, який треба розділити на багато незалежних ключів — це <b>виведення ключів</b> (HKDF). А людський пароль має надто малу ентропію, щоб бути ключем, тож його треба зробити <b>дорогим для перебору</b> — це <b>гешування паролів</b> (PBKDF2, bcrypt, scrypt, Argon2, Balloon). Історія другої половини — це повільна гонка озброєнь: зробити функцію не просто повільною, а <b>пам'ять-складною</b>, щоб склад GPU та ASIC давав зловмиснику майже нічого.">Turning shared secrets and low-entropy passwords into strong keys.</p>
+    <div class="readout" id="selftest" style="margin-top:18px; max-width:600px;"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ========== 1. HKDF ========== -->
+  <section id="hkdf">
+    <span class="num" data-en="24 / HKDF" data-uk="24 / HKDF">24 / HKDF</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(n)</span>
+      <span data-en="HKDF — HMAC-Based Extract-Then-Expand KDF" data-uk="HKDF — KDF «extract-then-expand» на HMAC">HKDF</span></h2>
+    <div class="formula">PRK = HMAC(salt, IKM);   OKM = T(1)‖T(2)‖…,  T(i) = HMAC(PRK, T(i−1)‖info‖i)</div>
+    <p class="desc" data-en="HKDF (RFC 5869) is the standard way to turn one high-entropy but non-uniform shared secret (say, a Diffie–Hellman output) into any number of independent, uniformly-random keys. It works in two steps: <b>Extract</b> concentrates the entropy into a fixed pseudorandom key PRK = HMAC(salt, IKM); <b>Expand</b> then stretches PRK into as much labelled key material as you ask for. Different <b>info</b> labels give provably-independent keys — below, one shared secret yields a distinct encryption key, IV and MAC key. This demo runs <b>real HMAC-SHA-256</b>."
+       data-uk="HKDF (RFC 5869) — стандартний спосіб перетворити один високоентропійний, але нерівномірний спільний секрет (наприклад, вихід Діффі–Хеллмана) на будь-яку кількість незалежних, рівномірно-випадкових ключів. Працює у два кроки: <b>Extract</b> концентрує ентропію у фіксований псевдовипадковий ключ PRK = HMAC(salt, IKM); <b>Expand</b> розтягує PRK на стільки маркованого ключового матеріалу, скільки треба. Різні мітки <b>info</b> дають доказово незалежні ключі — нижче один спільний секрет дає окремий ключ шифрування, IV та ключ MAC. Це демо виконує <b>справжній HMAC-SHA-256</b>."></p>
+    <div id="refs-hkdf"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="hkCanvas" width="300" height="200"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="shared secret (IKM)" data-uk="спільний секрет (IKM)">shared secret (IKM)</span></label>
+          <input type="text" id="hkSecret" value="shared-secret" maxlength="40" style="width:100%; font-size:12px"></div>
+        <div class="ctrl"><label><span data-en="salt" data-uk="сіль">salt</span></label>
+          <input type="text" id="hkSalt" value="atlas-salt" maxlength="40" style="width:100%; font-size:12px"></div>
+        <div class="ctrl"><label><span data-en="bytes per derived key" data-uk="байтів на виведений ключ">bytes per key</span><span class="val" id="hkLenV">16</span></label>
+          <input type="range" id="hkLen" min="8" max="32" value="16"></div>
+        <div class="hint" data-en="One PRK, three info labels → three independent keys." data-uk="Один PRK, три мітки info → три незалежні ключі."></div>
+        <div class="readout" id="hkOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="HKDF is proven secure in the standard model when HMAC is a secure PRF (Krawczyk, 2010); it has no known weaknesses and is the KDF of TLS 1.3, Signal and Noise. Two cautions: HKDF is <b>not</b> a password hash — its input must already be high-entropy (never feed it a raw password), and the Expand step must not be asked for more than 255·HashLen bytes."
+            data-uk="HKDF доказово стійкий у стандартній моделі, коли HMAC — стійкий PRF (Кравчик, 2010); не має відомих вад і є KDF у TLS 1.3, Signal та Noise. Дві засторони: HKDF — це <b>не</b> геш паролів, його вхід має вже бути високоентропійним (ніколи не подавайте «сирий» пароль), а крок Expand не можна просити більше ніж 255·HashLen байтів."></span></div>
+    <div class="xrefs"><a href="hash.html#hmac">HMAC</a> <a href="authprotocols.html#auth-rsa" data-en="Key transport" data-uk="Транспорт ключів">Key transport</a> <a href="protocols.html#tls13">TLS 1.3</a> <a href="kdf.html#pbkdf2">PBKDF2</a></div>
+  </section>
+
+  <!-- ========== 2. PBKDF2 ========== -->
+  <section id="pbkdf2">
+    <span class="num" data-en="24 / PBKDF2 — RFC 8018" data-uk="24 / PBKDF2 — RFC 8018">24 / PBKDF2</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(c·n)</span>
+      <span data-en="PBKDF2 — Iterated HMAC" data-uk="PBKDF2 — ітерований HMAC">PBKDF2</span></h2>
+    <div class="formula">DK = T₁‖T₂‖… ;  Tᵢ = U₁ ⊕ U₂ ⊕ … ⊕ U_c ,  U₁ = HMAC(P, salt‖i),  Uⱼ = HMAC(P, Uⱼ₋₁)</div>
+    <p class="desc" data-en="PBKDF2 (PKCS #5 / RFC 8018) is the oldest standard password hash: apply HMAC to the password <b>c times in a chain</b>, XORing the intermediate values, so verifying one password costs c hash calls. Raising c makes each guess more expensive — but the cost is purely <b>CPU time</b> with negligible memory, and that is its fatal flaw: GPUs and ASICs run thousands of these chains in parallel almost for free. The demo runs <b>real PBKDF2-HMAC-SHA-256</b> with a deliberately tiny iteration count so you can watch the hex change live."
+       data-uk="PBKDF2 (PKCS #5 / RFC 8018) — найстаріший стандартний геш паролів: застосувати HMAC до пароля <b>c разів у ланцюгу</b>, XOR-ячи проміжні значення, тож перевірка одного пароля коштує c викликів гешу. Збільшення c робить кожен здогад дорожчим — але вартість суто <b>процесорна</b> з мізерною пам'яттю, і це його фатальна вада: GPU та ASIC виконують тисячі таких ланцюгів паралельно майже безкоштовно. Демо виконує <b>справжній PBKDF2-HMAC-SHA-256</b> з навмисно крихітною кількістю ітерацій, щоб ви бачили зміну hex наживо."></p>
+    <div id="refs-pbkdf2"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="pbCanvas" width="300" height="200"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="password" data-uk="пароль">password</span></label>
+          <input type="text" id="pbPw" value="correct horse" maxlength="40" style="width:100%; font-size:12px"></div>
+        <div class="ctrl"><label><span data-en="salt" data-uk="сіль">salt</span></label>
+          <input type="text" id="pbSalt" value="NaCl" maxlength="40" style="width:100%; font-size:12px"></div>
+        <div class="ctrl"><label><span data-en="iterations c" data-uk="ітерацій c">iterations c</span><span class="val" id="pbIterV">1000</span></label>
+          <input type="range" id="pbIter" min="1" max="4000" value="1000" step="1"></div>
+        <div class="hint" data-en="Toy count. Real deployments use c ≥ 600 000 (OWASP 2023)." data-uk="Іграшкове число. Реальні системи використовують c ≥ 600 000 (OWASP 2023)."></div>
+        <div class="readout" id="pbOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No structural break — PBKDF2 is as strong as HMAC-SHA-256 — but it is <b>not memory-hard</b>, so per-guess cost on a GPU or ASIC is orders of magnitude below the defender's cost. NIST SP 800-132 still permits it; OWASP now recommends ≥600 000 iterations for SHA-256, and prefers Argon2/scrypt for new systems. Always use a unique random salt to defeat rainbow tables."
+            data-uk="Структурного зламу немає — PBKDF2 такий самий стійкий, як HMAC-SHA-256 — але він <b>не пам'ять-складний</b>, тож вартість здогаду на GPU чи ASIC на порядки нижча за вартість для захисника. NIST SP 800-132 його ще дозволяє; OWASP тепер радить ≥600 000 ітерацій для SHA-256 і надає перевагу Argon2/scrypt для нових систем. Завжди використовуйте унікальну випадкову сіль проти райдужних таблиць."></span></div>
+    <div class="xrefs"><a href="hash.html#hmac">HMAC</a> <a href="kdf.html#bcrypt">bcrypt</a> <a href="kdf.html#argon2">Argon2</a></div>
+  </section>
+
+  <!-- ========== 3. bcrypt ========== -->
+  <section id="bcrypt">
+    <span class="num" data-en="24 / bcrypt" data-uk="24 / bcrypt">24 / bcrypt</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c2">O(2^c)</span>
+      <span data-en="bcrypt — Blowfish-Based Adaptive Hash" data-uk="bcrypt — адаптивний геш на Blowfish">bcrypt</span></h2>
+    <div class="formula" data-en="work = 2^cost  key setups of EksBlowfish;  state = 4 KiB S-boxes" data-uk="робота = 2^cost  налаштувань ключа EksBlowfish;  стан = 4 КіБ S-боксів">work = 2^cost EksBlowfish setups; 4 KiB state</div>
+    <p class="desc" data-en="bcrypt (Provos &amp; Mazières, 1999) wraps the Blowfish cipher's <b>expensive key schedule</b> in a loop run 2^cost times. Its quiet strength is that Blowfish's key setup constantly rewrites <b>4 KiB of S-box state</b> with data-dependent lookups — a small but real dose of memory-hardness that made GPUs far worse at bcrypt than at PBKDF2 for two decades. The single <b>cost</b> knob is stored in the hash string, so defenders raise it as hardware improves without changing the algorithm. This demo is an <b>illustrative cost model</b> of the 2^cost work factor — it does not run the real Blowfish schedule."
+       data-uk="bcrypt (Провос і Мазʼєр, 1999) загортає <b>дороге розкладання ключа</b> шифру Blowfish у цикл, що виконується 2^cost разів. Його тиха сила в тому, що налаштування ключа Blowfish постійно переписує <b>4 КіБ стану S-боксів</b> залежними від даних зверненнями — мала, але реальна доза пам'ять-складності, через яку GPU два десятиліття були значно гіршими на bcrypt, ніж на PBKDF2. Єдиний регулятор <b>cost</b> зберігається в рядку гешу, тож захисники підвищують його з поліпшенням апарату, не змінюючи алгоритм. Це демо — <b>ілюстративна модель вартості</b> коефіцієнта роботи 2^cost, вона не виконує справжнє розкладання Blowfish."></p>
+    <div id="refs-bcrypt"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="bcCanvas" width="300" height="200"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="cost factor" data-uk="фактор вартості">cost factor</span><span class="val" id="bcCostV">10</span></label>
+          <input type="range" id="bcCost" min="4" max="16" value="10"></div>
+        <div class="hint" data-en="Each +1 to cost doubles the work. 10–12 is common today." data-uk="Кожен +1 до cost подвоює роботу. Сьогодні поширено 10–12."></div>
+        <div class="readout" id="bcOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical break; bcrypt remains a sound choice. Caveats: the classic implementation <b>truncates passwords at 72 bytes</b>, and a well-known bug silently truncates at the first NUL byte in some libraries — long passphrases should be pre-hashed. Modern GPUs and FPGAs have narrowed bcrypt's old parallelism advantage, so new systems should prefer Argon2id, with bcrypt a fine legacy option."
+            data-uk="Практичного зламу немає; bcrypt лишається розумним вибором. Застороги: класична реалізація <b>обрізає паролі до 72 байтів</b>, а відома вада в деяких бібліотеках тихо обрізає на першому байті NUL — довгі парольні фрази слід попередньо гешувати. Сучасні GPU та FPGA звузили давню перевагу bcrypt у паралелізмі, тож нові системи мають надавати перевагу Argon2id, а bcrypt — добрий варіант для успадкованих систем."></span></div>
+    <div class="xrefs"><a href="kdf.html#scrypt">scrypt</a> <a href="kdf.html#argon2">Argon2</a> <a href="symmetric.html#blowfish">Blowfish</a></div>
+  </section>
+
+  <!-- ========== 4. scrypt ========== -->
+  <section id="scrypt">
+    <span class="num" data-en="24 / scrypt — RFC 7914" data-uk="24 / scrypt — RFC 7914">24 / scrypt</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(N·r)</span>
+      <span data-en="scrypt — The First Memory-Hard KDF" data-uk="scrypt — перший пам'ять-складний KDF">scrypt</span></h2>
+    <div class="formula">memory ≈ 128 · N · r bytes;   cost ≈ N · r ;   ROMix fills, then randomly reads a large array</div>
+    <p class="desc" data-en="scrypt (Percival, 2009; RFC 7914) was the first widely-used <b>memory-hard</b> KDF. Its core, ROMix, fills a large array of N blocks (each 128·r bytes) and then makes N passes that each read a <b>pseudorandomly-chosen</b> earlier block. To compute it you must keep the whole array in RAM; an attacker who tries to save silicon by recomputing blocks instead of storing them pays a steep time penalty (a <b>time–memory trade-off</b>). Buying memory bandwidth is expensive, so GPUs and ASICs lose much of their edge. The demo is an <b>illustrative memory/cost model</b> — it does not run the real Salsa20/8 core."
+       data-uk="scrypt (Персіваль, 2009; RFC 7914) — перший широковживаний <b>пам'ять-складний</b> KDF. Його ядро ROMix заповнює великий масив із N блоків (по 128·r байтів), а потім робить N проходів, кожен з яких читає <b>псевдовипадково обраний</b> попередній блок. Щоб його обчислити, треба тримати весь масив у RAM; зловмисник, який намагається заощадити кремній, переобчислюючи блоки замість зберігання, платить крутою часовою пенею (<b>компроміс час–пам'ять</b>). Купувати пропускну здатність пам'яті дорого, тож GPU та ASIC втрачають значну частину переваги. Демо — <b>ілюстративна модель пам'яті/вартості</b>, вона не виконує справжнє ядро Salsa20/8."></p>
+    <div id="refs-scrypt"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="scCanvas" width="300" height="200"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="cost log₂N" data-uk="вартість log₂N">cost log₂N</span><span class="val" id="scNV">14</span></label>
+          <input type="range" id="scN" min="8" max="20" value="14"></div>
+        <div class="ctrl"><label><span data-en="block size r" data-uk="розмір блоку r">block r</span><span class="val" id="scRV">8</span></label>
+          <input type="range" id="scR" min="1" max="16" value="8"></div>
+        <div class="ctrl"><label><span data-en="parallelism p" data-uk="паралелізм p">parallelism p</span><span class="val" id="scPV">1</span></label>
+          <input type="range" id="scP" min="1" max="8" value="1"></div>
+        <div class="readout" id="scOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical break; scrypt is a solid memory-hard KDF and secures many cryptocurrencies and disk-encryption tools. Its main theoretical criticism is that memory and time are coupled in a single N knob, and some cache-timing side channels exist because block indices depend on secret data — issues Argon2 later addressed with separate m/t/p parameters and a data-independent mode (Argon2i)."
+            data-uk="Практичного зламу немає; scrypt — надійний пам'ять-складний KDF, що захищає багато криптовалют і засобів шифрування дисків. Головна теоретична критика — пам'ять і час зв'язані одним регулятором N, а через залежність індексів блоків від секретних даних існують кеш-часові побічні канали — проблеми, які Argon2 згодом розв'язав окремими параметрами m/t/p і режимом, незалежним від даних (Argon2i)."></span></div>
+    <div class="xrefs"><a href="kdf.html#argon2">Argon2</a> <a href="kdf.html#bcrypt">bcrypt</a> <a href="kdf.html#pbkdf2">PBKDF2</a></div>
+  </section>
+
+  <!-- ========== 5. Argon2 — FLAGSHIP ========== -->
+  <section id="argon2">
+    <span class="num" data-en="24 / Argon2 — RFC 9106 (PHC winner)" data-uk="24 / Argon2 — RFC 9106 (переможець PHC)">24 / Argon2</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(m·t)</span>
+      <span data-en="Argon2 — Memory-Hardness as a Cost Model" data-uk="Argon2 — пам'ять-складність як модель вартості">Argon2</span></h2>
+    <div class="formula">defender cost ∝ m · t   (m = memory KiB, t = passes, p = lanes);   attacker parallelism ∝ ⌊fast-memory / m⌋</div>
+    <p class="desc" data-en="Argon2 (Biryukov–Dinu–Khovratovich) won the 2015 Password Hashing Competition and is now RFC 9106; <b>Argon2id</b> is the recommended default. It fills a large memory array of <b>m</b> KiB, mixes it for <b>t</b> passes over <b>p</b> parallel lanes, and its cost is the <b>memory × time area</b>. The point of this flagship demo is the economics of attack: PBKDF2's cost is time only, so a GPU with thousands of cores parallelises guesses almost for free; but a memory-hard function forces the attacker to <b>replicate the whole array per guess</b>, and fast on-chip memory is the one thing silicon cannot cheaply multiply. Below is an <b>explicit cost model</b> (not the real Argon2 permutation) contrasting Argon2, bcrypt and PBKDF2 on the same axes — watch the GPU's parallel advantage collapse as you raise m."
+       data-uk="Argon2 (Бірюков–Діну–Ховратович) переміг у Password Hashing Competition 2015 і тепер є RFC 9106; <b>Argon2id</b> — рекомендований типовий вибір. Він заповнює великий масив пам'яті на <b>m</b> КіБ, перемішує його за <b>t</b> проходів на <b>p</b> паралельних смугах, і його вартість — це <b>площа пам'ять × час</b>. Суть цього флагманського демо — економіка атаки: вартість PBKDF2 лише часова, тож GPU з тисячами ядер розпаралелює здогади майже безкоштовно; але пам'ять-складна функція змушує зловмисника <b>копіювати весь масив на кожен здогад</b>, а швидка внутрішньочіпова пам'ять — це те єдине, що кремній не може дешево множити. Нижче — <b>явна модель вартості</b> (не справжня перестановка Argon2), що порівнює Argon2, bcrypt та PBKDF2 на одних осях — дивіться, як паралельна перевага GPU колапсує, коли ви підвищуєте m."></p>
+    <div id="refs-argon2"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="agCanvas" width="300" height="270"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="memory m (KiB)" data-uk="пам'ять m (КіБ)">memory m (KiB)</span><span class="val" id="agMV">1024</span></label>
+          <input type="range" id="agM" min="8" max="4096" value="1024" step="8"></div>
+        <div class="ctrl"><label><span data-en="passes t" data-uk="проходів t">passes t</span><span class="val" id="agTV">3</span></label>
+          <input type="range" id="agT" min="1" max="10" value="3"></div>
+        <div class="ctrl"><label><span data-en="lanes p" data-uk="смуг p">lanes p</span><span class="val" id="agPV">4</span></label>
+          <input type="range" id="agP" min="1" max="8" value="4"></div>
+        <div class="hint" data-en="Cost model only. Attacker fast-memory pool = 256 KiB, ≤256 cheap lanes (illustrative)." data-uk="Лише модель вартості. Пул швидкої пам'яті зловмисника = 256 КіБ, ≤256 дешевих смуг (ілюстративно)."></div>
+        <div class="readout" id="agOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Argon2 is the current best practice (RFC 9106; use Argon2id — OWASP's minimum is m ≥ 19 MiB, t ≥ 2, p = 1, while RFC 9106 suggests m = 2 GiB, t = 1, p = 4, or t = 3, m = 64 MiB when memory-constrained). Early tradeoff attacks by Corrigan-Gibbs and Alwen–Blocki on Argon2i prompted the v1.3 tweak and the hybrid Argon2id, which resists both GPU parallelism and side-channel-guided recomputation. No practical attack on Argon2id at recommended parameters. The only real footgun is choosing memory too low — pick the largest m your login latency budget allows."
+            data-uk="Argon2 — поточна найкраща практика (RFC 9106; використовуйте Argon2id — мінімум OWASP: m ≥ 19 МіБ, t ≥ 2, p = 1, тоді як RFC 9106 радить m = 2 ГіБ, t = 1, p = 4, або t = 3, m = 64 МіБ за обмеженої пам'яті). Ранні атаки-компроміси Корріган-Ґіббса та Алвена–Блоцкі на Argon2i спонукали правку v1.3 і гібридний Argon2id, стійкий і до паралелізму GPU, і до керованого побічним каналом переобчислення. Практичних атак на Argon2id за рекомендованих параметрів немає. Єдина справжня пастка — обрати замалу пам'ять; беріть найбільше m, яке дозволяє ваш бюджет затримки входу."></span></div>
+    <div class="xrefs"><a href="kdf.html#scrypt">scrypt</a> <a href="kdf.html#bcrypt">bcrypt</a> <a href="kdf.html#balloon">Balloon</a> <a href="hash.html#blake">BLAKE2</a></div>
+  </section>
+
+  <!-- ========== 6. Balloon ========== -->
+  <section id="balloon">
+    <span class="num" data-en="24 / Balloon hashing" data-uk="24 / Balloon-гешування">24 / Balloon</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(s·t)</span>
+      <span data-en="Balloon — Provably Memory-Hard From Any Hash" data-uk="Balloon — доказово пам'ять-складне з будь-якого гешу">Balloon hashing</span></h2>
+    <div class="formula" data-en="fill a buffer of s blocks; mix for t rounds; each block = H(prev ‖ δ random blocks);  cost ∝ s·t" data-uk="заповнити буфер із s блоків; змішати за t раундів; кожен блок = H(попередній ‖ δ випадкових блоків);  вартість ∝ s·t">buffer of s blocks, t rounds; cost ∝ s·t</div>
+    <p class="desc" data-en="Balloon hashing (Boneh, Corrigan-Gibbs &amp; Schechter, 2016) reaches memory-hardness with two features scrypt and bcrypt lack: it is built from <b>any standard cryptographic hash</b> (no new primitive to trust), and it comes with a <b>proof</b> of memory-hardness in the random-oracle model. It allocates a buffer of <b>s</b> blocks, fills it so each block depends on the previous one, then runs <b>t</b> mixing rounds where every block is rehashed together with <b>δ</b> pseudorandomly-chosen other blocks — forcing the whole buffer to stay resident. The demo is an <b>illustrative model</b> of the fill-and-mix dependency structure; it does not run a real hash over the blocks."
+       data-uk="Balloon-гешування (Боне, Корріган-Ґіббс і Шехтер, 2016) досягає пам'ять-складності двома рисами, яких бракує scrypt і bcrypt: воно побудоване з <b>будь-якого стандартного криптографічного гешу</b> (немає нового примітиву, якому треба довіряти) і має <b>доказ</b> пам'ять-складності в моделі випадкового оракула. Воно виділяє буфер із <b>s</b> блоків, заповнює його так, що кожен блок залежить від попереднього, потім виконує <b>t</b> раундів змішування, де кожен блок перегешовується разом із <b>δ</b> псевдовипадково обраними іншими блоками — змушуючи весь буфер лишатися в пам'яті. Демо — <b>ілюстративна модель</b> структури залежностей «заповнити-і-змішати»; воно не виконує справжній геш над блоками."></p>
+    <div id="refs-balloon"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="baCanvas" width="300" height="220"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="space s (blocks)" data-uk="простір s (блоків)">space s</span><span class="val" id="baSV">32</span></label>
+          <input type="range" id="baS" min="8" max="64" value="32"></div>
+        <div class="ctrl"><label><span data-en="time t (rounds)" data-uk="час t (раундів)">time t</span><span class="val" id="baTV">3</span></label>
+          <input type="range" id="baT" min="1" max="6" value="3"></div>
+        <div class="hint" data-en="Lines show each block's dependency on δ=3 earlier blocks." data-uk="Лінії показують залежність кожного блоку від δ=3 попередніх блоків."></div>
+        <div class="readout" id="baOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical break; Balloon has a formal memory-hardness proof and, being built on a standard hash (e.g. SHA-256), inherits its security. Like scrypt it is data-dependent, so a constant-time or data-independent addressing schedule is advised where cache side channels matter. It is less widely deployed than Argon2, which remains the mainstream recommendation; Balloon is the elegant &lsquo;memory-hardness from any hash, with a proof&rsquo; option."
+            data-uk="Практичного зламу немає; Balloon має формальний доказ пам'ять-складності й, будучи побудованим на стандартному гешу (напр. SHA-256), успадковує його стійкість. Як і scrypt, воно залежить від даних, тож там, де важливі кеш-побічні канали, радять графік адресації сталого часу або незалежний від даних. Воно менш поширене, ніж Argon2, який лишається основною рекомендацією; Balloon — елегантний варіант «пам'ять-складність із будь-якого гешу, з доказом»."></span></div>
+    <div class="xrefs"><a href="kdf.html#argon2">Argon2</a> <a href="kdf.html#scrypt">scrypt</a> <a href="hash.html#sha3">SHA-3</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+
+/* ====================================================================
+   Real primitives: SHA-256 (verified vector) → HMAC → HKDF → PBKDF2
+   SHA object copied verbatim from standards.html (self-tested below).
+   ==================================================================== */
+const SHA=(function(){
+  const K=new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+  const rr=(x,n)=>(x>>>n)|(x<<(32-n));
+  function digest(bytes){
+    const l=bytes.length,bl=((l+8>>6)+1)<<6,m=new Uint8Array(bl); m.set(bytes); m[l]=0x80;
+    const bits=l*8; m[bl-4]=(bits>>>24)&255;m[bl-3]=(bits>>>16)&255;m[bl-2]=(bits>>>8)&255;m[bl-1]=bits&255;
+    let h0=0x6a09e667,h1=0xbb67ae85,h2=0x3c6ef372,h3=0xa54ff53a,h4=0x510e527f,h5=0x9b05688c,h6=0x1f83d9ab,h7=0x5be0cd19;
+    const w=new Uint32Array(64);
+    for(let o=0;o<bl;o+=64){
+      for(let i=0;i<16;i++) w[i]=(m[o+4*i]<<24)|(m[o+4*i+1]<<16)|(m[o+4*i+2]<<8)|m[o+4*i+3];
+      for(let i=16;i<64;i++){ const s0=rr(w[i-15],7)^rr(w[i-15],18)^(w[i-15]>>>3), s1=rr(w[i-2],17)^rr(w[i-2],19)^(w[i-2]>>>10); w[i]=(w[i-16]+s0+w[i-7]+s1)|0; }
+      let a=h0,b=h1,c=h2,d=h3,e=h4,f=h5,g=h6,h=h7;
+      for(let i=0;i<64;i++){ const S1=rr(e,6)^rr(e,11)^rr(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[i]+w[i])|0,S0=rr(a,2)^rr(a,13)^rr(a,22),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)|0; h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0; }
+      h0=(h0+a)|0;h1=(h1+b)|0;h2=(h2+c)|0;h3=(h3+d)|0;h4=(h4+e)|0;h5=(h5+f)|0;h6=(h6+g)|0;h7=(h7+h)|0;
+    }
+    const out=new Uint8Array(32),hs=[h0,h1,h2,h3,h4,h5,h6,h7];
+    for(let i=0;i<8;i++){ out[4*i]=(hs[i]>>>24)&255;out[4*i+1]=(hs[i]>>>16)&255;out[4*i+2]=(hs[i]>>>8)&255;out[4*i+3]=hs[i]&255; }
+    return out;
+  }
+  const enc=new TextEncoder(),hex=b=>Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join('');
+  return {digest,hex,str:s=>digest(enc.encode(s))};
+})();
+
+const ENC=new TextEncoder();
+const bytes=s=>ENC.encode(s);
+const toHex=b=>Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join('');
+function cat(){ let n=0; for(const a of arguments) n+=a.length; const o=new Uint8Array(n); let p=0; for(const a of arguments){ o.set(a,p); p+=a.length; } return o; }
+
+/* ---- HMAC-SHA-256 (real, RFC 2104) ---- */
+function hmac(key,msg){
+  const B=64; let k=key;
+  if(k.length>B) k=SHA.digest(k);
+  const k0=new Uint8Array(B); k0.set(k);
+  const ip=new Uint8Array(B), op=new Uint8Array(B);
+  for(let i=0;i<B;i++){ ip[i]=k0[i]^0x36; op[i]=k0[i]^0x5c; }
+  return SHA.digest(cat(op, SHA.digest(cat(ip,msg))));
+}
+/* ---- HKDF (real, RFC 5869) ---- */
+function hkdfExtract(salt,ikm){ return hmac(salt,ikm); }
+function hkdfExpand(prk,info,L){
+  const N=Math.ceil(L/32); let T=new Uint8Array(0); const out=new Uint8Array(N*32);
+  for(let i=1;i<=N;i++){ T=hmac(prk, cat(T,info,new Uint8Array([i]))); out.set(T,(i-1)*32); }
+  return out.slice(0,L);
+}
+/* ---- PBKDF2-HMAC-SHA-256 (real, RFC 8018) ---- */
+function int32be(i){ return new Uint8Array([(i>>>24)&255,(i>>>16)&255,(i>>>8)&255,i&255]); }
+function pbkdf2(pw,salt,c,dkLen){
+  const hLen=32, blocks=Math.ceil(dkLen/hLen), DK=new Uint8Array(blocks*hLen);
+  for(let b=1;b<=blocks;b++){
+    let U=hmac(pw, cat(salt,int32be(b))); const T=U.slice();
+    for(let j=1;j<c;j++){ U=hmac(pw,U); for(let k=0;k<hLen;k++) T[k]^=U[k]; }
+    DK.set(T,(b-1)*hLen);
+  }
+  return DK.slice(0,dkLen);
+}
+
+/* ====================================================================
+   Self-test banner — SHA-256, HKDF (RFC 5869 case 1), PBKDF2 (SHA-256)
+   ==================================================================== */
+function selfTest(){
+  const uk=window.LANG==='uk';
+  const sh=SHA.hex(SHA.str('abc'))==='ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
+  // RFC 5869 Test Case 1
+  const ikm=new Uint8Array(22).fill(0x0b);
+  const salt=new Uint8Array([0,1,2,3,4,5,6,7,8,9,10,11,12]);
+  const info=new Uint8Array([0xf0,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9]);
+  const prk=hkdfExtract(salt,ikm), okm=hkdfExpand(prk,info,42);
+  const hk=toHex(prk)==='077709362c2e32df0ddc3f0dc47bba6390b6c73bb50f9c3122ec844ad7c2b3e5'
+        && toHex(okm)==='3cb25f25faacd57a90434f64d0362f2a2d2d0a90cf1a5a4c5db02d56ecc4c5bf34007208d5b887185865';
+  // PBKDF2-HMAC-SHA256, P="password", S="salt", c=1, dkLen=32
+  const pb=toHex(pbkdf2(bytes('password'),bytes('salt'),1,32))==='120fb6cffcf8b32c43e7225256c4f837a86548c92ccc35480805987cb70be17b';
+  const all=sh&&hk&&pb;
+  document.getElementById('selftest').innerHTML=
+    '<span class="k">'+(uk?'Самоперевірка':'Self-test')+':</span>  '+
+    'SHA-256("abc") <span class="'+(sh?'a':'b')+'">'+(sh?'✓':'✗')+'</span>   '+
+    'HKDF (RFC 5869 #1) <span class="'+(hk?'a':'b')+'">'+(hk?'✓':'✗')+'</span>   '+
+    'PBKDF2-SHA256 <span class="'+(pb?'a':'b')+'">'+(pb?'✓':'✗')+'</span>   '+
+    (all?'<span class="a">'+(uk?'примітиви коректні':'primitives correct')+'</span>':'<span class="b">FAIL</span>');
+}
+
+/* ====================================================================
+   1) HKDF demo — real HMAC-SHA-256, extract-then-expand
+   ==================================================================== */
+function drawHKDF(){
+  const uk=window.LANG==='uk';
+  const L=+document.getElementById('hkLen').value; document.getElementById('hkLenV').textContent=L;
+  const ikm=bytes(document.getElementById('hkSecret').value||'');
+  const salt=bytes(document.getElementById('hkSalt').value||'');
+  const prk=hkdfExtract(salt,ikm);
+  const labels=['key','iv','mac'];
+  const keys=labels.map(lb=>hkdfExpand(prk,bytes(lb),L));
+  // canvas: extract → PRK → expand pipeline
+  const cv=document.getElementById('hkCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  g.font='10px monospace'; g.textAlign='center';
+  const box=(x,y,w,h,col,txt)=>{ g.strokeStyle=col; g.lineWidth=1.4; g.strokeRect(x,y,w,h); g.fillStyle=col; g.fillText(txt,x+w/2,y+h/2+3); };
+  const arrow=(x1,y1,x2,y2)=>{ g.strokeStyle=C.line; g.lineWidth=1; g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke(); };
+  box(15,12,120,26,C.dim,'IKM'); box(165,12,120,26,C.dim,uk?'сіль':'salt');
+  arrow(75,38,150,60); arrow(225,38,150,60);
+  box(90,60,120,26,C.amber,'Extract → PRK');
+  arrow(150,86,150,104);
+  box(90,104,120,26,C.teal,'Expand');
+  const yk=150, cols=[C.teal,C.amber,C.rose];
+  labels.forEach((lb,i)=>{ const x=15+i*97; arrow(150,130,x+45,yk);
+    box(x,yk,90,30,cols[i],'"'+lb+'"'); });
+  g.textAlign='left';
+  document.getElementById('hkOut').innerHTML=
+    '<span class="k">PRK = HMAC(salt, IKM):</span>\n  <span class="s">'+toHex(prk)+'</span>\n'+
+    '<span class="k">'+(uk?'ключ':'key')+' = Expand(PRK,"key"):</span>  <span class="a">'+toHex(keys[0])+'</span>\n'+
+    '<span class="k">iv  = Expand(PRK,"iv"):</span>   <span class="a">'+toHex(keys[1])+'</span>\n'+
+    '<span class="k">mac = Expand(PRK,"mac"):</span>  <span class="a">'+toHex(keys[2])+'</span>';
+}
+
+/* ====================================================================
+   2) PBKDF2 demo — real PBKDF2-HMAC-SHA-256, iterations vs work
+   ==================================================================== */
+function drawPBKDF2(){
+  const uk=window.LANG==='uk';
+  const c=+document.getElementById('pbIter').value; document.getElementById('pbIterV').textContent=c;
+  const pw=bytes(document.getElementById('pbPw').value||'');
+  const salt=bytes(document.getElementById('pbSalt').value||'');
+  const dk=pbkdf2(pw,salt,c,32);
+  // canvas: linear work curve, current point + recommendation line
+  const cv=document.getElementById('pbCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const padL=8,padB=22,x0=padL,x1=W-8,y0=H-padB,y1=14;
+  g.strokeStyle=C.line; g.beginPath(); g.moveTo(x0,y0); g.lineTo(x1,y0); g.stroke();
+  // work grows linearly with c; map c 0..4000 to width, work to height
+  g.strokeStyle=C.teal; g.lineWidth=1.6; g.beginPath();
+  for(let px=x0;px<=x1;px++){ const cc=(px-x0)/(x1-x0)*4000; const yy=y0-(cc/4000)*(y0-y1); if(px===x0)g.moveTo(px,yy); else g.lineTo(px,yy); }
+  g.stroke(); g.lineWidth=1;
+  const cx=x0+(c/4000)*(x1-x0), cyv=y0-(c/4000)*(y0-y1);
+  g.strokeStyle=C.rose; g.setLineDash([3,3]); g.beginPath(); g.moveTo(cx,y0); g.lineTo(cx,cyv); g.stroke(); g.setLineDash([]);
+  g.fillStyle=C.amber; g.beginPath(); g.arc(cx,cyv,4,0,7); g.fill();
+  g.fillStyle=C.dim; g.font='9px monospace';
+  g.fillText((uk?'робота = c · HMAC (лінійно)':'work = c · HMAC (linear)'),x0+4,y1+2);
+  g.fillText('c',x1-8,y0+14);
+  document.getElementById('pbOut').innerHTML=
+    '<span class="k">'+(uk?'ітерацій':'iterations')+' c =</span> <span class="s">'+c.toLocaleString()+'</span>   ('+c+' × HMAC-SHA256)\n'+
+    '<span class="k">DK (32 '+(uk?'байти':'bytes')+'):</span>\n  <span class="a">'+toHex(dk)+'</span>\n'+
+    '<span class="k">'+(uk?'проти OWASP ≥600 000':'vs OWASP ≥600,000')+':</span> <span class="b">'+(c/600000*100).toFixed(2)+'%</span> '+(uk?'рекомендованої вартості':'of recommended cost');
+}
+
+/* ====================================================================
+   Shared attacker cost model (illustrative) for m/t hardness
+   ==================================================================== */
+const GPU_MEM=256;   // KiB of scarce fast memory (illustrative)
+const GPU_CORES=256; // cheap parallel lanes for a memoryless hash
+function lanes(memKiB){ if(memKiB<=0) return GPU_CORES; return Math.max(1, Math.min(GPU_CORES, Math.floor(GPU_MEM/memKiB))); }
+
+/* ====================================================================
+   3) bcrypt — illustrative 2^cost work model
+   ==================================================================== */
+function drawBcrypt(){
+  const uk=window.LANG==='uk';
+  const c=+document.getElementById('bcCost').value; document.getElementById('bcCostV').textContent=c;
+  const cv=document.getElementById('bcCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  // exponential bars for cost 4..16, current highlighted (log-height so 2^c fits)
+  const lo=4,hi=16,n=hi-lo+1,bw=(W-16)/n;
+  const y0=H-24,top=14;
+  for(let i=0;i<n;i++){ const cost=lo+i; const frac=(cost-lo)/(hi-lo); const bh=(y0-top)*frac;
+    g.fillStyle=(cost===c)?C.amber:(cost<=c?C.teal:C.grid);
+    g.fillRect(8+i*bw+1,y0-bh,bw-2,bh);
+    if(cost===c){ g.fillStyle=C.ink; g.font='9px monospace'; g.textAlign='center'; g.fillText('2^'+cost,8+i*bw+bw/2,y0-bh-4); }
+  }
+  g.fillStyle=C.dim; g.font='9px monospace'; g.textAlign='left';
+  g.fillText('cost 4',8,y0+14); g.fillText('16',W-20,y0+14);
+  g.textAlign='center'; g.fillText((uk?'робота = 2^cost (лог. висота)':'work = 2^cost (log height)'),W/2,top-2);
+  g.textAlign='left';
+  const work=Math.pow(2,c);
+  const rel=Math.pow(2,c-10); // relative to cost 10
+  document.getElementById('bcOut').innerHTML=
+    '<span class="k">cost =</span> <span class="s">'+c+'</span>   <span class="k">'+(uk?'робота':'work')+' = 2^'+c+' =</span> <span class="a">'+work.toLocaleString()+'</span> '+(uk?'налаштувань ключа':'key setups')+'\n'+
+    '<span class="k">'+(uk?'відносно cost 10':'relative to cost 10')+':</span> <span class="a">'+(rel>=1?rel+'×':rel.toFixed(3)+'×')+'</span>\n'+
+    '<span class="k">'+(uk?'стан пам’яті':'memory state')+':</span> ~4 KiB S-box '+(uk?'(мала пам’ять-складність)':'(mild memory-hardness)');
+}
+
+/* ====================================================================
+   4) scrypt — illustrative memory/cost model
+   ==================================================================== */
+function drawScrypt(){
+  const uk=window.LANG==='uk';
+  const logN=+document.getElementById('scN').value, r=+document.getElementById('scR').value, p=+document.getElementById('scP').value;
+  document.getElementById('scNV').textContent=logN; document.getElementById('scRV').textContent=r; document.getElementById('scPV').textContent=p;
+  const N=Math.pow(2,logN);
+  const memBytes=128*N*r*p;
+  const cv=document.getElementById('scCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  // draw a grid representing the N-block array (capped visually), area ∝ memory
+  const cols=32, rows=16, cellw=(W-16)/cols, cellh=(H-40)/rows;
+  const shown=Math.min(cols*rows, Math.max(1, Math.round((logN-7)/13*cols*rows)));
+  for(let i=0;i<cols*rows;i++){ const cx=i%cols, cy=Math.floor(i/cols);
+    g.fillStyle = i<shown ? 'hsl('+(170+i/(cols*rows)*60)+' 45% '+(30+ (i<shown?12:0))+'%)' : C.grid;
+    g.fillRect(8+cx*cellw+0.5,10+cy*cellh+0.5,cellw-1,cellh-1);
+  }
+  // random-access arrows (a few)
+  g.strokeStyle=C.rose; g.lineWidth=1;
+  for(let a=0;a<5;a++){ const s=Math.floor(Math.random()*shown), t=Math.floor(Math.random()*shown);
+    const sc=s%cols,sr=Math.floor(s/cols),tc=t%cols,tr=Math.floor(t/cols);
+    g.beginPath(); g.moveTo(8+sc*cellw+cellw/2,10+sr*cellh+cellh/2); g.lineTo(8+tc*cellw+cellw/2,10+tr*cellh+cellh/2); g.stroke(); }
+  g.fillStyle=C.dim; g.font='9px monospace';
+  g.fillText((uk?'масив N блоків + випадкові читання (рожеві)':'N-block array + random reads (pink)'),8,H-14);
+  const mem = memBytes>=1048576 ? (memBytes/1048576).toFixed(1)+' MiB' : (memBytes/1024).toFixed(0)+' KiB';
+  const memKiB=memBytes/1024;
+  document.getElementById('scOut').innerHTML=
+    '<span class="k">N = 2^'+logN+' =</span> '+N.toLocaleString()+'   <span class="k">r =</span> '+r+'   <span class="k">p =</span> '+p+'\n'+
+    '<span class="k">'+(uk?'пам’ять ≈ 128·N·r·p =':'memory ≈ 128·N·r·p =')+'</span> <span class="a">'+mem+'</span>\n'+
+    '<span class="k">'+(uk?'вартість ∝ N·r·p =':'cost ∝ N·r·p =')+'</span> <span class="s">'+(N*r*p).toLocaleString()+'</span>\n'+
+    '<span class="k">'+(uk?'паралелізм GPU (модель):':'GPU parallelism (model):')+'</span> <span class="'+(lanes(memKiB)>16?'b':'a')+'">'+lanes(memKiB)+'×</span> '+(uk?'проти ×256 без пам’яті':'vs ×256 memoryless')+'\n<span class="k">'+(uk?'* ілюстративна модель':'* illustrative model')+'</span>';
+}
+
+/* ====================================================================
+   5) Argon2 — FLAGSHIP interactive cost model
+   ==================================================================== */
+function drawArgon(){
+  const uk=window.LANG==='uk';
+  const m=+document.getElementById('agM').value, t=+document.getElementById('agT').value, p=+document.getElementById('agP').value;
+  document.getElementById('agMV').textContent=m; document.getElementById('agTV').textContent=t; document.getElementById('agPV').textContent=p;
+  const laneA=lanes(m), laneP=lanes(0), laneB=lanes(4);
+  const cv=document.getElementById('agCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  // --- top: memory × time cost area rectangle ---
+  const ax0=34,ay0=128,axw=W-46,ayh=112;
+  g.strokeStyle=C.dim; g.lineWidth=1; g.beginPath(); g.moveTo(ax0,ay0-ayh); g.lineTo(ax0,ay0); g.lineTo(ax0+axw,ay0); g.stroke();
+  const rw=Math.max(6,(t/10)*axw), rh=Math.max(4,(m/4096)*ayh);
+  g.fillStyle='rgba(127,219,202,0.28)'; g.fillRect(ax0,ay0-rh,rw,rh);
+  g.strokeStyle=C.teal; g.strokeRect(ax0,ay0-rh,rw,rh);
+  g.fillStyle=C.dim; g.font='9px monospace'; g.textAlign='left';
+  g.fillText(uk?'пам’ять m':'memory m',4,ay0-ayh+4);
+  g.textAlign='right'; g.fillText(uk?'час t':'time t',ax0+axw,ay0+14);
+  g.textAlign='center'; g.fillStyle=C.teal;
+  g.fillText((uk?'площа = m·t':'area = m·t'),ax0+rw/2, ay0-rh-4);
+  // --- bottom: attacker parallel-advantage bars (log2 scale) ---
+  g.textAlign='left'; g.fillStyle=C.dim; g.font='9px monospace';
+  g.fillText((uk?'паралельна перевага атакувальника (×, лог):':'attacker parallel advantage (×, log):'),6,150);
+  const bars=[['PBKDF2',laneP,C.rose],['bcrypt',laneB,C.amber],['Argon2',laneA,C.teal]];
+  const bx0=70,bw2=W-90,by=162,bh=20,gap=8, maxlog=Math.log2(GPU_CORES);
+  bars.forEach((bar,i)=>{ const y=by+i*(bh+gap); const frac=Math.log2(bar[1]+1)/Math.log2(GPU_CORES+1);
+    g.fillStyle=C.grid; g.fillRect(bx0,y,bw2,bh);
+    g.fillStyle=bar[2]; g.fillRect(bx0,y,Math.max(2,bw2*frac),bh);
+    g.fillStyle=C.ink; g.font='9px monospace'; g.textAlign='left'; g.fillText(bar[0],6,y+14);
+    g.fillStyle=C.ink; g.textAlign='right'; g.fillText(bar[1]+'×',bx0+bw2-4,y+14);
+  });
+  g.textAlign='left';
+  document.getElementById('agOut').innerHTML=
+    '<span class="k">'+(uk?'вартість захисника ∝ m·t =':'defender cost ∝ m·t =')+'</span> <span class="s">'+(m*t).toLocaleString()+'</span> '+(uk?'КіБ·проходів':'KiB·passes')+'  (p='+p+' '+(uk?'смуг':'lanes')+')\n'+
+    '<span class="k">'+(uk?'GPU-паралелізм / здогад:':'GPU parallelism / guess:')+'</span>\n'+
+    '  PBKDF2 <span class="b">'+laneP+'×</span>   bcrypt <span class="s">'+laneB+'×</span>   Argon2 <span class="a">'+laneA+'×</span>\n'+
+    '<span class="k">'+(uk?'пам’ять-складність зводить ×'+GPU_CORES+' GPU до':'memory-hardness collapses the ×'+GPU_CORES+' GPU to')+'</span> <span class="a">'+laneA+'×</span>\n'+
+    '<span class="k">'+(uk?'* модель вартості, не справжня перестановка Argon2':'* cost model, not the real Argon2 permutation')+'</span>';
+}
+
+/* ====================================================================
+   6) Balloon — illustrative fill-and-mix dependency model
+   ==================================================================== */
+function drawBalloon(){
+  const uk=window.LANG==='uk';
+  const s=+document.getElementById('baS').value, t=+document.getElementById('baT').value;
+  document.getElementById('baSV').textContent=s; document.getElementById('baTV').textContent=t;
+  const delta=3;
+  const cv=document.getElementById('baCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  // one row of s blocks; draw dependency arcs to delta earlier blocks (deterministic pseudo)
+  const y=90, r=Math.max(3, Math.min(7,(W-20)/s/2));
+  const px=i=>10+ (i+0.5)*((W-20)/s);
+  // arcs
+  g.strokeStyle=C.line; g.lineWidth=1;
+  for(let i=1;i<s;i++){ // chain dep on i-1
+    g.strokeStyle='rgba(139,151,180,0.4)'; g.beginPath(); g.moveTo(px(i-1),y); g.lineTo(px(i),y); g.stroke();
+  }
+  for(let i=0;i<s;i++){ for(let d=0;d<delta;d++){ const j=( (i*31+d*17+7) % (i+1) );
+    if(j===i) continue; const mx=(px(i)+px(j))/2, my=y-18-Math.abs(i-j)*0.6;
+    g.strokeStyle='rgba(242,166,90,0.35)'; g.beginPath(); g.moveTo(px(j),y); g.quadraticCurveTo(mx,my,px(i),y); g.stroke();
+  } }
+  for(let i=0;i<s;i++){ g.fillStyle= i===0?C.teal:C.amber; g.beginPath(); g.arc(px(i),y,r,0,7); g.fill(); }
+  g.fillStyle=C.dim; g.font='9px monospace';
+  g.fillText((uk?'буфер із s блоків; дуги = δ=3 залежності':'buffer of s blocks; arcs = δ=3 dependencies'),10,y+40);
+  g.fillText((uk?'сірі = ланцюг заповнення':'grey = fill chain')+' · '+(uk?'жовті = змішування':'amber = mixing'),10,y+56);
+  document.getElementById('baOut').innerHTML=
+    '<span class="k">'+(uk?'простір s =':'space s =')+'</span> '+s+' '+(uk?'блоків':'blocks')+'   <span class="k">'+(uk?'час t =':'time t =')+'</span> '+t+' '+(uk?'раундів':'rounds')+'   <span class="k">δ =</span> '+delta+'\n'+
+    '<span class="k">'+(uk?'викликів гешу ≈ s·t·(1+δ) =':'hash calls ≈ s·t·(1+δ) =')+'</span> <span class="a">'+(s*t*(1+delta)).toLocaleString()+'</span>\n'+
+    '<span class="k">'+(uk?'вартість ∝ s·t =':'cost ∝ s·t =')+'</span> <span class="s">'+(s*t).toLocaleString()+'</span>   <span class="k">'+(uk?'пам’ять =':'memory =')+'</span> '+s+' '+(uk?'блоків':'blocks')+'\n'+
+    '<span class="k">'+(uk?'* ілюстративна модель залежностей':'* illustrative dependency model')+'</span>';
+}
+
+/* ====================================================================
+   refs + wiring
+   ==================================================================== */
+const WK='https://en.wikipedia.org/wiki/';
+window.REFS={
+  hkdf:[{tag:'wiki',en:{href:WK+'HKDF',label:'Wikipedia: HKDF'}},
+        {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc5869',label:'RFC 5869 (HKDF)'}},
+        {tag:'paper',en:{href:'https://eprint.iacr.org/2010/264',label:'Krawczyk — HKDF scheme (ePrint 2010/264)'}}],
+  pbkdf2:[{tag:'wiki',en:{href:WK+'PBKDF2',label:'Wikipedia: PBKDF2'}},
+          {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc8018',label:'RFC 8018 (PKCS #5 v2.1)'}},
+          {tag:'nist',en:{href:'https://csrc.nist.gov/pubs/sp/800/132/final',label:'NIST SP 800-132'}}],
+  bcrypt:[{tag:'wiki',en:{href:WK+'Bcrypt',label:'Wikipedia: bcrypt'}},
+          {tag:'paper',en:{href:'https://www.usenix.org/legacy/events/usenix99/provos/provos.pdf',label:'Provos & Mazières — A Future-Adaptable Password Scheme'}},
+          {tag:'wiki',en:{href:WK+'Blowfish_(cipher)',label:'Wikipedia: Blowfish'}}],
+  scrypt:[{tag:'wiki',en:{href:WK+'Scrypt',label:'Wikipedia: scrypt'}},
+          {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc7914',label:'RFC 7914 (scrypt)'}},
+          {tag:'paper',en:{href:'https://www.tarsnap.com/scrypt/scrypt.pdf',label:'Percival — Stronger KDF via memory-hard functions'}}],
+  argon2:[{tag:'wiki',en:{href:WK+'Argon2',label:'Wikipedia: Argon2'}},
+          {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc9106',label:'RFC 9106 (Argon2)'}},
+          {tag:'paper',en:{href:'https://eprint.iacr.org/2015/430',label:'Biryukov–Dinu–Khovratovich — Argon2 (ePrint 2015/430)'}}],
+  balloon:[{tag:'paper',en:{href:'https://eprint.iacr.org/2016/027',label:'Boneh–Corrigan-Gibbs–Schechter — Balloon Hashing (ePrint 2016/027)'}},
+           {tag:'code',en:{href:'https://crypto.stanford.edu/balloon/',label:'Stanford — Balloon hashing project'}},
+           {tag:'wiki',en:{href:WK+'Key_stretching',label:'Wikipedia: key stretching'}}]
+};
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  selfTest(); drawHKDF(); drawPBKDF2(); drawBcrypt(); drawScrypt(); drawArgon(); drawBalloon();
+};
+
+// controls
+['hkSecret','hkSalt','hkLen'].forEach(id=>document.getElementById(id).addEventListener('input',drawHKDF));
+['pbPw','pbSalt','pbIter'].forEach(id=>document.getElementById(id).addEventListener('input',drawPBKDF2));
+document.getElementById('bcCost').addEventListener('input',drawBcrypt);
+['scN','scR','scP'].forEach(id=>document.getElementById(id).addEventListener('input',drawScrypt));
+['agM','agT','agP'].forEach(id=>document.getElementById(id).addEventListener('input',drawArgon));
+['baS','baT'].forEach(id=>document.getElementById(id).addEventListener('input',drawBalloon));
+</script>
+</body>
+</html>

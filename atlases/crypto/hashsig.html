@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hash-based signatures — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="hashsig">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 09 — digital signatures · the hash-based ladder under SPHINCS+"
+         data-uk="Розділ 09 — цифрові підписи · геш-драбина під SPHINCS+">Section 09 — hash-based signatures</div>
+    <h1 data-en="Hash-Based Signatures" data-uk="Підписи на основі гешів">Hash-based signatures</h1>
+    <p class="lede" data-en="Almost every signature in use — RSA, ECDSA, EdDSA — rests on a number-theoretic problem a quantum computer would break. Hash-based signatures need <b>nothing but a secure hash function</b>. Start with Lamport's one-time signature (just reveal preimages), compress it with Winternitz hash-chains, glue many one-time keys under a single Merkle root, and add a state to get XMSS / LMS — the exact scaffolding that stateless SPHINCS+ (FIPS 205) is built from. Every demo below runs a real SHA-256."
+       data-uk="Майже кожен підпис у вжитку — RSA, ECDSA, EdDSA — спирається на теоретико-числову задачу, яку зламав би квантовий комп'ютер. Підписам на гешах не потрібно <b>нічого, крім стійкої геш-функції</b>. Почніть з одноразового підпису Лампорта (просто розкрийте прообрази), стисніть його геш-ланцюгами Вінтерніца, склейте багато одноразових ключів під одним коренем Меркла й додайте стан, щоб отримати XMSS / LMS — саме ту основу, з якої побудовано stateless SPHINCS+ (FIPS 205). Кожне демо нижче виконує справжній SHA-256.">The quantum-safe ladder built only from a hash function.</p>
+    <div class="readout" id="selftest" style="margin-top:18px; max-width:620px;"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ============ Lamport ============ -->
+  <section id="lamport">
+    <span class="num" data-en="09 / Lamport" data-uk="09 / Лампорт">09 / Lamport</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="Lamport One-Time Signature (OTS)" data-uk="Одноразовий підпис Лампорта (OTS)">Lamport one-time signature</span></h2>
+    <div class="formula">sk = {x<sub>i,0</sub>, x<sub>i,1</sub>};  pk = {H(x<sub>i,0</sub>), H(x<sub>i,1</sub>)};  σ<sub>i</sub> = x<sub>i, m<sub>i</sub></sub>;  verify: H(σ<sub>i</sub>) =? pk<sub>i, m<sub>i</sub></sub></div>
+    <p class="desc" data-en="To sign an <b>L-bit</b> message, generate <b>2·L</b> random secret values — a &lsquo;0-value&rsquo; and a &lsquo;1-value&rsquo; for every bit position. The public key is their hashes. The signature simply <b>reveals</b>, for each message bit, the secret from the matching column; the verifier hashes each revealed value and checks it against the public key. Forgery would require inverting the hash. But each secret is exposed at most once, so a key is strictly <b>one-time</b>: signing two different messages leaks both columns wherever the messages differ, and an attacker can then forge. The demo signs an 8-bit value and makes all three facts explicit."
+       data-uk="Щоб підписати <b>L-бітне</b> повідомлення, згенеруйте <b>2·L</b> випадкових секретів — «0-значення» та «1-значення» для кожної позиції біта. Відкритий ключ — це їхні геші. Підпис просто <b>розкриває</b> для кожного біта повідомлення секрет із відповідного стовпця; перевіряч гешує кожне розкрите значення й звіряє з відкритим ключем. Підробка потребувала б обернення гешу. Але кожен секрет розкривається щонайбільше раз, тож ключ строго <b>одноразовий</b>: підпис двох різних повідомлень розкриває обидва стовпці там, де повідомлення відрізняються, і зловмисник може підробити. Демо підписує 8-бітне значення й робить усі три факти явними."></p>
+    <div id="refs-lamport"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="lamCanvas" width="300" height="190"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="message m (8-bit)" data-uk="повідомлення m (8-біт)">message m</span><span class="val" id="lamMV">182</span></label>
+            <input type="range" id="lamM" min="0" max="255" value="182"></div>
+          <div class="ctrl"><label><span data-en="second message m′ (key reuse)" data-uk="друге повідомлення m′ (повтор ключа)">second m′</span><span class="val" id="lamM2V">150</span></label>
+            <input type="range" id="lamM2" min="0" max="255" value="150"></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="lamNew" data-en="New key" data-uk="Новий ключ">New key</button>
+            <button id="lamAtk" class="secondary" data-en="Reuse key → attack" data-uk="Повтор ключа → атака">Reuse key → attack</button>
+          </div>
+          <div class="hint" data-en="Grid = 8 bit-rows × {0-value, 1-value}. Teal = revealed by σ(m)." data-uk="Сітка = 8 рядків-бітів × {0-значення, 1-значення}. Бірюза = розкрито σ(m)."></div>
+          <div class="readout" id="lamOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Unforgeability reduces directly to the hash's <b>one-wayness</b> (preimage resistance) — no number theory, so it is believed <b>quantum-safe</b> (Grover only halves the security level, offset by a larger hash). The fatal caveat is the name: a Lamport key is <b>one-time</b>. Reuse leaks preimages and enables forgery, exactly as the demo shows — which is why the rest of this page exists (Merkle trees make many one-time keys usable under one public key)."
+            data-uk="Непідробність зводиться прямо до <b>однобічності</b> гешу (стійкості до прообразу) — жодної теорії чисел, тож схема вважається <b>квантово-стійкою</b> (Гровер лише вдвічі зменшує рівень стійкості, що компенсують більшим гешем). Фатальне застереження — у назві: ключ Лампорта <b>одноразовий</b>. Повтор розкриває прообрази й уможливлює підробку, як показує демо — саме тому існує решта цієї сторінки (дерева Меркла роблять багато одноразових ключів придатними під одним відкритим ключем)."></span></div>
+    <div class="xrefs"><a href="signatures.html#sphincs">SPHINCS+</a> <a href="hashsig.html#wots" data-en="Winternitz OTS" data-uk="Одноразовий підпис Вінтерніца">Winternitz OTS</a> <a href="hashsig.html#merkle" data-en="Merkle tree" data-uk="Дерево Меркла">Merkle tree</a> <a href="hash.html#sha2">SHA-256</a></div>
+  </section>
+
+  <!-- ============ Winternitz OTS ============ -->
+  <section id="wots">
+    <span class="num" data-en="09 / WOTS+" data-uk="09 / WOTS+">09 / WOTS+</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(w·n)</span>
+      <span data-en="Winternitz One-Time Signature (WOTS+)" data-uk="Одноразовий підпис Вінтерніца (WOTS+)">Winternitz OTS (WOTS+)</span></h2>
+    <div class="formula">chain: pk = H<sup>w−1</sup>(x);  to sign digit d: σ = H<sup>d</sup>(x);  verify: H<sup>w−1−d</sup>(σ) =? pk</div>
+    <p class="desc" data-en="Lamport spends two secrets per bit. Winternitz trades <b>time for size</b>: pick a base <b>w</b> and cut the message into base-w digits, then dedicate one <b>hash-chain</b> to each digit. The secret is the chain start x, the public key is the chain tip H<sup>w−1</sup>(x). Signing digit d reveals the mid-chain value H<sup>d</sup>(x); the verifier just keeps hashing (w−1−d more times) until it lands on the public tip. Larger w means fewer, longer chains — shorter signatures, more hashing. A real WOTS+ also signs a <b>checksum</b> of the digits so no digit can be forged upward; the demo shows one chain."
+       data-uk="Лампорт витрачає два секрети на біт. Вінтерніц міняє <b>час на розмір</b>: беруть основу <b>w</b> і ріжуть повідомлення на цифри за основою w, виділяючи кожній цифрі один <b>геш-ланцюг</b>. Секрет — початок ланцюга x, відкритий ключ — вершина H<sup>w−1</sup>(x). Підпис цифри d розкриває серединне значення H<sup>d</sup>(x); перевіряч просто гешує далі (ще w−1−d разів), доки не дійде до відкритої вершини. Більше w — менше довших ланцюгів: коротші підписи, більше гешування. Справжній WOTS+ також підписує <b>контрольну суму</b> цифр, щоб жодну цифру не можна було підробити вгору; демо показує один ланцюг."></p>
+    <div id="refs-wots"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="wotsCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="Winternitz base w" data-uk="основа Вінтерніца w">base w</span><span class="val" id="wotsWV">8</span></label>
+            <input type="range" id="wotsW" min="2" max="16" value="8"></div>
+          <div class="ctrl"><label><span data-en="digit d to sign" data-uk="цифра d для підпису">digit d</span><span class="val" id="wotsDV">3</span></label>
+            <input type="range" id="wotsD" min="0" max="7" value="3"></div>
+          <button id="wotsNew" class="secondary" data-en="New secret" data-uk="Новий секрет">New secret</button>
+          <div class="readout" id="wotsOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="WOTS+ (Hülsing, 2013) hardens earlier Winternitz variants with per-node bitmask keying, so its security relies only on a <b>second-preimage / undetectable one-wayness</b> assumption — still hash-only and quantum-safe. It remains strictly <b>one-time</b>. The checksum is essential: omit it and an attacker who sees one signature can raise digits to forge related messages. WOTS+ is the leaf primitive inside XMSS, LMS and SPHINCS+."
+            data-uk="WOTS+ (Гюльсінг, 2013) посилює ранні варіанти Вінтерніца поблочним ключуванням бітмасками, тож стійкість спирається лише на припущення про <b>другий прообраз / невиявну однобічність</b> — усе ще лише геш і квантова стійкість. Схема лишається строго <b>одноразовою</b>. Контрольна сума критична: без неї зловмисник, побачивши один підпис, може підняти цифри й підробити споріднені повідомлення. WOTS+ — це листовий примітив у XMSS, LMS і SPHINCS+."></span></div>
+    <div class="xrefs"><a href="signatures.html#sphincs">SPHINCS+</a> <a href="hashsig.html#lamport" data-en="Lamport OTS" data-uk="Підпис Лампорта">Lamport OTS</a> <a href="hashsig.html#merkle" data-en="Merkle tree" data-uk="Дерево Меркла">Merkle tree</a> <a href="hashsig.html#xmss">XMSS / LMS</a></div>
+  </section>
+
+  <!-- ============ Merkle tree ============ -->
+  <section id="merkle">
+    <span class="num" data-en="09 / Merkle" data-uk="09 / Меркл">09 / Merkle</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(log n)</span>
+      <span data-en="Merkle Signature Tree" data-uk="Підписне дерево Меркла">Merkle signature tree</span></h2>
+    <div class="formula">leaf<sub>i</sub> = H(OTS-pk<sub>i</sub>);  parent = H(left ‖ right);  root = one reusable public key</div>
+    <p class="desc" data-en="A one-time key signs once — useless alone. Merkle's idea: generate <b>2<sup>h</sup></b> one-time key pairs, hash each public key into a <b>leaf</b>, and hash pairs of nodes up a binary tree to a single <b>root</b>. That root is <i>the</i> long-lived public key. To use leaf i, you publish its OTS signature plus the <b>authentication path</b> — the sibling hash at each level — and the verifier re-hashes leaf + path back up to the root. Cost is only <b>O(log n)</b> hashes and O(log n) storage. The demo builds an 8-leaf tree; pick a leaf to see its path and watch the root be re-derived and self-checked."
+       data-uk="Одноразовий ключ підписує лише раз — сам по собі марний. Ідея Меркла: згенерувати <b>2<sup>h</sup></b> одноразових пар ключів, гешувати кожен відкритий ключ у <b>лист</b> і гешувати пари вузлів угору двійковим деревом до єдиного <b>кореня</b>. Цей корінь — <i>той самий</i> довговічний відкритий ключ. Щоб задіяти лист i, публікують його OTS-підпис плюс <b>шлях автентифікації</b> — сусідній геш на кожному рівні — а перевіряч перегешовує лист + шлях назад до кореня. Ціна — лише <b>O(log n)</b> гешів і O(log n) пам'яті. Демо будує дерево з 8 листів; оберіть лист, щоб побачити його шлях і як корінь перевиводиться та самоперевіряється."></p>
+    <div id="refs-merkle"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="merkleCanvas" width="300" height="210"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="leaf index (0–7)" data-uk="індекс листа (0–7)">leaf index</span><span class="val" id="merkLV">3</span></label>
+            <input type="range" id="merkL" min="0" max="7" value="3"></div>
+          <button id="merkNew" class="secondary" data-en="Regenerate leaves" data-uk="Перегенерувати листя">Regenerate leaves</button>
+          <div class="hint" data-en="Amber = chosen leaf's path to root; rose = the authentication-path siblings." data-uk="Бурштин = шлях обраного листа до кореня; рожевий = сусіди шляху автентифікації."></div>
+          <div class="readout" id="merkOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Security rests on <b>collision resistance</b> of the tree hash: forging a path would need a second leaf/subtree hashing to the same node. The same structure powers <b>Certificate Transparency</b> logs, Git commit history and blockchain block hashing (Bitcoin's transaction root). Classic Merkle signatures are stateful — you must never reuse a leaf — which XMSS/LMS formalise and SPHINCS+ removes by choosing leaves pseudorandomly from a huge tree."
+            data-uk="Стійкість спирається на <b>стійкість до колізій</b> деревного гешу: підробка шляху потребувала б другого листа/піддерева з тим самим гешем вузла. Ця ж структура живить журнали <b>Certificate Transparency</b>, історію комітів Git і гешування блоків блокчейну (кореневий геш транзакцій Bitcoin). Класичні підписи Меркла стан-залежні — лист не можна повторювати — що формалізують XMSS/LMS, а SPHINCS+ усуває, обираючи листя псевдовипадково з величезного дерева."></span></div>
+    <div class="xrefs"><a href="signatures.html#sphincs">SPHINCS+</a> <a href="hashsig.html#lamport" data-en="Lamport OTS" data-uk="Підпис Лампорта">Lamport OTS</a> <a href="hashsig.html#wots" data-en="Winternitz OTS" data-uk="Підпис Вінтерніца">Winternitz OTS</a> <a href="advanced.html#shamir" data-en="Secret sharing" data-uk="Розділення секрету">Secret sharing</a> <a href="hashsig.html#xmss">XMSS / LMS</a></div>
+  </section>
+
+  <!-- ============ XMSS / LMS ============ -->
+  <section id="xmss">
+    <span class="num" data-en="09 / XMSS · LMS" data-uk="09 / XMSS · LMS">09 / XMSS · LMS</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(log n)</span>
+      <span data-en="XMSS / LMS (RFC 8391 / 8554)" data-uk="XMSS / LMS (RFC 8391 / 8554)">XMSS / LMS</span></h2>
+    <div class="formula">XMSS = WOTS+ leaves + Merkle tree + a <b>state</b> (the next unused leaf index)</div>
+    <p class="desc" data-en="XMSS and LMS are the <b>standardised</b> hash-based signatures (IETF RFC 8391 / 8554, NIST SP 800-208). They are exactly the assembly of this page: each Merkle leaf is a <b>WOTS+</b> public key, the Merkle <b>root</b> is the long-term public key, and a signature is one WOTS+ signature plus its authentication path. The one novelty — and the whole risk — is <b>state</b>: the signer must remember which leaf indices are already used and <b>never repeat one</b>. Reusing an index breaks the one-time WOTS+ underneath it. The demo tracks that state: sign advances the index; a repeat is refused; exhaust the tree and it is spent. XMSS adds keyed bitmasks for a stronger (collision-free) security proof; LMS is the leaner, faster SHA-256 variant."
+       data-uk="XMSS та LMS — це <b>стандартизовані</b> підписи на гешах (IETF RFC 8391 / 8554, NIST SP 800-208). Вони є саме складанням цієї сторінки: кожен лист Меркла — це відкритий ключ <b>WOTS+</b>, <b>корінь</b> Меркла — довготривалий відкритий ключ, а підпис — це один підпис WOTS+ плюс його шлях автентифікації. Єдина новизна — і весь ризик — це <b>стан</b>: підписувач мусить пам'ятати, які індекси листів уже використані, й <b>ніколи не повторювати</b> жоден. Повтор індексу ламає одноразовий WOTS+ під ним. Демо відстежує цей стан: підпис просуває індекс; повтор відхиляється; вичерпайте дерево — і воно витрачене. XMSS додає ключовані бітмаски для сильнішого (без-колізійного) доведення; LMS — легша, швидша SHA-256-версія."></p>
+    <div id="refs-xmss"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="xmssSign" data-en="Sign next message" data-uk="Підписати наступне">Sign next message</button>
+          <button id="xmssReuse" class="secondary" data-en="Try to reuse index 0" data-uk="Спробувати повтор індексу 0">Try to reuse index 0</button>
+          <button id="xmssReset" class="secondary" data-en="Reset state / key" data-uk="Скинути стан / ключ">Reset</button>
+        </div>
+        <div class="hint" data-en="Height h = 3 → 8 WOTS+ leaves = 8 signatures total, then the key is spent." data-uk="Висота h = 3 → 8 листів WOTS+ = усього 8 підписів, далі ключ витрачено."></div>
+        <div class="readout" id="xmssOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="With correct state handling, XMSS/LMS have <b>tight, conservative, hash-only</b> security proofs and are approved by NIST SP 800-208 for firmware and code signing today. The one deadly failure mode is <b>state reuse</b> — from a VM snapshot, backup restore, or parallel signer — which reveals WOTS+ chains and enables forgery; this is why stateless SPHINCS+ was standardised for general use. Reference implementations: the <a class='ext' href='https://github.com/PQClean/PQClean' target='_blank' rel='noopener'>PQClean</a> / <a class='ext' href='https://github.com/open-quantum-safe/liboqs' target='_blank' rel='noopener'>liboqs</a> hash-based modules."
+            data-uk="За правильної роботи зі станом XMSS/LMS мають <b>щільні, консервативні, суто гешеві</b> доведення й уже схвалені NIST SP 800-208 для підпису прошивок і коду. Єдиний смертельний режим відмови — <b>повтор стану</b> (зі знімка ВМ, відновлення з резервної копії чи паралельного підписувача) — що розкриває ланцюги WOTS+ і дає підробку; саме тому для загального вжитку стандартизували stateless SPHINCS+. Еталонні реалізації: геш-модулі <a class='ext' href='https://github.com/PQClean/PQClean' target='_blank' rel='noopener'>PQClean</a> / <a class='ext' href='https://github.com/open-quantum-safe/liboqs' target='_blank' rel='noopener'>liboqs</a>."></span></div>
+    <div class="xrefs"><a href="signatures.html#sphincs">SPHINCS+</a> <a href="hashsig.html#merkle" data-en="Merkle tree" data-uk="Дерево Меркла">Merkle tree</a> <a href="hashsig.html#wots" data-en="WOTS+ leaves" data-uk="Листя WOTS+">WOTS+ leaves</a> <a href="asymmetric.html#pqc" data-en="Post-quantum crypto" data-uk="Постквантова криптографія">Post-quantum crypto</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+
+/* ---- SHA-256 (verified helper, copied from standards.html) ---- */
+const SHA=(function(){
+  const K=new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+  const rr=(x,n)=>(x>>>n)|(x<<(32-n));
+  function digest(bytes){
+    const l=bytes.length,bl=((l+8>>6)+1)<<6,m=new Uint8Array(bl); m.set(bytes); m[l]=0x80;
+    const bits=l*8; m[bl-4]=(bits>>>24)&255;m[bl-3]=(bits>>>16)&255;m[bl-2]=(bits>>>8)&255;m[bl-1]=bits&255;
+    let h0=0x6a09e667,h1=0xbb67ae85,h2=0x3c6ef372,h3=0xa54ff53a,h4=0x510e527f,h5=0x9b05688c,h6=0x1f83d9ab,h7=0x5be0cd19;
+    const w=new Uint32Array(64);
+    for(let o=0;o<bl;o+=64){
+      for(let i=0;i<16;i++) w[i]=(m[o+4*i]<<24)|(m[o+4*i+1]<<16)|(m[o+4*i+2]<<8)|m[o+4*i+3];
+      for(let i=16;i<64;i++){ const s0=rr(w[i-15],7)^rr(w[i-15],18)^(w[i-15]>>>3), s1=rr(w[i-2],17)^rr(w[i-2],19)^(w[i-2]>>>10); w[i]=(w[i-16]+s0+w[i-7]+s1)|0; }
+      let a=h0,b=h1,c=h2,d=h3,e=h4,f=h5,g=h6,h=h7;
+      for(let i=0;i<64;i++){ const S1=rr(e,6)^rr(e,11)^rr(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[i]+w[i])|0,S0=rr(a,2)^rr(a,13)^rr(a,22),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)|0; h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0; }
+      h0=(h0+a)|0;h1=(h1+b)|0;h2=(h2+c)|0;h3=(h3+d)|0;h4=(h4+e)|0;h5=(h5+f)|0;h6=(h6+g)|0;h7=(h7+h)|0;
+    }
+    const out=new Uint8Array(32),hs=[h0,h1,h2,h3,h4,h5,h6,h7];
+    for(let i=0;i<8;i++){ out[4*i]=(hs[i]>>>24)&255;out[4*i+1]=(hs[i]>>>16)&255;out[4*i+2]=(hs[i]>>>8)&255;out[4*i+3]=hs[i]&255; }
+    return out;
+  }
+  const enc=new TextEncoder(),hex=b=>Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join('');
+  return {digest,hex,str:s=>digest(enc.encode(s))};
+})();
+
+/* ---- shared helpers ---- */
+function randBytes(n){ const a=new Uint8Array(n); for(let i=0;i<n;i++) a[i]=(Math.random()*256)|0; return a; }
+function bhex(b,n){ const s=SHA.hex(b); return n&&s.length>2*n?s.slice(0,2*n)+'…':s; }
+function beq(a,b){ if(a.length!==b.length) return false; for(let i=0;i<a.length;i++) if(a[i]!==b[i]) return false; return true; }
+function H2(a,b){ const c=new Uint8Array(a.length+b.length); c.set(a,0); c.set(b,a.length); return SHA.digest(c); }
+function chain(x,k){ let h=x; for(let i=0;i<k;i++) h=SHA.digest(h); return h; }   // H^k(x)
+
+/* ====================================================================
+   1) LAMPORT one-time signature — REAL SHA-256 keygen / sign / verify
+   ==================================================================== */
+let lamSK=null;                       // lamSK[i] = [Uint8Array(4) 0-value, Uint8Array(4) 1-value], i = bit 0..7
+let lamPK=null;                       // lamPK[i] = [H(0-value), H(1-value)]
+let lamRevealed=null;                 // pool of preimages leaked so far: lamRevealed[i][j] or null
+function lamKeygen(){
+  lamSK=[]; lamPK=[];
+  for(let i=0;i<8;i++){ const s0=randBytes(4),s1=randBytes(4); lamSK.push([s0,s1]); lamPK.push([SHA.digest(s0),SHA.digest(s1)]); }
+  lamRevealed=[[null,null],[null,null],[null,null],[null,null],[null,null],[null,null],[null,null],[null,null]];
+}
+function lamSign(m){ const sig=[]; for(let i=0;i<8;i++){ const bit=(m>>i)&1; sig.push(lamSK[i][bit]); } return sig; }   // sig[i] preimage
+function lamVerify(m,sig){ for(let i=0;i<8;i++){ const bit=(m>>i)&1; if(!beq(SHA.digest(sig[i]),lamPK[i][bit])) return false; } return true; }
+function lamRecord(m){ const sig=lamSign(m); for(let i=0;i<8;i++){ const bit=(m>>i)&1; lamRevealed[i][bit]=sig[i]; } return sig; }
+
+function drawLamCanvas(m,markReuse){
+  const cv=document.getElementById('lamCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const x0=44, colW=100, rowH=(H-24)/8;
+  g.font='9px monospace'; g.textAlign='center';
+  g.fillStyle=C.dim; g.fillText('bit',20,14); g.fillText('0-value',x0+colW/2,14); g.fillText('1-value',x0+colW+colW/2,14);
+  for(let i=0;i<8;i++){
+    const y=18+i*rowH, bit=(m>>i)&1;
+    g.fillStyle=C.dim; g.textAlign='right'; g.fillText('b'+i,32,y+rowH/2+3); g.textAlign='center';
+    for(let j=0;j<2;j++){
+      const cx=x0+j*colW, revealed=(j===bit), leak=markReuse&&lamRevealed&&lamRevealed[i][j];
+      g.fillStyle= revealed?C.teal:(leak?C.rose:C.grid);
+      g.fillRect(cx+2,y+2,colW-6,rowH-4);
+      g.fillStyle= revealed?C.panel:C.dim; g.font='8px monospace';
+      g.fillText(revealed||leak?bhex(revealed?lamSK[i][j]:lamRevealed[i][j],3):'••••',cx+colW/2-2,y+rowH/2+3);
+    }
+  }
+  g.textAlign='left';
+}
+function drawLam(){
+  if(!lamSK) lamKeygen();
+  const m=+document.getElementById('lamM').value; document.getElementById('lamMV').textContent=m;
+  document.getElementById('lamM2V').textContent=document.getElementById('lamM2').value;
+  const uk=window.LANG==='uk';
+  const sig=lamSign(m);
+  const ok=lamVerify(m,sig);
+  // flip-one-bit self-test: verify sig of m against a 1-bit-different message m2
+  const flip=1<<3, mFlip=m^flip;
+  const okFlip=lamVerify(mFlip,sig);           // should be FALSE
+  drawLamCanvas(m,false);
+  const bits=[]; for(let i=7;i>=0;i--) bits.push((m>>i)&1);
+  document.getElementById('lamOut').innerHTML=
+    '<span class="k">m =</span> '+m+' = <span class="a">'+bits.join('')+'</span>  (b7..b0)\n'+
+    '<span class="k">pk<sub>0</sub> col0/col1:</span> '+bhex(lamPK[0][0],4)+' / '+bhex(lamPK[0][1],4)+'\n'+
+    '<span class="k">σ (8 revealed preimages):</span>\n  '+sig.map(s=>bhex(s,3)).join(' ')+'\n'+
+    '<span class="k">'+(uk?'перевірка H(σ_i)=pk':'verify H(σ_i)=pk')+':</span> '+(ok?'<span class="a">'+(uk?'ДІЙСНИЙ ✓':'VALID ✓')+'</span>':'<span class="b">✗</span>')+'\n'+
+    '<span class="k">'+(uk?'самотест — 1 біт перекинуто (b3):':'self-test — flip 1 bit (b3):')+'</span> '+
+    (okFlip?'<span class="b">'+(uk?'помилково прийнято ✗':'wrongly accepted ✗')+'</span>':'<span class="a">'+(uk?'відхилено, як і має бути ✓':'rejected as expected ✓')+'</span>');
+}
+function drawLamAttack(){
+  if(!lamSK) lamKeygen();
+  const uk=window.LANG==='uk';
+  const m1=+document.getElementById('lamM').value, m2=+document.getElementById('lamM2').value;
+  // reuse the SAME key to sign m1 then m2 — record leaked preimages
+  lamRevealed=[[null,null],[null,null],[null,null],[null,null],[null,null],[null,null],[null,null],[null,null]];
+  lamRecord(m1); lamRecord(m2);
+  // count columns fully leaked; forgeable messages = 2^(#differing bits)
+  let diff=0; for(let i=0;i<8;i++) if(((m1>>i)&1)!==((m2>>i)&1)) diff++;
+  const forgeable=Math.pow(2,diff);
+  // build a genuinely-new forged message using only leaked preimages (flip up to 2 differing bits of m1)
+  let m3=m1, flips=0;
+  for(let i=0;i<8&&flips<2;i++){ if(((m1>>i)&1)!==((m2>>i)&1)){ m3^=(1<<i); flips++; } }
+  let forgeLine, forgedOk=null;
+  if(m3!==m1&&m3!==m2){
+    // assemble forged signature from the leaked pool
+    const fsig=[]; let complete=true;
+    for(let i=0;i<8;i++){ const b=(m3>>i)&1; const pre=lamRevealed[i][b]; if(!pre){complete=false;break;} fsig.push(pre); }
+    forgedOk = complete && lamVerify(m3,fsig);
+    forgeLine='<span class="k">'+(uk?'підроблено НОВЕ повідомлення':'forged a NEW message')+' m″ =</span> '+m3+
+      ' → <span class="'+(forgedOk?'b':'a')+'">'+(forgedOk?(uk?'підпис ДІЙСНИЙ без секретного ключа! ✗':'signature VALID with no secret key! ✗'):'—')+'</span>';
+  } else {
+    forgeLine='<span class="k">'+(uk?'m і m′ надто схожі — оберіть більшу різницю бітів':'m and m′ too similar — pick a bigger bit difference')+'</span>';
+  }
+  drawLamCanvas(m1,true);
+  document.getElementById('lamOut').innerHTML=
+    '<span class="b">'+(uk?'ПОВТОР КЛЮЧА':'KEY REUSE')+':</span> '+(uk?'підписано двічі':'signed twice')+' — m='+m1+', m′='+m2+'\n'+
+    '<span class="k">'+(uk?'бітів, де m≠m′':'bits where m≠m′')+':</span> <span class="s">'+diff+'</span> → '+
+    '<span class="k">'+(uk?'підробних повідомлень':'forgeable messages')+':</span> <span class="b">2^'+diff+' = '+forgeable+'</span>\n'+
+    '<span class="k">'+(uk?'рожеві клітинки = розкриті обидва стовпці':'rose cells = both columns exposed')+'</span>\n'+
+    forgeLine;
+}
+
+/* ====================================================================
+   2) WINTERNITZ OTS (WOTS+) — REAL SHA-256 hash chain
+   ==================================================================== */
+let wotsX=randBytes(4);
+function drawWots(){
+  const w=+document.getElementById('wotsW').value; document.getElementById('wotsWV').textContent=w;
+  const dEl=document.getElementById('wotsD'); dEl.max=w-1; if(+dEl.value>w-1) dEl.value=w-1;
+  const d=+dEl.value; document.getElementById('wotsDV').textContent=d;
+  const uk=window.LANG==='uk';
+  // full chain x = H^0 .. H^(w-1)
+  const nodes=[]; let h=wotsX; for(let k=0;k<w;k++){ nodes.push(h); h=SHA.digest(h); }
+  const pk=nodes[w-1], sig=nodes[d];
+  const ver=chain(sig,(w-1)-d);                 // verifier hashes forward
+  const ok=beq(ver,pk);
+  // canvas: draw the chain
+  const cv=document.getElementById('wotsCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const n=w, gap=(W-20)/Math.max(1,n-1), y=54;
+  g.strokeStyle=C.line; g.beginPath(); g.moveTo(10,y); g.lineTo(W-10,y); g.stroke();
+  for(let k=0;k<n;k++){ const x=10+k*gap;
+    g.fillStyle=(k===d)?C.teal:(k===w-1?C.amber:(k===0?C.rose:C.grid));
+    g.beginPath(); g.arc(x,y,k===d||k===w-1||k===0?6:4,0,7); g.fill();
+  }
+  g.fillStyle=C.dim; g.font='8px monospace'; g.textAlign='center';
+  g.fillText(uk?'x=H⁰':'x=H⁰',10,y+18); g.fillText('σ=H^'+d,10+d*gap,y-12); g.fillText('pk=H^'+(w-1),W-10,y+18);
+  g.textAlign='left';
+  document.getElementById('wotsOut').innerHTML=
+    '<span class="k">'+(uk?'секрет':'secret')+' x = H⁰:</span> <span class="rose" style="color:'+C.rose+'">'+bhex(wotsX,4)+'</span>\n'+
+    '<span class="k">'+(uk?'відкритий':'public')+' pk = H^'+(w-1)+'(x):</span> <span class="s">'+bhex(pk,4)+'</span>\n'+
+    '<span class="k">'+(uk?'підпис цифри':'sign digit')+' d='+d+':  σ = H^'+d+'(x) =</span> <span class="a">'+bhex(sig,4)+'</span>\n'+
+    '<span class="k">'+(uk?'перевірка':'verify')+' H^'+((w-1)-d)+'(σ) =? pk →</span> '+
+    (ok?'<span class="a">'+(uk?'ДІЙСНИЙ ✓':'VALID ✓')+'</span>':'<span class="b">✗</span>');
+}
+
+/* ====================================================================
+   3) MERKLE signature tree — REAL SHA-256 root + authentication path
+   ==================================================================== */
+let merkSeed=randBytes(8);
+function merkLeaves(){ const lv=[]; for(let i=0;i<8;i++){ const b=new Uint8Array(9); b.set(merkSeed,0); b[8]=i; lv.push(SHA.digest(b)); } return lv; } // leaf_i = H(OTS-pk_i)
+function merkBuild(leaves){ const levels=[leaves]; let cur=leaves; while(cur.length>1){ const nx=[]; for(let i=0;i<cur.length;i+=2) nx.push(H2(cur[i],cur[i+1])); levels.push(nx); cur=nx; } return levels; }
+function merkAuth(levels,idx){ const path=[]; let i=idx; for(let l=0;l<levels.length-1;l++){ path.push(levels[l][i^1]); i>>=1; } return path; }
+function merkReroot(leaf,idx,path){ let h=leaf,i=idx; for(let l=0;l<path.length;l++){ h=(i&1)?H2(path[l],h):H2(h,path[l]); i>>=1; } return h; }
+function drawMerk(){
+  const idx=+document.getElementById('merkL').value; document.getElementById('merkLV').textContent=idx;
+  const uk=window.LANG==='uk';
+  const leaves=merkLeaves(), levels=merkBuild(leaves), root=levels[levels.length-1][0];
+  const path=merkAuth(levels,idx), rederived=merkReroot(leaves[idx],idx,path), ok=beq(rederived,root);
+  // which node indices lie on the path-to-root and which are siblings
+  const onPath=[], sib=[]; { let i=idx; for(let l=0;l<levels.length;l++){ onPath.push([l,i]); if(l<levels.length-1) sib.push([l,i^1]); i>>=1; } }
+  const cv=document.getElementById('merkleCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const isOn=(l,i)=>onPath.some(p=>p[0]===l&&p[1]===i), isSib=(l,i)=>sib.some(p=>p[0]===l&&p[1]===i);
+  const levY=[H-22, H-22-52, H-22-104, 20];
+  const posX=(l,i)=>{ const cnt=levels[l].length; return (W/cnt)*(i+0.5); };
+  // edges
+  g.strokeStyle=C.line;
+  for(let l=0;l<levels.length-1;l++) for(let i=0;i<levels[l].length;i++){ g.beginPath(); g.moveTo(posX(l,i),levY[l]); g.lineTo(posX(l+1,i>>1),levY[l+1]); g.stroke(); }
+  // nodes
+  for(let l=0;l<levels.length;l++) for(let i=0;i<levels[l].length;i++){ const x=posX(l,i),y=levY[l];
+    g.fillStyle=isOn(l,i)?C.amber:(isSib(l,i)?C.rose:C.grid);
+    const r=(l===0)?7:8; g.beginPath(); g.arc(x,y,r,0,7); g.fill();
+    if(l===0){ g.fillStyle=C.dim; g.font='8px monospace'; g.textAlign='center'; g.fillText(i,x,y+18); }
+  }
+  g.fillStyle=C.teal; g.font='9px monospace'; g.textAlign='center'; g.fillText(uk?'корінь':'root',posX(3,0),12);
+  g.textAlign='left';
+  document.getElementById('merkOut').innerHTML=
+    '<span class="k">'+(uk?'корінь (відкритий ключ)':'root (public key)')+':</span> <span class="a">'+bhex(root,6)+'</span>\n'+
+    '<span class="k">'+(uk?'лист':'leaf')+' #'+idx+':</span> '+bhex(leaves[idx],5)+'\n'+
+    '<span class="k">'+(uk?'шлях автентифікації (сусіди)':'auth path (siblings)')+':</span>\n'+
+    path.map((p,l)=>'  L'+l+': '+bhex(p,4)).join('\n')+'\n'+
+    '<span class="k">'+(uk?'перевиведений корінь =? корінь':'re-derived root =? root')+':</span> '+
+    (ok?'<span class="a">'+(uk?'ЗБІГ ✓':'MATCH ✓')+'</span>':'<span class="b">✗</span>');
+}
+
+/* ====================================================================
+   4) XMSS / LMS — WOTS+ leaves under a Merkle root + STATE simulation
+   ==================================================================== */
+let xmssSeed=randBytes(8), xmssIdx=0, xmssLog=[];
+function xmssLeaf(i){ const b=new Uint8Array(10); b.set(xmssSeed,0); b[8]=i; b[9]=0xA5; return SHA.digest(b); } // leaf_i = H(WOTS+ pk_i)
+function xmssRender(){
+  const uk=window.LANG==='uk';
+  const leaves=[]; for(let i=0;i<8;i++) leaves.push(xmssLeaf(i));
+  const levels=merkBuild(leaves), root=levels[levels.length-1][0];
+  let out='<span class="k">'+(uk?'XMSS відкритий ключ = корінь Меркла над 8 листами WOTS+ (лист = H(заглушка pk) у цьому демо)':'XMSS public key = Merkle root over 8 WOTS+ leaves (leaf = H(placeholder pk) here)')+':</span>\n'+
+    '  <span class="a">'+bhex(root,8)+'</span>\n'+
+    '<span class="k">'+(uk?'стан: наступний невикористаний індекс':'state: next unused index')+' =</span> '+
+    (xmssIdx<8?'<span class="s">'+xmssIdx+'</span>':'<span class="b">'+(uk?'— ВИЧЕРПАНО':'— EXHAUSTED')+'</span>')+'  ('+xmssIdx+'/8 '+(uk?'використано':'used')+')\n';
+  if(xmssLog.length) out+='<span class="k">'+(uk?'журнал підписів':'signing log')+':</span>\n'+xmssLog.join('\n')+'\n';
+  document.getElementById('xmssOut').innerHTML=out.replace(/\n$/,'');
+}
+function xmssSignNext(){
+  const uk=window.LANG==='uk';
+  if(xmssIdx>=8){ xmssLog.push('  <span class="b">'+(uk?'✗ дерево витрачене — згенеруйте новий ключ':'✗ tree spent — generate a new key')+'</span>'); xmssRender(); return; }
+  const leaves=[]; for(let i=0;i<8;i++) leaves.push(xmssLeaf(i));
+  const levels=merkBuild(leaves), root=levels[levels.length-1][0];
+  const path=merkAuth(levels,xmssIdx), ok=beq(merkReroot(leaves[xmssIdx],xmssIdx,path),root);
+  xmssLog.push('  <span class="a">✓</span> '+(uk?'підпис':'sig')+' #'+xmssIdx+': '+(uk?'лист':'leaf')+'='+bhex(leaves[xmssIdx],3)+
+    ', '+(uk?'шлях':'path')+'='+path.map(p=>bhex(p,2)).join(',')+' '+(ok?(uk?'корінь ✓':'root ✓'):'root ✗'));
+  xmssIdx++;
+  xmssRender();
+}
+function xmssReuse(){
+  const uk=window.LANG==='uk';
+  if(xmssIdx===0){ xmssLog.push('  <span class="k">'+(uk?'ще нічого не підписано — спершу підпишіть':'nothing signed yet — sign first')+'</span>'); }
+  else xmssLog.push('  <span class="b">'+(uk?'✗ ВІДМОВА: індекс 0 уже використано — повтор зламав би WOTS+ під ним':'✗ REFUSED: index 0 already used — reuse would break the WOTS+ beneath it')+'</span>');
+  xmssRender();
+}
+function xmssReset(){ xmssSeed=randBytes(8); xmssIdx=0; xmssLog=[]; xmssRender(); }
+
+/* ====================================================================
+   self-test banner (SHA-256 KAT + live Lamport + live Merkle)
+   ==================================================================== */
+function selfTest(){
+  const uk=window.LANG==='uk';
+  const sh=SHA.hex(SHA.str('abc'))==='ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
+  // live Lamport round-trip on a throwaway key
+  let lamOk; { const sk=[],pk=[]; for(let i=0;i<8;i++){ const s0=randBytes(4),s1=randBytes(4); sk.push([s0,s1]); pk.push([SHA.digest(s0),SHA.digest(s1)]); }
+    const m=0xC3, sig=[]; for(let i=0;i<8;i++) sig.push(sk[i][(m>>i)&1]);
+    let good=true,bad=false; for(let i=0;i<8;i++){ if(!beq(SHA.digest(sig[i]),pk[i][(m>>i)&1])) good=false; }
+    const mf=m^1; for(let i=0;i<8;i++){ if(!beq(SHA.digest(sig[i]),pk[i][(mf>>i)&1])){ bad=true; break; } }
+    lamOk=good&&bad; }                     // valid verifies AND flipped-bit fails
+  // live Merkle auth-path round-trip
+  let merkOk; { const lv=[]; for(let i=0;i<8;i++) lv.push(SHA.digest(new Uint8Array([i,7,7,i]))); const levels=merkBuild(lv);
+    const root=levels[levels.length-1][0], idx=5, path=merkAuth(levels,idx); merkOk=beq(merkReroot(lv[idx],idx,path),root); }
+  document.getElementById('selftest').innerHTML=
+    '<span class="k">'+(uk?'Самоперевірка':'Self-test')+':</span>  '+
+    'SHA-256("abc") <span class="'+(sh?'a':'b')+'">'+(sh?'✓':'✗')+'</span>   '+
+    'Lamport '+(uk?'підпис/перевірка':'sign/verify')+' <span class="'+(lamOk?'a':'b')+'">'+(lamOk?'✓':'✗')+'</span>   '+
+    'Merkle '+(uk?'шлях→корінь':'path→root')+' <span class="'+(merkOk?'a':'b')+'">'+(merkOk?'✓':'✗')+'</span>   '+
+    ((sh&&lamOk&&merkOk)?'<span class="a">'+(uk?'усі примітиви коректні':'all primitives correct')+'</span>':'<span class="b">FAIL</span>');
+}
+
+/* ====================================================================
+   references + language wiring
+   ==================================================================== */
+window.REFS={
+  lamport:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Lamport_signature',label:'Wikipedia: Lamport signature'}},
+           {tag:'paper',en:{href:'https://www.microsoft.com/en-us/research/publication/constructing-digital-signatures-one-way-function/',label:'Lamport (1979): Constructing digital signatures'}},
+           {tag:'fips',en:{href:'https://csrc.nist.gov/pubs/fips/205/final',label:'FIPS 205 (SPHINCS+)'}}],
+  wots:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Hash-based_cryptography',label:'Wikipedia: hash-based cryptography'}},
+        {tag:'paper',en:{href:'https://eprint.iacr.org/2017/965',label:'Hülsing: W-OTS+ (ePrint 2017/965)'}},
+        {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc8391',label:'RFC 8391 §3 (WOTS+)'}}],
+  merkle:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Merkle_signature_scheme',label:'Wikipedia: Merkle signature scheme'}},
+          {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Merkle_tree',label:'Wikipedia: Merkle tree'}},
+          {tag:'paper',en:{href:'https://doi.org/10.1007/0-387-34805-0_21',label:'Merkle (1989): A certified digital signature'}}],
+  xmss:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Hash-based_cryptography',label:'Wikipedia: hash-based cryptography'}},
+        {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc8391',label:'RFC 8391 (XMSS)'}},
+        {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc8554',label:'RFC 8554 (LMS)'}},
+        {tag:'nist',en:{href:'https://csrc.nist.gov/pubs/sp/800/208/final',label:'NIST SP 800-208 (stateful HBS)'}}]
+};
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  selfTest(); drawLam(); drawWots(); drawMerk(); xmssRender();
+};
+
+/* controls */
+['lamM','lamM2'].forEach(id=>document.getElementById(id).addEventListener('input',drawLam));
+document.getElementById('lamNew').addEventListener('click',()=>{ lamKeygen(); drawLam(); });
+document.getElementById('lamAtk').addEventListener('click',drawLamAttack);
+['wotsW','wotsD'].forEach(id=>document.getElementById(id).addEventListener('input',drawWots));
+document.getElementById('wotsNew').addEventListener('click',()=>{ wotsX=randBytes(4); drawWots(); });
+document.getElementById('merkL').addEventListener('input',drawMerk);
+document.getElementById('merkNew').addEventListener('click',()=>{ merkSeed=randBytes(8); drawMerk(); });
+document.getElementById('xmssSign').addEventListener('click',xmssSignNext);
+document.getElementById('xmssReuse').addEventListener('click',xmssReuse);
+document.getElementById('xmssReset').addEventListener('click',xmssReset);
+</script>
+</body>
+</html>

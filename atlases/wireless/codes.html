@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Error detection & block codes (CRC · Hamming · Reed–Solomon · BCH · Golay) — Wireless Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="codes">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Detecting and repairing the bits the channel mangled" data-uk="Виявлення й відновлення бітів, зіпсованих каналом">Channel coding I</div>
+    <h1 data-en="Error Detection & Block Codes" data-uk="Виявлення помилок і блокові коди">Error Detection &amp; Block Codes</h1>
+    <div class="eq-hero">add redundancy: k data bits → n coded bits, correct up to t errors</div>
+    <p class="lede" data-en="Radio channels flip bits. The cheapest defence just <b>detects</b> corruption so the frame can be dropped or re-sent — a <b>parity</b> bit, a <b>checksum</b>, or the near-universal <b>CRC</b>. Spend a little more redundancy and a <b>block code</b> can <b>repair</b> errors outright: <b>Hamming</b> fixes any single bit, <b>Reed–Solomon</b> and <b>BCH</b> shrug off bursts, and <b>Golay</b> guarded the Voyager images. Every demo here runs the real arithmetic on bits you control."
+       data-uk="Радіоканали перекидають біти. Найдешевший захист лише <b>виявляє</b> псування, щоб кадр відкинути чи переслати — біт <b>парності</b>, <b>контрольна сума</b> чи майже універсальний <b>CRC</b>. Витратьте трохи більше надлишковості — і <b>блоковий код</b> <b>виправить</b> помилки: <b>Хеммінг</b> лагодить будь-який один біт, <b>Рід–Соломон</b> і <b>БЧХ</b> тримають пакети помилок, а <b>Голей</b> оберігав знімки Voyager. Кожне демо тут виконує справжню арифметику на бітах, якими ви керуєте."></p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="Error detection" data-uk="Виявлення помилок">Error detection</h3>
+
+  <!-- ============ Parity ============ -->
+  <section id="parity">
+    <span class="num" data-en="01 / Parity bit" data-uk="01 / Біт парності">01 / Parity</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">XOR</span>
+      <span data-en="Parity bit" data-uk="Біт парності">Parity bit</span></h2>
+    <div class="formula">p = b₁ ⊕ b₂ ⊕ … ⊕ bₙ   (even parity: total number of 1s is made even)</div>
+    <p class="desc" data-en="One extra bit set so the count of 1s is even (or odd). It catches <b>any single-bit error</b> — and any odd number of errors — but is blind to an even number, and can never say <b>where</b> the error is. It costs one bit and one XOR tree, which is why it survives in memory buses and simple serial links (the 7E1 UART frame). Type a byte and watch the parity bit and the running XOR."
+       data-uk="Один додатковий біт, встановлений так, щоб кількість одиниць була парною (чи непарною). Він ловить <b>будь-яку одиничну помилку</b> — і будь-яку непарну кількість — але сліпий до парної й ніколи не скаже, <b>де</b> помилка. Коштує один біт і одне дерево XOR, тому виживає у шинах пам'яті й простих послідовних лініях (кадр UART 7E1). Введіть байт і дивіться на біт парності й поточний XOR."></p>
+    <div id="refs-parity"></div>
+    <div class="panel"><div class="controls" style="min-width:100%">
+      <div class="ctrl"><label><span data-en="data bits" data-uk="біти даних">data bits</span></label>
+        <input type="text" id="pIn" value="1011001" maxlength="16" style="width:100%"></div>
+      <div class="readout" id="pOut"></div>
+    </div></div>
+    <div class="xrefs"><a href="#hamming">Hamming</a> <a href="#crc">CRC</a></div>
+  </section>
+
+  <!-- ============ CRC ============ -->
+  <section id="crc">
+    <span class="num" data-en="02 / Cyclic Redundancy Check" data-uk="02 / Циклічний надлишковий код">02 / CRC</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">LFSR</span>
+      <span data-en="CRC — Cyclic Redundancy Check" data-uk="CRC — циклічний надлишковий код">CRC — Cyclic Redundancy Check</span></h2>
+    <div class="formula">remainder = ( message · xⁿ ) mod G(x)   over GF(2)</div>
+    <p class="desc" data-en="Treat the message as a polynomial over GF(2), multiply by xⁿ (append n zeros), and divide by a fixed <b>generator polynomial</b> G(x); the remainder is the CRC. Because errors that are not multiples of G(x) leave a non-zero remainder, a well-chosen G catches all single- and double-bit errors, all odd errors, and any burst shorter than n — for the price of an n-bit shift register (an LFSR). It guards Ethernet, Wi-Fi, Bluetooth, ZigBee and GSM frames. Edit the message or inject an error to see the remainder change."
+       data-uk="Розгляньте повідомлення як многочлен над GF(2), помножте на xⁿ (додайте n нулів) і поділіть на фіксований <b>породжувальний многочлен</b> G(x); залишок — це CRC. Оскільки помилки, що не кратні G(x), лишають ненульовий залишок, вдало обраний G ловить усі одно- й двобітові помилки, усі непарні й будь-який пакет, коротший за n — ціною n-бітного регістра зсуву (LFSR). Він оберігає кадри Ethernet, Wi-Fi, Bluetooth, ZigBee та GSM. Змініть повідомлення чи внесіть помилку, щоб побачити зміну залишку."></p>
+    <div id="refs-crc"></div>
+    <div class="panel"><div class="controls" style="min-width:100%">
+      <div class="ctrl"><label><span data-en="message bits" data-uk="біти повідомлення">message bits</span></label>
+        <input type="text" id="crcIn" value="11010011" maxlength="20" style="width:100%"></div>
+      <div class="ctrl"><label><span data-en="generator G(x)" data-uk="генератор G(x)">generator G(x)</span></label>
+        <select id="crcG">
+          <option value="1011">1011  (x³+x+1, CRC-3)</option>
+          <option value="10011">10011  (x⁴+x+1, CRC-4)</option>
+          <option value="110101">110101 (x⁵+x⁴+x²+1)</option>
+        </select></div>
+      <button id="crcErr" data-en="Inject a 1-bit error" data-uk="Внести 1-бітову помилку">Inject a 1-bit error</button>
+      <div class="readout" id="crcOut"></div>
+    </div></div>
+    <div class="xrefs"><a href="#checksum">Checksum</a> <a href="standards.html#wifi">Wi-Fi</a> <a href="standards.html#bluetooth">Bluetooth</a></div>
+  </section>
+
+  <!-- ============ Checksum ============ -->
+  <section id="checksum">
+    <span class="num" data-en="03 / Checksum" data-uk="03 / Контрольна сума">03 / Checksum</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">add</span>
+      <span data-en="Checksum" data-uk="Контрольна сума">Checksum</span></h2>
+    <div class="formula">C = ( Σ wordᵢ ) mod 2ᵐ   (or one's-complement, as in IP/TCP)</div>
+    <p class="desc" data-en="The simplest integrity field of all: just add up the data words and send the sum. It is trivial and fast (the Internet checksum is a one's-complement 16-bit add), but weak — reordering words or two compensating errors can slip through, which is why link layers prefer CRC. Type numbers to see the modular sum."
+       data-uk="Найпростіше поле цілісності: просто додайте слова даних і надішліть суму. Тривіально й швидко (інтернет-контрольна сума — це 16-бітне додавання в доповняльному коді до одиниці), але слабко — переставляння слів чи дві компенсаційні помилки можуть проскочити, тому канальні рівні надають перевагу CRC. Введіть числа, щоб побачити модульну суму."></p>
+    <div id="refs-checksum"></div>
+    <div class="panel"><div class="controls" style="min-width:100%">
+      <div class="ctrl"><label><span data-en="bytes (space-separated, 0–255)" data-uk="байти (через пробіл, 0–255)">bytes (space-separated)</span></label>
+        <input type="text" id="csumIn" value="120 55 200 33" style="width:100%"></div>
+      <div class="readout" id="csumOut"></div>
+    </div></div>
+    <div class="xrefs"><a href="#crc">CRC</a> <a href="#parity">Parity</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Block codes — repairing errors" data-uk="Блокові коди — виправлення помилок">Block codes — repairing errors</h3>
+
+  <!-- ============ Hamming ============ -->
+  <section id="hamming">
+    <span class="num" data-en="04 / Hamming code (7,4)" data-uk="04 / Код Хеммінга (7,4)">04 / Hamming</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">syndrome</span>
+      <span data-en="Hamming codes — single-error correction" data-uk="Коди Хеммінга — виправлення однієї помилки">Hamming (7,4)</span></h2>
+    <div class="formula">3 parity bits at positions 1,2,4 → syndrome points straight at the flipped bit</div>
+    <p class="desc" data-en="Hamming's beautiful trick: put parity bits at the power-of-two positions (1, 2, 4), each covering the positions whose index has that bit set. After transmission, recompute the three parities; read as a binary number, the <b>syndrome is the exact position of the error</b> — or zero if the codeword is clean. Flip it back and you have corrected a single-bit error with just 3 check bits. Set the 4 data bits and choose which bit the channel corrupts; the decoder locates and repairs it live."
+       data-uk="Прекрасний трюк Хеммінга: поставте біти парності на позиції-степені двійки (1, 2, 4), кожен покриває позиції, у чиєму індексі цей біт встановлено. Після передачі перерахуйте три парності; прочитаний як двійкове число, <b>синдром — це точна позиція помилки</b> — або нуль, якщо кодове слово чисте. Переверніть її назад — і ви виправили одиничну помилку лише 3 перевірними бітами. Задайте 4 біти даних і оберіть, який біт псує канал; декодер знаходить і лагодить його наживо."></p>
+    <div id="refs-hamming"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="hCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="data bits d (4)" data-uk="біти даних d (4)">data bits (4)</span></label>
+            <input type="text" id="hData" value="1011" maxlength="4" style="width:100%"></div>
+          <div class="ctrl"><label><span data-en="channel flips position (0 = none)" data-uk="канал перекидає позицію (0 = жодної)">flip position</span><span class="val" id="hEV">5</span></label>
+            <input type="range" id="hErr" min="0" max="7" step="1" value="5"></div>
+          <div class="readout" id="hOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="<b>ECC memory (SECDED)</b>, some modem and control-channel protocols, and (in a simplified form) LoRa's FEC. Extend it by one bit and it also <b>detects</b> double errors."
+            data-uk="<b>ECC-пам'ять (SECDED)</b>, деякі модемні протоколи й канали керування, а також (у спрощеній формі) FEC у LoRa. Розширте його на один біт — і він також <b>виявляє</b> подвійні помилки."></span></div>
+    <div class="xrefs"><a href="#parity">Parity</a> <a href="#bch">BCH</a> <a href="standards.html#lora">LoRa</a></div>
+  </section>
+
+  <!-- ============ Reed–Solomon ============ -->
+  <section id="reedsolomon">
+    <span class="num" data-en="05 / Reed–Solomon codes" data-uk="05 / Коди Ріда–Соломона">05 / Reed–Solomon</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">GF(2^m)</span>
+      <span data-en="Reed–Solomon — burst-error champions" data-uk="Рід–Соломон — чемпіони пакетних помилок">Reed–Solomon codes</span></h2>
+    <div class="formula">RS(n,k) over GF(2^m): corrects up to t = (n−k)/2 symbol errors</div>
+    <p class="desc" data-en="Reed–Solomon works on <b>symbols</b> (groups of m bits), not single bits, which makes it superb against <b>bursts</b>: a run of 40 corrupted bits touches only a few symbols. An RS(n,k) code adds n−k parity symbols and repairs up to t = (n−k)/2 of them, wherever they land in a symbol. It guards DVB, DAB, QR codes, CDs/DVDs and deep-space links. Corrupt some symbols below and watch it succeed until you exceed t."
+       data-uk="Рід–Соломон працює із <b>символами</b> (групами по m біт), а не окремими бітами, що робить його чудовим проти <b>пакетів</b>: серія з 40 зіпсованих біт зачіпає лише кілька символів. Код RS(n,k) додає n−k перевірних символів і виправляє до t = (n−k)/2 з них, де б вони не опинилися в символі. Він оберігає DVB, DAB, QR-коди, CD/DVD і далекокосмічні лінії. Зіпсуйте кілька символів нижче й дивіться, як він справляється, доки не перевищите t."></p>
+    <div id="refs-reedsolomon"></div>
+    <div class="panel"><div class="controls" style="min-width:100%">
+      <div class="ctrl"><label><span data-en="corrupted symbols e" data-uk="зіпсованих символів e">corrupted symbols e</span><span class="val" id="rsEV">2</span></label>
+        <input type="range" id="rsE" min="0" max="6" step="1" value="2"></div>
+      <div class="hint" data-en="Fixed example: RS(15,11) over GF(16) → 4 parity symbols → t = 2." data-uk="Фіксований приклад: RS(15,11) над GF(16) → 4 перевірні символи → t = 2."></div>
+      <div class="readout" id="rsOut"></div>
+    </div></div>
+    <div class="xrefs"><a href="#bch">BCH</a> <a href="iterative.html#concatenated">Concatenated</a> <a href="standards.html#dvb">DVB</a></div>
+  </section>
+
+  <!-- ============ BCH ============ -->
+  <section id="bch">
+    <span class="num" data-en="06 / BCH codes" data-uk="06 / БЧХ-коди">06 / BCH</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">GF(2^m)</span>
+      <span data-en="BCH codes — multi-bit correction" data-uk="БЧХ-коди — багатобітове виправлення">BCH codes</span></h2>
+    <div class="formula">BCH(n,k,t): cyclic code with a designed distance to correct t random bit errors</div>
+    <p class="desc" data-en="BCH (Bose–Chaudhuri–Hocquenghem) codes are cyclic block codes whose generator is built to guarantee a chosen error-correcting power t. Reed–Solomon is in fact a special (non-binary) BCH code; binary BCH is the go-to for <b>random</b> (not bursty) bit errors. It is the outer code of <b>DVB-S2</b> (cleaning up after LDPC), the workhorse of <b>NAND flash</b> ECC, and the protector of POCSAG paging. Adjust the parameters to see the rate/protection trade."
+       data-uk="Коди БЧХ (Боуза–Чоудхурі–Хоквенгема) — циклічні блокові коди, чий генератор побудовано так, щоб гарантувати обрану виправну здатність t. Рід–Соломон насправді є окремим (недвійковим) БЧХ; двійковий БЧХ — вибір для <b>випадкових</b> (не пакетних) бітових помилок. Це зовнішній код <b>DVB-S2</b> (прибирає після LDPC), робоча конячка ECC <b>NAND-флеш</b> і захисник пейджингу POCSAG. Змініть параметри, щоб побачити компроміс швидкість/захист."></p>
+    <div id="refs-bch"></div>
+    <div class="panel"><div class="controls" style="min-width:100%">
+      <div class="ctrl"><label><span data-en="correcting power t" data-uk="виправна здатність t">correcting power t</span><span class="val" id="bchTV">3</span></label>
+        <input type="range" id="bchT" min="1" max="10" step="1" value="3"></div>
+      <div class="hint" data-en="Fixed block length n = 127 (GF(128)). Each corrected bit costs about m = 7 parity bits." data-uk="Фіксована довжина блоку n = 127 (GF(128)). Кожен виправлений біт коштує близько m = 7 перевірних біт."></div>
+      <div class="readout" id="bchOut"></div>
+    </div></div>
+    <div class="xrefs"><a href="#reedsolomon">Reed–Solomon</a> <a href="iterative.html#ldpc">LDPC</a> <a href="standards.html#dvb">DVB-S2</a></div>
+  </section>
+
+  <!-- ============ Golay ============ -->
+  <section id="golay">
+    <span class="num" data-en="07 / Golay codes" data-uk="07 / Коди Голея">07 / Golay</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">algebraic</span>
+      <span data-en="Golay code (23,12)" data-uk="Код Голея (23,12)">Golay codes</span></h2>
+    <div class="formula">binary Golay G(23,12,7): corrects any 3 errors — a rare 'perfect' code</div>
+    <p class="desc" data-en="The binary Golay code (23,12) is one of the very few <b>perfect</b> codes: its 12 data bits and 11 parity bits pack the 23-bit space so tightly that every possible received word is within 3 bit-flips of exactly one codeword, so it corrects any pattern of up to 3 errors with no waste. Its mathematical elegance (and links to the Steiner system and the Leech lattice) made it a favourite for constrained, high-reliability links — most famously the <b>Voyager</b> probes' colour imagery, and various military systems."
+       data-uk="Двійковий код Голея (23,12) — один із дуже небагатьох <b>досконалих</b> кодів: його 12 біт даних і 11 перевірних так щільно пакують 23-бітний простір, що кожне можливе прийняте слово перебуває в межах 3 перекидань від рівно одного кодового слова, тож він виправляє будь-який патерн до 3 помилок без марнування. Математична елегантність (і зв'язки із системою Штейнера й ґраткою Ліча) зробили його улюбленцем обмежених високонадійних ліній — найвідоміше, кольорові знімки зондів <b>Voyager</b> та різних військових систем."></p>
+    <div id="refs-golay"></div>
+    <div class="readout" data-en="(23,12,7): rate 12/23 ≈ 0.52 · minimum distance 7 · corrects 3 errors · detects 6. The extended (24,12,8) form adds a parity bit for a rate-½ code that also flags 4-error patterns." data-uk="(23,12,7): швидкість 12/23 ≈ 0,52 · мінімальна відстань 7 · виправляє 3 помилки · виявляє 6. Розширена форма (24,12,8) додає біт парності, даючи код швидкості ½, що також позначає патерни з 4 помилок."></div>
+    <div class="xrefs"><a href="#hamming">Hamming</a> <a href="#reedsolomon">Reed–Solomon</a> <a href="standards.html#gnss">GPS message</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="Block codes · Wireless Atlas — from a lone parity bit to Voyager's perfect Golay code." data-uk="Блокові коди · Безпроводовий Атлас — від самотнього біта парності до досконалого коду Голея Voyager."></p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const CS=getComputedStyle(document.documentElement);
+const C_INK=CS.getPropertyValue('--ink').trim(), C_TEAL=CS.getPropertyValue('--teal').trim(),
+      C_AMBER=CS.getPropertyValue('--amber').trim(), C_ROSE=CS.getPropertyValue('--rose').trim(),
+      C_DIM=CS.getPropertyValue('--dim').trim(), C_LINE=CS.getPropertyValue('--line').trim();
+const bitsOf=s=>s.replace(/[^01]/g,'').split('').map(Number);
+
+// ---- Parity ---------------------------------------------------------
+function drawParity(){
+  const b=bitsOf(document.getElementById('pIn').value);
+  const p=b.reduce((a,x)=>a^x,0);
+  const ones=b.filter(x=>x).length;
+  const L=window.LANG==='uk';
+  document.getElementById('pOut').innerHTML=
+    `<span class="k">${L?'дані':'data'}</span>        = <span class="a">${b.join('')||'—'}</span>\n`
+    +`<span class="k">${L?'к-сть одиниць':'number of 1s'}</span> = ${ones}\n`
+    +`<span class="k">${L?'біт парності (even)':'parity bit (even)'}</span> = <span class="s">${p}</span> → ${L?'передається':'sent'}: <span class="a">${b.join('')}${p}</span>`;
+}
+
+// ---- CRC ------------------------------------------------------------
+let crcErrOn=false;
+function crcDivide(msgBits, gen){
+  const n=gen.length-1;
+  const work=msgBits.concat(new Array(n).fill(0));
+  for(let i=0;i<msgBits.length;i++){
+    if(work[i]===1){ for(let j=0;j<gen.length;j++) work[i+j]^=gen[j]; }
+  }
+  return work.slice(work.length-n);
+}
+function drawCRC(){
+  const msg=bitsOf(document.getElementById('crcIn').value);
+  const gen=bitsOf(document.getElementById('crcG').value);
+  if(!msg.length){ document.getElementById('crcOut').textContent='—'; return; }
+  const crc=crcDivide(msg,gen);
+  const tx=msg.concat(crc);
+  let rx=tx.slice();
+  if(crcErrOn){ const pos=Math.floor(Math.random()*rx.length); rx[pos]^=1; }
+  // receiver divides received codeword; remainder 0 ⇒ ok
+  const check=crcDivide(rx.slice(0,rx.length-gen.length+1), gen);
+  // Simpler: divide whole rx by gen, remainder should be 0
+  const rem=crcRemainder(rx,gen);
+  const ok=rem.every(x=>x===0);
+  const L=window.LANG==='uk';
+  document.getElementById('crcOut').innerHTML=
+    `<span class="k">${L?'повідомлення':'message'}</span> = <span class="a">${msg.join('')}</span>\n`
+    +`<span class="k">CRC = (msg·xⁿ) mod G</span> = <span class="s">${crc.join('')}</span>\n`
+    +`<span class="k">${L?'передано':'transmitted'}</span> = <span class="a">${tx.join('')}</span>\n`
+    +`<span class="k">${L?'прийнято':'received'}</span>  = ${crcErrOn?'<span class="b">'+rx.join('')+'</span>':'<span class="a">'+rx.join('')+'</span>'}\n`
+    +`<span class="k">${L?'залишок у приймачі':'receiver remainder'}</span> = ${rem.join('')} → `
+    +(ok?`<span style="color:${C_TEAL}">${L?'✓ цілісно':'✓ intact'}</span>`:`<span class="b">${L?'✗ ПОМИЛКУ ВИЯВЛЕНО':'✗ ERROR DETECTED'}</span>`);
+}
+function crcRemainder(bits, gen){
+  const n=gen.length-1; const work=bits.slice();
+  for(let i=0;i<work.length-n;i++){ if(work[i]===1){ for(let j=0;j<gen.length;j++) work[i+j]^=gen[j]; } }
+  return work.slice(work.length-n);
+}
+
+// ---- Checksum -------------------------------------------------------
+function drawChecksum(){
+  const nums=(document.getElementById('csumIn').value.match(/\d+/g)||[]).map(Number).filter(x=>x<=255);
+  const sum=nums.reduce((a,x)=>a+x,0);
+  const L=window.LANG==='uk';
+  document.getElementById('csumOut').innerHTML=
+    `<span class="k">${L?'байти':'bytes'}</span> = <span class="a">${nums.join(' ')||'—'}</span>\n`
+    +`<span class="k">Σ</span> = ${sum}\n`
+    +`<span class="k">${L?'сума mod 256':'checksum mod 256'}</span> = <span class="s">${sum%256}</span>   (0x${(sum%256).toString(16).toUpperCase().padStart(2,'0')})\n`
+    +`<span class="k">${L?'доповнення до 1 (8 біт)':"one's complement (8-bit)"}</span> = <span class="s">${(255-(sum%256))}</span>`;
+}
+
+// ---- Hamming(7,4) ---------------------------------------------------
+const hC=document.getElementById('hCanvas'), hX=hC.getContext('2d');
+function drawHamming(){
+  let d=bitsOf(document.getElementById('hData').value);
+  while(d.length<4)d.push(0); d=d.slice(0,4);
+  document.getElementById('hData').value=d.join('');
+  // positions 1..7: p1 p2 d1 p4 d2 d3 d4
+  const cw=[0, d[0], d[1], 0, d[2], d[3], 0]; // index1..(store 1-based in array of length8)
+  const code=new Array(8).fill(0);
+  code[3]=d[0]; code[5]=d[1]; code[6]=d[2]; code[7]=d[3];
+  code[1]=code[3]^code[5]^code[7];   // p1 covers 1,3,5,7
+  code[2]=code[3]^code[6]^code[7];   // p2 covers 2,3,6,7
+  code[4]=code[5]^code[6]^code[7];   // p4 covers 4,5,6,7
+  const errPos=+document.getElementById('hErr').value;
+  const rx=code.slice(); if(errPos>=1&&errPos<=7) rx[errPos]^=1;
+  // syndrome
+  const s1=rx[1]^rx[3]^rx[5]^rx[7];
+  const s2=rx[2]^rx[3]^rx[6]^rx[7];
+  const s4=rx[4]^rx[5]^rx[6]^rx[7];
+  const synd=s4*4+s2*2+s1;
+  const corrected=rx.slice(); if(synd>=1&&synd<=7) corrected[synd]^=1;
+  const dOut=[corrected[3],corrected[5],corrected[6],corrected[7]];
+  // draw 7 cells
+  const w=hC.width,hh=hC.height, cwid=w/7;
+  hX.clearRect(0,0,w,hh);
+  hX.font='13px "JetBrains Mono",monospace'; hX.textAlign='center';
+  for(let i=1;i<=7;i++){
+    const x=(i-1)*cwid, isP=(i===1||i===2||i===4);
+    hX.fillStyle=(i===errPos)?'rgba(240,96,127,.28)':(isP?'rgba(242,180,87,.15)':'rgba(79,214,230,.12)');
+    hX.fillRect(x+2,20,cwid-4,50);
+    hX.strokeStyle=(i===synd&&synd!==0)?C_TEAL:C_LINE; hX.lineWidth=(i===synd&&synd!==0)?2:1;
+    hX.strokeRect(x+2,20,cwid-4,50);
+    hX.fillStyle=(i===errPos)?C_ROSE:C_INK; hX.fillText(rx[i], x+cwid/2, 50);
+    hX.fillStyle=C_DIM; hX.font='9px "JetBrains Mono",monospace';
+    hX.fillText((isP?'p':'d')+i, x+cwid/2, 84);
+    hX.font='13px "JetBrains Mono",monospace';
+  }
+  hX.textAlign='left';
+  document.getElementById('hEV').textContent=errPos;
+  const L=window.LANG==='uk';
+  const ok=dOut.join('')===d.join('');
+  document.getElementById('hOut').innerHTML=
+    `<span class="k">${L?'кодове слово':'codeword'}</span> = <span class="a">${code.slice(1).join('')}</span>\n`
+    +`<span class="k">${L?'прийнято':'received'}</span> = ${errPos?'<span class="b">':'<span class="a">'}${rx.slice(1).join('')}</span>\n`
+    +`<span class="k">${L?'синдром s₄s₂s₁':'syndrome s₄s₂s₁'}</span> = ${s4}${s2}${s1} = <span class="s">${synd}</span> ${synd?(L?'→ біт '+synd+' перевернуто':'→ bit '+synd+' flipped'):(L?'→ помилок немає':'→ no error')}\n`
+    +`<span class="k">${L?'відновлені дані':'recovered data'}</span> = <span class="a">${dOut.join('')}</span> `
+    +(ok?`<span style="color:${C_TEAL}">✓</span>`:`<span class="b">✗</span>`);
+}
+
+// ---- Reed–Solomon capability ----------------------------------------
+function drawRS(){
+  const e=+document.getElementById('rsE').value;
+  const n=15,k=11,t=(n-k)/2;
+  const L=window.LANG==='uk';
+  const ok=e<=t;
+  document.getElementById('rsEV').textContent=e;
+  // render symbol strip
+  const strip=[]; for(let i=0;i<n;i++) strip.push(i<e?'▓':'░');
+  document.getElementById('rsOut').innerHTML=
+    `<span class="k">RS(15,11)</span> → ${L?'перевірних':'parity'} = ${n-k}, t = <span class="a">${t}</span>\n`
+    +`<span class="k">${L?'символи':'symbols'}</span> ${strip.map((s,i)=>i<e?`<span class="b">${s}</span>`:`<span class="k">${s}</span>`).join('')}\n`
+    +`<span class="k">${L?'зіпсовано':'corrupted'}</span> e = ${e} `
+    +(ok?`≤ t → <span style="color:${C_TEAL}">${L?'✓ виправлено':'✓ corrected'}</span>`
+        :`> t → <span class="b">${L?'✗ не виправити (виявлено збій)':'✗ uncorrectable (failure flagged)'}</span>`);
+}
+
+// ---- BCH trade ------------------------------------------------------
+function drawBCH(){
+  const t=+document.getElementById('bchT').value;
+  const n=127, m=7, parity=Math.min(n-1, m*t), k=n-parity;
+  const L=window.LANG==='uk';
+  document.getElementById('bchTV').textContent=t;
+  document.getElementById('bchOut').innerHTML=
+    `<span class="k">BCH(${n}, ${k}, ${t})</span>\n`
+    +`<span class="k">${L?'перевірних біт':'parity bits'}</span> ≈ m·t = 7·${t} = <span class="a">${parity}</span>\n`
+    +`<span class="k">${L?'швидкість коду':'code rate'}</span> = k/n = ${k}/${n} = <span class="s">${(k/n).toFixed(2)}</span>\n`
+    +`<span class="k">${L?'виправляє':'corrects'}</span> = <span class="a">${t}</span> ${L?'випадкових бітових помилок':'random bit errors'}`;
+}
+
+// ---- refs + wiring --------------------------------------------------
+function fillRefs(){
+  const w=(en,uk)=>({tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/'+en,label:en.replace(/_/g,' ')},uk:uk?{href:'https://uk.wikipedia.org/wiki/'+uk,label:uk.replace(/_/g,' ')}:undefined});
+  document.getElementById('refs-parity').innerHTML=atlasRefs([w('Parity_bit','Біт_парності')]);
+  document.getElementById('refs-crc').innerHTML=atlasRefs([w('Cyclic_redundancy_check','Циклічний_надлишковий_код')]);
+  document.getElementById('refs-checksum').innerHTML=atlasRefs([w('Checksum','Контрольна_сума'),{tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc1071',label:'RFC 1071'}}]);
+  document.getElementById('refs-hamming').innerHTML=atlasRefs([w('Hamming_code','Код_Геммінга')]);
+  document.getElementById('refs-reedsolomon').innerHTML=atlasRefs([w('Reed%E2%80%93Solomon_error_correction','Код_Ріда_—_Соломона')]);
+  document.getElementById('refs-bch').innerHTML=atlasRefs([w('BCH_code')]);
+  document.getElementById('refs-golay').innerHTML=atlasRefs([w('Binary_Golay_code')]);
+}
+document.getElementById('pIn').addEventListener('input',drawParity);
+document.getElementById('crcIn').addEventListener('input',()=>{crcErrOn=false;drawCRC();});
+document.getElementById('crcG').addEventListener('change',()=>{crcErrOn=false;drawCRC();});
+document.getElementById('crcErr').addEventListener('click',()=>{crcErrOn=true;drawCRC();});
+document.getElementById('csumIn').addEventListener('input',drawChecksum);
+document.getElementById('hData').addEventListener('input',drawHamming);
+document.getElementById('hErr').addEventListener('input',drawHamming);
+document.getElementById('rsE').addEventListener('input',drawRS);
+document.getElementById('bchT').addEventListener('input',drawBCH);
+window.onLangChange=function(){ fillRefs(); drawParity(); drawCRC(); drawChecksum(); drawHamming(); drawRS(); drawBCH(); };
+fillRefs(); drawParity(); drawCRC(); drawChecksum(); drawHamming(); drawRS(); drawBCH();
+</script>
+</body>
+</html>

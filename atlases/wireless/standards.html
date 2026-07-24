@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Standards & systems — Wireless Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="standards">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="How the pieces assemble into real radios" data-uk="Як частини складаються в реальні радіосистеми">The systems view</div>
+    <h1 data-en="Standards & Systems" data-uk="Стандарти та системи">Standards &amp; Systems</h1>
+    <p class="lede" data-en="Every real radio is a <b>stack</b>: a modulation to carry bits over the air, and a channel code to survive the errors. This table maps the standards from AM broadcasting to 5G onto the modulations and codes catalogued in the rest of this atlas. Every modulation and code name is a live link into its page. Filter by family, search by name, or arrive here from any cross-reference."
+       data-uk="Кожне реальне радіо — це <b>стек</b>: модуляція, щоб нести біти в ефірі, і канальний код, щоб пережити помилки. Ця таблиця зіставляє стандарти від AM-мовлення до 5G з модуляціями й кодами, каталогізованими в решті цього атласу. Кожна назва модуляції та коду — живе посилання на її сторінку. Фільтруйте за родиною, шукайте за назвою або приходьте сюди з будь-якого перехресного посилання."></p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+  <section style="border-bottom:none">
+    <div class="std-filter" id="stdFilter"></div>
+    <div class="std-filter">
+      <input type="text" id="stdSearch" placeholder="filter…" data-ph-en="filter standards…" data-ph-uk="фільтр стандартів…"
+        style="font-family:'JetBrains Mono',monospace; font-size:12.5px; background:var(--panel2); color:var(--ink); border:1px solid var(--line); border-radius:6px; padding:8px 10px; width:220px; outline:none;">
+      <span class="count-pill" id="stdCount"></span>
+    </div>
+
+    <div class="tbl-wrap">
+      <table class="stdtable">
+        <thead><tr>
+          <th data-en="Standard" data-uk="Стандарт">Standard</th>
+          <th data-en="Modulation" data-uk="Модуляція">Modulation</th>
+          <th data-en="Error-correction code" data-uk="Завадостійкий код">Error-correction code</th>
+          <th data-en="Role" data-uk="Роль">Role</th>
+        </tr></thead>
+        <tbody id="stdBody"></tbody>
+      </table>
+    </div>
+
+    <div class="strength use" style="margin-top:22px"><div class="st-title" data-en="Reading the stack" data-uk="Як читати стек">Reading the stack</div>
+      <span data-en="Notice the arc of history: 2G <b>GMSK</b> + convolutional codes → 3G <b>QPSK/WCDMA</b> + turbo → 4G/5G <b>QAM/OFDM</b> + LDPC &amp; polar. Each generation raised the modulation order (more bits/symbol) and adopted a stronger, more iterative code to pay for the shrinking noise margin — exactly the trade the QAM and iterative-FEC pages make tangible."
+            data-uk="Зверніть увагу на дугу історії: 2G <b>GMSK</b> + згорткові коди → 3G <b>QPSK/WCDMA</b> + турбо → 4G/5G <b>QAM/OFDM</b> + LDPC і полярні. Кожне покоління підвищувало порядок модуляції (більше біт/символ) і брало сильніший, ітеративніший код, щоб оплатити зменшення запасу на шум — саме той компроміс, який роблять відчутним сторінки QAM та ітеративного FEC."></span></div>
+  </section>
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="Standards · Wireless Atlas — the modulation-and-code stack of every radio from AM to 5G." data-uk="Стандарти · Безпроводовий Атлас — стек модуляції та коду кожного радіо від AM до 5G."></p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+// link helpers to other atlas pages
+const M=(href,label)=>`<a href="${href}">${label}</a>`;
+const STD=[
+  {id:'gsm', fam:'cellular', std:'GSM (2G)',
+    mod:M('keying.html#gmsk','GMSK'),
+    fec:M('iterative.html#convolutional','Convolutional')+' + '+M('iterative.html#interleaving','interleaving'),
+    en:'2G digital voice &amp; SMS', uk:'2G цифровий голос і SMS'},
+  {id:'edge', fam:'cellular', std:'EDGE (2.75G)',
+    mod:M('keying.html#psk8','8-PSK')+' / '+M('keying.html#gmsk','GMSK'),
+    fec:M('iterative.html#convolutional','Convolutional'),
+    en:'Higher-rate GSM data', uk:'Швидші дані GSM'},
+  {id:'umts', fam:'cellular', std:'UMTS / WCDMA (3G)',
+    mod:M('keying.html#qpsk','QPSK')+' + '+M('spread.html#cdma','WCDMA'),
+    fec:M('iterative.html#turbo','Turbo'),
+    en:'3G voice &amp; broadband data', uk:'3G голос і широкосмугові дані'},
+  {id:'lte', fam:'cellular', std:'LTE (4G)',
+    mod:M('qam.html#qam','QPSK–256-QAM')+' + '+M('multicarrier.html#ofdma','OFDMA')+' / '+M('multicarrier.html#scfdma','SC-FDMA'),
+    fec:M('iterative.html#turbo','Turbo')+' (data), '+M('iterative.html#convolutional','conv.')+' (control)',
+    en:'4G all-IP mobile broadband', uk:'4G повністю-IP мобільний широкосмуг'},
+  {id:'nr5g', fam:'cellular', std:'5G NR',
+    mod:M('qam.html#qam','QAM ≤ 256')+' + '+M('multicarrier.html#ofdm','OFDM'),
+    fec:M('iterative.html#ldpc','LDPC')+' (data), '+M('iterative.html#polar','Polar')+' (control)',
+    en:'5G enhanced &amp; low-latency mobile', uk:'5G покращений мобільний з малою затримкою'},
+  {id:'wifi', fam:'short', std:'Wi-Fi (802.11a→ax)',
+    mod:M('multicarrier.html#ofdm','OFDM')+'/'+M('multicarrier.html#ofdma','OFDMA')+', '+M('qam.html#qam','BPSK–1024-QAM'),
+    fec:M('iterative.html#convolutional','Conv.')+' / '+M('iterative.html#ldpc','LDPC'),
+    en:'Wireless LAN', uk:'Безпроводова локальна мережа'},
+  {id:'bluetooth', fam:'short', std:'Bluetooth / BLE',
+    mod:M('keying.html#gfsk','GFSK')+', '+M('keying.html#psk8','8-PSK')+'/'+M('keying.html#pi4dqpsk','π/4-DQPSK')+' + '+M('spread.html#fhss','FHSS'),
+    fec:M('codes.html#crc','CRC')+' + FEC ('+M('codes.html#hamming','Hamming')+')',
+    en:'Personal-area networking', uk:'Персональні мережі'},
+  {id:'zigbee', fam:'short', std:'ZigBee / Thread (802.15.4)',
+    mod:M('keying.html#oqpsk','O-QPSK')+' / '+M('keying.html#bpsk','BPSK'),
+    fec:M('codes.html#hamming','Hamming')+' / '+M('codes.html#crc','CRC'),
+    en:'Low-power mesh IoT', uk:'Малопотужна mesh-IoT'},
+  {id:'dect', fam:'short', std:'DECT',
+    mod:M('keying.html#gfsk','GFSK'),
+    fec:M('codes.html#crc','CRC'),
+    en:'Cordless telephony', uk:'Безпроводова телефонія'},
+  {id:'lora', fam:'iot', std:'LoRa / LoRaWAN',
+    mod:M('spread.html#css','CSS (chirp)'),
+    fec:M('codes.html#hamming','Hamming')+'-style FEC',
+    en:'Long-range low-power IoT', uk:'Далекобійний малопотужний IoT'},
+  {id:'sigfox', fam:'iot', std:'Sigfox',
+    mod:M('keying.html#dpsk','DBPSK')+' / '+M('keying.html#gfsk','GFSK')+' (UNB)',
+    fec:'&mdash; ('+({en:'triple repetition',uk:'потрійний повтор'}).en+')',
+    en:'Ultra-narrowband IoT', uk:'Ультравузькосмуговий IoT',
+    fecUk:'&mdash; (потрійний повтор)'},
+  {id:'tetra', fam:'other', std:'TETRA',
+    mod:M('keying.html#pi4dqpsk','π/4-DQPSK'),
+    fec:M('iterative.html#convolutional','Convolutional'),
+    en:'Professional mobile radio', uk:'Професійний рухомий радіозв\'язок'},
+  {id:'gnss', fam:'other', std:'GPS / GLONASS',
+    mod:M('keying.html#bpsk','BPSK')+' + '+M('spread.html#dsss','DSSS'),
+    fec:M('iterative.html#convolutional','Conv.')+' + '+M('codes.html#golay','Golay'),
+    en:'Satellite navigation', uk:'Супутникова навігація'},
+  {id:'dvb', fam:'other', std:'DVB-T/T2 · S/S2',
+    mod:M('multicarrier.html#ofdm','OFDM')+' ('+M('qam.html#qam','QPSK–256-QAM')+') / '+M('keying.html#qpsk','QPSK')+'-'+M('keying.html#psk8','8-PSK'),
+    fec:M('codes.html#reedsolomon','RS')+'+'+M('iterative.html#convolutional','conv.')+' (T) · '+M('iterative.html#ldpc','LDPC')+'+'+M('codes.html#bch','BCH')+' (T2/S2)',
+    en:'Digital television broadcast', uk:'Цифрове телемовлення'},
+  {id:'wimax', fam:'other', std:'WiMAX (802.16)',
+    mod:M('multicarrier.html#ofdm','OFDM')+'/'+M('multicarrier.html#ofdma','OFDMA'),
+    fec:M('iterative.html#turbo','Convolutional turbo'),
+    en:'Early broadband wireless access', uk:'Ранній широкосмуговий радіодоступ'},
+  {id:'paging', fam:'other', std:'Paging (POCSAG/FLEX)',
+    mod:M('keying.html#fsk','FSK'),
+    fec:M('codes.html#bch','BCH'),
+    en:'One-way messaging', uk:'Односторонні повідомлення'}
+];
+const FAMS=[
+  {k:'all',   en:'All',           uk:'Усі'},
+  {k:'cellular',en:'Cellular 2G–5G', uk:'Стільникові 2G–5G'},
+  {k:'short', en:'Short-range',    uk:'Ближній радіус'},
+  {k:'iot',   en:'IoT / LPWAN',    uk:'IoT / LPWAN'},
+  {k:'other', en:'Broadcast & other', uk:'Мовлення й інше'}
+];
+let curFam='all', curQ='';
+
+function renderFilter(){
+  document.getElementById('stdFilter').innerHTML = FAMS.map(f=>
+    `<span class="flt${curFam===f.k?'':' off'}" data-k="${f.k}" role="button" tabindex="0"
+      style="cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:12px; padding:5px 12px;
+      border:1px solid var(--line); border-radius:999px; background:var(--panel2);
+      ${curFam===f.k?'color:var(--teal); border-color:#27506B;':'color:var(--dim);'}">${window.LANG==='uk'?f.uk:f.en}</span>`).join(' ');
+  document.querySelectorAll('#stdFilter .flt').forEach(el=>{
+    const act=()=>{ curFam=el.getAttribute('data-k'); renderFilter(); renderTable(); };
+    el.addEventListener('click',act);
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();act();} });
+  });
+}
+function renderTable(){
+  const L=window.LANG==='uk';
+  const body=document.getElementById('stdBody');
+  let shown=0;
+  body.innerHTML = STD.map(s=>{
+    const famOk = curFam==='all' || s.fam===curFam;
+    const hay=(s.std+' '+s.en+' '+s.uk+' '+s.mod+' '+s.fec).toLowerCase();
+    const qOk = !curQ || hay.includes(curQ);
+    if(!famOk||!qOk) return '';
+    shown++;
+    const fec = (L&&s.fecUk)?s.fecUk:s.fec;
+    return `<tr id="${s.id}">
+      <td class="std">${s.std}</td>
+      <td>${s.mod}</td>
+      <td>${fec}</td>
+      <td>${L?s.uk:s.en}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('stdCount').textContent =
+    `${shown} / ${STD.length} ${L?'стандартів':'standards'}`;
+}
+function highlightHash(){
+  const h=location.hash.slice(1);
+  if(!h) return;
+  const row=document.getElementById(h);
+  if(row){ row.scrollIntoView({block:'center'}); row.classList.add('flash');
+    setTimeout(()=>row.classList.remove('flash'),1700); }
+}
+document.getElementById('stdSearch').addEventListener('input',e=>{ curQ=e.target.value.trim().toLowerCase(); renderTable(); });
+
+window.onLangChange=function(){ renderFilter(); renderTable(); highlightHash(); };
+renderFilter(); renderTable();
+setTimeout(highlightHash,60);
+window.addEventListener('hashchange',highlightHash);
+</script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spread spectrum & wideband (DSSS · FHSS · CDMA · CSS · UWB) — Wireless Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="spread">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Trading bandwidth for robustness, sharing & ranging" data-uk="Обмін смуги на стійкість, спільний доступ і вимірювання">Spread spectrum</div>
+    <h1 data-en="Spread Spectrum & Wideband" data-uk="Розширення спектра та широкосмугові">Spread Spectrum &amp; Wideband</h1>
+    <div class="eq-hero">occupy ≫ the minimum bandwidth  →  process gain, jam-resistance, code sharing</div>
+    <p class="lede" data-en="These schemes deliberately smear a signal across far more bandwidth than the data needs. Why? A narrowband jammer or fade then hits only a sliver of the signal (<b>DSSS</b>, <b>FHSS</b>); many users can share one band via distinct codes (<b>CDMA</b>); a sweeping chirp travels enormous distances at low power (<b>CSS/LoRa</b>); and sub-nanosecond pulses over gigahertz of bandwidth measure distance to the centimetre (<b>UWB</b>). Each idea has a live demo below."
+       data-uk="Ці схеми навмисне розмазують сигнал по значно ширшій смузі, ніж потрібно даним. Навіщо? Вузькосмуговий заглушувач чи завмирання тоді вражає лише крихту сигналу (<b>DSSS</b>, <b>FHSS</b>); багато абонентів ділять одну смугу через різні коди (<b>CDMA</b>); розгортаний чирп долає величезні відстані за малої потужності (<b>CSS/LoRa</b>); а субнаносекундні імпульси на гігагерцовій смузі вимірюють відстань до сантиметра (<b>UWB</b>). Кожна ідея має живе демо нижче."></p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ============ DSSS ============ -->
+  <section id="dsss">
+    <span class="num" data-en="01 / Direct Sequence Spread Spectrum" data-uk="01 / Розширення прямою послідовністю">01 / DSSS</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">correlator</span>
+      <span data-en="DSSS — Direct Sequence Spread Spectrum" data-uk="DSSS — розширення прямою послідовністю">DSSS — Direct Sequence</span></h2>
+    <div class="formula">tx = data × PN(chip rate ≫ bit rate);  process gain G_p = 10·log₁₀(N) dB</div>
+    <p class="desc" data-en="Multiply each data bit by a fast <b>pseudo-noise (PN) chip code</b> of length N. The signal now occupies N times the bandwidth at 1/N the power density — buried in the noise floor. At the receiver, multiplying by the same code again <b>collapses the data back</b> to a narrow, tall spike, while any narrowband jammer that entered gets spread out to a low, wide floor. That asymmetry is the <b>process gain</b>. Raise the jammer and the spreading factor below and watch the receiver's post-despread SNR hold up."
+       data-uk="Помножте кожен біт даних на швидкий <b>псевдовипадковий (PN) чип-код</b> довжини N. Сигнал тепер займає в N разів ширшу смугу за 1/N щільності потужності — схований у рівні шуму. У приймачі повторне множення на той самий код <b>згортає дані назад</b> у вузький високий пік, тоді як будь-який вузькосмуговий заглушувач, що потрапив, розмазується в низький широкий рівень. Ця асиметрія — <b>виграш обробки</b>. Підніміть заглушувач і фактор розширення нижче й дивіться, як SNR приймача після згортання тримається."></p>
+    <div id="refs-dsss"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="dsCanvas" width="360" height="200"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="spreading factor N (chips/bit)" data-uk="фактор розширення N (чипів/біт)">spreading factor N</span><span class="val" id="dsNV">16</span></label>
+            <input type="range" id="dsN" min="4" max="64" step="4" value="16"></div>
+          <div class="ctrl"><label><span data-en="jammer power" data-uk="потужність заглушувача">jammer power</span><span class="val" id="dsJV">4×</span></label>
+            <input type="range" id="dsJ" min="0" max="12" step="1" value="4"></div>
+          <div class="hint" data-en="Top = over the air; bottom = after despreading. The narrow spike is data, the low carpet is the jammer." data-uk="Зверху = в ефірі; знизу = після згортання. Вузький пік — дані, низький «килим» — заглушувач."></div>
+          <div class="readout" id="dsOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="The original <b>802.11</b> and 802.11b (11-chip Barker / CCK), <b>GPS</b> ranging codes, and cdmaOne. DSSS is also the basis of CDMA multi-user access — see below."
+            data-uk="Оригінальні <b>802.11</b> та 802.11b (11-чиповий код Баркера / CCK), далекомірні коди <b>GPS</b> та cdmaOne. DSSS також є основою багатоабонентського доступу CDMA — див. нижче."></span></div>
+    <div class="xrefs"><a href="#cdma">CDMA</a> <a href="standards.html#gnss">GPS</a> <a href="standards.html#wifi">802.11b</a></div>
+  </section>
+
+  <!-- ============ FHSS ============ -->
+  <section id="fhss">
+    <span class="num" data-en="02 / Frequency Hopping" data-uk="02 / Стрибки частоти">02 / FHSS</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">synth-hop</span>
+      <span data-en="FHSS — Frequency Hopping Spread Spectrum" data-uk="FHSS — розширення стрибками частоти">FHSS — Frequency Hopping</span></h2>
+    <div class="formula">carrier hops channel → channel on a shared pseudo-random schedule</div>
+    <p class="desc" data-en="Instead of spreading continuously, FHSS keeps the signal narrowband but <b>hops it among many channels</b> on a schedule both ends know. A jammer or a busy channel wipes out only the hops that happen to land there; the rest get through, and FEC repairs the gaps. Bluetooth hops 1600 times a second across 79 (or 40, for BLE) channels, and adaptively skips channels it finds busy (AFH). The grid below is time × frequency; toggle the jammer and re-roll the pattern to see collisions."
+       data-uk="Замість неперервного розширення FHSS тримає сигнал вузькосмуговим, але <b>стрибає ним між багатьма каналами</b> за розкладом, відомим обом сторонам. Заглушувач чи зайнятий канал знищує лише ті стрибки, що туди потрапили; решта проходить, а FEC латає прогалини. Bluetooth стрибає 1600 разів на секунду по 79 (або 40 для BLE) каналах і адаптивно оминає зайняті (AFH). Ґратка нижче — час × частота; увімкніть заглушувач і переграйте патерн, щоб побачити зіткнення."></p>
+    <div id="refs-fhss"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="fhCanvas" width="360" height="200"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="channels" data-uk="каналів">channels</span><span class="val" id="fhCV">10</span></label>
+            <input type="range" id="fhC" min="6" max="16" step="1" value="10"></div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            <button id="fhNew" data-en="New hop pattern" data-uk="Новий патерн">New pattern</button>
+            <button id="fhJam" class="secondary" data-en="Toggle jammer" data-uk="Заглушувач вкл/викл">Toggle jammer</button>
+          </div>
+          <div class="hint" data-en="Each column is a time slot, each row a channel. Teal = the hop; rose row(s) = jammed channels; a rose hop = a lost packet." data-uk="Кожен стовпець — часовий слот, кожен рядок — канал. Бірюзовий = стрибок; рожеві рядки = заглушені канали; рожевий стрибок = втрачений пакет."></div>
+          <div class="readout" id="fhOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="standards.html#bluetooth">Bluetooth</a> <a href="#dsss">DSSS</a></div>
+  </section>
+
+  <!-- ============ CDMA ============ -->
+  <section id="cdma">
+    <span class="num" data-en="03 / Code Division Multiple Access" data-uk="03 / Кодовий поділ доступу">03 / CDMA</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c3">RAKE</span>
+      <span data-en="CDMA — Code Division Multiple Access" data-uk="CDMA — кодовий поділ множинного доступу">CDMA — Code Division</span></h2>
+    <div class="formula">Σ (bitᵢ × codeᵢ) transmitted together;  recover bitⱼ = ⟨sum, codeⱼ⟩ / N</div>
+    <p class="desc" data-en="If every user spreads with a <b>mutually orthogonal code</b>, they can all transmit in the same band at the same time. The receiver recovers one user by correlating the combined signal against that user's code: the wanted code lines up (large dot-product) while every other code averages to zero. The demo uses 4-chip <b>Walsh codes</b> for two users — flip their bits and watch both messages fall out of one summed waveform. This orthogonality underpins IS-95, CDMA2000 and (as WCDMA) 3G."
+       data-uk="Якщо кожен абонент розширюється <b>взаємно ортогональним кодом</b>, усі можуть передавати в одній смузі одночасно. Приймач відновлює одного абонента, корелюючи сумарний сигнал із його кодом: потрібний код збігається (велике скалярне), а всі інші усереднюються до нуля. Демо використовує 4-чипові <b>коди Волша</b> для двох абонентів — перемикайте їхні біти й дивіться, як обидва повідомлення випадають з однієї сумарної форми. Ця ортогональність лежить в основі IS-95, CDMA2000 та (як WCDMA) 3G."></p>
+    <div id="refs-cdma"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <div class="controls" style="min-width:100%">
+          <div style="display:flex; gap:20px; flex-wrap:wrap">
+            <div>
+              <div class="hint" style="margin:0 0 6px" data-en="User A · Walsh [+1 +1 +1 +1]" data-uk="Абонент A · Волш [+1 +1 +1 +1]">User A · Walsh [+1 +1 +1 +1]</div>
+              <button id="cdA" data-en="A bit = +1" data-uk="A біт = +1">A bit = +1</button>
+            </div>
+            <div>
+              <div class="hint" style="margin:0 0 6px" data-en="User B · Walsh [+1 −1 +1 −1]" data-uk="Абонент B · Волш [+1 −1 +1 −1]">User B · Walsh [+1 −1 +1 −1]</div>
+              <button id="cdB" data-en="B bit = +1" data-uk="B біт = +1">B bit = +1</button>
+            </div>
+          </div>
+          <div class="readout" id="cdOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="<b>IS-95 (cdmaOne)</b> and <b>CDMA2000</b>, and the wideband CDMA (WCDMA) air interface of <b>3G/UMTS</b>. Real systems add power control and RAKE receivers to fight the near-far problem and multipath."
+            data-uk="<b>IS-95 (cdmaOne)</b> та <b>CDMA2000</b>, а також широкосмуговий CDMA (WCDMA) інтерфейс <b>3G/UMTS</b>. Реальні системи додають керування потужністю та RAKE-приймачі проти проблеми «ближній–дальній» і багатопроменевості."></span></div>
+    <div class="xrefs"><a href="#dsss">DSSS</a> <a href="standards.html#umts">UMTS/3G</a> <a href="keying.html#qpsk">QPSK</a></div>
+  </section>
+
+  <!-- ============ CSS / LoRa ============ -->
+  <section id="css">
+    <span class="num" data-en="04 / Chirp Spread Spectrum" data-uk="04 / Розширення чирпами">04 / CSS</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">de-chirp</span>
+      <span data-en="CSS — Chirp Spread Spectrum (LoRa)" data-uk="CSS — розширення чирпами (LoRa)">CSS — Chirp Spread Spectrum</span></h2>
+    <div class="formula">symbol = an up-chirp cyclically shifted by the data value;  SF = spreading factor</div>
+    <p class="desc" data-en="A <b>chirp</b> is a tone that sweeps linearly across the whole band. LoRa encodes a symbol as the <b>cyclic starting offset</b> of an up-chirp — a spreading factor SF gives 2^SF possible offsets, i.e. SF bits per symbol. Because the receiver 'de-chirps' by multiplying with a down-chirp, the whole wideband symbol collapses to a single tone whose position is the data — extremely robust to noise and Doppler, which is how LoRa reaches many kilometres at milliwatts. Move SF and the symbol value to see the chirp shift and wrap."
+       data-uk="<b>Чирп</b> — це тон, що лінійно розгортається по всій смузі. LoRa кодує символ як <b>циклічний початковий зсув</b> висхідного чирпа — фактор розширення SF дає 2^SF можливих зсувів, тобто SF біт на символ. Оскільки приймач «де-чирпує», множачи на низхідний чирп, увесь широкосмуговий символ згортається в один тон, позиція якого — це дані — надзвичайно стійко до шуму й Доплера, тому LoRa досягає кілометрів за міліватів. Змініть SF і значення символу, щоб побачити зсув і перенесення чирпа."></p>
+    <div id="refs-css"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="csCanvas" width="360" height="180"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="spreading factor SF" data-uk="фактор розширення SF">spreading factor SF</span><span class="val" id="csSV">7</span></label>
+            <input type="range" id="csSF" min="6" max="12" step="1" value="7"></div>
+          <div class="ctrl"><label><span data-en="symbol value" data-uk="значення символу">symbol value</span><span class="val" id="csVV">0</span></label>
+            <input type="range" id="csV" min="0" max="1" step="0.01" value="0"></div>
+          <div class="hint" data-en="Line = instantaneous frequency vs time. The symbol value sets where the up-chirp starts; it wraps around the band." data-uk="Лінія = миттєва частота від часу. Значення символу задає, де починається висхідний чирп; він переноситься через смугу."></div>
+          <div class="readout" id="csOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="<b>LoRa / LoRaWAN</b> long-range IoT. A larger SF trades data rate for range and sensitivity — SF12 can be decoded below the noise floor but sends only tens of bits per second."
+            data-uk="Далекобійний IoT <b>LoRa / LoRaWAN</b>. Більший SF міняє швидкість даних на дальність і чутливість — SF12 можна декодувати нижче рівня шуму, але він шле лише десятки біт на секунду."></span></div>
+    <div class="xrefs"><a href="keying.html#fsk">FSK</a> <a href="standards.html#lora">LoRaWAN</a></div>
+  </section>
+
+  <!-- ============ UWB ============ -->
+  <section id="uwb">
+    <span class="num" data-en="05 / Ultra-Wideband" data-uk="05 / Надширокосмугова">05 / UWB</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">sub-ns</span>
+      <span data-en="UWB — Ultra-Wideband (impulse radio)" data-uk="UWB — надширокосмугова (імпульсна)">UWB — Ultra-Wideband</span></h2>
+    <div class="formula">very short pulses (&lt;1 ns) → &gt;500 MHz bandwidth → time-of-flight ranging</div>
+    <p class="desc" data-en="UWB abandons a steady carrier for <b>trains of sub-nanosecond pulses</b> that occupy gigahertz of bandwidth at very low spectral density (so they coexist under other services). The enormous bandwidth buys extreme <b>time resolution</b>: measuring a pulse's flight time pins down distance to a few centimetres, and phase-difference across antennas gives angle. That is why UWB (IEEE 802.15.4a/z) now sits in phones, car keys and AirTags for secure ranging and 'digital key' entry. Data itself is often carried by pulse-position (PPM) or BPSK on the pulses."
+       data-uk="UWB відмовляється від сталого носія на користь <b>послідовностей субнаносекундних імпульсів</b>, що займають гігагерци смуги за дуже низької спектральної щільності (тож співіснують під іншими службами). Величезна смуга дає надзвичайну <b>роздільність у часі</b>: вимірювання часу польоту імпульсу визначає відстань до кількох сантиметрів, а різниця фаз між антенами дає кут. Тому UWB (IEEE 802.15.4a/z) тепер у телефонах, автоключах і AirTag для захищеного вимірювання й «цифрового ключа». Самі дані часто переносяться позицією імпульсу (PPM) чи BPSK на імпульсах."></p>
+    <div id="refs-uwb"></div>
+    <div class="readout" data-en="bandwidth 500 MHz → range resolution ≈ c / (2·BW) ≈ 0.30 m per raw pulse; sub-sample timing pushes real UWB ranging to ~10 cm. Compare Wi-Fi RSSI positioning: several metres." data-uk="смуга 500 МГц → роздільність відстані ≈ c / (2·BW) ≈ 0,30 м на сирий імпульс; субвідлікова синхронізація доводить реальне UWB-вимірювання до ~10 см. Порівняйте позиціювання за RSSI Wi-Fi: кілька метрів."></div>
+    <div class="xrefs"><a href="#ppm">PPM</a> <a href="keying.html#bpsk">BPSK</a></div>
+  </section>
+
+  <!-- ============ PPM ============ -->
+  <section id="ppm">
+    <span class="num" data-en="06 / Pulse Position Modulation" data-uk="06 / Позиційно-імпульсна модуляція">06 / PPM</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">gating</span>
+      <span data-en="PPM — Pulse Position Modulation" data-uk="PPM — позиційно-імпульсна модуляція">PPM — Pulse Position Modulation</span></h2>
+    <div class="formula">data value → which of M time slots holds the pulse (log₂M bits/pulse)</div>
+    <p class="desc" data-en="PPM carries information in the <b>timing</b> of a single pulse within a frame of M slots — the amplitude and shape stay fixed. It is energy-efficient (one short pulse per symbol) and a natural fit for optical and impulse-radio links: <b>IrDA</b> uses 4-PPM, and impulse UWB uses PPM on its pulse trains. Slide the symbol value to move the pulse between slots."
+       data-uk="PPM несе інформацію в <b>моменті</b> одного імпульсу в межах кадру з M слотів — амплітуда й форма незмінні. Вона енергоефективна (один короткий імпульс на символ) і природно пасує оптичним та імпульсним радіолініям: <b>IrDA</b> використовує 4-PPM, а імпульсна UWB застосовує PPM на послідовностях імпульсів. Посуньте значення символу, щоб перемістити імпульс між слотами."></p>
+    <div id="refs-ppm"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="ppCanvas" width="360" height="120"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="slots M" data-uk="слотів M">slots M</span><span class="val" id="ppMV">4</span></label>
+            <input type="range" id="ppM" min="2" max="8" step="1" value="4"></div>
+          <div class="ctrl"><label><span data-en="symbol (slot index)" data-uk="символ (індекс слоту)">symbol</span><span class="val" id="ppSV">1</span></label>
+            <input type="range" id="ppS" min="0" max="7" step="1" value="1"></div>
+          <div class="readout" id="ppOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="#uwb">UWB</a> <a href="keying.html#ook">OOK</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="Spread spectrum · Wireless Atlas — spend bandwidth to buy robustness, sharing and ranging." data-uk="Розширення спектра · Безпроводовий Атлас — витратити смугу, щоб купити стійкість, спільний доступ і вимірювання."></p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const CS=getComputedStyle(document.documentElement);
+const C_INK=CS.getPropertyValue('--ink').trim(), C_TEAL=CS.getPropertyValue('--teal').trim(),
+      C_AMBER=CS.getPropertyValue('--amber').trim(), C_ROSE=CS.getPropertyValue('--rose').trim(),
+      C_DIM=CS.getPropertyValue('--dim').trim(), C_LINE=CS.getPropertyValue('--line').trim();
+
+// ---- DSSS process-gain demo -----------------------------------------
+const dsC=document.getElementById('dsCanvas'), dsX=dsC.getContext('2d');
+function drawDS(){
+  const N=+document.getElementById('dsN').value, J=+document.getElementById('dsJ').value;
+  const w=dsC.width,h=dsC.height, cx=w/2;
+  dsX.clearRect(0,0,w,h);
+  const midA=h*0.28, midB=h*0.78, baseH=h*0.20;
+  dsX.fillStyle=C_DIM; dsX.font='10px "JetBrains Mono",monospace';
+  dsX.fillText(window.LANG==='uk'?'в ефірі':'over the air', 6, 12);
+  dsX.fillText(window.LANG==='uk'?'після згортання':'after despread', 6, h*0.56);
+  // baselines
+  dsX.strokeStyle=C_LINE;
+  [midA,midB].forEach(m=>{ dsX.beginPath(); dsX.moveTo(0,m); dsX.lineTo(w,m); dsX.stroke(); });
+  // PANEL A: spread data (wide low) + jammer (narrow tall)
+  const spreadW=Math.min(w*0.9, 40+N*4);
+  dsX.fillStyle='rgba(79,214,230,.35)';
+  dsX.fillRect(cx-spreadW/2, midA-baseH*0.5, spreadW, baseH*0.5);
+  dsX.fillStyle=C_ROSE;
+  const jH=J*4; dsX.fillRect(cx+spreadW*0.18, midA-jH, 5, jH);
+  // PANEL B: data collapses (narrow tall) + jammer spreads (wide low)
+  const dataH=baseH*1.0;
+  dsX.fillStyle=C_TEAL; dsX.fillRect(cx-3, midB-dataH, 6, dataH);
+  dsX.fillStyle='rgba(240,96,127,.30)';
+  const jSpread=Math.min(w*0.9,120+N*3), jLow=Math.max(1,jH/N*4);
+  dsX.fillRect(cx-jSpread/2, midB-jLow, jSpread, jLow);
+  const L=window.LANG==='uk';
+  const gp=(10*Math.log10(N)).toFixed(1);
+  const post=(dataH/(jLow+0.5)).toFixed(1);
+  document.getElementById('dsNV').textContent=N;
+  document.getElementById('dsJV').textContent=J+'×';
+  document.getElementById('dsOut').innerHTML=
+    `<span class="k">${L?'виграш обробки':'process gain'}</span> G_p = 10·log₁₀(${N}) = <span class="a">${gp} dB</span>\n`
+    +`<span class="k">${L?'дані/заглушувач після згортання':'data/jammer after despread'}</span> ≈ <span class="s">${post}×</span>`;
+}
+
+// ---- FHSS hop grid --------------------------------------------------
+const fhC=document.getElementById('fhCanvas'), fhX=fhC.getContext('2d');
+let hopPattern=[], jamOn=true, jamRows=[];
+function rollHops(){
+  const ch=+document.getElementById('fhC').value, slots=16;
+  hopPattern=[]; for(let i=0;i<slots;i++) hopPattern.push(Math.floor(Math.random()*ch));
+  jamRows=[Math.floor(Math.random()*ch), Math.floor(Math.random()*ch)];
+}
+function drawFH(){
+  const ch=+document.getElementById('fhC').value, slots=16;
+  const w=fhC.width,h=fhC.height, cw=w/slots, chh=h/ch;
+  fhX.clearRect(0,0,w,h);
+  // jammed rows
+  if(jamOn){ fhX.fillStyle='rgba(240,96,127,.14)';
+    jamRows.forEach(r=>{ if(r<ch) fhX.fillRect(0,r*chh,w,chh); }); }
+  // grid
+  fhX.strokeStyle=C_LINE; fhX.lineWidth=1;
+  for(let i=0;i<=slots;i++){ fhX.beginPath(); fhX.moveTo(i*cw,0); fhX.lineTo(i*cw,h); fhX.stroke(); }
+  for(let j=0;j<=ch;j++){ fhX.beginPath(); fhX.moveTo(0,j*chh); fhX.lineTo(w,j*chh); fhX.stroke(); }
+  // hops
+  let hit=0;
+  hopPattern.forEach((r,i)=>{ const jammed=jamOn&&jamRows.includes(r)&&r<ch;
+    if(jammed) hit++;
+    fhX.fillStyle=jammed?C_ROSE:C_TEAL;
+    fhX.fillRect(i*cw+2, r*chh+2, cw-4, chh-4);
+  });
+  document.getElementById('fhCV').textContent=ch;
+  const L=window.LANG==='uk';
+  const surv=Math.round(100*(slots-hit)/slots);
+  document.getElementById('fhOut').innerHTML=
+    `<span class="k">${L?'заглушувач':'jammer'}</span> = ${jamOn?(L?'увімк. ('+jamRows.filter(r=>r<ch).length+' каналів)':'on ('+jamRows.filter(r=>r<ch).length+' channels)'):(L?'вимк.':'off')}\n`
+    +`<span class="k">${L?'стрибків уціліло':'hops surviving'}</span> = <span class="a">${slots-hit}/${slots}</span> (${surv}%)`;
+}
+
+// ---- CDMA Walsh worked example --------------------------------------
+let cdBitA=1, cdBitB=1;
+const codeA=[1,1,1,1], codeB=[1,-1,1,-1];
+function drawCD(){
+  const sum=codeA.map((c,i)=>cdBitA*c + cdBitB*codeB[i]);
+  const recA=sum.reduce((s,v,i)=>s+v*codeA[i],0)/4;
+  const recB=sum.reduce((s,v,i)=>s+v*codeB[i],0)/4;
+  document.getElementById('cdA').textContent=(window.LANG==='uk'?'A біт = ':'A bit = ')+(cdBitA>0?'+1':'−1');
+  document.getElementById('cdB').textContent=(window.LANG==='uk'?'B біт = ':'B bit = ')+(cdBitB>0?'+1':'−1');
+  const L=window.LANG==='uk';
+  const fmt=a=>'['+a.map(v=>v>=0?'+'+v:v).join(' ')+']';
+  document.getElementById('cdOut').innerHTML=
+    `<span class="k">${L?'передано (A×code_A + B×code_B)':'transmitted (A×code_A + B×code_B)'}</span>\n  = <span class="s">${fmt(sum)}</span>\n\n`
+    +`<span class="k">${L?'⟨сума, code_A⟩ / 4':'⟨sum, code_A⟩ / 4'}</span> = <span class="a">${recA>=0?'+':''}${recA}</span> → A = <span class="a">${recA>0?'+1':'−1'}</span> ${recA===cdBitA?'✓':''}\n`
+    +`<span class="k">${L?'⟨сума, code_B⟩ / 4':'⟨sum, code_B⟩ / 4'}</span> = <span class="a">${recB>=0?'+':''}${recB}</span> → B = <span class="a">${recB>0?'+1':'−1'}</span> ${recB===cdBitB?'✓':''}\n\n`
+    +`<span style="color:${C_TEAL}">${L?'обидва відновлено з одного сигналу — коди ортогональні':'both recovered from one signal — the codes are orthogonal'}</span>`;
+}
+
+// ---- LoRa chirp -----------------------------------------------------
+const csC=document.getElementById('csCanvas'), csX=csC.getContext('2d');
+function drawCS(){
+  const SF=+document.getElementById('csSF').value, val=+document.getElementById('csV').value;
+  const w=csC.width,h=csC.height, pad=16;
+  csX.clearRect(0,0,w,h);
+  csX.strokeStyle=C_LINE; csX.strokeRect(pad,pad,w-2*pad,h-2*pad);
+  csX.fillStyle=C_DIM; csX.font='10px "JetBrains Mono",monospace';
+  csX.fillText(window.LANG==='uk'?'частота':'freq', 2, pad+4);
+  csX.fillText(window.LANG==='uk'?'час':'time', w-32, h-4);
+  // base up-chirp (dim reference), starts at 0
+  const drawChirp=(offset,color,width)=>{
+    csX.strokeStyle=color; csX.lineWidth=width;
+    const innerW=w-2*pad, innerH=h-2*pad;
+    // frequency = (offset + t) mod 1
+    csX.beginPath(); let started=false;
+    for(let px=0;px<=innerW;px++){ const t=px/innerW;
+      let f=(offset+t)%1;
+      const x=pad+px, y=pad+innerH*(1-f);
+      if(px>0){ const prevF=(offset+(px-1)/innerW)%1;
+        if(f<prevF){ csX.stroke(); csX.beginPath(); started=false; } } // wrap → lift pen
+      if(!started){ csX.moveTo(x,y); started=true; } else csX.lineTo(x,y);
+    }
+    csX.stroke();
+  };
+  drawChirp(0, C_DIM, 1);
+  drawChirp(val, C_TEAL, 1.8);
+  const symbols=Math.pow(2,SF);
+  const symIdx=Math.round(val*(symbols-1));
+  document.getElementById('csSV').textContent=SF;
+  document.getElementById('csVV').textContent=symIdx;
+  const L=window.LANG==='uk';
+  document.getElementById('csOut').innerHTML=
+    `<span class="k">SF</span> = ${SF} → <span class="a">2^${SF} = ${symbols}</span> ${L?'символів':'symbols'} = ${SF} ${L?'біт/символ':'bits/sym'}\n`
+    +`<span class="k">${L?'значення символу':'symbol value'}</span> = <span class="s">${symIdx}</span> ${L?'(циклічний зсув чирпа)':'(cyclic chirp shift)'}`;
+}
+
+// ---- PPM ------------------------------------------------------------
+const ppC=document.getElementById('ppCanvas'), ppX=ppC.getContext('2d');
+function drawPP(){
+  const M=+document.getElementById('ppM').value;
+  const sSlider=document.getElementById('ppS');
+  sSlider.max=M-1; let s=+sSlider.value; if(s>M-1){ s=M-1; sSlider.value=s; }
+  const w=ppC.width,h=ppC.height, base=h-24, sw=w/M;
+  ppX.clearRect(0,0,w,h);
+  ppX.strokeStyle=C_LINE; ppX.beginPath(); ppX.moveTo(0,base); ppX.lineTo(w,base); ppX.stroke();
+  for(let i=0;i<=M;i++){ ppX.strokeStyle=C_LINE; ppX.beginPath(); ppX.moveTo(i*sw,base); ppX.lineTo(i*sw,base-6); ppX.stroke(); }
+  // pulse in slot s
+  ppX.fillStyle=C_TEAL; ppX.fillRect(s*sw+sw*0.35, base-70, sw*0.30, 70);
+  ppX.fillStyle=C_DIM; ppX.font='10px "JetBrains Mono",monospace';
+  for(let i=0;i<M;i++) ppX.fillText(String(i), i*sw+sw*0.42, base+14);
+  document.getElementById('ppMV').textContent=M;
+  document.getElementById('ppSV').textContent=s;
+  const L=window.LANG==='uk';
+  document.getElementById('ppOut').innerHTML=
+    `<span class="k">${L?'слотів':'slots'}</span> M = ${M} → <span class="a">${Math.log2(M).toFixed(2)}</span> ${L?'біт/імпульс':'bits/pulse'}\n`
+    +`<span class="k">${L?'імпульс у слоті':'pulse in slot'}</span> = <span class="s">${s}</span>`;
+}
+
+// ---- refs + wiring --------------------------------------------------
+function fillRefs(){
+  const w=(en,uk)=>({tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/'+en,label:en.replace(/_/g,' ')},uk:uk?{href:'https://uk.wikipedia.org/wiki/'+uk,label:uk.replace(/_/g,' ')}:undefined});
+  document.getElementById('refs-dsss').innerHTML=atlasRefs([w('Direct-sequence_spread_spectrum','Розширення_спектра_методом_прямої_послідовності')]);
+  document.getElementById('refs-fhss').innerHTML=atlasRefs([w('Frequency-hopping_spread_spectrum','Псевдовипадкове_перестроювання_робочої_частоти')]);
+  document.getElementById('refs-cdma').innerHTML=atlasRefs([w('Code-division_multiple_access','CDMA'),{tag:'code',en:{href:'https://en.wikipedia.org/wiki/Walsh_function',label:'Walsh codes'}}]);
+  document.getElementById('refs-css').innerHTML=atlasRefs([w('Chirp_spread_spectrum'),{tag:'spec',en:{href:'https://lora-alliance.org/about-lorawan/',label:'LoRa Alliance'}}]);
+  document.getElementById('refs-uwb').innerHTML=atlasRefs([w('Ultra-wideband','Надширокосмуговий_сигнал'),{tag:'ieee',en:{href:'https://standards.ieee.org/ieee/802.15.4z/10230/',label:'802.15.4z'}}]);
+  document.getElementById('refs-ppm').innerHTML=atlasRefs([w('Pulse-position_modulation')]);
+}
+document.getElementById('dsN').addEventListener('input',drawDS);
+document.getElementById('dsJ').addEventListener('input',drawDS);
+document.getElementById('fhC').addEventListener('input',()=>{rollHops();drawFH();});
+document.getElementById('fhNew').addEventListener('click',()=>{rollHops();drawFH();});
+document.getElementById('fhJam').addEventListener('click',()=>{jamOn=!jamOn;drawFH();});
+document.getElementById('cdA').addEventListener('click',()=>{cdBitA*=-1;drawCD();});
+document.getElementById('cdB').addEventListener('click',()=>{cdBitB*=-1;drawCD();});
+document.getElementById('csSF').addEventListener('input',drawCS);
+document.getElementById('csV').addEventListener('input',drawCS);
+document.getElementById('ppM').addEventListener('input',drawPP);
+document.getElementById('ppS').addEventListener('input',drawPP);
+
+window.onLangChange=function(){ fillRefs(); drawDS(); drawFH(); drawCD(); drawCS(); drawPP(); };
+fillRefs(); drawDS(); rollHops(); drawFH(); drawCD(); drawCS(); drawPP();
+</script>
+</body>
+</html>

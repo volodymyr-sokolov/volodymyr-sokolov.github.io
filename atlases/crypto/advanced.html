@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advanced — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="advanced">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Sections 17 · 18 · 19 · 21 — lattices, secret sharing, zero-knowledge, homomorphic"
+         data-uk="Розділи 17 · 18 · 19 · 21 — решітки, розділення секрету, нульове розголошення, гомоморфне">Sections 17 · 18 · 19 · 21</div>
+    <h1 data-en="Advanced Topics" data-uk="Поглиблені теми">Advanced topics</h1>
+    <p class="lede" data-en="Lattice reduction, secret sharing &amp; MPC, zero-knowledge proofs and homomorphic encryption — the algorithms behind post-quantum security, threshold cryptography and privacy-preserving computation."
+       data-uk="Редукція решіток, розділення секрету та багатосторонні обчислення, докази з нульовим розголошенням і гомоморфне шифрування — алгоритми, що стоять за постквантовою стійкістю, пороговою криптографією та обчисленнями зі збереженням приватності.">Advanced topics of the course.</p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="§17 — Lattice Cryptography &amp; Cryptanalysis" data-uk="§17 — Решіткова криптографія та криптоаналіз">§17 — Lattices</h3>
+
+  <section id="lll">
+    <span class="num" data-en="17 / LLL" data-uk="17 / LLL">17 / LLL</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(n⁵ log³B)</span>
+      <span data-en="LLL (Lenstra–Lenstra–Lovász)" data-uk="Алгоритм LLL (Ленстра–Ленстра–Ловаса)">LLL</span></h2>
+    <div class="formula">‖b*₁‖ ≤ 2^((n−1)/2) · λ₁(L)</div>
+    <p class="desc" data-en="A polynomial-time <b>lattice basis reduction</b> algorithm: given any basis of a lattice it returns a shorter, nearly-orthogonal basis. LLL underlies both constructive cryptography and a large family of attacks — it finds short vectors that reveal hidden structure, breaking knapsack cryptosystems, low-density subset-sum, and many RSA misuse cases (via Coppersmith)."
+       data-uk="Алгоритм <b>редукції базису решітки</b> за поліноміальний час: з будь-якого базису решітки він повертає коротший, майже ортогональний базис. LLL лежить в основі і конструктивної криптографії, і великого сімейства атак — він знаходить короткі вектори, що розкривають приховану структуру, ламаючи рюкзачні криптосистеми, subset-sum низької щільності та багато випадків неправильного використання RSA (через Копперсміта)."></p>
+    <div id="refs-lll"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="lllCanvas" width="300" height="300"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="2-D Gauss/LLL reduction: the two input basis vectors span a lattice; reduction finds the shortest, most orthogonal basis for the same lattice." data-uk="2-D редукція Гаусса/LLL: два вхідні базисні вектори породжують решітку; редукція знаходить найкоротший, найбільш ортогональний базис тієї ж решітки."></div>
+          <div class="ctrl"><label><span>b₁ = (x, y)</span><span class="val" id="lllB1V">15, 3</span></label>
+            <input type="range" id="lllB1x" min="-25" max="25" value="15"><input type="range" id="lllB1y" min="-25" max="25" value="3"></div>
+          <div class="ctrl"><label><span>b₂ = (x, y)</span><span class="val" id="lllB2V">9, 8</span></label>
+            <input type="range" id="lllB2x" min="-25" max="25" value="9"><input type="range" id="lllB2y" min="-25" max="25" value="8"></div>
+          <div class="legend"><span><span class="dot" style="background:#E8607A"></span><span data-en="input basis" data-uk="вхідний базис">input basis</span></span><span><span class="dot" style="background:#7FDBCA"></span><span data-en="reduced basis" data-uk="редукований базис">reduced basis</span></span></div>
+          <div class="readout" id="lllOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Why it matters" data-uk="Чому це важливо">Why it matters</div>
+      <span data-en="LLL gives only an exponential approximation of the shortest vector, yet that is enough for cryptanalysis in low dimension. Lattice-based PQC (Kyber, NTRU, Dilithium) is designed so that even LLL/BKZ cannot find short enough vectors."
+            data-uk="LLL дає лише експоненційне наближення найкоротшого вектора, але цього достатньо для криптоаналізу в малій вимірності. Решіткова постквантова криптографія (Kyber, NTRU, Dilithium) розроблена так, щоб навіть LLL/BKZ не знаходили достатньо коротких векторів."></span></div>
+    <div class="xrefs">
+      <a href="advanced.html#bkz">BKZ</a>
+      <a href="advanced.html#coppersmith" data-en="Coppersmith" data-uk="Копперсміт">Coppersmith</a>
+      <a href="asymmetric.html#pqc">Kyber / NTRU</a>
+    </div>
+  </section>
+
+  <section id="bkz">
+    <span class="num" data-en="17 / BKZ" data-uk="17 / BKZ">17 / BKZ</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">2^O(β)</span>
+      <span data-en="BKZ (Block Korkine–Zolotarev)" data-uk="BKZ-алгоритм (блоковий Коркіна–Золотарьова)">BKZ</span></h2>
+    <div class="formula">δ ≈ (β·(πβ)^(1/β) / 2πe)^(1/(2(β−1)))</div>
+    <p class="desc" data-en="A stronger, tunable generalisation of LLL. BKZ works on <b>blocks</b> of the basis of size β, calling an SVP oracle on each block. Larger β yields shorter vectors but costs time exponential in β. BKZ (and BKZ 2.0) is the standard tool for <b>estimating the concrete security</b> of lattice schemes — the parameter sets of NIST PQC standards are chosen against it."
+       data-uk="Сильніше, налаштовуване узагальнення LLL. BKZ працює з <b>блоками</b> базису розміру β, викликаючи оракул SVP на кожному блоці. Більше β дає коротші вектори, але коштує час, експоненційний за β. BKZ (та BKZ 2.0) — стандартний інструмент для <b>оцінки конкретної стійкості</b> решіткових схем: параметри стандартів NIST PQC обираються саме проти нього."></p>
+    <div id="refs-bkz"></div>
+    <div class="xrefs">
+      <a href="advanced.html#lll">LLL</a>
+      <a href="asymmetric.html#pqc">Kyber / NTRU</a>
+      <a href="signatures.html#dilithium">Dilithium</a>
+    </div>
+  </section>
+
+  <section id="coppersmith">
+    <span class="num" data-en="17 / Coppersmith" data-uk="17 / Копперсміт">17 / Coppersmith</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">poly(n)</span>
+      <span data-en="Coppersmith's Attack" data-uk="Атака Копперсміта">Coppersmith's attack</span></h2>
+    <div class="formula">|x₀| &lt; N^(1/d) ⇒ f(x₀) ≡ 0 (mod N) recoverable</div>
+    <p class="desc" data-en="A method to find <b>small roots of a modular polynomial</b> f(x) ≡ 0 (mod N) of degree d, whenever the root is smaller than roughly N^(1/d). It reduces the problem to finding a short vector in a lattice built from shifts of f, then solves it with LLL. Consequences: attacks on <b>low public exponent RSA</b>, stereotyped / partially-known messages, and partial key exposure (also ROCA)."
+       data-uk="Метод пошуку <b>малих коренів модульного полінома</b> f(x) ≡ 0 (mod N) степеня d, коли корінь менший приблизно за N^(1/d). Задача зводиться до пошуку короткого вектора в решітці, побудованій зі зсувів f, і розв'язується через LLL. Наслідки: атаки на <b>RSA з малим відкритим показником</b>, шаблонні / частково відомі повідомлення та часткове розкриття ключа (зокрема ROCA)."></p>
+    <div id="refs-coppersmith"></div>
+    <div class="strength"><div class="st-title" data-en="Attacks enabled" data-uk="Уможливлені атаки">Attacks enabled</div>
+      <span data-en="Håstad's broadcast attack, Franklin–Reiter related-message attack, and factoring N given half the bits of p. Mitigation: use e = 65537 and randomised padding (OAEP), never a tiny exponent with structured messages."
+            data-uk="Broadcast-атака Гостада, атака Франкліна–Райтера на пов'язані повідомлення та факторизація N за половиною бітів p. Пом'якшення: використовуйте e = 65537 і рандомізоване доповнення (OAEP), ніколи — малий показник зі структурованими повідомленнями."></span></div>
+    <div class="xrefs">
+      <a href="advanced.html#lll">LLL</a>
+      <a href="asymmetric.html#rsa">RSA</a>
+      <a href="cryptanalysis.html#gnfs" data-en="Factoring" data-uk="Факторизація">Factoring</a>
+    </div>
+  </section>
+
+  <h3 class="sub" data-en="§18 — Secret Sharing &amp; MPC" data-uk="§18 — Розділення секрету та багатосторонні обчислення">§18 — Secret sharing &amp; MPC</h3>
+
+  <section id="shamir">
+    <span class="num" data-en="18 / Shamir" data-uk="18 / Шамір">18 / Shamir</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(k²)</span>
+      <span data-en="Shamir's Secret Sharing" data-uk="Схема Шаміра">Shamir's Secret Sharing</span></h2>
+    <div class="formula">f(x) = s + a₁x + … + a_{t−1}x^{t−1} (mod p),  share_i = (i, f(i))</div>
+    <p class="desc" data-en="A <b>(t, n) threshold scheme</b>: the secret s is the constant term of a random degree-(t−1) polynomial over a prime field. Any <b>t</b> of the n shares reconstruct s by Lagrange interpolation at x = 0; any <b>t−1</b> shares reveal nothing (perfect, information-theoretic security). Used in threshold signatures, HSM key custody and distributed key generation."
+       data-uk="<b>(t, n)-порогова схема</b>: секрет s — це вільний член випадкового полінома степеня (t−1) над простим полем. Будь-які <b>t</b> з n часток відновлюють s інтерполяцією Лагранжа в точці x = 0; будь-які <b>t−1</b> часток не розкривають нічого (досконала, теоретико-інформаційна стійкість). Застосовується у порогових підписах, зберіганні ключів HSM та розподіленій генерації ключів."></p>
+    <div id="refs-shamir"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <div class="controls">
+          <div class="ctrl">
+            <label><span data-en="Secret s" data-uk="Секрет s">Secret s</span><span class="val" id="shSecVal">42</span></label>
+            <input type="range" id="shSec" min="0" max="256" value="42">
+          </div>
+          <div class="ctrl">
+            <label><span data-en="Threshold t" data-uk="Поріг t">Threshold t</span><span class="val" id="shTVal">3</span></label>
+            <input type="range" id="shT" min="2" max="4" value="3">
+          </div>
+          <div class="ctrl">
+            <label><span data-en="Shares n" data-uk="Часток n">Shares n</span><span class="val" id="shNVal">5</span></label>
+            <input type="range" id="shN" min="2" max="6" value="5">
+          </div>
+          <button id="shGen" data-en="New random polynomial" data-uk="Новий випадковий поліном">New random polynomial</button>
+          <div class="hint" data-en="Prime field p = 257. Reconstruction uses the first t shares." data-uk="Просте поле p = 257. Відновлення використовує перші t часток."></div>
+        </div>
+        <div style="flex:1; min-width:260px;">
+          <div class="readout" id="shOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="xrefs">
+      <a href="advanced.html#blakley" data-en="Blakley" data-uk="Блеклі">Blakley</a>
+      <a href="advanced.html#mpc">MPC</a>
+      <a href="numbertheory.html#legendre" data-en="Finite fields" data-uk="Скінченні поля">Finite fields</a>
+    </div>
+  </section>
+
+  <section id="blakley">
+    <span class="num" data-en="18 / Blakley" data-uk="18 / Блеклі">18 / Blakley</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(k³)</span>
+      <span data-en="Blakley's Scheme" data-uk="Схема Блеклі">Blakley's scheme</span></h2>
+    <div class="formula">secret = ⋂ of t hyperplanes in a t-dimensional space</div>
+    <p class="desc" data-en="A <b>geometric</b> secret-sharing scheme. The secret is one coordinate of the intersection point of t hyperplanes; each share is one hyperplane. Fewer than t hyperplanes leave the point undetermined (they intersect in a line or plane). Blakley shares are larger than Shamir's for the same threshold, but the geometric intuition is instructive."
+       data-uk="<b>Геометрична</b> схема розділення секрету. Секрет — одна координата точки перетину t гіперплощин; кожна частка — одна гіперплощина. Менше ніж t гіперплощин лишають точку невизначеною (перетинаються по прямій чи площині). Частки Блеклі більші за частки Шаміра за того ж порогу, але геометрична інтуїція є повчальною."></p>
+    <div id="refs-blakley"></div>
+    <div class="xrefs">
+      <a href="advanced.html#shamir" data-en="Shamir" data-uk="Шамір">Shamir</a>
+      <a href="advanced.html#mpc">MPC</a>
+    </div>
+  </section>
+
+  <section id="mpc">
+    <span class="num" data-en="18 / MPC" data-uk="18 / MPC">18 / MPC</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(gates)</span>
+      <span data-en="Secure Multi-Party Computation (MPC)" data-uk="Багатосторонні обчислення (MPC)">Secure MPC</span></h2>
+    <div class="formula">parties compute y = f(x₁,…,xₙ) revealing only y</div>
+    <p class="desc" data-en="Several parties jointly evaluate a function of their private inputs so that <b>nothing but the output</b> is revealed. Two classic constructions: <b>Yao's Garbled Circuits</b> (two parties, one garbles a Boolean circuit, the other evaluates it via oblivious transfer) and the <b>GMW protocol</b> (secret-shared gates, any number of parties). Modern MPC powers private auctions, threshold signing and privacy-preserving analytics."
+       data-uk="Кілька сторін спільно обчислюють функцію своїх приватних входів так, що розкривається <b>лише результат</b>. Дві класичні конструкції: <b>Garbled Circuits Яо</b> (дві сторони: одна «заплутує» булеву схему, інша обчислює її через oblivious transfer) та <b>протокол GMW</b> (вентилі на основі розділених секретів, довільна кількість сторін). Сучасні MPC уможливлюють приватні аукціони, порогові підписи та аналітику зі збереженням приватності."></p>
+    <div id="refs-mpc"></div>
+    <div class="strength"><div class="st-title" data-en="Security model" data-uk="Модель стійкості">Security model</div>
+      <span data-en="Distinguish semi-honest (honest-but-curious) from malicious adversaries, and honest-majority from dishonest-majority settings — they demand very different (and costlier) protocols."
+            data-uk="Розрізняють напівчесних (чесних-але-цікавих) і зловмисних супротивників, а також налаштування з чесною більшістю та без неї — вони вимагають дуже різних (і дорожчих) протоколів."></span></div>
+    <div class="xrefs">
+      <a href="advanced.html#shamir" data-en="Shamir sharing" data-uk="Схема Шаміра">Shamir sharing</a>
+      <a href="advanced.html#snark">zk-SNARK</a>
+      <a href="advanced.html#gentry" data-en="FHE" data-uk="FHE">FHE</a>
+    </div>
+  </section>
+
+  <h3 class="sub" data-en="§19 — Zero-Knowledge Proofs" data-uk="§19 — Докази з нульовим розголошенням">§19 — Zero-knowledge proofs</h3>
+
+  <section id="ffs">
+    <span class="num" data-en="19 / Feige–Fiat–Shamir" data-uk="19 / Фейге–Фіат–Шамір">19 / FFS</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(k·n²)</span>
+      <span data-en="Feige–Fiat–Shamir" data-uk="Протокол Фейге–Фіата–Шаміра">Feige–Fiat–Shamir</span></h2>
+    <div class="formula">Prover knows s : v = s² mod N;  commit r² → challenge b → reveal r·s^b</div>
+    <p class="desc" data-en="An <b>interactive zero-knowledge identification</b> protocol. The prover demonstrates knowledge of a modular square root of a public value without revealing it, using a commit–challenge–response round based on the hardness of factoring. Repeating k rounds drives the cheating probability down to 2⁻ᵏ. The <b>Fiat–Shamir heuristic</b> makes it non-interactive by deriving the challenge from a hash."
+       data-uk="<b>Інтерактивний протокол ідентифікації з нульовим розголошенням</b>. Доводжувач демонструє знання квадратного кореня за модулем від відкритого значення, не розкриваючи його, у раунді «зобов'язання–виклик–відповідь» на основі складності факторизації. Повторення k раундів знижує ймовірність шахрайства до 2⁻ᵏ. <b>Евристика Фіата–Шаміра</b> робить протокол неінтерактивним, виводячи виклик із геш-функції."></p>
+    <div id="refs-ffs"></div>
+    <div class="xrefs">
+      <a href="advanced.html#schnorr-zk" data-en="Schnorr ZK" data-uk="Шнорр ZK">Schnorr ZK</a>
+      <a href="signatures.html#schnorr" data-en="Schnorr signature" data-uk="Підпис Шнорра">Schnorr signature</a>
+      <a href="numbertheory.html#legendre" data-en="Quadratic residues" data-uk="Квадратичні лишки">Quadratic residues</a>
+    </div>
+  </section>
+
+  <section id="schnorr-zk">
+    <span class="num" data-en="19 / Schnorr protocol" data-uk="19 / Протокол Шнорра">19 / Schnorr</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+      <span data-en="Schnorr Protocol (ZKP)" data-uk="Протокол Шнорра (ZKP)">Schnorr protocol</span></h2>
+    <div class="formula">t = gʳ → challenge c → s = r + c·x;  check gˢ = t·yᶜ</div>
+    <p class="desc" data-en="A <b>Σ-protocol</b> proving knowledge of a discrete logarithm x with y = gˣ. It is the archetype of modern zero-knowledge: three moves (commit, challenge, response), special soundness and honest-verifier zero-knowledge. Applying Fiat–Shamir turns it into the Schnorr signature; it is also the building block of ring signatures and many threshold protocols."
+       data-uk="<b>Σ-протокол</b>, що доводить знання дискретного логарифма x, де y = gˣ. Це архетип сучасного нульового розголошення: три кроки (зобов'язання, виклик, відповідь), спеціальна коректність і нульове розголошення для чесного перевіряча. Застосування Фіата–Шаміра перетворює його на підпис Шнорра; він також є будівельним блоком кільцевих підписів і багатьох порогових протоколів."></p>
+    <div id="refs-schnorr-zk"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="hint" data-en="Toy group: p = 2087, generator g = 5, public y = gˣ mod p." data-uk="Іграшкова група: p = 2087, генератор g = 5, відкрите y = gˣ mod p."></div>
+        <div class="ctrl"><label><span data-en="secret x (= log_g y)" data-uk="секрет x (= log_g y)">secret x</span><span class="val" id="szXV">123</span></label>
+          <input type="range" id="szX" min="1" max="1042" value="123"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="szRun" data-en="Honest proof" data-uk="Чесний доказ">Honest proof</button>
+          <button id="szCheat" class="secondary" data-en="Cheat (no x)" data-uk="Шахрай (без x)">Cheat (no x)</button>
+        </div>
+        <div class="readout" id="szOut"></div>
+      </div>
+    </div>
+
+    <div class="xrefs">
+      <a href="advanced.html#ffs">Feige–Fiat–Shamir</a>
+      <a href="advanced.html#snark">zk-SNARK</a>
+      <a href="keyexchange.html#dh" data-en="Discrete log" data-uk="Дискретний логарифм">Discrete log</a>
+    </div>
+  </section>
+
+  <section id="snark">
+    <span class="num" data-en="19 / zk-SNARK / STARK" data-uk="19 / zk-SNARK / STARK">19 / SNARK</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(C log C)</span>
+      <span data-en="zk-SNARKs, zk-STARKs" data-uk="zk-SNARKs, zk-STARKs">zk-SNARKs / STARKs</span></h2>
+    <div class="formula">π : |π| = O(1),  verify in O(1)…O(log C)  for a circuit of size C</div>
+    <p class="desc" data-en="<b>Succinct non-interactive arguments of knowledge.</b> A prover produces a tiny proof π that a computation was performed correctly; the verifier checks it far faster than re-running the computation, learning nothing else. <b>SNARKs</b> are short but often need a trusted setup and pairings; <b>STARKs</b> are transparent (no setup) and post-quantum, at the cost of larger proofs. Core technology for private and scalable blockchains (zk-rollups)."
+       data-uk="<b>Стислі неінтерактивні аргументи знання.</b> Доводжувач створює крихітний доказ π того, що обчислення виконано правильно; перевіряч перевіряє його значно швидше, ніж повторний запуск обчислення, і не дізнається нічого іншого. <b>SNARK</b> короткі, але часто потребують довіреного налаштування та спарювань; <b>STARK</b> прозорі (без налаштування) і постквантові ціною більших доказів. Ключова технологія приватних і масштабованих блокчейнів (zk-rollups)."></p>
+    <div id="refs-snark"></div>
+    <div class="xrefs">
+      <a href="advanced.html#schnorr-zk" data-en="Σ-protocols" data-uk="Σ-протоколи">Σ-protocols</a>
+      <a href="advanced.html#mpc">MPC</a>
+      <a href="signatures.html#eddsa" data-en="Elliptic curves" data-uk="Еліптичні криві">Elliptic curves</a>
+    </div>
+  </section>
+
+  <h3 class="sub" data-en="§21 — Homomorphic Encryption" data-uk="§21 — Гомоморфне шифрування">§21 — Homomorphic encryption</h3>
+
+  <section id="gentry">
+    <span class="num" data-en="21 / Gentry" data-uk="21 / Гентрі">21 / Gentry</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">poly(λ)</span>
+      <span data-en="Gentry's Scheme (First FHE)" data-uk="Схема Гентрі (перша FHE)">Gentry's scheme</span></h2>
+    <div class="formula">Dec(Enc(a) ⊕ Enc(b)) = a+b,  Dec(Enc(a) ⊗ Enc(b)) = a·b</div>
+    <p class="desc" data-en="The <b>first fully homomorphic encryption (FHE)</b> scheme (2009). Ciphertexts carry a small noise term that grows with every operation; Gentry's breakthrough was <b>bootstrapping</b> — homomorphically evaluating the scheme's own decryption to refresh a ciphertext and reset its noise, allowing an unbounded number of additions and multiplications. Lattice-based, and the conceptual root of all modern FHE."
+       data-uk="<b>Перша повністю гомоморфна схема шифрування (FHE)</b> (2009). Шифротексти несуть невеликий шум, що зростає з кожною операцією; прорив Гентрі — <b>bootstrapping</b>: гомоморфне обчислення власного розшифрування схеми, щоб «оновити» шифротекст і скинути шум, уможливлюючи необмежену кількість додавань і множень. Заснована на решітках і є концептуальним коренем усієї сучасної FHE."></p>
+    <div id="refs-gentry"></div>
+    <div class="xrefs">
+      <a href="advanced.html#bgv">BGV / BFV / CKKS</a>
+      <a href="asymmetric.html#paillier" data-en="Paillier (partial)" data-uk="Paillier (часткова)">Paillier</a>
+      <a href="advanced.html#lll" data-en="Lattices" data-uk="Решітки">Lattices</a>
+    </div>
+  </section>
+
+  <section id="bgv">
+    <span class="num" data-en="21 / BGV · BFV · CKKS" data-uk="21 / BGV · BFV · CKKS">21 / BGV</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">Õ(λ)</span>
+      <span data-en="BGV, BFV, CKKS" data-uk="BGV, BFV, CKKS">BGV / BFV / CKKS</span></h2>
+    <div class="formula">RLWE:  b = a·s + e  over  R_q = ℤ_q[x]/(xⁿ+1)</div>
+    <p class="desc" data-en="The <b>practical, second-generation FHE</b> schemes built on Ring-LWE. <b>BGV</b> and <b>BFV</b> compute exactly on integers; <b>CKKS</b> supports approximate arithmetic on real/complex numbers — ideal for machine learning on encrypted data. They rely on <b>levelled</b> evaluation and <b>SIMD packing</b> to amortise cost, and are implemented in libraries such as Microsoft SEAL, HElib and OpenFHE."
+       data-uk="<b>Практичні FHE-схеми другого покоління</b> на основі Ring-LWE. <b>BGV</b> і <b>BFV</b> обчислюють точно над цілими числами; <b>CKKS</b> підтримує наближену арифметику над дійсними/комплексними числами — ідеально для машинного навчання над зашифрованими даними. Вони спираються на <b>рівневе</b> обчислення та <b>SIMD-пакування</b> для амортизації вартості й реалізовані в бібліотеках Microsoft SEAL, HElib та OpenFHE."></p>
+    <div id="refs-bgv"></div>
+    <div class="xrefs">
+      <a href="advanced.html#gentry" data-en="Gentry (first FHE)" data-uk="Гентрі (перша FHE)">Gentry</a>
+      <a href="asymmetric.html#pqc" data-en="Ring-LWE / Kyber" data-uk="Ring-LWE / Kyber">Ring-LWE</a>
+      <a href="advanced.html#bkz" data-en="Security estimation" data-uk="Оцінка стійкості">BKZ</a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+// ---------- references (bilingual, filled per language) ----------------
+const REFS = {
+  lll:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Lenstra%E2%80%93Lenstra%E2%80%93Lov%C3%A1sz_lattice_basis_reduction_algorithm', label:'Wikipedia: LLL'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1007/BF01457454', label:'Lenstra, Lenstra, Lovász (1982)'}}
+  ],
+  bkz:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Lattice_reduction', label:'Wikipedia: lattice reduction'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1007/978-3-642-25385-0_1', label:'Chen & Nguyen — BKZ 2.0'}}
+  ],
+  coppersmith:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Coppersmith%27s_attack', label:"Wikipedia: Coppersmith's attack"}},
+    {tag:'paper', en:{href:'https://doi.org/10.1007/s001459900030', label:'Coppersmith (1997)'}}
+  ],
+  shamir:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Shamir%27s_secret_sharing', label:"Wikipedia: Shamir's Secret Sharing"}},
+    {tag:'paper', en:{href:'https://doi.org/10.1145/359168.359176', label:'Shamir — How to Share a Secret (1979)'}}
+  ],
+  blakley:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Secret_sharing', label:'Wikipedia: secret sharing'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1109/MARK.1979.8817296', label:'Blakley — Safeguarding cryptographic keys (1979)'}}
+  ],
+  mpc:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Secure_multi-party_computation', label:'Wikipedia: secure MPC'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1145/28395.28420', label:'Goldreich, Micali, Wigderson — GMW (1987)'}}
+  ],
+  ffs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Feige%E2%80%93Fiat%E2%80%93Shamir_identification_scheme', label:'Wikipedia: Feige–Fiat–Shamir'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1007/BF02351717', label:'Feige, Fiat, Shamir (1988)'}}
+  ],
+  'schnorr-zk':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Proof_of_knowledge', label:'Wikipedia: proof of knowledge'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1007/BF00196725', label:'Schnorr — Efficient signature generation (1991)'}}
+  ],
+  snark:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Non-interactive_zero-knowledge_proof', label:'Wikipedia: NIZK'}},
+    {tag:'eprint', en:{href:'https://eprint.iacr.org/2018/046', label:'Ben-Sasson et al. — zk-STARKs'}}
+  ],
+  gentry:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Homomorphic_encryption', label:'Wikipedia: homomorphic encryption'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1145/1536414.1536440', label:'Gentry — Fully homomorphic encryption (2009)'}}
+  ],
+  bgv:[
+    {tag:'eprint', en:{href:'https://eprint.iacr.org/2011/277', label:'Brakerski, Gentry, Vaikuntanathan — BGV'}},
+    {tag:'code', en:{href:'https://github.com/microsoft/SEAL', label:'Microsoft SEAL'}}
+  ]
+};
+
+// ---------- Shamir secret-sharing interactive demo ---------------------
+const SH_P = 257;                 // small prime field
+function shModInv(a,p){ a=((a%p)+p)%p; let g=p,x=0,x1=1;
+  while(a>1){ const q=Math.floor(a/g); [a,g]=[g,a-q*g]; [x1,x]=[x,x1-q*x]; }
+  return ((x1%p)+p)%p;
+}
+let shCoef=[];
+function shRandomise(t){
+  shCoef=[]; for(let i=1;i<t;i++) shCoef.push(Math.floor(Math.random()*SH_P));
+}
+function shEval(s,x){ let y=s%SH_P; let xp=1;
+  for(const c of shCoef){ xp=(xp*x)%SH_P; y=(y+c*xp)%SH_P; } return y;
+}
+function shReconstruct(shares){          // Lagrange interpolation at x=0
+  let secret=0;
+  for(let i=0;i<shares.length;i++){
+    let num=1, den=1;
+    for(let j=0;j<shares.length;j++){ if(i===j) continue;
+      num=(num*(-shares[j][0]))%SH_P;
+      den=(den*(shares[i][0]-shares[j][0]))%SH_P;
+    }
+    const term=(shares[i][1]*((num%SH_P+SH_P)%SH_P)*shModInv((den%SH_P+SH_P)%SH_P,SH_P))%SH_P;
+    secret=(secret+term)%SH_P;
+  }
+  return ((secret%SH_P)+SH_P)%SH_P;
+}
+function shRender(){
+  const uk = window.LANG==='uk';
+  const s=+document.getElementById('shSec').value;
+  let t=+document.getElementById('shT').value;
+  let n=+document.getElementById('shN').value;
+  if(n<t){ n=t; document.getElementById('shN').value=n; }
+  document.getElementById('shSecVal').textContent=s;
+  document.getElementById('shTVal').textContent=t;
+  document.getElementById('shNVal').textContent=n;
+  if(shCoef.length!==t-1) shRandomise(t);
+  const poly = 'f(x) = '+s+(shCoef.map((c,i)=>' + '+c+'·x'+(i+1===1?'':'^'+(i+1))).join(''))+'  (mod '+SH_P+')';
+  const shares=[]; for(let x=1;x<=n;x++) shares.push([x, shEval(s,x)]);
+  const rec = shReconstruct(shares.slice(0,t));
+  const ok = rec===((s%SH_P)+SH_P)%SH_P;
+  const L = uk
+    ? {poly:'Поліном', sh:'Частки (x, f(x))', use:'Відновлення з перших '+t, got:'Відновлений секрет', ok:'✓ збігається із секретом', bad:'✗ помилка'}
+    : {poly:'Polynomial', sh:'Shares (x, f(x))', use:'Reconstruct from first '+t, got:'Recovered secret', ok:'✓ matches the secret', bad:'✗ mismatch'};
+  document.getElementById('shOut').innerHTML =
+    '<span class="k">'+L.poly+':</span> <span class="s">'+poly+'</span>\n\n'+
+    '<span class="k">'+L.sh+':</span>\n'+
+    shares.map((p,i)=>'  P'+(i+1)+' = ('+p[0]+', '+p[1]+')'+(i<t?'  <span class="a">←</span>':'')).join('\n')+
+    '\n\n<span class="k">'+L.use+' '+(uk?'часток':'shares')+':</span>\n'+
+    '  '+L.got+' = f(0) = <span class="a">'+rec+'</span>   '+
+    (ok?'<span class="a">'+L.ok+'</span>':'<span class="b">'+L.bad+'</span>');
+}
+
+// ---------- LLL: 2-D Gauss lattice reduction ---------------------------
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+function dot(a,b){ return a[0]*b[0]+a[1]*b[1]; }
+function gaussReduce(b1,b2){
+  b1=b1.slice(); b2=b2.slice(); let steps=0;
+  while(steps<100){
+    steps++;
+    if(dot(b1,b1)>dot(b2,b2)){ const t=b1; b1=b2; b2=t; }
+    const m=Math.round(dot(b1,b2)/dot(b1,b1));
+    if(m===0) break;
+    b2=[b2[0]-m*b1[0], b2[1]-m*b1[1]];
+  }
+  return [b1,b2];
+}
+function drawLLL(){
+  const b1=[+document.getElementById('lllB1x').value,+document.getElementById('lllB1y').value];
+  const b2=[+document.getElementById('lllB2x').value,+document.getElementById('lllB2y').value];
+  document.getElementById('lllB1V').textContent=b1[0]+', '+b1[1];
+  document.getElementById('lllB2V').textContent=b2[0]+', '+b2[1];
+  const cv=document.getElementById('lllCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,sc=5.4;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const det=b1[0]*b2[1]-b1[1]*b2[0];
+  const X=v=>cx+v[0]*sc, Y=v=>cy-v[1]*sc;
+  // lattice points
+  if(det!==0){
+    g.fillStyle=C.grid;
+    for(let i=-9;i<=9;i++)for(let j=-9;j<=9;j++){ const p=[i*b1[0]+j*b2[0], i*b1[1]+j*b2[1]];
+      const px=X(p),py=Y(p); if(px>=0&&px<=W&&py>=0&&py<=H){ g.beginPath(); g.arc(px,py,1.5,0,7); g.fill(); } }
+  }
+  g.strokeStyle=C.line; g.beginPath(); g.moveTo(0,cy); g.lineTo(W,cy); g.moveTo(cx,0); g.lineTo(cx,H); g.stroke();
+  const arrow=(v,col)=>{ g.strokeStyle=col; g.fillStyle=col; g.lineWidth=2; g.beginPath(); g.moveTo(cx,cy); g.lineTo(X(v),Y(v)); g.stroke();
+    g.beginPath(); g.arc(X(v),Y(v),3,0,7); g.fill(); g.lineWidth=1; };
+  arrow(b1,C.rose); arrow(b2,C.rose);
+  const [r1,r2]=gaussReduce(b1,b2);
+  arrow(r1,C.teal); arrow(r2,C.teal);
+  const uk=window.LANG==='uk';
+  const len=v=>Math.sqrt(dot(v,v)).toFixed(2);
+  const ang=(a,b)=>Math.round(Math.acos(Math.abs(dot(a,b))/(Math.sqrt(dot(a,a))*Math.sqrt(dot(b,b))||1))*180/Math.PI);
+  document.getElementById('lllOut').innerHTML= det===0
+    ? '<span class="b">'+(uk?'вироджений базис (det = 0)':'degenerate basis (det = 0)')+'</span>'
+    : '<span class="k">det (|'+(uk?'площа комірки':'cell area')+'|):</span> <span class="s">'+Math.abs(det)+'</span> '+(uk?'(зберігається)':'(invariant)')+'\n'+
+      '<span class="b">'+(uk?'вхід':'input')+':</span> |b₁|='+len(b1)+', |b₂|='+len(b2)+', ∠='+ang(b1,b2)+'°\n'+
+      '<span class="a">'+(uk?'редуковано':'reduced')+':</span> |b₁|='+len(r1)+', |b₂|='+len(r2)+', ∠='+ang(r1,r2)+'°\n'+
+      '<span class="k">'+(uk?'редукований базис коротший і майже ортогональний':'reduced basis is shorter and near-orthogonal')+'</span>';
+}
+
+// ---------- Schnorr Σ-protocol (ZKP of a discrete log) -----------------
+const SZ_P=2087n, SZ_G=5n;
+function szPow(b,e){ b%=SZ_P; let r=1n; e=BigInt(e); while(e>0n){ if(e&1n)r=r*b%SZ_P; b=b*b%SZ_P; e>>=1n; } return r; }
+function szRun(honest){
+  const x=BigInt(+document.getElementById('szX').value);
+  const q=SZ_P-1n;                       // exponent modulus (group order p−1)
+  const y=szPow(SZ_G,x);                 // public key
+  const c=BigInt(1+Math.floor(Math.random()*2000)); // verifier challenge
+  let t,s,note='';
+  if(honest){
+    const r=BigInt(1+Math.floor(Math.random()*Number(q-1n)));
+    t=szPow(SZ_G,r);
+    s=((r + c*x) % q);
+  } else {
+    // cheat without x: guess challenge ĉ, set t = gˢ·y^(−ĉ); verifies iff c==ĉ
+    const cg=BigInt(1+Math.floor(Math.random()*2000));
+    s=BigInt(1+Math.floor(Math.random()*Number(q-1n)));
+    const yinv=szPow(y,q-1n);            // y^(−1) via Fermat (order q, but works as modular inverse mod p)
+    t=(szPow(SZ_G,s)*szPow(yinv,cg))%SZ_P;
+    note=' (ĉ='+cg+')';
+  }
+  const lhs=szPow(SZ_G,s), rhs=(t*szPow(y,c))%SZ_P;
+  const ok=(lhs===rhs);
+  const uk=window.LANG==='uk';
+  document.getElementById('szOut').innerHTML=
+    '<span class="k">y = gˣ mod p =</span> <span class="s">'+y+'</span>\n'+
+    '<span class="k">'+(uk?'зобов\'язання':'commit')+' t = gʳ =</span> <span class="a">'+t+'</span>'+note+'\n'+
+    '<span class="k">'+(uk?'виклик':'challenge')+' c =</span> <span class="a">'+c+'</span>   '+
+    '<span class="k">'+(uk?'відповідь':'response')+' s = r+c·x =</span> <span class="a">'+s+'</span>\n'+
+    '<span class="k">gˢ =</span> '+lhs+'   <span class="k">t·yᶜ =</span> '+rhs+' → '+
+    (ok?'<span class="a">'+(uk?'ПРИЙНЯТО ✓':'ACCEPT ✓')+'</span>'
+       :'<span class="b">'+(uk?'ВІДХИЛЕНО ✗':'REJECT ✗')+'</span>')+
+    (honest?'':'\n<span class="b">'+(uk?'шахрай проходить лише коли c=ĉ (шанс 1/2000)':'cheat passes only when c=ĉ (chance 1/2000)')+'</span>');
+}
+
+// ---------- language-driven (re)render ---------------------------------
+window.onLangChange = function(){
+  Object.keys(REFS).forEach(id=>{
+    const el=document.getElementById('refs-'+id);
+    if(el) el.innerHTML=window.atlasRefs(REFS[id]);
+  });
+  shRender(); drawLLL();
+  document.getElementById('szOut').textContent = window.LANG==='uk'?'Натисніть «Чесний доказ».':'Press “Honest proof”.';
+};
+
+document.getElementById('shGen').addEventListener('click', ()=>{
+  shRandomise(+document.getElementById('shT').value); shRender();
+});
+['shSec','shT','shN'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', ()=>{
+    if(id==='shT') shCoef=[];   // threshold changed → new polynomial degree
+    shRender();
+  });
+});
+['lllB1x','lllB1y','lllB2x','lllB2y'].forEach(id=>document.getElementById(id).addEventListener('input',drawLLL));
+document.getElementById('szRun').addEventListener('click',()=>szRun(true));
+document.getElementById('szCheat').addEventListener('click',()=>szRun(false));
+</script>
+</body>
+</html>

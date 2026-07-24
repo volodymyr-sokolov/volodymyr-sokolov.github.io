@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi-carrier & multiple access (OFDM · OFDMA · SC-FDMA) — Wireless Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="multicarrier">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Hundreds of tiny carriers, working together" data-uk="Сотні крихітних носіїв, що працюють разом">Multi-carrier</div>
+    <h1 data-en="Multi-Carrier & Multiple Access" data-uk="Багаточастотні та множинний доступ">Multi-Carrier &amp; Multiple Access</h1>
+    <div class="eq-hero">s(t) = Σₖ Xₖ · e^{ j2π k Δf t },   Δf = 1 / T_symbol</div>
+    <p class="lede" data-en="Instead of one fast carrier fighting multipath echoes, <b>OFDM</b> splits the data over hundreds of slow, narrow subcarriers spaced so that each one's peak sits exactly on its neighbours' nulls — <b>orthogonal</b>, so they overlap without interfering, computed cheaply by an FFT. A <b>cyclic prefix</b> then absorbs echoes entirely. <b>OFDMA</b> hands different subcarrier groups to different users; <b>SC-FDMA</b> pre-codes them to spare a phone's battery. This is the physical layer of LTE, 5G, Wi-Fi and digital TV."
+       data-uk="Замість одного швидкого носія, що бореться з багатопроменевими відлуннями, <b>OFDM</b> розподіляє дані по сотнях повільних вузьких піднесучих, рознесених так, що пік кожної припадає точно на нулі сусідів — <b>ортогонально</b>, тож вони перекриваються без інтерференції й обчислюються дешево через FFT. <b>Циклічний префікс</b> потім повністю поглинає відлуння. <b>OFDMA</b> роздає різні групи піднесучих різним абонентам; <b>SC-FDMA</b> передкодує їх, щоб берегти батарею телефона. Це фізичний рівень LTE, 5G, Wi-Fi і цифрового ТБ."></p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ============ OFDM ============ -->
+  <section id="ofdm">
+    <span class="num" data-en="01 / Orthogonal FDM" data-uk="01 / Ортогональне ЧРУ">01 / OFDM</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">FFT</span>
+      <span data-en="OFDM — Orthogonal Frequency Division Multiplexing" data-uk="OFDM — ортогональне частотне мультиплексування">OFDM</span></h2>
+    <div class="formula">subcarrier spacing Δf = 1/T  ⇒  each sinc's peak lands on every other's zero</div>
+    <p class="desc" data-en="The magic is in the spacing. Each subcarrier's spectrum is a <b>sinc</b> (because a symbol is a finite time window), and by choosing Δf = 1/T the sinc for subcarrier k is <b>zero at every other subcarrier's centre</b>. So even though the subcarriers heavily overlap, sampling at each centre reads that subcarrier cleanly — orthogonality without guard bands. The top plot shows the overlapping sinc comb (highlight one to see its nulls line up); the bottom shows the composite time-domain waveform. A modem does all this with an inverse FFT."
+       data-uk="Уся магія — у рознесенні. Спектр кожної піднесучої — це <b>sinc</b> (бо символ — це скінченне часове вікно), і, обравши Δf = 1/T, sinc піднесучої k <b>дорівнює нулю в центрі кожної іншої піднесучої</b>. Тож попри сильне перекриття, вибірка в кожному центрі читає піднесучу чисто — ортогональність без захисних смуг. Верхній графік показує перекривний гребінець sinc (виділіть одну, щоб побачити, як її нулі збігаються); нижній — сумарну форму в часі. Модем робить усе це зворотним FFT."></p>
+    <div id="refs-ofdm"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="ofCanvas" width="360" height="230"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="subcarriers K" data-uk="піднесучих K">subcarriers K</span><span class="val" id="ofKV">6</span></label>
+            <input type="range" id="ofK" min="3" max="12" step="1" value="6"></div>
+          <div class="ctrl"><label><span data-en="highlight subcarrier" data-uk="виділити піднесучу">highlight subcarrier</span><span class="val" id="ofHV">2</span></label>
+            <input type="range" id="ofH" min="0" max="11" step="1" value="2"></div>
+          <button id="ofNew" data-en="New data symbols" data-uk="Нові символи даних">New data</button>
+          <div class="hint" data-en="Dots mark subcarrier centres. Note the highlighted sinc passes through zero at every other dot." data-uk="Точки — центри піднесучих. Виділений sinc проходить через нуль у кожній іншій точці."></div>
+          <div class="readout" id="ofOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="strength"><div class="st-title" data-en="Cyclic prefix & the catch" data-uk="Циклічний префікс і застереження">Cyclic prefix &amp; the catch</div>
+      <span data-en="Before each symbol, OFDM prepends a copy of its own tail — the <b>cyclic prefix</b> (CP). Any multipath echo shorter than the CP falls entirely within it and is discarded, so echoes never corrupt the data — multipath immunity for the price of a little overhead. The price of OFDM is a high <b>peak-to-average power ratio</b> (many subcarriers occasionally add in phase into a big spike), which stresses the amplifier — exactly the problem SC-FDMA solves below."
+            data-uk="Перед кожним символом OFDM додає копію його власного «хвоста» — <b>циклічний префікс</b> (CP). Будь-яке багатопроменеве відлуння, коротше за CP, повністю потрапляє в нього й відкидається, тож відлуння ніколи не псують дані — імунітет до багатопроменевості ціною невеликих накладних. Плата за OFDM — високий <b>пік-фактор</b> (багато піднесучих іноді складаються синфазно у великий сплеск), що навантажує підсилювач — саме цю проблему розв'язує SC-FDMA нижче."></span></div>
+    <div class="xrefs"><a href="qam.html#qam">QAM</a> <a href="#ofdma">OFDMA</a> <a href="iterative.html#ldpc">LDPC</a> <a href="standards.html#wifi">Wi-Fi</a></div>
+  </section>
+
+  <!-- ============ OFDMA ============ -->
+  <section id="ofdma">
+    <span class="num" data-en="02 / OFDMA" data-uk="02 / OFDMA">02 / OFDMA</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">FFT</span>
+      <span data-en="OFDMA — Orthogonal Frequency Division Multiple Access" data-uk="OFDMA — ортогональний частотний множинний доступ">OFDMA</span></h2>
+    <div class="formula">assign disjoint subcarrier groups (resource blocks) to different users</div>
+    <p class="desc" data-en="OFDM is a way to <b>multiplex</b> data; OFDMA turns it into a way to serve <b>many users</b>. The two-dimensional grid of subcarriers (frequency) × symbols (time) is carved into <b>resource blocks</b>, and the scheduler hands each block to whichever user needs it — small IoT devices get a sliver, a video stream gets a wide band, all in the same OFDM symbol. It also lets each user be assigned the subcarriers where their channel happens to be strong (frequency-selective scheduling). Reallocate the grid below."
+       data-uk="OFDM — це спосіб <b>мультиплексувати</b> дані; OFDMA перетворює його на спосіб обслуговувати <b>багатьох абонентів</b>. Двовимірна ґратка піднесучих (частота) × символів (час) ділиться на <b>ресурсні блоки</b>, і планувальник роздає кожен блок тому абоненту, кому він потрібен — малий IoT-пристрій отримує крихту, відеопотік — широку смугу, усе в одному символі OFDM. Це також дозволяє призначати абоненту ті піднесучі, де його канал сильний (частотно-вибіркове планування). Перерозподіліть ґратку нижче."></p>
+    <div id="refs-ofdma"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="oaCanvas" width="360" height="200"></canvas>
+        <div class="controls">
+          <button id="oaNew" data-en="Re-schedule" data-uk="Перепланувати">Re-schedule</button>
+          <div class="hint" data-en="Rows = subcarriers, columns = time symbols. Each colour is a different user's resource blocks." data-uk="Рядки = піднесучі, стовпці = часові символи. Кожен колір — ресурсні блоки іншого абонента."></div>
+          <div class="readout" id="oaOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="#ofdm">OFDM</a> <a href="#scfdma">SC-FDMA</a> <a href="standards.html#lte">LTE</a> <a href="standards.html#nr5g">5G NR</a></div>
+  </section>
+
+  <!-- ============ SC-FDMA ============ -->
+  <section id="scfdma">
+    <span class="num" data-en="03 / SC-FDMA" data-uk="03 / SC-FDMA">03 / SC-FDMA</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">DFT+FFT</span>
+      <span data-en="SC-FDMA — Single-Carrier FDMA" data-uk="SC-FDMA — одночастотний FDMA">SC-FDMA</span></h2>
+    <div class="formula">DFT-spread the symbols before the IFFT ⇒ low PAPR, kinder to the amplifier</div>
+    <p class="desc" data-en="OFDM's Achilles heel is <b>peak-to-average power ratio</b> (PAPR): when many subcarriers align, the waveform spikes, forcing the power amplifier to back off (waste power) or clip (splatter). Fine for a mains-powered base station, painful for a battery phone. SC-FDMA adds one step — a <b>DFT pre-spread</b> before the OFDM IFFT — that makes the transmitted signal behave almost like a single carrier, with far lower PAPR, while keeping OFDMA's flexible subcarrier assignment. That is why LTE uses OFDMA on the downlink but SC-FDMA on the <b>uplink</b>. The demo contrasts the two waveforms' peaks."
+       data-uk="Ахіллесова п'ята OFDM — <b>пік-фактор</b> (PAPR): коли багато піднесучих вирівнюються, форма сплескує, змушуючи підсилювач відступати (марнувати потужність) чи обрізати (бризки). Це прийнятно для базової станції від мережі, але болісно для телефона на батареї. SC-FDMA додає один крок — <b>DFT-передрозширення</b> перед IFFT OFDM — що змушує переданий сигнал поводитися майже як один носій, зі значно нижчим PAPR, зберігаючи гнучке призначення піднесучих OFDMA. Тому LTE використовує OFDMA на низхідному каналі, але SC-FDMA — на <b>висхідному</b>. Демо порівнює піки двох форм."></p>
+    <div id="refs-scfdma"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="scCanvas" width="360" height="200"></canvas>
+        <div class="controls">
+          <button id="scNew" data-en="New symbols" data-uk="Нові символи">New symbols</button>
+          <div class="hint" data-en="Amber = OFDM composite (spiky, high PAPR); teal = single-carrier-like SC-FDMA (flatter envelope)." data-uk="Бурштиновий = композит OFDM (сплески, високий PAPR); бірюзовий = SC-FDMA у стилі одного носія (рівніша обвідна)."></div>
+          <div class="readout" id="scOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="The <b>LTE uplink</b>. 5G NR keeps SC-FDMA (called DFT-s-OFDM) as an optional low-PAPR uplink mode for coverage-limited phones, but can also use plain OFDM uplink when power is not the bottleneck."
+            data-uk="<b>Висхідний канал LTE</b>. 5G NR зберігає SC-FDMA (звану DFT-s-OFDM) як опційний режим висхідного каналу з низьким PAPR для телефонів на межі покриття, але може використовувати й звичайний OFDM, коли потужність не є вузьким місцем."></span></div>
+    <div class="xrefs"><a href="#ofdm">OFDM</a> <a href="#ofdma">OFDMA</a> <a href="standards.html#lte">LTE uplink</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="Multi-carrier · Wireless Atlas — orthogonality, the FFT, and the peak-power trade behind every 4G/5G/Wi-Fi link." data-uk="Багаточастотні · Безпроводовий Атлас — ортогональність, FFT і компроміс пікової потужності за кожною лінією 4G/5G/Wi-Fi."></p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const CS=getComputedStyle(document.documentElement);
+const C_INK=CS.getPropertyValue('--ink').trim(), C_TEAL=CS.getPropertyValue('--teal').trim(),
+      C_AMBER=CS.getPropertyValue('--amber').trim(), C_ROSE=CS.getPropertyValue('--rose').trim(),
+      C_DIM=CS.getPropertyValue('--dim').trim(), C_LINE=CS.getPropertyValue('--line').trim();
+const USERC=['#4FD6E6','#F2B457','#7FD98A','#B39DDB'];
+function randSign(){ return Math.random()<.5?-1:1; }
+
+// ---- OFDM sinc comb + composite -------------------------------------
+const ofC=document.getElementById('ofCanvas'), ofX=ofC.getContext('2d');
+let ofData=[];
+function ensureData(K){ while(ofData.length<K) ofData.push(randSign()); }
+function drawOF(){
+  const K=+document.getElementById('ofK').value;
+  const hSlider=document.getElementById('ofH'); hSlider.max=K-1;
+  let hi=+hSlider.value; if(hi>K-1){ hi=K-1; hSlider.value=hi; }
+  ensureData(K);
+  const w=ofC.width,h=ofC.height;
+  ofX.clearRect(0,0,w,h);
+  const topMid=h*0.28, topAmp=h*0.20, pad=30;
+  const spanW=w-2*pad, dx=spanW/(K+1);
+  // frequency axis
+  ofX.strokeStyle=C_LINE; ofX.beginPath(); ofX.moveTo(0,topMid); ofX.lineTo(w,topMid); ofX.stroke();
+  const centre=k=>pad+(k+1)*dx;
+  const sinc=x=>{ if(Math.abs(x)<1e-6)return 1; const a=Math.PI*x; return Math.sin(a)/a; };
+  // all subcarriers faint
+  for(let k=0;k<K;k++){
+    ofX.strokeStyle = k===hi?C_TEAL:'rgba(133,149,180,.45)';
+    ofX.lineWidth = k===hi?2:1;
+    ofX.beginPath();
+    for(let px=0;px<=w;px++){ const kf=(px-centre(k))/dx;
+      const y=topMid - topAmp*ofData[k]*sinc(kf);
+      if(px===0)ofX.moveTo(px,y); else ofX.lineTo(px,y);} ofX.stroke();
+  }
+  // centre dots
+  for(let k=0;k<K;k++){ ofX.fillStyle=k===hi?C_TEAL:C_DIM;
+    ofX.beginPath(); ofX.arc(centre(k),topMid,3,0,2*Math.PI); ofX.fill(); }
+  ofX.fillStyle=C_DIM; ofX.font='10px "JetBrains Mono",monospace';
+  ofX.fillText(window.LANG==='uk'?'спектр (перекривні sinc)':'spectrum (overlapping sincs)',6,12);
+  // composite time waveform
+  const botMid=h*0.76, botAmp=h*0.17;
+  ofX.strokeStyle=C_LINE; ofX.beginPath(); ofX.moveTo(0,botMid); ofX.lineTo(w,botMid); ofX.stroke();
+  ofX.strokeStyle=C_AMBER; ofX.lineWidth=1.3; ofX.beginPath();
+  for(let px=0;px<=w;px++){ const t=px/w; let s=0;
+    for(let k=0;k<K;k++) s+=ofData[k]*Math.cos(2*Math.PI*(k+1)*t);
+    const y=botMid - botAmp*s/Math.sqrt(K);
+    if(px===0)ofX.moveTo(px,y); else ofX.lineTo(px,y);} ofX.stroke();
+  ofX.fillStyle=C_DIM; ofX.fillText(window.LANG==='uk'?'композит у часі (Σ піднесучих)':'time composite (Σ subcarriers)',6,botMid-botAmp-6);
+  document.getElementById('ofKV').textContent=K;
+  document.getElementById('ofHV').textContent=hi;
+  const L=window.LANG==='uk';
+  document.getElementById('ofOut').innerHTML=
+    `<span class="k">${L?'піднесучих':'subcarriers'}</span> K = <span class="a">${K}</span>   Δf = 1/T\n`
+    +`<span class="k">${L?'виділена k=':'highlighted k='}</span><span class="s">${hi}</span> · sinc = 0 ${L?'у всіх інших центрах':'at every other centre'}`;
+}
+
+// ---- OFDMA resource grid --------------------------------------------
+const oaC=document.getElementById('oaCanvas'), oaX=oaC.getContext('2d');
+let grid=[];
+function schedule(){
+  const rows=10, cols=12; grid=[];
+  for(let r=0;r<rows;r++){ grid[r]=[]; for(let c=0;c<cols;c++) grid[r][c]=0; }
+  // assign contiguous-ish blocks per user
+  const nUser=4;
+  for(let c=0;c<cols;c++){
+    let r=0; while(r<rows){ const u=Math.floor(Math.random()*nUser);
+      const len=1+Math.floor(Math.random()*3);
+      for(let i=0;i<len&&r<rows;i++,r++) grid[r][c]=u;
+    }
+  }
+}
+function drawOA(){
+  const rows=grid.length, cols=grid[0].length;
+  const w=oaC.width,h=oaC.height, cw=w/cols, chh=h/rows;
+  oaX.clearRect(0,0,w,h);
+  const counts=[0,0,0,0];
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){ const u=grid[r][c]; counts[u]++;
+    oaX.fillStyle=USERC[u]; oaX.globalAlpha=.85;
+    oaX.fillRect(c*cw+1,r*chh+1,cw-2,chh-2);
+  }
+  oaX.globalAlpha=1;
+  const total=rows*cols;
+  const L=window.LANG==='uk';
+  document.getElementById('oaOut').innerHTML=
+    `<span class="k">${L?'частка ресурсів':'resource share'}</span>\n`
+    +counts.map((n,u)=>`<span style="color:${USERC[u]}">■</span> ${L?'абонент':'user'} ${u+1}: <span class="a">${Math.round(100*n/total)}%</span>`).join('   ');
+}
+
+// ---- SC-FDMA PAPR ---------------------------------------------------
+const scC=document.getElementById('scCanvas'), scX=scC.getContext('2d');
+let scSym=[];
+function newSC(){ scSym=[]; for(let i=0;i<8;i++) scSym.push(randSign()); }
+function drawSC(){
+  const w=scC.width,h=scC.height;
+  scX.clearRect(0,0,w,h);
+  const K=scSym.length;
+  // OFDM composite (top)
+  const midO=h*0.30, amp=h*0.20;
+  scX.strokeStyle=C_LINE; scX.beginPath(); scX.moveTo(0,midO); scX.lineTo(w,midO); scX.stroke();
+  let peakO=0,sumO=0,nO=0;
+  scX.strokeStyle=C_AMBER; scX.lineWidth=1.3; scX.beginPath();
+  for(let px=0;px<=w;px++){ const t=px/w; let s=0;
+    for(let k=0;k<K;k++) s+=scSym[k]*Math.cos(2*Math.PI*(k+1)*t);
+    s/=Math.sqrt(K); peakO=Math.max(peakO,Math.abs(s)); sumO+=s*s; nO++;
+    const y=midO-amp*s; if(px===0)scX.moveTo(px,y); else scX.lineTo(px,y);} scX.stroke();
+  // single-carrier-like (bottom): symbols in series, raised-cosine-ish → flat envelope
+  const midS=h*0.74;
+  scX.strokeStyle=C_LINE; scX.beginPath(); scX.moveTo(0,midS); scX.lineTo(w,midS); scX.stroke();
+  let peakS=0,sumS=0,nS=0; const fc=14;
+  scX.strokeStyle=C_TEAL; scX.lineWidth=1.3; scX.beginPath();
+  for(let px=0;px<=w;px++){ const t=px*K/w; const si=Math.min(K-1,Math.floor(t));
+    const env=scSym[si]; const s=env*Math.cos(2*Math.PI*fc*px/w);
+    peakS=Math.max(peakS,Math.abs(s)); sumS+=s*s; nS++;
+    const y=midS-amp*s; if(px===0)scX.moveTo(px,y); else scX.lineTo(px,y);} scX.stroke();
+  scX.fillStyle=C_DIM; scX.font='10px "JetBrains Mono",monospace';
+  scX.fillText('OFDM',6,14); scX.fillText('SC-FDMA',6,midS-amp-6);
+  const paprO=10*Math.log10(peakO*peakO/(sumO/nO));
+  const paprS=10*Math.log10(peakS*peakS/(sumS/nS));
+  const L=window.LANG==='uk';
+  document.getElementById('scOut').innerHTML=
+    `<span class="k">PAPR</span> OFDM ≈ <span class="b">${paprO.toFixed(1)} dB</span>\n`
+    +`<span class="k">PAPR</span> SC-FDMA ≈ <span class="a">${paprS.toFixed(1)} dB</span>\n`
+    +`<span class="s">${L?'нижчий PAPR → ефективніший підсилювач телефона':'lower PAPR → more efficient phone amplifier'}</span>`;
+}
+
+// ---- refs + wiring --------------------------------------------------
+function fillRefs(){
+  const w=(en,uk)=>({tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/'+en,label:en.replace(/_/g,' ')},uk:uk?{href:'https://uk.wikipedia.org/wiki/'+uk,label:uk.replace(/_/g,' ')}:undefined});
+  document.getElementById('refs-ofdm').innerHTML=atlasRefs([w('Orthogonal_frequency-division_multiplexing','OFDM'),{tag:'ieee',en:{href:'https://standards.ieee.org/ieee/802.11/7028/',label:'802.11'}}]);
+  document.getElementById('refs-ofdma').innerHTML=atlasRefs([w('Orthogonal_frequency-division_multiple_access'),{tag:'std',en:{href:'https://www.3gpp.org/technologies/lte',label:'3GPP LTE'}}]);
+  document.getElementById('refs-scfdma').innerHTML=atlasRefs([w('Single-carrier_FDMA'),{tag:'std',en:{href:'https://www.3gpp.org/technologies/lte',label:'3GPP TS 36.211'}}]);
+}
+document.getElementById('ofK').addEventListener('input',drawOF);
+document.getElementById('ofH').addEventListener('input',drawOF);
+document.getElementById('ofNew').addEventListener('click',()=>{ofData=[];drawOF();});
+document.getElementById('oaNew').addEventListener('click',()=>{schedule();drawOA();});
+document.getElementById('scNew').addEventListener('click',()=>{newSC();drawSC();});
+window.onLangChange=function(){ fillRefs(); drawOF(); drawOA(); drawSC(); };
+fillRefs(); drawOF(); schedule(); drawOA(); newSC(); drawSC();
+</script>
+</body>
+</html>

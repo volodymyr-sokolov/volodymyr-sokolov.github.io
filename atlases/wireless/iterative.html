@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convolutional & iterative codes (Viterbi · Turbo · LDPC · Polar) — Wireless Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="iterative">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Approaching the Shannon limit" data-uk="Наближення до межі Шеннона">Channel coding II</div>
+    <h1 data-en="Convolutional & Iterative Codes" data-uk="Згорткові та ітеративні коди">Convolutional &amp; Iterative Codes</h1>
+    <div class="eq-hero">stream & graph codes + soft-decision decoding → near-capacity FEC</div>
+    <p class="lede" data-en="Block codes work on fixed blocks; the modern forward-error-correction (FEC) that powers 4G, 5G, Wi-Fi and digital TV works on <b>streams and graphs</b>. A <b>convolutional</b> code mixes each bit into its neighbours and is decoded optimally by the <b>Viterbi</b> trellis search. <b>Turbo</b>, <b>LDPC</b> and <b>Polar</b> codes then reach within a fraction of a dB of Shannon's limit by passing 'soft' probabilities around iteratively. Each demo below runs the actual algorithm — encode, corrupt, and watch it heal."
+       data-uk="Блокові коди працюють з фіксованими блоками; сучасне пряме виправлення помилок (FEC), що живить 4G, 5G, Wi-Fi і цифрове ТБ, працює із <b>потоками й графами</b>. <b>Згортковий</b> код змішує кожен біт із сусідами й оптимально декодується <b>решітчастим пошуком Вітербі</b>. <b>Турбо-</b>, <b>LDPC-</b> та <b>полярні</b> коди потім наближаються на частку дБ до межі Шеннона, ітеративно передаючи «м'які» ймовірності. Кожне демо нижче виконує справжній алгоритм — закодувати, зіпсувати й дивитися, як він зцілюється."></p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ============ Convolutional + Viterbi ============ -->
+  <section id="convolutional">
+    <span class="num" data-en="01 / Convolutional code + Viterbi" data-uk="01 / Згортковий код + Вітербі">01 / Convolutional</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">trellis</span>
+      <span data-en="Convolutional codes (rate ½, K=3)" data-uk="Згорткові коди (швидкість ½, K=3)">Convolutional codes</span></h2>
+    <div class="formula">G = (111, 101)₂ = (7,5)₈ · each input bit → 2 output bits mixing 3 taps</div>
+    <p class="desc" data-en="A convolutional encoder is a small shift register: each incoming bit is XORed with earlier bits through fixed 'tap' patterns (the generator polynomials) to produce, here, two output bits — a rate-½ code. Because the output depends on a sliding window of input, errors can be corrected by finding the <b>most likely path</b> through the code's trellis: that is the <b>Viterbi algorithm</b>, which this demo runs in full. Type a message, flip a couple of received bits, and watch Viterbi trace the survivor path back to your original bits."
+       data-uk="Згортковий кодер — це малий регістр зсуву: кожен вхідний біт XOR-иться з попередніми через фіксовані «відводи» (породжувальні многочлени), даючи тут два вихідні біти — код швидкості ½. Оскільки вихід залежить від ковзного вікна входу, помилки можна виправити, знайшовши <b>найімовірніший шлях</b> через решітку коду: це <b>алгоритм Вітербі</b>, який це демо виконує повністю. Введіть повідомлення, переверніть кілька прийнятих біт і дивіться, як Вітербі простежує шлях-вцілілий назад до ваших початкових біт."></p>
+    <div id="refs-convolutional"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="cvCanvas" width="360" height="150"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="message bits" data-uk="біти повідомлення">message bits</span></label>
+            <input type="text" id="cvIn" value="1011" maxlength="8" style="width:100%"></div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            <button id="cvFlip" data-en="Flip a channel bit" data-uk="Перекинути біт каналу">Flip a channel bit</button>
+            <button id="cvClear" class="secondary" data-en="Clear errors" data-uk="Прибрати помилки">Clear errors</button>
+          </div>
+          <div class="hint" data-en="The trellis shows 4 encoder states over time; teal = the Viterbi survivor path chosen for your received bits." data-uk="Решітка показує 4 стани кодера в часі; бірюзовий = шлях-вцілілий Вітербі, обраний для ваших прийнятих біт."></div>
+          <div class="readout" id="cvOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="<b>GSM</b>, <b>IS-95 CDMA</b>, <b>GPS</b>, 802.11a/b/g and deep-space links. Viterbi decoding is one of the most-implemented algorithms in all of DSP hardware."
+            data-uk="<b>GSM</b>, <b>IS-95 CDMA</b>, <b>GPS</b>, 802.11a/b/g і далекокосмічні лінії. Декодування Вітербі — один із найпоширеніших алгоритмів в усій апаратурі DSP."></span></div>
+    <div class="xrefs"><a href="#viterbi">Viterbi</a> <a href="#turbo">Turbo</a> <a href="#interleaving">Interleaving</a> <a href="standards.html#gsm">GSM</a></div>
+  </section>
+
+  <!-- ============ Turbo ============ -->
+  <section id="turbo">
+    <span class="num" data-en="02 / Turbo codes" data-uk="02 / Турбо-коди">02 / Turbo</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">iterative</span>
+      <span data-en="Turbo codes — the iterative breakthrough" data-uk="Турбо-коди — ітеративний прорив">Turbo codes</span></h2>
+    <div class="formula">two convolutional encoders + an interleaver, decoded by exchanging soft info (BCJR)</div>
+    <p class="desc" data-en="Turbo codes (Berrou &amp; Glavieux, 1993) stunned the field by getting within ~0.5 dB of the Shannon limit. The encoder is two simple convolutional codes fed the data in two orders (one direct, one <b>interleaved</b>). The decoder runs two soft-input/soft-output (BCJR) decoders that <b>pass their belief about each bit back and forth</b>, each refining the other — 'turbocharging' — for several iterations. That iterative soft exchange is the idea LDPC and Polar also build on. The demo shows the residual error rate falling with each decoder iteration."
+       data-uk="Турбо-коди (Берру й Главьє, 1993) вразили галузь, наблизившись на ~0,5 дБ до межі Шеннона. Кодер — це два прості згорткові коди, яким дані подано у двох порядках (один прямий, один <b>перемежований</b>). Декодер запускає два декодери з м'яким входом/виходом (BCJR), що <b>передають свою впевненість щодо кожного біта туди-сюди</b>, кожен уточнює інший — «турбонаддув» — упродовж кількох ітерацій. Цей ітеративний м'який обмін — ідея, на якій будуються й LDPC, і полярні. Демо показує, як залишкова частота помилок падає з кожною ітерацією декодера."></p>
+    <div id="refs-turbo"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="tbCanvas" width="300" height="150"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="decoder iterations" data-uk="ітерацій декодера">decoder iterations</span><span class="val" id="tbIV">4</span></label>
+            <input type="range" id="tbI" min="0" max="10" step="1" value="4"></div>
+          <div class="hint" data-en="Illustrative BER-vs-iteration curve: most of the gain comes in the first few iterations, then it saturates." data-uk="Ілюстративна крива BER від ітерацій: більшість виграшу — у перших ітераціях, далі насичення."></div>
+          <div class="readout" id="tbOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="#convolutional">Convolutional</a> <a href="#ldpc">LDPC</a> <a href="standards.html#umts">UMTS/3G</a> <a href="standards.html#lte">LTE</a></div>
+  </section>
+
+  <!-- ============ LDPC ============ -->
+  <section id="ldpc">
+    <span class="num" data-en="03 / LDPC codes" data-uk="03 / LDPC-коди">03 / LDPC</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">msg-pass</span>
+      <span data-en="LDPC — Low-Density Parity-Check" data-uk="LDPC — розріджені перевірки парності">LDPC codes</span></h2>
+    <div class="formula">sparse parity-check matrix H · decode by message passing on the Tanner graph</div>
+    <p class="desc" data-en="An LDPC code is defined by a <b>sparse</b> parity-check matrix drawn as a <b>Tanner graph</b>: bit nodes (circles) wired to check nodes (squares), each check enforcing an XOR = 0 constraint. Decoding passes messages along the edges until every check is satisfied. The demo runs a tiny (6,3) code with hard-decision <b>bit-flipping</b>: corrupt a bit, see which checks fail (rose), and watch the decoder flip the bit shared by the most failing checks to repair the word. Invented by Gallager in 1962, forgotten, then rediscovered — now the data-channel FEC of Wi-Fi, 5G and DVB-S2."
+       data-uk="LDPC-код задається <b>розрідженою</b> матрицею перевірок парності, зображеною як <b>граф Таннера</b>: бітові вузли (кола), з'єднані з перевірними (квадрати), кожна перевірка накладає обмеження XOR = 0. Декодування передає повідомлення вздовж ребер, доки всі перевірки не задовольняться. Демо запускає крихітний код (6,3) із жорстким <b>перекиданням бітів</b>: зіпсуйте біт, побачте, які перевірки не проходять (рожеві), і дивіться, як декодер перекидає біт, спільний для найбільшого числа невдалих перевірок, щоб відновити слово. Винайдений Ґаллагером у 1962, забутий, потім перевідкритий — тепер це FEC каналу даних Wi-Fi, 5G і DVB-S2."></p>
+    <div id="refs-ldpc"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="ldCanvas" width="300" height="200"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="data bits (3)" data-uk="біти даних (3)">data bits (3)</span></label>
+            <input type="text" id="ldData" value="101" maxlength="3" style="width:100%"></div>
+          <div class="ctrl"><label><span data-en="channel flips bit (0 = none)" data-uk="канал перекидає біт (0 = жодного)">flip bit</span><span class="val" id="ldEV">1</span></label>
+            <input type="range" id="ldErr" min="0" max="6" step="1" value="1"></div>
+          <button id="ldStep" data-en="Run bit-flip round" data-uk="Виконати раунд перекидання">Run bit-flip round</button>
+          <div class="readout" id="ldOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="#turbo">Turbo</a> <a href="#polar">Polar</a> <a href="qam.html#qam">QAM</a> <a href="standards.html#nr5g">5G NR</a></div>
+  </section>
+
+  <!-- ============ Polar ============ -->
+  <section id="polar">
+    <span class="num" data-en="04 / Polar codes" data-uk="04 / Полярні коди">04 / Polar</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">SC-list</span>
+      <span data-en="Polar codes — channel polarization" data-uk="Полярні коди — поляризація каналу">Polar codes</span></h2>
+    <div class="formula">recursively combine N channels → some become near-perfect, others near-useless</div>
+    <p class="desc" data-en="Arıkan's polar codes (2009) were the first with a <b>proof</b> of reaching channel capacity. The trick is <b>channel polarization</b>: recursively combining N copies of a channel makes some synthetic sub-channels almost <b>error-free</b> and the rest almost <b>pure noise</b>. You then send information only on the good sub-channels and 'freeze' the bad ones to known values. The demo computes the real Bhattacharyya reliabilities for N sub-channels over an erasure channel and shows the polarization — good channels (teal) carry data, frozen channels (grey) are sacrificed."
+       data-uk="Полярні коди Арікана (2009) стали першими з <b>доведенням</b> досягнення ємності каналу. Трюк — <b>поляризація каналу</b>: рекурсивне поєднання N копій каналу робить одні синтетичні підканали майже <b>безпомилковими</b>, а решту — майже <b>чистим шумом</b>. Тоді інформацію шлють лише хорошими підканалами, а погані «заморожують» до відомих значень. Демо обчислює справжні надійності Бгаттачар'ї для N підканалів над каналом зі стиранням і показує поляризацію — хороші канали (бірюзові) несуть дані, заморожені (сірі) приносяться в жертву."></p>
+    <div id="refs-polar"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="plCanvas" width="360" height="170"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="block length N" data-uk="довжина блоку N">block length N</span><span class="val" id="plNV">8</span></label>
+            <input type="range" id="plN" min="2" max="5" step="1" value="3"></div>
+          <div class="ctrl"><label><span data-en="channel erasure p" data-uk="ймовірність стирання p">erasure p</span><span class="val" id="plPV">0.50</span></label>
+            <input type="range" id="plP" min="0.1" max="0.9" step="0.05" value="0.5"></div>
+          <div class="ctrl"><label><span data-en="info bits K" data-uk="інформаційних біт K">info bits K</span><span class="val" id="plKV">4</span></label>
+            <input type="range" id="plK" min="1" max="8" step="1" value="4"></div>
+          <div class="readout" id="plOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="#ldpc">LDPC</a> <a href="standards.html#nr5g">5G NR control</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Decoding & combined schemes" data-uk="Декодування та комбіновані схеми">Decoding &amp; combined schemes</h3>
+
+  <!-- ============ Viterbi ============ -->
+  <section id="viterbi">
+    <span class="num" data-en="05 / Viterbi decoding" data-uk="05 / Декодування Вітербі">05 / Viterbi</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">trellis</span>
+      <span data-en="Viterbi decoding — maximum-likelihood on a trellis" data-uk="Декодування Вітербі — макс. правдоподібність на решітці">Viterbi decoding</span></h2>
+    <div class="formula">keep one survivor path per state; the global best path is the ML codeword</div>
+    <p class="desc" data-en="The Viterbi algorithm finds the <b>single most likely</b> transmitted sequence through a convolutional code's trellis, without the impossible cost of checking every sequence: at each step it keeps just one best 'survivor' path into each state, discarding the rest. With <b>soft</b> inputs (using how confident each received bit is, not just 0/1) it gains another ~2 dB. It is demonstrated live in the convolutional section above — the teal path is the Viterbi survivor. The same dynamic-programming idea decodes GSM, GPS and hard-disk read channels."
+       data-uk="Алгоритм Вітербі знаходить <b>єдину найімовірнішу</b> передану послідовність через решітку згорткового коду без нездійсненної вартості перевірки кожної послідовності: на кожному кроці він тримає лише один найкращий шлях-«вцілілий» у кожен стан, відкидаючи решту. З <b>м'якими</b> входами (враховуючи впевненість кожного прийнятого біта, а не лише 0/1) він виграє ще ~2 дБ. Він продемонстрований наживо у розділі згорткових кодів вище — бірюзовий шлях і є вцілілим Вітербі. Та сама ідея динамічного програмування декодує GSM, GPS і канали читання жорстких дисків."></p>
+    <div id="refs-viterbi"></div>
+    <div class="xrefs"><a href="#convolutional">Convolutional</a> <a href="standards.html#gnss">GPS</a></div>
+  </section>
+
+  <!-- ============ Concatenated ============ -->
+  <section id="concatenated">
+    <span class="num" data-en="06 / Concatenated codes" data-uk="06 / Каскадні коди">06 / Concatenated</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">2-stage</span>
+      <span data-en="Concatenated codes — inner + outer" data-uk="Каскадні коди — внутрішній + зовнішній">Concatenated codes</span></h2>
+    <div class="formula">outer Reed–Solomon ∘ interleaver ∘ inner convolutional (Viterbi)</div>
+    <p class="desc" data-en="A single code rarely handles both random noise and bursts well. Concatenation stacks two: an <b>inner</b> convolutional code (Viterbi-decoded) mops up the frequent random bit errors but occasionally emits a short <b>burst</b> when it fails; an interleaver scatters those bursts, and an <b>outer</b> Reed–Solomon code — a burst specialist — cleans up what's left. This RS + convolutional stack was the classic <b>DVB-S</b> and NASA deep-space scheme for decades, until turbo and LDPC codes replaced it."
+       data-uk="Один код рідко добре справляється і з випадковим шумом, і з пакетами. Каскадування складає два: <b>внутрішній</b> згортковий код (декодований Вітербі) прибирає часті випадкові бітові помилки, але зрідка видає короткий <b>пакет</b>, коли не справляється; перемежувач розкидає ці пакети, а <b>зовнішній</b> код Ріда–Соломона — фахівець із пакетів — прибирає решту. Цей стек RS + згортковий був класичною схемою <b>DVB-S</b> і далекокосмічних місій NASA десятиліттями, доки його не змінили турбо- й LDPC-коди."></p>
+    <div id="refs-concatenated"></div>
+    <div class="xrefs"><a href="#convolutional">Convolutional</a> <a href="codes.html#reedsolomon">Reed–Solomon</a> <a href="#interleaving">Interleaving</a> <a href="standards.html#dvb">DVB-S</a></div>
+  </section>
+
+  <!-- ============ Interleaving ============ -->
+  <section id="interleaving">
+    <span class="num" data-en="07 / Interleaving" data-uk="07 / Перемежування">07 / Interleaving</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">buffer</span>
+      <span data-en="Interleaving — turning bursts into sprinkles" data-uk="Перемежування — пакети на розсип">Interleaving</span></h2>
+    <div class="formula">write in rows, read in columns ⇒ a burst of B errors → spread across B blocks</div>
+    <p class="desc" data-en="Fading and interference come in <b>bursts</b> — long runs of adjacent bit errors — but most codes only correct a few errors <b>per block</b>. Interleaving fixes the mismatch cheaply: buffer the coded bits into a grid written by rows and read out by columns, so that neighbours on air were far apart in the code. A burst that wipes a whole column, once de-interleaved, becomes a single scattered error in each block — well within the code's power. The demo drops a burst on a stream and shows how interleaving disperses it below the correction threshold."
+       data-uk="Завмирання й завади приходять <b>пакетами</b> — довгими серіями сусідніх бітових помилок — але більшість кодів виправляють лише кілька помилок <b>на блок</b>. Перемежування дешево усуває невідповідність: буферизуйте кодовані біти у ґратку, записану рядками й зчитану стовпцями, тож сусіди в ефірі були далеко в коді. Пакет, що знищує цілий стовпець, після деперемежування стає однією розсіяною помилкою в кожному блоці — цілком у межах сили коду. Демо кидає пакет на потік і показує, як перемежування розпорошує його нижче порогу виправлення."></p>
+    <div id="refs-interleaving"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="ilCanvas" width="360" height="200"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="burst length B" data-uk="довжина пакета B">burst length B</span><span class="val" id="ilBV">4</span></label>
+            <input type="range" id="ilB" min="0" max="10" step="1" value="4"></div>
+          <div class="hint" data-en="Grid = 6×6 interleaver. Top: burst hits consecutive coded bits. Bottom: after de-interleaving, ≤1 error per block (row)." data-uk="Ґратка = перемежувач 6×6. Зверху: пакет б'є послідовні кодовані біти. Знизу: після деперемежування ≤1 помилка на блок (рядок)."></div>
+          <div class="readout" id="ilOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="#convolutional">Convolutional</a> <a href="#concatenated">Concatenated</a> <a href="standards.html#gsm">GSM</a> <a href="standards.html#lte">LTE</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="Iterative FEC · Wireless Atlas — the trellis, the Tanner graph and the polarized channel that reach Shannon's limit." data-uk="Ітеративний FEC · Безпроводовий Атлас — решітка, граф Таннера й поляризований канал, що сягають межі Шеннона."></p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const CS=getComputedStyle(document.documentElement);
+const C_INK=CS.getPropertyValue('--ink').trim(), C_TEAL=CS.getPropertyValue('--teal').trim(),
+      C_AMBER=CS.getPropertyValue('--amber').trim(), C_ROSE=CS.getPropertyValue('--rose').trim(),
+      C_DIM=CS.getPropertyValue('--dim').trim(), C_LINE=CS.getPropertyValue('--line').trim();
+const bitsOf=s=>s.replace(/[^01]/g,'').split('').map(Number);
+
+// ---- Convolutional encoder + Viterbi (rate 1/2, K=3, G=(7,5)) -------
+function convEncode(bits){
+  let m1=0,m2=0; const out=[];
+  const seq=bits.concat([0,0]); // flush
+  seq.forEach(u=>{ const o0=u^m1^m2, o1=u^m2; out.push(o0,o1); m2=m1; m1=u; });
+  return out;
+}
+function encOut(state,u){ const m1=state>>1, m2=state&1;
+  return [u^m1^m2, u^m2, ((u<<1)|m1)&3]; } // [o0,o1,next]
+function viterbi(rx){
+  const T=rx.length/2; const INF=1e9;
+  let pm=[0,INF,INF,INF]; const bp=[]; // backpointers per step: [state]->{prev,u}
+  for(let t=0;t<T;t++){
+    const r0=rx[2*t], r1=rx[2*t+1];
+    const npm=[INF,INF,INF,INF]; const step=[null,null,null,null];
+    for(let s=0;s<4;s++){ if(pm[s]===INF)continue;
+      for(let u=0;u<2;u++){ const [o0,o1,ns]=encOut(s,u);
+        const bm=(o0^r0)+(o1^r1); const cand=pm[s]+bm;
+        if(cand<npm[ns]){ npm[ns]=cand; step[ns]={prev:s,u}; }
+      }
+    }
+    pm=npm; bp.push(step);
+  }
+  // traceback from state 0 (flushed)
+  let s=0; const us=[];
+  for(let t=T-1;t>=0;t--){ const e=bp[t][s]; if(!e)break; us.unshift(e.u); s=e.prev; }
+  return {bits:us.slice(0,us.length-2), metric:pm[0]}; // drop flush bits
+}
+const cvC=document.getElementById('cvCanvas'), cvX=cvC.getContext('2d');
+let cvErr=new Set();
+function drawCV(){
+  let bits=bitsOf(document.getElementById('cvIn').value); if(!bits.length)bits=[0];
+  bits=bits.slice(0,8);
+  const enc=convEncode(bits);
+  const rx=enc.slice(); cvErr.forEach(p=>{ if(p<rx.length) rx[p]^=1; });
+  const dec=viterbi(rx);
+  // trellis draw
+  const T=rx.length/2, w=cvC.width,h=cvC.height, pad=18;
+  cvX.clearRect(0,0,w,h);
+  const colW=(w-2*pad)/T, rowH=(h-2*pad)/3;
+  // decode path states
+  let s=0; const path=[0]; // reconstruct forward from decoded (incl flush)
+  const full=dec.bits.concat([0,0]);
+  full.forEach(u=>{ const [,,ns]=encOut(s,u); path.push(ns); s=ns; });
+  for(let st=0;st<4;st++)for(let t=0;t<=T;t++){
+    const x=pad+t*colW, y=pad+st*rowH;
+    cvX.fillStyle=C_LINE; cvX.beginPath(); cvX.arc(x,y,3,0,2*Math.PI); cvX.fill();
+  }
+  // survivor path
+  cvX.strokeStyle=C_TEAL; cvX.lineWidth=2; cvX.beginPath();
+  for(let t=0;t<path.length;t++){ const x=pad+t*colW, y=pad+path[t]*rowH;
+    if(t===0)cvX.moveTo(x,y); else cvX.lineTo(x,y);} cvX.stroke();
+  cvX.fillStyle=C_DIM; cvX.font='9px "JetBrains Mono",monospace';
+  ['00','01','10','11'].forEach((s,i)=>cvX.fillText(s,2,pad+i*rowH+3));
+  const L=window.LANG==='uk';
+  const ok=dec.bits.join('')===bits.join('');
+  document.getElementById('cvOut').innerHTML=
+    `<span class="k">${L?'вхід':'input'}</span>    = <span class="a">${bits.join('')}</span>\n`
+    +`<span class="k">${L?'закодовано':'encoded'}</span> = <span class="s">${enc.join('')}</span>\n`
+    +`<span class="k">${L?'прийнято':'received'}</span> = ${cvErr.size?'<span class="b">':'<span class="a">'}${rx.map((b,i)=>cvErr.has(i)?'<u>'+b+'</u>':b).join('')}</span>\n`
+    +`<span class="k">${L?'Вітербі →':'Viterbi →'}</span> <span class="a">${dec.bits.join('')}</span> `
+    +(ok?`<span style="color:${C_TEAL}">✓ ${cvErr.size?(L?'помилки виправлено':'errors corrected'):(L?'без помилок':'clean')}</span>`:`<span class="b">✗</span>`);
+}
+
+// ---- Turbo illustrative BER curve -----------------------------------
+const tbC=document.getElementById('tbCanvas'), tbX=tbC.getContext('2d');
+function drawTB(){
+  const it=+document.getElementById('tbI').value;
+  const w=tbC.width,h=tbC.height, pad=24;
+  tbX.clearRect(0,0,w,h);
+  tbX.strokeStyle=C_LINE; tbX.strokeRect(pad,pad*0.5,w-pad-6,h-pad);
+  // BER model: starts ~0.1, drops sharply then floors ~1e-5
+  const ber=i=>0.1*Math.pow(0.18,Math.min(i,6))+1e-5;
+  tbX.strokeStyle=C_TEAL; tbX.lineWidth=2; tbX.beginPath();
+  const maxIt=10;
+  for(let i=0;i<=maxIt;i++){ const x=pad+(w-pad-6-pad)*(i/maxIt);
+    const y=pad*0.5 + (h-pad-pad*0.5)*(Math.log10(ber(i))*-1)/5; // log scale 1..1e-5
+    if(i===0)tbX.moveTo(x,y); else tbX.lineTo(x,y);} tbX.stroke();
+  // marker at current it
+  const x=pad+(w-pad-6-pad)*(it/maxIt), y=pad*0.5+(h-pad-pad*0.5)*(Math.log10(ber(it))*-1)/5;
+  tbX.fillStyle=C_AMBER; tbX.beginPath(); tbX.arc(x,y,4,0,2*Math.PI); tbX.fill();
+  tbX.fillStyle=C_DIM; tbX.font='9px "JetBrains Mono",monospace';
+  tbX.fillText('BER',2,pad*0.5+6); tbX.fillText(window.LANG==='uk'?'ітерації':'iterations',w-64,h-4);
+  document.getElementById('tbIV').textContent=it;
+  const L=window.LANG==='uk';
+  document.getElementById('tbOut').innerHTML=
+    `<span class="k">${L?'ітерація':'iteration'}</span> = <span class="a">${it}</span>\n`
+    +`<span class="k">${L?'приблизна BER':'approx BER'}</span> ≈ <span class="s">${ber(it).toExponential(1)}</span>\n`
+    +`<span class="k">${it>=5?(L?'насичення — далі виграшу мало':'saturated — little further gain'):(L?'ще падає':'still falling')}</span>`;
+}
+
+// ---- LDPC (6,3) bit-flipping ----------------------------------------
+const ldC=document.getElementById('ldCanvas'), ldX=ldC.getContext('2d');
+// checks: c0=b0^b1^b3, c1=b1^b2^b4, c2=b0^b2^b5
+const checks=[[0,1,3],[1,2,4],[0,2,5]];
+let ldWord=[0,0,0,0,0,0];
+function ldEncode(){
+  let d=bitsOf(document.getElementById('ldData').value); while(d.length<3)d.push(0); d=d.slice(0,3);
+  document.getElementById('ldData').value=d.join('');
+  const b=[d[0],d[1],d[2], d[0]^d[1], d[1]^d[2], d[0]^d[2]];
+  const errPos=+document.getElementById('ldErr').value;
+  ldWord=b.slice(); if(errPos>=1&&errPos<=6) ldWord[errPos-1]^=1;
+}
+function ldSyndrome(w){ return checks.map(c=>c.reduce((a,i)=>a^w[i],0)); }
+function drawLD(){
+  const w=ldC.width,h=ldC.height;
+  const syn=ldSyndrome(ldWord);
+  ldX.clearRect(0,0,w,h);
+  const bx=[], cx=[];
+  for(let i=0;i<6;i++) bx.push({x:24+i*50, y:h-30});
+  for(let j=0;j<3;j++) cx.push({x:60+j*90, y:34});
+  // edges
+  ldX.strokeStyle=C_LINE; ldX.lineWidth=1;
+  checks.forEach((c,j)=>c.forEach(i=>{ ldX.beginPath(); ldX.moveTo(cx[j].x,cx[j].y); ldX.lineTo(bx[i].x,bx[i].y); ldX.stroke(); }));
+  // check nodes (squares)
+  cx.forEach((p,j)=>{ ldX.fillStyle=syn[j]?C_ROSE:C_TEAL; ldX.fillRect(p.x-9,p.y-9,18,18);
+    ldX.fillStyle='#081019'; ldX.font='10px "JetBrains Mono",monospace'; ldX.textAlign='center';
+    ldX.fillText('c'+j,p.x,p.y+3); });
+  // bit nodes (circles)
+  bx.forEach((p,i)=>{ ldX.fillStyle=C_INK; ldX.beginPath(); ldX.arc(p.x,p.y,11,0,2*Math.PI); ldX.fill();
+    ldX.fillStyle='#081019'; ldX.fillText(ldWord[i],p.x,p.y+3);
+    ldX.fillStyle=C_DIM; ldX.font='8px "JetBrains Mono",monospace'; ldX.fillText('b'+i,p.x,p.y+22);
+    ldX.font='10px "JetBrains Mono",monospace'; });
+  ldX.textAlign='left';
+  document.getElementById('ldEV').textContent=document.getElementById('ldErr').value;
+  const L=window.LANG==='uk';
+  const nfail=syn.filter(x=>x).length;
+  document.getElementById('ldOut').innerHTML=
+    `<span class="k">${L?'слово':'word'}</span> = <span class="a">${ldWord.join('')}</span>\n`
+    +`<span class="k">${L?'синдром':'syndrome'}</span> = ${syn.map(s=>s?`<span class="b">${s}</span>`:s).join('')} `
+    +(nfail?`(<span class="b">${nfail} ${L?'перевірок не пройдено':'checks fail'}</span>)`:`<span style="color:${C_TEAL}">${L?'усі перевірки ОК':'all checks satisfied'}</span>`);
+}
+function ldBitFlip(){
+  const syn=ldSyndrome(ldWord);
+  if(syn.every(x=>x===0)) return;
+  // count failing checks per bit
+  const score=new Array(6).fill(0);
+  checks.forEach((c,j)=>{ if(syn[j]) c.forEach(i=>score[i]++); });
+  let best=0; for(let i=1;i<6;i++) if(score[i]>score[best]) best=i;
+  ldWord[best]^=1;
+  drawLD();
+  const L=window.LANG==='uk';
+  const after=ldSyndrome(ldWord).every(x=>x===0);
+  document.getElementById('ldOut').innerHTML+=
+    `\n<span class="k">${L?'→ перекинуто біт':'→ flipped bit'}</span> b${best} `
+    +(after?`<span style="color:${C_TEAL}">✓ ${L?'слово відновлено':'word repaired'}</span>`:`(${L?'ще ні':'not yet'})`);
+}
+
+// ---- Polar polarization ---------------------------------------------
+const plC=document.getElementById('plCanvas'), plX=plC.getContext('2d');
+function polarZ(p,n){ let z=[p];
+  for(let l=0;l<n;l++){ const nz=[]; z.forEach(zi=>{ nz.push(2*zi-zi*zi); nz.push(zi*zi); }); z=nz; }
+  return z; // length 2^n, z=erasure prob (lower=better)
+}
+function drawPL(){
+  const n=+document.getElementById('plN').value, p=+document.getElementById('plP').value;
+  const N=Math.pow(2,n);
+  const kSlider=document.getElementById('plK'); kSlider.max=N; let K=+kSlider.value; if(K>N){K=N;kSlider.value=K;}
+  const z=polarZ(p,n);
+  // reliability = 1-z; choose K most reliable as info
+  const idx=z.map((zi,i)=>[i,zi]).sort((a,b)=>a[1]-b[1]);
+  const info=new Set(idx.slice(0,K).map(e=>e[0]));
+  const w=plC.width,h=plC.height, pad=16, base=h-24;
+  plX.clearRect(0,0,w,h);
+  const bw=(w-2*pad)/N;
+  z.forEach((zi,i)=>{ const rel=1-zi; const bh=(base-16)*rel;
+    plX.fillStyle=info.has(i)?C_TEAL:'rgba(133,149,180,.45)';
+    plX.fillRect(pad+i*bw+2, base-bh, bw-4, bh);
+  });
+  plX.strokeStyle=C_LINE; plX.beginPath(); plX.moveTo(0,base); plX.lineTo(w,base); plX.stroke();
+  plX.fillStyle=C_DIM; plX.font='9px "JetBrains Mono",monospace';
+  plX.fillText(window.LANG==='uk'?'надійність підканалу (вище=краще)':'sub-channel reliability (higher=better)',6,12);
+  document.getElementById('plNV').textContent=N;
+  document.getElementById('plPV').textContent=p.toFixed(2);
+  document.getElementById('plKV').textContent=K;
+  const L=window.LANG==='uk';
+  document.getElementById('plOut').innerHTML=
+    `<span class="k">N</span> = ${N}  <span class="k">K</span> = <span class="a">${K}</span>  <span class="k">${L?'швидкість':'rate'}</span> = ${K}/${N} = <span class="s">${(K/N).toFixed(2)}</span>\n`
+    +`<span style="color:${C_TEAL}">■</span> ${L?'інформаційні (надійні)':'info (reliable)'}   <span style="color:${C_DIM}">■</span> ${L?'заморожені':'frozen'}`;
+}
+
+// ---- Interleaving burst-spread --------------------------------------
+const ilC=document.getElementById('ilCanvas'), ilX=ilC.getContext('2d');
+function drawIL(){
+  const B=+document.getElementById('ilB').value;
+  const R=6,Cc=6, N=R*Cc;
+  // burst hits positions burstStart.. in TRANSMISSION order (column read-out)
+  // interleaver: write rows, read columns. air index a → grid pos (row=a%R? )
+  // transmitted order = read by columns: t-th sent = grid[t%R][floor(t/R)]
+  const start=8;
+  const errAir=new Set(); for(let i=0;i<B;i++) errAir.add((start+i)%N);
+  // map air index (column-read) back to grid (row,col)
+  const gridErr=[]; for(let r=0;r<R;r++){gridErr[r]=[];for(let c=0;c<Cc;c++)gridErr[r][c]=false;}
+  errAir.forEach(a=>{ const r=a%R, c=Math.floor(a/R); gridErr[r][c]=true; });
+  const w=ilC.width,h=ilC.height;
+  ilX.clearRect(0,0,w,h);
+  ilX.fillStyle=C_DIM; ilX.font='10px "JetBrains Mono",monospace';
+  ilX.fillText(window.LANG==='uk'?'в ефірі (пакет підряд):':'over the air (contiguous burst):',6,12);
+  // top strip: air order
+  const cell=Math.min(26,(w-12)/N);
+  for(let a=0;a<N;a++){ ilX.fillStyle=errAir.has(a)?C_ROSE:'rgba(79,214,230,.25)';
+    ilX.fillRect(6+a*cell,18,cell-2,14); }
+  // grid (deinterleaved): rows = blocks
+  ilX.fillStyle=C_DIM; ilX.fillText(window.LANG==='uk'?'після деперемежування (рядок = блок коду):':'after de-interleaving (row = code block):',6,58);
+  const gx=90, gy=70, gc=Math.min(30,(w-gx-10)/Cc), gr=Math.min(20,(h-gy-6)/R);
+  let maxPerRow=0;
+  for(let r=0;r<R;r++){ let cnt=0;
+    for(let c=0;c<Cc;c++){ if(gridErr[r][c])cnt++;
+      ilX.fillStyle=gridErr[r][c]?C_ROSE:'rgba(79,214,230,.18)';
+      ilX.fillRect(gx+c*gc, gy+r*gr, gc-2, gr-2); }
+    maxPerRow=Math.max(maxPerRow,cnt);
+    ilX.fillStyle=C_DIM; ilX.fillText('blk'+r, gx-40, gy+r*gr+13);
+  }
+  document.getElementById('ilBV').textContent=B;
+  const L=window.LANG==='uk';
+  document.getElementById('ilOut').innerHTML=
+    `<span class="k">${L?'пакет':'burst'}</span> B = ${B}\n`
+    +`<span class="k">${L?'макс. помилок на блок після деперемежування':'max errors per block after de-interleave'}</span> = <span class="a">${maxPerRow}</span>\n`
+    +(maxPerRow<=1?`<span style="color:${C_TEAL}">${L?'✓ код із t=1 виправляє кожен блок':'✓ a t=1 code fixes every block'}</span>`
+      :`<span class="b">${L?'✗ якийсь блок має >1 помилки — потрібен сильніший код':'✗ a block has >1 error — needs a stronger code'}</span>`);
+}
+
+// ---- refs + wiring --------------------------------------------------
+function fillRefs(){
+  const w=(en,uk)=>({tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/'+en,label:en.replace(/_/g,' ')},uk:uk?{href:'https://uk.wikipedia.org/wiki/'+uk,label:uk.replace(/_/g,' ')}:undefined});
+  document.getElementById('refs-convolutional').innerHTML=atlasRefs([w('Convolutional_code','Згортковий_код')]);
+  document.getElementById('refs-turbo').innerHTML=atlasRefs([w('Turbo_code'),{tag:'paper',en:{href:'https://doi.org/10.1109/ICC.1993.397441',label:'Berrou 1993'}}]);
+  document.getElementById('refs-ldpc').innerHTML=atlasRefs([w('Low-density_parity-check_code'),{tag:'paper',en:{href:'https://doi.org/10.1109/TIT.1962.1057683',label:'Gallager 1962'}}]);
+  document.getElementById('refs-polar').innerHTML=atlasRefs([w('Polar_code_(coding_theory)'),{tag:'paper',en:{href:'https://doi.org/10.1109/TIT.2009.2021379',label:'Arıkan 2009'}}]);
+  document.getElementById('refs-viterbi').innerHTML=atlasRefs([w('Viterbi_algorithm','Алгоритм_Вітербі')]);
+  document.getElementById('refs-concatenated').innerHTML=atlasRefs([w('Concatenated_error_correction_code')]);
+  document.getElementById('refs-interleaving').innerHTML=atlasRefs([w('Burst_error-correcting_code'),w('Interleaving_(disk_storage)')]);
+}
+document.getElementById('cvIn').addEventListener('input',()=>{cvErr.clear();drawCV();});
+document.getElementById('cvFlip').addEventListener('click',()=>{ const enc=convEncode(bitsOf(document.getElementById('cvIn').value)||[0]);
+  let p; let tries=0; do{ p=Math.floor(Math.random()*enc.length); tries++; }while(cvErr.has(p)&&tries<20); cvErr.add(p); drawCV(); });
+document.getElementById('cvClear').addEventListener('click',()=>{cvErr.clear();drawCV();});
+document.getElementById('tbI').addEventListener('input',drawTB);
+document.getElementById('ldData').addEventListener('input',()=>{ldEncode();drawLD();});
+document.getElementById('ldErr').addEventListener('input',()=>{ldEncode();drawLD();});
+document.getElementById('ldStep').addEventListener('click',ldBitFlip);
+document.getElementById('plN').addEventListener('input',drawPL);
+document.getElementById('plP').addEventListener('input',drawPL);
+document.getElementById('plK').addEventListener('input',drawPL);
+document.getElementById('ilB').addEventListener('input',drawIL);
+window.onLangChange=function(){ fillRefs(); drawCV(); drawTB(); drawLD(); drawPL(); drawIL(); };
+fillRefs(); drawCV(); drawTB(); ldEncode(); drawLD(); drawPL(); drawIL();
+</script>
+</body>
+</html>

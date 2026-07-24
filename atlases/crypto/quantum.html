@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum algorithms — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="quantum">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 17 · quantum algorithms" data-uk="Розділ 17 · квантові алгоритми">Section 17 · quantum algorithms</div>
+    <h1 data-en="Quantum Algorithms &amp; QKD" data-uk="Квантові алгоритми та QKD">Quantum algorithms &amp; QKD</h1>
+    <div class="eq-hero">|ψ⟩ = α|0⟩ + β|1⟩ ,&nbsp; |α|² + |β|² = 1</div>
+    <p class="lede" data-en="Quantum computing changes the rules twice. Offensively: Shor's algorithm collapses factoring and discrete logs — the foundations of RSA, DH and ECC — and Grover's quadratically speeds up brute force. Defensively: quantum physics offers key distribution (BB84, E91) whose security rests on the no-cloning theorem, not on computational hardness. All four are simulated live below with plain classical JS."
+       data-uk="Квантові обчислення змінюють правила двічі. В атаці: алгоритм Шора обвалює факторизацію та дискретні логарифми — фундамент RSA, DH та ECC, а алгоритм Гровера квадратично прискорює повний перебір. У захисті: квантова фізика дає розподіл ключів (BB84, E91), безпека якого спирається на теорему про заборону клонування, а не на обчислювальну складність. Усі чотири нижче симулюються наживо звичайним класичним JS.">Quantum computing changes the rules twice…</p>
+    <div class="legend-lvls" id="lvlLegend"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ======================================================= Shor -->
+  <section id="shor-q">
+    <div class="num" data-en="01 / Shor" data-uk="01 / Шор">01 / Shor</div>
+    <h2><span class="badge l3 lg">III</span>
+        <span class="cx c3">O(n³) [q]</span>
+        <span data-en="Shor's Algorithm — Period-Finding Kills Factoring" data-uk="Алгоритм Шора — пошук періоду ламає факторизацію">Shor's algorithm — period-finding kills factoring</span></h2>
+    <div class="formula">r = ord_N(a): aʳ ≡ 1 (mod N) &nbsp;⇒&nbsp; gcd(a^(r/2) ± 1, N)</div>
+    <p class="desc" data-en="Factoring N reduces to finding the <b>period r</b> of f(x) = aˣ mod N: if r is even and a^(r/2) ≢ −1, then gcd(a^(r/2) ± 1, N) reveals a factor. Classically, period-finding is as hard as factoring itself. A quantum computer prepares a superposition over <b>all</b> x at once, and the <b>quantum Fourier transform</b> (QFT) extracts r in polynomial time — about O(n³) gates for an n-bit N. The demo runs the same reduction end-to-end, finding the period by brute force, so you see exactly what the QFT would deliver in one shot."
+       data-uk="Факторизація N зводиться до пошуку <b>періоду r</b> функції f(x) = aˣ mod N: якщо r парний і a^(r/2) ≢ −1, то gcd(a^(r/2) ± 1, N) відкриває дільник. Класично пошук періоду не легший за саму факторизацію. Квантовий комп'ютер готує суперпозицію за <b>всіма</b> x одразу, і <b>квантове перетворення Фур'є</b> (QFT) видобуває r за поліноміальний час — близько O(n³) гейтів для n-бітного N. Демо виконує ту саму редукцію повністю, знаходячи період перебором, — рівно те, що QFT видало б за один запуск.">Factoring N reduces to finding the period r…</p>
+    <div id="refs-shor-q"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label>N</label><select id="shN"></select></div>
+        <div class="ctrl"><label>a</label><input type="number" id="shA" value="2" min="2" style="width:90px"></div>
+        <div class="ctrl" style="align-self:flex-end"><button id="shRand" data-en="↻ random a" data-uk="↻ випадкове a">↻ random a</button></div>
+      </div>
+      <div class="canvas-row">
+        <canvas id="shCanvas" width="460" height="220"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="The plot is f(x) = aˣ mod N. The sequence repeats with period r — amber guides mark x = 0, r, 2r… On a quantum computer this whole picture lives in one superposition and the QFT reads off r directly."
+               data-uk="На графіку f(x) = aˣ mod N. Послідовність повторюється з періодом r — янтарні лінії позначають x = 0, r, 2r… На квантовому комп'ютері вся ця картинка живе в одній суперпозиції, і QFT зчитує r напряму.">The plot is f(x) = aˣ mod N…</div>
+          <div class="legend">
+            <div><span class="dot" style="background:var(--teal)"></span><span data-en="f(x) = aˣ mod N" data-uk="f(x) = aˣ mod N">f(x) = aˣ mod N</span></div>
+            <div><span class="dot" style="background:var(--amber)"></span><span data-en="x where f(x) = 1 (multiples of r)" data-uk="x, де f(x) = 1 (кратні r)">x where f(x) = 1</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="readout" id="shOut"></div>
+    </div>
+    <p class="hint" data-en="Code: <a class='ext' href='https://github.com/Qiskit/qiskit' target='_blank' rel='noopener'>Qiskit</a> — real quantum-circuit simulation of Shor · <a class='ext' href='https://github.com/open-quantum-safe/liboqs' target='_blank' rel='noopener'>liboqs</a> — the practical answer: post-quantum KEMs and signatures for migration."
+       data-uk="Код: <a class='ext' href='https://github.com/Qiskit/qiskit' target='_blank' rel='noopener'>Qiskit</a> — справжня симуляція квантової схеми Шора · <a class='ext' href='https://github.com/open-quantum-safe/liboqs' target='_blank' rel='noopener'>liboqs</a> — практична відповідь: постквантові KEM і підписи для міграції.">Code: Qiskit · liboqs</p>
+    <div class="strength"><div class="st-title" data-en="Security impact" data-uk="Криптостійкість / вплив">Security impact</div>
+      <span data-en="On a fault-tolerant quantum computer Shor factors and takes discrete logarithms in polynomial time — <b>RSA, DH and ECC all fall</b>. <a class='ext' href='https://doi.org/10.22331/q-2021-04-15-433' target='_blank' rel='noopener'>Gidney–Ekerå (2021)</a> estimate RSA-2048 broken in ~8 hours on ~20 million noisy qubits: far beyond today's hardware, but «harvest now, decrypt later» already justifies migrating to the <a class='ext' href='https://csrc.nist.gov/projects/post-quantum-cryptography' target='_blank' rel='noopener'>NIST PQC standards</a> (ML-KEM/Kyber, ML-DSA/Dilithium). Symmetric ciphers and hashes are <b>not</b> broken by Shor."
+            data-uk="На відмовостійкому квантовому комп'ютері Шор факторизує та бере дискретні логарифми за поліноміальний час — <b>падають RSA, DH і ECC</b>. За оцінкою <a class='ext' href='https://doi.org/10.22331/q-2021-04-15-433' target='_blank' rel='noopener'>Гідні–Екеро (2021)</a>, RSA-2048 ламається за ~8 годин на ~20 млн зашумлених кубітів: це далеко за межами сьогоднішнього заліза, але «збери зараз — розшифруй потім» уже виправдовує міграцію на <a class='ext' href='https://csrc.nist.gov/projects/post-quantum-cryptography' target='_blank' rel='noopener'>стандарти NIST PQC</a> (ML-KEM/Kyber, ML-DSA/Dilithium). Симетричні шифри та хеші Шор <b>не</b> ламає."></span></div>
+    <div class="xrefs">
+      <a href="cryptanalysis.html#shor-f" data-en="cryptanalysis: Shor (factoring) →" data-uk="криптоаналіз: Шор (факторизація) →">cryptanalysis: Shor (factoring) →</a>
+      <a href="asymmetric.html#rsa" data-en="RSA (what it breaks) →" data-uk="RSA (що він ламає) →">RSA →</a>
+      <a href="keyexchange.html#dh" data-en="Diffie–Hellman →" data-uk="Діффі–Хеллман →">Diffie–Hellman →</a>
+      <a href="asymmetric.html#pqc" data-en="post-quantum: Kyber / NTRU / McEliece →" data-uk="постквантові: Kyber / NTRU / McEliece →">post-quantum →</a>
+    </div>
+  </section>
+
+  <!-- ===================================================== Grover -->
+  <section id="grover">
+    <div class="num" data-en="02 / Grover" data-uk="02 / Гровер">02 / Grover</div>
+    <h2><span class="badge l3 lg">III</span>
+        <span class="cx c3">O(√N) [q]</span>
+        <span data-en="Grover's Algorithm — Amplitude Amplification" data-uk="Алгоритм Гровера — ампліфікація амплітуди">Grover's algorithm — amplitude amplification</span></h2>
+    <div class="formula">P(marked) = sin²((2k+1)·θ), sin θ = 1/√N &nbsp;·&nbsp; k* ≈ (π/4)·√N</div>
+    <p class="desc" data-en="Grover search finds one marked item among N with about <b>(π/4)√N</b> oracle calls instead of the classical ~N/2. The state starts as a uniform superposition; each iteration applies the <b>oracle</b> (a phase flip on the marked item) and then <b>diffusion</b> (inversion of every amplitude about the mean). The marked amplitude grows steadily, peaks near k* = (π/4)√N, and then <b>over-rotates</b> — extra iterations actively hurt. Drag the iteration slider past the peak to watch the probability fall again."
+       data-uk="Пошук Гровера знаходить один позначений елемент серед N приблизно за <b>(π/4)√N</b> звернень до оракула замість класичних ~N/2. Стан починається як рівномірна суперпозиція; кожна ітерація застосовує <b>оракул</b> (переворот фази позначеного елемента), а потім <b>дифузію</b> (відбиття кожної амплітуди відносно середнього). Позначена амплітуда стабільно зростає, сягає піку біля k* = (π/4)√N, а далі <b>перекручується</b> — зайві ітерації відверто шкодять. Потягніть повзунок ітерацій за пік і подивіться, як імовірність знову падає.">Grover search finds one marked item among N…</p>
+    <div id="refs-grover"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="grCanvas" width="460" height="240"></canvas>
+        <div class="controls">
+          <div class="ctrl">
+            <label><span data-en="database size N" data-uk="розмір бази N">database size N</span> <span class="val" id="grNVal">32</span></label>
+            <input type="range" id="grN" min="4" max="128" step="1" value="32">
+          </div>
+          <div class="ctrl">
+            <label><span data-en="Grover iterations k" data-uk="ітерацій Гровера k">Grover iterations k</span> <span class="val" id="grKVal">0</span></label>
+            <input type="range" id="grK" min="0" max="11" step="1" value="0">
+          </div>
+          <button id="grPlay" data-en="▶ animate iterations" data-uk="▶ анімувати ітерації">▶ animate iterations</button>
+          <button id="grMark" data-en="↻ new marked item" data-uk="↻ новий позначений елемент">↻ new marked item</button>
+          <div class="hint" data-en="Bars are amplitudes (not probabilities): the dashed line is the initial 1/√N. Watch the oracle briefly push the marked bar negative, then diffusion overshoot it above the rest."
+               data-uk="Стовпчики — амплітуди (не ймовірності): пунктир — початкове 1/√N. Оракул на мить робить позначений стовпчик від'ємним, а дифузія підкидає його вище решти.">Bars are amplitudes…</div>
+        </div>
+      </div>
+      <div class="readout" id="grOut"></div>
+    </div>
+    <p class="hint" data-en="Code: <a class='ext' href='https://github.com/Qiskit/qiskit' target='_blank' rel='noopener'>Qiskit</a> — Grover circuits and amplitude amplification on a real quantum simulator."
+       data-uk="Код: <a class='ext' href='https://github.com/Qiskit/qiskit' target='_blank' rel='noopener'>Qiskit</a> — схеми Гровера та ампліфікація амплітуди на справжньому квантовому симуляторі.">Code: Qiskit</p>
+    <div class="strength"><div class="st-title" data-en="Security impact" data-uk="Криптостійкість / вплив">Security impact</div>
+      <span data-en="Only a <b>quadratic</b> speed-up — and it parallelises poorly. Key search on AES-128 drops from 2¹²⁸ to ~2⁶⁴ quantum operations, so the guidance is simply <b>use AES-256</b> (2¹²⁸ quantum work) and SHA-256/384 for hashing; symmetric cryptography survives with doubled key lengths (see the <a class='ext' href='https://csrc.nist.gov/projects/post-quantum-cryptography/faqs' target='_blank' rel='noopener'>NIST PQC FAQ</a>). The BBBV theorem proves no generic quantum search can beat O(√N), and NIST's quantum-resistant guidance such as <a class='ext' href='https://csrc.nist.gov/pubs/sp/800/208/final' target='_blank' rel='noopener'>SP 800-208</a> (hash-based signatures) leans on exactly this."
+            data-uk="Лише <b>квадратичне</b> прискорення — до того ж воно погано розпаралелюється. Пошук ключа AES-128 падає з 2¹²⁸ до ~2⁶⁴ квантових операцій, тож порада проста: <b>використовуйте AES-256</b> (2¹²⁸ квантової роботи) і SHA-256/384 для хешування; симетрична криптографія виживає з подвоєними ключами (див. <a class='ext' href='https://csrc.nist.gov/projects/post-quantum-cryptography/faqs' target='_blank' rel='noopener'>NIST PQC FAQ</a>). Теорема BBBV доводить, що жоден загальний квантовий пошук не переб'є O(√N), і квантово-стійкі рекомендації NIST, як-от <a class='ext' href='https://csrc.nist.gov/pubs/sp/800/208/final' target='_blank' rel='noopener'>SP 800-208</a> (підписи на хешах), спираються саме на це."></span></div>
+    <div class="xrefs">
+      <a href="symmetric.html#aes" data-en="AES (use 256-bit keys) →" data-uk="AES (беріть 256-бітні ключі) →">AES →</a>
+      <a href="hash.html#sha2" data-en="SHA-2 →" data-uk="SHA-2 →">SHA-2 →</a>
+      <a href="asymmetric.html#pqc" data-en="post-quantum schemes →" data-uk="постквантові схеми →">post-quantum →</a>
+    </div>
+  </section>
+
+  <!-- ======================================================= BB84 -->
+  <section id="bb84">
+    <div class="num">03 / BB84</div>
+    <h2><span class="badge l2 lg">II</span>
+        <span class="cx c1">O(n)</span>
+        <span data-en="BB84 — Quantum Key Distribution" data-uk="BB84 — квантовий розподіл ключів">BB84 — quantum key distribution</span></h2>
+    <div class="formula">+ = {0°, 90°} &nbsp;·&nbsp; × = {45°, 135°} &nbsp;·&nbsp; Eve ⇒ QBER ≈ 25%</div>
+    <p class="desc" data-en="Alice encodes random bits as photon polarizations in randomly chosen bases — rectilinear (<b>+</b>: 0°/90°) or diagonal (<b>×</b>: 45°/135°). Bob measures each photon in his own random basis. Where the bases match, his bit equals Alice's; where they differ, physics returns a coin flip. Publicly comparing <b>bases only</b> (never bits) and keeping the matches — <b>sifting</b> — yields a shared key. An eavesdropper must measure to learn anything, and measuring in the wrong basis re-randomizes the photon: an intercept-resend Eve leaves a ~25% error trail in the sifted key. Toggle Eve on and count the mismatches."
+       data-uk="Аліса кодує випадкові біти в поляризаціях фотонів у випадково обраних базисах — прямому (<b>+</b>: 0°/90°) або діагональному (<b>×</b>: 45°/135°). Боб вимірює кожен фотон у своєму випадковому базисі. Де базиси збіглися — його біт дорівнює бітові Аліси; де ні — фізика повертає підкидання монети. Публічне порівняння <b>лише базисів</b> (ніколи не бітів) і збереження збігів — <b>просіювання</b> — дає спільний ключ. Підслуховувачка мусить вимірювати, а вимірювання в неправильному базисі рерандомізує фотон: Єва зі стратегією «перехопи-перешли» лишає слід у ~25% помилок просіяного ключа. Увімкніть Єву та порахуйте розбіжності.">Alice encodes random bits as photon polarizations…</p>
+    <div id="refs-bb84"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="bbCanvas" width="460" height="220"></canvas>
+        <div class="controls">
+          <div class="ctrl">
+            <label><span data-en="photons n" data-uk="фотонів n">photons n</span> <span class="val" id="bbNVal">16</span></label>
+            <input type="range" id="bbN" min="8" max="32" step="1" value="16">
+          </div>
+          <div class="ctrl">
+            <label style="justify-content:flex-start;gap:10px"><input type="checkbox" id="bbEve" style="accent-color:#F2A65A">
+              <span data-en="Eve intercepts &amp; resends" data-uk="Єва перехоплює й пересилає">Eve intercepts &amp; resends</span></label>
+          </div>
+          <button id="bbRun" data-en="▶ send photons" data-uk="▶ надіслати фотони">▶ send photons</button>
+          <div class="hint" data-en="Each photon carries a polarization arrow. With Eve on, she measures mid-channel in a random basis and resends what she got — the resent photon (amber) is wrong in ~half her guesses."
+               data-uk="Кожен фотон несе стрілку поляризації. Якщо Єва ввімкнена, вона вимірює посеред каналу у випадковому базисі й пересилає те, що отримала, — пересланий фотон (янтарний) хибний приблизно в половині її вгадувань.">Each photon carries a polarization arrow…</div>
+          <div class="legend">
+            <div><span class="dot" style="background:var(--teal)"></span><span data-en="photon as Alice sent it" data-uk="фотон, як його надіслала Аліса">photon as Alice sent it</span></div>
+            <div><span class="dot" style="background:var(--amber)"></span><span data-en="photon after Eve's resend" data-uk="фотон після пересилання Євою">photon after Eve's resend</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="readout" id="bbOut"></div>
+    </div>
+    <p class="hint" data-en="Code: <a class='ext' href='https://github.com/Qiskit/qiskit' target='_blank' rel='noopener'>Qiskit</a> — BB84 as a real qubit-circuit simulation; commercial QKD already runs over metro fibre links."
+       data-uk="Код: <a class='ext' href='https://github.com/Qiskit/qiskit' target='_blank' rel='noopener'>Qiskit</a> — BB84 як справжня симуляція кубітної схеми; комерційний QKD уже працює в міських оптоволоконних мережах.">Code: Qiskit</p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="The protocol's security is <b>information-theoretic</b>: the no-cloning theorem forbids copying an unknown quantum state, so any interception disturbs the photons measurably — no computational assumption involved. Real devices are attacked through hardware, not math: <a class='ext' href='https://doi.org/10.1103/PhysRevLett.85.1330' target='_blank' rel='noopener'>photon-number-splitting</a> exploits weak laser pulses that emit &gt;1 photon (countered by decoy states), and <a class='ext' href='https://doi.org/10.1038/nphoton.2010.214' target='_blank' rel='noopener'>detector blinding</a> remote-controls avalanche photodiodes. QKD also requires an <b>authenticated</b> classical channel — it distributes keys, it does not replace authentication."
+            data-uk="Безпека протоколу <b>інформаційно-теоретична</b>: теорема про заборону клонування не дозволяє скопіювати невідомий квантовий стан, тож будь-яке перехоплення помітно збурює фотони — без жодних обчислювальних припущень. Реальні пристрої атакують через залізо, а не математику: <a class='ext' href='https://doi.org/10.1103/PhysRevLett.85.1330' target='_blank' rel='noopener'>photon-number-splitting</a> використовує слабкі лазерні імпульси з &gt;1 фотоном (контрзахід — decoy states), а <a class='ext' href='https://doi.org/10.1038/nphoton.2010.214' target='_blank' rel='noopener'>засліплення детекторів</a> дистанційно керує лавинними фотодіодами. QKD також потребує <b>автентифікованого</b> класичного каналу — він розподіляє ключі, але не замінює автентифікацію."></span></div>
+    <div class="xrefs">
+      <a href="keyexchange.html#dh" data-en="Diffie–Hellman (classical analogue) →" data-uk="Діффі–Хеллман (класичний аналог) →">Diffie–Hellman →</a>
+      <a href="#e91" data-en="E91 — entangled QKD →" data-uk="E91 — QKD на заплутаності →">E91 →</a>
+      <a href="asymmetric.html#pqc" data-en="post-quantum (the software route) →" data-uk="постквантові (програмний шлях) →">post-quantum →</a>
+    </div>
+  </section>
+
+  <!-- ======================================================== E91 -->
+  <section id="e91">
+    <div class="num">04 / E91</div>
+    <h2><span class="badge l3 lg">III</span>
+        <span class="cx c1">O(n)</span>
+        <span data-en="E91 — Entanglement-Based QKD and the CHSH Test" data-uk="E91 — QKD на заплутаності та тест CHSH">E91 — entanglement-based QKD and the CHSH test</span></h2>
+    <div class="formula">S = E(a,b) − E(a,b′) + E(a′,b) + E(a′,b′) &nbsp;·&nbsp; |S|<sub>classical</sub> ≤ 2 &lt; 2√2</div>
+    <p class="desc" data-en="Ekert's protocol replaces prepared photons with a source that distributes <b>entangled pairs</b>. Measurements in matching bases give perfectly correlated bits — that is the key. Measurements in the CHSH test bases certify security: compute the correlation E for four angle pairs and combine into <b>S</b>. Any local-realistic model — including any eavesdropper holding a copy — obeys |S| ≤ 2, while entangled photons reach 2√2 ≈ 2.83 at the optimal angles. If the measured S drops to 2 or below, someone touched the channel. The demo simulates thousands of pairs at your chosen angles."
+       data-uk="Протокол Екерта замінює підготовлені фотони джерелом, що роздає <b>заплутані пари</b>. Вимірювання в узгоджених базисах дають ідеально корельовані біти — це і є ключ. Вимірювання в базисах тесту CHSH сертифікують безпеку: обчисліть кореляцію E для чотирьох пар кутів і складіть у <b>S</b>. Будь-яка локально-реалістична модель — включно з підслуховувачем, що тримає копію, — задовольняє |S| ≤ 2, тоді як заплутані фотони сягають 2√2 ≈ 2,83 на оптимальних кутах. Якщо виміряний S падає до 2 чи нижче — хтось торкався каналу. Демо симулює тисячі пар на обраних вами кутах.">Ekert's protocol replaces prepared photons…</p>
+    <div id="refs-e91"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="actor alice">
+          <h3>Alice</h3>
+          <div class="ctrl"><label>a</label><select id="e91A"></select></div>
+          <div class="ctrl"><label>a′</label><select id="e91Ap"></select></div>
+        </div>
+        <div class="actor bob">
+          <h3>Bob</h3>
+          <div class="ctrl"><label>b</label><select id="e91B"></select></div>
+          <div class="ctrl"><label>b′</label><select id="e91Bp"></select></div>
+        </div>
+      </div>
+      <div class="canvas-row">
+        <canvas id="e91Canvas" width="460" height="240"></canvas>
+        <div class="controls">
+          <div class="ctrl">
+            <label><span data-en="entangled pairs" data-uk="заплутаних пар">entangled pairs</span> <span class="val" id="e91NVal">2000</span></label>
+            <input type="range" id="e91N" min="400" max="8000" step="400" value="2000">
+          </div>
+          <div class="ctrl">
+            <label data-en="source" data-uk="джерело">source</label>
+            <select id="e91Mode">
+              <option value="q" data-en="entangled pairs (quantum)" data-uk="заплутані пари (квантове)">entangled pairs (quantum)</option>
+              <option value="c" data-en="local hidden variable (≈ intercepted)" data-uk="локальна прихована змінна (≈ перехоплено)">local hidden variable (≈ intercepted)</option>
+            </select>
+          </div>
+          <button id="e91Run" data-en="↻ measure" data-uk="↻ виміряти">↻ measure</button>
+          <div class="hint" data-en="Teal curve: quantum correlation E = cos 2Δ. Dashed line: the best any local model can do. Amber dots: your measured correlations. Defaults a=0°, a′=45°, b=22.5°, b′=67.5° maximise S."
+               data-uk="Бірюзова крива: квантова кореляція E = cos 2Δ. Пунктир: найкраще, на що здатна будь-яка локальна модель. Янтарні точки: ваші виміряні кореляції. Типові a=0°, a′=45°, b=22,5°, b′=67,5° максимізують S.">Teal curve: quantum correlation…</div>
+        </div>
+      </div>
+      <div class="readout" id="e91Out"></div>
+    </div>
+    <p class="hint" data-en="Code: <a class='ext' href='https://github.com/Qiskit/qiskit' target='_blank' rel='noopener'>Qiskit</a> — Bell pairs and CHSH experiments as runnable circuits."
+       data-uk="Код: <a class='ext' href='https://github.com/Qiskit/qiskit' target='_blank' rel='noopener'>Qiskit</a> — пари Белла та експерименти CHSH як запускні схеми.">Code: Qiskit</p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="A CHSH violation certifies that the measured bits are <b>fresh randomness no third party can share</b> — the seed of device-independent QKD, where you distrust even your own hardware. Loophole-free Bell violations were finally achieved in 2015 (<a class='ext' href='https://doi.org/10.1038/nature15759' target='_blank' rel='noopener'>Hensen et al., Delft</a>, S = 2.42). In practice entanglement-based QKD shares BB84's implementation attack surface — lossy channels, imperfect detectors (see the detector-blinding attack above) — and the same need for authenticated classical communication."
+            data-uk="Порушення CHSH сертифікує, що виміряні біти — це <b>свіжа випадковість, якою не може володіти жодна третя сторона</b>, — зерно апаратно-незалежного (device-independent) QKD, де ви не довіряєте навіть власному обладнанню. Порушення Белла без лазівок уперше досягнуто 2015 року (<a class='ext' href='https://doi.org/10.1038/nature15759' target='_blank' rel='noopener'>Хенсен та ін., Делфт</a>, S = 2,42). На практиці QKD на заплутаності має ту саму поверхню атак реалізації, що й BB84, — канали з втратами, недосконалі детектори (див. атаку засліплення вище) — і ту саму потребу в автентифікованому класичному каналі."></span></div>
+    <div class="xrefs">
+      <a href="#bb84" data-en="BB84 →" data-uk="BB84 →">BB84 →</a>
+      <a href="keyexchange.html#dh" data-en="Diffie–Hellman (classical analogue) →" data-uk="Діффі–Хеллман (класичний аналог) →">Diffie–Hellman →</a>
+      <a href="asymmetric.html#pqc" data-en="post-quantum schemes →" data-uk="постквантові схеми →">post-quantum →</a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="<b>A note on simulation:</b> everything on this page runs on a classical CPU. Grover amplitudes and Bell correlations follow the exact quantum formulas; photon measurements are sampled with the probabilities quantum mechanics prescribes. That is legitimate for small demos precisely because these systems are tiny — the entire point of quantum advantage is that this trick stops scaling: simulating n qubits classically costs 2ⁿ amplitudes, while the quantum computer just <b>is</b> them."
+     data-uk="<b>Заувага про симуляцію:</b> усе на цій сторінці працює на класичному CPU. Амплітуди Гровера та кореляції Белла обчислені за точними квантовими формулами; вимірювання фотонів семплюються з імовірностями, які приписує квантова механіка. Для малих демо це чесно саме тому, що ці системи крихітні, — увесь сенс квантової переваги в тому, що цей трюк перестає масштабуватись: класична симуляція n кубітів коштує 2ⁿ амплітуд, а квантовий комп'ютер просто <b>є</b> ними."
+     data-i18n-html="1">A note on simulation…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+// ===================== shared helpers =================================
+function UK(){ return window.LANG==='uk'; }
+function bgcd(a,b){ a=a<0n?-a:a; b=b<0n?-b:b; while(b){ [a,b]=[b,a%b]; } return a; }
+function bmodpow(b,e,m){ b%=m; let r=1n; while(e>0n){ if(e&1n) r=r*b%m; b=b*b%m; e>>=1n; } return r; }
+const C_TEAL='#7FDBCA', C_AMBER='#F2A65A', C_ROSE='#E8607A', C_DIM='#8B97B4', C_GRID='#1B2740', C_AXIS='#3A4A6B';
+const MONO='11px "JetBrains Mono", monospace';
+
+// ===================== references =====================================
+const REFS = {
+  'shor-q':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Shor%27s_algorithm', label:"Shor's algorithm"},
+                 uk:{href:'https://uk.wikipedia.org/wiki/Алгоритм_Шора', label:'Алгоритм Шора'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1137/S0097539795293172', label:'Shor 1994/97 — SIAM J. Comput.'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Quantum_Fourier_transform', label:'Quantum Fourier transform'}},
+    {tag:'nist', en:{href:'https://csrc.nist.gov/projects/post-quantum-cryptography', label:'NIST PQC project'}}
+  ],
+  grover:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Grover%27s_algorithm', label:"Grover's algorithm"},
+                 uk:{href:'https://uk.wikipedia.org/wiki/Алгоритм_Гровера', label:'Алгоритм Гровера'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1145/237814.237866', label:'Grover 1996 — STOC'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Amplitude_amplification', label:'Amplitude amplification'}},
+    {tag:'nist', en:{href:'https://csrc.nist.gov/pubs/sp/800/208/final', label:'NIST SP 800-208'}}
+  ],
+  bb84:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/BB84', label:'BB84'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/BB84', label:'BB84'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1016/j.tcs.2014.05.025', label:'Bennett–Brassard 1984'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Quantum_key_distribution', label:'Quantum key distribution'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/Квантовий_розподіл_ключів', label:'Квантовий розподіл ключів'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/No-cloning_theorem', label:'No-cloning theorem'}}
+  ],
+  e91:[
+    {tag:'paper', en:{href:'https://doi.org/10.1103/PhysRevLett.67.661', label:'Ekert 1991 — PRL 67, 661'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/CHSH_inequality', label:'CHSH inequality'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Quantum_entanglement', label:'Quantum entanglement'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/Квантова_заплутаність', label:'Квантова заплутаність'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Bell%27s_theorem', label:"Bell's theorem"}}
+  ]
+};
+function renderAllRefs(){
+  for(const id in REFS){
+    const el=document.getElementById('refs-'+id);
+    if(el) el.innerHTML=window.atlasRefs(REFS[id]);
+  }
+}
+
+// ===================== 01 · Shor ======================================
+const SHOR_NS=[15,21,33,35,39,51,55,57,77,85,91];
+const shC=document.getElementById('shCanvas'), shx=shC.getContext('2d');
+
+function drawShor(vals,N,r){
+  const W=460,H=220,pL=34,pR=10,pT=14,pB=24;
+  shx.clearRect(0,0,W,H);
+  shx.strokeStyle=C_GRID; shx.lineWidth=1;
+  for(let i=0;i<=4;i++){ const y=pT+(H-pT-pB)*i/4;
+    shx.beginPath(); shx.moveTo(pL,y); shx.lineTo(W-pR,y); shx.stroke(); }
+  shx.strokeStyle=C_AXIS;
+  shx.beginPath(); shx.moveTo(pL,pT); shx.lineTo(pL,H-pB); shx.lineTo(W-pR,H-pB); shx.stroke();
+  const X=vals.length, sx=(W-pL-pR)/X, y0=H-pB, sc=(H-pT-pB)/N;
+  // period guides
+  if(r){
+    shx.strokeStyle=C_AMBER; shx.setLineDash([4,4]); shx.lineWidth=1;
+    for(let x=0;x<X;x+=r){
+      const px=pL+x*sx+sx/2;
+      shx.beginPath(); shx.moveTo(px,pT); shx.lineTo(px,y0); shx.stroke();
+    }
+    shx.setLineDash([]);
+    shx.fillStyle=C_AMBER; shx.font=MONO; shx.textAlign='left';
+    shx.fillText('r = '+r, pL+r*sx+sx/2+4, pT+10);
+  }
+  for(let x=0;x<X;x++){
+    const v=vals[x], px=pL+x*sx+sx/2, py=y0-v*sc;
+    const hot=(v===1);
+    shx.strokeStyle=hot?C_AMBER:'#2C4A45';
+    shx.beginPath(); shx.moveTo(px,y0); shx.lineTo(px,py); shx.stroke();
+    shx.fillStyle=hot?C_AMBER:C_TEAL;
+    shx.beginPath(); shx.arc(px,py,Math.min(3.4,sx*0.35),0,Math.PI*2); shx.fill();
+  }
+  shx.fillStyle=C_DIM; shx.font=MONO;
+  shx.textAlign='left'; shx.fillText('x →', W-pR-30, H-8);
+  shx.save(); shx.translate(10,pT+58); shx.rotate(-Math.PI/2);
+  shx.fillText('aˣ mod N',0,0); shx.restore();
+}
+
+function findPeriod(a,N){
+  const A=BigInt(a), Nn=BigInt(N);
+  let v=1n, r=0;
+  do{ v=v*A%Nn; r++; if(r>4096) return null; }while(v!==1n);
+  return r;
+}
+
+function runShor(){
+  const N=parseInt(document.getElementById('shN').value);
+  const a=parseInt(document.getElementById('shA').value)||0;
+  const out=document.getElementById('shOut'), u=UK();
+  if(a<2||a>N-2){
+    out.innerHTML='<span class="b">'+(u?'Потрібно 2 ≤ a ≤ N−2.':'Need 2 ≤ a ≤ N−2.')+'</span>';
+    drawShor([],N,null); return;
+  }
+  const g=Number(bgcd(BigInt(a),BigInt(N)));
+  const vals=[]; { let v=1n; const A=BigInt(a),Nn=BigInt(N);
+    for(let x=0;x<48;x++){ vals.push(Number(v)); v=v*A%Nn; } }
+  if(g>1){
+    drawShor(vals,N,null);
+    out.innerHTML=
+      '<span class="k">N</span> = '+N+' , a = '+a+'\n'+
+      'gcd(a, N) = <span class="s">'+g+'</span> — '+
+      (u?'пощастило: уже класичний дільник! '+N+' = '+g+' × '+(N/g)+'. Період не потрібен.'
+         :'lucky: a classical factor already! '+N+' = '+g+' × '+(N/g)+'. No period needed.');
+    return;
+  }
+  const r=findPeriod(a,N);
+  const X=Math.min(Math.max(2*r+2,16),48);
+  drawShor(vals.slice(0,X),N,r);
+  let s='<span class="k">N</span> = '+N+' , a = '+a+' , gcd(a,N) = 1 ✓\n';
+  s+=(u?'<span class="a">період</span>':'<span class="a">period</span>')+': r = <span class="s">'+r+'</span>   ('+a+'^'+r+' ≡ 1 mod '+N+')\n';
+  s+='<span class="k">'+(u
+    ?'класично: '+r+' множень до повтору · квантово: одна QFT на ~2·log₂N кубітах, O(n³)'
+    :'classical: '+r+' multiplications to find it · quantum: one QFT over ~2·log₂N qubits, O(n³)')+'</span>\n\n';
+  if(r%2===1){
+    s+='<span class="b">'+(u?'r непарний — цей a невдалий, візьміть інший (квантовий алгоритм теж перезапускається).'
+                            :'r is odd — this a fails, pick another (the quantum algorithm also retries).')+'</span>';
+  } else {
+    const y=bmodpow(BigInt(a),BigInt(r/2),BigInt(N));
+    if(y===BigInt(N-1)){
+      s+='<span class="b">a^(r/2) ≡ −1 (mod N) — '+(u?'тривіальний випадок, візьміть інший a.':'trivial case, pick another a.')+'</span>';
+    } else {
+      const f1=Number(bgcd(y-1n,BigInt(N))), f2=Number(bgcd(y+1n,BigInt(N)));
+      s+='y = a^(r/2) mod N = '+a+'^'+(r/2)+' mod '+N+' = <span class="a">'+y+'</span>\n';
+      s+='gcd(y−1, N) = <span class="s">'+f1+'</span> ,  gcd(y+1, N) = <span class="s">'+f2+'</span>\n';
+      if(f1>1&&f1<N){
+        s+='<span class="s">'+N+' = '+f1+' × '+(N/f1)+' ✓</span>';
+      } else if(f2>1&&f2<N){
+        s+='<span class="s">'+N+' = '+f2+' × '+(N/f2)+' ✓</span>';
+      } else {
+        s+='<span class="b">'+(u?'тривіальні дільники — візьміть інший a.':'trivial factors — pick another a.')+'</span>';
+      }
+    }
+  }
+  out.innerHTML=s;
+}
+
+function initShor(){
+  const sel=document.getElementById('shN');
+  sel.innerHTML=SHOR_NS.map(n=>'<option'+(n===21?' selected':'')+'>'+n+'</option>').join('');
+  sel.addEventListener('change',runShor);
+  document.getElementById('shA').addEventListener('input',runShor);
+  document.getElementById('shRand').addEventListener('click',()=>{
+    const N=parseInt(sel.value);
+    document.getElementById('shA').value=2+Math.floor(Math.random()*(N-3));
+    runShor();
+  });
+  runShor();
+}
+
+// ===================== 02 · Grover ====================================
+const grC=document.getElementById('grCanvas'), grx=grC.getContext('2d');
+let grMarked=7;
+
+function groverAmps(N,marked,k){
+  let a=new Array(N).fill(1/Math.sqrt(N));
+  for(let it=0;it<k;it++){
+    a[marked]=-a[marked];
+    const mean=a.reduce((s,x)=>s+x,0)/N;
+    for(let i=0;i<N;i++) a[i]=2*mean-a[i];
+  }
+  return a;
+}
+
+function drawGrover(){
+  const N=parseInt(document.getElementById('grN').value);
+  const k=parseInt(document.getElementById('grK').value);
+  document.getElementById('grNVal').textContent=N;
+  document.getElementById('grKVal').textContent=k;
+  if(grMarked>=N) grMarked=Math.floor(Math.random()*N);
+  const amps=groverAmps(N,grMarked,k);
+  const W=460,H=240,pad=14,y0=190,sc=150;
+  grx.clearRect(0,0,W,H);
+  grx.strokeStyle=C_AXIS; grx.lineWidth=1;
+  grx.beginPath(); grx.moveTo(pad,y0); grx.lineTo(W-pad,y0); grx.stroke();
+  const init=1/Math.sqrt(N);
+  grx.strokeStyle=C_DIM; grx.setLineDash([3,4]);
+  grx.beginPath(); grx.moveTo(pad,y0-init*sc); grx.lineTo(W-pad,y0-init*sc); grx.stroke();
+  grx.setLineDash([]);
+  const bw=(W-2*pad)/N;
+  for(let i=0;i<N;i++){
+    const h=amps[i]*sc, x=pad+i*bw;
+    grx.fillStyle=(i===grMarked)?C_AMBER:C_TEAL;
+    if(h>=0) grx.fillRect(x+bw*0.12, y0-h, Math.max(1,bw*0.76), Math.max(1,h));
+    else     grx.fillRect(x+bw*0.12, y0,   Math.max(1,bw*0.76), -h);
+  }
+  const P=amps[grMarked]*amps[grMarked];
+  grx.fillStyle=C_AMBER; grx.font=MONO; grx.textAlign='left';
+  grx.fillText('P(marked) = '+(P*100).toFixed(1)+'%', pad+2, 18);
+  grx.fillStyle=C_DIM;
+  grx.fillText('1/√N', W-pad-42, y0-init*sc-5);
+  // readout
+  const kOpt=Math.max(1,Math.floor(Math.PI/4*Math.sqrt(N)));
+  const aOpt=groverAmps(N,grMarked,kOpt);
+  const u=UK();
+  let note='';
+  if(k===0) note=u?'початковий рівномірний стан':'initial uniform state';
+  else if(k<kOpt) note=u?'амплітуда зростає — продовжуйте':'amplitude growing — keep going';
+  else if(k===kOpt) note=u?'пік! вимірюйте зараз':'the peak! measure now';
+  else note=u?'перекрут за пік — імовірність падає':'over-rotated past the peak — probability falling';
+  document.getElementById('grOut').innerHTML=
+    '<span class="k">N</span> = '+N+' , '+(u?'позначений елемент':'marked item')+' = <span class="s">'+grMarked+'</span> , k = '+k+'\n'+
+    (u?'амплітуда':'amplitude')+'(marked) = <span class="a">'+amps[grMarked].toFixed(4)+'</span>  →  P = <span class="s">'+(P*100).toFixed(2)+'%</span>   ('+note+')\n\n'+
+    'k* = ⌊(π/4)·√'+N+'⌋ = <span class="s">'+kOpt+'</span>  →  P(k*) = '+(aOpt[grMarked]*aOpt[grMarked]*100).toFixed(2)+'%\n'+
+    '<span class="k">'+(u
+      ?'класично: ~N/2 = '+Math.round(N/2)+' перевірок · Гровер: '+kOpt+' ітерацій = O(√N)'
+      :'classical: ~N/2 = '+Math.round(N/2)+' checks · Grover: '+kOpt+' iterations = O(√N)')+'</span>';
+}
+
+let grTimer=null;
+function initGrover(){
+  const nS=document.getElementById('grN'), kS=document.getElementById('grK');
+  function syncMax(){
+    const N=parseInt(nS.value);
+    kS.max=Math.ceil(Math.PI/2*Math.sqrt(N))+2;
+    if(parseInt(kS.value)>parseInt(kS.max)) kS.value=kS.max;
+  }
+  nS.addEventListener('input',()=>{ syncMax(); drawGrover(); });
+  kS.addEventListener('input',drawGrover);
+  document.getElementById('grMark').addEventListener('click',()=>{
+    grMarked=Math.floor(Math.random()*parseInt(nS.value)); drawGrover();
+  });
+  document.getElementById('grPlay').addEventListener('click',()=>{
+    if(grTimer){ clearInterval(grTimer); grTimer=null; }
+    kS.value=0; drawGrover();
+    grTimer=setInterval(()=>{
+      const k=parseInt(kS.value);
+      if(k>=parseInt(kS.max)){ clearInterval(grTimer); grTimer=null; return; }
+      kS.value=k+1; drawGrover();
+    },280);
+  });
+  syncMax(); drawGrover();
+}
+
+// ===================== 03 · BB84 ======================================
+const bbC=document.getElementById('bbCanvas'), bbx=bbC.getContext('2d');
+let bb=null;
+const BB_STAG=0.09, BB_DUR=0.9;
+
+function bbGenerate(){
+  const n=parseInt(document.getElementById('bbN').value);
+  const eve=document.getElementById('bbEve').checked;
+  const rb=()=>Math.random()<0.5?0:1;
+  const aBits=[],aBases=[],eBases=[],eBits=[],bBases=[],bBits=[];
+  for(let i=0;i<n;i++){
+    aBits.push(rb()); aBases.push(rb());
+    let chBase=aBases[i], chBit=aBits[i];
+    if(eve){
+      const eb=rb(); eBases.push(eb);
+      const m=(eb===aBases[i])?aBits[i]:rb();
+      eBits.push(m); chBase=eb; chBit=m;
+    }
+    bBases.push(rb());
+    bBits.push(bBases[i]===chBase?chBit:rb());
+  }
+  const sift=[],errs=[];
+  for(let i=0;i<n;i++) if(aBases[i]===bBases[i]){
+    sift.push(i); if(aBits[i]!==bBits[i]) errs.push(i);
+  }
+  bb={n,eve,aBits,aBases,eBases,eBits,bBases,bBits,sift,errs};
+}
+
+function polAngle(base,bit){ return base?(bit?135:45):(bit?90:0); }
+
+function drawBBScene(t){
+  const W=460,H=220,y=118,xA=78,xB=382;
+  bbx.clearRect(0,0,W,H);
+  bbx.strokeStyle='#233150'; bbx.lineWidth=2;
+  bbx.beginPath(); bbx.moveTo(xA,y); bbx.lineTo(xB,y); bbx.stroke();
+  const u=UK();
+  function box(x0,label,color){
+    bbx.strokeStyle=color; bbx.lineWidth=1.5;
+    bbx.strokeRect(x0,y-38,64,76);
+    bbx.fillStyle=color; bbx.font='12px "JetBrains Mono", monospace'; bbx.textAlign='center';
+    bbx.fillText(label,x0+32,y+54);
+  }
+  box(12,u?'Аліса':'Alice',C_TEAL);
+  box(384,u?'Боб':'Bob',C_ROSE);
+  if(bb&&bb.eve) box(198,u?'Єва':'Eve',C_AMBER);
+  if(bb){
+    for(let i=0;i<bb.n;i++){
+      const p=(t-i*BB_STAG)/BB_DUR;
+      if(p<=0||p>=1) continue;
+      const x=xA+(xB-xA)*p;
+      let base=bb.aBases[i], bit=bb.aBits[i], col=C_TEAL;
+      if(bb.eve&&p>0.5){ base=bb.eBases[i]; bit=bb.eBits[i]; col=C_AMBER; }
+      const th=polAngle(base,bit)*Math.PI/180;
+      bbx.strokeStyle=col; bbx.lineWidth=1.5;
+      bbx.beginPath(); bbx.arc(x,y,9,0,Math.PI*2); bbx.stroke();
+      bbx.lineWidth=2.2;
+      bbx.beginPath();
+      bbx.moveTo(x-9*Math.cos(th),y+9*Math.sin(th));
+      bbx.lineTo(x+9*Math.cos(th),y-9*Math.sin(th));
+      bbx.stroke();
+    }
+  }
+  bbx.fillStyle=C_DIM; bbx.font=MONO; bbx.textAlign='left';
+  bbx.fillText(u?'базис + : 0° / 90°   ·   базис × : 45° / 135°'
+                :'basis + : 0° / 90°   ·   basis × : 45° / 135°',12,16);
+}
+
+function bbRender(){
+  if(!bb) return;
+  const u=UK(), baseCh=b=>b?'×':'+';
+  const cell=(v,cls)=>cls?('<span class="'+cls+'">'+v+' </span>'):(v+' ');
+  const lab=s=>'<span class="k">'+(s+'          ').slice(0,10)+'</span>';
+  let r1='',r2='',r3='',r4='',r5='',r6='',r7='';
+  for(let i=0;i<bb.n;i++){
+    const m=bb.aBases[i]===bb.bBases[i];
+    r1+=cell(bb.aBits[i],'a');
+    r2+=cell(baseCh(bb.aBases[i]),'a');
+    if(bb.eve){ r3+=cell(baseCh(bb.eBases[i]),'s'); r4+=cell(bb.eBits[i],'s'); }
+    r5+=cell(baseCh(bb.bBases[i]),'b');
+    r6+=cell(bb.bBits[i],'b');
+    r7+=cell(m?'✓':'·',m?'s':'k');
+  }
+  let o='';
+  o+=lab(u?'біт A':'A bit')+r1+'\n';
+  o+=lab(u?'базис A':'A basis')+r2+'\n';
+  if(bb.eve){
+    o+=lab(u?'базис Є':'E basis')+r3+'\n';
+    o+=lab(u?'Є шле':'E resend')+r4+'\n';
+  }
+  o+=lab(u?'базис B':'B basis')+r5+'\n';
+  o+=lab(u?'біт B':'B bit')+r6+'\n';
+  o+=lab(u?'збіг':'match')+r7+'\n\n';
+  const ka=bb.sift.map(i=>bb.aBits[i]).join('');
+  const kb=bb.sift.map(i=>bb.aBits[i]===bb.bBits[i]
+      ? String(bb.bBits[i])
+      : '<span class="b">'+bb.bBits[i]+'</span>').join('');
+  o+=lab(u?'ключ A':'A key')+'<span class="s">'+ka+'</span>\n';
+  o+=lab(u?'ключ B':'B key')+kb+'\n';
+  const ns=bb.sift.length, ne=bb.errs.length;
+  const q=ns?Math.round(100*ne/ns):0;
+  o+='\n'+lab('QBER')+ne+'/'+ns+' = <span class="'+(q>10?'b':'a')+'">'+q+'%</span>   ';
+  if(q>10) o+='<span class="b">'+(u?'← Єву викрито! Ключ відкидається.':'← Eve detected! Key discarded.')+'</span>';
+  else if(bb.eve) o+='<span class="s">'+(u?'(Єві пощастило на цій короткій вибірці — довший ключ її викриє)':'(Eve got lucky on this short sample — a longer key exposes her)')+'</span>';
+  else o+='<span class="a">'+(u?'канал чистий — ключ придатний ✓':'channel clean — key usable ✓')+'</span>';
+  o+='\n<span class="k">'+(u
+    ?'очікувано: ~50% позицій просіюється; Єва вносить ~25% помилок у просіяний ключ'
+    :'expected: ~50% of positions survive sifting; Eve induces ~25% errors in the sifted key')+'</span>';
+  document.getElementById('bbOut').innerHTML=o;
+}
+
+let bbAnimId=0;
+function bbRun(){
+  bbGenerate(); bbRender();
+  const myId=++bbAnimId;
+  const start=performance.now();
+  const total=bb.n*BB_STAG+BB_DUR+0.15;
+  function frame(now){
+    if(myId!==bbAnimId) return;
+    const t=(now-start)/1000;
+    drawBBScene(t);
+    if(t<total) requestAnimationFrame(frame);
+    else drawBBScene(1e9);
+  }
+  requestAnimationFrame(frame);
+}
+
+function initBB84(){
+  document.getElementById('bbN').addEventListener('input',()=>{
+    document.getElementById('bbNVal').textContent=document.getElementById('bbN').value;
+  });
+  document.getElementById('bbN').addEventListener('change',bbRun);
+  document.getElementById('bbEve').addEventListener('change',bbRun);
+  document.getElementById('bbRun').addEventListener('click',bbRun);
+  bbRun();
+}
+
+// ===================== 04 · E91 / CHSH ================================
+const e91Cv=document.getElementById('e91Canvas'), ex=e91Cv.getContext('2d');
+const E91_ANGLES=[0,22.5,30,45,60,67.5,90];
+let e91Res=null;
+const D2R=Math.PI/180;
+
+function e91Sim(){
+  const A=[parseFloat(document.getElementById('e91A').value),
+           parseFloat(document.getElementById('e91Ap').value)];
+  const B=[parseFloat(document.getElementById('e91B').value),
+           parseFloat(document.getElementById('e91Bp').value)];
+  const T=parseInt(document.getElementById('e91N').value);
+  const mode=document.getElementById('e91Mode').value;
+  const cnt=[[{n:0,s:0},{n:0,s:0}],[{n:0,s:0},{n:0,s:0}]];
+  for(let t=0;t<T;t++){
+    const sa=Math.random()<0.5?0:1, sb=Math.random()<0.5?0:1;
+    const al=A[sa], be=B[sb];
+    let oa,ob;
+    if(mode==='q'){
+      const E=Math.cos(2*(al-be)*D2R);
+      oa=Math.random()<0.5?1:-1;
+      ob=(Math.random()<(1+E)/2)?oa:-oa;
+    } else {
+      const lam=Math.random()*180;
+      oa=Math.cos(2*(al-lam)*D2R)>=0?1:-1;
+      ob=Math.cos(2*(be-lam)*D2R)>=0?1:-1;
+    }
+    const c=cnt[sa][sb]; c.n++; if(oa===ob) c.s++;
+  }
+  const E=[[0,0],[0,0]];
+  for(let i=0;i<2;i++) for(let j=0;j<2;j++){
+    const c=cnt[i][j]; E[i][j]=c.n?(2*c.s-c.n)/c.n:0;
+  }
+  const S=E[0][0]-E[0][1]+E[1][0]+E[1][1];
+  e91Res={A,B,E,S,cnt,mode,T};
+}
+
+function foldD(a,b){ let d=Math.abs(a-b)%180; if(d>90) d=180-d; return d; }
+
+function drawE91(){
+  const W=460,H=240,pL=40,pR=12,pT=14,pB=26;
+  const xOf=d=>pL+(W-pL-pR)*d/90;
+  const yOf=E=>pT+(1-E)/2*(H-pT-pB);
+  ex.clearRect(0,0,W,H);
+  ex.strokeStyle=C_GRID; ex.lineWidth=1;
+  [-1,-0.5,0,0.5,1].forEach(v=>{
+    ex.beginPath(); ex.moveTo(pL,yOf(v)); ex.lineTo(W-pR,yOf(v)); ex.stroke();
+  });
+  ex.strokeStyle=C_AXIS;
+  ex.beginPath(); ex.moveTo(pL,pT); ex.lineTo(pL,H-pB); ex.lineTo(W-pR,H-pB); ex.stroke();
+  ex.fillStyle=C_DIM; ex.font=MONO; ex.textAlign='right';
+  ex.fillText('+1',pL-5,yOf(1)+4); ex.fillText('0',pL-5,yOf(0)+4); ex.fillText('−1',pL-5,yOf(-1)+4);
+  ex.textAlign='left'; ex.fillText('Δ°',W-pR-18,H-8);
+  [0,45,90].forEach(d=>{ ex.textAlign='center'; ex.fillText(String(d),xOf(d),H-8); });
+  // classical bound (triangle): E = 1 − Δ/45
+  ex.strokeStyle=C_DIM; ex.setLineDash([4,4]); ex.lineWidth=1.3;
+  ex.beginPath(); ex.moveTo(xOf(0),yOf(1)); ex.lineTo(xOf(90),yOf(-1)); ex.stroke();
+  ex.setLineDash([]);
+  // quantum curve E = cos 2Δ
+  ex.strokeStyle=C_TEAL; ex.lineWidth=2;
+  ex.beginPath();
+  for(let d=0;d<=90;d+=1){
+    const x=xOf(d), y=yOf(Math.cos(2*d*D2R));
+    d===0?ex.moveTo(x,y):ex.lineTo(x,y);
+  }
+  ex.stroke();
+  // measured points
+  if(e91Res){
+    const names=[['ab','ab′'],['a′b','a′b′']];
+    for(let i=0;i<2;i++) for(let j=0;j<2;j++){
+      const d=foldD(e91Res.A[i],e91Res.B[j]);
+      const x=xOf(d), y=yOf(e91Res.E[i][j]);
+      ex.fillStyle=C_AMBER;
+      ex.beginPath(); ex.arc(x,y,4.5,0,Math.PI*2); ex.fill();
+      ex.strokeStyle='#06110F'; ex.lineWidth=1.2; ex.stroke();
+      ex.fillStyle=C_AMBER; ex.font=MONO; ex.textAlign='left';
+      ex.fillText(names[i][j],x+7,y+4);
+    }
+  }
+}
+
+function runE91(){
+  e91Sim(); drawE91();
+  const u=UK(), R=e91Res;
+  const pn=[['(a,b)','(a,b′)'],['(a′,b)','(a′,b′)']];
+  let o='';
+  for(let i=0;i<2;i++) for(let j=0;j<2;j++){
+    o+='E'+pn[i][j]+' = <span class="a">'+R.E[i][j].toFixed(3)+'</span>'+
+       '   <span class="k">Δ='+foldD(R.A[i],R.B[j]).toFixed(1)+'° , n='+R.cnt[i][j].n+'</span>\n';
+  }
+  o+='\nS = E(a,b) − E(a,b′) + E(a′,b) + E(a′,b′) = <span class="s">'+R.S.toFixed(3)+'</span>\n';
+  o+='<span class="k">'+(u?'класична межа':'classical bound')+'</span> |S| ≤ 2   ·   '+
+     '<span class="k">'+(u?'квантовий максимум (Цирельсон)':'quantum maximum (Tsirelson)')+'</span> 2√2 ≈ 2.828\n\n';
+  const noise=2/Math.sqrt(R.T/4);
+  if(Math.abs(R.S)>2+2*noise)
+    o+='<span class="a">'+(u
+      ?'|S| > 2 — нерівність Белла порушено: заплутаність справжня, канал без підслуховування ✓'
+      :'|S| > 2 — Bell inequality violated: entanglement is genuine, channel free of eavesdropping ✓')+'</span>';
+  else
+    o+='<span class="b">'+(u
+      ?'|S| ≤ 2 — порушення немає: сумісно з локальною моделлю або перехопленням. Ключ відкидається.'
+      :'|S| ≤ 2 — no violation: consistent with a local model or interception. Key discarded.')+'</span>';
+  o+='\n<span class="k">'+(u
+    ?'статистичний шум ~±'+noise.toFixed(2)+' на цій кількості пар (поріг вироку: 2 + 2σ)'
+    :'sampling noise ~±'+noise.toFixed(2)+' at this pair count (verdict threshold: 2 + 2σ)')+'</span>';
+  document.getElementById('e91Out').innerHTML=o;
+}
+
+function initE91(){
+  const defs={e91A:0, e91Ap:45, e91B:22.5, e91Bp:67.5};
+  for(const id in defs){
+    const el=document.getElementById(id);
+    el.innerHTML=E91_ANGLES.map(a=>'<option value="'+a+'"'+(a===defs[id]?' selected':'')+'>'+a+'°</option>').join('');
+    el.addEventListener('change',runE91);
+  }
+  document.getElementById('e91N').addEventListener('input',()=>{
+    document.getElementById('e91NVal').textContent=document.getElementById('e91N').value;
+  });
+  document.getElementById('e91N').addEventListener('change',runE91);
+  document.getElementById('e91Mode').addEventListener('change',runE91);
+  document.getElementById('e91Run').addEventListener('click',runE91);
+  runE91();
+}
+
+// ===================== boot ===========================================
+function renderLegend(){
+  const Lg=I18N[window.LANG].lvlLegend;
+  document.getElementById('lvlLegend').innerHTML=
+    [1,2,3].map((n,i)=>'<span>'+window.atlasBadge(n)+' '+Lg[i]+'</span>').join('');
+}
+initShor(); initGrover(); initBB84(); initE91();
+renderLegend(); renderAllRefs();
+window.onLangChange=function(){
+  renderLegend(); renderAllRefs();
+  runShor(); drawGrover();
+  bbRender(); drawBBScene(1e9);
+  runE91();
+};
+</script>
+</body>
+</html>

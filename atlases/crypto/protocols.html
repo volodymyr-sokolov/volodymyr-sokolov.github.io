@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Applied protocols — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="protocols">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 27 — how primitives compose into real, deployed systems"
+         data-uk="Розділ 27 — як примітиви складаються у реальні, розгорнуті системи">Section 27</div>
+    <h1 data-en="Applied Protocols" data-uk="Прикладні протоколи">Applied protocols</h1>
+    <p class="lede" data-en="A cipher, a hash and a signature are not yet a secure channel. Real systems <b>compose</b> them — a key exchange for a shared secret, a KDF to grow keys, a signature to authenticate, a MAC to confirm — and composition introduces its own failures: version <b>downgrade</b>, message <b>replay</b>, loss of <b>forward secrecy</b>, and unbound transcripts. Here are nine deployed protocols with working, verifiable demonstrations of their core key schedules and handshakes."
+       data-uk="Шифр, геш і підпис — це ще не захищений канал. Реальні системи <b>складають</b> їх — обмін ключами для спільного секрету, KDF для розгортання ключів, підпис для автентифікації, MAC для підтвердження — і композиція вносить власні збої: <b>зниження версії</b>, <b>повтори</b> повідомлень, втрату <b>прямої секретності</b> та непов'язані транскрипти. Ось дев'ять розгорнутих протоколів із робочими, перевірюваними демонстраціями їхніх ключових розкладів і рукостискань.">Nine deployed protocols and how their key schedules really work.</p>
+    <div class="readout" id="selftest" style="margin-top:18px; max-width:640px;"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="Secure Channels &amp; Messaging" data-uk="Захищені канали та обмін повідомленнями">Secure channels &amp; messaging</h3>
+
+  <!-- ================= TLS 1.3 ================= -->
+  <section id="tls13">
+    <span class="num">27 / 1</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">1-RTT</span>
+      <span data-en="TLS 1.3 Handshake" data-uk="Рукостискання TLS 1.3">TLS 1.3 handshake</span></h2>
+    <div class="formula">HS = HKDF-Extract(Derive(ES,"derived"), ECDHE);   MS = HKDF-Extract(Derive(HS,"derived"), 0)</div>
+    <p class="desc" data-en="TLS 1.3 (RFC 8446) reaches an authenticated, forward-secret channel in a <b>single round trip</b>. The ClientHello already carries a <b>key_share</b> (an ephemeral (EC)DHE public), so once the ServerHello answers with its own share, both sides run the same <b>HKDF key schedule</b>: an Early Secret, a Handshake Secret (keyed by the ECDHE output) and a Master Secret, each producing traffic keys via <b>Derive-Secret / HKDF-Expand-Label</b>. Step through the flow to watch which secret becomes available at each message. The ephemeral keys are discarded afterwards — that is the forward secrecy."
+       data-uk="TLS 1.3 (RFC 8446) досягає автентифікованого каналу з прямою секретністю за <b>один цикл</b>. ClientHello уже несе <b>key_share</b> (ефемерний (EC)DHE відкритий ключ), тож щойно ServerHello відповідає своєю часткою, обидві сторони виконують той самий <b>розклад ключів HKDF</b>: Early Secret, Handshake Secret (ключований виходом ECDHE) і Master Secret, кожен породжує ключі трафіку через <b>Derive-Secret / HKDF-Expand-Label</b>. Пройдіть потік, щоб побачити, який секрет стає доступним на кожному повідомленні. Ефемерні ключі згодом знищуються — це і є пряма секретність."></p>
+    <div id="refs-tls13"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="tlsCanvas" width="320" height="260"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Real RFC 8446 key schedule (HKDF-SHA256) over a toy ECDHE value; secrets shown are genuine HKDF outputs." data-uk="Справжній розклад ключів RFC 8446 (HKDF-SHA256) над іграшковим значенням ECDHE; показані секрети — це справжні виходи HKDF."></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="tlsNext" data-en="Next message ▸" data-uk="Наступне повідомлення ▸">Next message ▸</button>
+            <button id="tlsReset" class="secondary" data-en="Reset" data-uk="Скинути">Reset</button>
+          </div>
+          <div class="readout" id="tlsOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Failure modes" data-uk="Режими збою">Failure modes</div>
+      <span data-en="<b>Downgrade:</b> earlier TLS fell to FREAK and Logjam (forced export-grade RSA/DH); TLS 1.3 hard-codes a downgrade sentinel into the server Finished and drops renegotiation. <b>Replay:</b> the optional 0-RTT early-data is <i>not</i> forward-secret and is replayable — only idempotent requests may use it. <b>Transcript binding:</b> the Finished MAC covers the whole handshake transcript, so a tampered ServerHello (e.g. an injected downgrade) breaks the MAC. Forward secrecy holds only because the (EC)DHE keys are ephemeral and erased."
+            data-uk="<b>Зниження версії:</b> старіший TLS падав під FREAK і Logjam (примусовий експортний RSA/DH); TLS 1.3 жорстко вшиває маркер зниження у серверний Finished і прибирає ренегоціацію. <b>Повтори:</b> необов'язкові дані 0-RTT <i>не</i> мають прямої секретності й піддаються повтору — лише ідемпотентні запити. <b>Прив'язка транскрипту:</b> MAC у Finished покриває весь транскрипт рукостискання, тож підмінений ServerHello (напр. вкинуте зниження) ламає MAC. Пряма секретність тримається лише тому, що (EC)DHE ключі ефемерні й стираються."></span></div>
+    <div class="xrefs"><a href="keyexchange.html#ecdh">ECDH</a> <a href="hash.html#hmac">HMAC / HKDF</a> <a href="signatures.html#eddsa">EdDSA</a> <a href="protocols.html#signal">Signal</a></div>
+  </section>
+
+  <!-- ================= Signal ================= -->
+  <section id="signal">
+    <span class="num">27 / 2</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n)</span>
+      <span data-en="Signal — X3DH + Double Ratchet" data-uk="Signal — X3DH + Double Ratchet">Signal — X3DH + Double Ratchet</span></h2>
+    <div class="formula">MK = HMAC(CK, 0x01);   CK′ = HMAC(CK, 0x02);   (RK′, CK) = HKDF(RK, DH_out)</div>
+    <p class="desc" data-en="Signal starts with <b>X3DH</b> — three or four Diffie–Hellman combinations over long-term, signed-prekey and one-time keys — to agree an initial <b>root key</b> asynchronously (the recipient can be offline). Then the <b>Double Ratchet</b> takes over: a <b>symmetric-key ratchet</b> derives a fresh message key per message (MK = HMAC(CK,1), then CK advances), and a <b>DH ratchet</b> mixes a new Diffie–Hellman output into the root key whenever the direction of conversation turns. Old keys are deleted immediately. Send messages and reply to watch the keys evolve — every arrow is a real HMAC/HKDF-SHA256 step."
+       data-uk="Signal починає з <b>X3DH</b> — трьох чи чотирьох комбінацій Діффі–Хеллмана над довготривалим, підписаним пре-ключем і одноразовими ключами — щоб узгодити початковий <b>кореневий ключ</b> асинхронно (отримувач може бути офлайн). Далі керує <b>Double Ratchet</b>: <b>симетричний ратчет</b> виводить свіжий ключ повідомлення для кожного повідомлення (MK = HMAC(CK,1), потім CK просувається), а <b>DH-ратчет</b> підмішує новий вихід Діффі–Хеллмана у кореневий ключ щоразу, коли напрям розмови змінюється. Старі ключі негайно знищуються. Надсилайте й відповідайте, щоб побачити еволюцію ключів — кожна стрілка — це справжній крок HMAC/HKDF-SHA256."></p>
+    <div id="refs-signal"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="sigCanvas" width="320" height="240"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Schematic key-evolution over real HMAC/HKDF-SHA256 chaining; the DH values are a toy exponentiation and are labelled as such." data-uk="Схематична еволюція ключів на справжньому ланцюгу HMAC/HKDF-SHA256; значення DH — іграшкове піднесення до степеня й позначені як такі."></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="sigSend" data-en="Send ▸" data-uk="Надіслати ▸">Send ▸</button>
+            <button id="sigReply" data-en="◂ Reply (DH ratchet)" data-uk="◂ Відповісти (DH-ратчет)">◂ Reply (DH ratchet)</button>
+            <button id="sigReset" class="secondary" data-en="Reset" data-uk="Скинути">Reset</button>
+          </div>
+          <div class="readout" id="sigOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Failure modes" data-uk="Режими збою">Failure modes</div>
+      <span data-en="<b>Forward secrecy</b> comes from deleting each chain/message key after use — a stolen device cannot decrypt past messages. <b>Post-compromise security</b> comes from the DH ratchet: one honest round injects new entropy and heals the session. Pitfalls: reusing a one-time prekey enables <b>replay</b> of the first message (Signal binds it to a fresh key to limit this); dropping the DH ratchet would collapse to a static chain with no self-healing; and out-of-order delivery must cache skipped message keys without letting that cache grow unbounded (a DoS vector)."
+            data-uk="<b>Пряма секретність</b> походить від знищення кожного ключа ланцюга/повідомлення після використання — викрадений пристрій не розшифрує минулі повідомлення. <b>Безпека після компрометації</b> походить від DH-ратчета: один чесний раунд вносить нову ентропію й «зцілює» сесію. Пастки: повторне використання одноразового пре-ключа уможливлює <b>повтор</b> першого повідомлення (Signal прив'язує його до свіжого ключа, щоб обмежити це); відмова від DH-ратчета звела б усе до статичного ланцюга без самозцілення; а доставка не за порядком потребує кешувати пропущені ключі, не даючи кешу зростати безмежно (вектор DoS)."></span></div>
+    <div class="xrefs"><a href="keyexchange.html#ecdh">ECDH</a> <a href="authprotocols.html#auth-ecc">ECC auth</a> <a href="protocols.html#noise">Noise</a> <a href="hash.html#hmac">HMAC</a></div>
+  </section>
+
+  <!-- ================= Noise ================= -->
+  <section id="noise">
+    <span class="num">27 / 3</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(1)</span>
+      <span data-en="Noise Protocol Framework" data-uk="Каркас протоколів Noise">Noise protocol framework</span></h2>
+    <div class="formula">MixHash(d): h ← H(h ‖ d);   MixKey(dh): (ck, k) ← HKDF(ck, dh)</div>
+    <p class="desc" data-en="Noise is not one protocol but a <b>construction kit</b>. A handshake pattern is a short script of tokens — <code>e</code>, <code>s</code>, <code>ee</code>, <code>es</code>, <code>se</code>, <code>ss</code> — where <code>e</code>/<code>s</code> send an ephemeral/static public key and the paired tokens perform a Diffie–Hellman and fold it in. Every party keeps two variables: a running transcript hash <b>h</b> (updated by MixHash) and a chaining key <b>ck</b> (updated by MixKey via HKDF). Step through the classic <b>Noise_XX</b> pattern below and watch h and ck evolve — MixHash is a real SHA-256, MixKey a real HKDF-SHA256."
+       data-uk="Noise — це не один протокол, а <b>конструктор</b>. Патерн рукостискання — короткий сценарій токенів — <code>e</code>, <code>s</code>, <code>ee</code>, <code>es</code>, <code>se</code>, <code>ss</code> — де <code>e</code>/<code>s</code> надсилають ефемерний/статичний відкритий ключ, а парні токени виконують Діффі–Хеллмана й вплітають його. Кожна сторона тримає дві змінні: поточний геш транскрипту <b>h</b> (оновлюється MixHash) і ланцюговий ключ <b>ck</b> (оновлюється MixKey через HKDF). Пройдіть класичний патерн <b>Noise_XX</b> нижче й спостерігайте за еволюцією h і ck — MixHash — це справжній SHA-256, MixKey — справжній HKDF-SHA256."></p>
+    <div id="refs-noise"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="noiseCanvas" width="320" height="150"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Noise_XX, 3 messages. Real SHA-256 MixHash and HKDF-SHA256 MixKey; DH is a toy exponentiation (labelled)." data-uk="Noise_XX, 3 повідомлення. Справжні SHA-256 MixHash і HKDF-SHA256 MixKey; DH — іграшкове піднесення (позначено)."></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="noiseNext" data-en="Next token ▸" data-uk="Наступний токен ▸">Next token ▸</button>
+            <button id="noiseReset" class="secondary" data-en="Reset" data-uk="Скинути">Reset</button>
+          </div>
+          <div class="readout" id="noiseOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Failure modes" data-uk="Режими збою">Failure modes</div>
+      <span data-en="Because h binds the <b>entire transcript</b> (protocol name, prologue, every key and ciphertext), a tampered message desynchronises h and the next AEAD tag fails — this is Noise's <b>transcript binding</b> and its downgrade defence: the negotiated name is hashed in, so an attacker cannot silently swap patterns. The remaining risks are pattern-specific: one-way patterns (like <code>N</code>) give no sender authentication and are <b>replayable</b>; a pattern that transmits a static key before a DH can leak the initiator's identity; and forward secrecy exists only after ephemeral–ephemeral (<code>ee</code>) has mixed in."
+            data-uk="Оскільки h прив'язує <b>весь транскрипт</b> (назву протоколу, пролог, кожен ключ і шифротекст), підмінене повідомлення розсинхронізує h, і наступний AEAD-тег не проходить — це <b>прив'язка транскрипту</b> Noise та його захист від зниження: узгоджена назва вгешовується, тож зловмисник не підмінить патерн непомітно. Решта ризиків залежить від патерну: односторонні патерни (як <code>N</code>) не дають автентифікації відправника й піддаються <b>повтору</b>; патерн, що передає статичний ключ до DH, може розкрити особу ініціатора; а пряма секретність існує лише після змішування ефемерний–ефемерний (<code>ee</code>)."></span></div>
+    <div class="xrefs"><a href="protocols.html#wireguard">WireGuard</a> <a href="keyexchange.html#ecdh">ECDH</a> <a href="hash.html#hmac">HKDF</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Network &amp; Enterprise Access" data-uk="Мережевий та корпоративний доступ">Network &amp; enterprise access</h3>
+
+  <!-- ================= IPsec / IKEv2 ================= -->
+  <section id="ipsec">
+    <span class="num">27 / 4</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(1)</span>
+      <span data-en="IKEv2 / IPsec" data-uk="IKEv2 / IPsec">IKEv2 / IPsec</span></h2>
+    <div class="formula">SKEYSEED = prf(Ni‖Nr, g^ir);   {SK_d,SK_ai,SK_ar,SK_ei,SK_er,SK_pi,SK_pr} = prf+(SKEYSEED, Ni‖Nr‖SPIi‖SPIr)</div>
+    <p class="desc" data-en="IPsec secures traffic at the <b>network layer</b>; IKEv2 (RFC 7296) is its key-exchange. <b>IKE_SA_INIT</b> does an anonymous Diffie–Hellman and exchanges nonces Ni, Nr; from these both peers compute <b>SKEYSEED = prf(Ni‖Nr, g^ir)</b> and expand it with <b>prf+</b> into seven keys — one to derive child keys (SK_d), two integrity keys, two encryption keys and two keys that protect the AUTH payload. <b>IKE_AUTH</b> then runs encrypted, authenticating the peers (signature or PSK). The demo runs the real prf+ expansion (HMAC-SHA256); regenerate the nonces to see the whole key block change."
+       data-uk="IPsec захищає трафік на <b>мережевому рівні</b>; IKEv2 (RFC 7296) — його обмін ключами. <b>IKE_SA_INIT</b> виконує анонімний Діффі–Хеллман і обмінює нонси Ni, Nr; з них обидва вузли обчислюють <b>SKEYSEED = prf(Ni‖Nr, g^ir)</b> і розгортають його через <b>prf+</b> у сім ключів — один для похідних ключів (SK_d), два ключі цілісності, два ключі шифрування і два ключі, що захищають AUTH. <b>IKE_AUTH</b> далі виконується зашифровано, автентифікуючи вузли (підпис або PSK). Демо виконує справжнє розгортання prf+ (HMAC-SHA256); згенеруйте нонси наново, щоб побачити зміну всього блоку ключів."></p>
+    <div id="refs-ipsec"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="hint" data-en="Real prf+ (HMAC-SHA256) key expansion per RFC 7296 §2.13. DH output g^ir is a toy exponentiation." data-uk="Справжнє розгортання ключів prf+ (HMAC-SHA256) за RFC 7296 §2.13. Вихід DH g^ir — іграшкове піднесення."></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="ipsecRun" data-en="New IKE_SA_INIT" data-uk="Новий IKE_SA_INIT">New IKE_SA_INIT</button>
+        </div>
+        <div class="readout" id="ipsecOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Failure modes" data-uk="Режими збою">Failure modes</div>
+      <span data-en="<b>Downgrade:</b> the older IKEv1 aggressive mode leaked a PSK-based hash offline (dictionary attack); weak DH groups fell to <b>Logjam</b>-style precomputation. <b>Replay:</b> IKEv2 counters it with message-ID sequencing and by binding both nonces into SKEYSEED. <b>Transcript / KCI:</b> the AUTH payload signs the peer's first message and nonce, binding identities to the exchange; without it a key-compromise-impersonation attack becomes possible. Always use a strong DH group (or ECDHE) so g^ir cannot be precomputed."
+            data-uk="<b>Зниження:</b> старіший агресивний режим IKEv1 розкривав геш на основі PSK офлайн (словникова атака); слабкі групи DH падали під <b>Logjam</b>-подібним передобчисленням. <b>Повтори:</b> IKEv2 протидіє нумерацією message-ID і прив'язкою обох нонсів у SKEYSEED. <b>Транскрипт / KCI:</b> AUTH підписує перше повідомлення й нонс вузла, прив'язуючи особи до обміну; без цього можлива атака видавання себе через компрометацію ключа. Завжди беріть сильну групу DH (або ECDHE), щоб g^ir не можна було передобчислити."></span></div>
+    <div class="xrefs"><a href="keyexchange.html#ecdh">ECDH</a> <a href="protocols.html#wireguard">WireGuard</a> <a href="hash.html#hmac">HMAC / prf+</a></div>
+  </section>
+
+  <!-- ================= WireGuard ================= -->
+  <section id="wireguard">
+    <span class="num">27 / 5</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(1)</span>
+      <span data-en="WireGuard" data-uk="WireGuard">WireGuard</span></h2>
+    <div class="formula">Noise_IKpsk2:  ck₀ = H(&quot;Noise_IK…&quot;);  cₖ₊₁ = HKDF(cₖ, DHᵢ);  keys = HKDF(ck, psk)</div>
+    <p class="desc" data-en="WireGuard is a deliberately <b>minimal</b> VPN: no cipher agility, no options. It fixes one Noise pattern (<b>Noise_IKpsk2</b>), Curve25519 for DH, ChaCha20-Poly1305 for data and BLAKE2s for hashing, and completes a <b>1-RTT</b> handshake in two messages. Its whole handshake is a straight-line chain of <b>HKDF</b> calls: a chaining key is seeded from the protocol name and then repeatedly mixed with each Diffie–Hellman result and the static identities, until the final HKDF splits it into the two transport keys. The demo runs that exact chain (real HKDF; SHA-256 stands in for BLAKE2s, clearly labelled)."
+       data-uk="WireGuard — навмисно <b>мінімалістичний</b> VPN: без гнучкості шифрів, без опцій. Він фіксує один патерн Noise (<b>Noise_IKpsk2</b>), Curve25519 для DH, ChaCha20-Poly1305 для даних і BLAKE2s для гешування, завершуючи <b>1-RTT</b> рукостискання за два повідомлення. Усе його рукостискання — прямий ланцюг викликів <b>HKDF</b>: ланцюговий ключ засівається з назви протоколу, а потім багаторазово змішується з кожним результатом Діффі–Хеллмана та статичними особами, доки фінальний HKDF не розділить його на два транспортні ключі. Демо виконує саме цей ланцюг (справжній HKDF; SHA-256 замінює BLAKE2s, чітко позначено)."></p>
+    <div id="refs-wireguard"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="hint" data-en="Real HKDF-chain handshake (SHA-256 substituted for BLAKE2s). DH outputs are toy exponentiations." data-uk="Справжнє рукостискання HKDF-ланцюгом (SHA-256 замість BLAKE2s). Виходи DH — іграшкові піднесення."></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="wgRun" data-en="Run handshake (2 messages)" data-uk="Виконати рукостискання (2 повідомлення)">Run handshake</button>
+        </div>
+        <div class="readout" id="wgOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Failure modes" data-uk="Режими збою">Failure modes</div>
+      <span data-en="No cipher negotiation means <b>no downgrade surface</b> at all — a deliberate design choice. <b>Replay</b> of the initiation is bounded by a TAI64N timestamp in the (encrypted) first message and a per-peer counter; the responder rejects stale or reused handshakes. The optional <b>psk2</b> pre-shared key adds a post-quantum hedge and defends against <b>KCI</b>. Forward secrecy holds per-session via the ephemeral Curve25519 keys; the fixed rekey interval bounds how long any one key protects data."
+            data-uk="Відсутність узгодження шифрів означає <b>жодної поверхні зниження</b> — навмисне рішення. <b>Повтор</b> ініціації обмежено міткою часу TAI64N у (зашифрованому) першому повідомленні та лічильником на вузол; відповідач відкидає застарілі чи повторені рукостискання. Необов'язковий пре-спільний ключ <b>psk2</b> додає постквантовий запас і захищає від <b>KCI</b>. Пряма секретність тримається посесійно через ефемерні ключі Curve25519; фіксований інтервал переключення ключів обмежує, як довго один ключ захищає дані."></span></div>
+    <div class="xrefs"><a href="protocols.html#noise">Noise</a> <a href="protocols.html#ipsec">IPsec</a> <a href="keyexchange.html#ecdh">Curve25519 / ECDH</a></div>
+  </section>
+
+  <!-- ================= Kerberos ================= -->
+  <section id="kerberos">
+    <span class="num">27 / 6</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(1)</span>
+      <span data-en="Kerberos" data-uk="Kerberos">Kerberos</span></h2>
+    <div class="formula">AS ⟶ {K_c,tgs}_Kc , TGT={K_c,tgs}_Ktgs;   TGS ⟶ {K_c,s}_Kc,tgs , ST={K_c,s}_Ks</div>
+    <p class="desc" data-en="Kerberos (RFC 4120) authenticates users across a network with <b>symmetric</b> keys and a trusted third party — the KDC — so no password ever crosses the wire and services need no per-user secrets. The client gets a <b>Ticket-Granting Ticket</b> from the Authentication Server (AS), then trades it at the Ticket-Granting Server (TGS) for a <b>service ticket</b>, and finally presents that ticket plus a fresh <b>authenticator</b> to the service. Each ticket carries a session key sealed under the next party's long-term key. Step through the six messages; the demo derives real session keys and computes a real HMAC-SHA256 authenticator."
+       data-uk="Kerberos (RFC 4120) автентифікує користувачів у мережі <b>симетричними</b> ключами й довіреною третьою стороною — KDC — тож пароль ніколи не йде каналом, а сервісам не потрібні секрети на кожного користувача. Клієнт отримує <b>квиток на видачу квитків</b> (TGT) від сервера автентифікації (AS), потім обмінює його на сервері видачі квитків (TGS) на <b>сервісний квиток</b> і врешті пред'являє цей квиток разом зі свіжим <b>автентифікатором</b> сервісу. Кожен квиток несе сеансовий ключ, запечатаний під довготривалим ключем наступної сторони. Пройдіть шість повідомлень; демо виводить справжні сеансові ключі й обчислює справжній автентифікатор HMAC-SHA256."></p>
+    <div id="refs-kerberos"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="hint" data-en="Real HMAC-SHA256 for key derivation and the authenticator; ticket &quot;encryption&quot; is a toy keyed transform (labelled)." data-uk="Справжній HMAC-SHA256 для виведення ключів і автентифікатора; «шифрування» квитка — іграшкове ключоване перетворення (позначено)."></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="krbNext" data-en="Next message ▸" data-uk="Наступне повідомлення ▸">Next message ▸</button>
+          <button id="krbReset" class="secondary" data-en="Reset" data-uk="Скинути">Reset</button>
+        </div>
+        <div class="readout" id="krbOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Failure modes" data-uk="Режими збою">Failure modes</div>
+      <span data-en="<b>Replay:</b> the authenticator carries a timestamp and the service caches recently seen ones inside the (short) clock-skew window — synchronised clocks are mandatory. <b>Offline guessing:</b> the AS-REP is encrypted under a key derived from the user's password, so <b>AS-REP roasting</b> and <b>Kerberoasting</b> (a service ticket is encrypted under the service account's key) let an attacker brute-force weak passwords offline. <b>KCI / delegation:</b> pre-authentication, and cautious use of ticket delegation, close impersonation paths. Single sign-on means a compromised KDC (the &lsquo;golden ticket&rsquo;) forges any identity."
+            data-uk="<b>Повтори:</b> автентифікатор несе мітку часу, а сервіс кешує нещодавно бачені в межах (короткого) вікна розсинхронізації годинників — синхронні годинники обов'язкові. <b>Офлайн-добір:</b> AS-REP зашифровано під ключем із пароля користувача, тож <b>AS-REP roasting</b> і <b>Kerberoasting</b> (сервісний квиток зашифровано під ключем сервісного акаунта) дають зловмиснику офлайн-перебір слабких паролів. <b>KCI / делегування:</b> попередня автентифікація й обережне делегування квитків закривають шляхи видавання себе. Єдиний вхід означає, що компрометований KDC («золотий квиток») підробляє будь-яку особу."></span></div>
+    <div class="xrefs"><a href="hash.html#hmac">HMAC</a> <a href="protocols.html#fido2">FIDO2</a> <a href="symmetric.html#aes">AES (ticket enc)</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Password &amp; Token Authentication" data-uk="Автентифікація паролем і токеном">Password &amp; token authentication</h3>
+
+  <!-- ================= PAKE ================= -->
+  <section id="pake">
+    <span class="num">27 / 7</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(n³)</span>
+      <span data-en="PAKE (SRP, SPAKE2, OPAQUE)" data-uk="PAKE (SRP, SPAKE2, OPAQUE)">PAKE (SRP, SPAKE2, OPAQUE)</span></h2>
+    <div class="formula">SRP-6a:  v = g^x;  A = g^a;  B = k·v + g^b;  S = g^{b(a+u·x)};  K = H(S)</div>
+    <p class="desc" data-en="A <b>Password-Authenticated Key Exchange</b> turns a low-entropy shared password into a strong session key <i>without</i> ever sending the password, a hash of it, or anything an eavesdropper (or the server) can use for <b>offline guessing</b>. The demo runs real <b>SRP-6a</b> over a toy safe prime: the server stores only a verifier v = g^x; both sides exchange public values A and B, mix in a common challenge u, and independently reach the same secret S. A wrong password simply yields two different S — no oracle. Modern PAKEs (SPAKE2, and the <b>augmented</b> OPAQUE) improve the trust model so even a stolen verifier database cannot be pre-computed against."
+       data-uk="<b>Автентифікований паролем обмін ключами</b> перетворює пароль з низькою ентропією на стійкий сеансовий ключ, <i>ніколи</i> не надсилаючи пароль, його геш чи будь-що, чим підслуховувач (або сервер) міг би скористатися для <b>офлайн-добору</b>. Демо виконує справжній <b>SRP-6a</b> над іграшковим безпечним простим: сервер зберігає лише верифікатор v = g^x; обидві сторони обмінюють відкриті значення A і B, підмішують спільний виклик u й незалежно доходять того самого секрету S. Хибний пароль просто дає два різні S — жодного оракула. Сучасні PAKE (SPAKE2 та <b>доповнений</b> OPAQUE) покращують модель довіри, тож навіть викрадену базу верифікаторів не можна передобчислити."></p>
+    <div id="refs-pake"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="password (client)" data-uk="пароль (клієнт)">password</span></label>
+          <input type="text" id="pakePw" value="correct horse" maxlength="24" style="width:100%"></div>
+        <div class="hint" data-en="Real SRP-6a BigInt math with H = SHA-256, over the toy safe prime N = 2039, g = 5." data-uk="Справжня математика SRP-6a на BigInt з H = SHA-256, над іграшковим безпечним простим N = 2039, g = 5."></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="pakeRun" data-en="Run SRP exchange" data-uk="Виконати обмін SRP">Run SRP exchange</button>
+          <button id="pakeWrong" class="secondary" data-en="Client mistypes password" data-uk="Клієнт помиляється паролем">Client mistypes password</button>
+        </div>
+        <div class="readout" id="pakeOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Failure modes" data-uk="Режими збою">Failure modes</div>
+      <span data-en="A PAKE's whole point is to deny <b>offline guessing</b>: an attacker gets only one online password try per protocol run. Failure modes are subtle: SRP-6a is not proven in the standard model and is awkward over elliptic curves; a naïve PAKE can leak whether a username exists, or fall to a <b>KCI</b>/relay if identities are not bound into the transcript. <b>Augmented</b> PAKEs (OPAQUE) resist <b>pre-computation</b> even after a server breach, because the salt never leaves the server in a guessable form. As always, throttle online attempts — the one guess per run is only cheap if you allow unlimited runs."
+            data-uk="Уся суть PAKE — заборонити <b>офлайн-добір</b>: зловмисник має лише одну онлайн-спробу пароля на запуск протоколу. Режими збою тонкі: SRP-6a не доведено у стандартній моделі й незручний на еліптичних кривих; наївний PAKE може розкрити, чи існує ім'я користувача, або впасти під <b>KCI</b>/реле, якщо особи не прив'язані до транскрипту. <b>Доповнені</b> PAKE (OPAQUE) стійкі до <b>передобчислення</b> навіть після зламу сервера, бо сіль ніколи не залишає сервер у вгадуваній формі. Як завжди, обмежуйте онлайн-спроби — одна спроба на запуск дешева лише якщо запусків необмежено."></span></div>
+    <div class="xrefs"><a href="authprotocols.html#auth-fs">Zero-knowledge auth</a> <a href="keyexchange.html#dh">Diffie–Hellman</a> <a href="protocols.html#otp">TOTP</a></div>
+  </section>
+
+  <!-- ================= FIDO2 / WebAuthn ================= -->
+  <section id="fido2">
+    <span class="num">27 / 8</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+      <span data-en="FIDO2 / WebAuthn" data-uk="FIDO2 / WebAuthn">FIDO2 / WebAuthn</span></h2>
+    <div class="formula">sig = Sign(sk, authenticatorData ‖ SHA-256(clientDataJSON));   authenticatorData ∋ SHA-256(rpId)</div>
+    <p class="desc" data-en="FIDO2/WebAuthn replaces passwords with a per-site <b>public-key credential</b> (a &lsquo;passkey&rsquo;). At registration the authenticator makes a fresh key pair, scoped to the site's <b>rpId</b>, and hands the server the public key. To log in, the server sends a random <b>challenge</b>; the authenticator signs <code>authenticatorData ‖ SHA-256(clientDataJSON)</code>, where authenticatorData embeds <b>SHA-256(rpId)</b> and clientDataJSON embeds the challenge and the browser's <b>origin</b>. This origin binding is what makes it <b>phishing-resistant</b>. The demo makes a real toy-curve key pair and signs; flip on the phishing site to see the origin mismatch rejected."
+       data-uk="FIDO2/WebAuthn замінює паролі <b>ключем з відкритим ключем</b> на кожен сайт («passkey»). Під час реєстрації автентифікатор створює свіжу пару ключів, прив'язану до <b>rpId</b> сайту, і передає серверу відкритий ключ. Для входу сервер надсилає випадковий <b>виклик</b>; автентифікатор підписує <code>authenticatorData ‖ SHA-256(clientDataJSON)</code>, де authenticatorData містить <b>SHA-256(rpId)</b>, а clientDataJSON — виклик і <b>origin</b> браузера. Саме ця прив'язка до origin робить його <b>стійким до фішингу</b>. Демо створює справжню пару ключів на іграшковій кривій і підписує; увімкніть фішинговий сайт, щоб побачити відхилення через розбіжність origin."></p>
+    <div id="refs-fido2"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="legitimate site (rpId)" data-uk="легітимний сайт (rpId)">rpId</span></label>
+          <input type="text" id="fidoRp" value="example.com" maxlength="24" style="width:100%"></div>
+        <label style="display:flex;gap:8px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim)">
+          <input type="checkbox" id="fidoPhish"> <span data-en="user is on a phishing site (evil-example.com)" data-uk="користувач на фішинговому сайті (evil-example.com)">phishing site</span></label>
+        <div class="hint" data-en="Real SHA-256 for rpIdHash and clientDataHash; a real toy-curve Schnorr signature (y²=x³+2x+3 mod 97)." data-uk="Справжній SHA-256 для rpIdHash і clientDataHash; справжній підпис Шнорра на іграшковій кривій (y²=x³+2x+3 mod 97)."></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="fidoReg" data-en="1 · Register passkey" data-uk="1 · Зареєструвати passkey">1 · Register</button>
+          <button id="fidoAuth" data-en="2 · Authenticate" data-uk="2 · Автентифікуватися">2 · Authenticate</button>
+        </div>
+        <div class="readout" id="fidoOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Failure modes" data-uk="Режими збою">Failure modes</div>
+      <span data-en="The signed <b>origin/rpId binding</b> defeats real-time <b>phishing and relay</b>: a proxy site has a different origin, so the signature the server receives does not match the rpId it expects — the core win over TOTP. <b>Replay</b> is stopped by the server's fresh per-login challenge and a monotonic <b>signature counter</b> in authenticatorData (a cloned authenticator is detected when the counter goes backwards). Residual risks are outside the crypto: authenticator <b>attestation</b> trust, account-recovery fallbacks (often a weaker password/OTP path), and roaming-key loss."
+            data-uk="Підписана <b>прив'язка origin/rpId</b> перемагає реальний <b>фішинг і реле</b>: проксі-сайт має інший origin, тож підпис, який отримує сервер, не відповідає очікуваному rpId — головна перевага над TOTP. <b>Повтор</b> зупиняється свіжим викликом на кожен вхід і монотонним <b>лічильником підписів</b> в authenticatorData (клонований автентифікатор виявляють, коли лічильник іде назад). Залишкові ризики поза криптографією: довіра до <b>атестації</b> автентифікатора, шляхи відновлення акаунта (часто слабший пароль/OTP) і втрата роумінг-ключа."></span></div>
+    <div class="xrefs"><a href="signatures.html#eddsa">EdDSA</a> <a href="authprotocols.html#auth-ecc">ECC auth</a> <a href="protocols.html#otp">TOTP</a> <a href="protocols.html#kerberos">Kerberos</a></div>
+  </section>
+
+  <!-- ================= HOTP / TOTP ================= -->
+  <section id="otp">
+    <span class="num">27 / 9</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(1)</span>
+      <span data-en="HOTP / TOTP" data-uk="HOTP / TOTP">HOTP / TOTP</span></h2>
+    <div class="formula">HOTP(K,C) = Truncate(HMAC-SHA1(K, C)) mod 10⁶;   TOTP: C = ⌊unixtime / 30⌋</div>
+    <p class="desc" data-en="The six digits in an authenticator app are a real cryptographic computation. <b>HOTP</b> (RFC 4226) takes a shared secret K and an 8-byte counter C, computes <b>HMAC-SHA1(K, C)</b>, then <b>dynamically truncates</b> it — the low nibble of the last byte picks a 4-byte window, masked to 31 bits and reduced mod 10⁶. <b>TOTP</b> (RFC 6238) just sets the counter to a 30-second time step, C = ⌊unixtime / 30⌋. Below is a <b>live TOTP</b> updating every second with a countdown, and a self-test against the published <b>RFC 4226 and RFC 6238 test vectors</b>. This is real HMAC-SHA1 — implemented from scratch on this page — so the vectors genuinely pass."
+       data-uk="Шість цифр у застосунку-автентифікаторі — це справжнє криптографічне обчислення. <b>HOTP</b> (RFC 4226) бере спільний секрет K і 8-байтовий лічильник C, обчислює <b>HMAC-SHA1(K, C)</b>, а потім <b>динамічно скорочує</b> його — молодший ніббл останнього байта обирає 4-байтове вікно, маскується до 31 біта й зводиться mod 10⁶. <b>TOTP</b> (RFC 6238) просто задає лічильник як 30-секундний крок часу, C = ⌊unixtime / 30⌋. Нижче — <b>живий TOTP</b>, що оновлюється щосекунди з відліком, і самоперевірка проти опублікованих <b>тестових векторів RFC 4226 і RFC 6238</b>. Це справжній HMAC-SHA1 — реалізований з нуля на цій сторінці — тож вектори справді проходять."></p>
+    <div id="refs-otp"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="otpCanvas" width="320" height="120"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="shared secret K (ASCII bytes)" data-uk="спільний секрет K (ASCII-байти)">secret K</span></label>
+            <input type="text" id="otpSecret" value="12345678901234567890" style="width:100%; font-size:11px"></div>
+          <div class="hint" data-en="Live 6-digit TOTP, 30-second step, HMAC-SHA1. The secret is taken as raw ASCII bytes (as in the RFC test vectors)." data-uk="Живий 6-значний TOTP, крок 30 секунд, HMAC-SHA1. Секрет береться як «сирі» ASCII-байти (як у тестових векторах RFC)."></div>
+          <div class="readout" id="otpOut"></div>
+          <div class="readout" id="otpVectors"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Failure modes" data-uk="Режими збою">Failure modes</div>
+      <span data-en="TOTP is a shared-secret scheme: the server stores K in the clear, so a <b>server breach leaks every seed</b>. It is <b>not phishing-resistant</b> — a real-time proxy relays the 6 digits within the 30-second window (this is the whole reason FIDO2 exists). <b>Replay</b> inside one time step is possible unless the server rejects a code already used; clock drift forces a small acceptance window that slightly widens the guessing surface. HMAC-SHA1 here is safe (SHA-1 collisions do not break HMAC), but the 6-digit space (10⁶) demands strict online rate-limiting."
+            data-uk="TOTP — схема зі спільним секретом: сервер зберігає K у відкритому вигляді, тож <b>злам сервера розкриває всі сіди</b>. Вона <b>не стійка до фішингу</b> — реальний проксі ретранслює 6 цифр у межах 30-секундного вікна (саме тому існує FIDO2). <b>Повтор</b> у межах одного кроку часу можливий, якщо сервер не відхиляє вже використаний код; дрейф годинника змушує мати невелике вікно прийняття, що трохи розширює поверхню добору. HMAC-SHA1 тут безпечний (колізії SHA-1 не ламають HMAC), але простір із 6 цифр (10⁶) вимагає суворого онлайн-обмеження частоти."></span></div>
+    <div class="xrefs"><a href="hash.html#hmac">HMAC</a> <a href="hash.html#sha1">SHA-1</a> <a href="protocols.html#fido2">FIDO2</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+const enc=new TextEncoder();
+const $=id=>document.getElementById(id);
+const uklang=()=>window.LANG==='uk';
+function cat(){ let n=0; for(const a of arguments)n+=a.length; const o=new Uint8Array(n); let i=0; for(const a of arguments){o.set(a,i);i+=a.length;} return o; }
+const bytesHex=b=>Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join('');
+const short=(h,n)=>h.slice(0,n)+'…';
+
+/* ============================ real SHA-1 (FIPS 180-1) ============================ */
+function sha1(bytes){
+  let h0=0x67452301,h1=0xEFCDAB89,h2=0x98BADCFE,h3=0x10325476,h4=0xC3D2E1F0;
+  const l=bytes.length, bl=(((l+8)>>6)+1)<<6, m=new Uint8Array(bl);
+  m.set(bytes); m[l]=0x80;
+  const bits=l*8, hi=Math.floor(bits/0x100000000), lo=bits>>>0;
+  m[bl-8]=(hi>>>24)&255; m[bl-7]=(hi>>>16)&255; m[bl-6]=(hi>>>8)&255; m[bl-5]=hi&255;
+  m[bl-4]=(lo>>>24)&255; m[bl-3]=(lo>>>16)&255; m[bl-2]=(lo>>>8)&255; m[bl-1]=lo&255;
+  const w=new Array(80), rol=(x,n)=>(x<<n)|(x>>>(32-n));
+  for(let o=0;o<bl;o+=64){
+    for(let i=0;i<16;i++) w[i]=(m[o+4*i]<<24)|(m[o+4*i+1]<<16)|(m[o+4*i+2]<<8)|m[o+4*i+3];
+    for(let i=16;i<80;i++) w[i]=rol(w[i-3]^w[i-8]^w[i-14]^w[i-16],1);
+    let a=h0,b=h1,c=h2,d=h3,e=h4;
+    for(let i=0;i<80;i++){
+      let f,k;
+      if(i<20){ f=(b&c)|((~b)&d); k=0x5A827999; }
+      else if(i<40){ f=b^c^d; k=0x6ED9EBA1; }
+      else if(i<60){ f=(b&c)|(b&d)|(c&d); k=0x8F1BBCDC; }
+      else { f=b^c^d; k=0xCA62C1D6; }
+      const t=(rol(a,5)+f+e+k+w[i])|0;
+      e=d; d=c; c=rol(b,30)|0; b=a; a=t;
+    }
+    h0=(h0+a)|0; h1=(h1+b)|0; h2=(h2+c)|0; h3=(h3+d)|0; h4=(h4+e)|0;
+  }
+  const out=new Uint8Array(20), hs=[h0,h1,h2,h3,h4];
+  for(let i=0;i<5;i++){ out[4*i]=(hs[i]>>>24)&255; out[4*i+1]=(hs[i]>>>16)&255; out[4*i+2]=(hs[i]>>>8)&255; out[4*i+3]=hs[i]&255; }
+  return out;
+}
+
+/* ============================ real SHA-256 (FIPS 180-4) ============================ */
+const sha256=(function(){
+  const K=new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+  const rr=(x,n)=>(x>>>n)|(x<<(32-n));
+  return function(bytes){
+    const l=bytes.length, bl=((l+8>>6)+1)<<6, m=new Uint8Array(bl); m.set(bytes); m[l]=0x80;
+    const bits=l*8; m[bl-4]=(bits>>>24)&255; m[bl-3]=(bits>>>16)&255; m[bl-2]=(bits>>>8)&255; m[bl-1]=bits&255;
+    let h0=0x6a09e667,h1=0xbb67ae85,h2=0x3c6ef372,h3=0xa54ff53a,h4=0x510e527f,h5=0x9b05688c,h6=0x1f83d9ab,h7=0x5be0cd19;
+    const w=new Uint32Array(64);
+    for(let o=0;o<bl;o+=64){
+      for(let i=0;i<16;i++) w[i]=(m[o+4*i]<<24)|(m[o+4*i+1]<<16)|(m[o+4*i+2]<<8)|m[o+4*i+3];
+      for(let i=16;i<64;i++){ const s0=rr(w[i-15],7)^rr(w[i-15],18)^(w[i-15]>>>3), s1=rr(w[i-2],17)^rr(w[i-2],19)^(w[i-2]>>>10); w[i]=(w[i-16]+s0+w[i-7]+s1)|0; }
+      let a=h0,b=h1,c=h2,d=h3,e=h4,f=h5,g=h6,h=h7;
+      for(let i=0;i<64;i++){ const S1=rr(e,6)^rr(e,11)^rr(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[i]+w[i])|0,S0=rr(a,2)^rr(a,13)^rr(a,22),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)|0; h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0; }
+      h0=(h0+a)|0;h1=(h1+b)|0;h2=(h2+c)|0;h3=(h3+d)|0;h4=(h4+e)|0;h5=(h5+f)|0;h6=(h6+g)|0;h7=(h7+h)|0;
+    }
+    const out=new Uint8Array(32),hs=[h0,h1,h2,h3,h4,h5,h6,h7];
+    for(let i=0;i<8;i++){ out[4*i]=(hs[i]>>>24)&255;out[4*i+1]=(hs[i]>>>16)&255;out[4*i+2]=(hs[i]>>>8)&255;out[4*i+3]=hs[i]&255; }
+    return out;
+  };
+})();
+
+/* ============================ generic HMAC + HKDF ============================ */
+function hmac(hfn, key, msg){          // block size 64 for SHA-1 and SHA-256
+  const B=64;
+  if(key.length>B) key=hfn(key);
+  const k=new Uint8Array(B); k.set(key);
+  const ip=new Uint8Array(B), op=new Uint8Array(B);
+  for(let i=0;i<B;i++){ ip[i]=k[i]^0x36; op[i]=k[i]^0x5c; }
+  return hfn(cat(op, hfn(cat(ip, msg))));
+}
+const hmac1  =(key,msg)=>hmac(sha1,key,msg);
+const hmac256=(key,msg)=>hmac(sha256,key,msg);
+function hkdfExtract(salt, ikm){ return hmac256(salt, ikm); }
+function hkdfExpand(prk, info, len){
+  const N=Math.ceil(len/32), okm=[]; let t=new Uint8Array(0);
+  for(let i=1;i<=N;i++){ t=hmac256(prk, cat(t, info, new Uint8Array([i]))); for(const b of t) okm.push(b); }
+  return new Uint8Array(okm.slice(0,len));
+}
+
+/* ============================ HOTP / TOTP (RFC 4226 / 6238) ============================ */
+function counterBytes(c){ const b=new Uint8Array(8); for(let i=7;i>=0;i--){ b[i]=c%256; c=Math.floor(c/256); } return b; }
+function hotp(keyBytes, counter, digits){
+  const mac=hmac1(keyBytes, counterBytes(counter));      // 20-byte HMAC-SHA1
+  const off=mac[19]&0x0f;
+  const bin=((mac[off]&0x7f)<<24)|((mac[off+1]&0xff)<<16)|((mac[off+2]&0xff)<<8)|(mac[off+3]&0xff);
+  return String(bin % Math.pow(10,digits)).padStart(digits,'0');
+}
+function totp(keyBytes, unixSec, step, digits){ return hotp(keyBytes, Math.floor(unixSec/step), digits); }
+
+/* ======================================================================
+   Self-test banner — proves the primitives + RFC vectors
+   ====================================================================== */
+function selfTest(){
+  const uk=uklang();
+  const s1=bytesHex(sha1(enc.encode('abc')))==='a9993e364706816aba3e25717850c26c9cd0d89d';
+  const s2=bytesHex(sha256(enc.encode('abc')))==='ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
+  // RFC 2104 HMAC-SHA1 not needed; use RFC 4226 HOTP vector instead
+  const K=enc.encode('12345678901234567890');
+  const hotpOK=(hotp(K,0,6)==='755224' && hotp(K,1,6)==='287082' && hotp(K,9,6)==='520489');
+  const totpOK=(totp(K,59,30,8)==='94287082' && totp(K,1111111109,30,8)==='07081804' && totp(K,1234567890,30,8)==='89005924');
+  const chip=(ok,lbl)=>lbl+' <span class="'+(ok?'a':'b')+'">'+(ok?'✓':'✗')+'</span>';
+  $('selftest').innerHTML=
+    '<span class="k">'+(uk?'Самоперевірка':'Self-test')+':</span>  '+
+    chip(s1,'SHA-1')+'   '+chip(s2,'SHA-256')+'   '+
+    chip(hotpOK,'HOTP (RFC 4226)')+'   '+chip(totpOK,'TOTP (RFC 6238)')+'\n'+
+    ((s1&&s2&&hotpOK&&totpOK)?'<span class="a">'+(uk?'усі примітиви коректні — TOTP використовує СПРАВЖНІЙ HMAC-SHA1':'all primitives correct — TOTP uses REAL HMAC-SHA1')+'</span>':'<span class="b">FAIL</span>');
+}
+
+/* ======================================================================
+   toy DH for handshake demos (small prime, BigInt) — labelled as toy
+   ====================================================================== */
+const DP=2903n, DG=5n;
+function modpow(b,e,m){ b%=m; if(b<0n)b+=m; let r=1n; while(e>0n){ if(e&1n)r=r*b%m; b=b*b%m; e>>=1n; } return r; }
+function dhShared(priv, pub){ return modpow(pub, priv, DP); }        // pub^priv mod p
+function bigToBytes(x){ const n=Number(x); return new Uint8Array([(n>>8)&255, n&255]); }
+function randPriv(){ return BigInt(2+Math.floor(Math.random()*2890)); }
+
+/* ======================================================================
+   1) TLS 1.3 — real RFC 8446 key schedule, stepped message flow
+   ====================================================================== */
+let tlsStep=0, tlsSched=null;
+function expandLabel(secret, label, ctxBytes, len){
+  const full=enc.encode('tls13 '+label);
+  const hl=[]; hl.push((len>>8)&255, len&255); hl.push(full.length);
+  for(const b of full) hl.push(b); hl.push(ctxBytes.length);
+  for(const b of ctxBytes) hl.push(b);
+  return hkdfExpand(secret, new Uint8Array(hl), len);
+}
+const deriveSecret=(secret,label,msgs)=>expandLabel(secret,label,sha256(msgs),32);
+function tlsBuild(){
+  const cPriv=randPriv(), sPriv=randPriv();
+  const cPub=modpow(DG,cPriv,DP), sPub=modpow(DG,sPriv,DP);
+  const ecdhe=bigToBytes(dhShared(cPriv,sPub));            // shared g^xy
+  const z=new Uint8Array(32);
+  const es=hkdfExtract(z, z);                              // Early Secret = Extract(0,0)
+  const dEs=deriveSecret(es,'derived',new Uint8Array(0));
+  const hs=hkdfExtract(dEs, ecdhe);                        // Handshake Secret
+  const cHs=deriveSecret(hs,'c hs traffic',enc.encode('CH..SH'));
+  const sHs=deriveSecret(hs,'s hs traffic',enc.encode('CH..SH'));
+  const dHs=deriveSecret(hs,'derived',new Uint8Array(0));
+  const ms=hkdfExtract(dHs, z);                            // Master Secret
+  const cAp=deriveSecret(ms,'c ap traffic',enc.encode('CH..SF'));
+  const sAp=deriveSecret(ms,'s ap traffic',enc.encode('CH..SF'));
+  tlsSched={cPub,sPub,es,hs,ms,cHs,sHs,cAp,sAp};
+}
+const TLS_MSGS=[
+  {en:'1 · ClientHello  +key_share',uk:'1 · ClientHello  +key_share',dir:1,
+   dEn:'Client sends its (EC)DHE share g^x. Early Secret is computable now (no PSK ⇒ from zeros).',dUk:'Клієнт надсилає свою частку (EC)DHE g^x. Early Secret уже обчислюваний (без PSK ⇒ із нулів).',key:'es'},
+  {en:'2 · ServerHello  +key_share',uk:'2 · ServerHello  +key_share',dir:-1,
+   dEn:'Server share g^y arrives ⇒ ECDHE known ⇒ Handshake Secret + handshake traffic keys. Server may now encrypt.',dUk:'Прибуває частка сервера g^y ⇒ відомий ECDHE ⇒ Handshake Secret + ключі трафіку рукостискання. Сервер уже може шифрувати.',key:'hs'},
+  {en:'3 · {EncExt,Cert,CertVerify,Finished}',uk:'3 · {EncExt,Cert,CertVerify,Finished}',dir:-1,
+   dEn:'Encrypted under server handshake key. CertVerify signs the transcript; Finished MACs it (transcript binding).',dUk:'Зашифровано під ключем рукостискання сервера. CertVerify підписує транскрипт; Finished ставить MAC (прив\'язка транскрипту).',key:'sHs'},
+  {en:'4 · {Finished}  ⇒ application data',uk:'4 · {Finished}  ⇒ дані застосунку',dir:1,
+   dEn:'Client Finished completes 1-RTT. Master Secret ⇒ application traffic keys. Ephemeral keys erased ⇒ forward secrecy.',dUk:'Client Finished завершує 1-RTT. Master Secret ⇒ ключі трафіку застосунку. Ефемерні ключі стерто ⇒ пряма секретність.',key:'ms'}
+];
+function drawTLS(){
+  const cv=$('tlsCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cx=54, sx=W-54;
+  g.strokeStyle=C.line; g.beginPath(); g.moveTo(cx,34); g.lineTo(cx,H-10); g.moveTo(sx,34); g.lineTo(sx,H-10); g.stroke();
+  g.fillStyle=C.teal; g.font='11px monospace'; g.textAlign='center';
+  g.fillText(uklang()?'Клієнт':'Client',cx,20); g.fillStyle=C.rose; g.fillText(uklang()?'Сервер':'Server',sx,20);
+  g.textAlign='left';
+  for(let i=0;i<TLS_MSGS.length;i++){
+    const y=54+i*46, on=i<tlsStep, m=TLS_MSGS[i];
+    g.globalAlpha=on?1:0.25;
+    g.strokeStyle=on?C.amber:C.dim; g.fillStyle=on?C.amber:C.dim; g.lineWidth=on?1.6:1;
+    const x1=m.dir>0?cx:sx, x2=m.dir>0?sx:cx;
+    g.beginPath(); g.moveTo(x1,y); g.lineTo(x2,y); g.stroke();
+    const ah=m.dir>0?-6:6; g.beginPath(); g.moveTo(x2,y); g.lineTo(x2+ah,y-4); g.lineTo(x2+ah,y+4); g.fill();
+    g.fillStyle=on?C.ink:C.dim; g.font='8.5px monospace'; g.textAlign='center';
+    g.fillText((uklang()?m.uk:m.en).slice(0,34),(cx+sx)/2,y-6);
+    g.globalAlpha=1; g.textAlign='left';
+  }
+  g.lineWidth=1;
+  const uk=uklang();
+  if(tlsStep===0){ $('tlsOut').innerHTML='<span class="k">'+(uk?'Натисніть «Наступне повідомлення».':'Press “Next message”.')+'</span>'; return; }
+  const m=TLS_MSGS[tlsStep-1], sec=tlsSched[m.key];
+  let out='<span class="k">'+(uk?m.uk:m.en)+'</span>\n'+(uk?m.dEn?m.dUk:'':m.dEn)+'\n';
+  out+='<span class="k">g^x=</span><span class="s">'+tlsSched.cPub+'</span> <span class="k">g^y=</span><span class="s">'+tlsSched.sPub+'</span>\n';
+  const label={es:'Early Secret',hs:'Handshake Secret',sHs:'server hs traffic',ms:'Master Secret'}[m.key];
+  out+='<span class="k">'+label+' =</span> <span class="a">'+short(bytesHex(sec),24)+'</span>';
+  if(tlsStep===4) out+='\n<span class="a">'+(uk?'1-RTT завершено; ключі трафіку застосунку виведено ✓':'1-RTT complete; application traffic keys derived ✓')+'</span>';
+  $('tlsOut').innerHTML=out;
+}
+
+/* ======================================================================
+   2) Signal Double Ratchet — real HMAC/HKDF-SHA256 chaining
+   ====================================================================== */
+let sig=null;
+function sigInit(){
+  const rk=sha256(enc.encode('X3DH-root'));               // initial root key from X3DH (schematic)
+  sig={rk, sendCK:null, sendN:0, dhN:0, log:[], mk:null, dhPriv:randPriv()};
+  // first DH ratchet to establish a sending chain
+  sigDH(true);
+}
+function sigDH(initial){
+  const peerPub=modpow(DG,randPriv(),DP);
+  const dhOut=bigToBytes(dhShared(sig.dhPriv, peerPub));
+  const prk=hkdfExtract(sig.rk, dhOut);
+  sig.rk=hkdfExpand(prk, enc.encode('rk'), 32);
+  sig.sendCK=hkdfExpand(prk, enc.encode('ck'), 32);
+  sig.sendN=0; sig.dhN++;
+  if(!initial) sig.log.push({t:'dh'});
+}
+function sigSend(){
+  if(!sig.sendCK) return;
+  const mk=hmac256(sig.sendCK, new Uint8Array([1]));       // message key
+  sig.sendCK=hmac256(sig.sendCK, new Uint8Array([2]));     // advance chain key
+  sig.sendN++; sig.mk=mk;
+  sig.log.push({t:'msg',n:sig.sendN,mk:bytesHex(mk).slice(0,8)});
+  drawSig();
+}
+function sigDoReply(){ sigDH(false); drawSig(); }
+function drawSig(){
+  const cv=$('sigCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  g.font='9px monospace';
+  // root key node
+  g.fillStyle=C.amber; g.fillRect(12,12,120,20); g.fillStyle=C.panel; g.fillText('RK '+bytesHex(sig.rk).slice(0,6),18,26);
+  // chain key
+  g.fillStyle=C.teal; g.fillRect(12,44,120,20); g.fillStyle=C.panel; g.fillText('CK'+sig.dhN+' '+(sig.sendCK?bytesHex(sig.sendCK).slice(0,6):'--'),18,58);
+  // message keys along a chain
+  g.fillStyle=C.dim; g.fillText('DH ratchets: '+sig.dhN,150,26);
+  let x=150,y=52;
+  const msgs=sig.log.filter(e=>e.t==='msg').slice(-6);
+  g.fillStyle=C.dim; g.fillText(uklang()?'ключі повідомлень (старі стерто):':'message keys (old erased):',12,86);
+  msgs.forEach((e,i)=>{
+    const last=i===msgs.length-1;
+    g.fillStyle=last?C.rose:C.grid; g.fillRect(12+i*50,94,46,20);
+    g.fillStyle=last?C.ink:C.dim; g.fillText('MK'+e.n,16+i*50,108);
+    g.fillStyle=last?C.rose:C.dim; g.fillText(e.mk,16+i*50,130);
+  });
+  const uk=uklang();
+  let out='<span class="k">'+(uk?'кореневий ключ RK =':'root key RK =')+'</span> <span class="s">'+short(bytesHex(sig.rk),16)+'</span>\n'+
+    '<span class="k">'+(uk?'ланцюг CK':'chain CK')+sig.dhN+' =</span> <span class="a">'+(sig.sendCK?short(bytesHex(sig.sendCK),16):'—')+'</span>   '+
+    '<span class="k">'+(uk?'DH-ратчетів':'DH ratchets')+':</span> '+sig.dhN+'\n';
+  if(sig.mk) out+='<span class="k">'+(uk?'останній ключ повідомлення MK':'latest message key MK')+sig.sendN+' =</span> <span class="b">'+short(bytesHex(sig.mk),16)+'</span>\n';
+  out+='<span class="k">'+(uk?'кожен MK та старий CK знищено після використання ⇒ пряма секретність':'each MK and old CK destroyed after use ⇒ forward secrecy')+'</span>';
+  $('sigOut').innerHTML=out;
+}
+
+/* ======================================================================
+   3) Noise_XX — real SHA-256 MixHash + HKDF-SHA256 MixKey
+   ====================================================================== */
+const NOISE_NAME='Noise_XX_25519_ChaChaPoly_SHA256';
+const XX_TOKENS=['e','e','ee','s','es','s','se'];        // msg1: e | msg2: e,ee,s,es | msg3: s,se
+let noise=null;
+function noiseInit(){
+  let h=new Uint8Array(32); const nb=enc.encode(NOISE_NAME);
+  if(nb.length<=32){ h=new Uint8Array(32); h.set(nb); } else h=sha256(nb);
+  noise={h, ck:h.slice(), i:0, iPriv:randPriv(), rPriv:randPriv(), log:[]};
+}
+function mixHash(d){ noise.h=sha256(cat(noise.h,d)); }
+function mixKey(dh){ const prk=hkdfExtract(noise.ck, dh); noise.ck=hkdfExpand(prk,new Uint8Array([1]),32); }
+function noiseNext(){
+  if(noise.i>=XX_TOKENS.length) return;
+  const tok=XX_TOKENS[noise.i]; let note='';
+  if(tok==='e'||tok==='s'){ const pub=modpow(DG, tok==='e'?noise.iPriv:noise.rPriv, DP); mixHash(bigToBytes(pub)); note='MixHash('+tok+'.pub='+pub+')'; }
+  else { const dh=bigToBytes(dhShared(noise.iPriv, modpow(DG,noise.rPriv,DP))); mixKey(dh); note='MixKey(DH '+tok+')'; }
+  noise.log.push({tok,note}); noise.i++; drawNoise();
+}
+function drawNoise(){
+  const cv=$('noiseCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  g.font='9px monospace'; g.textAlign='center';
+  const groups=[['e'],['e','ee','s','es'],['s','se']]; let idx=0, x=8;
+  for(let m=0;m<groups.length;m++){
+    for(const tk of groups[m]){
+      const done=idx<noise.i; const w=tk.length>1?30:20;
+      g.fillStyle=done?(tk.length>1?C.teal:C.amber):C.grid;
+      g.fillRect(x,40,w,20); g.fillStyle=done?C.panel:C.dim; g.fillText(tk,x+w/2,54);
+      x+=w+6; idx++;
+    }
+    x+=10; g.strokeStyle=C.line; g.beginPath(); g.moveTo(x-8,36); g.lineTo(x-8,64); g.stroke();
+  }
+  g.textAlign='left';
+  const uk=uklang();
+  let out='<span class="k">'+NOISE_NAME+'</span>\n'+
+    '<span class="k">h  =</span> <span class="a">'+short(bytesHex(noise.h),24)+'</span>\n'+
+    '<span class="k">ck =</span> <span class="s">'+short(bytesHex(noise.ck),24)+'</span>\n';
+  if(noise.i>0) out+='<span class="k">'+(uk?'останній токен':'last token')+':</span> '+noise.log[noise.i-1].note;
+  else out+='<span class="k">'+(uk?'Натисніть «Наступний токен».':'Press “Next token”.')+'</span>';
+  if(noise.i>=XX_TOKENS.length) out+='\n<span class="a">'+(uk?'рукостискання завершено — обидві сторони автентифіковані ✓':'handshake complete — both parties authenticated ✓')+'</span>';
+  $('noiseOut').innerHTML=out;
+}
+
+/* ======================================================================
+   4) IKEv2 / IPsec — real prf+ (HMAC-SHA256) key expansion
+   ====================================================================== */
+function prfPlus(key, seed, n){                            // RFC 7296 §2.13
+  const out=[]; let t=new Uint8Array(0);
+  for(let i=1;i<=n;i++){ t=hmac256(key, cat(t, seed, new Uint8Array([i]))); for(const b of t) out.push(b); }
+  return new Uint8Array(out);
+}
+function ipsecRun(){
+  const Ni=crypto8(), Nr=crypto8();
+  const iPriv=randPriv(), rPriv=randPriv();
+  const gir=bigToBytes(dhShared(iPriv, modpow(DG,rPriv,DP)));
+  const skeyseed=hmac256(cat(Ni,Nr), gir);                 // prf(Ni|Nr, g^ir)
+  const km=prfPlus(skeyseed, cat(Ni,Nr,enc.encode('SPIiSPIr')), 7); // 7*32 bytes
+  const names=['SK_d','SK_ai','SK_ar','SK_ei','SK_er','SK_pi','SK_pr'];
+  const uk=uklang();
+  let out='<span class="k">Ni =</span> <span class="s">'+bytesHex(Ni)+'</span>  <span class="k">Nr =</span> <span class="s">'+bytesHex(Nr)+'</span>\n'+
+    '<span class="k">g^ir =</span> '+bytesHex(gir)+'\n'+
+    '<span class="k">SKEYSEED = prf(Ni‖Nr, g^ir) =</span> <span class="a">'+short(bytesHex(skeyseed),24)+'</span>\n'+
+    '<span class="k">'+(uk?'prf+ розгортає у 7 ключів:':'prf+ expands into 7 keys:')+'</span>\n';
+  for(let i=0;i<7;i++) out+='  <span class="k">'+names[i]+'=</span> '+bytesHex(km.slice(i*32,i*32+8))+'…\n';
+  out+='<span class="k">'+(uk?'далі IKE_AUTH виконується зашифровано під SK_ei/SK_ai':'IKE_AUTH then runs encrypted under SK_ei/SK_ai')+'</span>';
+  $('ipsecOut').innerHTML=out;
+}
+function crypto8(){ const b=new Uint8Array(4); for(let i=0;i<4;i++) b[i]=(Math.random()*256)|0; return b; }
+
+/* ======================================================================
+   5) WireGuard — Noise_IKpsk2 HKDF chain (SHA-256 stands in for BLAKE2s)
+   ====================================================================== */
+function wgKdf(ck, input, n){                              // HKDF as WireGuard uses it
+  const prk=hkdfExtract(ck, input); const outs=[]; let prev=new Uint8Array(0);
+  for(let i=1;i<=n;i++){ prev=hmac256(prk, cat(prev, new Uint8Array([i]))); outs.push(prev); }
+  return outs;
+}
+function wgRun(){
+  const CONSTRUCTION='Noise_IKpsk2_25519_ChaChaPoly_BLAKE2s';
+  let ck=sha256(enc.encode(CONSTRUCTION));                 // ck0
+  const iS=randPriv(), iE=randPriv(), rS=randPriv(), rE=randPriv();
+  const steps=[];
+  steps.push(['ck0 = HASH(CONSTRUCTION)', ck]);
+  // initiator message: mix ephemeral, then static-static, then ephemeral DHs
+  let d;
+  d=bigToBytes(dhShared(iE, modpow(DG,rS,DP))); ck=wgKdf(ck,d,1)[0]; steps.push(['ck1 ← HKDF(ck, DH(iE,rS))', ck]);
+  d=bigToBytes(dhShared(iS, modpow(DG,rS,DP))); ck=wgKdf(ck,d,1)[0]; steps.push(['ck2 ← HKDF(ck, DH(iS,rS))', ck]);
+  // responder message
+  d=bigToBytes(dhShared(rE, modpow(DG,iE,DP))); ck=wgKdf(ck,d,1)[0]; steps.push(['ck3 ← HKDF(ck, DH(rE,iE))', ck]);
+  d=bigToBytes(dhShared(rE, modpow(DG,iS,DP))); ck=wgKdf(ck,d,1)[0]; steps.push(['ck4 ← HKDF(ck, DH(rE,iS))', ck]);
+  const psk=sha256(enc.encode('optional-psk')); const t=wgKdf(ck,psk,3); ck=t[0];
+  steps.push(['ck5 ← HKDF(ck, psk)  [psk2]', ck]);
+  const keys=wgKdf(ck,new Uint8Array(0),2);
+  const uk=uklang();
+  let out='<span class="k">'+CONSTRUCTION+'</span>\n';
+  for(const [lbl,v] of steps) out+='<span class="k">'+lbl+'</span>\n  <span class="a">'+short(bytesHex(v),20)+'</span>\n';
+  out+='<span class="k">'+(uk?'транспортні ключі (send/recv):':'transport keys (send/recv):')+'</span>\n'+
+       '  <span class="s">'+short(bytesHex(keys[0]),16)+'</span> / <span class="s">'+short(bytesHex(keys[1]),16)+'</span>\n'+
+       '<span class="a">'+(uk?'1-RTT: обидва повідомлення — і канал готовий ✓':'1-RTT: two messages and the channel is ready ✓')+'</span>';
+  $('wgOut').innerHTML=out;
+}
+
+/* ======================================================================
+   6) Kerberos — stepped AS/TGS/AP, real HMAC-SHA256 keys + authenticator
+   ====================================================================== */
+let krbStep=0, krb=null;
+function krbInit(){
+  const Kc=hmac256(enc.encode('pw:alice'), enc.encode('client-long-term'));
+  const Ktgs=sha256(enc.encode('KDC-tgs-key'));
+  const Ksvc=sha256(enc.encode('service-http-key'));
+  krb={Kc,Ktgs,Ksvc};
+}
+const KRB_MSGS=[
+  {en:'1 · AS-REQ  (client → AS)',uk:'1 · AS-REQ  (клієнт → AS)',
+   dEn:'Client requests a TGT for principal alice@REALM (pre-auth: a timestamp encrypted under Kc).',dUk:'Клієнт запитує TGT для alice@REALM (перед-автент.: мітка часу під Kc).'},
+  {en:'2 · AS-REP  (AS → client)',uk:'2 · AS-REP  (AS → клієнт)',
+   dEn:'AS returns TGT={K_c,tgs}_Ktgs and {K_c,tgs}_Kc. Only alice (knowing Kc) recovers the session key.',dUk:'AS повертає TGT={K_c,tgs}_Ktgs і {K_c,tgs}_Kc. Лише alice (знаючи Kc) відновить сеансовий ключ.'},
+  {en:'3 · TGS-REQ (client → TGS)',uk:'3 · TGS-REQ (клієнт → TGS)',
+   dEn:'Client presents the TGT + an authenticator {timestamp}_K_c,tgs to ask for a service ticket.',dUk:'Клієнт пред\'являє TGT + автентифікатор {мітка}_K_c,tgs, щоб отримати сервісний квиток.'},
+  {en:'4 · TGS-REP (TGS → client)',uk:'4 · TGS-REP (TGS → клієнт)',
+   dEn:'TGS issues ST={K_c,s}_Ksvc and {K_c,s}_K_c,tgs — a session key for the target service.',dUk:'TGS видає ST={K_c,s}_Ksvc і {K_c,s}_K_c,tgs — сеансовий ключ для сервісу.'},
+  {en:'5 · AP-REQ  (client → service)',uk:'5 · AP-REQ  (клієнт → сервіс)',
+   dEn:'Client sends ST + a fresh authenticator MAC over a timestamp (real HMAC-SHA256).',dUk:'Клієнт надсилає ST + свіжий автентифікатор — MAC над міткою часу (справжній HMAC-SHA256).'},
+  {en:'6 · AP-REP  (service → client)',uk:'6 · AP-REP  (сервіс → клієнт)',
+   dEn:'Service decrypts ST, checks the authenticator + timestamp window, and confirms — mutual auth done.',dUk:'Сервіс розшифровує ST, перевіряє автентифікатор + вікно часу й підтверджує — взаємна автентифікація.'}
+];
+function drawKrb(){
+  const uk=uklang();
+  if(krbStep===0){ $('krbOut').innerHTML='<span class="k">'+(uk?'Натисніть «Наступне повідомлення».':'Press “Next message”.')+'</span>'; return; }
+  const Kctgs=hmac256(krb.Ktgs, enc.encode('sess:c-tgs'));   // session key sealed in TGT
+  const Kcs  =hmac256(krb.Ksvc, enc.encode('sess:c-svc'));   // session key sealed in ST
+  const ts=Math.floor(Date.now()/1000);
+  const authenticator=hmac256(Kcs, enc.encode('ts='+ts));
+  let out='';
+  for(let i=0;i<krbStep;i++){ const m=KRB_MSGS[i]; out+='<span class="'+(i===krbStep-1?'a':'k')+'">'+(uk?m.uk:m.en)+'</span>\n'; if(i===krbStep-1) out+=(uk?m.dUk:m.dEn)+'\n'; }
+  if(krbStep>=2) out+='<span class="k">K_c,tgs =</span> <span class="s">'+short(bytesHex(Kctgs),16)+'</span>\n';
+  if(krbStep>=4) out+='<span class="k">K_c,s =</span> <span class="s">'+short(bytesHex(Kcs),16)+'</span>\n';
+  if(krbStep>=5) out+='<span class="k">authenticator = HMAC(K_c,s, ts) =</span> <span class="a">'+short(bytesHex(authenticator),16)+'</span>\n';
+  if(krbStep>=6) out+='<span class="a">'+(uk?'взаємна автентифікація завершена ✓ (пароль ніколи не йшов мережею)':'mutual authentication complete ✓ (password never crossed the wire)')+'</span>';
+  $('krbOut').innerHTML=out;
+}
+
+/* ======================================================================
+   7) PAKE — real SRP-6a over a toy safe prime, H = SHA-256
+   ====================================================================== */
+const SRP_N=2039n, SRP_G=5n;
+function hInt(str){ return BigInt('0x'+bytesHex(sha256(enc.encode(str))).slice(0,12)); }
+function srpRun(wrong){
+  const uk=uklang();
+  const pw=$('pakePw').value||'';
+  const salt='s@lt';
+  const x=hInt(salt+':'+pw) % (SRP_N-1n);
+  const v=modpow(SRP_G, x, SRP_N);                          // server-stored verifier
+  const kMul=hInt('k'+SRP_N+SRP_G) % SRP_N;
+  // client uses possibly-wrong password
+  const pwC=wrong ? (pw+'x') : pw;
+  const xC=hInt(salt+':'+pwC) % (SRP_N-1n);
+  const a=randPriv(), b=randPriv();
+  const A=modpow(SRP_G, a, SRP_N);
+  const B=(kMul*v + modpow(SRP_G, b, SRP_N)) % SRP_N;
+  const u=hInt(A+'|'+B) % SRP_N;
+  // client S = (B - k*g^xC)^(a + u*xC)
+  let base=((B - kMul*modpow(SRP_G,xC,SRP_N)) % SRP_N + SRP_N*SRP_N) % SRP_N;
+  const Sc=modpow(base, a + u*xC, SRP_N);
+  // server S = (A * v^u)^b
+  const Ss=modpow((A * modpow(v,u,SRP_N)) % SRP_N, b, SRP_N);
+  const Kc=bytesHex(sha256(enc.encode('K'+Sc))).slice(0,16);
+  const Ks=bytesHex(sha256(enc.encode('K'+Ss))).slice(0,16);
+  const ok=(Sc===Ss);
+  let out='<span class="k">N='+SRP_N+', g='+SRP_G+',  '+(uk?'сервер зберігає лише':'server stores only')+' v = g^x =</span> <span class="s">'+v+'</span>\n'+
+    '<span class="k">'+(uk?'клієнт':'client')+' A = g^a =</span> '+A+'   <span class="k">'+(uk?'сервер':'server')+' B = k·v+g^b =</span> '+B+'\n'+
+    '<span class="k">u = H(A|B) =</span> '+u+'\n'+
+    '<span class="k">'+(uk?'клієнт':'client')+' S =</span> <span class="a">'+Sc+'</span>   <span class="k">'+(uk?'сервер':'server')+' S =</span> <span class="a">'+Ss+'</span>\n'+
+    '<span class="k">'+(uk?'ключ':'key')+' K=H(S):</span> '+Kc+' / '+Ks+' → '+
+    (ok?'<span class="a">'+(uk?'ЗБІГ ✓ — спільний ключ без розкриття пароля':'MATCH ✓ — shared key, password never revealed')+'</span>'
+       :'<span class="b">'+(uk?'РІЗНІ ✗ — хибний пароль, жодного оракула для офлайн-добору':'DIFFER ✗ — wrong password, no oracle for offline guessing')+'</span>');
+  $('pakeOut').innerHTML=out;
+}
+
+/* ======================================================================
+   8) FIDO2 / WebAuthn — real SHA-256 + toy-curve Schnorr, origin binding
+   ====================================================================== */
+const EP=97n, EA=2n, EB=3n, EINF=null;
+function eiInv(a){ let [old_r,r]=[a,EP],[old_s,s]=[1n,0n]; while(r!==0n){ const q=old_r/r; [old_r,r]=[r,old_r-q*r]; [old_s,s]=[s,old_s-q*s]; } return ((old_s%EP)+EP)%EP; }
+function eAdd(P,Q){ if(P===EINF)return Q; if(Q===EINF)return P; const[x1,y1]=P,[x2,y2]=Q;
+  if(x1===x2 && ((y1+y2)%EP)===0n) return EINF; let m;
+  if(x1===x2&&y1===y2) m=((3n*x1*x1+EA)*eiInv((2n*y1)%EP))%EP; else m=((y2-y1+EP)%EP*eiInv(((x2-x1)%EP+EP)%EP))%EP;
+  m=((m%EP)+EP)%EP; const x3=((m*m-x1-x2)%EP+EP)%EP, y3=((m*(x1-x3)-y1)%EP+EP)%EP; return [x3,y3]; }
+function eMul(k,P){ let R=EINF,Q=P; k=BigInt(k); while(k>0n){ if(k&1n)R=eAdd(R,Q); Q=eAdd(Q,Q); k>>=1n; } return R; }
+const EG=(function(){ for(let x=0n;x<EP;x++){ const rhs=((x*x*x+EA*x+EB)%EP+EP)%EP; for(let y=1n;y<EP;y++) if((y*y)%EP===rhs) return [x,y]; } })();
+const EN=(function(){ let n=1n,Q=EG; while(Q!==EINF){ Q=eAdd(Q,EG); n++; if(n>200n)break; } return n; })();
+let fido=null;
+function fidoReg(){
+  const rp=$('fidoRp').value||'example.com';
+  const d=BigInt(2+Math.floor(Math.random()*(Number(EN)-2)));   // credential private key
+  const P=eMul(d,EG);
+  fido={rp,d,P};
+  const uk=uklang();
+  $('fidoOut').innerHTML='<span class="k">'+(uk?'реєстрація для rpId':'registration for rpId')+' =</span> <span class="s">'+rp+'</span>\n'+
+    '<span class="k">'+(uk?'нова пара ключів (passkey):':'new key pair (passkey):')+'</span>\n'+
+    '  <span class="k">'+(uk?'приватний d =':'private d =')+'</span> '+d+'   <span class="k">'+(uk?'відкритий P = d·G =':'public P = d·G =')+'</span> ('+fido.P[0]+','+fido.P[1]+')\n'+
+    '<span class="k">'+(uk?'сервер зберігає лише P, прив\'язаний до rpId. Тепер натисніть «Автентифікуватися».':'server stores only P, scoped to rpId. Now press “Authenticate”.')+'</span>';
+}
+function fidoAuth(){
+  const uk=uklang();
+  if(!fido){ $('fidoOut').innerHTML='<span class="b">'+(uk?'спершу зареєструйте passkey':'register a passkey first')+'</span>'; return; }
+  const phish=$('fidoPhish').checked;
+  const browserOrigin=phish ? ('evil-'+fido.rp) : fido.rp;
+  const challenge=bytesHex(crypto8())+bytesHex(crypto8());
+  const clientData=JSON.stringify({type:'webauthn.get',challenge,origin:browserOrigin});
+  const clientDataHash=sha256(enc.encode(clientData));
+  const signedRpIdHash=sha256(enc.encode(browserOrigin));       // authenticator hashes the origin it was given
+  const authData=cat(signedRpIdHash, new Uint8Array([0,0,0,1]));// rpIdHash ‖ counter
+  const msg=cat(authData, clientDataHash);
+  // toy Schnorr sign with credential key
+  const k=BigInt(1+Math.floor(Math.random()*(Number(EN)-1)));
+  const R=eMul(k,EG);
+  const e=hInt(R[0]+','+R[1]+':'+bytesHex(msg)) % EN;
+  const s=(k + e*fido.d) % EN;
+  // verify: s·G == R + e·P
+  const lhs=eMul(s,EG), rhs=eAdd(R, eMul(e,fido.P));
+  const sigOK=(lhs&&rhs&&lhs[0]===rhs[0]&&lhs[1]===rhs[1]);
+  // server-side origin check: expected rpIdHash for the LEGIT rp
+  const expected=sha256(enc.encode(fido.rp));
+  const originOK=bytesHex(signedRpIdHash)===bytesHex(expected);
+  let out='<span class="k">'+(uk?'браузер origin =':'browser origin =')+'</span> <span class="'+(phish?'b':'s')+'">'+browserOrigin+'</span>\n'+
+    '<span class="k">clientDataHash =</span> '+short(bytesHex(clientDataHash),16)+'\n'+
+    '<span class="k">'+(uk?'підписано rpIdHash =':'signed rpIdHash =')+'</span> '+short(bytesHex(signedRpIdHash),16)+'\n'+
+    '<span class="k">'+(uk?'очікуваний rpIdHash =':'expected rpIdHash =')+'</span> '+short(bytesHex(expected),16)+'\n'+
+    '<span class="k">'+(uk?'підпис s·G = R+e·P →':'signature s·G = R+e·P →')+'</span> '+(sigOK?'<span class="a">'+(uk?'дійсний':'valid')+'</span>':'<span class="b">✗</span>')+'\n';
+  if(originOK && sigOK) out+='<span class="a">'+(uk?'ПРИЙНЯТО ✓ — origin збігається, підпис дійсний':'ACCEPT ✓ — origin matches, signature valid')+'</span>';
+  else out+='<span class="b">'+(uk?'ВІДХИЛЕНО ✗ — origin не збігається (фішинг): підпис прив\'язаний до чужого rpId':'REJECT ✗ — origin mismatch (phishing): signature is bound to the wrong rpId')+'</span>';
+  $('fidoOut').innerHTML=out;
+}
+
+/* ======================================================================
+   9) TOTP — live code + countdown
+   ====================================================================== */
+function drawOTP(){
+  const secret=$('otpSecret').value||'';
+  const K=enc.encode(secret);
+  const now=Date.now()/1000, step=30;
+  const T=Math.floor(now/step);
+  const code=K.length?totp(K,now,step,6):'------';
+  const remain=step-(now%step);
+  const cv=$('otpCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  g.fillStyle=C.teal; g.font='bold 40px "JetBrains Mono",monospace'; g.textAlign='center';
+  g.fillText(code.slice(0,3)+' '+code.slice(3),W/2,54);
+  // countdown bar
+  g.fillStyle=C.grid; g.fillRect(30,80,W-60,12);
+  g.fillStyle=remain<5?C.rose:C.amber; g.fillRect(30,80,(W-60)*(remain/step),12);
+  g.fillStyle=C.dim; g.font='10px monospace'; g.textAlign='left';
+  g.fillText((uklang()?'оновлення через ':'refresh in ')+remain.toFixed(0)+'s',30,108);
+  g.textAlign='right'; g.fillText('T = '+T,W-30,108); g.textAlign='left';
+  const uk=uklang();
+  $('otpOut').innerHTML='<span class="k">'+(uk?'лічильник':'counter')+' T = ⌊unixtime/30⌋ =</span> <span class="s">'+T+'</span>\n'+
+    '<span class="k">HMAC-SHA1(K, T) → '+(uk?'скорочення':'truncate')+' → </span> <span class="a">'+code+'</span>';
+}
+function drawOTPVectors(){
+  const uk=uklang();
+  const K=enc.encode('12345678901234567890');
+  const rows=[[59,'94287082'],[1111111109,'07081804'],[1234567890,'89005924'],[2000000000,'69279037']];
+  let out='<span class="k">RFC 6238 '+(uk?'тестові вектори (8 цифр, SHA-1, секрет «12345678901234567890»):':'test vectors (8-digit, SHA-1, secret “12345678901234567890”):')+'</span>\n';
+  for(const [t,exp] of rows){ const got=totp(K,t,30,8); const ok=got===exp;
+    out+='  t='+String(t).padStart(10)+'  → <span class="'+(ok?'a':'b')+'">'+got+'</span> '+(ok?'✓':'✗ ('+exp+')')+'\n'; }
+  out+='<span class="k">RFC 4226 HOTP: </span>'+['755224','287082','359152'].map((e,i)=>{const g=hotp(K,i,6);return '<span class="'+(g===e?'a':'b')+'">'+g+'</span>';}).join(' ');
+  $('otpVectors').innerHTML=out;
+}
+
+/* ======================================================================
+   references
+   ====================================================================== */
+const W='https://en.wikipedia.org/wiki/', RFC='https://www.rfc-editor.org/rfc/';
+window.REFS={
+  tls13:[{tag:'rfc',en:{href:RFC+'rfc8446',label:'RFC 8446 (TLS 1.3)'}},
+         {tag:'wiki',en:{href:W+'Transport_Layer_Security',label:'Wikipedia: TLS'}},
+         {tag:'rfc',en:{href:RFC+'rfc5869',label:'RFC 5869 (HKDF)'}}],
+  signal:[{tag:'spec',en:{href:'https://signal.org/docs/specifications/doubleratchet/',label:'Signal: Double Ratchet'}},
+          {tag:'spec',en:{href:'https://signal.org/docs/specifications/x3dh/',label:'Signal: X3DH'}},
+          {tag:'wiki',en:{href:W+'Signal_Protocol',label:'Wikipedia: Signal Protocol'}}],
+  noise:[{tag:'spec',en:{href:'https://noiseprotocol.org/noise.html',label:'Noise Protocol Framework'}},
+         {tag:'wiki',en:{href:W+'Noise_Protocol_Framework',label:'Wikipedia: Noise'}}],
+  ipsec:[{tag:'rfc',en:{href:RFC+'rfc7296',label:'RFC 7296 (IKEv2)'}},
+         {tag:'wiki',en:{href:W+'Internet_Key_Exchange',label:'Wikipedia: IKE / IPsec'}}],
+  wireguard:[{tag:'paper',en:{href:'https://www.wireguard.com/papers/wireguard.pdf',label:'WireGuard whitepaper (Donenfeld)'}},
+             {tag:'wiki',en:{href:W+'WireGuard',label:'Wikipedia: WireGuard'}}],
+  kerberos:[{tag:'rfc',en:{href:RFC+'rfc4120',label:'RFC 4120 (Kerberos V5)'}},
+            {tag:'wiki',en:{href:W+'Kerberos_(protocol)',label:'Wikipedia: Kerberos'}}],
+  pake:[{tag:'rfc',en:{href:RFC+'rfc2945',label:'RFC 2945 (SRP)'}},
+        {tag:'wiki',en:{href:W+'Password-authenticated_key_agreement',label:'Wikipedia: PAKE'}},
+        {tag:'paper',en:{href:'https://eprint.iacr.org/2018/163',label:'OPAQUE (ePrint 2018/163)'}}],
+  fido2:[{tag:'spec',en:{href:'https://www.w3.org/TR/webauthn-2/',label:'W3C WebAuthn Level 2'}},
+         {tag:'wiki',en:{href:W+'WebAuthn',label:'Wikipedia: WebAuthn'}}],
+  otp:[{tag:'rfc',en:{href:RFC+'rfc6238',label:'RFC 6238 (TOTP)'}},
+       {tag:'rfc',en:{href:RFC+'rfc4226',label:'RFC 4226 (HOTP)'}},
+       {tag:'wiki',en:{href:W+'Time-based_one-time_password',label:'Wikipedia: TOTP'}}]
+};
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=$('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  selfTest();
+  drawTLS(); drawSig(); drawNoise(); ipsecRun(); wgRun(); drawKrb();
+  srpRun(false); drawOTP(); drawOTPVectors();
+  if(!fido) $('fidoOut').innerHTML='<span class="k">'+(uklang()?'Натисніть «Зареєструвати passkey».':'Press “Register passkey”.')+'</span>';
+};
+
+/* ============================ wiring ============================ */
+tlsBuild(); sigInit(); noiseInit(); krbInit();
+$('tlsNext').addEventListener('click',()=>{ if(tlsStep<TLS_MSGS.length)tlsStep++; drawTLS(); });
+$('tlsReset').addEventListener('click',()=>{ tlsStep=0; tlsBuild(); drawTLS(); });
+$('sigSend').addEventListener('click',sigSend);
+$('sigReply').addEventListener('click',sigDoReply);
+$('sigReset').addEventListener('click',()=>{ sigInit(); drawSig(); });
+$('noiseNext').addEventListener('click',noiseNext);
+$('noiseReset').addEventListener('click',()=>{ noiseInit(); drawNoise(); });
+$('ipsecRun').addEventListener('click',ipsecRun);
+$('wgRun').addEventListener('click',wgRun);
+$('krbNext').addEventListener('click',()=>{ if(krbStep<KRB_MSGS.length)krbStep++; drawKrb(); });
+$('krbReset').addEventListener('click',()=>{ krbStep=0; drawKrb(); });
+$('pakeRun').addEventListener('click',()=>srpRun(false));
+$('pakeWrong').addEventListener('click',()=>srpRun(true));
+$('pakePw').addEventListener('input',()=>srpRun(false));
+$('fidoReg').addEventListener('click',fidoReg);
+$('fidoAuth').addEventListener('click',fidoAuth);
+$('otpSecret').addEventListener('input',()=>{ drawOTP(); });
+setInterval(drawOTP, 500);
+</script>
+</body>
+</html>

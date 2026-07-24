@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Number-theoretic algorithms — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="arithmetic">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 23 — the arithmetic under every public-key system"
+         data-uk="Розділ 23 — арифметика під кожною системою з відкритим ключем">Section 23</div>
+    <h1 data-en="Number-Theoretic Algorithms" data-uk="Теоретико-числові алгоритми">Number-theoretic algorithms</h1>
+    <p class="lede" data-en="Before RSA, Diffie–Hellman or elliptic curves come the building blocks: the greatest common divisor, linear congruences and Diophantine equations, the Chinese Remainder Theorem, and arithmetic in finite fields and elliptic-curve point groups. Each is shown here as an interactive picture."
+       data-uk="Перед RSA, Діффі–Хеллманом чи еліптичними кривими йдуть будівельні блоки: найбільший спільний дільник, лінійні конгруенції та діофантові рівняння, китайська теорема про лишки, арифметика у скінченних полях і групах точок еліптичних кривих. Кожен показано тут як інтерактивну картину.">The arithmetic foundations of public-key cryptography.</p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ========== 1. Euclid ========== -->
+  <section id="euclid">
+    <span class="num">23 / 1</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(log n)</span>
+      <span data-en="Euclidean Algorithm (Classic &amp; Extended)" data-uk="Алгоритм Евкліда (класичний та розширений)">Euclidean algorithm</span></h2>
+    <div class="formula">gcd(a, b) = gcd(b, a mod b);   extended: a·s + b·t = gcd(a, b)</div>
+    <p class="desc" data-en="Repeatedly replace the larger number by its remainder on division by the smaller; the last non-zero remainder is the <b>gcd</b>. Geometrically, gcd(a,b) is the side of the largest square that tiles an a×b rectangle. The <b>extended</b> version tracks the coefficients that express the gcd as a·s + b·t (Bézout's identity) — the source of every modular inverse."
+       data-uk="Більше число послідовно замінюють остачею від ділення на менше; остання ненульова остача — це <b>нсд</b>. Геометрично нсд(a,b) — це сторона найбільшого квадрата, що замощує прямокутник a×b. <b>Розширена</b> версія відстежує коефіцієнти, що виражають нсд як a·s + b·t (тотожність Безу) — джерело кожного модульного оберненого."></p>
+    <div id="refs-euclid"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="euCanvas" width="300" height="220"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>a</span><span class="val" id="euAV">89</span></label>
+          <input type="range" id="euA" min="2" max="144" value="89"></div>
+        <div class="ctrl"><label><span>b</span><span class="val" id="euBV">55</span></label>
+          <input type="range" id="euB" min="1" max="144" value="55"></div>
+        <div class="hint" data-en="Squares tile the rectangle; the smallest square's side is gcd(a,b)." data-uk="Квадрати замощують прямокутник; сторона найменшого квадрата — нсд(a,b)."></div>
+        <div class="readout" id="euOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="The extended algorithm computes modular inverses (RSA private key d = e⁻¹ mod φ, and every division in a finite field). It is also the fast way to test coprimality." data-uk="Розширений алгоритм обчислює модульні обернені (приватний ключ RSA d = e⁻¹ mod φ і кожне ділення у скінченному полі). Це також швидкий спосіб перевірити взаємну простоту."></span></div>
+    <div class="xrefs"><a href="arithmetic.html#lincong" data-en="Linear congruences" data-uk="Лінійні конгруенції">Linear congruences</a> <a href="asymmetric.html#rsa">RSA</a></div>
+  </section>
+
+  <!-- ========== 2. Linear congruences ========== -->
+  <section id="lincong">
+    <span class="num">23 / 2</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(log m)</span>
+      <span data-en="Linear Congruences" data-uk="Лінійні конгруенції">Linear congruences</span></h2>
+    <div class="formula">a·x ≡ b (mod m)   solvable ⟺ g = gcd(a, m) divides b,  then g solutions</div>
+    <p class="desc" data-en="Solve a·x ≡ b (mod m). A solution exists exactly when g = gcd(a,m) divides b; there are then <b>g</b> solutions spaced m/g apart. Divide through by g and invert a/g modulo m/g. The grid below shows a·x mod m for every x; the cells equal to b are the solutions."
+       data-uk="Розв'яжіть a·x ≡ b (mod m). Розв'язок існує саме тоді, коли g = нсд(a,m) ділить b; тоді є <b>g</b> розв'язків на відстані m/g. Поділіть на g і оберніть a/g за модулем m/g. Сітка нижче показує a·x mod m для кожного x; клітинки, рівні b, — це розв'язки."></p>
+    <div id="refs-lincong"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="lcCanvas" width="300" height="150"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>a</span><span class="val" id="lcAV">6</span></label>
+          <input type="range" id="lcA" min="1" max="23" value="6"></div>
+        <div class="ctrl"><label><span>b</span><span class="val" id="lcBV">3</span></label>
+          <input type="range" id="lcB" min="0" max="23" value="3"></div>
+        <div class="ctrl"><label><span>m</span><span class="val" id="lcMV">9</span></label>
+          <input type="range" id="lcM" min="2" max="24" value="9"></div>
+        <div class="readout" id="lcOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="Key generation and signing constantly solve congruences — e.g. recovering d, or the s value in DSA/ECDSA — and the solvability condition is why moduli are chosen coprime to the exponents." data-uk="Генерація ключів і підписування постійно розв'язують конгруенції — напр. відновлення d або значення s у DSA/ECDSA — а умова розв'язності пояснює, чому модулі беруть взаємно простими з показниками."></span></div>
+    <div class="xrefs"><a href="arithmetic.html#euclid" data-en="Extended Euclid" data-uk="Розширений Евклід">Extended Euclid</a> <a href="arithmetic.html#crt">CRT</a></div>
+  </section>
+
+  <!-- ========== 3. Diophantine ========== -->
+  <section id="diophantine">
+    <span class="num">23 / 3</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(log n)</span>
+      <span data-en="Linear Diophantine Equations" data-uk="Лінійні діофантові рівняння">Diophantine equations</span></h2>
+    <div class="formula">a·x + b·y = c   solvable ⟺ g = gcd(a, b) | c;  (x, y) = (x₀ + (b/g)k, y₀ − (a/g)k)</div>
+    <p class="desc" data-en="Find all <b>integer</b> points on the line a·x + b·y = c. Integer solutions exist iff gcd(a,b) divides c; extended Euclid gives one particular solution, and the rest are obtained by stepping (b/g, −a/g). The plot draws the line and its evenly-spaced lattice solutions."
+       data-uk="Знайдіть усі <b>цілі</b> точки на прямій a·x + b·y = c. Цілі розв'язки існують тоді й лише тоді, коли нсд(a,b) ділить c; розширений Евклід дає один частковий розв'язок, а решту одержують кроком (b/g, −a/g). Графік креслить пряму та її рівновіддалені цілі розв'язки."></p>
+    <div id="refs-diophantine"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="dpCanvas" width="300" height="300"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>a</span><span class="val" id="dpAV">6</span></label>
+          <input type="range" id="dpA" min="-12" max="12" value="6"></div>
+        <div class="ctrl"><label><span>b</span><span class="val" id="dpBV">15</span></label>
+          <input type="range" id="dpB" min="-12" max="12" value="15"></div>
+        <div class="ctrl"><label><span>c</span><span class="val" id="dpCV">12</span></label>
+          <input type="range" id="dpC" min="-30" max="30" value="12"></div>
+        <div class="readout" id="dpOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="The same machinery underlies Bézout's identity and modular inversion; lattice attacks (LLL, Coppersmith) generalise &lsquo;small integer solutions of linear equations&rsquo; to many dimensions." data-uk="Той самий апарат лежить в основі тотожності Безу й модульного обернення; решіткові атаки (LLL, Копперсміт) узагальнюють «малі цілі розв'язки лінійних рівнянь» на багато вимірів."></span></div>
+    <div class="xrefs"><a href="arithmetic.html#euclid" data-en="Extended Euclid" data-uk="Розширений Евклід">Extended Euclid</a> <a href="advanced.html#lll">LLL</a></div>
+  </section>
+
+  <!-- ========== 4. CRT ========== -->
+  <section id="crt">
+    <span class="num">23 / 4</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(k log n)</span>
+      <span data-en="Chinese Remainder Theorem" data-uk="Китайська теорема про лишки">Chinese Remainder Theorem</span></h2>
+    <div class="formula">x ≡ a₁ (mod n₁),  x ≡ a₂ (mod n₂)  ⟹  unique x (mod n₁·n₂)  when gcd(n₁,n₂)=1</div>
+    <p class="desc" data-en="With pairwise-coprime moduli, a system of congruences has a single solution modulo the product N. The residues (x mod n₁, x mod n₂) are a <b>bijection</b> onto the grid: every cell holds exactly one value of [0, N). Pick a target cell and read off x."
+       data-uk="За попарно взаємно простих модулів система конгруенцій має єдиний розв'язок за модулем добутку N. Лишки (x mod n₁, x mod n₂) є <b>бієкцією</b> на сітку: кожна клітинка містить рівно одне значення з [0, N). Оберіть цільову клітинку й прочитайте x."></p>
+    <div id="refs-crt"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="crCanvas" width="300" height="240"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>n₁</span></label>
+          <select id="crN1"><option>3</option><option>4</option><option selected>5</option></select></div>
+        <div class="ctrl"><label><span>n₂</span></label>
+          <select id="crN2"><option selected>7</option><option>11</option><option>13</option></select></div>
+        <div class="ctrl"><label><span>a₁ = x mod n₁</span><span class="val" id="crA1V">2</span></label>
+          <input type="range" id="crA1" min="0" max="4" value="2"></div>
+        <div class="ctrl"><label><span>a₂ = x mod n₂</span><span class="val" id="crA2V">3</span></label>
+          <input type="range" id="crA2" min="0" max="6" value="3"></div>
+        <div class="readout" id="crOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="CRT speeds up RSA decryption ~4× by working mod p and mod q separately; it also underpins secret sharing, Paillier and many lattice/RNS implementations." data-uk="КТЛ пришвидшує розшифрування RSA приблизно у 4 рази, працюючи окремо за mod p і mod q; вона також лежить в основі розділення секрету, Paillier та багатьох решіткових/RNS реалізацій."></span></div>
+    <div class="xrefs"><a href="asymmetric.html#rsa">RSA-CRT</a> <a href="advanced.html#shamir">Shamir sharing</a></div>
+  </section>
+
+  <!-- ========== 5. Finite fields GF(p) ========== -->
+  <section id="gffield">
+    <span class="num">23 / 5</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(log p)</span>
+      <span data-en="Finite-Field Arithmetic GF(p)" data-uk="Арифметика у скінченних полях GF(p)">Finite fields GF(p)</span></h2>
+    <div class="formula">GF(p) = {0,…,p−1} with + and × mod p;  the non-zero elements form a cyclic group</div>
+    <p class="desc" data-en="Modulo a prime p, every non-zero element has an inverse, so {0,…,p−1} is a <b>field</b>. Its multiplicative group is cyclic: some element g (a <b>primitive root</b>) generates all p−1 others by repeated multiplication. The diagram draws the &lsquo;multiply by g&rsquo; permutation — one big loop means g is a generator."
+       data-uk="За модулем простого p кожен ненульовий елемент має обернений, тож {0,…,p−1} — це <b>поле</b>. Його мультиплікативна група циклічна: деякий елемент g (<b>первісний корінь</b>) породжує всі інші p−1 повторним множенням. Діаграма креслить перестановку «множення на g» — одна велика петля означає, що g — генератор."></p>
+    <div id="refs-gffield"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="gfCanvas" width="300" height="300"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>p</span></label>
+          <select id="gfP"><option>5</option><option>7</option><option>11</option><option selected>13</option><option>17</option></select></div>
+        <div class="ctrl"><label><span data-en="element g" data-uk="елемент g">element g</span><span class="val" id="gfGV">2</span></label>
+          <input type="range" id="gfG" min="2" max="12" value="2"></div>
+        <div class="readout" id="gfOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="This cyclic group is the arena of Diffie–Hellman, DSA and ElGamal; the hardness of the discrete logarithm (recovering k from gᵏ) is what keeps them secure." data-uk="Ця циклічна група — арена Діффі–Хеллмана, DSA та Ель-Гамаля; складність дискретного логарифма (відновлення k із gᵏ) забезпечує їхню стійкість."></span></div>
+    <div class="xrefs"><a href="keyexchange.html#dh">Diffie–Hellman</a> <a href="arithmetic.html#gfpoly" data-en="Extension fields" data-uk="Розширені поля">Extension fields</a></div>
+  </section>
+
+  <!-- ========== 6. Polynomials over finite fields ========== -->
+  <section id="gfpoly">
+    <span class="num">23 / 6</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(k²)</span>
+      <span data-en="Polynomials Over Finite Fields GF(pᵏ)" data-uk="Многочлени над скінченними полями GF(pᵏ)">Polynomials over GF(pᵏ)</span></h2>
+    <div class="formula">GF(pᵏ) = GF(p)[x] / (irreducible f(x));  multiply, then reduce mod f(x)</div>
+    <p class="desc" data-en="Extension fields are built from polynomials with GF(p) coefficients, added and multiplied <b>modulo an irreducible polynomial</b> f(x) of degree k. The result is a field of pᵏ elements. The table below is the full multiplication table of the chosen field; pick two elements to see their product polynomial and its reduction."
+       data-uk="Розширені поля будують з многочленів із коефіцієнтами з GF(p), які додають і множать <b>за модулем незвідного многочлена</b> f(x) степеня k. Результат — поле з pᵏ елементів. Таблиця нижче — повна таблиця множення обраного поля; оберіть два елементи, щоб побачити їхній добуток-многочлен та його зведення."></p>
+    <div id="refs-gfpoly"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="gpCanvas" width="300" height="300"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="field" data-uk="поле">field</span></label>
+          <select id="gpField">
+            <option value="0">GF(2³), x³+x+1</option>
+            <option value="1" selected>GF(2⁴), x⁴+x+1</option>
+            <option value="2">GF(3²), x²+1</option>
+          </select></div>
+        <div class="ctrl"><label><span data-en="element A" data-uk="елемент A">element A</span><span class="val" id="gpAV">11</span></label>
+          <input type="range" id="gpA" min="0" max="15" value="11"></div>
+        <div class="ctrl"><label><span data-en="element B" data-uk="елемент B">element B</span><span class="val" id="gpBV">9</span></label>
+          <input type="range" id="gpB" min="0" max="15" value="9"></div>
+        <div class="readout" id="gpOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="AES arithmetic lives in GF(2⁸); binary-curve signatures (DSTU 4145) and many codes and stream ciphers compute in GF(2ᵏ). Reduction mod an irreducible polynomial is the &lsquo;xtime&rsquo; step in every AES round." data-uk="Арифметика AES живе у GF(2⁸); підписи на двійкових кривих (ДСТУ 4145) та багато кодів і потокових шифрів рахують у GF(2ᵏ). Зведення за модулем незвідного многочлена — це крок «xtime» у кожному раунді AES."></span></div>
+    <div class="xrefs"><a href="symmetric.html#aes">AES / GF(2⁸)</a> <a href="standards.html#dstu4145">DSTU 4145</a> <a href="arithmetic.html#gffield">GF(p)</a></div>
+  </section>
+
+  <!-- ========== 7. Elliptic-curve group law ========== -->
+  <section id="ecgroup">
+    <span class="num">23 / 7</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(log n)</span>
+      <span data-en="Elliptic-Curve Group Law" data-uk="Груповий закон на еліптичній кривій">Elliptic-curve group law</span></h2>
+    <div class="formula">P + Q: draw the line PQ, take the third intersection, reflect over the x-axis</div>
+    <p class="desc" data-en="Points on y² = x³ + a·x + b form an <b>abelian group</b>. To add P and Q, draw the line through them; it meets the curve at a third point, whose reflection across the x-axis is P + Q. When P = Q the line is the <b>tangent</b> (doubling). Repeated addition (scalar multiplication) is easy, but undoing it — the elliptic-curve discrete log — is hard."
+       data-uk="Точки на y² = x³ + a·x + b утворюють <b>абелеву групу</b>. Щоб додати P і Q, проведіть пряму через них; вона перетинає криву в третій точці, відображення якої відносно осі x — це P + Q. Коли P = Q, пряма стає <b>дотичною</b> (подвоєння). Повторне додавання (скалярне множення) легке, а його обернення — еліптичний дискретний логарифм — важке."></p>
+    <div id="refs-ecgroup"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="ecCanvas" width="300" height="300"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>a</span><span class="val" id="ecAV">-1</span></label>
+          <input type="range" id="ecA" min="-5" max="5" value="-1"></div>
+        <div class="ctrl"><label><span>b</span><span class="val" id="ecBV">1</span></label>
+          <input type="range" id="ecB" min="-5" max="5" value="1"></div>
+        <div class="ctrl"><label><span>x of P</span><span class="val" id="ecXPV">1</span></label>
+          <input type="range" id="ecXP" min="-3" max="6" step="0.1" value="1"></div>
+        <div class="ctrl"><label><span>x of Q</span><span class="val" id="ecXQV">-1</span></label>
+          <input type="range" id="ecXQ" min="-3" max="6" step="0.1" value="-1"></div>
+        <label style="display:flex;gap:8px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim)">
+          <input type="checkbox" id="ecDbl"> <span data-en="double P (use tangent, Q = P)" data-uk="подвоїти P (дотична, Q = P)">double P (Q = P)</span></label>
+        <div class="readout" id="ecOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="In cryptography" data-uk="У криптографії">In cryptography</div>
+      <span data-en="Exactly this group law, taken over a finite field instead of the reals, powers ECDH, ECDSA, EdDSA and DSTU 4145 — the same construction, wrapped onto a finite grid of points. One addition is O(1) field operations; the O(log n) chip is for a full scalar multiplication (repeated addition)." data-uk="Саме цей груповий закон, узятий над скінченним полем замість дійсних чисел, живить ECDH, ECDSA, EdDSA та ДСТУ 4145 — та сама побудова, перенесена на скінченну сітку точок. Одне додавання — це O(1) польових операцій; позначка O(log n) стосується повного скалярного множення (повторного додавання)."></span></div>
+    <div class="xrefs"><a href="edwards.html" data-en="Edwards curves" data-uk="Криві Едвардса">Edwards curves</a> <a href="standards.html#dstu4145">DSTU 4145</a> <a href="authprotocols.html#auth-ecc">ECC auth</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;};
+function egcd(a,b){ // sign-consistent extended Euclid: works for negative a,b too
+  let r0=Math.abs(a),r1=Math.abs(b),s0=1,s1=0,t0=0,t1=1;
+  while(r1){ const q=Math.floor(r0/r1);
+    [r0,r1]=[r1,r0-q*r1]; [s0,s1]=[s1,s0-q*s1]; [t0,t1]=[t1,t0-q*t1]; }
+  return [r0, (a<0?-1:1)*s0, (b<0?-1:1)*t0];   // r0 = a·s + b·t = gcd(|a|,|b|)
+}
+function modinv(a,m){ const [g,x]=egcd(((a%m)+m)%m,m); return g===1?((x%m)+m)%m:null; }
+function isPrime(n){ if(n<2)return false; for(let i=2;i*i<=n;i++) if(n%i===0)return false; return true; }
+
+/* ================= 1. Euclid ================= */
+function euSquares(a,b){ // list of {x,y,size} tiling an a×b rectangle in unit space
+  const res=[]; let x=0,y=0,w=a,h=b;
+  let guard=0;
+  while(w>0&&h>0&&guard++<500){
+    if(w>=h){ const n=Math.floor(w/h); for(let i=0;i<n;i++) res.push({x:x+i*h,y,size:h}); x+=n*h; w-=n*h; }
+    else    { const n=Math.floor(h/w); for(let i=0;i<n;i++) res.push({x,y:y+i*w,size:w}); y+=n*w; h-=n*w; }
+  }
+  return res;
+}
+function drawEuclid(){
+  const a=+euA.value, b=+euB.value; euAV.textContent=a; euBV.textContent=b;
+  const cv=euCanvas,g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const pad=10, sc=Math.min((W-2*pad)/a,(H-2*pad)/b);
+  const ox=pad, oy=pad;
+  const sq=euSquares(a,b), G=gcd(a,b);
+  sq.forEach((s,i)=>{
+    g.fillStyle = `hsl(${(i*47)%360} 45% ${30+ (s.size===G?15:0)}%)`;
+    g.fillRect(ox+s.x*sc, oy+s.y*sc, s.size*sc, s.size*sc);
+    g.strokeStyle=C.panel; g.strokeRect(ox+s.x*sc, oy+s.y*sc, s.size*sc, s.size*sc);
+  });
+  g.strokeStyle=C.teal; g.lineWidth=1.5; g.strokeRect(ox,oy,a*sc,b*sc); g.lineWidth=1;
+  // steps + extended
+  const steps=[]; let x=a,y=b; while(y){ steps.push(`${x} = ${Math.floor(x/y)}·${y} + ${x%y}`); [x,y]=[y,x%y]; }
+  const [gg,s,t]=egcd(a,b);
+  const uk=window.LANG==='uk';
+  euOut.innerHTML='<span class="k">'+(uk?'кроки':'steps')+':</span>\n'+steps.map(s=>'  '+s).join('\n')+
+    '\n<span class="k">gcd =</span> <span class="a">'+G+'</span>\n'+
+    '<span class="k">'+(uk?'Безу':'Bézout')+':</span> '+a+'·('+s+') + '+b+'·('+t+') = <span class="s">'+(a*s+b*t)+'</span>';
+}
+
+/* ================= 2. Linear congruences ================= */
+function drawLincong(){
+  const a=+lcA.value,b=+lcB.value,m=+lcM.value; lcAV.textContent=a; lcBV.textContent=b; lcMV.textContent=m;
+  lcB.max=m-1; if(+lcB.value>m-1){ lcB.value=m-1; }
+  const bb=+lcB.value; lcBV.textContent=bb;
+  const g=gcd(a,m); const solvable=(bb%g===0);
+  let sols=[];
+  if(solvable){ const inv=modinv((a/g)%(m/g),m/g); const x0=((bb/g)*inv)%(m/g); for(let i=0;i<g;i++) sols.push(((x0+i*(m/g))%m+m)%m); sols.sort((p,q)=>p-q); }
+  const cv=lcCanvas,gx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  gx.fillStyle=C.panel; gx.fillRect(0,0,W,H);
+  const cols=Math.min(m,12), rows=Math.ceil(m/cols), cw=W/cols, ch=Math.min(46,H/rows);
+  for(let xv=0;xv<m;xv++){ const r=Math.floor(xv/cols),c=xv%cols; const val=(a*xv)%m; const hit=(val===bb);
+    gx.fillStyle=hit?C.teal:C.grid; gx.fillRect(c*cw+1,r*ch+1,cw-2,ch-2);
+    gx.fillStyle=hit?C.panel:C.dim; gx.font='9px monospace'; gx.textAlign='center';
+    gx.fillText('x='+xv, c*cw+cw/2, r*ch+15); gx.fillText('→'+val, c*cw+cw/2, r*ch+28);
+  }
+  gx.textAlign='left';
+  const uk=window.LANG==='uk';
+  lcOut.innerHTML='<span class="k">g = gcd(a,m) =</span> <span class="a">'+g+'</span>, '+
+    (solvable?'<span class="a">g | b '+(uk?'→ розв\'язне':'→ solvable')+'</span>':'<span class="b">g ∤ b '+(uk?'→ немає розв\'язків':'→ no solution')+'</span>')+'\n'+
+    (solvable?'<span class="k">'+(uk?'розв\'язки':'solutions')+' (×'+g+'):</span> <span class="s">'+sols.join(', ')+'</span>':'');
+}
+
+/* ================= 3. Diophantine ================= */
+function drawDioph(){
+  const a=+dpA.value,b=+dpB.value,c=+dpC.value; dpAV.textContent=a; dpBV.textContent=b; dpCV.textContent=c;
+  const cv=dpCanvas,g2=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=13,sc=(W/2-14)/R;
+  g2.fillStyle=C.panel; g2.fillRect(0,0,W,H);
+  // grid + axes
+  g2.strokeStyle=C.line; for(let i=-R;i<=R;i++){ g2.beginPath(); g2.moveTo(cx+i*sc,0); g2.lineTo(cx+i*sc,H); g2.moveTo(0,cy+i*sc); g2.lineTo(W,cy+i*sc); g2.stroke(); }
+  g2.strokeStyle=C.dim; g2.beginPath(); g2.moveTo(0,cy); g2.lineTo(W,cy); g2.moveTo(cx,0); g2.lineTo(cx,H); g2.stroke();
+  const X=x=>cx+x*sc, Y=y=>cy-y*sc;
+  const uk=window.LANG==='uk';
+  if(a===0&&b===0){ dpOut.innerHTML='<span class="b">a=b=0</span>'; return; }
+  // draw line a x + b y = c
+  g2.strokeStyle=C.amber; g2.beginPath();
+  if(b!==0){ let x1=-R, x2=R; g2.moveTo(X(x1),Y((c-a*x1)/b)); g2.lineTo(X(x2),Y((c-a*x2)/b)); }
+  else { const xv=c/a; g2.moveTo(X(xv),0); g2.lineTo(X(xv),H); }
+  g2.stroke();
+  const g=gcd(a,b);
+  let info;
+  if(c%g!==0){ info='<span class="b">g = '+g+' ∤ c '+(uk?'→ немає цілих розв\'язків':'→ no integer solutions')+'</span>'; }
+  else {
+    const [gg,s,t]=egcd(a,b); let x0=s*(c/g), y0=t*(c/g); const dx=b/g, dy=-a/g;
+    // shift solution nearest to origin
+    if(dx!==0){ const k=Math.round(-x0/dx); x0+=k*dx; y0+=k*dy; }
+    const pts=[]; for(let k=-6;k<=6;k++) pts.push([x0+k*dx,y0+k*dy]);
+    pts.forEach(p=>{ if(Math.abs(p[0])<=R&&Math.abs(p[1])<=R){ g2.fillStyle=C.teal; g2.beginPath(); g2.arc(X(p[0]),Y(p[1]),3.5,0,7); g2.fill(); } });
+    const term=v=>(v<0?' − ':' + ')+Math.abs(v)+'k';
+    info='<span class="k">g = gcd(a,b) =</span> <span class="a">'+g+'</span> | c\n'+
+      '<span class="k">'+(uk?'частковий':'particular')+':</span> (x₀,y₀)=(<span class="s">'+x0+','+y0+'</span>)\n'+
+      '<span class="k">'+(uk?'загальний':'general')+':</span> x='+x0+term(dx)+', y='+y0+term(dy);
+  }
+  dpOut.innerHTML=info;
+}
+
+/* ================= 4. CRT ================= */
+function drawCRT(){
+  const n1=+crN1.value,n2=+crN2.value;
+  crA1.max=n1-1; crA2.max=n2-1; if(+crA1.value>n1-1)crA1.value=n1-1; if(+crA2.value>n2-1)crA2.value=n2-1;
+  const a1=+crA1.value,a2=+crA2.value; crA1V.textContent=a1; crA2V.textContent=a2;
+  const N=n1*n2;
+  const x=(a1*n2*modinv(n2%n1,n1)+a2*n1*modinv(n1%n2,n2))%N;
+  const cv=crCanvas,g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cw=W/n2, ch=H/n1;
+  for(let i=0;i<n1;i++)for(let j=0;j<n2;j++){
+    // the value v with v%n1==i and v%n2==j
+    const v=(i*n2*modinv(n2%n1,n1)+j*n1*modinv(n1%n2,n2))%N;
+    const hit=(i===a1&&j===a2);
+    g.fillStyle=hit?C.teal:C.grid; g.fillRect(j*cw+1,i*ch+1,cw-2,ch-2);
+    g.fillStyle=hit?C.panel:C.dim; g.font='10px monospace'; g.textAlign='center';
+    g.fillText(v, j*cw+cw/2, i*ch+ch/2+3);
+  }
+  g.textAlign='left';
+  const uk=window.LANG==='uk';
+  crOut.innerHTML='<span class="k">x ≡ '+a1+' (mod '+n1+'),  x ≡ '+a2+' (mod '+n2+')</span>\n'+
+    '<span class="k">N = n₁·n₂ =</span> '+N+'\n'+
+    '<span class="k">'+(uk?'єдиний':'unique')+' x =</span> <span class="a">'+x+'</span>   '+
+    '<span class="k">'+(uk?'перевірка':'check')+':</span> '+x+'%'+n1+'='+(x%n1)+', '+x+'%'+n2+'='+(x%n2)+
+    ((x%n1===a1&&x%n2===a2)?' <span class="a">✓</span>':' <span class="b">✗</span>');
+}
+
+/* ================= 5. Finite field GF(p) ================= */
+function drawGF(){
+  const p=+gfP.value; gfG.max=p-1; if(+gfG.value>p-1)gfG.value=p-1; const ggen=+gfG.value; gfGV.textContent=ggen;
+  const cv=gfCanvas,g=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)/2-26;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const n=p-1, pos=k=>[cx+R*Math.cos(-Math.PI/2+2*Math.PI*(k-1)/n), cy+R*Math.sin(-Math.PI/2+2*Math.PI*(k-1)/n)];
+  // arrows x -> x*g mod p
+  g.strokeStyle=C.line;
+  for(let x=1;x<p;x++){ const y=(x*ggen)%p; const [ax,ay]=pos(x),[bx,by]=pos(y);
+    g.beginPath(); g.moveTo(ax,ay); g.lineTo(bx,by); g.stroke(); }
+  for(let x=1;x<p;x++){ const [px,py]=pos(x);
+    g.fillStyle=(x===ggen)?C.amber:(x===1?C.teal:C.grid); g.beginPath(); g.arc(px,py,9,0,7); g.fill();
+    g.fillStyle=C.ink; g.font='9px monospace'; g.textAlign='center'; g.fillText(x,px,py+3); }
+  g.textAlign='left';
+  // order of g
+  let ord=1,acc=ggen%p; while(acc!==1&&ord<p){ acc=(acc*ggen)%p; ord++; }
+  const powers=[]; let a=1; for(let i=0;i<Math.min(ord,p);i++){ powers.push(a); a=(a*ggen)%p; }
+  const prim=(ord===p-1);
+  const uk=window.LANG==='uk';
+  gfOut.innerHTML='<span class="k">p =</span> '+p+' ('+(isPrime(p)?(uk?'просте':'prime'):'—')+')\n'+
+    '<span class="k">'+(uk?'порядок g':'order of g')+' =</span> <span class="a">'+ord+'</span> '+
+    (prim?'<span class="a">('+(uk?'первісний корінь':'primitive root')+')</span>':'')+'\n'+
+    '<span class="k">'+(uk?'степені g':'powers of g')+':</span> '+powers.join(', ')+'\n'+
+    '<span class="k">g⁻¹ =</span> <span class="s">'+modinv(ggen,p)+'</span>';
+}
+
+/* ================= 6. Polynomials over GF(p^k) ================= */
+const GPF=[
+  {p:2,k:3,mod:[1,1,0,1],name:'GF(2³)'},
+  {p:2,k:4,mod:[1,1,0,0,1],name:'GF(2⁴)'},
+  {p:3,k:2,mod:[1,0,1],name:'GF(3²)'}
+];
+function idx2poly(idx,p,k){ const c=[]; for(let i=0;i<k;i++){ c.push(idx%p); idx=Math.floor(idx/p); } return c; }
+function poly2idx(c,p){ let v=0; for(let i=c.length-1;i>=0;i--) v=v*p+ (c[i]||0); return v; }
+function polymulmod(A,B,mod,p){
+  const prod=new Array(A.length+B.length-1).fill(0);
+  for(let i=0;i<A.length;i++)for(let j=0;j<B.length;j++) prod[i+j]=(prod[i+j]+A[i]*B[j])%p;
+  const k=mod.length-1;
+  for(let d=prod.length-1;d>=k;d--){ const c=((prod[d]%p)+p)%p; if(c){ for(let i=0;i<mod.length;i++) prod[d-k+i]=(((prod[d-k+i]-c*mod[i])%p)+p)%p; } }
+  return prod.slice(0,k).map(x=>((x%p)+p)%p);
+}
+function polyStr(c){ const t=[]; for(let i=c.length-1;i>=0;i--){ if(c[i]){ let term=(i===0?''+c[i]:(c[i]===1?'':c[i])+(i===1?'x':'x^'+i)); t.push(term); } } return t.length?t.join('+'):'0'; }
+function drawGP(){
+  const f=GPF[+gpField.value]; const q=Math.pow(f.p,f.k);
+  gpA.max=q-1; gpB.max=q-1; if(+gpA.value>q-1)gpA.value=q-1; if(+gpB.value>q-1)gpB.value=q-1;
+  const ai=+gpA.value, bi=+gpB.value; gpAV.textContent=ai; gpBV.textContent=bi;
+  const A=idx2poly(ai,f.p,f.k), B=idx2poly(bi,f.p,f.k);
+  const P=polymulmod(A,B,f.mod,f.p); const pidx=poly2idx(P,f.p);
+  const cv=gpCanvas,g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cell=Math.min(W,H)/q;
+  for(let i=0;i<q;i++)for(let j=0;j<q;j++){ const v=poly2idx(polymulmod(idx2poly(i,f.p,f.k),idx2poly(j,f.p,f.k),f.mod,f.p),f.p);
+    const hit=(i===ai&&j===bi); g.fillStyle=hit?C.teal:`hsl(${v/q*300} 45% 32%)`; g.fillRect(j*cell,i*cell,cell-0.5,cell-0.5); }
+  const uk=window.LANG==='uk';
+  gpOut.innerHTML='<span class="k">'+f.name+', f(x)=</span><span class="s">'+polyStr(f.mod)+'</span>\n'+
+    '<span class="k">A =</span> '+polyStr(A)+'   <span class="k">B =</span> '+polyStr(B)+'\n'+
+    '<span class="k">A·B mod f =</span> <span class="a">'+polyStr(P)+'</span>  ('+(uk?'елемент':'element')+' #'+pidx+')';
+}
+
+/* ================= 7. EC group law (over reals) ================= */
+function drawEC(){
+  const a=+ecA.value,b=+ecB.value; ecAV.textContent=a; ecBV.textContent=b;
+  const dbl=ecDbl.checked;
+  let xP=+ecXP.value, xQ=dbl?xP:+ecXQ.value; ecXPV.textContent=xP.toFixed(1); ecXQV.textContent=xQ.toFixed(1);
+  const f=x=>x*x*x+a*x+b;
+  const cv=ecCanvas,g=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,sc=26;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const X=x=>cx+x*sc, Y=y=>cy-y*sc;
+  g.strokeStyle=C.line; for(let i=-6;i<=6;i++){ g.beginPath(); g.moveTo(X(i),0); g.lineTo(X(i),H); g.moveTo(0,Y(i)); g.lineTo(W,Y(i)); g.stroke(); }
+  g.strokeStyle=C.dim; g.beginPath(); g.moveTo(0,cy); g.lineTo(W,cy); g.moveTo(cx,0); g.lineTo(cx,H); g.stroke();
+  // curve
+  g.strokeStyle=C.amber; g.lineWidth=1.6;
+  for(const sgn of [1,-1]){ let started=false; g.beginPath();
+    for(let px=0;px<=W;px+=1){ const x=(px-cx)/sc; const v=f(x); if(v<0){ started=false; continue; } const y=sgn*Math.sqrt(v);
+      if(!started){ g.moveTo(X(x),Y(y)); started=true; } else g.lineTo(X(x),Y(y)); } g.stroke(); }
+  g.lineWidth=1;
+  const uk=window.LANG==='uk';
+  const vP=f(xP), vQ=f(xQ);
+  if(vP<0||vQ<0){ ecOut.innerHTML='<span class="b">'+(uk?'оберіть x, де x³+ax+b ≥ 0':'choose x with x³+ax+b ≥ 0')+'</span>'; return; }
+  const yP=Math.sqrt(vP), yQ=Math.sqrt(vQ);
+  let m;
+  if(dbl){ if(yP===0){ ecOut.innerHTML='<span class="b">2P = ∞ (yP=0)</span>'; return; } m=(3*xP*xP+a)/(2*yP); }
+  else { if(xP===xQ){ ecOut.innerHTML='<span class="b">'+(uk?'P і Q мають різний x (або увімкніть подвоєння)':'P and Q need different x (or enable doubling)')+'</span>'; return; } m=(yQ-yP)/(xQ-xP); }
+  const x3=m*m-xP-xQ, yLine=yP+m*(x3-xP), y3=-yLine;
+  const P=[xP,yP], Q=[xQ,yQ], Rp=[x3,y3];
+  // chord/tangent line
+  g.strokeStyle=C.teal; g.setLineDash([4,3]); g.beginPath();
+  g.moveTo(X(xP-4),Y(yP+m*(-4))); g.lineTo(X(x3+2),Y(yP+m*(x3+2-xP))); g.stroke();
+  // vertical reflection
+  g.strokeStyle=C.rose; g.beginPath(); g.moveTo(X(x3),Y(yLine)); g.lineTo(X(x3),Y(y3)); g.stroke(); g.setLineDash([]);
+  const dot=(pt,col,lbl)=>{ g.fillStyle=col; g.beginPath(); g.arc(X(pt[0]),Y(pt[1]),4,0,7); g.fill(); g.fillStyle=C.ink; g.font='10px monospace'; g.fillText(lbl,X(pt[0])+6,Y(pt[1])-4); };
+  dot(P,C.teal,'P'); if(!dbl) dot(Q,C.teal,'Q'); dot([x3,yLine],C.dim,''); dot(Rp,C.rose,'P+Q');
+  ecOut.innerHTML='<span class="k">P =</span> ('+xP.toFixed(2)+', '+yP.toFixed(2)+')   '+
+    (dbl?'<span class="k">(Q=P)</span>':'<span class="k">Q =</span> ('+xQ.toFixed(2)+', '+yQ.toFixed(2)+')')+'\n'+
+    '<span class="k">'+(uk?'нахил':'slope')+' λ =</span> <span class="s">'+m.toFixed(3)+'</span>\n'+
+    '<span class="k">P + Q =</span> <span class="a">('+x3.toFixed(2)+', '+y3.toFixed(2)+')</span>';
+}
+
+/* ================= refs + wiring ================= */
+const W='https://en.wikipedia.org/wiki/';
+window.REFS={
+  euclid:[{tag:'wiki',en:{href:W+'Euclidean_algorithm',label:'Wikipedia: Euclidean algorithm'}},
+          {tag:'wiki',en:{href:W+'Extended_Euclidean_algorithm',label:'Extended Euclidean algorithm'}}],
+  lincong:[{tag:'wiki',en:{href:W+'Linear_congruence_theorem',label:'Wikipedia: linear congruence'}},
+           {tag:'wiki',en:{href:W+'Modular_multiplicative_inverse',label:'Modular inverse'}}],
+  diophantine:[{tag:'wiki',en:{href:W+'Diophantine_equation',label:'Wikipedia: Diophantine equation'}},
+               {tag:'wiki',en:{href:W+'B%C3%A9zout%27s_identity',label:"Bézout's identity"}}],
+  crt:[{tag:'wiki',en:{href:W+'Chinese_remainder_theorem',label:'Wikipedia: Chinese Remainder Theorem'}}],
+  gffield:[{tag:'wiki',en:{href:W+'Finite_field',label:'Wikipedia: finite field'}},
+           {tag:'wiki',en:{href:W+'Primitive_root_modulo_n',label:'Primitive root'}}],
+  gfpoly:[{tag:'wiki',en:{href:W+'Finite_field_arithmetic',label:'Wikipedia: finite-field arithmetic'}},
+          {tag:'wiki',en:{href:W+'Irreducible_polynomial',label:'Irreducible polynomial'}}],
+  ecgroup:[{tag:'wiki',en:{href:W+'Elliptic_curve',label:'Wikipedia: elliptic curve'}},
+           {tag:'wiki',en:{href:W+'Elliptic_curve_point_multiplication',label:'Point multiplication'}}]
+};
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  drawEuclid(); drawLincong(); drawDioph(); drawCRT(); drawGF(); drawGP(); drawEC();
+};
+['euA','euB'].forEach(id=>document.getElementById(id).addEventListener('input',drawEuclid));
+['lcA','lcB','lcM'].forEach(id=>document.getElementById(id).addEventListener('input',drawLincong));
+['dpA','dpB','dpC'].forEach(id=>document.getElementById(id).addEventListener('input',drawDioph));
+['crN1','crN2','crA1','crA2'].forEach(id=>document.getElementById(id).addEventListener('input',drawCRT));
+['gfP','gfG'].forEach(id=>document.getElementById(id).addEventListener('input',drawGF));
+['gpField','gpA','gpB'].forEach(id=>document.getElementById(id).addEventListener('input',drawGP));
+['ecA','ecB','ecXP','ecXQ','ecDbl'].forEach(id=>document.getElementById(id).addEventListener('input',drawEC));
+</script>
+</body>
+</html>

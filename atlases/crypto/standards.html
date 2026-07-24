@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cryptographic standards (DSTU / GOST) — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="standards">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="National standards — Ukraine (ДСТУ) &amp; the GOST family"
+         data-uk="Національні стандарти — України (ДСТУ) та сімейство ГОСТ">National standards</div>
+    <h1 data-en="Cryptographic Standards" data-uk="Криптографічні стандарти">Cryptographic standards</h1>
+    <p class="lede" data-en="Ukraine runs a full stack of national cryptographic standards — the Kalyna block cipher, the Strumok stream cipher, the Kupyna hash and the DSTU 4145 signature — alongside the older ДСТУ ГОСТ block standard. Here they are, next to the GOST-family designs they replace or relate to, each with a working demonstration of its core transform."
+       data-uk="Україна має повний стек національних криптографічних стандартів — блоковий шифр «Калина», потоковий «Струмок», геш-функцію «Купина» та підпис ДСТУ 4145 — поряд зі старішим блоковим стандартом ДСТУ ГОСТ. Тут вони подані разом із конструкціями сімейства ГОСТ, які вони замінюють чи з якими пов'язані, кожен — з робочою демонстрацією свого основного перетворення.">National cryptographic standards.</p>
+    <div class="readout" id="selftest" style="margin-top:18px; max-width:560px;"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="Block Ciphers" data-uk="Блокові шифри">Block ciphers</h3>
+
+  <!-- ============ Kalyna ============ -->
+  <section id="kalyna">
+    <span class="num" data-en="01 / ДСТУ 7624:2014" data-uk="01 / ДСТУ 7624:2014">01 / Kalyna</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="Kalyna (DSTU 7624:2014)" data-uk="«Калина» (ДСТУ 7624:2014)">Kalyna</span></h2>
+    <div class="formula">round = SubBytes → ShiftRows → MixColumns → AddRoundKey  (SP-network)</div>
+    <p class="desc" data-en="Ukraine's national block cipher (2014). Like AES it is an <b>SP-network</b> — a layer of S-box substitution for confusion, then a linear ShiftRows + MixColumns layer for diffusion, then key addition — but it uses <b>four different 8-bit S-boxes</b>, 128/256/512-bit blocks and a modular-addition key schedule. The demo below runs a real SP round on a 128-bit block (with the AES S-box and MixColumns as a faithful stand-in) so you can watch the <b>avalanche effect</b>: flip one input bit and roughly half the output bits change."
+       data-uk="Національний блоковий шифр України (2014). Як і AES, це <b>SP-мережа</b> — шар підстановки S-боксами для конфузії, потім лінійний шар ShiftRows + MixColumns для дифузії, потім додавання ключа — але використовує <b>чотири різні 8-бітні S-бокси</b>, блоки 128/256/512 біт і розклад ключів на модульному додаванні. Демо нижче виконує справжній SP-раунд над 128-бітним блоком (з S-боксом і MixColumns від AES як точним замінником), щоб побачити <b>лавинний ефект</b>: змініть один вхідний біт — і близько половини вихідних бітів зміняться."></p>
+    <div id="refs-kalyna"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="spCanvas" width="300" height="150"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="input block (hex, 32 nibbles)" data-uk="вхідний блок (hex, 32 ніблі)">input block (hex)</span></label>
+            <input type="text" id="spIn" value="00112233445566778899aabbccddeeff" maxlength="32" style="width:100%; font-size:11px"></div>
+          <div class="ctrl"><label><span data-en="rounds" data-uk="раундів">rounds</span><span class="val" id="spRV">4</span></label>
+            <input type="range" id="spR" min="1" max="10" value="4"></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="spFlip" data-en="Flip 1 input bit" data-uk="Змінити 1 вхідний біт">Flip 1 input bit</button>
+            <button id="spRand" class="secondary" data-en="Random block" data-uk="Випадковий блок">Random block</button>
+          </div>
+          <div class="readout" id="spOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical attack on full Kalyna; it targets a comfortable security margin above AES. Its larger 256/512-bit blocks resist birthday-bound issues in high-throughput modes. As always with SP-networks, watch for side channels in software S-box lookups."
+            data-uk="Практичних атак на повну «Калину» немає; вона має комфортний запас стійкості понад AES. Її більші блоки 256/512 біт стійкі до проблем межі днів народжень у високопродуктивних режимах. Як завжди для SP-мереж, слід стежити за побічними каналами під час програмних звернень до S-боксів."></span></div>
+    <div class="xrefs"><a href="symmetric.html#aes">AES</a> <a href="standards.html#kuznyechik">Kuznyechik</a> <a href="standards.html#kupyna">Kupyna</a></div>
+  </section>
+
+  <!-- ============ Kuznyechik ============ -->
+  <section id="kuznyechik">
+    <span class="num" data-en="01 / GOST R 34.12-2015" data-uk="01 / ГОСТ Р 34.12-2015">01 / Kuznyechik</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="Kuznyechik («Konyk»)" data-uk="«Коник» (Kuznyechik)">Kuznyechik</span></h2>
+    <div class="formula">L = R¹⁶,  R(a₁₅…a₀) = ( ℓ(a₁₅…a₀), a₁₅, …, a₁ ),  ℓ = Σ Cᵢ·aᵢ over GF(2⁸)</div>
+    <p class="desc" data-en="A modern Russian SP-network (GOST R 34.12-2015, 2016) with a 128-bit block. Its diffusion layer <b>L</b> is an LFSR-style transform: a linear combination ℓ over GF(2⁸) (field polynomial x⁸+x⁷+x⁶+x+1) is fed back into a 16-byte register sixteen times. The demo runs the <b>real L transform</b> with the standard coefficients, showing how a single active byte diffuses across the whole block after 16 R-steps (the nonlinear π S-box is omitted for brevity)."
+       data-uk="Сучасна російська SP-мережа (ГОСТ Р 34.12-2015, 2016) з блоком 128 біт. Її шар дифузії <b>L</b> — перетворення у стилі LFSR: лінійна комбінація ℓ над GF(2⁸) (поліном поля x⁸+x⁷+x⁶+x+1) шістнадцять разів подається у 16-байтовий регістр. Демо виконує <b>справжнє перетворення L</b> зі стандартними коефіцієнтами, показуючи, як один активний байт дифундує по всьому блоку за 16 R-кроків (нелінійний S-бокс π опущено для стислості)."></p>
+    <div id="refs-kuznyechik"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="lCanvas" width="300" height="150"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="active byte value" data-uk="значення активного байта">active byte</span><span class="val" id="lBV">1</span></label>
+            <input type="range" id="lB" min="1" max="255" value="1"></div>
+          <div class="ctrl"><label><span data-en="active position (0–15)" data-uk="позиція (0–15)">position</span><span class="val" id="lPV">0</span></label>
+            <input type="range" id="lP" min="0" max="15" value="0"></div>
+          <div class="ctrl"><label><span data-en="R-steps applied" data-uk="застосовано R-кроків">R-steps</span><span class="val" id="lSV">16</span></label>
+            <input type="range" id="lS" min="1" max="16" value="16"></div>
+          <div class="readout" id="lOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical break of full Kuznyechik. Its π S-box was later shown to have a hidden algebraic (TKlog) structure that its designers did not disclose — not an attack, but a transparency concern that fuels distrust of unexplained &ldquo;nothing-up-my-sleeve&rdquo; constants."
+            data-uk="Практичного злому повного «Коника» немає. Пізніше показали, що його S-бокс π має приховану алгебраїчну структуру (TKlog), яку розробники не розкрили — це не атака, але проблема прозорості, що живить недовіру до непояснених «констант із нічого»."></span></div>
+    <div class="xrefs"><a href="standards.html#kalyna">Kalyna</a> <a href="symmetric.html#gost">ДСТУ ГОСТ 28147</a> <a href="stream.html#berlekamp-massey" data-en="LFSR" data-uk="LFSR">LFSR</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Stream Ciphers" data-uk="Потокові шифри">Stream ciphers</h3>
+
+  <!-- ============ SNOW 2.0 ============ -->
+  <section id="snow2">
+    <span class="num" data-en="02 / SNOW 2.0 / 3G" data-uk="02 / SNOW 2.0 / 3G">02 / SNOW</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="SNOW 2.0 / SNOW 3G" data-uk="SNOW 2.0 / SNOW 3G">SNOW 2.0 / 3G</span></h2>
+    <div class="formula">zₜ = (s₁₅ ⊞ R1) ⊕ R2 ⊕ s₀;  R1 ← s₅ ⊞ R2;  R2 ← S(R1);  clock LFSR</div>
+    <p class="desc" data-en="A fast word-oriented stream cipher: a length-16 LFSR (over GF(2³²)) drives a small <b>finite-state machine</b>. In SNOW 2.0 the FSM has two registers R1, R2 and an AES-based S-box; <b>SNOW 3G hardens it with a third register R3 and a second S-box</b>. Each step combines the LFSR tap s₁₅ with the FSM to emit a keystream word, then clocks the LFSR through its α-multiplication feedback. SNOW 3G is standardised for 3G/UMTS confidentiality (UEA2) and integrity (UIA2), and for LTE as 128-EEA1 / 128-EIA1. The demo runs the SNOW 2.0 architecture on toy 8-bit words."
+       data-uk="Швидкий слово-орієнтований потоковий шифр: LFSR довжини 16 (над GF(2³²)) керує невеликим <b>скінченним автоматом</b>. У SNOW 2.0 автомат має два регістри R1, R2 та S-бокс на основі AES; <b>SNOW 3G посилює його третім регістром R3 і другим S-боксом</b>. Кожен крок поєднує відвід LFSR s₁₅ з автоматом, видаючи слово гами, потім тактує LFSR через зворотний зв'язок з α-множенням. SNOW 3G стандартизований для конфіденційності 3G/UMTS (UEA2) та цілісності (UIA2), а для LTE — як 128-EEA1 / 128-EIA1. Демо запускає архітектуру SNOW 2.0 на іграшкових 8-бітних словах."></p>
+    <div id="refs-snow2"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="snowCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="snowStep" data-en="Clock once" data-uk="Такт">Clock once</button>
+            <button id="snowRun" data-en="Clock ×8" data-uk="Такт ×8">Clock ×8</button>
+            <button id="snowReset" class="secondary" data-en="Re-key" data-uk="Пере-ключити">Re-key</button>
+          </div>
+          <div class="readout" id="snowOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="SNOW 2.0 has known distinguishers with data far beyond practical reach; SNOW 3G hardened the FSM against them and remains unbroken in mobile use. Its successor SNOW-V targets 5G. As with any stream cipher, never reuse a (key, IV) pair — it collapses to two-time-pad."
+            data-uk="SNOW 2.0 має відомі розрізнювачі з обсягом даних далеко за межами практичного; SNOW 3G посилив автомат проти них і лишається незламаним у мобільному застосуванні. Наступник SNOW-V орієнтований на 5G. Як з будь-яким потоковим шифром, ніколи не повторюйте пару (ключ, IV) — це зводиться до двократного блокнота."></span></div>
+    <div class="xrefs"><a href="standards.html#strumok">Strumok</a> <a href="stream.html#chacha">ChaCha20</a> <a href="stream.html#rc4">RC4</a></div>
+  </section>
+
+  <!-- ============ Strumok ============ -->
+  <section id="strumok">
+    <span class="num" data-en="02 / ДСТУ 8845:2019" data-uk="02 / ДСТУ 8845:2019">02 / Strumok</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="Strumok (DSTU 8845:2019)" data-uk="«Струмок» (ДСТУ 8845:2019)">Strumok</span></h2>
+    <div class="formula" data-en="SNOW-2-like: LFSR over GF(2⁶⁴) + FSM,  256/512-bit keys" data-uk="SNOW-2-подібний: LFSR над GF(2⁶⁴) + автомат, ключі 256/512 біт">SNOW-2-like, 64-bit words</div>
+    <p class="desc" data-en="Ukraine's national stream-cipher standard (2019). It follows the proven <b>SNOW-2 architecture</b> — an LFSR feeding a two-register finite-state machine — but widens the words to 64 bits and the key to 256/512 bits, and swaps in Kalyna's S-boxes for the FSM. The same LFSR+FSM demo below illustrates its data flow; the real Strumok simply operates on larger words for post-quantum-era key sizes."
+       data-uk="Національний стандарт потокового шифрування України (2019). Він наслідує перевірену <b>архітектуру SNOW-2</b> — LFSR, що живить дворегістровий скінченний автомат — але розширює слова до 64 біт і ключ до 256/512 біт, а в автоматі використовує S-бокси «Калини». Те саме демо LFSR+FSM нижче ілюструє його потік даних; справжній «Струмок» просто оперує більшими словами задля розмірів ключів епохи постквантової криптографії."></p>
+    <div id="refs-strumok"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="strCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="strStep" data-en="Clock once" data-uk="Такт">Clock once</button>
+            <button id="strRun" data-en="Clock ×8" data-uk="Такт ×8">Clock ×8</button>
+            <button id="strReset" class="secondary" data-en="Re-key" data-uk="Пере-ключити">Re-key</button>
+          </div>
+          <div class="readout" id="strOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Designed with a large security margin and 256/512-bit keys for long-term (including Grover-resistant) strength; published analysis has found no practical weakness. Reuse of a (key, IV) pair is still fatal, exactly as for SNOW."
+            data-uk="Розроблений із великим запасом стійкості й ключами 256/512 біт для довготривалої (зокрема стійкої до Гровера) міцності; опублікований аналіз не виявив практичних вад. Повторне використання пари (ключ, IV) так само фатальне, як і для SNOW."></span></div>
+    <div class="xrefs"><a href="standards.html#snow2">SNOW 2.0</a> <a href="standards.html#kalyna">Kalyna S-boxes</a> <a href="quantum.html#grover">Grover</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Hash Function" data-uk="Геш-функція">Hash function</h3>
+
+  <!-- ============ Kupyna ============ -->
+  <section id="kupyna">
+    <span class="num" data-en="03 / ДСТУ 7564:2014" data-uk="03 / ДСТУ 7564:2014">03 / Kupyna</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="Kupyna (DSTU 7564:2014)" data-uk="«Купина» (ДСТУ 7564:2014)">Kupyna</span></h2>
+    <div class="formula">hᵢ₊₁ = T⊕(hᵢ ⊕ mᵢ) ⊕ T⁺(mᵢ) ⊕ hᵢ   (Grøstl-like, two Kalyna-like permutations)</div>
+    <p class="desc" data-en="Ukraine's national hash standard (2014), producing 256/384/512-bit digests. It uses a <b>wide-pipe</b> construction driven by two AES/Kalyna-like permutations (an XOR-keyed one and a modular-addition-keyed one), giving strong collision and preimage resistance. Its defining property, shared by every good hash, is the <b>avalanche effect</b>. The demo shows it directly (with SHA-256 as an illustrative stand-in): change one bit of the input and about half the digest bits flip."
+       data-uk="Національний стандарт гешування України (2014) з дайджестами 256/384/512 біт. Використовує конструкцію <b>wide-pipe</b> на двох AES/«Калина»-подібних перестановках (одна з ключуванням XOR, інша — модульним додаванням), що дає сильну стійкість до колізій і прообразів. Її визначальна властивість, спільна для кожного доброго гешу, — <b>лавинний ефект</b>. Демо показує його напряму (з SHA-256 як ілюстративним замінником): змініть один біт входу — і близько половини бітів дайджесту зміниться."></p>
+    <div id="refs-kupyna"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="avCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="message" data-uk="повідомлення">message</span></label>
+            <input type="text" id="avIn" value="Kupyna" style="width:100%"></div>
+          <div class="hint" data-en="Compares digest of the message vs. the message with one bit flipped." data-uk="Порівнює дайджест повідомлення та повідомлення зі зміненим одним бітом."></div>
+          <div class="readout" id="avOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical collision or preimage attack on full Kupyna; rebound-style attacks reach only reduced-round variants. It shares design DNA with Kalyna, so cryptanalytic progress on one informs the other."
+            data-uk="Практичних атак на колізії чи прообраз повної «Купини» немає; атаки типу rebound досягають лише варіантів зі зменшеною кількістю раундів. Вона має спільну конструктивну ДНК із «Калиною», тож криптоаналіз одного інформує про інше."></span></div>
+    <div class="xrefs"><a href="hash.html#sha3">SHA-3</a> <a href="standards.html#kalyna">Kalyna</a> <a href="hash.html#blake">BLAKE</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Message Authentication" data-uk="Автентифікація повідомлень">Message authentication</h3>
+
+  <!-- ============ DES-CBC-MAC ============ -->
+  <section id="descbcmac">
+    <span class="num" data-en="07 / DES-CBC-MAC" data-uk="07 / DES-CBC-MAC">07 / CBC-MAC</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(n)</span>
+      <span data-en="DES-CBC-MAC" data-uk="DES-CBC-MAC">DES-CBC-MAC</span></h2>
+    <div class="formula">t₀ = 0;  tᵢ = Eₖ(tᵢ₋₁ ⊕ mᵢ);  tag = tₙ</div>
+    <p class="desc" data-en="The simplest block-cipher MAC: encrypt the message in CBC mode and keep only the <b>last</b> ciphertext block as the tag. Each block is XORed with the running chain, then enciphered, so the tag depends on every bit of every block. The demo uses a toy 1-byte block cipher Eₖ(x)=S[x⊕k] so you can follow the chain by hand — and see the classic <b>length-extension forgery</b> that makes raw CBC-MAC unsafe for variable-length messages."
+       data-uk="Найпростіший MAC на блоковому шифрі: зашифрувати повідомлення в режимі CBC й лишити тегом тільки <b>останній</b> блок шифротексту. Кожен блок XOR-иться з поточним ланцюгом, потім шифрується, тож тег залежить від кожного біта кожного блоку. Демо використовує іграшковий 1-байтовий шифр Eₖ(x)=S[x⊕k], щоб простежити ланцюг вручну — і побачити класичну <b>підробку подовженням</b>, через яку «сирий» CBC-MAC небезпечний для повідомлень змінної довжини."></p>
+    <div id="refs-descbcmac"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="message (text)" data-uk="повідомлення (текст)">message</span></label>
+          <input type="text" id="cbcIn" value="ATLAS" maxlength="10" style="width:100%"></div>
+        <div class="ctrl"><label><span data-en="key k" data-uk="ключ k">key k</span><span class="val" id="cbcKV">42</span></label>
+          <input type="range" id="cbcK" min="0" max="255" value="42"></div>
+        <button id="cbcForge" data-en="Show length-extension forgery" data-uk="Показати підробку подовженням">Show forgery</button>
+        <div class="readout" id="cbcOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Single-DES is obsolete (56-bit key, brute-forceable) and <b>raw CBC-MAC is insecure for variable-length messages</b> — the forgery shown here. Fixes: CMAC (OMAC), encrypt-last-block (EMAC), or length-prepending. Use CMAC or HMAC today."
+            data-uk="Одинарний DES застарів (56-бітний ключ, піддається перебору), а <b>«сирий» CBC-MAC небезпечний для повідомлень змінної довжини</b> — саме ця підробка. Виправлення: CMAC (OMAC), шифрування останнього блоку (EMAC) або додавання довжини. Сьогодні використовуйте CMAC або HMAC."></span></div>
+    <div class="xrefs"><a href="hash.html#cmac">CMAC</a> <a href="hash.html#hmac">HMAC</a> <a href="symmetric.html#des">DES</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Digital Signature" data-uk="Цифровий підпис">Digital signature</h3>
+
+  <!-- ============ DSTU 4145 ============ -->
+  <section id="dstu4145">
+    <span class="num" data-en="09 / ДСТУ 4145-2002" data-uk="09 / ДСТУ 4145-2002">09 / DSTU 4145</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+      <span data-en="DSTU 4145-2002" data-uk="ДСТУ 4145-2002">DSTU 4145-2002</span></h2>
+    <div class="formula">curve  y² + xy = x³ + a·x² + b  over GF(2ᵐ);  Q = d·G,  sign with a nonce k</div>
+    <p class="desc" data-en="Ukraine's national digital-signature standard, built on the discrete logarithm on <b>elliptic curves over binary fields</b> GF(2ᵐ) — arithmetic that is very efficient in hardware. The demo works over the tiny field GF(2⁴): it plots every point of the curve, computes a generator's order, and runs a working <b>EC-Schnorr sign/verify</b> (real binary-field point arithmetic). DSTU 4145 uses the same GF(2ᵐ) foundation with its own signature equation."
+       data-uk="Національний стандарт цифрового підпису України на дискретному логарифмі на <b>еліптичних кривих над двійковими полями</b> GF(2ᵐ) — арифметиці, дуже ефективній апаратно. Демо працює над крихітним полем GF(2⁴): воно креслить кожну точку кривої, обчислює порядок генератора й виконує робочий <b>підпис/перевірку EC-Schnorr</b> (справжня арифметика точок у двійковому полі). ДСТУ 4145 використовує ту саму основу GF(2ᵐ) зі своїм рівнянням підпису."></p>
+    <div id="refs-dstu4145"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="binCanvas" width="300" height="300"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="curve param b (≠0)" data-uk="параметр кривої b (≠0)">param b</span><span class="val" id="binBV">1</span></label>
+            <input type="range" id="binB" min="1" max="15" value="1"></div>
+          <div class="ctrl"><label><span data-en="secret key d" data-uk="секретний ключ d">secret d</span><span class="val" id="binDV">3</span></label>
+            <input type="range" id="binD" min="1" max="20" value="3"></div>
+          <div class="ctrl"><label><span data-en="message" data-uk="повідомлення">message</span></label>
+            <input type="text" id="binMsg" value="DSTU" maxlength="12" style="width:100%"></div>
+          <button id="binSign" data-en="Sign &amp; verify" data-uk="Підписати й перевірити">Sign &amp; verify</button>
+          <div class="readout" id="binOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Secure at standard field sizes (m ≥ 163, and ≥233 recommended). Binary-field curves need care: some GF(2ᵐ) parameters fall to Weil-descent / GHS attacks, so only vetted standard curves should be used. Like every ECDSA-style scheme it is fatally sensitive to nonce reuse."
+            data-uk="Стійкий за стандартних розмірів поля (m ≥ 163, рекомендовано ≥233). Двійкові криві потребують обережності: деякі параметри GF(2ᵐ) піддаються атакам Вейля / GHS, тож слід використовувати лише перевірені стандартні криві. Як і кожна схема типу ECDSA, вона фатально чутлива до повторного використання нонса."></span></div>
+    <div class="xrefs"><a href="signatures.html#eddsa">EdDSA</a> <a href="authprotocols.html#auth-ecc">ECC auth</a> <a href="edwards.html" data-en="Edwards curves" data-uk="Криві Едвардса">Edwards curves</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+
+/* ---- GF(2^8) for AES (poly 0x11B) + computed AES S-box ---- */
+function gmul(a,b){ let p=0; for(let i=0;i<8;i++){ if(b&1)p^=a; const hi=a&0x80; a=(a<<1)&0xFF; if(hi)a^=0x1b; b>>=1; } return p; }
+const SBOX=(function(){
+  const anti=new Array(256),log=new Array(256); let x=1;
+  for(let i=0;i<255;i++){ anti[i]=x; log[x]=i; x=gmul(x,3); }
+  const minv=a=> a===0?0:anti[(255-log[a])%255];
+  const box=new Array(256);
+  for(let i=0;i<256;i++){ let b=minv(i),s=b;
+    for(let c=0;c<4;c++){ b=((b<<1)|(b>>7))&0xFF; s^=b; }
+    box[i]=s^0x63;
+  }
+  return box;
+})();
+const xt=a=>gmul(a,2);
+
+/* ---- SHA-256 (for the avalanche demo) ---- */
+const SHA=(function(){
+  const K=new Uint32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+  const rr=(x,n)=>(x>>>n)|(x<<(32-n));
+  function digest(bytes){
+    const l=bytes.length,bl=((l+8>>6)+1)<<6,m=new Uint8Array(bl); m.set(bytes); m[l]=0x80;
+    const bits=l*8; m[bl-4]=(bits>>>24)&255;m[bl-3]=(bits>>>16)&255;m[bl-2]=(bits>>>8)&255;m[bl-1]=bits&255;
+    let h0=0x6a09e667,h1=0xbb67ae85,h2=0x3c6ef372,h3=0xa54ff53a,h4=0x510e527f,h5=0x9b05688c,h6=0x1f83d9ab,h7=0x5be0cd19;
+    const w=new Uint32Array(64);
+    for(let o=0;o<bl;o+=64){
+      for(let i=0;i<16;i++) w[i]=(m[o+4*i]<<24)|(m[o+4*i+1]<<16)|(m[o+4*i+2]<<8)|m[o+4*i+3];
+      for(let i=16;i<64;i++){ const s0=rr(w[i-15],7)^rr(w[i-15],18)^(w[i-15]>>>3), s1=rr(w[i-2],17)^rr(w[i-2],19)^(w[i-2]>>>10); w[i]=(w[i-16]+s0+w[i-7]+s1)|0; }
+      let a=h0,b=h1,c=h2,d=h3,e=h4,f=h5,g=h6,h=h7;
+      for(let i=0;i<64;i++){ const S1=rr(e,6)^rr(e,11)^rr(e,25),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[i]+w[i])|0,S0=rr(a,2)^rr(a,13)^rr(a,22),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)|0; h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0; }
+      h0=(h0+a)|0;h1=(h1+b)|0;h2=(h2+c)|0;h3=(h3+d)|0;h4=(h4+e)|0;h5=(h5+f)|0;h6=(h6+g)|0;h7=(h7+h)|0;
+    }
+    const out=new Uint8Array(32),hs=[h0,h1,h2,h3,h4,h5,h6,h7];
+    for(let i=0;i<8;i++){ out[4*i]=(hs[i]>>>24)&255;out[4*i+1]=(hs[i]>>>16)&255;out[4*i+2]=(hs[i]>>>8)&255;out[4*i+3]=hs[i]&255; }
+    return out;
+  }
+  const enc=new TextEncoder(),hex=b=>Array.from(b).map(x=>x.toString(16).padStart(2,'0')).join('');
+  return {digest,hex,str:s=>digest(enc.encode(s))};
+})();
+
+/* ---- helpers ---- */
+const hex2=v=>v.toString(16).padStart(2,'0');
+const parseHex=s=>{ const b=[]; s=s.replace(/[^0-9a-fA-F]/g,'').padEnd(32,'0').slice(0,32); for(let i=0;i<32;i+=2) b.push(parseInt(s.substr(i,2),16)); return b; };
+const popcount=n=>{ let c=0; while(n){ c+=n&1; n>>=1; } return c; };
+
+/* ====================================================================
+   1) Kalyna — one AES-like SP round + avalanche
+   ==================================================================== */
+function aesRound(st,key){
+  const s=st.map(b=>SBOX[b]);                          // SubBytes
+  const t=new Array(16);                               // ShiftRows (column-major)
+  for(let r=0;r<4;r++)for(let c=0;c<4;c++) t[c*4+r]=s[((c+r)%4)*4+r];
+  const o=new Array(16);                               // MixColumns
+  for(let c=0;c<4;c++){ const a0=t[c*4],a1=t[c*4+1],a2=t[c*4+2],a3=t[c*4+3];
+    o[c*4]  =xt(a0)^(xt(a1)^a1)^a2^a3;
+    o[c*4+1]=a0^xt(a1)^(xt(a2)^a2)^a3;
+    o[c*4+2]=a0^a1^xt(a2)^(xt(a3)^a3);
+    o[c*4+3]=(xt(a0)^a0)^a1^a2^xt(a3);
+  }
+  return o.map((b,i)=>b^key[i]);                        // AddRoundKey
+}
+function aesEncrypt(block,rounds){
+  let st=block.slice(); for(let r=0;r<rounds;r++){ const k=new Array(16).fill(0).map((_,i)=>(r*17+i*31)&0xFF); st=aesRound(st,k); } return st;
+}
+function drawSP(){
+  const rounds=+spR.value; spRV.textContent=rounds;
+  const inp=parseHex(spIn.value);
+  const out=aesEncrypt(inp,rounds);
+  // avalanche: flip input bit 0
+  const inp2=inp.slice(); inp2[0]^=1; const out2=aesEncrypt(inp2,rounds);
+  let diff=0; for(let i=0;i<16;i++) diff+=popcount(out[i]^out2[i]);
+  // canvas heatmap: input row + output row
+  const cv=document.getElementById('spCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cw=W/16;
+  const row=(arr,y,lbl)=>{ for(let i=0;i<16;i++){ const v=arr[i]; g.fillStyle='rgb('+(60+v*0.5|0)+','+(120+(v*0.3|0))+','+(160-(v*0.4|0))+')'; g.fillRect(i*cw+1,y,cw-2,34); }
+    g.fillStyle=C.dim; g.font='9px monospace'; g.fillText(lbl,4,y-3); };
+  g.fillStyle=C.dim; g.font='9px monospace';
+  row(inp,20,window.LANG==='uk'?'вхід':'input'); row(out,80,window.LANG==='uk'?'вихід (SP)':'output (SP)');
+  const uk=window.LANG==='uk';
+  document.getElementById('spOut').innerHTML=
+    '<span class="k">'+(uk?'вихід':'output')+':</span> <span class="a">'+out.map(hex2).join('')+'</span>\n'+
+    '<span class="k">'+(uk?'лавина (1 біт входу → )':'avalanche (1 input bit → )')+':</span> <span class="s">'+diff+' / 128</span> '+
+    (uk?'вихідних бітів змінено':'output bits changed')+'  ('+(diff/128*100).toFixed(0)+'%)';
+}
+
+/* ====================================================================
+   2) Kuznyechik — real L transform over GF(2^8), poly 0x1C3
+   ==================================================================== */
+function gmulK(a,b){ let p=0; for(let i=0;i<8;i++){ if(b&1)p^=a; const hi=a&0x80; a=(a<<1)&0xFF; if(hi)a^=0xC3; b>>=1; } return p; }
+const KC=[148,32,133,16,194,192,1,251,1,192,194,16,133,32,148,1];
+function Rstep(a){ // a[0..15]; returns new vector after one R
+  let l=0; for(let i=0;i<16;i++) l^=gmulK(a[i],KC[i]);
+  return [l].concat(a.slice(0,15));
+}
+function drawL(){
+  const val=+lB.value, pos=+lP.value, steps=+lS.value;
+  lBV.textContent=val; lPV.textContent=pos; lSV.textContent=steps;
+  let a=new Array(16).fill(0); a[pos]=val;
+  for(let i=0;i<steps;i++) a=Rstep(a);
+  const active=a.filter(x=>x!==0).length;
+  const cv=document.getElementById('lCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cw=W/16;
+  for(let i=0;i<16;i++){ const v=a[i]; g.fillStyle=v?('rgb('+(80+v*0.6|0)+',219,202)'):(C.grid); g.fillRect(i*cw+1,40,cw-2,50);
+    g.fillStyle=C.dim; g.font='8px monospace'; g.fillText(hex2(v),i*cw+cw/2-6,110); }
+  const uk=window.LANG==='uk';
+  document.getElementById('lOut').innerHTML=
+    '<span class="k">'+(uk?'стан після L':'state after L')+':</span> <span class="a">'+a.map(hex2).join(' ')+'</span>\n'+
+    '<span class="k">'+(uk?'ненульових байтів':'nonzero bytes')+':</span> <span class="s">'+active+' / 16</span> '+
+    (steps===16&&active===16?(uk?'→ повна дифузія':'→ full diffusion'):'');
+}
+
+/* ====================================================================
+   3+4) SNOW-style LFSR + FSM engine (toy 8-bit words)
+   ==================================================================== */
+function SnowEngine(seed){
+  let s=new Array(16).fill(0).map((_,i)=>SBOX[(i*7+seed)&0xFF]);   // LFSR fill
+  let R1=SBOX[seed&0xFF], R2=SBOX[(seed*3)&0xFF];
+  const ALPHA=a=>xt(a)^(a&0x80?0x2d:0);          // GF(2^8) α-multiply (toy)
+  return {
+    state:()=>({s:s.slice(),R1,R2}),
+    step(){
+      const z=((s[15]+R1)&0xFF)^R2^s[0];         // keystream word
+      const nR1=(s[5]+R2)&0xFF, nR2=SBOX[R1];     // FSM update
+      const fb=ALPHA(s[0])^s[2]^s[11];            // LFSR feedback
+      for(let i=0;i<15;i++) s[i]=s[i+1]; s[15]=fb;
+      R1=nR1; R2=nR2;
+      return z;
+    }
+  };
+}
+function makeSnow(prefix, canvasId, outId){
+  let eng=SnowEngine(0x5a), ks=[];
+  function draw(){
+    const st=eng.state();
+    const cv=document.getElementById(canvasId),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+    g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+    const cw=W/16;
+    for(let i=0;i<16;i++){ const v=st.s[i]; g.fillStyle='rgb('+(50+v*0.7|0)+',180,'+(160-(v*0.3|0))+')'; g.fillRect(i*cw+1,10,cw-2,38);
+      g.fillStyle=C.dim; g.font='7px monospace'; g.fillText(hex2(v),i*cw+2,60); }
+    g.fillStyle=C.amber; g.font='10px monospace';
+    g.fillText('R1='+hex2(st.R1)+'  R2='+hex2(st.R2),8,84);
+    g.fillStyle=C.teal; g.fillText('z: '+ks.slice(-10).map(hex2).join(' '),8,104);
+    const uk=window.LANG==='uk';
+    document.getElementById(outId).innerHTML=
+      '<span class="k">LFSR:</span> <span class="a">'+st.s.map(hex2).join(' ')+'</span>\n'+
+      '<span class="k">FSM:</span> R1=<span class="s">'+hex2(st.R1)+'</span> R2=<span class="s">'+hex2(st.R2)+'</span>\n'+
+      '<span class="k">'+(uk?'гама (останні)':'keystream (recent)')+':</span> <span class="teal">'+ks.slice(-16).map(hex2).join(' ')+'</span>';
+  }
+  return {
+    draw,
+    step(n){ for(let i=0;i<n;i++) ks.push(eng.step()); draw(); },
+    reset(){ eng=SnowEngine((Math.random()*256)|0); ks=[]; draw(); }
+  };
+}
+
+/* ====================================================================
+   5) Kupyna — avalanche (illustrative SHA-256)
+   ==================================================================== */
+function drawAV(){
+  const msg=document.getElementById('avIn').value||'';
+  const bytes=new TextEncoder().encode(msg);
+  const d1=SHA.digest(bytes);
+  const b2=bytes.slice(); if(b2.length===0){} else b2[0]^=1;   // flip one bit
+  const d2=SHA.digest(b2);
+  let diff=0; for(let i=0;i<32;i++) diff+=popcount(d1[i]^d2[i]);
+  const cv=document.getElementById('avCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const bw=W/256;
+  for(let i=0;i<32;i++){ for(let bit=0;bit<8;bit++){ const idx=i*8+bit;
+    const on=((d1[i]^d2[i])>>(7-bit))&1; g.fillStyle=on?C.rose:C.grid; g.fillRect(idx*bw,20,bw-0.3,80); } }
+  const uk=window.LANG==='uk';
+  document.getElementById('avOut').innerHTML=
+    '<span class="k">H(m)  =</span> <span class="a">'+SHA.hex(d1).slice(0,32)+'…</span>\n'+
+    '<span class="k">H(m′) =</span> <span class="a">'+SHA.hex(d2).slice(0,32)+'…</span>\n'+
+    '<span class="k">'+(uk?'бітів змінено (рожеві)':'bits changed (pink)')+':</span> <span class="s">'+diff+' / 256</span> ('+(diff/256*100).toFixed(0)+'%)';
+}
+
+/* ====================================================================
+   6) DES-CBC-MAC (toy 1-byte block cipher) + forgery
+   ==================================================================== */
+function toyE(x,k){ return SBOX[(x^k)&0xFF]; }
+function cbcmac(bytes,k){ let t=0; const chain=[]; for(const m of bytes){ t=toyE(t^m,k); chain.push(t); } return {tag:t,chain}; }
+function drawCBC(){
+  const k=+cbcK.value; cbcKV.textContent=k;
+  const msg=Array.from(new TextEncoder().encode(document.getElementById('cbcIn').value||''));
+  const {tag,chain}=cbcmac(msg,k);
+  const uk=window.LANG==='uk';
+  document.getElementById('cbcOut').innerHTML=
+    '<span class="k">'+(uk?'блоки mᵢ':'blocks mᵢ')+':</span> '+msg.map(hex2).join(' ')+'\n'+
+    '<span class="k">'+(uk?'ланцюг tᵢ':'chain tᵢ')+':</span> '+chain.map(hex2).join(' ')+'\n'+
+    '<span class="k">'+(uk?'тег = tₙ':'tag = tₙ')+' =</span> <span class="a">'+hex2(tag)+'</span>';
+}
+function drawForge(){
+  const k=+cbcK.value;
+  const m=Array.from(new TextEncoder().encode(document.getElementById('cbcIn').value||''));
+  const t1=cbcmac(m,k).tag;                    // known: MAC(m)=t1
+  // forge MAC of m' = m ‖ (m0 ⊕ t1) ‖ m1 ‖ … : appended block (m0⊕t1) resets chain, so MAC(m')=MAC(m)
+  const forged=m.concat([m[0]^t1]).concat(m.slice(1));
+  const t2=cbcmac(forged,k).tag;
+  const uk=window.LANG==='uk';
+  document.getElementById('cbcOut').innerHTML=
+    '<span class="k">'+(uk?'відомо':'known')+':  MAC(m) =</span> <span class="a">'+hex2(t1)+'</span>\n'+
+    '<span class="k">'+(uk?'підроблене повідомлення':'forged message')+' m′ = m ‖ (m₀⊕tag) ‖ m₁…:</span>\n'+
+    '  '+forged.map(hex2).join(' ')+'\n'+
+    '<span class="k">MAC(m′) =</span> <span class="'+(t2===t1?'a':'b')+'">'+hex2(t2)+'</span> '+
+    (t2===t1?'<span class="b">= MAC(m) → '+(uk?'ПІДРОБКА без ключа!':'FORGED without the key!')+'</span>':'');
+}
+
+/* ====================================================================
+   7) DSTU 4145 — EC-Schnorr over a toy binary curve GF(2^4)
+   ==================================================================== */
+const G4RED=0x13;                       // x^4 + x + 1
+function g4mul(a,b){ let p=0; for(let i=0;i<4;i++){ if(b&1)p^=a; b>>=1; const hi=a&0x8; a=(a<<1)&0xF; if(hi)a^=(G4RED&0xF); } return p&0xF; }
+function g4inv(a){ let r=1; for(let i=0;i<14;i++) r=g4mul(r,a); return r; }   // a^14 = a^-1 in GF(16)*
+const BINF=null;
+function binOnCurve(x,y,a,b){ // y^2 + xy = x^3 + a x^2 + b
+  const L=g4mul(y,y)^g4mul(x,y); const R=g4mul(g4mul(x,x),x)^g4mul(a,g4mul(x,x))^b; return L===R;
+}
+function binPoints(a,b){ const P=[]; for(let x=0;x<16;x++)for(let y=0;y<16;y++) if(binOnCurve(x,y,a,b)) P.push([x,y]); return P; }
+function binAdd(P,Q,a){
+  if(P===BINF)return Q; if(Q===BINF)return P;
+  const [x1,y1]=P,[x2,y2]=Q;
+  if(x1===x2 && (y2===(x1^y1))) return BINF;         // Q = -P
+  let lam,x3,y3;
+  if(x1===x2 && y1===y2){                            // doubling
+    if(x1===0) return BINF;
+    lam=x1^g4mul(y1,g4inv(x1));
+    x3=g4mul(lam,lam)^lam^a;
+    y3=g4mul(x1,x1)^g4mul(lam,x3)^x3;
+  } else {
+    lam=g4mul(y1^y2,g4inv(x1^x2));
+    x3=g4mul(lam,lam)^lam^x1^x2^a;
+    y3=g4mul(lam,x1^x3)^x3^y1;
+  }
+  return [x3,y3];
+}
+function binMul(k,P,a){ let R=BINF,Q=P; k=k|0; while(k>0){ if(k&1)R=binAdd(R,Q,a); Q=binAdd(Q,Q,a); k>>=1; } return R; }
+function binEq(P,Q){ return (P===BINF&&Q===BINF)||(P&&Q&&P[0]===Q[0]&&P[1]===Q[1]); }
+function drawBin(){
+  const a=1, b=+binB.value; binBV.textContent=b; binDV.textContent=binD.value;
+  const pts=binPoints(a,b);
+  // choose generator G = first point of largest order
+  let G=null,n=1;
+  for(const P of pts){ let o=1,Q=P; while(Q!==BINF&&o<=64){ Q=binAdd(Q,P,a); o++; } if(o>n){ n=o; G=P; } }
+  const uk=window.LANG==='uk';
+  const cv=document.getElementById('binCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const sx=v=>18+v/15*(W-30), sy=v=>H-18-v/15*(H-30);
+  g.strokeStyle=C.line; for(let i=0;i<16;i++){ g.beginPath(); g.moveTo(sx(i),sy(0)); g.lineTo(sx(i),sy(15)); g.moveTo(sx(0),sy(i)); g.lineTo(sx(15),sy(i)); g.stroke(); }
+  g.fillStyle=C.grid; pts.forEach(p=>{ g.beginPath(); g.arc(sx(p[0]),sy(p[1]),3,0,7); g.fill(); });
+  if(!G){ document.getElementById('binOut').innerHTML='<span class="b">'+(uk?'немає циклічної групи для цих параметрів':'no cyclic group for these params')+'</span>'; return; }
+  const d=((+binD.value-1)%(n-1))+1;                  // secret in [1,n-1]
+  const Q=binMul(d,G,a);                              // public key
+  // EC-Schnorr sign
+  const msg=document.getElementById('binMsg').value||'';
+  let sum=0; for(const ch of msg) sum+=ch.charCodeAt(0);
+  let k=(1+((sum*7+b*13)%(n-1)));                     // deterministic toy nonce in [1,n-1]
+  const R=binMul(k,G,a);
+  const e=((R?(R[0]*4+R[1]):0)+sum)%n;
+  const s=((k + e*d)%n);
+  // verify: s·G == R + e·Q
+  const lhs=binMul(s,G,a), rhs=binAdd(R,binMul(e,Q,a),a);
+  const ok=binEq(lhs,rhs);
+  const mark=(p,col,r)=>{ if(!p)return; g.fillStyle=col; g.beginPath(); g.arc(sx(p[0]),sy(p[1]),r,0,7); g.fill(); };
+  mark(G,C.dim,4.5); mark(Q,C.amber,4.5); mark(R,C.teal,4.5);
+  document.getElementById('binOut').innerHTML=
+    '<span class="k">GF(2⁴), y²+xy=x³+x²+'+b+',  '+pts.length+' '+(uk?'точок':'points')+'</span>\n'+
+    '<span class="k">G=</span>('+G[0]+','+G[1]+'), |G|=<span class="s">'+n+'</span>  <span class="k">Q=d·G=</span>'+(Q?'('+Q[0]+','+Q[1]+')':'∞')+'\n'+
+    '<span class="k">'+(uk?'підпис':'signature')+': R=</span>'+(R?'('+R[0]+','+R[1]+')':'∞')+' <span class="k">e=</span>'+e+' <span class="k">s=</span><span class="a">'+s+'</span>\n'+
+    '<span class="k">'+(uk?'перевірка s·G = R+e·Q':'verify s·G = R+e·Q')+' →</span> '+
+    (ok?'<span class="a">'+(uk?'ДІЙСНИЙ ✓':'VALID ✓')+'</span>':'<span class="b">✗</span>');
+}
+
+/* ====================================================================
+   self-test + wiring
+   ==================================================================== */
+function selfTest(){
+  const uk=window.LANG==='uk';
+  const sb=(SBOX[0]===0x63 && SBOX[1]===0x7c && SBOX[16]===0xca);
+  const sh=SHA.hex(SHA.str('abc'))==='ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad';
+  document.getElementById('selftest').innerHTML=
+    '<span class="k">'+(uk?'Самоперевірка':'Self-test')+':</span>  '+
+    'AES S-box <span class="'+(sb?'a':'b')+'">'+(sb?'✓':'✗')+'</span>   '+
+    'SHA-256("abc") <span class="'+(sh?'a':'b')+'">'+(sh?'✓':'✗')+'</span>   '+
+    ((sb&&sh)?'<span class="a">'+(uk?'примітиви коректні':'primitives correct')+'</span>':'<span class="b">FAIL</span>');
+}
+
+const snow=makeSnow('snow','snowCanvas','snowOut');
+const strum=makeSnow('str','strCanvas','strOut');
+
+window.REFS={
+  kalyna:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Kalyna_(cipher)',label:'Wikipedia: Kalyna'}},
+          {tag:'eprint',en:{href:'https://eprint.iacr.org/2015/650',label:'Kalyna specification (ePrint)'}}],
+  kuznyechik:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Kuznyechik',label:'Wikipedia: Kuznyechik'}},
+          {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc7801',label:'RFC 7801 (GOST R 34.12-2015)'}}],
+  snow2:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/SNOW',label:'Wikipedia: SNOW'}},
+         {tag:'spec',en:{href:'https://www.gsma.com/security/wp-content/uploads/2019/05/snow3gspec.pdf',label:'SNOW 3G specification'}}],
+  strumok:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Strumok',label:'Wikipedia: Strumok'}},
+           {tag:'paper',en:{href:'https://doi.org/10.1007/978-3-319-97822-8_2',label:'Strumok analysis'}}],
+  kupyna:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Kupyna',label:'Wikipedia: Kupyna'}},
+          {tag:'eprint',en:{href:'https://eprint.iacr.org/2015/885',label:'Kupyna specification (ePrint)'}}],
+  descbcmac:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/CBC-MAC',label:'Wikipedia: CBC-MAC'}},
+             {tag:'nist',en:{href:'https://csrc.nist.gov/pubs/sp/800/38/b/final',label:'NIST SP 800-38B (CMAC)'}}],
+  dstu4145:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/DSTU_4145-2002',label:'Wikipedia: DSTU 4145-2002'}},
+            {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc9066',label:'RFC 9066 (DSTU 4145 in TLS-adjacent use)'}}]
+};
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  selfTest(); drawSP(); drawL(); snow.draw(); strum.draw(); drawAV(); drawCBC(); drawBin();
+};
+
+// controls
+['spIn','spR'].forEach(id=>document.getElementById(id).addEventListener('input',drawSP));
+document.getElementById('spFlip').addEventListener('click',()=>{ const b=parseHex(spIn.value); const bit=(Math.random()*128)|0; b[bit>>3]^=(1<<(bit&7)); spIn.value=b.map(hex2).join(''); drawSP(); });
+document.getElementById('spRand').addEventListener('click',()=>{ const b=new Array(16).fill(0).map(()=> (Math.random()*256)|0); spIn.value=b.map(hex2).join(''); drawSP(); });
+['lB','lP','lS'].forEach(id=>document.getElementById(id).addEventListener('input',drawL));
+document.getElementById('snowStep').addEventListener('click',()=>snow.step(1));
+document.getElementById('snowRun').addEventListener('click',()=>snow.step(8));
+document.getElementById('snowReset').addEventListener('click',()=>snow.reset());
+document.getElementById('strStep').addEventListener('click',()=>strum.step(1));
+document.getElementById('strRun').addEventListener('click',()=>strum.step(8));
+document.getElementById('strReset').addEventListener('click',()=>strum.reset());
+document.getElementById('avIn').addEventListener('input',drawAV);
+['cbcIn','cbcK'].forEach(id=>document.getElementById(id).addEventListener('input',drawCBC));
+document.getElementById('cbcForge').addEventListener('click',drawForge);
+['binB','binD','binMsg'].forEach(id=>document.getElementById(id).addEventListener('input',drawBin));
+document.getElementById('binSign').addEventListener('click',drawBin);
+</script>
+</body>
+</html>

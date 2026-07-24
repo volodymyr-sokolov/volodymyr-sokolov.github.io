@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Implementation &amp; physical attacks — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="sidechannels">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 26 — where almost every real-world break actually happens"
+         data-uk="Розділ 26 — де насправді трапляється майже кожен реальний злам">Section 26</div>
+    <h1 data-en="Implementation &amp; Physical Attacks" data-uk="Атаки на реалізацію та фізичні атаки">Implementation &amp; physical attacks</h1>
+    <p class="lede" data-en="A cipher can be mathematically sound yet leak its secrets through the <b>side door</b>: how long an operation takes, how much power it draws, which cache lines it touches, or how it reacts to a corrupted input. These attacks target the <b>implementation</b>, not the algorithm — and they are how keys are stolen in practice. Below: timing, cache, power (DPA), fault and padding-oracle attacks, each with a working demonstration, then the countermeasures that close the channels."
+       data-uk="Шифр може бути математично бездоганним, але видавати секрети через <b>бічні двері</b>: скільки триває операція, скільки живлення споживає, яких ліній кешу торкається чи як реагує на зіпсований вхід. Ці атаки цілять у <b>реалізацію</b>, а не в алгоритм — і саме так на практиці крадуть ключі. Нижче: атаки за часом, кеш-атаки, аналіз живлення (DPA), атаки збоями та padding-оракули, кожна з робочою демонстрацією, а далі — контрзаходи, що закривають ці канали.">Attacks on the implementation, not the algorithm.</p>
+    <div class="readout" id="selftest" style="margin-top:18px; max-width:620px;"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ============ 1. Timing ============ -->
+  <section id="timing">
+    <span class="num">26 / 1</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(queries)</span>
+      <span data-en="Timing Attacks" data-uk="Атаки за часом">Timing attacks</span></h2>
+    <div class="formula">t(guess) ∝ length of matching prefix — a naive <code>==</code> returns early and leaks; a constant-time compare does not</div>
+    <p class="desc" data-en="Kocher (1996) observed that if an operation's <b>running time depends on secret data</b>, that time is an oracle. The classic case is a byte-by-byte comparison (a password or MAC check) that <b>returns on the first mismatch</b>: the closer your guess, the longer the compare runs. Measuring the time for each candidate byte reveals the secret one position at a time — turning an exponential search into a linear one. A <b>constant-time</b> compare always touches every byte, so its time is independent of the guess."
+       data-uk="Кочер (1996) помітив: якщо <b>час виконання залежить від секретних даних</b>, цей час стає оракулом. Класика — побайтове порівняння (перевірка пароля чи MAC), що <b>завершується на першій розбіжності</b>: чим ближчий здогад, тим довше триває порівняння. Вимірюючи час для кожного кандидата байта, секрет відновлюють позиція за позицією — перетворюючи експоненційний пошук на лінійний. <b>Сталочасове</b> порівняння завжди торкається всіх байтів, тож його час не залежить від здогаду."></p>
+    <div id="refs-timing"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="tmCanvas" width="300" height="220"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="target byte position" data-uk="позиція байта">target byte position</span><span class="val" id="tmPosV">0</span></label>
+          <input type="range" id="tmPos" min="0" max="3" value="0"></div>
+        <div class="ctrl"><label><span data-en="measurements averaged" data-uk="усереднення вимірів">measurements averaged</span><span class="val" id="tmTrialsV">12</span></label>
+          <input type="range" id="tmTrials" min="1" max="40" value="12"></div>
+        <label style="display:flex;gap:8px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim)">
+          <input type="checkbox" id="tmCT"> <span data-en="use constant-time compare" data-uk="сталочасове порівняння">use constant-time compare</span></label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button id="tmAuto" data-en="Auto-recover secret" data-uk="Авто-відновлення секрету">Auto-recover secret</button>
+          <button id="tmNew" class="secondary" data-en="New secret" data-uk="Новий секрет">New secret</button></div>
+        <div class="hint" data-en="Simulated measurement: each matching leading byte adds ~10 time units plus ±2 noise. The peak over 256 candidates is the correct byte — but only under the naive compare." data-uk="Симульований вимір: кожен збіжний початковий байт додає ~10 одиниць часу плюс ±2 шуму. Пік серед 256 кандидатів — правильний байт, але лише при наївному порівнянні."></div>
+        <div class="readout" id="tmOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Practical and repeatedly exploited: remote timing of OpenSSL RSA (Brumley–Boneh, 2003), <b>Lucky 13</b> against TLS CBC-HMAC (2013), and countless string-comparison bugs in MAC/token checks. The fix is code that runs in <b>constant time</b> — no secret-dependent branches, table indices or early returns." data-uk="Практична й неодноразово використана: віддалене вимірювання RSA в OpenSSL (Брамлі–Боне, 2003), <b>Lucky 13</b> проти TLS CBC-HMAC (2013) та безліч помилок порівняння рядків у перевірках MAC/токенів. Ліки — код <b>сталого часу</b>: без залежних від секрету гілок, індексів таблиць чи ранніх повернень."></span></div>
+    <div class="xrefs"><a href="authprotocols.html#auth-ecc" data-en="ECC authentication" data-uk="Автентифікація ECC">ECC authentication</a> <a href="implattacks.html#ctmeasures" data-en="Countermeasures" data-uk="Контрзаходи">Countermeasures</a> <a href="implattacks.html#cache" data-en="Cache attacks" data-uk="Кеш-атаки">Cache attacks</a></div>
+  </section>
+
+  <!-- ============ 2. Cache ============ -->
+  <section id="cache">
+    <span class="num">26 / 2</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(traces)</span>
+      <span data-en="Cache Attacks (Flush+Reload, Prime+Probe)" data-uk="Кеш-атаки (Flush+Reload, Prime+Probe)">Cache attacks</span></h2>
+    <div class="formula">Flush the cache → let the victim compute T[secret] → Reload every line: the <em>fast</em> line was the one it touched</div>
+    <p class="desc" data-en="A shared CPU cache is a covert channel. In <b>Flush+Reload</b> the attacker evicts a memory line, lets the victim run, then reloads it and times the access: a <b>fast</b> reload means the victim had already loaded that line — revealing which table entry a secret-dependent lookup touched. <b>Prime+Probe</b> works without shared memory by filling a cache set and detecting evictions. Because AES, RSA windowed exponentiation and many implementations index tables by key bits, the accessed index <b>is</b> the secret."
+       data-uk="Спільний кеш процесора — це прихований канал. У <b>Flush+Reload</b> атакувальник витісняє лінію пам'яті, дає жертві виконатись, тоді перезавантажує її й вимірює час: <b>швидке</b> перезавантаження означає, що жертва вже завантажила цю лінію — розкриваючи, який запис таблиці торкнувся залежний від секрету доступ. <b>Prime+Probe</b> працює без спільної пам'яті, заповнюючи набір кешу й виявляючи витіснення. Оскільки AES, віконне піднесення RSA та багато реалізацій індексують таблиці бітами ключа, торкнутий індекс <b>і є</b> секретом."></p>
+    <div id="refs-cache"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="caCanvas" width="300" height="200"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="secret table index T[·]" data-uk="секретний індекс T[·]">secret table index T[·]</span><span class="val" id="caSecretV">10</span></label>
+          <input type="range" id="caSecret" min="0" max="15" value="10"></div>
+        <button id="caRun" data-en="Flush + Reload probe" data-uk="Зондування Flush + Reload">Flush + Reload probe</button>
+        <div class="hint" data-en="Simulated reload times over 16 cache lines: 15 slow misses and one fast hit — the line the victim's lookup touched." data-uk="Симульовані часи перезавантаження по 16 лініях кешу: 15 повільних промахів і один швидкий влучний — лінія, якої торкнувся доступ жертви."></div>
+        <div class="readout" id="caOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Devastating and cross-VM: T-table AES key recovery (Osvik–Shamir–Tromer, 2006), Flush+Reload on GnuPG RSA/DSA (2014), and the microarchitectural family <b>Spectre/Meltdown</b> (2018) that reads across privilege boundaries. Defences: bitsliced / constant-time S-boxes, no secret-indexed memory, AES-NI hardware instructions." data-uk="Руйнівні й міжвіртуальні: відновлення ключа AES через T-таблиці (Osvik–Shamir–Tromer, 2006), Flush+Reload на RSA/DSA у GnuPG (2014) та мікроархітектурне сімейство <b>Spectre/Meltdown</b> (2018), що читає через межі привілеїв. Захист: bitsliced / сталочасові S-box, відсутність секретно-індексованої пам'яті, апаратні інструкції AES-NI."></span></div>
+    <div class="xrefs"><a href="symmetric.html#aes">AES (T-tables)</a> <a href="implattacks.html#dpa" data-en="Power analysis" data-uk="Аналіз живлення">Power analysis</a> <a href="implattacks.html#ctmeasures" data-en="Countermeasures" data-uk="Контрзаходи">Countermeasures</a></div>
+  </section>
+
+  <!-- ============ 3. DPA / SPA ============ -->
+  <section id="dpa">
+    <span class="num">26 / 3</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(traces)</span>
+      <span data-en="Power Analysis (SPA / DPA)" data-uk="Аналіз живлення (SPA / DPA)">Power analysis (SPA / DPA)</span></h2>
+    <div class="formula">leakage ≈ HW( SBox[p ⊕ k] ) + noise;   recover k̂ = argmaxₖ corr( HW-prediction, measured power )</div>
+    <p class="desc" data-en="A chip's power draw depends on the data it processes — typically the <b>Hamming weight</b> of a value on the bus. <b>SPA</b> reads a single trace by eye (e.g. square-vs-multiply in RSA). <b>DPA / CPA</b> (Kocher, 1999) is statistical: collect many traces with known plaintexts, guess one key byte, predict the leakage of <code>SBox[p⊕k]</code>, and <b>correlate</b> the prediction with the real power. Only the correct key guess correlates. The demo below runs real correlation power analysis against the AES S-box and recovers a key byte from noisy simulated traces."
+       data-uk="Споживання живлення чипа залежить від оброблюваних даних — зазвичай від <b>ваги Геммінга</b> значення на шині. <b>SPA</b> читає одну трасу очима (напр. піднесення-vs-множення в RSA). <b>DPA / CPA</b> (Кочер, 1999) — статистична: зібрати багато трас із відомими відкритими текстами, вгадати байт ключа, передбачити витік <code>SBox[p⊕k]</code> і <b>корелювати</b> передбачення з реальним живленням. Корелює лише правильний здогад ключа. Демо нижче виконує справжній кореляційний аналіз живлення проти S-box AES і відновлює байт ключа із зашумлених симульованих трас."></p>
+    <div id="refs-dpa"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="dpaCanvas" width="300" height="220"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="power traces" data-uk="трас живлення">power traces</span><span class="val" id="dpaTracesV">120</span></label>
+          <input type="range" id="dpaTraces" min="10" max="400" step="10" value="120"></div>
+        <div class="ctrl"><label><span data-en="noise σ" data-uk="шум σ">noise σ</span><span class="val" id="dpaNoiseV">1.5</span></label>
+          <input type="range" id="dpaNoise" min="0" max="4" step="0.1" value="1.5"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button id="dpaRun" data-en="Acquire &amp; correlate" data-uk="Зібрати й корелювати">Acquire &amp; correlate</button>
+          <button id="dpaNew" class="secondary" data-en="New key byte" data-uk="Новий байт ключа">New key byte</button></div>
+        <div class="hint" data-en="Correlation for all 256 key guesses (real CPA over the AES S-box). Raise the noise or drop the trace count and the peak drowns — that is why DPA is measured in traces." data-uk="Кореляція для всіх 256 здогадів ключа (справжня CPA над S-box AES). Підніміть шум чи зменшіть кількість трас — і пік тоне; тому DPA міряють у трасах."></div>
+        <div class="readout" id="dpaOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="The standard attack on smart cards, TPMs and IoT chips; commercial toolchains recover AES/RSA keys in minutes of trace capture. Countermeasures: <b>masking</b> (secret-sharing every intermediate), hiding (noise, shuffling), and dual-rail logic — all validated under ISO/IEC 17825 and Common Criteria." data-uk="Стандартна атака на смарт-карти, TPM та IoT-чипи; комерційні інструменти відновлюють ключі AES/RSA за хвилини захоплення трас. Контрзаходи: <b>маскування</b> (секретне розділення кожного проміжного значення), приховування (шум, перемішування) та dual-rail логіка — усе перевіряється за ISO/IEC 17825 і Common Criteria."></span></div>
+    <div class="xrefs"><a href="symmetric.html#aes">AES S-box</a> <a href="implattacks.html#cache" data-en="Cache attacks" data-uk="Кеш-атаки">Cache attacks</a> <a href="implattacks.html#ctmeasures" data-en="Masking &amp; blinding" data-uk="Маскування та засліплення">Masking &amp; blinding</a></div>
+  </section>
+
+  <!-- ============ 4. Fault (Bellcore RSA-CRT) ============ -->
+  <section id="fault">
+    <span class="num">26 / 4</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(1)</span>
+      <span data-en="Bellcore Fault Attack on RSA-CRT" data-uk="Атака збоєм Bellcore на RSA-CRT">Bellcore fault attack (RSA-CRT)</span></h2>
+    <div class="formula">s ≡ sₚ (mod p),  s ≡ s_q (mod q);   a fault in the mod-p half → gcd( ŝ<sup>e</sup> − m, N ) = q</div>
+    <p class="desc" data-en="RSA signatures are usually computed with the <b>CRT</b> (~4× faster): compute sₚ = m<sup>dₚ</sup> mod p and s_q = m<sup>d_q</sup> mod q, then recombine. Boneh–DeMillo–Lipton (1997) showed that a <b>single fault</b> — a voltage glitch, a laser pulse, a clock spike — in just one half yields a faulty signature ŝ that is still correct mod q but wrong mod p. Then <b>ŝ<sup>e</sup> − m</b> is divisible by q but not p, so a single gcd with N <b>recovers the private prime</b>. One faulty signature breaks the key. The demo runs real BigInt RSA-CRT and performs the gcd recovery."
+       data-uk="Підписи RSA зазвичай рахують через <b>КТЛ</b> (~4× швидше): обчислюють sₚ = m<sup>dₚ</sup> mod p і s_q = m<sup>d_q</sup> mod q, тоді збирають. Боне–ДеМілло–Ліптон (1997) показали, що <b>один збій</b> — стрибок напруги, лазерний імпульс, збій такту — лише в одній половині дає хибний підпис ŝ, ще правильний mod q, але хибний mod p. Тоді <b>ŝ<sup>e</sup> − m</b> ділиться на q, але не на p, тож один нсд із N <b>відновлює приватний простий множник</b>. Один хибний підпис ламає ключ. Демо виконує справжній RSA-CRT на BigInt і відновлення через нсд."></p>
+    <div id="refs-fault"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="faCanvas" width="300" height="200"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span>p</span></label>
+          <select id="faP"><option>53</option><option selected>61</option><option>101</option><option>113</option><option>149</option></select></div>
+        <div class="ctrl"><label><span>q</span></label>
+          <select id="faQ"><option selected>53</option><option>61</option><option>101</option><option>113</option><option>139</option></select></div>
+        <div class="ctrl"><label><span>e</span></label>
+          <select id="faE"><option selected>17</option><option>23</option><option>257</option></select></div>
+        <div class="ctrl"><label><span data-en="message m" data-uk="повідомлення m">message m</span><span class="val" id="faMV">42</span></label>
+          <input type="range" id="faM" min="2" max="200" value="42"></div>
+        <div class="ctrl"><label><span data-en="fault Δ in sₚ" data-uk="збій Δ у sₚ">fault Δ in sₚ</span><span class="val" id="faDeltaV">1</span></label>
+          <input type="range" id="faDelta" min="0" max="20" value="1"></div>
+        <div class="readout" id="faOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="A textbook one-shot break; fault injection is a core smart-card threat. The mandatory defence is to <b>verify the signature before releasing it</b> (recompute ŝ<sup>e</sup> mod N ?= m) or to avoid CRT — plus physical sensors and redundant computation. Set Δ = 0 above (no fault) and the recovered gcd collapses to 1: the attack needs exactly one corrupted half." data-uk="Хрестоматійний злам з одного пострілу; ін'єкція збоїв — ключова загроза смарт-карток. Обов'язковий захист — <b>перевіряти підпис перед видачею</b> (перерахувати ŝ<sup>e</sup> mod N ?= m) або уникати КТЛ — плюс фізичні сенсори й надлишкові обчислення. Поставте Δ = 0 (без збою) — і відновлений нсд стає 1: атаці потрібна рівно одна зіпсована половина."></span></div>
+    <div class="xrefs"><a href="asymmetric.html#rsa">RSA</a> <a href="arithmetic.html#crt">CRT</a> <a href="signatures.html#rsapss">RSA-PSS</a></div>
+  </section>
+
+  <!-- ============ 5. Padding oracle ============ -->
+  <section id="paddingoracle">
+    <span class="num">26 / 5</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(256·n)</span>
+      <span data-en="Padding Oracles (Bleichenbacher, POODLE, Lucky 13)" data-uk="Padding-оракули (Бляйхенбахер, POODLE, Lucky 13)">Padding oracles</span></h2>
+    <div class="formula">CBC:  Pᵢ = D_k(Cᵢ) ⊕ C_{i−1};   a &ldquo;valid padding?&rdquo; oracle leaks D_k(Cᵢ) one byte at a time</div>
+    <p class="desc" data-en="If a decryptor tells you — by an error message, a timing difference, or a TLS alert — whether a ciphertext had <b>valid padding</b>, you can decrypt it without the key. Manipulating the previous CBC block <b>C_{i−1}</b> lets the attacker force a target byte of the plaintext to the padding value <code>0x01</code>, then <code>0x02 0x02</code>, and so on; each success reveals one byte of the cipher's intermediate state D_k(Cᵢ). Vaudenay (2002) turned this into full plaintext recovery. The demo uses a clearly-labelled <b>toy 4-byte block cipher</b> and recovers a whole plaintext block using only valid/invalid answers."
+       data-uk="Якщо розшифрувальник повідомляє — повідомленням про помилку, різницею в часі чи TLS-алертом — чи мав шифротекст <b>дійсне доповнення</b>, ви можете розшифрувати його без ключа. Маніпулюючи попереднім блоком CBC <b>C_{i−1}</b>, атакувальник змушує цільовий байт відкритого тексту дорівнювати значенню доповнення <code>0x01</code>, тоді <code>0x02 0x02</code> і т.д.; кожен успіх розкриває один байт проміжного стану шифру D_k(Cᵢ). Воденей (2002) перетворив це на повне відновлення тексту. Демо використовує чітко позначений <b>іграшковий 4-байтовий блоковий шифр</b> і відновлює цілий блок лише за відповідями дійсно/недійсно."></p>
+    <div id="refs-paddingoracle"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="poCanvas" width="300" height="200"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="secret message (≤3 chars)" data-uk="секретне повідомлення (≤3 симв.)">secret message (≤3 chars)</span></label>
+          <input type="text" id="poMsg" value="Hi" maxlength="3" style="width:100%"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button id="poRun" data-en="Run padding-oracle attack" data-uk="Запустити атаку padding-оракула">Run padding-oracle attack</button>
+          <button id="poNew" class="secondary" data-en="New IV / key" data-uk="Новий IV / ключ">New IV / key</button></div>
+        <div class="hint" data-en="Toy cipher: a 4-round Feistel permutation on a 4-byte block (illustrative, not secure). The attack never sees the key — only the padding oracle's yes/no." data-uk="Іграшковий шифр: 4-раундова перестановка Фейстеля на 4-байтовому блоці (ілюстративна, не стійка). Атака ніколи не бачить ключа — лише «так/ні» оракула доповнення."></div>
+        <div class="readout" id="poOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Endemic: Bleichenbacher's 1998 attack on RSA PKCS#1v1.5 still returns as <b>ROBOT</b> (2017); <b>POODLE</b> (2014) killed SSL 3.0; <b>Lucky 13</b> (2013) is its timing form. The cure is <b>AEAD</b> (AES-GCM, ChaCha20-Poly1305) and Encrypt-then-MAC, which authenticate before decrypting so no padding oracle exists." data-uk="Повсюдні: атака Бляйхенбахера 1998 на RSA PKCS#1v1.5 повертається як <b>ROBOT</b> (2017); <b>POODLE</b> (2014) вбив SSL 3.0; <b>Lucky 13</b> (2013) — її часова форма. Ліки — <b>AEAD</b> (AES-GCM, ChaCha20-Poly1305) та Encrypt-then-MAC, які автентифікують перед розшифруванням, тож padding-оракула не існує."></span></div>
+    <div class="xrefs"><a href="symmetric.html#modes">CBC mode</a> <a href="symmetric.html#gcm">AES-GCM (AEAD)</a> <a href="asymmetric.html#rsa">RSA PKCS#1</a></div>
+  </section>
+
+  <!-- ============ 6. ROCA ============ -->
+  <section id="roca">
+    <span class="num">26 / 6</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">poly(n)</span>
+      <span data-en="ROCA (Infineon RSALib)" data-uk="ROCA (Infineon RSALib)">ROCA</span></h2>
+    <div class="formula">vulnerable primes: p = k·M + (65537<sup>a</sup> mod M) ⇒ N mod M ∈ ⟨65537⟩ — a detectable fingerprint</div>
+    <p class="desc" data-en="ROCA (Nemec et al., CVE-2017-15361) was a flaw in Infineon's RSALib key generator: to speed things up it built primes of the form <b>p = k·M + (65537<sup>a</sup> mod M)</b> for a fixed primorial M. This leaves a <b>fingerprint</b> — N mod M lies in the small cyclic group generated by 65537 — that is cheap to test, and it also shrinks the unknown to a range that <b>Coppersmith's method</b> factors in practice. Millions of keys in ID cards, TPMs, Yubikeys and passports were affected. The demo below computes the real fingerprint test on a constructed vulnerable modulus versus a random one."
+       data-uk="ROCA (Nemec та ін., CVE-2017-15361) — вада генератора ключів Infineon RSALib: для швидкості він будував прості вигляду <b>p = k·M + (65537<sup>a</sup> mod M)</b> для фіксованого прайморіала M. Це лишає <b>відбиток</b> — N mod M лежить у малій циклічній групі, породженій 65537 — який дешево перевірити, і водночас зменшує невідоме до діапазону, який <b>метод Копперсміта</b> факторизує на практиці. Постраждали мільйони ключів у ID-картках, TPM, Yubikey та паспортах. Демо нижче обчислює справжній тест відбитка на сконструйованому вразливому модулі проти випадкового."></p>
+    <div id="refs-roca"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="roCanvas" width="300" height="180"></canvas>
+      <div class="controls">
+        <button id="roNew" data-en="Generate &amp; fingerprint" data-uk="Згенерувати й перевірити відбиток">Generate &amp; fingerprint</button>
+        <div class="hint" data-en="Fingerprint only (M = 2·3·5·7·11·13). The actual Coppersmith factorisation is out of scope here; this is the O(1) screening test that flagged millions of keys." data-uk="Лише відбиток (M = 2·3·5·7·11·13). Сама факторизація Копперсміта тут поза межами; це O(1) скринінговий тест, що позначив мільйони ключів."></div>
+        <div class="readout" id="roOut"></div>
+      </div>
+    </div></div>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>BROKEN (2017).</b> All RSALib keys are considered compromised — 512- to 2048-bit keys were practically factorable (2048-bit at ~140 CPU-years, trivially parallelised). Lesson: never bias prime generation for speed; use uniform random primes and independent, audited RNGs." data-uk="<b>ЗЛАМАНО (2017).</b> Усі ключі RSALib вважаються скомпрометованими — ключі від 512 до 2048 біт були практично факторизовними (2048-бітний ~140 процесоро-років, легко паралелізується). Урок: ніколи не зміщуйте генерацію простих заради швидкості; беріть рівномірно випадкові прості та незалежні перевірені ГВЧ."></span></div>
+    <div class="xrefs"><a href="asymmetric.html#rsa">RSA</a> <a href="advanced.html#coppersmith" data-en="Coppersmith's attack" data-uk="Атака Копперсміта">Coppersmith's attack</a> <a href="implattacks.html#ctmeasures" data-en="Countermeasures" data-uk="Контрзаходи">Countermeasures</a></div>
+  </section>
+
+  <!-- ============ 7. Countermeasures ============ -->
+  <section id="ctmeasures">
+    <span class="num">26 / 7</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">—</span>
+      <span data-en="Countermeasures" data-uk="Контрзаходи">Countermeasures</span></h2>
+    <div class="formula">blinding:  ŝ = (m · rᵉ)ᵈ = mᵈ · r (mod N)  ⇒  s = ŝ · r⁻¹ (mod N) — the exponentiated value is randomised every time</div>
+    <p class="desc" data-en="Every attack above exploits a <b>secret-dependent physical signal</b>, so the defences all aim to make behaviour independent of the secret. <b>Constant-time code</b>: no branches, table indices or memory accesses that depend on secrets (kills timing and cache attacks). <b>Blinding</b>: randomise the input to a computation so no fixed secret is ever exponentiated twice — the RSA demo below multiplies the message by rᵉ before signing and divides r out afterwards, giving the identical signature while randomising every trace. <b>Masking</b>: secret-share each intermediate value so power leakage carries no information. <b>Montgomery ladder</b>: perform the same operations for a 0 or a 1 key bit, removing the square-vs-multiply SPA signal. This is <b>why Ed25519 exists</b>: it derives its per-signature nonce <b>deterministically</b> from the key and message (RFC 8032), so a broken RNG cannot leak the key — exactly the failure that let attackers extract the <b>Sony PlayStation 3</b> ECDSA master key in 2010 when the same nonce was reused."
+       data-uk="Кожна атака вище використовує <b>залежний від секрету фізичний сигнал</b>, тож усі захисти прагнуть зробити поведінку незалежною від секрету. <b>Код сталого часу</b>: жодних гілок, індексів таблиць чи звернень до пам'яті, що залежать від секретів (вбиває атаки за часом і кеш-атаки). <b>Засліплення</b>: рандомізувати вхід обчислення, щоб жоден фіксований секрет не підносився двічі — RSA-демо нижче множить повідомлення на rᵉ перед підписом і ділить r опісля, даючи ідентичний підпис при рандомізації кожної траси. <b>Маскування</b>: секретно розділити кожне проміжне значення, щоб витік живлення не ніс інформації. <b>Драбина Монтгомері</b>: виконувати однакові операції для біта ключа 0 чи 1, прибираючи SPA-сигнал піднесення-vs-множення. Саме <b>тому існує Ed25519</b>: він виводить одноразове число підпису <b>детерміновано</b> з ключа й повідомлення (RFC 8032), тож зламаний ГВЧ не видасть ключа — саме той збій, що дозволив дістати ECDSA-майстер-ключ <b>Sony PlayStation 3</b> у 2010, коли одне й те саме число повторно використали."></p>
+    <div id="refs-ctmeasures"></div>
+    <div class="panel"><div class="canvas-row">
+      <canvas id="ctCanvas" width="300" height="200"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="blinding factor r" data-uk="фактор засліплення r">blinding factor r</span><span class="val" id="ctRV">7</span></label>
+          <input type="range" id="ctR" min="2" max="60" value="7"></div>
+        <button id="ctRun" data-en="Re-blind &amp; sign" data-uk="Пере-засліпити й підписати">Re-blind &amp; sign</button>
+        <div class="hint" data-en="Real BigInt RSA (p=61, q=53, e=17). The blinded value (m·rᵉ) changes with r, yet the unblinded signature is always the same and verifies." data-uk="Справжній RSA на BigInt (p=61, q=53, e=17). Засліплене значення (m·rᵉ) змінюється з r, проте знезасліплений підпис завжди однаковий і перевіряється."></div>
+        <div class="readout" id="ctOut"></div>
+      </div>
+    </div></div>
+    <table class="ct-table" style="width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:12px;margin:6px 0 4px">
+      <thead><tr style="color:var(--dim);text-align:left">
+        <th style="padding:6px 10px;border-bottom:1px solid var(--line)" data-en="Channel" data-uk="Канал">Channel</th>
+        <th style="padding:6px 10px;border-bottom:1px solid var(--line)" data-en="Countermeasure" data-uk="Контрзахід">Countermeasure</th></tr></thead>
+      <tbody>
+        <tr><td style="padding:6px 10px;color:var(--teal)" data-en="Timing" data-uk="Час">Timing</td><td style="padding:6px 10px" data-en="Constant-time compare &amp; branch-free code" data-uk="Сталочасове порівняння та код без гілок">Constant-time compare &amp; branch-free code</td></tr>
+        <tr><td style="padding:6px 10px;color:var(--teal)" data-en="Cache" data-uk="Кеш">Cache</td><td style="padding:6px 10px" data-en="No secret-indexed tables; bitslicing; AES-NI" data-uk="Жодних секретно-індексованих таблиць; bitslicing; AES-NI">No secret-indexed tables; bitslicing; AES-NI</td></tr>
+        <tr><td style="padding:6px 10px;color:var(--teal)" data-en="Power (DPA)" data-uk="Живлення (DPA)">Power (DPA)</td><td style="padding:6px 10px" data-en="Masking (secret-sharing), hiding, shuffling" data-uk="Маскування (секретне розділення), приховування, перемішування">Masking (secret-sharing), hiding, shuffling</td></tr>
+        <tr><td style="padding:6px 10px;color:var(--teal)" data-en="Fault" data-uk="Збій">Fault</td><td style="padding:6px 10px" data-en="Verify-after-sign; redundancy; sensors" data-uk="Перевірка після підпису; надлишковість; сенсори">Verify-after-sign; redundancy; sensors</td></tr>
+        <tr><td style="padding:6px 10px;color:var(--teal)" data-en="RSA/ECC exponent" data-uk="Показник RSA/ECC">RSA/ECC exponent</td><td style="padding:6px 10px" data-en="Blinding; Montgomery ladder; deterministic nonces (Ed25519)" data-uk="Засліплення; драбина Монтгомері; детерміновані одноразові числа (Ed25519)">Blinding; Montgomery ladder; deterministic nonces (Ed25519)</td></tr>
+      </tbody>
+    </table>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Countermeasures are necessary but subtle: compilers can re-introduce branches, and combined (timing + fault) attacks defeat single defences. Modern libraries (BoringSSL, libsodium, HACL*) ship <b>formally verified constant-time</b> primitives, and Ed25519's deterministic nonce is now the default answer to the nonce-reuse class of failures (Sony PS3, 2010; Android SecureRandom, 2013)." data-uk="Контрзаходи необхідні, але тонкі: компілятори можуть повертати гілки, а комбіновані (час + збій) атаки долають одиничні захисти. Сучасні бібліотеки (BoringSSL, libsodium, HACL*) постачають <b>формально перевірені сталочасові</b> примітиви, а детерміноване число Ed25519 — тепер типова відповідь на клас збоїв повторного використання (Sony PS3, 2010; Android SecureRandom, 2013)."></span></div>
+    <div class="xrefs"><a href="signatures.html#eddsa" data-en="Ed25519 (deterministic nonces)" data-uk="Ed25519 (детерміновані числа)">Ed25519 (deterministic nonces)</a> <a href="edwards.html" data-en="Edwards curves" data-uk="Криві Едвардса">Edwards curves</a> <a href="implattacks.html#fault" data-en="Fault attacks" data-uk="Атаки збоями">Fault attacks</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+
+/* ---- BigInt modular helpers (reused from prng.html) ---- */
+function bmod(a,m){ a%=m; return a<0n?a+m:a; }
+function modpow(b,e,m){ b=bmod(b,m); let r=1n; while(e>0n){ if(e&1n) r=r*b%m; b=b*b%m; e>>=1n; } return r; }
+function egcd(a,b){ let x=0n,x1=1n,y=1n,y1=0n; while(b){ const q=a/b; [a,b]=[b,a-q*b]; [x1,x]=[x,x1-q*x]; [y1,y]=[y,y1-q*y]; } return [a,x1,y1]; }
+function modinv(a,m){ return bmod(egcd(bmod(a,m),m)[1],m); }
+function bgcd(a,b){ a=a<0n?-a:a; b=b<0n?-b:b; while(b){ [a,b]=[b,a%b]; } return a; }
+const gcdN=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;};
+
+/* ---- AES S-box (identical to standards.html) ---- */
+const SBOX=[
+0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
+0xca,0x82,0xc9,0x7d,0xfa,0x59,0x47,0xf0,0xad,0xd4,0xa2,0xaf,0x9c,0xa4,0x72,0xc0,
+0xb7,0xfd,0x93,0x26,0x36,0x3f,0xf7,0xcc,0x34,0xa5,0xe5,0xf1,0x71,0xd8,0x31,0x15,
+0x04,0xc7,0x23,0xc3,0x18,0x96,0x05,0x9a,0x07,0x12,0x80,0xe2,0xeb,0x27,0xb2,0x75,
+0x09,0x83,0x2c,0x1a,0x1b,0x6e,0x5a,0xa0,0x52,0x3b,0xd6,0xb3,0x29,0xe3,0x2f,0x84,
+0x53,0xd1,0x00,0xed,0x20,0xfc,0xb1,0x5b,0x6a,0xcb,0xbe,0x39,0x4a,0x4c,0x58,0xcf,
+0xd0,0xef,0xaa,0xfb,0x43,0x4d,0x33,0x85,0x45,0xf9,0x02,0x7f,0x50,0x3c,0x9f,0xa8,
+0x51,0xa3,0x40,0x8f,0x92,0x9d,0x38,0xf5,0xbc,0xb6,0xda,0x21,0x10,0xff,0xf3,0xd2,
+0xcd,0x0c,0x13,0xec,0x5f,0x97,0x44,0x17,0xc4,0xa7,0x7e,0x3d,0x64,0x5d,0x19,0x73,
+0x60,0x81,0x4f,0xdc,0x22,0x2a,0x90,0x88,0x46,0xee,0xb8,0x14,0xde,0x5e,0x0b,0xdb,
+0xe0,0x32,0x3a,0x0a,0x49,0x06,0x24,0x5c,0xc2,0xd3,0xac,0x62,0x91,0x95,0xe4,0x79,
+0xe7,0xc8,0x37,0x6d,0x8d,0xd5,0x4e,0xa9,0x6c,0x56,0xf4,0xea,0x65,0x7a,0xae,0x08,
+0xba,0x78,0x25,0x2e,0x1c,0xa6,0xb4,0xc6,0xe8,0xdd,0x74,0x1f,0x4b,0xbd,0x8b,0x8a,
+0x70,0x3e,0xb5,0x66,0x48,0x03,0xf6,0x0e,0x61,0x35,0x57,0xb9,0x86,0xc1,0x1d,0x9e,
+0xe1,0xf8,0x98,0x11,0x69,0xd9,0x8e,0x94,0x9b,0x1e,0x87,0xe9,0xce,0x55,0x28,0xdf,
+0x8c,0xa1,0x89,0x0d,0xbf,0xe6,0x42,0x68,0x41,0x99,0x2d,0x0f,0xb0,0x54,0xbb,0x16];
+function HW(x){ let c=0; while(x){ c+=x&1; x>>=1; } return c; }
+
+function clr(cv){ const g=cv.getContext('2d'); g.fillStyle=C.panel; g.fillRect(0,0,cv.width,cv.height); return g; }
+
+/* ================= 1. Timing ================= */
+let SECRET=[0x9c,0x41,0xd7,0x22];
+function matchPrefix(a,b){ let p=0; while(p<b.length && a[p]===b[p]) p++; return p; }
+// SIMULATED measurement: naive early-return compare leaks the matching-prefix length.
+function measureCmp(guess,secret,ct){
+  const base = ct ? secret.length : matchPrefix(guess,secret);
+  return base*10 + (Math.random()*4-2);
+}
+function avgTime(guess,secret,ct,trials){ let t=0; for(let k=0;k<trials;k++) t+=measureCmp(guess,secret,ct); return t/trials; }
+function recoverByte(pos,known,ct,trials){
+  let best=0,bestT=-1e9;
+  for(let c=0;c<256;c++){ const g=known.slice(0,pos).concat([c]); for(let i=pos+1;i<SECRET.length;i++) g[i]=0;
+    const t=avgTime(g,SECRET,ct,trials); if(t>bestT){ bestT=t; best=c; } }
+  return best;
+}
+function recoverSecret(ct){ const known=[]; for(let pos=0;pos<SECRET.length;pos++) known[pos]=recoverByte(pos,known,ct,20); return known; }
+function drawTiming(){
+  const pos=+tmPos.value; tmPosV.textContent=pos;
+  const trials=+tmTrials.value; tmTrialsV.textContent=trials;
+  const ct=tmCT.checked;
+  const times=[]; let best=0,bestT=-1e9,mn=1e9,mx=-1e9;
+  for(let c=0;c<256;c++){ const g=SECRET.slice(0,pos).concat([c]); for(let i=pos+1;i<SECRET.length;i++) g[i]=0;
+    const t=avgTime(g,SECRET,ct,trials); times.push(t); if(t>bestT){bestT=t;best=c;} if(t<mn)mn=t; if(t>mx)mx=t; }
+  const cv=tmCanvas,g=clr(cv),W=cv.width,H=cv.height,pad=24;
+  g.strokeStyle=C.line; g.beginPath(); g.moveTo(pad,H-pad); g.lineTo(W-4,H-pad); g.moveTo(pad,4); g.lineTo(pad,H-pad); g.stroke();
+  const span=(mx-mn)||1;
+  for(let c=0;c<256;c++){ const x=pad+(c/255)*(W-pad-6); const h=(times[c]-mn)/span*(H-pad-8);
+    g.strokeStyle=(c===SECRET[pos])?C.teal:(c===best?C.amber:C.grid); g.beginPath(); g.moveTo(x,H-pad); g.lineTo(x,H-pad-h); g.stroke(); }
+  const uk=window.LANG==='uk';
+  g.fillStyle=C.dim; g.font='9px monospace'; g.fillText(uk?'час vs здогад байта (0..255)':'time vs guessed byte (0..255)',pad+4,12);
+  const hit=(best===SECRET[pos]);
+  tmOut.innerHTML='<span class="k">'+(uk?'секрет':'secret')+':</span> <span class="s">'+SECRET.map(b=>b.toString(16).padStart(2,'0')).join(' ')+'</span>\n'+
+    '<span class="k">'+(uk?'ціль байта':'target byte')+' #'+pos+' — '+(uk?'справжній':'true')+':</span> <span class="s">'+SECRET[pos].toString(16).padStart(2,'0')+'</span>\n'+
+    '<span class="k">'+(uk?'пік у':'peak at')+':</span> <span class="'+(hit?'a':'b')+'">'+best.toString(16).padStart(2,'0')+'</span>  '+
+    (ct?'<span class="b">'+(uk?'(сталий час — пік = шум)':'(constant-time — peak is noise)')+'</span>':(hit?'<span class="a">'+(uk?'✓ витік':'✓ leaked')+'</span>':'<span class="b">'+(uk?'збільште усереднення':'raise averaging')+'</span>'));
+}
+function tmAutoRun(){
+  const ct=tmCT.checked; const rec=recoverSecret(ct);
+  const uk=window.LANG==='uk';
+  const ok = rec.every((b,i)=>b===SECRET[i]);
+  const hx=a=>a.map(b=>b.toString(16).padStart(2,'0')).join(' ');
+  tmOut.innerHTML='<span class="k">'+(uk?'секрет':'secret')+':</span>    <span class="s">'+hx(SECRET)+'</span>\n'+
+    '<span class="k">'+(uk?'відновлено':'recovered')+':</span> <span class="'+(ok?'a':'b')+'">'+hx(rec)+'</span>\n'+
+    (ct?'<span class="b">'+(uk?'сталочасове порівняння → відновлення провалено ✗':'constant-time compare → recovery fails ✗')+'</span>'
+       :'<span class="a">'+(uk?'наївне порівняння → секрет відновлено ✓ (self-check '+(ok?'пройдено':'FAIL')+')':'naive compare → secret recovered ✓ (self-check '+(ok?'passed':'FAIL')+')')+'</span>');
+}
+
+/* ================= 2. Cache (Flush+Reload) ================= */
+let caTimes=null;
+function caProbe(){
+  const secret=+caSecret.value;
+  caTimes=[]; for(let i=0;i<16;i++) caTimes.push(200+Math.random()*40); // slow misses (SIMULATED cycles)
+  caTimes[secret]=40+Math.random()*20; // fast hit
+  drawCache();
+}
+function drawCache(){
+  const secret=+caSecret.value; caSecretV.textContent=secret;
+  const cv=caCanvas,g=clr(cv),W=cv.width,H=cv.height,pad=22;
+  const uk=window.LANG==='uk';
+  if(!caTimes){ g.fillStyle=C.dim; g.font='11px monospace'; g.fillText(uk?'натисніть «Flush + Reload»':'press “Flush + Reload”',pad,H/2); caOut.innerHTML='<span class="k">'+(uk?'кеш: 16 ліній T[0..15]':'cache: 16 lines T[0..15]')+'</span>'; return; }
+  const bw=(W-pad-6)/16, mx=Math.max.apply(null,caTimes);
+  let recovered=0,best=1e9; for(let i=0;i<16;i++) if(caTimes[i]<best){best=caTimes[i];recovered=i;}
+  for(let i=0;i<16;i++){ const x=pad+i*bw, h=caTimes[i]/mx*(H-pad-16);
+    g.fillStyle=(i===recovered)?C.teal:C.grid; g.fillRect(x+1,H-pad-h,bw-2,h);
+    g.fillStyle=C.dim; g.font='8px monospace'; g.textAlign='center'; g.fillText(i,x+bw/2,H-pad+10); }
+  g.textAlign='left'; g.fillStyle=C.teal; g.font='9px monospace'; g.fillText(uk?'швидко=влучення':'fast=hit',pad,12);
+  const ok=(recovered===secret);
+  caOut.innerHTML='<span class="k">'+(uk?'найшвидша лінія':'fastest line')+':</span> T[<span class="a">'+recovered+'</span>] ≈ '+caTimes[recovered].toFixed(0)+' '+(uk?'цикл.':'cyc')+'\n'+
+    '<span class="k">'+(uk?'секретний індекс':'secret index')+':</span> '+secret+'  '+(ok?'<span class="a">'+(uk?'✓ відновлено':'✓ recovered')+'</span>':'<span class="b">✗</span>');
+}
+
+/* ================= 3. DPA / CPA (real correlation) ================= */
+let dpaKey=0xB4;
+function pearson(x,y){ const n=x.length; let sx=0,sy=0,sxx=0,syy=0,sxy=0;
+  for(let i=0;i<n;i++){ sx+=x[i]; sy+=y[i]; sxx+=x[i]*x[i]; syy+=y[i]*y[i]; sxy+=x[i]*y[i]; }
+  const num=n*sxy-sx*sy, den=Math.sqrt((n*sxx-sx*sx)*(n*syy-sy*sy)); return den===0?0:num/den; }
+function drawDPA(){
+  const T=+dpaTraces.value; dpaTracesV.textContent=T;
+  const sigma=+dpaNoise.value; dpaNoiseV.textContent=sigma.toFixed(1);
+  // acquire T traces: plaintext p random; leakage = HW(SBox[p^key]) + gaussian noise
+  const pts=[], leak=[];
+  for(let i=0;i<T;i++){ const p=(Math.random()*256)|0; pts.push(p);
+    const g1=Math.random(),g2=Math.random(); const noise=Math.sqrt(-2*Math.log(g1+1e-12))*Math.cos(6.2831853*g2)*sigma;
+    leak.push(HW(SBOX[p^dpaKey])+noise); }
+  // CPA: correlate over all 256 key guesses
+  const corr=[]; let best=0,bestC=-1;
+  for(let kg=0;kg<256;kg++){ const pred=pts.map(p=>HW(SBOX[p^kg])); const c=Math.abs(pearson(pred,leak));
+    corr.push(c); if(c>bestC){ bestC=c; best=kg; } }
+  const cv=dpaCanvas,g=clr(cv),W=cv.width,H=cv.height,pad=22;
+  g.strokeStyle=C.line; g.beginPath(); g.moveTo(pad,H-pad); g.lineTo(W-4,H-pad); g.moveTo(pad,4); g.lineTo(pad,H-pad); g.stroke();
+  for(let kg=0;kg<256;kg++){ const x=pad+(kg/255)*(W-pad-6), h=corr[kg]*(H-pad-8);
+    g.strokeStyle=(kg===dpaKey)?C.teal:(kg===best?C.amber:C.grid); g.beginPath(); g.moveTo(x,H-pad); g.lineTo(x,H-pad-h); g.stroke(); }
+  const uk=window.LANG==='uk';
+  g.fillStyle=C.dim; g.font='9px monospace'; g.fillText(uk?'|кореляція| vs здогад ключа':'|correlation| vs key guess',pad+4,12);
+  const ok=(best===dpaKey);
+  dpaOut.innerHTML='<span class="k">'+(uk?'справжній ключ':'true key')+':</span> <span class="s">0x'+dpaKey.toString(16)+'</span>\n'+
+    '<span class="k">'+(uk?'найкращий здогад':'best guess')+':</span> <span class="'+(ok?'a':'b')+'">0x'+best.toString(16)+'</span>  ρ='+bestC.toFixed(3)+'\n'+
+    (ok?'<span class="a">'+(uk?'✓ байт ключа відновлено':'✓ key byte recovered')+'</span>':'<span class="b">'+(uk?'✗ більше трас / менше шуму':'✗ more traces / less noise')+'</span>');
+}
+
+/* ================= 4. Fault attack (real RSA-CRT) ================= */
+function drawFault(){
+  const p=BigInt(faP.value), q=BigInt(faQ.value), e=BigInt(faE.value);
+  const N=p*q; const uk=window.LANG==='uk';
+  faM.max=Number(N)-1;
+  const m=bmod(BigInt(+faM.value),N); faMV.textContent=faM.value;
+  const cv=faCanvas,g=clr(cv),W=cv.width,H=cv.height;
+  if(p===q){ faOut.innerHTML='<span class="b">'+(uk?'оберіть p ≠ q':'choose p ≠ q')+'</span>'; g.fillStyle=C.rose; g.font='11px monospace'; g.fillText('p = q',20,H/2); return; }
+  const phi=(p-1n)*(q-1n);
+  if(bgcd(e,phi)!==1n){ faOut.innerHTML='<span class="b">'+(uk?'e ділить спільний множник з φ — оберіть інше e':'e shares a factor with φ — pick another e')+'</span>'; return; }
+  const d=modinv(e,phi), dp=bmod(d,p-1n), dq=bmod(d,q-1n), qinv=modinv(q,p);
+  const sp=modpow(m,dp,p), sq=modpow(m,dq,q);
+  const s=bmod(sq+q*bmod(qinv*(sp-sq),p),N);        // correct CRT signature
+  const good=(modpow(s,e,N)===m);
+  const delta=BigInt(+faDelta.value); faDeltaV.textContent=faDelta.value;
+  const spf=bmod(sp+delta,p);                         // fault the mod-p half
+  const sf=bmod(sq+q*bmod(qinv*(spf-sq),p),N);        // faulty signature
+  const X=bmod(modpow(sf,e,N)-m,N);
+  const rec=bgcd(X,N);                                // gcd recovery
+  const okFactor=(rec>1n && rec<N && N%rec===0n);
+  const isQ=(rec===q);
+  // draw p|q lattice hint
+  g.strokeStyle=C.line; for(let i=0;i<=10;i++){ g.beginPath(); g.moveTo(30+i*24,20); g.lineTo(30+i*24,180); g.stroke(); }
+  g.fillStyle=C.teal; g.font='11px monospace'; g.fillText('N = p·q = '+N,20,16);
+  g.fillStyle=okFactor?C.amber:C.rose; g.font='13px monospace'; g.fillText((uk?'gcd(ŝᵉ−m, N) = ':'gcd(ŝᵉ−m, N) = ')+rec,20,H/2);
+  g.fillStyle=C.dim; g.font='10px monospace'; g.fillText(isQ?'= q ✓':(okFactor?'= p ✓':'= 1 (no fault)'),20,H/2+18);
+  faOut.innerHTML='<span class="k">'+(uk?'КТЛ':'CRT')+': sₚ=</span>'+sp+' <span class="k">s_q=</span>'+sq+'\n'+
+    '<span class="k">'+(uk?'коректний s =':'correct s =')+'</span> <span class="a">'+s+'</span> '+(good?'<span class="a">('+(uk?'sᵉ=m ✓':'sᵉ=m ✓')+')</span>':'<span class="b">✗</span>')+'\n'+
+    '<span class="k">'+(uk?'хибний ŝ =':'faulty ŝ =')+'</span> <span class="b">'+sf+'</span>\n'+
+    '<span class="k">'+(uk?'відновлено':'recovered')+':</span> <span class="'+(okFactor?'a':'b')+'">'+rec+'</span>'+
+    (delta===0n?' <span class="k">('+(uk?'Δ=0 → без збою':'Δ=0 → no fault')+')</span>':'')+'\n'+
+    '<span class="k">self-check:</span> '+(okFactor?('<span class="a">'+rec+' | N ✓'+(isQ?' , = q ✓':' , = p ✓')+'</span>'):'<span class="b">'+(uk?'множник не знайдено':'no factor')+'</span>');
+}
+
+/* ================= 5. Padding oracle (real attack, toy cipher) ================= */
+let RK=[0x1a2b,0x3c4d,0x5e6f,0x7788];   // toy round keys (illustrative)
+function Frnd(r){ r&=0xFFFF; return ((r*43 + (((r<<7)|(r>>>9))&0xFFFF)) ^ 0x9e37)&0xFFFF; }
+function enc16(L,R){ for(let i=0;i<4;i++){ const nL=R, nR=L^((Frnd(R)^RK[i])&0xFFFF); L=nL; R=nR; } return [L&0xFFFF,R&0xFFFF]; }
+function dec16(L,R){ for(let i=3;i>=0;i--){ const pL=R^((Frnd(L)^RK[i])&0xFFFF), pR=L; L=pL&0xFFFF; R=pR; } return [L,R]; }
+function encBlk(b){ const [L,R]=enc16((b[0]<<8)|b[1],(b[2]<<8)|b[3]); return [(L>>8)&255,L&255,(R>>8)&255,R&255]; }
+function decBlk(b){ const [L,R]=dec16((b[0]<<8)|b[1],(b[2]<<8)|b[3]); return [(L>>8)&255,L&255,(R>>8)&255,R&255]; }
+function pkcs7ok(bl){ const n=bl[3]; if(n<1||n>4) return false; for(let i=0;i<n;i++) if(bl[3-i]!==n) return false; return true; }
+let poIV=[0x5a,0x13,0xC7,0x88];
+function poOracle(C1,Cp){ const I=decBlk(C1); const P=[I[0]^Cp[0],I[1]^Cp[1],I[2]^Cp[2],I[3]^Cp[3]]; return pkcs7ok(P); }
+function poAttack(C1){
+  const B=4, I=[0,0,0,0]; let queries=0;
+  for(let k=1;k<=B;k++){ const pos=B-k; let found=-1;
+    for(let guess=0;guess<256;guess++){ const Cp=[0,0,0,0];
+      for(let i=pos+1;i<B;i++) Cp[i]=I[i]^k; Cp[pos]=guess; queries++;
+      if(poOracle(C1,Cp)){ if(pos>0){ const C2=Cp.slice(); C2[pos-1]^=0xFF; if(!poOracle(C1,C2)) continue; } found=guess^k; break; } }
+    if(found<0) return {ok:false,I,queries}; I[pos]=found; }
+  return {ok:true,I,queries};
+}
+function poRunAttack(){
+  const uk=window.LANG==='uk';
+  let msg=(poMsg.value||'Hi').slice(0,3); const bytes=[]; for(let i=0;i<msg.length;i++) bytes.push(msg.charCodeAt(i)&255);
+  const padN=4-bytes.length; const P=bytes.concat(new Array(padN).fill(padN));   // PKCS#7 to one block
+  const C0=poIV, C1=encBlk([P[0]^C0[0],P[1]^C0[1],P[2]^C0[2],P[3]^C0[3]]);
+  const res=poAttack(C1);
+  const Prec=[res.I[0]^C0[0],res.I[1]^C0[1],res.I[2]^C0[2],res.I[3]^C0[3]];
+  const ok=res.ok && Prec.every((b,i)=>b===P[i]);
+  const recMsg=Prec.slice(0,4-Prec[3]).map(c=>String.fromCharCode(c)).join('');
+  const hx=a=>a.map(b=>b.toString(16).padStart(2,'0')).join(' ');
+  drawPO(P,res.I,Prec);
+  poOut.innerHTML='<span class="k">'+(uk?'відкр. текст P (з доповн.)':'plaintext P (padded)')+':</span> <span class="s">'+hx(P)+'</span>\n'+
+    '<span class="k">D_k(C₁) '+(uk?'відновлено':'recovered')+':</span> '+hx(res.I)+'\n'+
+    '<span class="k">P = D_k(C₁)⊕IV:</span> <span class="'+(ok?'a':'b')+'">'+hx(Prec)+'</span>\n'+
+    '<span class="k">'+(uk?'запити оракула':'oracle queries')+':</span> '+res.queries+'   '+
+    '<span class="k">'+(uk?'текст':'message')+':</span> <span class="s">"'+recMsg+'"</span>\n'+
+    '<span class="k">self-check:</span> '+(ok?'<span class="a">'+(uk?'відновлено = оригінал ✓':'recovered = original ✓')+'</span>':'<span class="b">✗</span>');
+}
+function drawPO(P,I,Prec){
+  const cv=poCanvas,g=clr(cv),W=cv.width,H=cv.height; const uk=window.LANG==='uk';
+  const rows=[[uk?'IV':'IV',poIV,C.dim],[uk?'D_k(C₁)':'D_k(C₁)',I,C.amber],[uk?'P відновл.':'P recovered',Prec,C.teal]];
+  g.font='10px monospace';
+  rows.forEach((row,r)=>{ const y=40+r*46; g.fillStyle=C.dim; g.fillText(row[0],10,y-8);
+    for(let i=0;i<4;i++){ const x=90+i*48; g.fillStyle=C.grid; g.fillRect(x,y-18,42,26);
+      g.fillStyle=row[2]; g.textAlign='center'; g.fillText(row[1][i].toString(16).padStart(2,'0'),x+21,y); g.textAlign='left'; } });
+  g.fillStyle=C.dim; g.fillText(uk?'кожен байт D_k(C₁) — з відповідей оракула':'each D_k(C₁) byte from oracle answers',10,H-10);
+}
+
+/* ================= 6. ROCA fingerprint (real membership test) ================= */
+const RM=30030n, RG=bmod(65537n,30030n);
+function rocaSubgroup(){ const s=new Set(); let x=1n; for(let i=0;i<40000;i++){ s.add(Number(x)); x=bmod(x*RG,RM); if(x===1n) break; } return s; }
+const ROCA_S=rocaSubgroup();
+function randBigHex(hx){ let s=''; for(let i=0;i<hx;i++) s+=Math.floor(Math.random()*16).toString(16); s=s.replace(/^0+/,'')||'1'; return BigInt('0x'+s); }
+let roVuln=null,roSafe=null;
+function roGen(){
+  // vulnerable modulus: force N ≡ 65537^a (mod M)  →  residue in the subgroup
+  const arr=Array.from(ROCA_S); const s0=BigInt(arr[(Math.random()*arr.length)|0]);
+  roVuln=s0 + RM*randBigHex(9);
+  do{ roSafe=randBigHex(12); }while(ROCA_S.has(Number(bmod(roSafe,RM))));
+  drawRoca();
+}
+function drawRoca(){
+  const cv=roCanvas,g=clr(cv),W=cv.width,H=cv.height; const uk=window.LANG==='uk';
+  if(roVuln===null){ g.fillStyle=C.dim; g.font='11px monospace'; g.fillText(uk?'натисніть «Згенерувати»':'press “Generate”',20,H/2); roOut.innerHTML='<span class="k">M = 2·3·5·7·11·13 = 30030</span>'; return; }
+  const rv=Number(bmod(roVuln,RM)), rs=Number(bmod(roSafe,RM));
+  const inV=ROCA_S.has(rv), inS=ROCA_S.has(rs);
+  g.font='11px monospace';
+  g.fillStyle=C.teal; g.fillText((uk?'|⟨65537⟩ mod M| = ':'|⟨65537⟩ mod M| = ')+ROCA_S.size,14,20);
+  g.fillStyle=inV?C.rose:C.dim; g.fillText((uk?'вразливий: N mod M = ':'vulnerable: N mod M = ')+rv,14,64); g.fillText(inV?(uk?'∈ ⟨65537⟩  → ПОЗНАЧЕНО':'∈ ⟨65537⟩  → FLAGGED'):'—',30,84);
+  g.fillStyle=inS?C.rose:C.teal; g.fillText((uk?'випадковий: N mod M = ':'random: N mod M = ')+rs,14,124); g.fillText(inS?'∈ ⟨65537⟩':(uk?'∉ ⟨65537⟩  → чистий':'∉ ⟨65537⟩  → clean'),30,144);
+  const ok=(inV && !inS);
+  roOut.innerHTML='<span class="k">'+(uk?'вразливий N mod M':'vulnerable N mod M')+':</span> <span class="'+(inV?'b':'a')+'">'+rv+'</span> '+(inV?(uk?'ПОЗНАЧЕНО':'FLAGGED'):'—')+'\n'+
+    '<span class="k">'+(uk?'випадковий N mod M':'random N mod M')+':</span> <span class="'+(inS?'b':'a')+'">'+rs+'</span> '+(inS?'?':(uk?'чистий':'clean'))+'\n'+
+    '<span class="k">self-check:</span> '+(ok?'<span class="a">'+(uk?'відбиток вирізняє вразливий ключ ✓':'fingerprint separates the vulnerable key ✓')+'</span>':'<span class="b">'+(uk?'повторіть':'retry')+'</span>');
+}
+
+/* ================= 7. Countermeasures — RSA blinding (real BigInt) ================= */
+const ctP=61n, ctQ=53n, ctE=17n, ctN=ctP*ctQ, ctPhi=(ctP-1n)*(ctQ-1n), ctD=modinv(ctE,ctPhi);
+function drawCt(){
+  const uk=window.LANG==='uk';
+  let r=BigInt(+ctR.value); ctRV.textContent=ctR.value;
+  const m=1234n%ctN;
+  if(bgcd(r,ctN)!==1n) r=bmod(r+1n,ctN);            // r must be invertible
+  const blinded=bmod(m*modpow(r,ctE,ctN),ctN);      // m·rᵉ
+  const sb=modpow(blinded,ctD,ctN);                 // (m·rᵉ)ᵈ = mᵈ·r
+  const s=bmod(sb*modinv(r,ctN),ctN);               // unblind → mᵈ
+  const plain=modpow(m,ctD,ctN);                    // reference (no blinding)
+  const ok=(s===plain && modpow(s,ctE,ctN)===m);
+  const cv=ctCanvas,g=clr(cv),W=cv.width,H=cv.height;
+  g.fillStyle=C.dim; g.font='10px monospace';
+  g.fillText('N='+ctN+'  e='+ctE+'  d='+ctD,14,18);
+  g.fillStyle=C.rose; g.font='12px monospace'; g.fillText((uk?'піднесене (засліпл.): ':'exponentiated (blinded): ')+blinded,14,70);
+  g.fillStyle=C.dim; g.font='10px monospace'; g.fillText(uk?'↑ змінюється з кожним r → траса рандомізована':'↑ changes with every r → trace randomised',14,90);
+  g.fillStyle=C.teal; g.font='12px monospace'; g.fillText((uk?'підпис (знеасліпл.): ':'signature (unblinded): ')+s,14,140);
+  g.fillStyle=C.dim; g.font='10px monospace'; g.fillText(uk?'↑ завжди однаковий та дійсний':'↑ always identical and valid',14,160);
+  ctOut.innerHTML='<span class="k">m =</span> '+m+'   <span class="k">r =</span> '+r+'\n'+
+    '<span class="k">'+(uk?'засліплене m·rᵉ =':'blinded m·rᵉ =')+'</span> <span class="b">'+blinded+'</span>\n'+
+    '<span class="k">'+(uk?'знеасліплений підпис =':'unblinded signature =')+'</span> <span class="a">'+s+'</span>\n'+
+    '<span class="k">'+(uk?'без засліплення mᵈ =':'plain mᵈ =')+'</span> '+plain+'\n'+
+    '<span class="k">self-check:</span> '+(ok?'<span class="a">'+(uk?'однаковий підпис, sᵉ=m ✓':'identical signature, sᵉ=m ✓')+'</span>':'<span class="b">✗</span>');
+}
+
+/* ================= hero self-test ================= */
+function selfTest(){
+  const uk=window.LANG==='uk';
+  // fault: gcd recovers q
+
+  const p=61n,q=53n,e=17n,N=p*q,m=42n,phi=(p-1n)*(q-1n),d=modinv(e,phi);
+  const dp=bmod(d,p-1n),dq=bmod(d,q-1n),qinv=modinv(q,p);
+  const sp=modpow(m,dp,p),sq=modpow(m,dq,q);
+  const spf=bmod(sp+1n,p), sf=bmod(sq+q*bmod(qinv*(spf-sq),p),N);
+  const faultOK=(bgcd(bmod(modpow(sf,e,N)-m,N),N)===q);
+  // padding oracle: recover a block
+  const P=[72,105,2,2], C0=[0x5a,0x13,0xC7,0x88];
+  const C1=encBlk([P[0]^C0[0],P[1]^C0[1],P[2]^C0[2],P[3]^C0[3]]);
+  const oldIV=poIV; poIV=C0; const res=poAttack(C1); poIV=oldIV;
+  const Prec=[res.I[0]^C0[0],res.I[1]^C0[1],res.I[2]^C0[2],res.I[3]^C0[3]];
+  const padOK=res.ok && Prec.every((b,i)=>b===P[i]);
+  // AES S-box
+  const sbOK=(SBOX[0]===0x63 && SBOX[1]===0x7c && SBOX[16]===0xca);
+  // timing recovery
+  const savedSecret=SECRET; SECRET=[0x9c,0x41,0xd7,0x22]; const tRec=recoverSecret(false);
+  const tOK=tRec.every((b,i)=>b===SECRET[i]); SECRET=savedSecret;
+  const chip=(v)=>'<span class="'+(v?'a':'b')+'">'+(v?'✓':'✗')+'</span>';
+  document.getElementById('selftest').innerHTML=
+    '<span class="k">'+(uk?'Самоперевірка':'Self-test')+':</span>  '+
+    (uk?'RSA-CRT нсд→q ':'RSA-CRT gcd→q ')+chip(faultOK)+'   '+
+    (uk?'padding-оракул ':'padding oracle ')+chip(padOK)+'   '+
+    (uk?'таймінг→секрет ':'timing→secret ')+chip(tOK)+'   '+
+    'AES S-box '+chip(sbOK)+'   '+
+    ((faultOK&&padOK&&tOK&&sbOK)?'<span class="a">'+(uk?'усі атаки відтворюються':'all attacks reproduce')+'</span>':'<span class="b">FAIL</span>');
+}
+
+/* ================= refs + wiring ================= */
+const Wp='https://en.wikipedia.org/wiki/';
+window.REFS={
+  timing:[{tag:'wiki',en:{href:Wp+'Timing_attack',label:'Wikipedia: timing attack'}},
+          {tag:'paper',en:{href:'https://www.rambus.com/wp-content/uploads/2015/08/TimingAttacks.pdf',label:'Kocher 1996 — timing attacks'}},
+          {tag:'paper',en:{href:'https://www.usenix.org/legacy/events/sec03/tech/brumley.html',label:'Brumley–Boneh: remote timing on OpenSSL'}}],
+  cache:[{tag:'wiki',en:{href:Wp+'Cache_timing_attack',label:'Wikipedia: cache timing attack'}},
+         {tag:'paper',en:{href:'https://www.usenix.org/conference/usenixsecurity14/technical-sessions/presentation/yarom',label:'Yarom–Falkner: Flush+Reload'}},
+         {tag:'paper',en:{href:'https://eprint.iacr.org/2005/271',label:'Osvik–Shamir–Tromer: cache attacks on AES'}}],
+  dpa:[{tag:'wiki',en:{href:Wp+'Power_analysis',label:'Wikipedia: power analysis'}},
+       {tag:'paper',en:{href:'https://www.paulkocher.com/doc/DifferentialPowerAnalysis.pdf',label:'Kocher–Jaffe–Jun: DPA (1999)'}},
+       {tag:'paper',en:{href:'https://www.iacr.org/archive/ches2004/31560016/31560016.pdf',label:'Brier–Clavier–Olivier: CPA'}}],
+  fault:[{tag:'wiki',en:{href:Wp+'Fault_injection',label:'Wikipedia: fault injection'}},
+         {tag:'paper',en:{href:'https://link.springer.com/article/10.1007/s001450010016',label:'Boneh–DeMillo–Lipton (Bellcore, 1997)'}},
+         {tag:'wiki',en:{href:Wp+'RSA_(cryptosystem)#Using_the_Chinese_remainder_algorithm',label:'RSA-CRT'}}],
+  paddingoracle:[{tag:'wiki',en:{href:Wp+'Padding_oracle_attack',label:'Wikipedia: padding oracle attack'}},
+                 {tag:'paper',en:{href:'https://www.iacr.org/archive/eurocrypt2002/23320530/cbc02_e02d.pdf',label:'Vaudenay 2002 — CBC padding oracle'}},
+                 {tag:'paper',en:{href:'https://www.openssl.org/~bodo/ssl-poodle.pdf',label:'POODLE (2014)'}}],
+  roca:[{tag:'wiki',en:{href:Wp+'ROCA_vulnerability',label:'Wikipedia: ROCA vulnerability'}},
+        {tag:'paper',en:{href:'https://dl.acm.org/doi/10.1145/3133956.3133969',label:'Nemec et al. — The Return of Coppersmith (CCS 2017)'}},
+        {tag:'code',en:{href:'https://nvd.nist.gov/vuln/detail/CVE-2017-15361',label:'CVE-2017-15361'}}],
+  ctmeasures:[{tag:'wiki',en:{href:Wp+'Blinding_(cryptography)',label:'Wikipedia: blinding'}},
+              {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc8032',label:'RFC 8032 — Ed25519 (deterministic nonces)'}},
+              {tag:'wiki',en:{href:Wp+'Montgomery_ladder',label:'Montgomery ladder'}}]
+};
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  selfTest(); drawTiming(); drawCache(); drawDPA(); drawFault(); drawPO([0,0,0,0],[0,0,0,0],[0,0,0,0]); drawRoca(); drawCt();
+};
+
+// timing
+['tmPos','tmTrials','tmCT'].forEach(id=>document.getElementById(id).addEventListener('input',drawTiming));
+tmAuto.addEventListener('click',tmAutoRun);
+tmNew.addEventListener('click',()=>{ SECRET=[0,0,0,0].map(()=> (Math.random()*256)|0); drawTiming(); });
+// cache
+caSecret.addEventListener('input',()=>{ caTimes=null; drawCache(); });
+caRun.addEventListener('click',caProbe);
+// dpa
+['dpaTraces','dpaNoise'].forEach(id=>document.getElementById(id).addEventListener('input',drawDPA));
+dpaRun.addEventListener('click',drawDPA);
+dpaNew.addEventListener('click',()=>{ dpaKey=(Math.random()*256)|0; drawDPA(); });
+// fault
+['faP','faQ','faE','faM','faDelta'].forEach(id=>document.getElementById(id).addEventListener('input',drawFault));
+// padding oracle
+poRun.addEventListener('click',poRunAttack);
+poNew.addEventListener('click',()=>{ poIV=[0,0,0,0].map(()=> (Math.random()*256)|0); RK=RK.map(()=> (Math.random()*65536)|0); poRunAttack(); });
+poMsg.addEventListener('input',poRunAttack);
+// roca
+roNew.addEventListener('click',roGen);
+// countermeasures
+ctR.addEventListener('input',drawCt);
+ctRun.addEventListener('click',()=>{ ctR.value=2+((Math.random()*58)|0); drawCt(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lightweight ciphers — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="lightweight">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 19 · lightweight ciphers" data-uk="Розділ 19 · легковагові шифри">Section 19 · lightweight ciphers</div>
+    <h1 data-en="Lightweight Cryptography" data-uk="Легковагова криптографія">Lightweight cryptography</h1>
+    <div class="eq-hero">v₀ += ((v₁≪4)+k₀) ⊕ (v₁+Σδ) ⊕ ((v₁≫5)+k₁)</div>
+    <p class="lede" data-en="Ciphers built for smart cards, RFID tags and microcontrollers, where every logic gate and every byte of RAM counts. Below, the real algorithms run live in your browser: TEA/XTEA round by round (with TEA's equivalent-key flaw demonstrated), PRESENT's bit-permutation on a canvas, a SIMON/SPECK round stepper, the genuine ASCON permutation, and more."
+       data-uk="Шифри для смарт-карт, RFID-міток і мікроконтролерів, де рахується кожен логічний вентиль і кожен байт RAM. Нижче справжні алгоритми працюють наживо у браузері: TEA/XTEA раунд за раундом (з демонстрацією вади еквівалентних ключів TEA), бітова перестановка PRESENT на канвасі, покроковий SIMON/SPECK, справжня перестановка ASCON тощо.">Ciphers built for constrained devices…</p>
+    <div class="legend-lvls" id="lvlLegend"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ============================================================ TEA -->
+  <section id="tea">
+    <div class="num" data-en="01 / TEA" data-uk="01 / TEA">01 / TEA</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="TEA — The Tiny Feistel Cipher" data-uk="TEA — крихітний шифр Фейстеля">TEA — the tiny Feistel cipher</span></h2>
+    <div class="formula">v₀ += ((v₁≪4)+k₀) ⊕ (v₁+sum) ⊕ ((v₁≫5)+k₁),&nbsp; sum += δ = 9E3779B9₁₆</div>
+    <p class="desc" data-en="Wheeler and Needham's TEA (Cambridge, 1994) encrypts a <b>64-bit block</b> with a <b>128-bit key</b> in a few lines of C: 32 cycles (64 Feistel rounds) of shifts, additions and XORs, driven by the constant δ = ⌊2³²/φ⌋ from the golden ratio. No S-boxes, no tables — the mixing comes purely from the interaction of + and ⊕. Its key schedule is trivially weak: flipping the top bits of k₀ and k₁ (or of k₂ and k₃) produces the <b>same ciphertext</b>, so every key has 3 twins and the effective key length is <b>126 bits</b> — the demo proves it live."
+       data-uk="TEA Вілера та Нідгема (Кембридж, 1994) шифрує <b>64-бітний блок</b> <b>128-бітним ключем</b> у кілька рядків C: 32 цикли (64 раунди Фейстеля) зі зсувів, додавань і XOR, керовані константою δ = ⌊2³²/φ⌋ від золотого перетину. Без S-box'ів і таблиць — перемішування дає лише взаємодія + і ⊕. Розклад ключів тривіально слабкий: інвертування старших бітів k₀ і k₁ (або k₂ і k₃) дає <b>той самий шифротекст</b>, тож кожен ключ має 3 двійники, а ефективна довжина ключа — <b>126 біт</b>; демо доводить це наживо.">TEA…</p>
+    <div id="refs-tea"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="variant" data-uk="варіант">variant</span></label>
+          <select id="teaVar"><option value="tea">TEA</option><option value="xtea">XTEA</option></select></div>
+        <div class="ctrl"><label><span data-en="cycles" data-uk="цикли">cycles</span> <span class="val" id="teaCycVal">32</span></label>
+          <input type="range" id="teaCyc" min="1" max="32" step="1" value="32" style="width:140px"></div>
+        <div class="ctrl"><label>v₀ (hex, 32 bit)</label><input type="text" id="teaV0" value="01234567" maxlength="8" style="width:110px"></div>
+        <div class="ctrl"><label>v₁ (hex, 32 bit)</label><input type="text" id="teaV1" value="89ABCDEF" maxlength="8" style="width:110px"></div>
+        <div class="ctrl"><label><span data-en="key k₀…k₃ (hex, 128 bit)" data-uk="ключ k₀…k₃ (hex, 128 біт)">key k₀…k₃ (hex, 128 bit)</span></label>
+          <input type="text" id="teaKey" value="DEADBEEF0BADF00D1337C0DECAFEBABE" maxlength="32" style="width:300px"></div>
+      </div>
+      <div class="readout" id="teaOut"></div>
+      <div class="hint" data-en="Toggle TEA ↔ XTEA above: same interface, different round function. The equivalent-key experiment at the bottom of the readout flips the MSB of k₀ and k₁ and re-encrypts — under TEA the ciphertext does not change; under XTEA it does. Misusing TEA as a hash is exactly how the original Xbox boot chain was broken."
+           data-uk="Перемкніть TEA ↔ XTEA вище: той самий інтерфейс, інша раундова функція. Експеримент з еквівалентними ключами внизу зчитування інвертує старший біт k₀ і k₁ та шифрує знову — під TEA шифротекст не змінюється, під XTEA — змінюється. Саме використання TEA як хешу зламало ланцюг завантаження першого Xbox.">Toggle TEA ↔ XTEA…</div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/torvalds/linux/blob/master/crypto/tea.c" target="_blank" rel="noopener">linux/crypto/tea.c</a>
+      <span data-en="— TEA/XTEA live in the Linux kernel; none of this page's ciphers ship in OpenSSL." data-uk="— TEA/XTEA живуть у ядрі Linux; жоден шифр цієї сторінки не входить до OpenSSL.">— TEA/XTEA live in the Linux kernel…</span></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Broken by design flaws rather than brute force: <b>equivalent keys</b> (126-bit effective key) and a <b>related-key attack</b> needing ~2²³ chosen plaintexts (Kelsey–Schneier–Wagner, 1997). The equivalent keys made TEA fatal as a Davies–Meyer hash: Microsoft used it to verify the original <b>Xbox</b> bootloader, and attackers changed code without changing the hash (<a class='ext' href='https://events.ccc.de/congress/2005/fahrplan/attachments/591-paper_xbox.pdf' target='_blank' rel='noopener'>Steil, “17 Mistakes”</a>). Do not use TEA for anything new."
+            data-uk="Зламаний через вади дизайну, а не перебір: <b>еквівалентні ключі</b> (ефективно 126 біт) і <b>атака на пов'язаних ключах</b> з ~2²³ обраних відкритих текстів (Келсі–Шнаєр–Вагнер, 1997). Еквівалентні ключі стали фатальними для TEA як хешу Девіса–Мейєра: Microsoft перевіряла ним завантажувач першого <b>Xbox</b>, і атакувальники змінювали код, не змінюючи хеш (<a class='ext' href='https://events.ccc.de/congress/2005/fahrplan/attachments/591-paper_xbox.pdf' target='_blank' rel='noopener'>Steil, «17 Mistakes»</a>). Не використовуйте TEA для нового.">…</span></div>
+    <div class="xrefs">
+      <a href="#xtea" data-en="XTEA — the fix" data-uk="XTEA — виправлення">XTEA — the fix</a>
+      <a href="symmetric.html#des" data-en="DES — the Feistel original" data-uk="DES — оригінальний Фейстель">DES — the Feistel original</a>
+      <a href="cryptanalysis.html" data-en="cryptanalysis toolbox" data-uk="інструменти криптоаналізу">cryptanalysis toolbox</a>
+    </div>
+  </section>
+
+  <!-- =========================================================== XTEA -->
+  <section id="xtea">
+    <div class="num" data-en="02 / XTEA" data-uk="02 / XTEA">02 / XTEA</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="XTEA — TEA With the Key Schedule Repaired" data-uk="XTEA — TEA з виправленим розкладом ключів">XTEA — TEA with the key schedule repaired</span></h2>
+    <div class="formula">v₀ += (((v₁≪4) ⊕ (v₁≫5)) + v₁) ⊕ (sum + k[sum &amp; 3])</div>
+    <p class="desc" data-en="Needham and Wheeler's 1997 follow-up keeps TEA's size and speed but rearranges the round: the key word is now <b>selected by bits of sum</b> (index sum&amp;3 before the increment, (sum≫11)&amp;3 after), and the key is added to sum rather than to the shifted halves. That kills the equivalent-key classes — flipping MSBs of two key words no longer cancels — and breaks the regularity the related-key attack exploited. The comparison below is computed live from the block and key you typed in the TEA lab above."
+       data-uk="Продовження Нідгема та Вілера 1997 року зберігає розмір і швидкість TEA, але переставляє раунд: слово ключа тепер <b>обирається бітами sum</b> (індекс sum&amp;3 до інкременту, (sum≫11)&amp;3 після), а ключ додається до sum, а не до зсунутих половин. Це знищує класи еквівалентних ключів — інвертування старших бітів двох слів ключа більше не скорочується — і ламає регулярність, яку використовувала атака на пов'язаних ключах. Порівняння нижче обчислюється наживо з блока та ключа, введених у лабораторії TEA вище.">XTEA…</p>
+    <div id="refs-xtea"></div>
+    <div class="panel">
+      <div class="readout" id="xteaOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/torvalds/linux/blob/master/crypto/tea.c" target="_blank" rel="noopener">linux/crypto/tea.c</a>
+      <span data-en="(same file implements TEA, XTEA and the byte-order variant XETA)" data-uk="(той самий файл реалізує TEA, XTEA і варіант XETA з іншим порядком байтів)">(same file implements TEA, XTEA and XETA)</span></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No attack on the full 64 rounds. The best published result is a <b>related-key rectangle attack on 36 rounds</b> (<a class='ext' href='https://doi.org/10.1007/s10207-008-0059-9' target='_blank' rel='noopener'>Lu, 2009</a>). The practical caveat is the <b>64-bit block</b>: after ~2³² blocks under one key, birthday collisions leak plaintext (the Sweet32 effect) — so XTEA is fine for tiny embedded payloads, wrong for bulk traffic."
+            data-uk="Атак на повні 64 раунди немає. Найкращий опублікований результат — <b>rectangle-атака на пов'язаних ключах на 36 раундів</b> (<a class='ext' href='https://doi.org/10.1007/s10207-008-0059-9' target='_blank' rel='noopener'>Lu, 2009</a>). Практичне застереження — <b>64-бітний блок</b>: після ~2³² блоків під одним ключем колізії днів народження зливають відкритий текст (ефект Sweet32) — тож XTEA годиться для крихітних вбудованих даних, але не для великого трафіку.">…</span></div>
+    <div class="xrefs">
+      <a href="#tea" data-en="TEA — the original" data-uk="TEA — оригінал">TEA — the original</a>
+      <a href="#xxtea" data-en="XXTEA — block-of-any-size" data-uk="XXTEA — блок будь-якого розміру">XXTEA</a>
+      <a href="symmetric.html#des" data-en="Feistel networks" data-uk="мережі Фейстеля">Feistel networks</a>
+      <a href="cryptanalysis.html" data-en="cryptanalysis" data-uk="криптоаналіз">cryptanalysis</a>
+    </div>
+  </section>
+
+  <!-- ========================================================== XXTEA -->
+  <section id="xxtea">
+    <div class="num" data-en="03 / XXTEA" data-uk="03 / XXTEA">03 / XXTEA</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="XXTEA — Corrected Block TEA" data-uk="XXTEA — виправлений блоковий TEA">XXTEA — corrected block TEA</span></h2>
+    <div class="formula">MX = ((z≫5 ⊕ y≪2) + (y≫3 ⊕ z≪4)) ⊕ ((sum⊕y) + (k[(p&amp;3)⊕e] ⊕ z))</div>
+    <p class="desc" data-en="XXTEA (1998) treats the <b>whole message as one block</b>: an array of n ≥ 2 words. Each of its 6+⌊52/n⌋ outer rounds sweeps across the array, updating every word from both neighbours y and z through the MX function — so every output word depends on every input word. It is a favourite of hobby projects because ten lines of code encrypt a packet of any length without modes of operation. The demo runs the real btea routine and verifies the round-trip."
+       data-uk="XXTEA (1998) розглядає <b>все повідомлення як один блок</b>: масив з n ≥ 2 слів. Кожен із 6+⌊52/n⌋ зовнішніх раундів проходить масивом, оновлюючи кожне слово від обох сусідів y і z через функцію MX — тож кожне вихідне слово залежить від кожного вхідного. Улюбленець аматорських проєктів: десять рядків коду шифрують пакет будь-якої довжини без режимів роботи. Демо виконує справжню процедуру btea і перевіряє зворотний хід.">XXTEA…</p>
+    <div id="refs-xxtea"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="block (hex, 8–64 chars → n words)" data-uk="блок (hex, 8–64 симв. → n слів)">block (hex, 8–64 chars → n words)</span></label>
+          <input type="text" id="xxBlock" value="0123456789ABCDEF0011223344556677" maxlength="64" style="width:300px"></div>
+        <div class="ctrl"><label><span data-en="key (hex, 128 bit)" data-uk="ключ (hex, 128 біт)">key (hex, 128 bit)</span></label>
+          <input type="text" id="xxKey" value="DEADBEEF0BADF00D1337C0DECAFEBABE" maxlength="32" style="width:300px"></div>
+      </div>
+      <div class="readout" id="xxOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/xxtea" target="_blank" rel="noopener">github.com/xxtea</a>
+      <span data-en="(ports for JS, Python, Go, …); not in OpenSSL." data-uk="(порти для JS, Python, Go, …); в OpenSSL відсутній.">(ports for JS, Python, Go, …)</span></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="<b>Broken.</b> Yarrkov's 2010 chosen-plaintext differential attack recovers the key of full XXTEA with ~2⁵⁹ queries for long blocks (<a class='ext' href='https://eprint.iacr.org/2010/254' target='_blank' rel='noopener'>ePrint 2010/254</a>) — far below the 128-bit target. Fine as a puzzle, unsuitable where a real adversary can choose plaintexts."
+            data-uk="<b>Зламаний.</b> Диференціальна атака Яркова 2010 року з обраними відкритими текстами відновлює ключ повного XXTEA за ~2⁵⁹ запитів для довгих блоків (<a class='ext' href='https://eprint.iacr.org/2010/254' target='_blank' rel='noopener'>ePrint 2010/254</a>) — значно нижче цілі у 128 біт. Годиться як головоломка, непридатний там, де супротивник може обирати відкриті тексти.">…</span></div>
+    <div class="xrefs">
+      <a href="#xtea" data-en="XTEA — the round it borrows" data-uk="XTEA — запозичений раунд">XTEA</a>
+      <a href="symmetric.html#des" data-en="Feistel networks" data-uk="мережі Фейстеля">Feistel networks</a>
+      <a href="symmetric.html#modes" data-en="why modes exist" data-uk="навіщо існують режими">modes of operation</a>
+      <a href="cryptanalysis.html" data-en="cryptanalysis" data-uk="криптоаналіз">cryptanalysis</a>
+    </div>
+  </section>
+
+  <!-- ======================================================== PRESENT -->
+  <section id="present">
+    <div class="num" data-en="04 / PRESENT" data-uk="04 / PRESENT">04 / PRESENT</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="PRESENT — The 1000-Gate SP-Network" data-uk="PRESENT — SP-мережа на 1000 вентилів">PRESENT — the 1000-gate SP-network</span></h2>
+    <div class="formula">state ← pLayer(sBoxLayer(state ⊕ Kᵢ)),&nbsp; P(i) = 16·i mod 63</div>
+    <p class="desc" data-en="PRESENT (CHES 2007) is the minimal substitution–permutation network: a 64-bit block, 31 rounds, <b>one 4-bit S-box</b> repeated 16 times, and a diffusion layer that is <b>pure wiring</b> — bit i moves to position 16·i mod 63, which costs zero gates in silicon (~1570 GE total). It became the first lightweight cipher standardised in ISO/IEC 29192-2. The canvas traces how a single input bit spreads: after the S-box its whole nibble is active, the pLayer scatters those 4 bits into 4 different nibbles, and within 3–4 rounds all 64 bits are reached — full avalanche."
+       data-uk="PRESENT (CHES 2007) — мінімальна підстановчо-перестановча мережа: 64-бітний блок, 31 раунд, <b>один 4-бітний S-box</b>, повторений 16 разів, і шар дифузії з <b>чистої розводки</b> — біт i переходить на позицію 16·i mod 63, що в кремнії коштує нуль вентилів (~1570 GE загалом). Став першим легковаговим шифром, стандартизованим в ISO/IEC 29192-2. Канвас простежує, як розповсюджується один вхідний біт: після S-box активним стає весь його нібл, pLayer розкидає ці 4 біти по 4 різних ніблах, і за 3–4 раунди охоплено всі 64 біти — повна лавина.">PRESENT…</p>
+    <div id="refs-present"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="prCanvas" width="440" height="300"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="input bit to trace" data-uk="вхідний біт для трасування">input bit to trace</span> <span class="val" id="prBitVal">21</span></label>
+            <input type="range" id="prBit" min="0" max="63" step="1" value="21"></div>
+          <div class="ctrl"><label><span data-en="rounds of diffusion" data-uk="раундів дифузії">rounds of diffusion</span> <span class="val" id="prRoundsVal">1</span></label>
+            <input type="range" id="prRounds" min="1" max="4" step="1" value="1"></div>
+          <div class="legend">
+            <div><span class="dot" style="background:var(--teal)"></span><span data-en="active before pLayer (after S-box)" data-uk="активні до pLayer (після S-box)">active before pLayer</span></div>
+            <div><span class="dot" style="background:var(--amber)"></span><span data-en="active after pLayer" data-uk="активні після pLayer">active after pLayer</span></div>
+          </div>
+          <div class="hint" data-en="Wires animate on every change: 1 bit → 4 → 16 → 64. The S-box makes the whole nibble of an active bit active (confusion); the wiring sends each of the 4 bits to a different nibble (diffusion)."
+               data-uk="Дроти анімуються при кожній зміні: 1 біт → 4 → 16 → 64. S-box робить активним увесь нібл активного біта (конфузія); розводка надсилає кожен із 4 бітів у інший нібл (дифузія).">Wires animate…</div>
+        </div>
+      </div>
+      <div class="actor-row" style="margin-top:16px">
+        <div class="ctrl"><label><span data-en="plaintext (hex, 64 bit)" data-uk="відкритий текст (hex, 64 біт)">plaintext (hex, 64 bit)</span></label>
+          <input type="text" id="prPt" value="0000000000000000" maxlength="16" style="width:180px"></div>
+        <div class="ctrl"><label><span data-en="key (hex, 80 bit)" data-uk="ключ (hex, 80 біт)">key (hex, 80 bit)</span></label>
+          <input type="text" id="prKey" value="00000000000000000000" maxlength="20" style="width:220px"></div>
+      </div>
+      <div class="readout" id="prOut"></div>
+      <div class="hint" data-en="This is the full real PRESENT-80: with the all-zero key and plaintext the ciphertext must equal the official test vector 5579C1387B228445."
+           data-uk="Це повний справжній PRESENT-80: з нульовими ключем і відкритим текстом шифротекст має збігтися з офіційним тест-вектором 5579C1387B228445.">Full real PRESENT-80…</div>
+    </div>
+    <p class="hint"><span data-en="Implementations: not in OpenSSL or the Linux kernel — it lives in embedded/research C, starting from the designers' reference code in the CHES paper." data-uk="Реалізації: відсутній в OpenSSL і ядрі Linux — живе у вбудованому/дослідницькому C, починаючи з еталонного коду авторів у статті CHES.">Implementations…</span>
+      <a class="ext" href="https://www.iacr.org/archive/ches2007/47270450/47270450.pdf" target="_blank" rel="noopener">CHES 2007 paper</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="The full 31 rounds stand. Because its S-box and pLayer are so clean, PRESENT became the <b>standard lab exercise</b> for differential and linear cryptanalysis: linear hulls reach 26 rounds (<a class='ext' href='https://eprint.iacr.org/2009/397' target='_blank' rel='noopener'>Cho, 2009</a>), differentials ~18. The margin is real but thin, and the 64-bit block again implies re-keying before 2³² blocks. PRESENT-80 also concedes ~2⁴⁰-effort multi-key brute force to well-funded attackers — 128-bit keys are the conservative choice."
+            data-uk="Повний 31 раунд тримається. Завдяки чистоті S-box і pLayer PRESENT став <b>стандартною лабораторною вправою</b> з диференціального та лінійного криптоаналізу: лінійні халли сягають 26 раундів (<a class='ext' href='https://eprint.iacr.org/2009/397' target='_blank' rel='noopener'>Cho, 2009</a>), диференціали — ~18. Запас реальний, але тонкий, а 64-бітний блок знову вимагає зміни ключа до 2³² блоків. PRESENT-80 також поступається багатоключовому перебору добре фінансованих атакувальників — консервативний вибір — 128-бітні ключі.">…</span></div>
+    <div class="xrefs">
+      <a href="symmetric.html#aes" data-en="AES — the big SP-network" data-uk="AES — велика SP-мережа">AES</a>
+      <a href="#gift" data-en="GIFT — its successor" data-uk="GIFT — наступник">GIFT</a>
+      <a href="#led" data-en="LED — reuses this S-box" data-uk="LED — той самий S-box">LED</a>
+      <a href="cryptanalysis.html" data-en="differential / linear attacks" data-uk="диференціальні / лінійні атаки">differential / linear</a>
+    </div>
+  </section>
+
+  <!-- ========================================================== SIMON -->
+  <section id="simon">
+    <div class="num" data-en="05 / SIMON &amp; SPECK" data-uk="05 / SIMON та SPECK">05 / SIMON &amp; SPECK</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="SIMON &amp; SPECK — The NSA Lightweight Families" data-uk="SIMON та SPECK — легковагові сімейства NSA">SIMON &amp; SPECK — the NSA lightweight families</span></h2>
+    <div class="formula">SIMON: (x,y) ← (y ⊕ (x⋘1 &amp; x⋘8) ⊕ (x⋘2) ⊕ k, x)</div>
+    <p class="desc" data-en="Published by the NSA in 2013 as ten-size families. <b>SIMON</b> targets hardware: its round is one AND and three rotations — the AND is the only nonlinear gate. <b>SPECK</b> targets software: an ARX round (modular add, rotate, XOR) that maps to three CPU instructions. The stepper below runs the genuine SIMON32/64 (32 rounds) or SPECK32/64 (22 rounds), including the real key schedules with the z₀ constant sequence; step through and watch the state and round keys evolve."
+       data-uk="Опубліковані NSA у 2013 як сімейства з десяти розмірів. <b>SIMON</b> цілить в апаратуру: його раунд — один AND і три ротації, AND — єдиний нелінійний вентиль. <b>SPECK</b> цілить у софт: ARX-раунд (модульне додавання, ротація, XOR), що лягає у три інструкції CPU. Степер нижче виконує справжній SIMON32/64 (32 раунди) або SPECK32/64 (22 раунди), включно зі справжніми розкладами ключів і послідовністю констант z₀; крокуйте та спостерігайте еволюцію стану і раундових ключів.">SIMON &amp; SPECK…</p>
+    <div id="refs-simon"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="cipher" data-uk="шифр">cipher</span></label>
+          <select id="smCipher"><option value="simon">SIMON32/64</option><option value="speck">SPECK32/64</option></select></div>
+        <div class="ctrl"><label>x (hex, 16 bit)</label><input type="text" id="smX" value="6565" maxlength="4" style="width:80px"></div>
+        <div class="ctrl"><label>y (hex, 16 bit)</label><input type="text" id="smY" value="6877" maxlength="4" style="width:80px"></div>
+        <div class="ctrl"><label><span data-en="key (hex, 64 bit = k₃k₂k₁k₀)" data-uk="ключ (hex, 64 біт = k₃k₂k₁k₀)">key (hex, 64 bit = k₃k₂k₁k₀)</span></label>
+          <input type="text" id="smKey" value="1918111009080100" maxlength="16" style="width:180px"></div>
+      </div>
+      <div class="actor-row">
+        <button id="smReset" data-en="⟲ reset" data-uk="⟲ скинути">⟲ reset</button>
+        <button id="smStep" data-en="step one round →" data-uk="крок на раунд →">step one round →</button>
+        <button id="smRun" data-en="run all rounds ⇒" data-uk="усі раунди ⇒">run all rounds ⇒</button>
+      </div>
+      <div class="readout" id="smOut"></div>
+      <div class="hint" data-en="Defaults are the official test vectors: SIMON32/64 encrypts 6565 6877 → C69B E9BB; SPECK32/64 encrypts 6574 694C → A868 42F2 (set x=6574, y=694C). Contrast: SIMON's AND-based round needs ~half the hardware area of SPECK's adder, while SPECK's ARX round is faster on any CPU — the same trade-off as SHA-3 vs BLAKE."
+           data-uk="Типові значення — офіційні тест-вектори: SIMON32/64 шифрує 6565 6877 → C69B E9BB; SPECK32/64 шифрує 6574 694C → A868 42F2 (поставте x=6574, y=694C). Контраст: раунд SIMON на AND потребує ~вдвічі менше апаратної площі, ніж суматор SPECK, а ARX-раунд SPECK швидший на будь-якому CPU — той самий компроміс, що SHA-3 проти BLAKE.">Defaults are the official test vectors…</div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/nsacyber/simon-speck" target="_blank" rel="noopener">nsacyber/simon-speck</a>
+      <span data-en="— SPECK was briefly in the Linux kernel (fscrypt) and removed in 2018 after the ISO controversy; neither is in OpenSSL." data-uk="— SPECK ненадовго з'явився в ядрі Linux (fscrypt) і був вилучений у 2018 після скандалу в ISO; жоден не входить до OpenSSL.">— SPECK was briefly in the Linux kernel…</span></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No full-round breaks: differential attacks reach ~23 of SIMON32's 32 rounds and ~14 of SPECK32's 22 (<a class='ext' href='https://eprint.iacr.org/2013/526' target='_blank' rel='noopener'>Abed et al., 2014</a>) — thinner margins than ASCON's. The real controversy was procedural: the NSA published no design rationale, and after heated debate <b>ISO rejected</b> both in 2018 (they were later included only in narrower profiles). Trust, not mathematics, is the open question."
+            data-uk="Повнораундових зломів немає: диференціальні атаки сягають ~23 з 32 раундів SIMON32 і ~14 з 22 раундів SPECK32 (<a class='ext' href='https://eprint.iacr.org/2013/526' target='_blank' rel='noopener'>Abed et al., 2014</a>) — запаси тонші, ніж в ASCON. Справжній скандал був процедурним: NSA не опублікувала обґрунтування дизайну, і після гарячих дебатів <b>ISO відхилила</b> обидва у 2018 (пізніше їх включили лише у вужчі профілі). Відкрите питання — довіра, а не математика.">…</span></div>
+    <div class="xrefs">
+      <a href="symmetric.html#aes" data-en="AES — the benchmark" data-uk="AES — еталон">AES</a>
+      <a href="stream.html#chacha" data-en="ChaCha20 — ARX in streams" data-uk="ChaCha20 — ARX у потокових">ChaCha20 — ARX</a>
+      <a href="#chaskey" data-en="Chaskey — ARX MAC" data-uk="Chaskey — ARX MAC">Chaskey</a>
+      <a href="cryptanalysis.html" data-en="cryptanalysis" data-uk="криптоаналіз">cryptanalysis</a>
+    </div>
+  </section>
+
+  <!-- ========================================================= CLEFIA -->
+  <section id="clefia">
+    <div class="num" data-en="06 / CLEFIA" data-uk="06 / CLEFIA">06 / CLEFIA</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c1">O(n)</span>
+        <span data-en="CLEFIA — Sony's Generalised Feistel" data-uk="CLEFIA — узагальнений Фейстель від Sony">CLEFIA — Sony's generalised Feistel</span></h2>
+    <div class="formula">GFN₄: (x₀,x₁,x₂,x₃) → (x₁⊕F₀(k₀,x₀), x₂, x₃⊕F₁(k₁,x₂), x₀)</div>
+    <p class="desc" data-en="CLEFIA (Sony, FSE 2007; named after <i>clef</i>, the musical key) encrypts 128-bit blocks with a <b>4-branch generalised Feistel network</b>: two parallel F-functions per round, then a branch rotation. Its diffusion trick is <b>DSM — diffusion switching mechanism</b>: F₀ and F₁ use two different S-boxes and two different MDS matrices, which blocks the long differential/linear trails that plague plain generalised Feistels. Standardised in ISO/IEC 29192-2 next to PRESENT. The toy below animates the branch structure with 8-bit words and a miniature F, so you can watch values migrate between branches."
+       data-uk="CLEFIA (Sony, FSE 2007; від <i>clef</i> — музичний ключ) шифрує 128-бітні блоки <b>4-гілковою узагальненою мережею Фейстеля</b>: два паралельні F-перетворення на раунд, потім ротація гілок. Трюк дифузії — <b>DSM, механізм перемикання дифузії</b>: F₀ і F₁ використовують два різні S-box'и та дві різні MDS-матриці, що блокує довгі диференціальні/лінійні сліди, властиві простим узагальненим Фейстелям. Стандартизований в ISO/IEC 29192-2 поруч із PRESENT. Іграшка нижче анімує структуру гілок з 8-бітними словами та мініатюрним F — видно, як значення мігрують між гілками.">CLEFIA…</p>
+    <div id="refs-clefia"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="state x₀x₁x₂x₃ (hex, 4 bytes)" data-uk="стан x₀x₁x₂x₃ (hex, 4 байти)">state x₀x₁x₂x₃ (hex, 4 bytes)</span></label>
+          <input type="text" id="clIn" value="A1B2C3D4" maxlength="8" style="width:110px"></div>
+        <div class="ctrl"><label><span data-en="key (hex, 16 bit)" data-uk="ключ (hex, 16 біт)">key (hex, 16 bit)</span></label>
+          <input type="text" id="clK" value="3C5F" maxlength="4" style="width:80px"></div>
+        <div class="ctrl"><label><span data-en="rounds" data-uk="раунди">rounds</span> <span class="val" id="clRoundsVal">4</span></label>
+          <input type="range" id="clRounds" min="1" max="8" step="1" value="4" style="width:140px"></div>
+      </div>
+      <div class="readout" id="clOut"></div>
+      <div class="hint" data-en="Toy GFN₄ (8-bit branches, F = S-box + rotation) — the structure is CLEFIA's, the parameters are shrunk to stay readable. Real CLEFIA uses 32-bit branches, 18/22/26 rounds and two MDS matrices."
+           data-uk="Іграшковий GFN₄ (8-бітні гілки, F = S-box + ротація) — структура CLEFIA, параметри зменшені для читабельності. Справжня CLEFIA має 32-бітні гілки, 18/22/26 раундів і дві MDS-матриці.">Toy GFN₄…</div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://www.sony.net/Products/cryptography/clefia/" target="_blank" rel="noopener">sony.net/clefia</a>
+      <span data-en="(reference code &amp; specification); not in OpenSSL." data-uk="(еталонний код і специфікація); в OpenSSL відсутній.">(reference code &amp; specification)</span></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Full 18-round CLEFIA-128 is unbroken; the best attacks (improbable differentials, integral) stop around <b>13–14 rounds</b>. The DSM design did its job — trails die out faster than in classical GFNs. Its 128-bit block avoids the Sweet32 issue that haunts the 64-bit ciphers on this page."
+            data-uk="Повна 18-раундова CLEFIA-128 не зламана; найкращі атаки (improbable-диференціали, інтегральні) зупиняються на <b>13–14 раундах</b>. Дизайн DSM спрацював — сліди згасають швидше, ніж у класичних GFN. 128-бітний блок знімає проблему Sweet32, що переслідує 64-бітні шифри цієї сторінки.">…</span></div>
+    <div class="xrefs">
+      <a href="symmetric.html#des" data-en="DES — 2-branch Feistel" data-uk="DES — 2-гілковий Фейстель">DES</a>
+      <a href="#present" data-en="PRESENT — same ISO standard" data-uk="PRESENT — той самий стандарт ISO">PRESENT</a>
+      <a href="symmetric.html#camellia" data-en="Camellia — Feistel cousin" data-uk="Camellia — родич-Фейстель">Camellia</a>
+    </div>
+  </section>
+
+  <!-- ========================================================= PRINCE -->
+  <section id="prince">
+    <div class="num" data-en="07 / PRINCE" data-uk="07 / PRINCE">07 / PRINCE</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c1">O(n)</span>
+        <span data-en="PRINCE — Low Latency and the α-Reflection" data-uk="PRINCE — низька затримка та α-відображення">PRINCE — low latency and the α-reflection</span></h2>
+    <div class="formula">D<sub>(k₀‖k₁)</sub> = E<sub>(k₀′‖k₁⊕α)</sub>,&nbsp; α = C0AC29B7C97C50DD₁₆</div>
+    <p class="desc" data-en="PRINCE (ASIACRYPT 2012) is built to encrypt in <b>one clock cycle</b> — memory encryption and bus scramblers cannot afford 31 sequential rounds. Its 12-round core is arranged symmetrically around an involutive middle layer, and the round constants satisfy RCᵢ ⊕ RC₁₁₋ᵢ = α. The consequence is the <b>α-reflection property</b>: decryption is the <i>same circuit</i> as encryption with the key k₁ XOR-ed by α — hardware gets decryption for free. The panel verifies the reflection identity on the real constants (which are digits of π — a “nothing up my sleeve” guarantee)."
+       data-uk="PRINCE (ASIACRYPT 2012) створений шифрувати за <b>один такт</b> — шифрування пам'яті та шин не може дозволити собі 31 послідовний раунд. Його 12-раундове ядро симетричне навколо інволютивного середнього шару, а раундові константи задовольняють RCᵢ ⊕ RC₁₁₋ᵢ = α. Наслідок — властивість <b>α-відображення</b>: розшифрування — це <i>та сама схема</i>, що й шифрування, з ключем k₁, XOR-нутим на α — апаратура отримує розшифрування безкоштовно. Панель перевіряє тотожність відображення на справжніх константах (це цифри π — гарантія «нічого в рукаві»).">PRINCE…</p>
+    <div id="refs-prince"></div>
+    <div class="panel">
+      <div class="readout" id="prcOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations: ASIC/FPGA IP cores and research C; the design paper carries reference code. Not in OpenSSL." data-uk="Реалізації: IP-ядра ASIC/FPGA та дослідницький C; еталонний код — у статті. В OpenSSL відсутній.">Implementations…</span>
+      <a class="ext" href="https://eprint.iacr.org/2012/529" target="_blank" rel="noopener">ePrint 2012/529</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="PRINCE is an FX construction (whitening key k₀ around a core), so its security degrades gracefully with attacker data: ~126−log₂(D) bits. The α-reflection itself enables dedicated <b>reflection attacks</b> on related α values, and years of the designers' public “PRINCE Challenge” produced attacks up to 10 of 12 core rounds. The team responded with <b>PRINCEv2</b> (2020), tweaking the key schedule for stricter bounds. See <a class='ext' href='https://en.wikipedia.org/wiki/Prince_(cipher)' target='_blank' rel='noopener'>the attack summary</a>."
+            data-uk="PRINCE — це FX-конструкція (вибілювальний ключ k₀ навколо ядра), тож стійкість плавно спадає з обсягом даних атакувальника: ~126−log₂(D) біт. Саме α-відображення уможливлює спеціальні <b>атаки відображення</b> на споріднені α, а роки публічного «PRINCE Challenge» дали атаки до 10 з 12 раундів ядра. Команда відповіла <b>PRINCEv2</b> (2020), підправивши розклад ключів для суворіших меж. Див. <a class='ext' href='https://en.wikipedia.org/wiki/Prince_(cipher)' target='_blank' rel='noopener'>огляд атак</a>.">…</span></div>
+    <div class="xrefs">
+      <a href="#led" data-en="LED — the other AES miniature" data-uk="LED — інша мініатюра AES">LED</a>
+      <a href="#present" data-en="PRESENT — shares design DNA" data-uk="PRESENT — спільна ДНК дизайну">PRESENT</a>
+      <a href="symmetric.html#aes" data-en="AES" data-uk="AES">AES</a>
+    </div>
+  </section>
+
+  <!-- ============================================================ LED -->
+  <section id="led">
+    <div class="num" data-en="08 / LED" data-uk="08 / LED">08 / LED</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c1">O(n)</span>
+        <span data-en="LED — AES Shrunk to Nibbles, No Key Schedule" data-uk="LED — AES у ніблах, без розкладу ключів">LED — AES shrunk to nibbles, no key schedule</span></h2>
+    <div class="formula">step = 4 × (AddConstants → SubCells → ShiftRows → MixColumnsSerial),&nbsp; ⊕K</div>
+    <p class="desc" data-en="LED (CHES 2011) is AES scaled down to a 4×4 grid of <b>4-bit cells</b>: SubCells applies the PRESENT S-box, ShiftRows rotates rows, and MixColumnsSerial is an MDS matrix chosen so hardware can apply it as four shifts of one cheap row — serialised, it fits in ~700 GE. The radical idea is <b>no key schedule at all</b>: the key itself is XOR-ed unchanged every four rounds, and security against related-key attacks is <i>proved</i> by counting active S-boxes across steps. The demo runs one real LED round on your state."
+       data-uk="LED (CHES 2011) — це AES, зменшений до ґратки 4×4 з <b>4-бітних комірок</b>: SubCells застосовує S-box PRESENT, ShiftRows обертає рядки, а MixColumnsSerial — MDS-матриця, обрана так, щоб апаратура застосовувала її як чотири зсуви одного дешевого рядка — у серіалізованому вигляді ~700 GE. Радикальна ідея — <b>взагалі без розкладу ключів</b>: сам ключ XOR-иться незмінним кожні чотири раунди, а стійкість до атак на пов'язаних ключах <i>доведена</i> підрахунком активних S-box'ів по кроках. Демо виконує один справжній раунд LED над вашим станом.">LED…</p>
+    <div id="refs-led"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="state (hex, 64 bit, row-major nibbles)" data-uk="стан (hex, 64 біт, нібли построково)">state (hex, 64 bit, row-major nibbles)</span></label>
+          <input type="text" id="ledIn" value="0123456789ABCDEF" maxlength="16" style="width:180px"></div>
+      </div>
+      <div class="readout" id="ledOut"></div>
+      <div class="hint" data-en="One genuine LED round (constants omitted for legibility): watch SubCells change every nibble, ShiftRows move them, and MixColumnsSerial mix each column over GF(2⁴)."
+           data-uk="Один справжній раунд LED (константи опущені для читабельності): SubCells змінює кожен нібл, ShiftRows їх переміщує, MixColumnsSerial перемішує кожен стовпець над GF(2⁴).">One genuine LED round…</div>
+    </div>
+    <p class="hint"><span data-en="Implementations: research/embedded C from the design team; not in OpenSSL." data-uk="Реалізації: дослідницький/вбудований C від авторів; в OpenSSL відсутній.">Implementations…</span>
+      <a class="ext" href="https://eprint.iacr.org/2012/600" target="_blank" rel="noopener">The LED Block Cipher</a></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Unbroken: attacks on LED-64 reach ~16 of 32 rounds (meet-in-the-middle on step boundaries), LED-128 ~24 of 48. Its security proofs treat the fixed-key steps as ideal permutations — the same single-key Even–Mansour reasoning as PRINCE and Chaskey — making LED a favourite object of <b>provable-security</b> analysis for block ciphers."
+            data-uk="Не зламаний: атаки на LED-64 сягають ~16 з 32 раундів (meet-in-the-middle на межах кроків), на LED-128 — ~24 з 48. Доведення стійкості розглядають кроки з фіксованим ключем як ідеальні перестановки — та сама логіка одноключового Івена–Мансура, що в PRINCE і Chaskey — тож LED улюблений об'єкт <b>доказової стійкості</b> блокових шифрів.">…</span></div>
+    <div class="xrefs">
+      <a href="symmetric.html#aes" data-en="AES — the original layers" data-uk="AES — оригінальні шари">AES</a>
+      <a href="#present" data-en="PRESENT — donates the S-box" data-uk="PRESENT — донор S-box">PRESENT</a>
+      <a href="#prince" data-en="PRINCE — the other FX design" data-uk="PRINCE — інший FX-дизайн">PRINCE</a>
+    </div>
+  </section>
+
+  <!-- ========================================================== KATAN -->
+  <section id="katan">
+    <div class="num" data-en="09 / KATAN · KTANTAN" data-uk="09 / KATAN · KTANTAN">09 / KATAN · KTANTAN</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c1">O(n)</span>
+        <span data-en="KATAN — a Cipher Made of Two Shift Registers" data-uk="KATAN — шифр із двох зсувних регістрів">KATAN — a cipher made of two shift registers</span></h2>
+    <div class="formula">fₐ = L₁[12]⊕L₁[7]⊕(L₁[8]·L₁[5])⊕(L₁[3]·IR)⊕kₐ → L₂</div>
+    <p class="desc" data-en="KATAN32 (CHES 2009) abandons rounds-of-layers entirely: the 32-bit state lives in two <b>nonlinear feedback shift registers</b> (13 and 19 bits) that feed each other, one bit per clock, for <b>254 clocks</b>. Two AND gates per register are the only nonlinearity; an 8-bit LFSR counts the rounds and its top bit IR irregularly enables one tap to defeat slide attacks. The whole cipher is ~800 GE. KTANTAN is the same circuit with the key burned into the silicon. The animation clocks the real KATAN32 registers — taps outlined in amber."
+       data-uk="KATAN32 (CHES 2009) взагалі відмовляється від раундів-шарів: 32-бітний стан живе у двох <b>нелінійних зсувних регістрах</b> (13 і 19 біт), які живлять один одного, по біту за такт, упродовж <b>254 тактів</b>. Два вентилі AND на регістр — єдина нелінійність; 8-бітний LFSR лічить раунди, і його старший біт IR нерегулярно вмикає один відвід, щоб зірвати slide-атаки. Увесь шифр — ~800 GE. KTANTAN — та сама схема з ключем, «впаяним» у кремній. Анімація тактує справжні регістри KATAN32 — відводи обведені янтарним.">KATAN32…</p>
+    <div id="refs-katan"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="ktCanvas" width="440" height="190"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="plaintext (hex, 32 bit)" data-uk="відкритий текст (hex, 32 біт)">plaintext (hex, 32 bit)</span></label>
+            <input type="text" id="ktPt" value="00000000" maxlength="8" style="width:110px"></div>
+          <div class="ctrl"><label><span data-en="key (hex, 80 bit)" data-uk="ключ (hex, 80 біт)">key (hex, 80 bit)</span></label>
+            <input type="text" id="ktKey" value="FFFFFFFFFFFFFFFFFFFF" maxlength="20" style="width:220px"></div>
+          <div class="ctrl"><label><span data-en="speed (rounds/tick)" data-uk="швидкість (раундів/такт)">speed</span> <span class="val" id="ktSpeedVal">4</span></label>
+            <input type="range" id="ktSpeed" min="1" max="32" step="1" value="4"></div>
+          <div class="actor-row" style="margin:0">
+            <button id="ktPlay" data-en="▶ play" data-uk="▶ пуск">▶ play</button>
+            <button id="ktStep" data-en="step" data-uk="крок">step</button>
+            <button id="ktReset" class="secondary" data-en="⟲ reset" data-uk="⟲ скинути">⟲ reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="readout" id="ktOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://www.cs.technion.ac.il/~orrd/KATAN/" target="_blank" rel="noopener">designers' page (Technion)</a>
+      <span data-en="— reference C; not in OpenSSL." data-uk="— еталонний C; в OpenSSL відсутній.">— reference C</span></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Full KATAN stands (best results ~150 of 254 rounds). Its hard-wired sibling <b>KTANTAN fell</b>: the weak key loading enables a 3-subset <b>meet-in-the-middle attack</b> recovering the key in ~2⁷⁵ steps with only 3 plaintexts (<a class='ext' href='https://doi.org/10.1007/978-3-642-19574-7_16' target='_blank' rel='noopener'>Bogdanov–Rechberger, 2010</a>) — a textbook lesson that a key schedule, even a trivial one, earns its keep."
+            data-uk="Повний KATAN тримається (найкращі результати — ~150 з 254 раундів). Його «впаяний» родич <b>KTANTAN упав</b>: слабке завантаження ключа дозволяє 3-підмножинну <b>meet-in-the-middle атаку</b>, що відновлює ключ за ~2⁷⁵ кроків із лише 3 відкритими текстами (<a class='ext' href='https://doi.org/10.1007/978-3-642-19574-7_16' target='_blank' rel='noopener'>Богданов–Рехбергер, 2010</a>) — хрестоматійний урок: розклад ключів, навіть тривіальний, недаремний.">…</span></div>
+    <div class="xrefs">
+      <a href="stream.html#trivium" data-en="Trivium — the stream cousin" data-uk="Trivium — потоковий родич">Trivium</a>
+      <a href="stream.html#a5" data-en="A5/1 — LFSRs in GSM" data-uk="A5/1 — LFSR у GSM">A5/1</a>
+      <a href="cryptanalysis.html" data-en="meet-in-the-middle" data-uk="meet-in-the-middle">meet-in-the-middle</a>
+    </div>
+  </section>
+
+  <!-- =========================================================== GIFT -->
+  <section id="gift">
+    <div class="num" data-en="10 / Skinny &amp; GIFT" data-uk="10 / Skinny та GIFT">10 / Skinny &amp; GIFT</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c1">O(n)</span>
+        <span data-en="GIFT — “a Small PRESENT”, and Skinny" data-uk="GIFT — «малий PRESENT», і Skinny">GIFT — “a small PRESENT”, and Skinny</span></h2>
+    <div class="formula">GS = [1,A,4,C,6,F,3,9,2,D,B,7,5,0,8,E]</div>
+    <p class="desc" data-en="GIFT (CHES 2017) revisits PRESENT ten years later with better tools: a cheaper S-box (one gate less), a re-drawn bit permutation matched to the S-box's differential properties, and round keys added to only half the state. The result is smaller <i>and</i> faster with larger security margins. <b>Skinny</b> (CRYPTO 2016) is its tweakey-based rival with AES-like structure. GIFT matters beyond IoT: <b>GIFT-COFB was a finalist</b> of the NIST Lightweight Cryptography competition, losing only to ASCON. Below, the S-box's <b>difference distribution table</b> is computed live — the exact table a differential cryptanalyst builds first."
+       data-uk="GIFT (CHES 2017) переосмислює PRESENT через десять років з кращими інструментами: дешевший S-box (на вентиль менше), перемальована бітова перестановка, узгоджена з диференціальними властивостями S-box, і раундові ключі лише на половину стану. Результат менший <i>і</i> швидший, із більшими запасами стійкості. <b>Skinny</b> (CRYPTO 2016) — конкурент на tweakey з AES-подібною структурою. GIFT важливий не лише для IoT: <b>GIFT-COFB був фіналістом</b> конкурсу NIST Lightweight Cryptography, поступившись лише ASCON. Нижче наживо обчислюється <b>таблиця розподілу різниць</b> S-box — саме її диференціальний криптоаналітик будує першою.">GIFT…</p>
+    <div id="refs-gift"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="gfCanvas" width="280" height="280"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label>S-box</label>
+            <select id="gfSbox"><option value="gift">GIFT GS</option><option value="present">PRESENT S</option></select></div>
+          <div class="legend">
+            <div><span class="dot" style="background:var(--teal)"></span><span data-en="DDT entry 2" data-uk="елемент DDT = 2">DDT entry 2</span></div>
+            <div><span class="dot" style="background:var(--amber)"></span><span data-en="DDT entry 4" data-uk="елемент DDT = 4">DDT entry 4</span></div>
+            <div><span class="dot" style="background:var(--rose)"></span><span data-en="entry ≥ 6" data-uk="елемент ≥ 6">entry ≥ 6</span></div>
+          </div>
+          <div class="readout" id="gfOut"></div>
+          <div class="hint" data-en="DDT[a][b] counts inputs x with S(x)⊕S(x⊕a)=b. The max entry over a≠0 gives the best one-round differential probability — the seed number of every differential attack, and a standard lab exercise on PRESENT/GIFT."
+               data-uk="DDT[a][b] лічить входи x із S(x)⊕S(x⊕a)=b. Максимум по a≠0 дає найкращу однораундову диференціальну ймовірність — стартове число кожної диференціальної атаки і стандартна лабораторна вправа на PRESENT/GIFT.">DDT…</div>
+        </div>
+      </div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/rweather/lightweight-crypto" target="_blank" rel="noopener">rweather/lightweight-crypto</a>
+      <span data-en="(GIFT-COFB and the other NIST LWC candidates); not in OpenSSL." data-uk="(GIFT-COFB та інші кандидати NIST LWC); в OpenSSL відсутній.">(GIFT-COFB and other NIST LWC candidates)</span></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Unbroken with comfortable margins: best differential/linear results reach ~26 of GIFT-64's 28 rounds only in weakened related-key settings; single-key attacks stop far earlier. GIFT-COFB survived the full public scrutiny of the NIST LWC process (2019–2023) — the strongest evidence a lightweight design can currently earn short of winning."
+            data-uk="Не зламаний, із комфортними запасами: найкращі диференціальні/лінійні результати сягають ~26 з 28 раундів GIFT-64 лише в ослаблених моделях пов'язаних ключів; одноключові атаки зупиняються значно раніше. GIFT-COFB витримав повний публічний розгляд процесу NIST LWC (2019–2023) — найсильніший доказ, який легковаговий дизайн нині може здобути, окрім перемоги.">…</span></div>
+    <div class="xrefs">
+      <a href="#present" data-en="PRESENT — the ancestor" data-uk="PRESENT — предок">PRESENT</a>
+      <a href="symmetric.html#aes" data-en="AES — Skinny's model" data-uk="AES — модель Skinny">AES</a>
+      <a href="#ascon" data-en="ASCON — the winner" data-uk="ASCON — переможець">ASCON</a>
+      <a href="cryptanalysis.html" data-en="differential cryptanalysis" data-uk="диференціальний криптоаналіз">differential cryptanalysis</a>
+    </div>
+  </section>
+
+  <!-- ========================================================== ASCON -->
+  <section id="ascon">
+    <div class="num" data-en="11 / ASCON" data-uk="11 / ASCON">11 / ASCON</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+        <span data-en="ASCON — The NIST Lightweight Standard" data-uk="ASCON — легковаговий стандарт NIST">ASCON — the NIST lightweight standard</span></h2>
+    <div class="formula">S ← p¹²(IV ‖ K ‖ N);&nbsp; cᵢ = mᵢ ⊕ S<sub>rate</sub>;&nbsp; T = K ⊕ S<sub>cap</sub></div>
+    <p class="desc" data-en="ASCON (Graz, 2014) won both the CAESAR competition and the <b>NIST Lightweight Cryptography contest (2023)</b>, becoming the standard for AEAD and hashing on constrained devices — NIST SP 800-232. It is a <b>duplex sponge</b>, the same idea as SHA-3: a 320-bit state (five 64-bit words) absorbs the message 64 bits at a time through the <i>rate</i>, while the 256-bit <i>capacity</i> stays hidden; between blocks the state is stirred by the permutation p — a 5-bit S-box applied bit-slice-wise across the words, then a rotation-based linear layer. Encryption, authentication and hashing all fall out of one permutation. The diagram shows the AEAD dataflow, and the stepper below runs the <b>real ASCON permutation</b>, round by round."
+       data-uk="ASCON (Ґрац, 2014) виграв і конкурс CAESAR, і <b>конкурс NIST Lightweight Cryptography (2023)</b>, ставши стандартом AEAD та хешування для обмежених пристроїв — NIST SP 800-232. Це <b>дуплексна губка</b>, та сама ідея, що в SHA-3: 320-бітний стан (п'ять 64-бітних слів) поглинає повідомлення по 64 біти через <i>rate</i>, тоді як 256-бітна <i>capacity</i> лишається прихованою; між блоками стан перемішує перестановка p — 5-бітний S-box, застосований бітовими зрізами упоперек слів, і лінійний шар на ротаціях. Шифрування, автентифікація і хешування випливають з однієї перестановки. Діаграма показує потік даних AEAD, а степер нижче виконує <b>справжню перестановку ASCON</b> раунд за раундом.">ASCON…</p>
+    <div id="refs-ascon"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="asCanvas" width="440" height="220"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="key K (hex, 128 bit)" data-uk="ключ K (hex, 128 біт)">key K (hex, 128 bit)</span></label>
+            <input type="text" id="asKey" value="000102030405060708090A0B0C0D0E0F" maxlength="32" style="width:300px"></div>
+          <div class="ctrl"><label><span data-en="nonce N (hex, 128 bit)" data-uk="нонс N (hex, 128 біт)">nonce N (hex, 128 bit)</span></label>
+            <input type="text" id="asNonce" value="000102030405060708090A0B0C0D0E0F" maxlength="32" style="width:300px"></div>
+          <div class="actor-row" style="margin:0">
+            <button id="asReset" data-en="⟲ init state" data-uk="⟲ ініціалізувати">⟲ init state</button>
+            <button id="asStep" data-en="p round →" data-uk="раунд p →">p round →</button>
+            <button id="asRun" data-en="run p¹² ⇒" data-uk="виконати p¹² ⇒">run p¹² ⇒</button>
+          </div>
+        </div>
+      </div>
+      <div class="readout" id="asOut"></div>
+      <div class="hint" data-en="State x₀…x₄ starts as IV ‖ K ‖ N (Ascon-128 IV = 80400C0600000000). Each round: add constant to x₂ → 5-bit S-box over the columns → rotational diffusion inside each word. All 64 columns pass the S-box in parallel — that is bit-slicing."
+           data-uk="Стан x₀…x₄ починається як IV ‖ K ‖ N (IV Ascon-128 = 80400C0600000000). Кожен раунд: константа в x₂ → 5-бітний S-box по стовпцях → ротаційна дифузія всередині кожного слова. Усі 64 стовпці проходять S-box паралельно — це bit-slicing.">State starts as IV ‖ K ‖ N…</div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://github.com/ascon/ascon-c" target="_blank" rel="noopener">ascon/ascon-c</a>
+      <span data-en="(official reference &amp; optimised C) — adoption into mainstream TLS libraries is only beginning; OpenSSL does not ship it yet." data-uk="(офіційний еталонний та оптимізований C) — впровадження в основні TLS-бібліотеки лише починається; в OpenSSL його ще немає.">…</span></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Why it won: a decade of open cryptanalysis (CAESAR 2014 → NIST 2023) never got past <b>7 of 12 rounds</b> of the initialisation — a huge margin for such a small state — while the design stays fast in software, tiny in hardware, and its bitwise operations make masking against side channels cheap. Keys are 128-bit; NIST SP 800-232 (2025) standardises AEAD, hash and XOF variants. See <a class='ext' href='https://csrc.nist.gov/projects/lightweight-cryptography' target='_blank' rel='noopener'>the NIST LWC project</a>."
+            data-uk="Чому переміг: десятиліття відкритого криптоаналізу (CAESAR 2014 → NIST 2023) не просунулося далі <b>7 з 12 раундів</b> ініціалізації — величезний запас для такого малого стану — а дизайн лишається швидким у софті, крихітним в апаратурі, і його побітові операції здешевлюють маскування проти побічних каналів. Ключі 128-бітні; NIST SP 800-232 (2025) стандартизує варіанти AEAD, хешу та XOF. Див. <a class='ext' href='https://csrc.nist.gov/projects/lightweight-cryptography' target='_blank' rel='noopener'>проєкт NIST LWC</a>.">…</span></div>
+    <div class="xrefs">
+      <a href="hash.html#sha3" data-en="SHA-3 — the sponge idea" data-uk="SHA-3 — ідея губки">SHA-3 — sponge</a>
+      <a href="symmetric.html#gcm" data-en="GCM — AEAD it replaces" data-uk="GCM — AEAD, який він заміняє">GCM — AEAD</a>
+      <a href="#gift" data-en="GIFT-COFB — the runner-up" data-uk="GIFT-COFB — фіналіст">GIFT-COFB</a>
+      <a href="stream.html#chacha" data-en="ChaCha20-Poly1305" data-uk="ChaCha20-Poly1305">ChaCha20-Poly1305</a>
+    </div>
+  </section>
+
+  <!-- ======================================================== CHASKEY -->
+  <section id="chaskey">
+    <div class="num" data-en="12 / Chaskey" data-uk="12 / Chaskey">12 / Chaskey</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c1">O(n)</span>
+        <span data-en="Chaskey — a MAC for Microcontrollers" data-uk="Chaskey — MAC для мікроконтролерів">Chaskey — a MAC for microcontrollers</span></h2>
+    <div class="formula">τ = trunc<sub>t</sub>( π(…π(π(K⊕m₁))⊕m₂…⊕mₗ⊕K₁) )</div>
+    <p class="desc" data-en="Chaskey (Mouha et al., 2014) authenticates messages on 8/16/32-bit microcontrollers where even AES-CMAC is too heavy: ~10× faster than AES software on a Cortex-M0. It is an <b>Even–Mansour MAC</b>: XOR the key into the state, apply a public ARX permutation π (four 32-bit words, add–rotate–xor, SipHash's shape with different rotations), absorb the next block, and finally truncate. Subkeys K₁/K₂ (multiplication by x in GF(2¹²⁸)) handle padding, exactly like CMAC. Standardised in ISO/IEC 29192-6. The stepper below runs the real π rounds."
+       data-uk="Chaskey (Mouha та ін., 2014) автентифікує повідомлення на 8/16/32-бітних мікроконтролерах, де навіть AES-CMAC заважкий: ~10× швидше за програмний AES на Cortex-M0. Це <b>MAC Івена–Мансура</b>: XOR ключа у стан, публічна ARX-перестановка π (чотири 32-бітні слова, add–rotate–xor, форма SipHash з іншими ротаціями), поглинання наступного блока і зрештою обрізання. Підключі K₁/K₂ (множення на x у GF(2¹²⁸)) обробляють доповнення, точно як у CMAC. Стандартизований в ISO/IEC 29192-6. Степер нижче виконує справжні раунди π.">Chaskey…</p>
+    <div id="refs-chaskey"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="state v₀v₁v₂v₃ = K⊕m (hex, 128 bit)" data-uk="стан v₀v₁v₂v₃ = K⊕m (hex, 128 біт)">state v₀v₁v₂v₃ = K⊕m (hex, 128 bit)</span></label>
+          <input type="text" id="chIn" value="833D3433009F389F2398E64F417ACF39" maxlength="32" style="width:300px"></div>
+        <div class="ctrl" style="flex:0">
+          <div class="actor-row" style="margin:0">
+            <button id="chReset" data-en="⟲ reset" data-uk="⟲ скинути">⟲ reset</button>
+            <button id="chStep" data-en="π round →" data-uk="раунд π →">π round →</button>
+            <button id="chRun" data-en="run π⁸ ⇒" data-uk="виконати π⁸ ⇒">run π⁸ ⇒</button>
+          </div>
+        </div>
+      </div>
+      <div class="readout" id="chOut"></div>
+    </div>
+    <p class="hint"><span data-en="Implementations:" data-uk="Реалізації:">Implementations:</span>
+      <a class="ext" href="https://mouha.be/chaskey/" target="_blank" rel="noopener">mouha.be/chaskey</a>
+      <span data-en="(reference code); not in OpenSSL." data-uk="(еталонний код); в OpenSSL відсутній.">(reference code)</span></p>
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Carries an Even–Mansour <b>security proof</b>: forging requires data·time ≈ 2¹²⁸, so security erodes gracefully with captured MACs (rekey before 2⁴⁸ blocks, as ISO advises). Differential-linear attacks reached 7 of the original 8 rounds, prompting the standardised <b>Chaskey-12</b> with 12 rounds (<a class='ext' href='https://eprint.iacr.org/2014/386' target='_blank' rel='noopener'>design paper</a>)."
+            data-uk="Має <b>доведення стійкості</b> Івена–Мансура: підробка вимагає дані·час ≈ 2¹²⁸, тож стійкість плавно спадає із захопленими MAC (зміна ключа до 2⁴⁸ блоків, як радить ISO). Диференціально-лінійні атаки сягнули 7 з початкових 8 раундів, що спричинило стандартизований <b>Chaskey-12</b> з 12 раундами (<a class='ext' href='https://eprint.iacr.org/2014/386' target='_blank' rel='noopener'>стаття авторів</a>).">…</span></div>
+    <div class="xrefs">
+      <a href="hash.html#poly1305" data-en="Poly1305 — the software MAC" data-uk="Poly1305 — програмний MAC">Poly1305</a>
+      <a href="hash.html#cmac" data-en="CMAC — same padding trick" data-uk="CMAC — той самий трюк доповнення">CMAC</a>
+      <a href="#simon" data-en="SPECK — ARX sibling" data-uk="SPECK — ARX-родич">SPECK — ARX</a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="<b>Where lightweight ciphers live:</b> almost none of them ship in OpenSSL or BoringSSL — their homes are microcontroller SDKs, RFID silicon, the Linux kernel (TEA/XTEA), vendor reference code and research libraries. Everything on this page runs the genuine algorithms (TEA, XTEA, XXTEA, PRESENT-80, SIMON32/64, SPECK32/64, KATAN32, the ASCON permutation, Chaskey's π) at their real parameters — only CLEFIA and LED are shown as scaled or single-round illustrations. Small block sizes (64 bits) and small keys (80 bits) trade security margin for gates: know the data limits before deploying."
+     data-uk="<b>Де живуть легковагові шифри:</b> майже жоден не входить до OpenSSL чи BoringSSL — їхні домівки: SDK мікроконтролерів, кремній RFID, ядро Linux (TEA/XTEA), еталонний код виробників і дослідницькі бібліотеки. Усе на цій сторінці виконує справжні алгоритми (TEA, XTEA, XXTEA, PRESENT-80, SIMON32/64, SPECK32/64, KATAN32, перестановку ASCON, π Chaskey) зі справжніми параметрами — лише CLEFIA і LED показані як зменшені чи однораундові ілюстрації. Малі блоки (64 біти) і малі ключі (80 біт) міняють запас стійкості на вентилі: знайте ліміти даних перед впровадженням."
+     data-i18n-html="1">Where lightweight ciphers live…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+// ======================= shared helpers ================================
+function UK(){ return window.LANG==='uk'; }
+function $(id){ return document.getElementById(id); }
+function h8(x){ return (x>>>0).toString(16).toUpperCase().padStart(8,'0'); }
+function h4(x){ return (x&0xFFFF).toString(16).toUpperCase().padStart(4,'0'); }
+function h2(x){ return (x&0xFF).toString(16).toUpperCase().padStart(2,'0'); }
+function h16(x){ return x.toString(16).toUpperCase().padStart(16,'0'); }
+function rotl16(x,n){ return ((x<<n)|(x>>>(16-n)))&0xFFFF; }
+function ror16(x,n){ return ((x>>>n)|(x<<(16-n)))&0xFFFF; }
+function rotl32(x,n){ return ((x<<n)|(x>>>(32-n)))>>>0; }
+function hexClean(s){ return (s||'').replace(/[^0-9a-fA-F]/g,''); }
+function word32(s,def){ const h=hexClean(s); return h? parseInt(h.slice(0,8),16)>>>0 : def>>>0; }
+function keyWords(s,defs){ // 32 hex chars -> 4 words
+  let h=hexClean(s); if(!h) return defs.slice();
+  h=(h+'0'.repeat(32)).slice(0,32);
+  return [0,1,2,3].map(i=>parseInt(h.slice(i*8,i*8+8),16)>>>0);
+}
+const PS=[0xC,5,6,0xB,9,0,0xA,0xD,3,0xE,0xF,8,4,7,1,2];      // PRESENT S-box
+const GS=[1,0xA,4,0xC,6,0xF,3,9,2,0xD,0xB,7,5,0,8,0xE];      // GIFT S-box
+
+// ============================ 01–02 TEA / XTEA =========================
+const TDELTA=0x9E3779B9;
+function teaEnc(variant,v0,v1,k,cyc,trace){
+  let sum=0; const rows=[];
+  for(let i=0;i<cyc;i++){
+    if(variant==='tea'){
+      sum=(sum+TDELTA)>>>0;
+      v0=(v0+((((v1<<4)>>>0)+k[0])^((v1+sum)>>>0)^(((v1>>>5)+k[1])>>>0)))>>>0;
+      v1=(v1+((((v0<<4)>>>0)+k[2])^((v0+sum)>>>0)^(((v0>>>5)+k[3])>>>0)))>>>0;
+    }else{
+      v0=(v0+(((((v1<<4)>>>0)^(v1>>>5))+v1)^((sum+k[sum&3])>>>0)))>>>0;
+      sum=(sum+TDELTA)>>>0;
+      v1=(v1+(((((v0<<4)>>>0)^(v0>>>5))+v0)^((sum+k[(sum>>>11)&3])>>>0)))>>>0;
+    }
+    if(trace) rows.push([sum,v0,v1]);
+  }
+  return {v0,v1,rows};
+}
+function teaDec(variant,v0,v1,k,cyc){
+  let sum=(TDELTA*cyc)>>>0;
+  for(let i=0;i<cyc;i++){
+    if(variant==='tea'){
+      v1=(v1-((((v0<<4)>>>0)+k[2])^((v0+sum)>>>0)^(((v0>>>5)+k[3])>>>0)))>>>0;
+      v0=(v0-((((v1<<4)>>>0)+k[0])^((v1+sum)>>>0)^(((v1>>>5)+k[1])>>>0)))>>>0;
+      sum=(sum-TDELTA)>>>0;
+    }else{
+      v1=(v1-(((((v0<<4)>>>0)^(v0>>>5))+v0)^((sum+k[(sum>>>11)&3])>>>0)))>>>0;
+      sum=(sum-TDELTA)>>>0;
+      v0=(v0-(((((v1<<4)>>>0)^(v1>>>5))+v1)^((sum+k[sum&3])>>>0)))>>>0;
+    }
+  }
+  return [v0,v1];
+}
+function teaInputs(){
+  return {
+    v0:word32($('teaV0').value,0x01234567),
+    v1:word32($('teaV1').value,0x89ABCDEF),
+    k:keyWords($('teaKey').value,[0xDEADBEEF,0x0BADF00D,0x1337C0DE,0xCAFEBABE]),
+    cyc:parseInt($('teaCyc').value)
+  };
+}
+function runTEA(){
+  const {v0,v1,k,cyc}=teaInputs();
+  const variant=$('teaVar').value;
+  $('teaCycVal').textContent=String(cyc);
+  const e=teaEnc(variant,v0,v1,k,cyc,true);
+  const d=teaDec(variant,e.v0,e.v1,k,cyc);
+  const kEq=[ (k[0]^0x80000000)>>>0,(k[1]^0x80000000)>>>0,k[2],k[3] ];
+  const e2=teaEnc(variant,v0,v1,kEq,cyc,false);
+  const same=(e2.v0===e.v0&&e2.v1===e.v1);
+  let s=`<span class="k">${variant.toUpperCase()}</span> · `+
+    `<span class="k">${UK()?'ключ':'key'}</span> = ${k.map(h8).join(' ')} · δ = 9E3779B9\n`;
+  const show = e.rows.map((r,i)=>
+    `<span class="k">${UK()?'цикл':'cycle'} ${String(i+1).padStart(2,'0')}</span>  sum=<span class="s">${h8(r[0])}</span>  v0=<span class="a">${h8(r[1])}</span>  v1=<span class="a">${h8(r[2])}</span>`);
+  s+=show.join('\n');
+  s+=`\n\n<span class="a">${UK()?'шифротекст':'ciphertext'}</span> = ${h8(e.v0)} ${h8(e.v1)}`;
+  s+=`\n<span class="b">${UK()?'розшифрування':'decrypt'}</span>   = ${h8(d[0])} ${h8(d[1])}  ${d[0]===v0&&d[1]===v1?'✓':'✗'}`;
+  s+=`\n\n<span class="s">${UK()?'експеримент: еквівалентні ключі':'experiment: equivalent keys'}</span> — k₀⊕=8000_0000, k₁⊕=8000_0000:`;
+  s+=`\n${UK()?'ключ′':'key′'} = ${kEq.map(h8).join(' ')}`;
+  s+=`\nE(${UK()?'ключ′':'key′'}) = ${h8(e2.v0)} ${h8(e2.v1)}  → `+(same
+    ?`<span class="b">${UK()?'ІДЕНТИЧНИЙ шифротекст — еквівалентний ключ! (ефективно 126 біт)':'IDENTICAL ciphertext — an equivalent key! (126 effective bits)'}</span>`
+    :`<span class="a">${UK()?'інший шифротекст — XTEA цю ваду виправив':'different ciphertext — XTEA fixed this flaw'}</span>`);
+  $('teaOut').innerHTML=s;
+  runXTEAcompare();
+}
+function runXTEAcompare(){
+  const {v0,v1,k,cyc}=teaInputs();
+  const kEq=[ (k[0]^0x80000000)>>>0,(k[1]^0x80000000)>>>0,k[2],k[3] ];
+  const t=teaEnc('tea',v0,v1,k,cyc,false),  t2=teaEnc('tea',v0,v1,kEq,cyc,false);
+  const x=teaEnc('xtea',v0,v1,k,cyc,false), x2=teaEnc('xtea',v0,v1,kEq,cyc,false);
+  const dec=teaDec('xtea',x.v0,x.v1,k,cyc);
+  $('xteaOut').innerHTML=
+    `<span class="k">${UK()?'блок':'block'}</span> = ${h8(v0)} ${h8(v1)} · <span class="k">${UK()?'ключ':'key'}</span> = ${k.map(h8).join(' ')} · ${cyc} ${UK()?'циклів':'cycles'}\n\n`+
+    `TEA : E(k) = <span class="a">${h8(t.v0)} ${h8(t.v1)}</span>   E(k⊕MSB) = <span class="a">${h8(t2.v0)} ${h8(t2.v1)}</span>  ${t.v0===t2.v0&&t.v1===t2.v1?`<span class="b">${UK()?'збіг — слабкість':'equal — the weakness'}</span>`:''}\n`+
+    `XTEA: E(k) = <span class="s">${h8(x.v0)} ${h8(x.v1)}</span>   E(k⊕MSB) = <span class="s">${h8(x2.v0)} ${h8(x2.v1)}</span>  ${x.v0===x2.v0&&x.v1===x2.v1?'✗':`<span class="a">${UK()?'різні — виправлено':'different — repaired'}</span>`}\n\n`+
+    `XTEA D(E(m)) = ${h8(dec[0])} ${h8(dec[1])}  ${dec[0]===v0&&dec[1]===v1?'✓ '+(UK()?'зворотний хід':'round-trip'):'✗'}`;
+}
+
+// ============================ 03 XXTEA =================================
+function mxf(sum,y,z,p,e,k){
+  return ((((z>>>5)^(y<<2))+((y>>>3)^(z<<4)))^((((sum^y)>>>0)+((k[(p&3)^e]^z)>>>0))|0))|0;
+}
+function xxteaEnc(v,k){
+  const n=v.length; let rounds=6+Math.floor(52/n), sum=0, y, z=v[n-1], e;
+  const sums=[];
+  while(rounds-->0){
+    sum=(sum+TDELTA)>>>0; sums.push(sum); e=(sum>>>2)&3;
+    for(let p=0;p<n;p++){ y=v[(p+1)%n]; z=v[p]=(v[p]+mxf(sum,y,z,p,e,k))>>>0; }
+  }
+  return sums;
+}
+function xxteaDec(v,k){
+  const n=v.length; const rounds=6+Math.floor(52/n);
+  let sum=(rounds*TDELTA)>>>0, y=v[0], z, e;
+  while(sum!==0){
+    e=(sum>>>2)&3;
+    for(let p=n-1;p>=0;p--){ z=v[(p+n-1)%n]; y=v[p]=(v[p]-mxf(sum,y,z,p,e,k))>>>0; }
+    sum=(sum-TDELTA)>>>0;
+  }
+}
+function runXXTEA(){
+  let h=hexClean($('xxBlock').value);
+  if(h.length<16) h=(h+'0123456789ABCDEF').slice(0,16);
+  h=h.slice(0,Math.max(16,h.length-(h.length%8)));
+  const n=h.length/8;
+  const v=[]; for(let i=0;i<n;i++) v.push(parseInt(h.slice(i*8,i*8+8),16)>>>0);
+  const k=keyWords($('xxKey').value,[0xDEADBEEF,0x0BADF00D,0x1337C0DE,0xCAFEBABE]);
+  const orig=v.slice();
+  const ct=v.slice(); const sums=xxteaEnc(ct,k);
+  const rt=ct.slice(); xxteaDec(rt,k);
+  const ok=rt.every((w,i)=>w===orig[i]);
+  $('xxOut').innerHTML=
+    `n = <span class="s">${n}</span> ${UK()?'слів':'words'} · ${UK()?'зовнішніх раундів':'outer rounds'} = 6+⌊52/${n}⌋ = <span class="s">${6+Math.floor(52/n)}</span>\n`+
+    `<span class="k">sum:</span> ${h8(sums[0])}, ${h8(sums[1])}, … , ${h8(sums[sums.length-1])}\n\n`+
+    `<span class="k">${UK()?'вхід':'input'}</span>  = ${orig.map(h8).join(' ')}\n`+
+    `<span class="a">${UK()?'шифр':'cipher'}</span> = ${ct.map(h8).join(' ')}\n`+
+    `<span class="b">${UK()?'назад':'back'}</span>  = ${rt.map(h8).join(' ')}  ${ok?'✓':'✗'}`;
+}
+
+// ============================ 04 PRESENT ===============================
+const Pperm=i=> i===63?63:(16*i)%63;
+function presSbox(s){ let t=0n; for(let i=0;i<16;i++) t|=BigInt(PS[Number((s>>BigInt(4*i))&0xFn)])<<BigInt(4*i); return t; }
+function presPlayer(s){ let u=0n; for(let i=0;i<64;i++) if((s>>BigInt(i))&1n) u|=1n<<BigInt(Pperm(i)); return u; }
+function presEnc(pt,key){
+  const M80=(1n<<80n)-1n;
+  let K=key&M80, s=pt&((1n<<64n)-1n);
+  const rks=[];
+  for(let r=1;r<=32;r++){
+    rks.push(K>>16n);
+    K=((K<<61n)&M80)|(K>>19n);
+    const top=Number(K>>76n)&0xF;
+    K=(K&((1n<<76n)-1n))|(BigInt(PS[top])<<76n);
+    K^=BigInt(r)<<15n;
+  }
+  const st=[];
+  for(let r=0;r<31;r++){ s^=rks[r]; s=presPlayer(presSbox(s)); st.push(s); }
+  s^=rks[31];
+  return {ct:s,st,rks};
+}
+function runPresentEnc(){
+  const pt=BigInt('0x'+(hexClean($('prPt').value)||'0'));
+  const key=BigInt('0x'+(hexClean($('prKey').value)||'0'));
+  const r=presEnc(pt,key);
+  $('prOut').innerHTML=
+    `<span class="k">K₁</span> = ${h16(r.rks[0])}   <span class="k">K₂</span> = ${h16(r.rks[1])}\n`+
+    `<span class="k">${UK()?'раунд':'round'} 1</span>  → ${h16(r.st[0])}\n`+
+    `<span class="k">${UK()?'раунд':'round'} 2</span>  → ${h16(r.st[1])}\n`+
+    `<span class="k">…</span>\n`+
+    `<span class="k">${UK()?'раунд':'round'} 31</span> → ${h16(r.st[30])}\n`+
+    `⊕ K₃₂ → <span class="a">${UK()?'шифротекст':'ciphertext'} = ${h16(r.ct)}</span>`;
+}
+// ---- canvas: pLayer diffusion trace ----
+const prCtx=$('prCanvas').getContext('2d');
+let prAnimT=1, prAnimReq=null;
+function prSets(bit,rounds){
+  let act=new Set([bit]); const layers=[];
+  for(let r=0;r<rounds;r++){
+    const nib=new Set();
+    act.forEach(b=>{ const base=b-(b%4); for(let j=0;j<4;j++) nib.add(base+j); });
+    const out=new Set(); nib.forEach(b=>out.add(Pperm(b)));
+    layers.push({pre:nib,post:out});
+    act=out;
+  }
+  return layers;
+}
+function drawPresent(){
+  const W=440,H=300, topY=42, botY=H-42;
+  const x=i=>14+i*((W-28)/63);
+  const bit=parseInt($('prBit').value), rounds=parseInt($('prRounds').value);
+  $('prBitVal').textContent=String(bit); $('prRoundsVal').textContent=String(rounds);
+  const layers=prSets(bit,rounds), last=layers[layers.length-1];
+  prCtx.clearRect(0,0,W,H);
+  // faint full wiring
+  prCtx.lineWidth=1; prCtx.strokeStyle='rgba(35,49,80,.8)';
+  for(let i=0;i<64;i++){ prCtx.beginPath(); prCtx.moveTo(x(i),topY); prCtx.lineTo(x(Pperm(i)),botY); prCtx.stroke(); }
+  // highlighted wires (animated)
+  prCtx.lineWidth=1.8; prCtx.strokeStyle='#F2A65A';
+  last.pre.forEach(i=>{
+    const x1=x(i),y1=topY,x2=x(Pperm(i)),y2=botY;
+    prCtx.beginPath(); prCtx.moveTo(x1,y1);
+    prCtx.lineTo(x1+(x2-x1)*prAnimT, y1+(y2-y1)*prAnimT); prCtx.stroke();
+  });
+  // nodes
+  for(let i=0;i<64;i++){
+    prCtx.beginPath(); prCtx.arc(x(i),topY,2.6,0,7);
+    prCtx.fillStyle=last.pre.has(i)?'#7FDBCA':'#2C3A5C'; prCtx.fill();
+    prCtx.beginPath(); prCtx.arc(x(i),botY,2.6,0,7);
+    prCtx.fillStyle=(prAnimT>0.98&&last.post.has(i))?'#F2A65A':'#2C3A5C'; prCtx.fill();
+  }
+  // labels
+  prCtx.fillStyle='#8B97B4'; prCtx.font='10.5px JetBrains Mono, monospace';
+  prCtx.fillText(UK()?'вхідні біти 0…63 (після S-box)':'input bits 0…63 (after S-box)',14,topY-16);
+  prCtx.fillText(UK()?'вихід pLayer: біт i → 16·i mod 63':'pLayer output: bit i → 16·i mod 63',14,botY+26);
+  prCtx.fillStyle='#7FDBCA';
+  const counts=[1]; layers.forEach(l=>counts.push(l.post.size));
+  prCtx.fillText((UK()?'активних бітів: ':'active bits: ')+counts.join(' → '),14,16);
+}
+function prAnimate(){
+  prAnimT=0;
+  if(prAnimReq) cancelAnimationFrame(prAnimReq);
+  const t0=performance.now();
+  (function fr(t){
+    prAnimT=Math.min(1,(t-t0)/450);
+    drawPresent();
+    if(prAnimT<1) prAnimReq=requestAnimationFrame(fr);
+  })(t0);
+}
+
+// ============================ 05 SIMON / SPECK =========================
+const Z0=[1,1,1,1,1,0,1,0,0,0,1,0,0,1,0,1,0,1,1,0,0,0,0,1,1,1,0,0,1,1,0,1,
+          1,1,1,1,0,1,0,0,0,1,0,0,1,0,1,0,1,1,0,0,0,0,1,1,1,0,0,1,1,0];
+function simonKS(k){
+  const ks=k.slice();
+  for(let i=4;i<32;i++){
+    let t=ror16(ks[i-1],3)^ks[i-3];
+    t^=ror16(t,1);
+    ks.push(((~ks[i-4])&0xFFFF)^t^Z0[(i-4)%62]^3);
+  }
+  return ks.map(v=>v&0xFFFF);
+}
+function speckKS(k){ // k[0]=k0, l=[l0,l1,l2]
+  const ks=[k[0]], l=[k[1],k[2],k[3]];
+  for(let i=0;i<21;i++){
+    l.push((((ks[i]+ror16(l[i],7))&0xFFFF)^i)&0xFFFF);
+    ks.push((rotl16(ks[i],2)^l[i+3])&0xFFFF);
+  }
+  return ks;
+}
+let SM={rows:[],i:0,x:0,y:0,ks:[],cipher:'simon',total:32};
+function smReset(){
+  const cipher=$('smCipher').value;
+  const kh=(hexClean($('smKey').value)+'0'.repeat(16)).slice(0,16);
+  const kw=[0,1,2,3].map(i=>parseInt(kh.slice(i*4,i*4+4),16)); // k3 k2 k1 k0
+  const k=[kw[3],kw[2],kw[1],kw[0]];
+  SM={ rows:[], i:0,
+       x:parseInt(hexClean($('smX').value)||'0',16)&0xFFFF,
+       y:parseInt(hexClean($('smY').value)||'0',16)&0xFFFF,
+       ks: cipher==='simon'?simonKS(k):speckKS(k),
+       cipher, total: cipher==='simon'?32:22 };
+  smRender();
+}
+function smStep(){
+  if(SM.i>=SM.total) return;
+  const k=SM.ks[SM.i];
+  if(SM.cipher==='simon'){
+    const t=SM.x;
+    SM.x=(SM.y^((rotl16(SM.x,1)&rotl16(SM.x,8))^rotl16(SM.x,2))^k)&0xFFFF;
+    SM.y=t;
+  }else{
+    SM.x=(((ror16(SM.x,7)+SM.y)&0xFFFF)^k)&0xFFFF;
+    SM.y=(rotl16(SM.y,2)^SM.x)&0xFFFF;
+  }
+  SM.rows.push([SM.i,k,SM.x,SM.y]); SM.i++;
+  smRender();
+}
+function smRunAll(){ while(SM.i<SM.total) smStep(); }
+function smRender(){
+  const name=SM.cipher==='simon'?'SIMON32/64':'SPECK32/64';
+  let s=`<span class="k">${name}</span> · ${SM.total} ${UK()?'раундів':'rounds'} · `+
+        `${UK()?'раундові ключі':'round keys'} k₀…k₃ = ${SM.ks.slice(0,4).map(h4).join(' ')}\n\n`;
+  if(!SM.rows.length) s+=`<span class="k">${UK()?'натисніть «крок» або «усі раунди»':'press “step” or “run all”'}</span>  x=${h4(SM.x)} y=${h4(SM.y)}`;
+  else s+=SM.rows.map(r=>
+    `<span class="k">r${String(r[0]+1).padStart(2,'0')}</span> k=<span class="s">${h4(r[1])}</span>  x=<span class="a">${h4(r[2])}</span>  y=<span class="a">${h4(r[3])}</span>`).join('\n');
+  if(SM.i>=SM.total) s+=`\n\n<span class="a">${UK()?'шифротекст':'ciphertext'} = ${h4(SM.x)} ${h4(SM.y)}</span>`;
+  $('smOut').innerHTML=s;
+}
+
+// ============================ 06 CLEFIA (toy GFN) ======================
+function clF(x,k,rot){ x=(x^k)&0xFF; x=((PS[x>>4]<<4)|PS[x&15])&0xFF; return ((x<<rot)|(x>>(8-rot)))&0xFF; }
+function runCLEFIA(){
+  const h=(hexClean($('clIn').value)+'A1B2C3D4').slice(0,8);
+  let b=[0,1,2,3].map(i=>parseInt(h.slice(i*2,i*2+2),16));
+  const key=parseInt(hexClean($('clK').value)||'3C5F',16)&0xFFFF;
+  const R=parseInt($('clRounds').value);
+  $('clRoundsVal').textContent=String(R);
+  let s=`<span class="k">(x₀,x₁,x₂,x₃)</span> = ${b.map(h2).join(' ')}\n`;
+  for(let r=0;r<R;r++){
+    const k0=(key^(r*0x35))&0xFF, k1=((key>>8)^(r*0x5B))&0xFF;
+    const f0=clF(b[0],k0,2), f1=clF(b[2],k1,5);
+    b=[(b[1]^f0)&0xFF, b[2], (b[3]^f1)&0xFF, b[0]];
+    s+=`<span class="k">r${r+1}</span> F₀(${h2(k0)})=<span class="s">${h2(f0)}</span> F₁(${h2(k1)})=<span class="s">${h2(f1)}</span> → <span class="a">${b.map(h2).join(' ')}</span>\n`;
+  }
+  s+=`\n${UK()?'кожні 4 раунди кожен байт побував у кожній гілці — дифузія GFN₄':'every 4 rounds each byte has visited every branch — GFN₄ diffusion'}`;
+  $('clOut').innerHTML=s;
+}
+
+// ============================ 07 PRINCE α-reflection ===================
+function runPRINCE(){
+  const RC=['0000000000000000','13198a2e03707344','a4093822299f31d0','082efa98ec4e6c89',
+            '452821e638d01377','be5466cf34e90c6c','7ef84f78fd955cb1','85840851f1ac43aa',
+            'c882d32f25323c54','64a51195e0e3610d','d3b5a399ca0c2399','c0ac29b7c97c50dd'];
+  const A=BigInt('0xc0ac29b7c97c50dd');
+  let ok=true, s=`<span class="k">${UK()?'раундові константи PRINCE (цифри π):':'PRINCE round constants (digits of π):'}</span>\n`;
+  for(let i=0;i<6;i++){
+    const x=BigInt('0x'+RC[i])^BigInt('0x'+RC[11-i]);
+    const eq=(x===A); ok=ok&&eq;
+    s+=`RC${String(i).padStart(2)} ⊕ RC${11-i} = <span class="${eq?'a':'b'}">${h16(x)}</span> ${eq?'= α ✓':'✗'}\n`;
+  }
+  s+=`\n<span class="s">α = ${h16(A)}</span>\n`;
+  s+=ok?`\n${UK()?'усі 6 пар збігаються з α наживо — тому':'all 6 pairs equal α, verified live — hence'} <span class="a">D(k₀‖k₁) = E(k₀′‖k₁⊕α)</span>: ${UK()?'той самий кремній шифрує і розшифровує':'the same silicon both encrypts and decrypts'}`:'✗';
+  $('prcOut').innerHTML=s;
+}
+
+// ============================ 08 LED one round =========================
+function gf16m(a,b){ let r=0; while(b){ if(b&1)r^=a; b>>=1; a<<=1; if(a&0x10)a^=0x13; } return r&0xF; }
+const LEDM=[[4,1,2,2],[8,6,5,6],[0xB,0xE,0xA,9],[2,2,0xF,0xB]];
+function runLED(){
+  const h=(hexClean($('ledIn').value)+'0123456789ABCDEF').slice(0,16);
+  let st=[...h].map(c=>parseInt(c,16)); // 16 nibbles row-major
+  const fmt=a=>a.map(v=>v.toString(16).toUpperCase()).join('').replace(/(.{4})/g,'$1 ').trim();
+  const sc=st.map(v=>PS[v]);
+  const sr=sc.slice();
+  for(let r=1;r<4;r++){ const row=sc.slice(r*4,r*4+4); for(let c=0;c<4;c++) sr[r*4+c]=row[(c+r)%4]; }
+  const mc=new Array(16);
+  for(let c=0;c<4;c++) for(let r=0;r<4;r++){
+    let v=0; for(let k=0;k<4;k++) v^=gf16m(LEDM[r][k],sr[k*4+c]);
+    mc[r*4+c]=v;
+  }
+  $('ledOut').innerHTML=
+    `<span class="k">${UK()?'стан':'state'}</span>            ${fmt(st)}\n`+
+    `<span class="k">SubCells (PRESENT S-box)</span> → <span class="a">${fmt(sc)}</span>\n`+
+    `<span class="k">ShiftRows</span>       → <span class="a">${fmt(sr)}</span>\n`+
+    `<span class="k">MixColumnsSerial (GF(2⁴), x⁴+x+1)</span> → <span class="s">${fmt(mc)}</span>\n\n`+
+    `${UK()?'через кожні 4 такі раунди: state ⊕= K (ключ без розкладу)':'after every 4 such rounds: state ⊕= K (the un-scheduled key)'}`;
+}
+
+// ============================ 09 KATAN32 ===============================
+const KT={L1:[],L2:[],k:[],ir:[],r:0,timer:null};
+function ktIRseq(){
+  const ir=[]; let t=0xFF;
+  for(let i=0;i<254;i++){
+    ir.push((t>>7)&1);
+    const fb=((t>>7)^(t>>6)^(t>>4)^(t>>2))&1;
+    t=((t<<1)|fb)&0xFF;
+  }
+  return ir;
+}
+function ktReset(){
+  if(KT.timer){ clearInterval(KT.timer); KT.timer=null; $('ktPlay').textContent=UK()?'▶ пуск':'▶ play'; }
+  const pt=word32($('ktPt').value,0);
+  let kh=(hexClean($('ktKey').value)+'F'.repeat(20)).slice(0,20);
+  const key=BigInt('0x'+kh);
+  KT.L2=[]; KT.L1=[];
+  for(let i=0;i<19;i++) KT.L2.push(Number((BigInt(pt)>>BigInt(i))&1n));
+  for(let i=0;i<13;i++) KT.L1.push(Number((BigInt(pt)>>BigInt(i+19))&1n));
+  KT.k=[];
+  for(let i=0;i<80;i++) KT.k.push(Number((key>>BigInt(79-i))&1n));
+  for(let i=80;i<508;i++) KT.k.push(KT.k[i-80]^KT.k[i-61]^KT.k[i-50]^KT.k[i-13]);
+  KT.ir=ktIRseq(); KT.r=0;
+  ktDraw(); ktReadout();
+}
+function ktStepN(n){
+  for(let j=0;j<n&&KT.r<254;j++){
+    const i=KT.r, ir=KT.ir[i], ka=KT.k[2*i], kb=KT.k[2*i+1];
+    const L1=KT.L1, L2=KT.L2;
+    const fa=L1[12]^L1[7]^(L1[8]&L1[5])^(L1[3]&ir)^ka;
+    const fb=L2[18]^L2[7]^(L2[12]&L2[10])^(L2[8]&L2[3])^kb;
+    KT.L1=[fb].concat(L1.slice(0,12));
+    KT.L2=[fa].concat(L2.slice(0,18));
+    KT.r++;
+  }
+  ktDraw(); ktReadout();
+  if(KT.r>=254&&KT.timer){ clearInterval(KT.timer); KT.timer=null; $('ktPlay').textContent=UK()?'▶ пуск':'▶ play'; }
+}
+function ktState32(){
+  let v=0;
+  for(let i=0;i<19;i++) v|=KT.L2[i]<<i;
+  for(let i=0;i<13;i++) v|=KT.L1[i]<<(i+19);
+  return v>>>0;
+}
+function ktDraw(){
+  const c=$('ktCanvas').getContext('2d'), W=440,H=190;
+  c.clearRect(0,0,W,H);
+  const cell=(x,y,bit,tap)=>{
+    c.fillStyle=bit?'#7FDBCA':'#182339'; c.fillRect(x,y,18,18);
+    c.strokeStyle=tap?'#F2A65A':'#233150'; c.lineWidth=tap?2:1; c.strokeRect(x,y,18,18);
+  };
+  c.fillStyle='#8B97B4'; c.font='10.5px JetBrains Mono, monospace';
+  c.fillText('L1 (13 bit)  fa → L2',14,30);
+  const taps1=new Set([12,7,8,5,3]);
+  for(let i=0;i<13;i++) cell(14+i*21,40,KT.L1[12-i],taps1.has(12-i));
+  c.fillText('L2 (19 bit)  fb → L1',14,110);
+  const taps2=new Set([18,7,12,10,8,3]);
+  for(let i=0;i<19;i++) cell(14+i*21,120,KT.L2[18-i],taps2.has(18-i));
+  c.fillStyle='#F2A65A';
+  c.fillText((UK()?'такт ':'round ')+KT.r+' / 254   IR='+(KT.r<254?KT.ir[KT.r]:'—'),14,170);
+}
+function ktReadout(){
+  const done=KT.r>=254;
+  $('ktOut').innerHTML=
+    `<span class="k">${UK()?'такт':'round'}</span> ${KT.r}/254 · IR=${KT.r<254?KT.ir[KT.r]:'—'} · `+
+    `kₐ=${KT.r<254?KT.k[2*KT.r]:'—'} k_b=${KT.r<254?KT.k[2*KT.r+1]:'—'}\n`+
+    `<span class="k">${UK()?'стан (32 біти)':'state (32 bit)'}</span> = <span class="${done?'a':'s'}">${h8(ktState32())}</span>`+
+    (done?`  ← <span class="a">${UK()?'шифротекст після 254 тактів':'ciphertext after 254 clocks'}</span>`:'')+
+    `\n<span class="k">${UK()?'розширення ключа':'key expansion'}</span>: k${2*Math.min(KT.r,253)}=k${2*Math.min(KT.r,253)-80<0?'…':2*Math.min(KT.r,253)-80+'⊕k'+(2*Math.min(KT.r,253)-61)+'⊕k'+(2*Math.min(KT.r,253)-50)+'⊕k'+(2*Math.min(KT.r,253)-13)}`;
+}
+function ktTogglePlay(){
+  if(KT.timer){ clearInterval(KT.timer); KT.timer=null; $('ktPlay').textContent=UK()?'▶ пуск':'▶ play'; return; }
+  if(KT.r>=254) ktReset();
+  $('ktPlay').textContent=UK()?'⏸ пауза':'⏸ pause';
+  KT.timer=setInterval(()=>ktStepN(parseInt($('ktSpeed').value)),80);
+}
+
+// ============================ 10 GIFT DDT ==============================
+function runGIFT(){
+  const S=$('gfSbox').value==='gift'?GS:PS;
+  const D=Array.from({length:16},()=>Array(16).fill(0));
+  for(let a=0;a<16;a++) for(let x=0;x<16;x++) D[a][S[x]^S[x^a]]++;
+  let mx=0;
+  for(let a=1;a<16;a++) for(let b=0;b<16;b++) if(D[a][b]>mx) mx=D[a][b];
+  const c=$('gfCanvas').getContext('2d'), cs=15, off=28;
+  c.clearRect(0,0,280,280);
+  c.font='9.5px JetBrains Mono, monospace';
+  for(let i=0;i<16;i++){
+    c.fillStyle='#8B97B4';
+    c.fillText(i.toString(16).toUpperCase(),off+i*cs+4,off-6);
+    c.fillText(i.toString(16).toUpperCase(),off-14,off+i*cs+11);
+  }
+  for(let a=0;a<16;a++) for(let b=0;b<16;b++){
+    const v=D[a][b];
+    c.fillStyle = v===0?'#0E1626' : v===16?'#3A4A6B' : v===2?'#2C6B60' : v===4?'#C08344' : '#E8607A';
+    c.fillRect(off+b*cs,off+a*cs,cs-1,cs-1);
+  }
+  c.fillStyle='#8B97B4';
+  c.fillText(UK()?'a↓  b→':'a↓  b→',off+16*cs-40,off+16*cs+14);
+  $('gfOut').innerHTML=
+    `${UK()?'S-box':'S-box'} = [${S.map(v=>v.toString(16).toUpperCase()).join(' ')}]\n`+
+    `max DDT (a≠0) = <span class="s">${mx}/16</span> → ${UK()?'найкращий однораундовий диференціал':'best one-round differential'}: p = ${mx}/16 = 2^${Math.log2(mx/16).toFixed(1)}\n`+
+    `${UK()?'рядок a=0 — тривіальний (b=0, 16/16)':'row a=0 is trivial (b=0, 16/16)'}`;
+}
+
+// ============================ 11 ASCON =================================
+const M64=(1n<<64n)-1n;
+function ror64(x,n){ const b=BigInt(n); return ((x>>b)|(x<<(64n-b)))&M64; }
+const ARC=[0xf0n,0xe1n,0xd2n,0xc3n,0xb4n,0xa5n,0x96n,0x87n,0x78n,0x69n,0x5an,0x4bn];
+function asconRound(x,c){
+  x[2]^=c;
+  x[0]^=x[4]; x[4]^=x[3]; x[2]^=x[1];
+  const t=x.map((xi,i)=>((~xi)&M64)&x[(i+1)%5]);
+  x[0]^=t[1]; x[1]^=t[2]; x[2]^=t[3]; x[3]^=t[4]; x[4]^=t[0];
+  x[1]^=x[0]; x[0]^=x[4]; x[3]^=x[2]; x[2]=(~x[2])&M64;
+  x[0]^=ror64(x[0],19)^ror64(x[0],28);
+  x[1]^=ror64(x[1],61)^ror64(x[1],39);
+  x[2]^=ror64(x[2],1)^ror64(x[2],6);
+  x[3]^=ror64(x[3],10)^ror64(x[3],17);
+  x[4]^=ror64(x[4],7)^ror64(x[4],41);
+}
+const AS={x:[0n,0n,0n,0n,0n],r:0};
+function asInit(){
+  const kh=(hexClean($('asKey').value)+'0'.repeat(32)).slice(0,32);
+  const nh=(hexClean($('asNonce').value)+'0'.repeat(32)).slice(0,32);
+  AS.x=[ BigInt('0x80400c0600000000'),
+         BigInt('0x'+kh.slice(0,16)), BigInt('0x'+kh.slice(16)),
+         BigInt('0x'+nh.slice(0,16)), BigInt('0x'+nh.slice(16)) ];
+  AS.r=0; asRender();
+}
+function asStep(){ if(AS.r>=12) return; asconRound(AS.x,ARC[AS.r]); AS.r++; asRender(); }
+function asRunAll(){ while(AS.r<12) asStep(); }
+function asRender(){
+  let s=`<span class="k">p-${UK()?'раунд':'round'}</span> ${AS.r}/12`+
+    (AS.r<12?` · ${UK()?'наступна константа':'next constant'} c=<span class="s">${ARC[AS.r].toString(16).toUpperCase()}</span>`:` · <span class="a">p¹² ${UK()?'завершено — стан готовий поглинати дані':'complete — state ready to absorb data'}</span>`)+'\n';
+  for(let i=0;i<5;i++) s+=`x${i} = <span class="${i===0?'s':(AS.r===0&&i>0?'k':'a')}">${h16(AS.x[i])}</span>${AS.r===0?['  ← IV','  ← K hi','  ← K lo','  ← N hi','  ← N lo'][i]:''}\n`;
+  $('asOut').innerHTML=s;
+}
+function drawSponge(){
+  const c=$('asCanvas').getContext('2d'), W=440,H=220;
+  c.clearRect(0,0,W,H);
+  const box=(x,y,w,h,col,txt,txt2)=>{
+    c.strokeStyle=col; c.lineWidth=1.5; c.strokeRect(x,y,w,h);
+    c.fillStyle=col; c.font='10.5px JetBrains Mono, monospace';
+    if(txt) c.fillText(txt,x+w/2-c.measureText(txt).width/2,y+h/2+(txt2?-2:4));
+    if(txt2) c.fillText(txt2,x+w/2-c.measureText(txt2).width/2,y+h/2+11);
+  };
+  const arrow=(x1,y1,x2,y2,col)=>{
+    c.strokeStyle=col; c.lineWidth=1.3;
+    c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.stroke();
+    const a=Math.atan2(y2-y1,x2-x1);
+    c.beginPath(); c.moveTo(x2,y2);
+    c.lineTo(x2-6*Math.cos(a-.4),y2-6*Math.sin(a-.4));
+    c.lineTo(x2-6*Math.cos(a+.4),y2-6*Math.sin(a+.4));
+    c.closePath(); c.fillStyle=col; c.fill();
+  };
+  const uk=UK();
+  // init block
+  box(10,70,66,80,'#8B97B4','IV‖K‖N','320b');
+  box(96,70,54,80,'#7FDBCA','p¹²','');
+  arrow(76,110,96,110,'#8B97B4');
+  // two duplex steps
+  let x=170;
+  for(let i=0;i<2;i++){
+    // rate xor
+    arrow(x+16,20,x+16,62,'#F2A65A');           // m_i down
+    c.fillStyle='#F2A65A'; c.font='10.5px JetBrains Mono, monospace';
+    c.fillText('m'+(i+1),x+8,14);
+    c.beginPath(); c.arc(x+16,70,7,0,7); c.strokeStyle='#F2A65A'; c.lineWidth=1.3; c.stroke();
+    c.fillText('⊕',x+11,74);
+    arrow(x+26,70,x+52,70,'#F2A65A');
+    c.fillText('c'+(i+1),x+52,60);
+    box(x,84,34,28,'#F2A65A','rate','64b');
+    box(x,116,34,34,'#E8607A','cap.','256b');
+    box(x+50,84,40,66,'#7FDBCA',i===0?'p⁶':'p⁶','');
+    arrow(150+ (i===0?0:0),0,0,0,'rgba(0,0,0,0)'); // noop keep linter calm
+    if(i===0) arrow(150,110,x,110,'#8B97B4'); else arrow(260,110,x,110,'#8B97B4');
+    x+=120;
+  }
+  // finalisation
+  box(x,70,54,80,'#7FDBCA','p¹²','');
+  arrow(380,110,x,110,'#8B97B4');
+  arrow(x+54,110,x+54+26,110,'#B6E3A7');
+  c.fillStyle='#B6E3A7';
+  c.fillText(uk?'тег T':'tag T',x+30,166);
+  arrow(x+27,150,x+27,162,'#B6E3A7');
+  c.fillStyle='#8B97B4';
+  c.fillText(uk?'дуплексна губка Ascon-128: rate 64 біт, capacity 256 біт':'Ascon-128 duplex sponge: 64-bit rate, 256-bit capacity',10,205);
+}
+
+// ============================ 12 Chaskey π =============================
+const CH={v:[0,0,0,0],r:0};
+function chRound(v){
+  v[0]=(v[0]+v[1])>>>0; v[1]=(rotl32(v[1],5)^v[0])>>>0; v[0]=rotl32(v[0],16);
+  v[2]=(v[2]+v[3])>>>0; v[3]=(rotl32(v[3],8)^v[2])>>>0;
+  v[0]=(v[0]+v[3])>>>0; v[3]=(rotl32(v[3],13)^v[0])>>>0;
+  v[2]=(v[2]+v[1])>>>0; v[1]=(rotl32(v[1],7)^v[2])>>>0; v[2]=rotl32(v[2],16);
+}
+function chReset(){
+  CH.v=keyWords($('chIn').value,[0x833D3433,0x009F389F,0x2398E64F,0x417ACF39]);
+  CH.r=0; chRender();
+}
+function chStep(){ if(CH.r>=8) return; chRound(CH.v); CH.r++; chRender(); }
+function chRunAll(){ while(CH.r<8) chStep(); }
+function chRender(){
+  $('chOut').innerHTML=
+    `<span class="k">π-${UK()?'раунд':'round'}</span> ${CH.r}/8 · `+
+    `${UK()?'операції':'ops'}: +mod 2³², ⋘5/8/13/7/16, ⊕\n`+
+    `v = <span class="${CH.r===8?'a':'s'}">${CH.v.map(h8).join(' ')}</span>`+
+    (CH.r===8?`\n${UK()?'MAC = обрізаний стан після поглинання останнього блока з K₁':'MAC = truncated state after absorbing the final block with K₁'}`:'');
+}
+
+// ============================ references ===============================
+const REFS={
+  tea:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Tiny_Encryption_Algorithm',label:'Wikipedia: TEA'}},
+    {tag:'paper',en:{href:'https://www.cl.cam.ac.uk/ftp/papers/djw-rmn/djw-rmn-tea.html',label:'Wheeler–Needham: TEA (FSE 1994)'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/BFb0028479',label:'Kelsey–Schneier–Wagner: related-key (1997)'}},
+    {tag:'paper',en:{href:'https://events.ccc.de/congress/2005/fahrplan/attachments/591-paper_xbox.pdf',label:'Steil: 17 Mistakes (Xbox)'}}
+  ],
+  xtea:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/XTEA',label:'Wikipedia: XTEA'}},
+    {tag:'paper',en:{href:'https://www.cl.cam.ac.uk/ftp/users/djw3/xtea.ps',label:'Needham–Wheeler: TEA extensions (1997)'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/s10207-008-0059-9',label:'Lu: 36-round related-key rectangle'}}
+  ],
+  xxtea:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/XXTEA',label:'Wikipedia: XXTEA'}},
+    {tag:'paper',en:{href:'https://www.cl.cam.ac.uk/ftp/users/djw3/xxtea.ps',label:'Needham–Wheeler: Correction to XTEA (1998)'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2010/254',label:'Yarrkov: Cryptanalysis of XXTEA'}}
+  ],
+  present:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/PRESENT',label:'Wikipedia: PRESENT'}},
+    {tag:'paper',en:{href:'https://www.iacr.org/archive/ches2007/47270450/47270450.pdf',label:'Bogdanov et al.: PRESENT (CHES 2007)'}},
+    {tag:'iso',  en:{href:'https://www.iso.org/standard/78477.html',label:'ISO/IEC 29192-2:2019'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2009/397',label:'Cho: linear cryptanalysis, 26 rounds'}}
+  ],
+  simon:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Simon_(cipher)',label:'Wikipedia: Simon'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Speck_(cipher)',label:'Wikipedia: Speck'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2013/404',label:'NSA: SIMON & SPECK (ePrint 2013/404)'}},
+    {tag:'code', en:{href:'https://github.com/nsacyber/simon-speck',label:'nsacyber/simon-speck'}}
+  ],
+  clefia:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/CLEFIA',label:'Wikipedia: CLEFIA'}},
+    {tag:'rfc',  en:{href:'https://www.rfc-editor.org/rfc/rfc6114',label:'RFC 6114'}},
+    {tag:'iso',  en:{href:'https://www.iso.org/standard/78477.html',label:'ISO/IEC 29192-2:2019'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/978-3-540-74619-5_12',label:'Shirai et al.: CLEFIA (FSE 2007)'}}
+  ],
+  prince:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Prince_(cipher)',label:'Wikipedia: PRINCE'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2012/529',label:'Borghoff et al.: PRINCE (ePrint 2012/529)'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2020/1269',label:'PRINCEv2 (ePrint 2020/1269)'}}
+  ],
+  led:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Lightweight_cryptography',label:'Wikipedia: Lightweight cryptography'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2012/600',label:'Guo–Peyrin–Poschmann–Robshaw: LED'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/978-3-642-23951-9_22',label:'CHES 2011 version'}}
+  ],
+  katan:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/KATAN',label:'Wikipedia: KATAN'}},
+    {tag:'paper',en:{href:'https://doi.org/10.1007/978-3-642-04138-9_20',label:'De Cannière–Dunkelman–Knežević (CHES 2009)'}},
+    {tag:'code', en:{href:'https://www.cs.technion.ac.il/~orrd/KATAN/',label:'reference code (Technion)'}}
+  ],
+  gift:[
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2017/622',label:'Banik et al.: GIFT — a small PRESENT'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2020/738',label:'GIFT-COFB (NIST LWC finalist)'}},
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2016/660',label:'Beierle et al.: SKINNY'}},
+    {tag:'nist', en:{href:'https://csrc.nist.gov/projects/lightweight-cryptography',label:'NIST LWC project'}}
+  ],
+  ascon:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Ascon_(cipher)',label:'Wikipedia: Ascon'}},
+    {tag:'nist', en:{href:'https://csrc.nist.gov/pubs/sp/800/232/final',label:'NIST SP 800-232'}},
+    {tag:'nist', en:{href:'https://csrc.nist.gov/projects/lightweight-cryptography',label:'NIST LWC project'}},
+    {tag:'paper',en:{href:'https://ascon.isec.tugraz.at',label:'Ascon design team site'}},
+    {tag:'code', en:{href:'https://github.com/ascon/ascon-c',label:'ascon/ascon-c'}}
+  ],
+  chaskey:[
+    {tag:'paper',en:{href:'https://eprint.iacr.org/2014/386',label:'Mouha et al.: Chaskey (ePrint 2014/386)'}},
+    {tag:'iso',  en:{href:'https://www.iso.org/standard/71116.html',label:'ISO/IEC 29192-6'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/SipHash',label:'Wikipedia: SipHash (the sibling)'}},
+    {tag:'code', en:{href:'https://mouha.be/chaskey/',label:'mouha.be/chaskey'}}
+  ]
+};
+function renderRefs(){
+  for(const id in REFS){
+    const el=$('refs-'+id);
+    if(el) el.innerHTML=window.atlasRefs(REFS[id]);
+  }
+}
+function renderLegend(){
+  const Lg=I18N[window.LANG].lvlLegend;
+  $('lvlLegend').innerHTML=[1,2,3].map((n,i)=>`<span>${window.atlasBadge(n)} ${Lg[i]}</span>`).join('');
+}
+
+// ============================ wiring / boot ============================
+['teaVar','teaCyc','teaV0','teaV1','teaKey'].forEach(id=>$(id).addEventListener('input',runTEA));
+['xxBlock','xxKey'].forEach(id=>$(id).addEventListener('input',runXXTEA));
+['prPt','prKey'].forEach(id=>$(id).addEventListener('input',runPresentEnc));
+['prBit','prRounds'].forEach(id=>$(id).addEventListener('input',prAnimate));
+['smCipher','smX','smY','smKey'].forEach(id=>$(id).addEventListener('input',smReset));
+$('smReset').addEventListener('click',smReset);
+$('smStep').addEventListener('click',smStep);
+$('smRun').addEventListener('click',smRunAll);
+['clIn','clK','clRounds'].forEach(id=>$(id).addEventListener('input',runCLEFIA));
+$('ledIn').addEventListener('input',runLED);
+['ktPt','ktKey'].forEach(id=>$(id).addEventListener('input',ktReset));
+$('ktSpeed').addEventListener('input',()=>{ $('ktSpeedVal').textContent=$('ktSpeed').value; });
+$('ktPlay').addEventListener('click',ktTogglePlay);
+$('ktStep').addEventListener('click',()=>ktStepN(1));
+$('ktReset').addEventListener('click',ktReset);
+$('gfSbox').addEventListener('change',runGIFT);
+['asKey','asNonce'].forEach(id=>$(id).addEventListener('input',asInit));
+$('asReset').addEventListener('click',asInit);
+$('asStep').addEventListener('click',asStep);
+$('asRun').addEventListener('click',asRunAll);
+$('chIn').addEventListener('input',chReset);
+$('chReset').addEventListener('click',chReset);
+$('chStep').addEventListener('click',chStep);
+$('chRun').addEventListener('click',chRunAll);
+
+function runAll(){
+  runTEA(); runXXTEA(); runPresentEnc(); drawPresent();
+  smRender(); runCLEFIA(); runPRINCE(); runLED();
+  ktDraw(); ktReadout(); runGIFT(); drawSponge(); asRender(); chRender();
+}
+runTEA(); runXXTEA(); runPresentEnc(); prAnimate();
+smReset(); runCLEFIA(); runPRINCE(); runLED();
+ktReset(); runGIFT(); drawSponge(); asInit(); chReset();
+
+window.onLangChange=function(){
+  renderLegend(); renderRefs(); runAll();
+  if(KT.timer) $('ktPlay').textContent=UK()?'⏸ пауза':'⏸ pause';
+};
+</script>
+</body>
+</html>

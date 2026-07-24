@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block-cipher modes — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="modes">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 3 — the modes that turn a block cipher into a usable tool"
+         data-uk="Розділ 3 — режими, що перетворюють блоковий шифр на робочий інструмент">Section 3</div>
+    <h1 data-en="Block-Cipher Modes" data-uk="Режими роботи блокових шифрів">Block-cipher modes</h1>
+    <p class="lede" data-en="A block cipher only enciphers one fixed-size block. A <b>mode of operation</b> wires many blocks together — and each mode makes different promises. Here are the modern &lsquo;fill-out&rsquo; modes beyond ECB/CBC/CTR: disk encryption (XTS), nonce-misuse-resistant AEAD (GCM-SIV / SIV), single-pass AEAD (OCB, EAX), key wrapping (KW), format-preserving encryption (FF1/FF3), and the composition question of Encrypt-then-MAC. Every demo runs a real toy computation you can verify."
+       data-uk="Блоковий шифр шифрує лише один блок фіксованого розміру. <b>Режим роботи</b> сполучає багато блоків разом — і кожен режим дає різні гарантії. Тут — сучасні режими понад ECB/CBC/CTR: шифрування дисків (XTS), стійке до повторення нонса AEAD (GCM-SIV / SIV), однопрохідне AEAD (OCB, EAX), загортання ключів (KW), формозберігаюче шифрування (FF1/FF3) та питання композиції Encrypt-then-MAC. Кожне демо виконує справжнє іграшкове обчислення, яке можна перевірити.">The modes that turn a block cipher into a usable tool.</p>
+    <div class="readout" id="selftest" style="margin-top:18px; max-width:620px;"></div>
+    <div class="hint" style="max-width:620px" data-en="Note: every demo below uses a deliberately weak, clearly-labelled TOY block cipher (E(x)=AES-S-box[x⊕k] on tiny blocks) so the numbers stay legible. It is NOT secure — it exists only to make the mode's structure visible and verifiable."
+         data-uk="Примітка: кожне демо нижче використовує навмисно слабкий, чітко позначений ІГРАШКОВИЙ блоковий шифр (E(x)=AES-S-бокс[x⊕k] на крихітних блоках), щоб числа лишалися читними. Він НЕ захищений — існує лише щоб зробити структуру режиму видимою й перевірюваною."></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ============ XTS ============ -->
+  <section id="xts">
+    <span class="num" data-en="03 / XTS-AES" data-uk="03 / XTS-AES">03 / XTS-AES</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="XTS-AES — Disk Encryption" data-uk="XTS-AES — шифрування дисків">XTS-AES</span></h2>
+    <div class="formula">Cᵢ = E_K1(Pᵢ ⊕ Tᵢ) ⊕ Tᵢ,   Tᵢ = E_K2(sector) · αⁱ   in GF(2¹²⁸)</div>
+    <p class="desc" data-en="Disk encryption has no room for a nonce and no room to grow the ciphertext: sector <i>i</i>, block <i>j</i> must map to exactly one ciphertext block in place. XTS solves this with a <b>tweakable</b> cipher: a per-sector tweak T = E_K2(sector) is stepped by multiplying by α = 2 in GF(2¹²⁸) for each block position, then XORed in before and after encryption. So the <b>same plaintext at two different positions encrypts to different ciphertext</b> — defeating the pattern leaks of ECB — while staying length-preserving and random-access. The demo enciphers one constant plaintext byte across two sectors × eight block positions with a <b>toy</b> cipher and a toy GF(2⁸) tweak; watch every cell differ."
+       data-uk="У шифруванні дисків немає місця для нонса й немає місця, щоб збільшити шифротекст: сектор <i>i</i>, блок <i>j</i> мають відображатися рівно в один блок шифротексту на місці. XTS розв'язує це <b>підлаштовуваним</b> шифром: посекторний твік T = E_K2(сектор) крокується множенням на α = 2 у GF(2¹²⁸) для кожної позиції блоку, потім XOR-иться до і після шифрування. Тож <b>той самий відкритий текст на двох різних позиціях шифрується в різний шифротекст</b> — усуваючи витік шаблонів ECB — лишаючись довжинозберігаючим і придатним до довільного доступу. Демо шифрує один сталий байт відкритого тексту по двох секторах × восьми позиціях блоку <b>іграшковим</b> шифром і іграшковим твіком GF(2⁸); дивіться, як кожна клітинка відрізняється."></p>
+    <div id="refs-xts"></div>
+
+    <div class="panel"><div class="canvas-row">
+      <canvas id="xtsCanvas" width="300" height="150"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="plaintext byte P (same everywhere)" data-uk="байт відкритого тексту P (усюди однаковий)">plaintext byte P</span><span class="val" id="xtsPV">2a</span></label>
+          <input type="range" id="xtsP" min="0" max="255" value="42"></div>
+        <div class="ctrl"><label><span data-en="key K1" data-uk="ключ K1">key K1</span><span class="val" id="xtsKV">55</span></label>
+          <input type="range" id="xtsK" min="0" max="255" value="55"></div>
+        <div class="hint" data-en="Two sectors, eight block positions each. Identical P, all-different C ⇒ the position tweak works." data-uk="Два сектори, по вісім позицій блоку. Однаковий P, усі C різні ⇒ твік позиції працює."></div>
+        <div class="readout" id="xtsOut"></div>
+      </div>
+    </div></div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Standardised as IEEE 1619 and NIST SP 800-38E and used by BitLocker, FileVault, dm-crypt and VeraCrypt. Caveats: XTS gives <b>confidentiality but not authentication</b> — an attacker can flip or rearrange ciphertext blocks, and identical plaintext blocks at the same position across writes are visible (no freshness). The data unit is limited to 2²⁰ blocks. Use it only for at-rest storage, never as a general AEAD."
+            data-uk="Стандартизований як IEEE 1619 та NIST SP 800-38E; використовується BitLocker, FileVault, dm-crypt і VeraCrypt. Застереження: XTS дає <b>конфіденційність, але не автентифікацію</b> — зловмисник може перевертати чи переставляти блоки шифротексту, а однакові блоки на тій самій позиції між записами видимі (немає свіжості). Одиниця даних обмежена 2²⁰ блоками. Використовуйте лише для сховища у спокої, ніколи як загальне AEAD."></span></div>
+    <div class="xrefs"><a href="symmetric.html#modes" data-en="ECB/CBC/CTR modes" data-uk="Режими ECB/CBC/CTR">ECB/CBC/CTR</a> <a href="symmetric.html#gcm">GCM</a></div>
+  </section>
+
+  <!-- ============ GCM-SIV / SIV (FLAGSHIP) ============ -->
+  <section id="gcmsiv">
+    <span class="num" data-en="03 / GCM-SIV / SIV" data-uk="03 / GCM-SIV / SIV">03 / GCM-SIV</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="GCM-SIV / SIV — Nonce-Misuse Resistance" data-uk="GCM-SIV / SIV — стійкість до повторення нонса">GCM-SIV / SIV</span></h2>
+    <div class="formula">SIV = PRF_K1(N, A, P);   C = SIV ‖ ( P ⊕ CTR_K2(SIV) )</div>
+    <p class="desc" data-en="A standard nonce-based AEAD (GCM, ChaCha20-Poly1305) is <b>catastrophic</b> if a nonce ever repeats: the same nonce gives the same keystream, so C1 ⊕ C2 = P1 ⊕ P2 — a <b>two-time pad</b> that leaks the XOR of the two plaintexts. SIV (Synthetic IV) removes the sharp edge: the IV that seeds the counter is itself a <b>PRF of the plaintext</b>, not a caller-chosen nonce. Reuse the nonce and the worst that leaks is <b>whether two (nonce, plaintext) pairs were identical</b>. Below: two plaintexts and a nonce, with a &lsquo;reuse nonce&rsquo; toggle. Turn reuse on and the CTR row collapses onto P1 ⊕ P2 (the leak), while the SIV row stays scrambled. It is a real toy computation — SIV is a CBC-MAC of the toy cipher, CTR is that cipher counting."
+       data-uk="Стандартне AEAD на нонсі (GCM, ChaCha20-Poly1305) <b>катастрофічне</b>, якщо нонс колись повториться: той самий нонс дає ту саму гаму, тож C1 ⊕ C2 = P1 ⊕ P2 — <b>двократний блокнот</b>, що видає XOR двох відкритих текстів. SIV (синтетичний IV) прибирає гостроту: IV, який засіває лічильник, сам є <b>PRF від відкритого тексту</b>, а не обраним нонсом. Повторіть нонс — і найгірше, що витече, це <b>чи були дві пари (нонс, відкритий текст) однакові</b>. Нижче: два відкриті тексти й нонс із перемикачем «повторити нонс». Увімкніть повтор — рядок CTR збігається з P1 ⊕ P2 (витік), а рядок SIV лишається перемішаним. Це справжнє іграшкове обчислення — SIV це CBC-MAC іграшкового шифру, CTR це той самий шифр у лічбі."></p>
+    <div id="refs-gcmsiv"></div>
+
+    <div class="panel"><div class="canvas-row">
+      <canvas id="sivCanvas" width="300" height="150"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="plaintext 1" data-uk="відкритий текст 1">plaintext 1</span></label>
+          <input type="text" id="sivP1" value="ATTACK-AT-DAWN" maxlength="16" style="width:100%"></div>
+        <div class="ctrl"><label><span data-en="plaintext 2" data-uk="відкритий текст 2">plaintext 2</span></label>
+          <input type="text" id="sivP2" value="RETREAT-AT-DUSK" maxlength="16" style="width:100%"></div>
+        <div class="ctrl"><label><span data-en="nonce N" data-uk="нонс N">nonce N</span><span class="val" id="sivNV">7</span></label>
+          <input type="range" id="sivN" min="0" max="255" value="7"></div>
+        <label style="display:flex;gap:8px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim)">
+          <input type="checkbox" id="sivReuse" checked> <span data-en="reuse nonce for both messages" data-uk="повторити нонс для обох повідомлень">reuse nonce</span></label>
+        <div class="readout" id="sivOut"></div>
+      </div>
+    </div></div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="AES-GCM-SIV is standardised in RFC 8452; SIV in RFC 5297 (Rogaway–Shrimpton, &lsquo;Deterministic Authenticated Encryption&rsquo;). It is the recommended choice when nonce uniqueness cannot be guaranteed (stateless senders, many devices, key-commitment concerns). The price is that encryption is <b>two-pass</b> (it must read the whole plaintext to derive the IV) and identical messages are detectable. It does not fix nonce reuse for confidentiality of <i>equal</i> messages — nothing can — only for distinct ones."
+            data-uk="AES-GCM-SIV стандартизований у RFC 8452; SIV — у RFC 5297 (Роґевей–Шримптон, «Детерміноване автентифіковане шифрування»). Це рекомендований вибір, коли унікальність нонса не гарантована (сендери без стану, багато пристроїв, питання зобов'язання ключа). Ціна — шифрування <b>двопрохідне</b> (треба прочитати весь відкритий текст, щоб вивести IV), а однакові повідомлення виявні. Воно не рятує конфіденційність <i>однакових</i> повідомлень за повтору нонса — цього не може ніщо — лише різних."></span></div>
+    <div class="xrefs"><a href="symmetric.html#modes" data-en="ECB/CBC/CTR modes" data-uk="Режими ECB/CBC/CTR">ECB/CBC/CTR</a> <a href="symmetric.html#gcm">GCM</a></div>
+  </section>
+
+  <!-- ============ OCB ============ -->
+  <section id="ocb">
+    <span class="num" data-en="03 / OCB" data-uk="03 / OCB">03 / OCB</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="OCB — One-Pass Authenticated Encryption" data-uk="OCB — однопрохідне автентифіковане шифрування">OCB</span></h2>
+    <div class="formula">L = E_K(0);  Δᵢ = offset(L, i);  Cᵢ = E_K(Pᵢ ⊕ Δᵢ) ⊕ Δᵢ;  tag = E_K(Σ Pᵢ ⊕ Δ*)</div>
+    <p class="desc" data-en="OCB is the elegant single-pass AEAD: it authenticates <b>and</b> encrypts in essentially one block-cipher call per block, with no separate MAC pass. Each block gets an XTS-like offset Δᵢ derived cheaply from L = E_K(0) by Gray-code stepping; encryption is E_K(Pᵢ ⊕ Δᵢ) ⊕ Δᵢ, and the running XOR of all plaintext blocks (a <b>checksum</b>) is enciphered into the authentication tag. The schematic below is <b>illustrative</b> (labelled, not a live demo). OCB's mechanics are the same tweak-offset idea as XTS, plus a checksum for integrity."
+       data-uk="OCB — елегантне однопрохідне AEAD: воно автентифікує <b>й</b> шифрує по суті одним викликом блокового шифру на блок, без окремого проходу MAC. Кожен блок отримує XTS-подібний зсув Δᵢ, дешево виведений з L = E_K(0) кроками коду Ґрея; шифрування це E_K(Pᵢ ⊕ Δᵢ) ⊕ Δᵢ, а поточний XOR усіх блоків відкритого тексту (<b>контрольна сума</b>) шифрується в тег автентифікації. Схема нижче <b>ілюстративна</b> (позначена, не живе демо). Механіка OCB — та сама ідея зсуву-твіка, що й у XTS, плюс контрольна сума для цілісності."></p>
+    <div id="refs-ocb"></div>
+
+    <div class="panel"><div class="controls">
+      <div class="hint" data-en="Schematic (labelled) — structure only, not a live computation." data-uk="Схема (позначена) — лише структура, не живе обчислення."></div>
+      <div class="readout" id="ocbOut"></div>
+    </div></div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Standardised in RFC 7253 and long considered the gold standard for speed. Two caveats: OCB was patent-encumbered for years (now freely licensed), which is why GCM won deployment; and in 2018 Inoue–Minematsu showed a <b>forgery on OCB2</b> (not OCB1/OCB3) via its ciphertext-stealing construction. OCB3 remains secure. Like all AEAD, its security dies if a nonce repeats — that is exactly what GCM-SIV above defends against."
+            data-uk="Стандартизований у RFC 7253 і довго вважався еталоном швидкості. Два застереження: OCB роками був обтяжений патентами (тепер вільно ліцензований), тому в розгортанні переміг GCM; а 2018 року Іноуе–Мінемацу показали <b>підробку на OCB2</b> (не OCB1/OCB3) через його конструкцію викрадання шифротексту. OCB3 лишається захищеним. Як усе AEAD, його безпека гине за повтору нонса — саме від цього захищає GCM-SIV вище."></span></div>
+    <div class="xrefs"><a href="symmetric.html#modes" data-en="ECB/CBC/CTR modes" data-uk="Режими ECB/CBC/CTR">ECB/CBC/CTR</a> <a href="symmetric.html#gcm">GCM</a></div>
+  </section>
+
+  <!-- ============ EAX ============ -->
+  <section id="eax">
+    <span class="num" data-en="03 / EAX" data-uk="03 / EAX">03 / EAX</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="EAX — CTR + OMAC AEAD" data-uk="EAX — AEAD з CTR + OMAC">EAX</span></h2>
+    <div class="formula">N = OMAC⁰(nonce);  C = P ⊕ CTR_K(N);  tag = OMAC⁰(nonce) ⊕ OMAC¹(header) ⊕ OMAC²(C)</div>
+    <p class="desc" data-en="EAX is a clean, patent-free <b>two-pass</b> AEAD built only from a block cipher: CTR mode for confidentiality, and OMAC (CMAC) for authentication, combined so that nonce, associated header and ciphertext each get their own tagged MAC and XOR together into one tag. It is simple to implement correctly and streams in either direction. The demo runs a <b>real toy EAX</b>: type a message, header and nonce; it computes the ciphertext and tag with the toy cipher, then re-verifies the tag on decrypt. (The toy OMAC is a plain CBC-MAC with a domain tag — labelled toy.)"
+       data-uk="EAX — чисте, вільне від патентів <b>двопрохідне</b> AEAD лише з блокового шифру: режим CTR для конфіденційності та OMAC (CMAC) для автентифікації, поєднані так, що нонс, асоційований заголовок і шифротекст кожен отримує власний MAC із доменним тегом, і всі вони XOR-яться в один тег. Його просто реалізувати правильно, і воно потокове в обидва боки. Демо виконує <b>справжній іграшковий EAX</b>: введіть повідомлення, заголовок і нонс; воно обчислює шифротекст і тег іграшковим шифром, потім перевіряє тег під час розшифрування. (Іграшковий OMAC це звичайний CBC-MAC із доменним тегом — позначено як іграшка.)"></p>
+    <div id="refs-eax"></div>
+
+    <div class="panel"><div class="controls">
+      <div class="ctrl"><label><span data-en="message" data-uk="повідомлення">message</span></label>
+        <input type="text" id="eaxMsg" value="SECRET" maxlength="16" style="width:100%"></div>
+      <div class="ctrl"><label><span data-en="associated header (authenticated, not encrypted)" data-uk="асоційований заголовок (автентифікований, не шифрований)">header</span></label>
+        <input type="text" id="eaxHdr" value="v1;to=bob" maxlength="16" style="width:100%"></div>
+      <div class="ctrl"><label><span data-en="nonce" data-uk="нонс">nonce</span><span class="val" id="eaxNV">3</span></label>
+        <input type="range" id="eaxN" min="0" max="255" value="3"></div>
+      <div class="readout" id="eaxOut"></div>
+    </div></div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="EAX (Bellare–Rogaway–Wagner, 2003) has a clean security proof and no known weaknesses; a variant EAX′ (EAX-prime, ANSI C12.22) was later broken, but standard EAX is fine. It is slower than one-pass OCB and than hardware-accelerated GCM, so it is chosen mainly where simplicity and patent-freedom matter. Nonce uniqueness is still required for confidentiality."
+            data-uk="EAX (Белларе–Роґевей–Ваґнер, 2003) має чисте доведення безпеки й не має відомих вад; варіант EAX′ (EAX-prime, ANSI C12.22) пізніше зламали, але стандартний EAX справний. Він повільніший за однопрохідний OCB і за апаратно прискорений GCM, тож його обирають переважно там, де важать простота й свобода від патентів. Унікальність нонса все ще потрібна для конфіденційності."></span></div>
+    <div class="xrefs"><a href="symmetric.html#modes" data-en="ECB/CBC/CTR modes" data-uk="Режими ECB/CBC/CTR">ECB/CBC/CTR</a> <a href="symmetric.html#gcm">GCM</a></div>
+  </section>
+
+  <!-- ============ KW ============ -->
+  <section id="kw">
+    <span class="num" data-en="03 / AES Key Wrap" data-uk="03 / AES Key Wrap">03 / AES-KW</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">O(n)</span>
+      <span data-en="AES Key Wrap (KW)" data-uk="AES Key Wrap (KW)">AES Key Wrap</span></h2>
+    <div class="formula">A = A6A6…;  for j=0..5, i=1..n:  B = E_K(A ‖ Rᵢ),  A = MSB(B) ⊕ t,  Rᵢ = LSB(B),  t = n·j+i</div>
+    <p class="desc" data-en="Key Wrap encrypts <b>keys with keys</b>. Because the plaintext is itself high-entropy key material, KW needs no nonce or IV, yet it must still provide integrity: unwrapping garbage must be detectable. RFC 3394 achieves this with a fixed integrity constant A6A6A6A6A6A6A6A6 carried through six passes of the block cipher over the semiblocks; on unwrap, that constant must reappear or the wrap is rejected. The demo runs a <b>real toy KW</b> over one-byte semiblocks (toy 16-bit Feistel cipher): enter key bytes, wrap, then unwrap and watch the integrity check pass — and fail if you corrupt a byte."
+       data-uk="Key Wrap шифрує <b>ключі ключами</b>. Оскільки відкритий текст сам є високоентропійним ключовим матеріалом, KW не потребує нонса чи IV, та все ж має давати цілісність: розгортання сміття має бути виявним. RFC 3394 досягає цього фіксованою константою цілісності A6A6A6A6A6A6A6A6, проведеною через шість проходів блокового шифру над напівблоками; при розгортанні ця константа має з'явитися знову, інакше загортання відхиляється. Демо виконує <b>справжній іграшковий KW</b> над однобайтовими напівблоками (іграшковий 16-бітний шифр Фейстеля): введіть байти ключа, загорніть, потім розгорніть і дивіться, як перевірка цілісності проходить — і провалюється, якщо зіпсувати байт."></p>
+    <div id="refs-kw"></div>
+
+    <div class="panel"><div class="controls">
+      <div class="ctrl"><label><span data-en="key data (hex bytes to wrap)" data-uk="ключові дані (hex-байти для загортання)">key data (hex)</span></label>
+        <input type="text" id="kwData" value="01 23 45 67 89 ab" maxlength="40" style="width:100%; font-size:11px"></div>
+      <div class="ctrl"><label><span data-en="wrapping key K" data-uk="ключ загортання K">wrapping key K</span><span class="val" id="kwKV">99</span></label>
+        <input type="range" id="kwK" min="0" max="255" value="99"></div>
+      <label style="display:flex;gap:8px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim)">
+        <input type="checkbox" id="kwCorrupt"> <span data-en="corrupt one wrapped byte (break integrity)" data-uk="зіпсувати один загорнутий байт (зламати цілісність)">corrupt a byte</span></label>
+      <div class="readout" id="kwOut"></div>
+    </div></div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Standardised as RFC 3394 and NIST SP 800-38F; widely used in KMIP, PKCS#11, JOSE (A128KW/A256KW) and HSMs. It is a deterministic authenticated cipher for key material only — do not use it for general data (the six-pass structure is slow and it assumes high-entropy input). KWP (RFC 5649) adds padding for arbitrary lengths. No practical break of AES-KW is known."
+            data-uk="Стандартизований як RFC 3394 і NIST SP 800-38F; широко вживаний у KMIP, PKCS#11, JOSE (A128KW/A256KW) та HSM. Це детермінований автентифікований шифр лише для ключового матеріалу — не використовуйте для звичайних даних (шестипрохідна структура повільна й припускає високоентропійний вхід). KWP (RFC 5649) додає доповнення для довільних довжин. Практичного злому AES-KW не відомо."></span></div>
+    <div class="xrefs"><a href="symmetric.html#modes" data-en="ECB/CBC/CTR modes" data-uk="Режими ECB/CBC/CTR">ECB/CBC/CTR</a> <a href="symmetric.html#gcm">GCM</a> <a href="hash.html#hmac">HMAC</a></div>
+  </section>
+
+  <!-- ============ FPE ============ -->
+  <section id="fpe">
+    <span class="num" data-en="03 / FF1 / FF3" data-uk="03 / FF1 / FF3">03 / FPE</span>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(n)</span>
+      <span data-en="FF1 / FF3 — Format-Preserving Encryption" data-uk="FF1 / FF3 — формозберігаюче шифрування">FF1 / FF3</span></h2>
+    <div class="formula">Feistel over base-10:  Aᵢ₊₁ = B,  Bᵢ₊₁ = ( num(A) + F_K(i, B, tweak) ) mod 10ᵐ</div>
+    <p class="desc" data-en="A legacy database column of 16-digit card numbers cannot suddenly hold 128-bit binary blobs. <b>Format-preserving encryption</b> enciphers a 16-digit number into another 16-digit number — same length, same alphabet — so it drops into the existing schema. FF1 and FF3 (NIST SP 800-38G) do this with an <b>unbalanced Feistel network over the digit string</b>: split the digits in half, and each round mixes one half with a keyed pseudo-random function of the other, reduced mod 10ᵐ to stay in-radix. The demo runs a <b>real toy FF-style Feistel</b> on your digits: encrypt, then decrypt back, and check the output is the same length and all-digits."
+       data-uk="Успадкований стовпець бази з 16-значними номерами карток не може раптом вмістити 128-бітні двійкові кляксини. <b>Формозберігаюче шифрування</b> шифрує 16-значне число в інше 16-значне число — та сама довжина, той самий алфавіт — тож воно лягає в наявну схему. FF1 і FF3 (NIST SP 800-38G) роблять це <b>незбалансованою мережею Фейстеля над рядком цифр</b>: ділять цифри навпіл, і кожен раунд змішує одну половину з ключовою псевдовипадковою функцією іншої, зведеною mod 10ᵐ, щоб лишитися в основі. Демо виконує <b>справжній іграшковий FF-подібний Фейстель</b> над вашими цифрами: шифрує, потім розшифровує назад і перевіряє, що вихід тієї ж довжини й лише з цифр."></p>
+    <div id="refs-fpe"></div>
+
+    <div class="panel"><div class="controls">
+      <div class="ctrl"><label><span data-en="digits (6–10, e.g. a card number)" data-uk="цифри (6–10, напр. номер картки)">digits</span></label>
+        <input type="text" id="fpeIn" value="4111111111" maxlength="10" style="width:100%"></div>
+      <div class="ctrl"><label><span data-en="key" data-uk="ключ">key</span><span class="val" id="fpeKV">77</span></label>
+        <input type="range" id="fpeKey" min="0" max="255" value="77"></div>
+      <div class="ctrl"><label><span data-en="tweak" data-uk="твік">tweak</span><span class="val" id="fpeTV">5</span></label>
+        <input type="range" id="fpeTweak" min="0" max="255" value="5"></div>
+      <div class="readout" id="fpeOut"></div>
+    </div></div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="FF1 and FF3 are NIST SP 800-38G. <b>FF3 was broken</b> in 2017 (Durak–Vaudenay) with a practical attack exploiting its tweak handling; the repaired <b>FF3-1</b> reduces the tweak and is the current form. FPE has an unavoidable structural weakness: on small domains the message space is tiny, so it leaks equality and is vulnerable to codebook/known-plaintext recovery. Use it only for compliance-driven format constraints (e.g. PCI card numbers), never as your primary confidentiality mechanism, and always with a per-record tweak."
+            data-uk="FF1 і FF3 — це NIST SP 800-38G. <b>FF3 було зламано</b> 2017 року (Дурак–Воде́не) практичною атакою на обробку твіка; виправлений <b>FF3-1</b> зменшує твік і є чинною формою. FPE має неминучу структурну ваду: на малих доменах простір повідомлень крихітний, тож воно видає рівність і вразливе до відновлення кодбуком/відомим текстом. Використовуйте лише для форматних обмежень заради відповідності (напр. номери карток PCI), ніколи як основний механізм конфіденційності, і завжди з посекторним твіком."></span></div>
+    <div class="xrefs"><a href="symmetric.html#modes" data-en="ECB/CBC/CTR modes" data-uk="Режими ECB/CBC/CTR">ECB/CBC/CTR</a> <a href="symmetric.html#gcm">GCM</a> <a href="symmetric.html#aes">AES</a></div>
+  </section>
+
+  <!-- ============ EtM vs MtE ============ -->
+  <section id="etmmte">
+    <span class="num" data-en="03 / Encrypt-then-MAC" data-uk="03 / Encrypt-then-MAC">03 / EtM vs MtE</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">—</span>
+      <span data-en="Encrypt-Then-MAC vs MAC-Then-Encrypt" data-uk="Encrypt-then-MAC та MAC-then-Encrypt">EtM vs MtE</span></h2>
+    <div class="formula">EtM: (C, MAC(C))   ·   MtE: E(P ‖ MAC(P))   ·   E&amp;M: (E(P), MAC(P))</div>
+    <p class="desc" data-en="If you must combine a cipher and a MAC by hand, the <b>order matters</b> — and only one order is generically safe. <b>Encrypt-then-MAC</b> authenticates the ciphertext, so forged or tampered ciphertexts are rejected <b>before</b> decryption ever runs, which shuts down padding oracles and other decryption-side leaks. MAC-then-Encrypt and Encrypt-and-MAC both decrypt attacker-controlled input first, and their timing/padding behaviour has repeatedly leaked plaintext (POODLE, Lucky-13). The comparison below is <b>schematic (labelled)</b>."
+       data-uk="Якщо доводиться поєднувати шифр і MAC вручну, <b>порядок має значення</b> — і лише один порядок загалом безпечний. <b>Encrypt-then-MAC</b> автентифікує шифротекст, тож підроблені чи зіпсовані шифротексти відхиляються <b>до</b> будь-якого розшифрування, що закриває padding-оракули та інші витоки з боку розшифрування. MAC-then-Encrypt та Encrypt-and-MAC обидва спершу розшифровують вхід під контролем зловмисника, і їхня поведінка за часом/доповненням неодноразово видавала відкритий текст (POODLE, Lucky-13). Порівняння нижче <b>схематичне (позначене)</b>."></p>
+    <div id="refs-etmmte"></div>
+
+    <div class="panel"><div class="controls">
+      <div class="hint" data-en="Schematic comparison (labelled) — the three composition orders and their failure modes." data-uk="Схематичне порівняння (позначене) — три порядки композиції та їхні режими відмови."></div>
+      <table style="width:100%; border-collapse:collapse; font-family:'JetBrains Mono',monospace; font-size:12px; margin-top:6px">
+        <thead><tr style="color:var(--dim); text-align:left">
+          <th style="padding:6px 8px; border-bottom:1px solid var(--line)" data-en="order" data-uk="порядок">order</th>
+          <th style="padding:6px 8px; border-bottom:1px solid var(--line)" data-en="what is authenticated" data-uk="що автентифікується">authenticates</th>
+          <th style="padding:6px 8px; border-bottom:1px solid var(--line)" data-en="known failure mode" data-uk="відомий режим відмови">failure mode</th>
+          <th style="padding:6px 8px; border-bottom:1px solid var(--line)" data-en="verdict" data-uk="вердикт">verdict</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--line); color:var(--teal)">Encrypt-then-MAC</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--line)" data-en="the ciphertext C" data-uk="шифротекст C">the ciphertext C</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--line)" data-en="none generic — bad C rejected before decrypt" data-uk="немає загального — поганий C відхиляється до розшифрування">none generic — bad C rejected before decrypt</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--line); color:var(--teal)" data-en="✓ safe (IND-CCA + INT-CTXT)" data-uk="✓ безпечно (IND-CCA + INT-CTXT)">✓ safe</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--line); color:var(--amber)">MAC-then-Encrypt</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--line)" data-en="the plaintext P (hidden inside C)" data-uk="відкритий текст P (схований у C)">the plaintext P (inside C)</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--line); color:var(--rose)" data-en="padding oracles: POODLE, Lucky-13" data-uk="padding-оракули: POODLE, Lucky-13">padding oracles: POODLE, Lucky-13</td>
+          <td style="padding:6px 8px; border-bottom:1px solid var(--line); color:var(--amber)" data-en="⚠ fragile (decrypts attacker input first)" data-uk="⚠ крихко (спершу розшифровує вхід зловмисника)">⚠ fragile</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px; color:var(--rose)">Encrypt-and-MAC</td>
+          <td style="padding:6px 8px" data-en="P and C separately; MAC(P) is exposed" data-uk="P і C окремо; MAC(P) відкритий">P and C separately</td>
+          <td style="padding:6px 8px; color:var(--rose)" data-en="MAC(P) may leak plaintext equality; no ciphertext integrity" data-uk="MAC(P) може видати рівність тексту; немає цілісності шифротексту">MAC(P) can leak; no C integrity</td>
+          <td style="padding:6px 8px; color:var(--rose)" data-en="✗ avoid (used by SSH, needs care)" data-uk="✗ уникати (вживає SSH, потребує обережності)">✗ avoid</td>
+        </tr>
+        </tbody>
+      </table>
+    </div></div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Bellare–Namprempre (2000) proved Encrypt-then-MAC is the only generically secure order (giving IND-CCA and INT-CTXT for any secure cipher + MAC). Real breaks followed the theory: <b>Lucky-13</b> and <b>POODLE</b> both exploited TLS/SSL's MAC-then-Encrypt. TLS 1.3 dropped MtE composition entirely in favour of dedicated AEADs (GCM, ChaCha20-Poly1305) and the Encrypt-then-MAC extension (RFC 7366). Rule of thumb: prefer a proven AEAD; if you must compose, Encrypt-then-MAC with independent keys."
+            data-uk="Белларе–Нампремпре (2000) довели, що Encrypt-then-MAC — єдиний загалом безпечний порядок (дає IND-CCA та INT-CTXT для будь-яких безпечних шифру + MAC). За теорією прийшли реальні зломи: <b>Lucky-13</b> та <b>POODLE</b> обидва експлуатували MAC-then-Encrypt у TLS/SSL. TLS 1.3 повністю відмовився від композиції MtE на користь спеціалізованих AEAD (GCM, ChaCha20-Poly1305) та розширення Encrypt-then-MAC (RFC 7366). Правило: віддавайте перевагу перевіреному AEAD; якщо мусите компонувати — Encrypt-then-MAC з незалежними ключами."></span></div>
+    <div class="xrefs"><a href="symmetric.html#modes" data-en="ECB/CBC/CTR modes" data-uk="Режими ECB/CBC/CTR">ECB/CBC/CTR</a> <a href="symmetric.html#gcm">GCM</a> <a href="implattacks.html#paddingoracle" data-en="Padding oracles" data-uk="Padding-оракули">Padding oracles</a> <a href="hash.html#hmac">HMAC</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+
+/* ---- GF(2^8) for AES (poly 0x11B) + computed AES S-box & inverse ---- */
+function gmul(a,b){ let p=0; for(let i=0;i<8;i++){ if(b&1)p^=a; const hi=a&0x80; a=(a<<1)&0xFF; if(hi)a^=0x1b; b>>=1; } return p; }
+const SBOX=(function(){
+  const anti=new Array(256),log=new Array(256); let x=1;
+  for(let i=0;i<255;i++){ anti[i]=x; log[x]=i; x=gmul(x,3); }
+  const minv=a=> a===0?0:anti[(255-log[a])%255];
+  const box=new Array(256);
+  for(let i=0;i<256;i++){ let b=minv(i),s=b;
+    for(let c=0;c<4;c++){ b=((b<<1)|(b>>7))&0xFF; s^=b; }
+    box[i]=s^0x63;
+  }
+  return box;
+})();
+const INVSBOX=(function(){ const inv=new Array(256); for(let i=0;i<256;i++) inv[SBOX[i]]=i; return inv; })();
+const xt=a=>gmul(a,2);                       // multiply by α=2 in GF(2^8)
+
+/* ---- toy 8-bit block cipher: bijection over one byte ---- */
+function tE(x,k){ return SBOX[(x^k)&0xFF]; }         // encrypt one byte
+function tD(y,k){ return INVSBOX[y&0xFF]^k; }        // decrypt one byte
+
+/* ---- toy 16-bit block cipher: 4-round balanced Feistel (for Key Wrap) ---- */
+function fRound(x,k,r){ return SBOX[(x ^ ((k + r*0x3B)&0xFF)) & 0xFF]; }
+function tE16(x,k){ let L=(x>>8)&0xFF, R=x&0xFF;
+  for(let r=0;r<4;r++){ const F=fRound(R,k,r); const nL=R, nR=L^F; L=nL; R=nR; }
+  return ((L<<8)|R)&0xFFFF; }
+function tD16(x,k){ let L=(x>>8)&0xFF, R=x&0xFF;
+  for(let r=3;r>=0;r--){ const prevR=L, prevL=R^fRound(L,k,r); L=prevL; R=prevR; }
+  return ((L<<8)|R)&0xFFFF; }
+
+/* ---- helpers ---- */
+const hex2=v=>(v&0xFF).toString(16).padStart(2,'0');
+const bytesOf=id=>Array.from(new TextEncoder().encode(document.getElementById(id).value||''));
+function xorArr(a,b,L){ const o=[]; for(let i=0;i<L;i++) o.push((a[i]||0)^(b[i]||0)); return o; }
+function arrEq(a,b){ if(a.length!==b.length) return false; for(let i=0;i<a.length;i++) if(a[i]!==b[i]) return false; return true; }
+function hexrow(arr){ return arr.map(hex2).join(' '); }
+
+/* ====================================================================
+   XTS — tweakable encryption over toy GF(2^8)
+   ==================================================================== */
+function xtsTweak(sector,k2){ return tE(sector&0xFF,k2); }
+function xtsEncBlock(p,sector,j,k1,k2){ let T=xtsTweak(sector,k2); for(let i=0;i<j;i++) T=xt(T); return tE(p^T,k1)^T; }
+function xtsDecBlock(c,sector,j,k1,k2){ let T=xtsTweak(sector,k2); for(let i=0;i<j;i++) T=xt(T); return tD(c^T,k1)^T; }
+function drawXTS(){
+  const uk=window.LANG==='uk';
+  const P=+document.getElementById('xtsP').value; document.getElementById('xtsPV').textContent=hex2(P);
+  const k1=+document.getElementById('xtsK').value; document.getElementById('xtsKV').textContent=k1;
+  const k2=(k1*3+5)&0xFF;
+  const cv=document.getElementById('xtsCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cols=8, cw=W/cols, rowH=40;
+  const rows=[[],[]];
+  for(let s=0;s<2;s++){ const y=24+s*(rowH+24);
+    for(let j=0;j<cols;j++){ const c=xtsEncBlock(P,s,j,k1,k2); rows[s].push(c);
+      g.fillStyle='rgb('+(50+(c*0.6|0))+',150,'+(180-(c*0.3|0))+')'; g.fillRect(j*cw+1,y,cw-2,rowH);
+      g.fillStyle=C.ink; g.font='9px monospace'; g.textAlign='center'; g.fillText(hex2(c),j*cw+cw/2,y+rowH/2+3);
+    }
+    g.fillStyle=C.dim; g.font='9px monospace'; g.textAlign='left';
+    g.fillText((uk?'сектор ':'sector ')+s+'  (j=0..7)',4,y-4);
+  }
+  const all=rows[0].concat(rows[1]); const uniq=new Set(all).size;
+  const rt=xtsDecBlock(rows[0][3],0,3,k1,k2)===P;
+  document.getElementById('xtsOut').innerHTML=
+    '<span class="k">'+(uk?'вхід P (усюди)':'input P (everywhere)')+':</span> <span class="s">'+hex2(P)+'</span>\n'+
+    '<span class="k">'+(uk?'сектор 0':'sector 0')+':</span> <span class="a">'+hexrow(rows[0])+'</span>\n'+
+    '<span class="k">'+(uk?'сектор 1':'sector 1')+':</span> <span class="a">'+hexrow(rows[1])+'</span>\n'+
+    '<span class="k">'+(uk?'різних C з 16':'distinct C of 16')+':</span> <span class="'+(uniq===16?'a':'b')+'">'+uniq+'</span>  '+
+    '<span class="k">'+(uk?'розшифр. C(0,3)=P':'decrypt C(0,3)=P')+':</span> '+(rt?'<span class="a">✓</span>':'<span class="b">✗</span>');
+}
+
+/* ====================================================================
+   GCM-SIV / SIV vs a nonce-based CTR AEAD  (FLAGSHIP)
+   ==================================================================== */
+const KCTR=0x5A, KMAC=0x3C;
+function ctrKS(seed,len,k){ const ks=[]; for(let i=0;i<len;i++) ks.push(tE((seed+i)&0xFF,k)); return ks; }
+function ctrEnc(pt,nonce,k){ const ks=ctrKS(nonce&0xFF,pt.length,k); return xorArr(pt,ks,pt.length); }
+function sivMac(nonce,pt){ let t=tE(nonce&0xFF,KMAC); for(const m of pt) t=tE((t^m)&0xFF,KMAC); return t&0xFF; }   // synthetic IV = CBC-MAC(nonce ‖ P)
+function sivEnc(nonce,pt){ const s=sivMac(nonce,pt); const ct=xorArr(pt,ctrKS(s,pt.length,KCTR),pt.length); return {siv:s,ct}; }
+function sivDec(nonce,s,ct){ const pt=xorArr(ct,ctrKS(s,ct.length,KCTR),ct.length); return {pt,ok:sivMac(nonce,pt)===s}; }
+function drawSIV(){
+  const uk=window.LANG==='uk';
+  const P1=bytesOf('sivP1'), P2=bytesOf('sivP2');
+  const N=+document.getElementById('sivN').value; document.getElementById('sivNV').textContent=N;
+  const reuse=document.getElementById('sivReuse').checked;
+  const L=Math.min(Math.min(P1.length,P2.length)||1,16);
+  const n1=N, n2=reuse?N:((N+1)&0xFF);
+  const c1=ctrEnc(P1,n1,KCTR), c2=ctrEnc(P2,n2,KCTR);
+  const s1=sivEnc(N,P1), s2=sivEnc(N,P2);
+  const truth=xorArr(P1,P2,L), ctrLeak=xorArr(c1,c2,L), sivLeak=xorArr(s1.ct,s2.ct,L);
+  const ctrMatch=arrEq(truth,ctrLeak), sivMatch=arrEq(truth,sivLeak);
+  // canvas: three byte rows
+  const cv=document.getElementById('sivCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cw=Math.min(W/L,20);
+  const row=(arr,y,hot,lbl)=>{ for(let i=0;i<L;i++){ const v=arr[i];
+      g.fillStyle=hot?'rgb('+(200+(v*0.2|0))+','+(70+(v*0.3|0))+',110)':'rgb('+(50+(v*0.6|0))+',150,'+(180-(v*0.3|0))+')';
+      g.fillRect(i*cw+1,y,cw-2,26); }
+    g.fillStyle=C.dim; g.font='9px monospace'; g.textAlign='left'; g.fillText(lbl,4,y-3); };
+  row(truth,16,false,'P1⊕P2'+(uk?'  (істина)':'  (truth)'));
+  row(ctrLeak,66,ctrMatch,'CTR: C1⊕C2'+(ctrMatch?(uk?'  = ВИТІК!':'  = LEAK!'):''));
+  row(sivLeak,116,false,'SIV: C1⊕C2'+(sivMatch?(uk?'  (тексти рівні)':'  (equal msgs)'):(uk?'  (замасковано)':'  (masked)')));
+  document.getElementById('sivOut').innerHTML=
+    '<span class="k">'+(uk?'нонси':'nonces')+':</span> CTR '+(uk?'вжив.':'used')+' N1='+n1+', N2='+n2+(reuse?(uk?'  (повтор!)':'  (reused!)'):(uk?'  (різні)':'  (distinct)'))+'\n'+
+    '<span class="k">CTR AEAD:</span> C1⊕C2 '+(ctrMatch?
+        '<span class="b">= P1⊕P2 → '+(uk?'двократний блокнот, витік XOR текстів':'two-time pad, plaintext XOR leaked')+'</span>':
+        '<span class="a">≠ P1⊕P2 → '+(uk?'унікальні нонси = безпечно':'unique nonces = safe')+'</span>')+'\n'+
+    '<span class="k">SIV</span> siv1=<span class="s">'+hex2(s1.siv)+'</span> siv2=<span class="s">'+hex2(s2.siv)+'</span>'+
+        (s1.siv===s2.siv?(uk?'  → однакові (тексти рівні)':'  → identical (equal msgs)'):(uk?'  → різні':'  → differ'))+'\n'+
+    '<span class="k">SIV AEAD:</span> C1⊕C2 '+(sivMatch?
+        '<span class="b">'+(uk?'збіг лише бо P1=P2':'matches only because P1=P2')+'</span>':
+        '<span class="a">≠ P1⊕P2 → '+(uk?'нема витоку навіть за повтору нонса':'no leak even with reused nonce')+'</span>')+'\n'+
+    '<span class="k">'+(uk?'round-trip SIV':'SIV round-trip')+':</span> '+(sivDec(N,s1.siv,s1.ct).ok&&arrEq(sivDec(N,s1.siv,s1.ct).pt,P1)?'<span class="a">✓ dec(enc(P1))=P1</span>':'<span class="b">✗</span>');
+}
+
+/* ====================================================================
+   OCB — schematic (labelled)
+   ==================================================================== */
+function drawOCB(){
+  const uk=window.LANG==='uk';
+  document.getElementById('ocbOut').innerHTML=
+    '<span class="k">'+(uk?'СХЕМА (не живе обчислення)':'SCHEMATIC (not a live computation)')+'</span>\n'+
+    'L   = E_K(0)\n'+
+    'Δ₁  = offset(L,1),  Δ₂ = offset(L,2), …   ('+(uk?'кроки коду Ґрея':'Gray-code steps')+')\n'+
+    'Cᵢ  = E_K(Pᵢ ⊕ Δᵢ) ⊕ Δᵢ            ('+(uk?'один виклик шифру на блок':'one cipher call per block')+')\n'+
+    'Σ   = P₁ ⊕ P₂ ⊕ … ⊕ Pₘ              ('+(uk?'контрольна сума':'checksum')+')\n'+
+    'tag = E_K(Σ ⊕ Δ*) ⊕ Auth(header)\n'+
+    '<span class="a">'+(uk?'⇒ конфіденційність + автентифікація за один прохід':'⇒ confidentiality + authentication in one pass')+'</span>';
+}
+
+/* ====================================================================
+   EAX — real toy AEAD (CTR + OMAC)
+   ==================================================================== */
+function omac(dom,bytes){ let t=tE(dom&0xFF,KMAC); for(const m of bytes) t=tE((t^m)&0xFF,KMAC); return t&0xFF; }
+function eaxEnc(nonce,header,msg){ const N=omac(0,[nonce&0xFF]);
+  const ct=xorArr(msg,ctrKS(N,msg.length,KCTR),msg.length);
+  const tag=(N^omac(1,header)^omac(2,ct))&0xFF; return {ct,tag,N}; }
+function eaxDec(nonce,header,ct,tag){ const N=omac(0,[nonce&0xFF]);
+  const tag2=(N^omac(1,header)^omac(2,ct))&0xFF;
+  const pt=xorArr(ct,ctrKS(N,ct.length,KCTR),ct.length); return {pt,ok:tag2===tag}; }
+function drawEAX(){
+  const uk=window.LANG==='uk';
+  const msg=bytesOf('eaxMsg'), hdr=bytesOf('eaxHdr'), N=+document.getElementById('eaxN').value;
+  document.getElementById('eaxNV').textContent=N;
+  const e=eaxEnc(N,hdr,msg); const d=eaxDec(N,hdr,e.ct,e.tag);
+  const rt=d.ok&&arrEq(d.pt,msg);
+  // tamper demonstration: flip a ciphertext bit → tag must fail
+  let tamperFails=true;
+  if(e.ct.length){ const bad=e.ct.slice(); bad[0]^=1; tamperFails=!eaxDec(N,hdr,bad,e.tag).ok; }
+  document.getElementById('eaxOut').innerHTML=
+    '<span class="k">'+(uk?'відкритий текст':'plaintext')+':</span> '+hexrow(msg)+'\n'+
+    '<span class="k">'+(uk?'заголовок (автент.)':'header (auth)')+':</span> '+hexrow(hdr)+'\n'+
+    '<span class="k">'+(uk?'шифротекст':'ciphertext')+' C:</span> <span class="a">'+hexrow(e.ct)+'</span>\n'+
+    '<span class="k">'+(uk?'тег':'tag')+':</span> <span class="s">'+hex2(e.tag)+'</span>  = OMAC⁰(N)⊕OMAC¹(H)⊕OMAC²(C)\n'+
+    '<span class="k">'+(uk?'розшифр. + перевірка тегу':'decrypt + verify tag')+':</span> '+(rt?'<span class="a">✓ '+(uk?'відновлено':'recovered')+'</span>':'<span class="b">✗</span>')+
+    '   <span class="k">'+(uk?'підробка C відхилена':'tampered C rejected')+':</span> '+(tamperFails?'<span class="a">✓</span>':'<span class="b">✗</span>');
+}
+
+/* ====================================================================
+   AES Key Wrap (RFC 3394 structure, toy one-byte semiblocks)
+   ==================================================================== */
+const KWIV=0xA6;
+function kwWrap(P,k){ const n=P.length; let A=KWIV; const R=P.slice();
+  for(let j=0;j<6;j++) for(let i=1;i<=n;i++){
+    const B=tE16(((A<<8)|R[i-1])&0xFFFF,k); const t=(n*j+i)&0xFF;
+    A=((B>>8)&0xFF)^t; R[i-1]=B&0xFF; }
+  return [A].concat(R); }
+function kwUnwrap(Cw,k){ const n=Cw.length-1; let A=Cw[0]; const R=Cw.slice(1);
+  for(let j=5;j>=0;j--) for(let i=n;i>=1;i--){
+    const t=(n*j+i)&0xFF; const B=tD16((((A^t)<<8)|R[i-1])&0xFFFF,k);
+    A=(B>>8)&0xFF; R[i-1]=B&0xFF; }
+  return {key:R,ok:A===KWIV}; }
+function parseBytes(str){ const b=[]; const m=(str||'').match(/[0-9a-fA-F]{2}/g)||[]; for(const h of m) b.push(parseInt(h,16)); if(!b.length) b.push(0); return b.slice(0,8); }
+function drawKW(){
+  const uk=window.LANG==='uk';
+  const P=parseBytes(document.getElementById('kwData').value);
+  const k=+document.getElementById('kwK').value; document.getElementById('kwKV').textContent=k;
+  const corrupt=document.getElementById('kwCorrupt').checked;
+  const wrapped=kwWrap(P,k);
+  const recv=wrapped.slice(); if(corrupt) recv[1]^=0x01;         // flip one bit in transit
+  const un=kwUnwrap(recv,k);
+  const rt=arrEq(un.key,P);
+  document.getElementById('kwOut').innerHTML=
+    '<span class="k">'+(uk?'ключові дані P':'key data P')+' ('+P.length+'):</span> <span class="s">'+hexrow(P)+'</span>\n'+
+    '<span class="k">'+(uk?'загорнуто (IV ‖ R)':'wrapped (IV ‖ R)')+':</span> <span class="a">'+hexrow(wrapped)+'</span>\n'+
+    (corrupt?'<span class="b">'+(uk?'у транзиті зіпсовано байт':'one byte corrupted in transit')+': '+hexrow(recv)+'</span>\n':'')+
+    '<span class="k">'+(uk?'цілісність (IV=A6?)':'integrity (IV=A6?)')+':</span> '+(un.ok?'<span class="a">✓ '+(uk?'прийнято':'accept')+'</span>':'<span class="b">✗ '+(uk?'ВІДХИЛЕНО':'REJECT')+'</span>')+'\n'+
+    '<span class="k">'+(uk?'розгорнуто':'unwrapped')+':</span> '+(un.ok?'<span class="'+(rt?'a':'b')+'">'+hexrow(un.key)+'</span> '+(rt?'= P ✓':'✗'):'<span class="b">—</span>');
+}
+
+/* ====================================================================
+   FPE — FF1/FF3-style unbalanced Feistel over base-10
+   ==================================================================== */
+const FPE_ROUNDS=8;
+function fpePRF(round,digits,key,tweak){
+  let h=(key^tweak^((round*0x9E)&0xFF))&0xFF;
+  for(const d of digits) h=SBOX[(h^d^round)&0xFF];
+  let y=0,hh=h; for(let j=0;j<4;j++){ hh=SBOX[(hh^((j*57)&0xFF)^key)&0xFF]; y=y*256+hh; }
+  return y>>>0;
+}
+const dNum=a=>{ let n=0; for(const d of a) n=n*10+d; return n; };
+const dDigits=(n,len)=>{ const a=new Array(len).fill(0); for(let i=len-1;i>=0;i--){ a[i]=n%10; n=Math.floor(n/10); } return a; };
+function fpeEnc(dig,key,tw){ const n=dig.length,u=n>>1,v=n-u; let A=dig.slice(0,u),B=dig.slice(u);
+  for(let i=0;i<FPE_ROUNDS;i++){ const m=(i%2===0)?u:v; const y=fpePRF(i,B,key,tw);
+    const c=(dNum(A)+y)%Math.pow(10,m); const Cn=dDigits(c,m); A=B; B=Cn; }
+  return A.concat(B); }
+function fpeDec(dig,key,tw){ const n=dig.length,u=n>>1,v=n-u; let A=dig.slice(0,u),B=dig.slice(u);
+  for(let i=FPE_ROUNDS-1;i>=0;i--){ const m=(i%2===0)?u:v; const oldB=A; const y=fpePRF(i,oldB,key,tw);
+    const c=((dNum(B)-y)%Math.pow(10,m)+Math.pow(10,m))%Math.pow(10,m); const oldA=dDigits(c,m); A=oldA; B=oldB; }
+  return A.concat(B); }
+function drawFPE(){
+  const uk=window.LANG==='uk';
+  let raw=(document.getElementById('fpeIn').value||'').replace(/\D/g,'').slice(0,10);
+  if(raw.length<6) raw=(raw+'000000').slice(0,6);
+  const dig=raw.split('').map(Number);
+  const key=+document.getElementById('fpeKey').value; document.getElementById('fpeKV').textContent=key;
+  const tw=+document.getElementById('fpeTweak').value; document.getElementById('fpeTV').textContent=tw;
+  const ct=fpeEnc(dig,key,tw); const back=fpeDec(ct,key,tw);
+  const inFmt=ct.length===dig.length && ct.every(d=>d>=0&&d<=9);
+  const rt=arrEq(back,dig);
+  document.getElementById('fpeOut').innerHTML=
+    '<span class="k">'+(uk?'вхід':'input')+' ('+dig.length+' '+(uk?'цифр':'digits')+'):</span> <span class="s">'+dig.join('')+'</span>\n'+
+    '<span class="k">'+(uk?'зашифровано':'encrypted')+':</span> <span class="a">'+ct.join('')+'</span>\n'+
+    '<span class="k">'+(uk?'розшифровано':'decrypted')+':</span> <span class="'+(rt?'a':'b')+'">'+back.join('')+'</span> '+(rt?'= '+(uk?'вхід ✓':'input ✓'):'✗')+'\n'+
+    '<span class="k">'+(uk?'формат збережено (та ж довжина, лише цифри)':'format preserved (same length, all digits)')+':</span> '+(inFmt?'<span class="a">✓</span>':'<span class="b">✗</span>');
+}
+
+/* ====================================================================
+   self-tests
+   ==================================================================== */
+function runSelfTests(){
+  const uk=window.LANG==='uk';
+  const r=[];
+  // primitives
+  r.push(['S-box', SBOX[0]===0x63&&SBOX[1]===0x7c&&SBOX[16]===0xca]);
+  r.push(['S-box⁻¹', (function(){ for(let i=0;i<256;i++) if(INVSBOX[SBOX[i]]!==i) return false; return true; })()]);
+  // XTS: round-trip + position independence
+  r.push(['XTS', (function(){ const k1=55,k2=(55*3+5)&0xFF;
+      for(let s=0;s<2;s++)for(let j=0;j<8;j++){ const c=xtsEncBlock(42,s,j,k1,k2); if(xtsDecBlock(c,s,j,k1,k2)!==42) return false; }
+      return xtsEncBlock(42,0,0,k1,k2)!==xtsEncBlock(42,0,1,k1,k2)&&xtsEncBlock(42,0,0,k1,k2)!==xtsEncBlock(42,1,0,k1,k2); })()]);
+  // SIV: round-trip + determinism + nonce-reuse leak on CTR / resistance on SIV
+  r.push(['SIV', (function(){ const P1=[1,2,3,4],P2=[9,8,7,6],N=7;
+      const e=sivEnc(N,P1); const d=sivDec(N,e.siv,e.ct); if(!(d.ok&&arrEq(d.pt,P1))) return false;
+      if(sivEnc(N,P1).siv!==sivEnc(N,P1).siv) return false;                 // deterministic
+      if(!arrEq(sivEnc(N,P1).ct,sivEnc(N,P1).ct)) return false;             // identical P → identical C
+      if(sivEnc(N,P1).siv===sivEnc(N,P2).siv) return false;                 // distinct P → distinct SIV
+      const c1=ctrEnc(P1,N,KCTR),c2=ctrEnc(P2,N,KCTR);                      // reused nonce
+      if(!arrEq(xorArr(c1,c2,4),xorArr(P1,P2,4))) return false;             // CTR leaks XOR
+      const s1=sivEnc(N,P1),s2=sivEnc(N,P2);
+      return !arrEq(xorArr(s1.ct,s2.ct,4),xorArr(P1,P2,4)); })()]);         // SIV does not
+  // EAX round-trip + tamper detection
+  r.push(['EAX', (function(){ const m=[5,6,7],h=[1,2],N=3; const e=eaxEnc(N,h,m);
+      const d=eaxDec(N,h,e.ct,e.tag); if(!(d.ok&&arrEq(d.pt,m))) return false;
+      const bad=e.ct.slice(); bad[0]^=1; return !eaxDec(N,h,bad,e.tag).ok; })()]);
+  // KW round-trip + integrity rejection
+  r.push(['KW', (function(){ const P=[0x01,0x23,0x45,0x67],k=99; const w=kwWrap(P,k);
+      const u=kwUnwrap(w,k); if(!(u.ok&&arrEq(u.key,P))) return false;
+      const bad=w.slice(); bad[1]^=1; return !kwUnwrap(bad,k).ok; })()]);
+  // FPE round-trip + format
+  r.push(['FPE', (function(){ for(const s of ['4111111111','123456','9876543']){ const d=s.split('').map(Number);
+      const c=fpeEnc(d,77,5); if(!(c.length===d.length&&c.every(x=>x>=0&&x<=9))) return false;
+      if(!arrEq(fpeDec(c,77,5),d)) return false; } return true; })()]);
+  const allok=r.every(x=>x[1]);
+  document.getElementById('selftest').innerHTML=
+    '<span class="k">'+(uk?'Самоперевірка':'Self-test')+':</span>  '+
+    r.map(x=>x[0]+' <span class="'+(x[1]?'a':'b')+'">'+(x[1]?'✓':'✗')+'</span>').join('   ')+'   '+
+    (allok?'<span class="a">'+(uk?'усі демо коректні':'all demos correct')+'</span>':'<span class="b">FAIL</span>');
+}
+
+/* ====================================================================
+   refs + wiring
+   ==================================================================== */
+const WK='https://en.wikipedia.org/wiki/';
+window.REFS={
+  xts:[{tag:'wiki',en:{href:WK+'Disk_encryption_theory',label:'Wikipedia: XTS / disk encryption theory'}},
+       {tag:'nist',en:{href:'https://csrc.nist.gov/pubs/sp/800/38/e/final',label:'NIST SP 800-38E (XTS-AES)'}}],
+  gcmsiv:[{tag:'wiki',en:{href:WK+'AES-GCM-SIV',label:'Wikipedia: AES-GCM-SIV'}},
+          {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc8452',label:'RFC 8452 (AES-GCM-SIV)'}},
+          {tag:'paper',en:{href:'https://eprint.iacr.org/2006/221',label:'Rogaway–Shrimpton: Deterministic AE (SIV)'}}],
+  ocb:[{tag:'wiki',en:{href:WK+'OCB_mode',label:'Wikipedia: OCB mode'}},
+       {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc7253',label:'RFC 7253 (OCB)'}},
+       {tag:'paper',en:{href:'https://eprint.iacr.org/2019/311',label:'Inoue–Minematsu: OCB2 forgery'}}],
+  eax:[{tag:'wiki',en:{href:WK+'EAX_mode',label:'Wikipedia: EAX mode'}},
+       {tag:'paper',en:{href:'https://eprint.iacr.org/2003/069',label:'Bellare–Rogaway–Wagner: EAX'}}],
+  kw:[{tag:'wiki',en:{href:WK+'Key_Wrap',label:'Wikipedia: Key Wrap'}},
+      {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc3394',label:'RFC 3394 (AES Key Wrap)'}},
+      {tag:'nist',en:{href:'https://csrc.nist.gov/pubs/sp/800/38/f/final',label:'NIST SP 800-38F'}}],
+  fpe:[{tag:'wiki',en:{href:WK+'Format-preserving_encryption',label:'Wikipedia: format-preserving encryption'}},
+       {tag:'nist',en:{href:'https://csrc.nist.gov/pubs/sp/800/38/g/final',label:'NIST SP 800-38G (FF1/FF3)'}},
+       {tag:'paper',en:{href:'https://eprint.iacr.org/2017/521',label:'Durak–Vaudenay: FF3 attack'}}],
+  etmmte:[{tag:'wiki',en:{href:WK+'Authenticated_encryption',label:'Wikipedia: authenticated encryption'}},
+          {tag:'paper',en:{href:'https://eprint.iacr.org/2000/025',label:'Bellare–Namprempre: order of encryption & authentication'}},
+          {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc7366',label:'RFC 7366 (Encrypt-then-MAC for TLS)'}}]
+};
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  runSelfTests(); drawXTS(); drawSIV(); drawOCB(); drawEAX(); drawKW(); drawFPE();
+};
+
+// controls
+['xtsP','xtsK'].forEach(id=>document.getElementById(id).addEventListener('input',drawXTS));
+['sivP1','sivP2','sivN','sivReuse'].forEach(id=>document.getElementById(id).addEventListener('input',drawSIV));
+['eaxMsg','eaxHdr','eaxN'].forEach(id=>document.getElementById(id).addEventListener('input',drawEAX));
+['kwData','kwK','kwCorrupt'].forEach(id=>document.getElementById(id).addEventListener('input',drawKW));
+['fpeIn','fpeKey','fpeTweak'].forEach(id=>document.getElementById(id).addEventListener('input',drawFPE));
+</script>
+</body>
+</html>

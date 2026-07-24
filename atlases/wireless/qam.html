@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quadrature Amplitude Modulation (QAM) — Wireless Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="qam">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Amplitude and phase, together" data-uk="Амплітуда й фаза разом">The high-rate mainstream</div>
+    <h1 data-en="Quadrature Amplitude Modulation" data-uk="Квадратурна амплітудна модуляція">Quadrature Amplitude Modulation</h1>
+    <div class="eq-hero">s(t) = I·cos(2π f_c t) − Q·sin(2π f_c t)</div>
+    <p class="lede" data-en="QAM modulates <b>two</b> carriers of the same frequency but 90° apart — the in-phase (I) cosine and the quadrature (Q) sine — independently. Each symbol is a point on a rectangular <b>I/Q grid</b>: 16-QAM has 16 points (4 bits), 256-QAM has 256 (8 bits), 4096-QAM has 4096 (12 bits). Packing more points into the same square wins throughput but shrinks the gap between them, so high-order QAM lives or dies by signal quality. This is the workhorse of Wi-Fi, LTE, 5G, cable and digital TV."
+       data-uk="QAM модулює <b>два</b> носії однакової частоти, але зі зсувом 90° — синфазний (I) косинус і квадратурний (Q) синус — незалежно. Кожен символ — точка на прямокутній <b>сітці I/Q</b>: 16-QAM має 16 точок (4 біти), 256-QAM — 256 (8 біт), 4096-QAM — 4096 (12 біт). Упаковка більшої кількості точок у той самий квадрат виграє в пропускності, але зменшує проміжок між ними, тож QAM високого порядку цілком залежить від якості сигналу. Це робоча конячка Wi-Fi, LTE, 5G, кабелю й цифрового ТБ."></p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <section id="qam">
+    <span class="num" data-en="01 / QAM constellations" data-uk="01 / Сузір'я QAM">01 / QAM</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c3">EQ+coh</span>
+      <span data-en="QAM — 16 / 64 / 256 / 1024 / 4096" data-uk="QAM — 16 / 64 / 256 / 1024 / 4096">QAM — 16 / 64 / 256 / 1024 / 4096</span></h2>
+    <div class="formula">M-QAM → √M × √M grid → log₂M bits/symbol</div>
+    <p class="desc" data-en="Pick an order and a channel quality below. The teal lattice is the <b>ideal constellation</b>; the rose haze is what the receiver actually sees after additive Gaussian noise. Each received point is decided to the nearest lattice point — when the haze of one point reaches its neighbour's decision boundary, you get symbol errors, tallied live. Watch how 16-QAM shrugs off noise that shreds 1024-QAM: doubling the bits per symbol roughly quadruples the points and demands ~6 dB more SNR each step. Modern radios therefore switch order <b>adaptively</b> with link quality (MCS)."
+       data-uk="Оберіть порядок і якість каналу нижче. Бірюзова ґратка — <b>ідеальне сузір'я</b>; рожевий серпанок — те, що приймач насправді бачить після адитивного гаусового шуму. Кожна прийнята точка відноситься до найближчої вузлової — коли серпанок однієї точки досягає межі рішення сусідньої, виникають символьні помилки, що підраховуються наживо. Дивіться, як 16-QAM ігнорує шум, що знищує 1024-QAM: подвоєння біт на символ приблизно вчетверо збільшує кількість точок і вимагає ~6 дБ більше SNR на крок. Тому сучасні радіо перемикають порядок <b>адаптивно</b> за якістю лінії (MCS)."></p>
+    <div id="refs-qam"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="qCanvas" width="260" height="260"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="order M" data-uk="порядок M">order M</span></label>
+            <select id="qOrder">
+              <option value="4">4-QAM (QPSK)</option>
+              <option value="16" selected>16-QAM</option>
+              <option value="64">64-QAM</option>
+              <option value="256">256-QAM</option>
+              <option value="1024">1024-QAM</option>
+              <option value="4096">4096-QAM</option>
+            </select></div>
+          <div class="ctrl"><label><span data-en="channel SNR" data-uk="SNR каналу">channel SNR</span><span class="val" id="qSV">20 dB</span></label>
+            <input type="range" id="qSNR" min="6" max="42" step="1" value="20"></div>
+          <button id="qNew" data-en="Re-transmit" data-uk="Перепередати">Re-transmit</button>
+          <div class="hint" data-en="Teal = ideal grid, rose = received symbols with AWGN. Errors are points that cross into a neighbour's cell." data-uk="Бірюзовий = ідеальна сітка, рожевий = прийняті символи з AWGN. Помилки — точки, що переходять у чужу комірку."></div>
+          <div class="readout" id="qOut"></div>
+        </div>
+      </div>
+      <div class="chips" style="margin-top:14px">
+        <span class="chip">16-QAM · <b data-en="Wi-Fi a/g, LTE" data-uk="Wi-Fi a/g, LTE">Wi-Fi a/g, LTE</b></span>
+        <span class="chip">64-QAM · <b data-en="Wi-Fi n, DVB-T" data-uk="Wi-Fi n, DVB-T">Wi-Fi n, DVB-T</b></span>
+        <span class="chip">256-QAM · <b data-en="Wi-Fi ac, LTE-A, 5G" data-uk="Wi-Fi ac, LTE-A, 5G">Wi-Fi ac, LTE-A, 5G</b></span>
+        <span class="chip">1024-QAM · <b data-en="Wi-Fi 6 (ax)" data-uk="Wi-Fi 6 (ax)">Wi-Fi 6</b></span>
+        <span class="chip">4096-QAM · <b data-en="Wi-Fi 7, DOCSIS, microwave" data-uk="Wi-Fi 7, DOCSIS, радіорелейка">Wi-Fi 7, DOCSIS</b></span>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Practical limits" data-uk="Практичні межі">Practical limits</div>
+      <span data-en="High-order QAM is unforgiving: it needs an accurate <b>carrier phase</b> (phase noise smears the constellation into rings), a linear power amplifier (compression warps the outer points), and a good <b>channel equaliser</b> to undo multipath. 4096-QAM realistically requires ~40 dB SNR — achievable on cable and short indoor Wi-Fi, rarely at the cell edge. That is why every modern standard pairs QAM with <b>OFDM</b> (to flatten the channel) and strong <b>FEC</b> (LDPC) and falls back to QPSK when the link degrades."
+            data-uk="QAM високого порядку невблаганна: їй потрібна точна <b>фаза носія</b> (фазовий шум розмазує сузір'я в кільця), лінійний підсилювач (компресія викривлює зовнішні точки) і добрий <b>еквалайзер каналу</b> проти багатопроменевості. 4096-QAM реалістично потребує ~40 дБ SNR — досяжно на кабелі й короткому Wi-Fi у приміщенні, рідко на краю стільника. Тому кожен сучасний стандарт поєднує QAM з <b>OFDM</b> (щоб вирівняти канал) і сильним <b>FEC</b> (LDPC) і відкочується до QPSK, коли лінія гіршає."></span></div>
+    <div class="xrefs"><a href="keying.html#psk8">8-PSK</a> <a href="multicarrier.html#ofdm">OFDM</a> <a href="iterative.html#ldpc">LDPC</a> <a href="standards.html#wifi">Wi-Fi</a> <a href="standards.html#nr5g">5G NR</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="QAM · Wireless Atlas — where bits per symbol meets the noise floor." data-uk="QAM · Безпроводовий Атлас — де біти на символ зустрічають рівень шуму."></p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const CS=getComputedStyle(document.documentElement);
+const C_TEAL=CS.getPropertyValue('--teal').trim(), C_ROSE=CS.getPropertyValue('--rose').trim(),
+      C_DIM=CS.getPropertyValue('--dim').trim(), C_LINE=CS.getPropertyValue('--line').trim();
+function gaussPair(){ let u=1-Math.random(),v=Math.random();
+  const r=Math.sqrt(-2*Math.log(u)); return [r*Math.cos(2*Math.PI*v), r*Math.sin(2*Math.PI*v)]; }
+
+const qC=document.getElementById('qCanvas'), qX=qC.getContext('2d');
+let rxPts=[], rxErr=0;
+function gridLevels(M){ const s=Math.round(Math.sqrt(M)); const lv=[];
+  for(let i=0;i<s;i++) lv.push(2*i-(s-1)); return lv; } // e.g. -3,-1,1,3
+function avgPower(lv){ // average symbol energy for square grid
+  let sum=0,n=0; lv.forEach(a=>lv.forEach(b=>{ sum+=a*a+b*b; n++; })); return sum/n; }
+function transmit(){
+  const M=+document.getElementById('qOrder').value;
+  const snr=+document.getElementById('qSNR').value;
+  const lv=gridLevels(M); const P=avgPower(lv);
+  const scale=1/Math.sqrt(P);                 // normalise to unit average power
+  const noise=Math.sqrt(0.5)*Math.pow(10,-snr/20);
+  const N=Math.min(900, M*6);
+  rxPts=[]; rxErr=0;
+  const step = lv.length>1 ? 2 : 1;
+  for(let i=0;i<N;i++){
+    const ai=lv[Math.floor(Math.random()*lv.length)], bi=lv[Math.floor(Math.random()*lv.length)];
+    const g=gaussPair();
+    const rx=[(ai*scale)+g[0]*noise, (bi*scale)+g[1]*noise];
+    rxPts.push(rx);
+    // decide: nearest grid level
+    const da=Math.round(rx[0]/scale), db=Math.round(rx[1]/scale);
+    const clamp=x=>Math.max(lv[0],Math.min(lv[lv.length-1], (Math.abs(x%2)===1?x:x+ (x>=0?1:-1)) ));
+    // snap to nearest odd level
+    const near=v=>{ let best=lv[0],bd=1e9; lv.forEach(l=>{const d=Math.abs(v-l);if(d<bd){bd=d;best=l;}}); return best; };
+    if(near(rx[0]/scale)!==ai || near(rx[1]/scale)!==bi) rxErr++;
+  }
+  rxPts._N=N;
+}
+function drawQ(){
+  const M=+document.getElementById('qOrder').value;
+  const snr=+document.getElementById('qSNR').value;
+  const lv=gridLevels(M); const P=avgPower(lv); const scale=1/Math.sqrt(P);
+  const w=qC.width,h=qC.height, cx=w/2, cy=h/2;
+  const R = h*0.40 / (lv[lv.length-1]*scale);   // px per unit-power
+  qX.clearRect(0,0,w,h);
+  qX.strokeStyle=C_LINE; qX.lineWidth=1;
+  qX.beginPath(); qX.moveTo(0,cy); qX.lineTo(w,cy); qX.moveTo(cx,0); qX.lineTo(cx,h); qX.stroke();
+  // received cloud
+  qX.fillStyle='rgba(240,96,127,.45)';
+  rxPts.forEach(p=>{ qX.beginPath(); qX.arc(cx+p[0]*R,cy-p[1]*R,1.1,0,2*Math.PI); qX.fill(); });
+  // ideal grid
+  qX.fillStyle=C_TEAL;
+  const dotR = M>=1024?1.6:M>=256?2.2:3.2;
+  lv.forEach(a=>lv.forEach(b=>{ qX.beginPath(); qX.arc(cx+a*scale*R,cy-b*scale*R,dotR,0,2*Math.PI); qX.fill(); }));
+  qX.fillStyle=C_DIM; qX.font='10px "JetBrains Mono",monospace';
+  qX.fillText('I',w-12,cy-5); qX.fillText('Q',cx+5,10);
+  document.getElementById('qSV').textContent=snr+' dB';
+  const bits=Math.log2(M);
+  const L=window.LANG==='uk';
+  const N=rxPts._N||1;
+  const ser=(100*rxErr/N).toFixed(rxErr/N<0.01?2:1);
+  const dmin=(2*scale).toFixed(3);
+  document.getElementById('qOut').innerHTML=
+    `<span class="k">${L?'порядок':'order'}</span> M = <span class="a">${M}</span> → <span class="a">${bits}</span> ${L?'біт/символ':'bits/symbol'}\n`
+    +`<span class="k">${L?'мін. відстань':'min distance'}</span> d = <span class="s">${dmin}</span> ${L?'(норм. потужність)':'(unit power)'}\n`
+    +`<span class="k">${L?'символьних помилок':'symbol errors'}</span> = <span class="b">${rxErr}/${N}</span> (${ser}%)`;
+}
+function refresh(){ transmit(); drawQ(); }
+
+function fillRefs(){
+  document.getElementById('refs-qam').innerHTML=atlasRefs([
+    {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Quadrature_amplitude_modulation',label:'QAM'},
+                uk:{href:'https://uk.wikipedia.org/wiki/Квадратурна_амплітудна_модуляція',label:'QAM'}},
+    {tag:'ieee',en:{href:'https://standards.ieee.org/ieee/802.11/7028/',label:'IEEE 802.11'}},
+    {tag:'std',en:{href:'https://www.3gpp.org/specifications',label:'3GPP TS 38.211'}}
+  ]);
+}
+document.getElementById('qOrder').addEventListener('change',refresh);
+document.getElementById('qSNR').addEventListener('input',refresh);
+document.getElementById('qNew').addEventListener('click',refresh);
+window.onLangChange=function(){ fillRefs(); drawQ(); };
+fillRefs(); refresh();
+</script>
+</body>
+</html>

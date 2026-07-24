@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cellular cryptography (KASUMI · ZUC · MILENAGE · TUAK) — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="cellular">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="The mobile-network cryptographic stack — 2G to 5G"
+         data-uk="Криптографічний стек мобільних мереж — від 2G до 5G">Mobile-network stack</div>
+    <h1 data-en="Cellular Cryptography" data-uk="Стільникова криптографія">Cellular cryptography</h1>
+    <p class="lede" data-en="Every phone call and data session over 3G, 4G and 5G is protected by a small family of primitives specified by 3GPP: the <b>KASUMI</b> block cipher (from MISTY1), the <b>ZUC</b> stream cipher, and the two authentication-and-key-agreement (AKA) kernels — <b>MILENAGE</b> (built on AES/Rijndael) and <b>TUAK</b> (built on Keccak). Here they are with two working toy engines — a ZUC-style LFSR keystream generator and a KASUMI-style Feistel showing the avalanche effect — and two schematic diagrams of the SIM ⇄ network handshake."
+       data-uk="Кожен дзвінок і сеанс даних у 3G, 4G та 5G захищає невелика родина примітивів, визначених 3GPP: блоковий шифр <b>KASUMI</b> (з MISTY1), потоковий шифр <b>ZUC</b> та два ядра автентифікації й узгодження ключів (AKA) — <b>MILENAGE</b> (на основі AES/Rijndael) і <b>TUAK</b> (на основі Keccak). Тут вони подані з двома робочими іграшковими рушіями — потоковим генератором у стилі ZUC (LFSR) і мережею Фейстеля у стилі KASUMI з лавинним ефектом — та двома схематичними діаграмами рукостискання SIM ⇄ мережа.">The cryptographic stack of the mobile network.</p>
+    <div class="readout" id="selftest" style="margin-top:18px; max-width:560px;"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="Confidentiality Primitives" data-uk="Примітиви конфіденційності">Confidentiality primitives</h3>
+
+  <!-- ============ KASUMI ============ -->
+  <section id="kasumi">
+    <span class="num" data-en="01 / KASUMI (3GPP TS 35.202)" data-uk="01 / KASUMI (3GPP TS 35.202)">01 / KASUMI</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="KASUMI (A5/3, GEA3) — The 3G Block Cipher" data-uk="KASUMI (A5/3, GEA3) — блоковий шифр 3G">KASUMI (A5/3, GEA3)</span></h2>
+    <div class="formula">Lᵢ = Rᵢ₋₁,  Rᵢ = Lᵢ₋₁ ⊕ fᵢ(Rᵢ₋₁, RKᵢ)   (8-round Feistel, 64-bit block)</div>
+    <p class="desc" data-en="KASUMI is a 64-bit, <b>8-round Feistel</b> cipher derived from Mitsubishi's <b>MISTY1</b>, standardised by 3GPP as the core of the <b>A5/3</b> voice cipher, the <b>GEA3</b> GPRS cipher and the f8/f9 confidentiality &amp; integrity functions of UMTS/3G. Its round function nests two more Feistel-like layers (FO inside FL) built from two S-boxes S7 and S9. The defining behaviour of any good Feistel cipher is the <b>avalanche effect</b>: flipping one input bit should flip about half the output bits after enough rounds. The demo runs a faithful toy Feistel (with the AES S-box as a stand-in round function) so you can watch that diffusion spread round by round. It is a <b>toy structural model</b>, not real KASUMI."
+       data-uk="KASUMI — це 64-бітний <b>8-раундовий шифр Фейстеля</b>, похідний від <b>MISTY1</b> компанії Mitsubishi, стандартизований 3GPP як основа голосового шифру <b>A5/3</b>, GPRS-шифру <b>GEA3</b> та функцій конфіденційності й цілісності f8/f9 в UMTS/3G. Його раундова функція вкладає ще два Фейстель-подібні шари (FO всередині FL) на двох S-боксах S7 і S9. Визначальна поведінка будь-якого доброго шифру Фейстеля — <b>лавинний ефект</b>: зміна одного вхідного біта має змінити близько половини вихідних бітів після достатньої кількості раундів. Демо виконує точну іграшкову мережу Фейстеля (з S-боксом AES як замінником раундової функції), щоб побачити, як ця дифузія поширюється раунд за раундом. Це <b>іграшкова структурна модель</b>, а не справжній KASUMI."></p>
+    <div id="refs-kasumi"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="ksCanvas" width="300" height="170"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="input block (hex, 8 nibbles = 32 bits)" data-uk="вхідний блок (hex, 8 ніблів = 32 біти)">input block (hex)</span></label>
+            <input type="text" id="ksIn" value="0123abcd" maxlength="8" style="width:100%; font-size:12px"></div>
+          <div class="ctrl"><label><span data-en="rounds" data-uk="раундів">rounds</span><span class="val" id="ksRV">8</span></label>
+            <input type="range" id="ksR" min="1" max="8" value="8"></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="ksFlip" data-en="Flip 1 input bit" data-uk="Змінити 1 вхідний біт">Flip 1 input bit</button>
+            <button id="ksRand" class="secondary" data-en="Random block" data-uk="Випадковий блок">Random block</button>
+          </div>
+          <div class="hint" data-en="Each row = one round; a pink cell means that output bit differs from the run with one flipped input bit." data-uk="Кожен рядок — один раунд; рожева клітинка означає, що цей вихідний біт відрізняється від запуску зі зміненим одним вхідним бітом."></div>
+          <div class="readout" id="ksOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Full KASUMI has a devastating <b>related-key attack</b> (Dunkelman–Keller–Shamir, 2010) that recovers the key in about 2³² time on a normal PC — an attack that, notably, does <b>not</b> work against its parent MISTY1, because 3GPP simplified the key schedule for hardware speed. It stays in service inside A5/3/GEA3 only because the mobile protocol never gives an attacker the related-key queries the attack needs; even so, 4G/5G moved confidentiality to SNOW 3G, AES and ZUC. Avoid KASUMI for new designs."
+            data-uk="Повний KASUMI має руйнівну <b>атаку на зв'язаних ключах</b> (Данкельман–Келлер–Шамір, 2010), що відновлює ключ приблизно за 2³² операцій на звичайному ПК — атаку, яка, показово, <b>не</b> працює проти батьківського MISTY1, бо 3GPP спростив розклад ключів заради апаратної швидкості. Він лишається в A5/3/GEA3 лише тому, що мобільний протокол ніколи не дає атакувальнику потрібних запитів на зв'язаних ключах; попри це, 4G/5G перевели конфіденційність на SNOW 3G, AES і ZUC. Уникайте KASUMI в нових проєктах."></span></div>
+    <div class="xrefs"><a href="stream.html#a5">A5/1, A5/2</a> <a href="symcrypt.html#boomerang" data-en="Related-key / boomerang" data-uk="Зв'язані ключі / бумеранг">Related-key / boomerang</a> <a href="standards.html#snow2">SNOW 3G</a></div>
+  </section>
+
+  <!-- ============ ZUC ============ -->
+  <section id="zuc">
+    <span class="num" data-en="02 / ZUC (128-EEA3 / 128-EIA3)" data-uk="02 / ZUC (128-EEA3 / 128-EIA3)">02 / ZUC</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="ZUC — The 4G/5G Stream Cipher" data-uk="ZUC — потоковий шифр 4G/5G">ZUC (128-EEA3 / 128-EIA3)</span></h2>
+    <div class="formula">LFSR (16 cells / GF(2³¹−1)) → bit-reorganisation X₀…X₃ → F(R1,R2) → z = W ⊕ X₃</div>
+    <p class="desc" data-en="ZUC is a word-oriented stream cipher designed in China and adopted by 3GPP for LTE and 5G as the <b>128-EEA3</b> confidentiality and <b>128-EIA3</b> integrity algorithms — the third option alongside the AES- and SNOW-3G-based sets. It has three layers: a <b>16-stage LFSR</b> over the prime field GF(2³¹−1); a <b>bit-reorganisation</b> that carves four 32-bit words X₀…X₃ out of the LFSR cells; and a <b>nonlinear function F</b> with two 32-bit memory registers R1, R2 and two S-boxes, whose output W is XORed with X₃ to produce each keystream word. The demo below runs a genuine LFSR + bit-reorganisation + nonlinear-F engine on toy 8-bit words and steps it to emit keystream bytes, drawing the live LFSR state. It is a <b>toy structural model</b> of ZUC (real ZUC uses 31-bit words and a mod-2³¹−1 feedback)."
+       data-uk="ZUC — це слово-орієнтований потоковий шифр, розроблений у Китаї й прийнятий 3GPP для LTE та 5G як алгоритми конфіденційності <b>128-EEA3</b> і цілісності <b>128-EIA3</b> — третій варіант поряд із наборами на AES та SNOW 3G. Він має три шари: <b>16-стадійний LFSR</b> над простим полем GF(2³¹−1); <b>реорганізацію бітів</b>, що вирізає чотири 32-бітні слова X₀…X₃ з комірок LFSR; та <b>нелінійну функцію F</b> з двома 32-бітними регістрами пам'яті R1, R2 і двома S-боксами, вихід W якої XOR-иться з X₃, даючи кожне слово гами. Демо нижче запускає справжній рушій LFSR + реорганізація бітів + нелінійна F на іграшкових 8-бітних словах і крокує ним, видаючи байти гами, малюючи живий стан LFSR. Це <b>іграшкова структурна модель</b> ZUC (справжній ZUC працює з 31-бітними словами й зворотним зв'язком за mod 2³¹−1)."></p>
+    <div id="refs-zuc"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="zuCanvas" width="300" height="120"></canvas>
+        <div class="controls">
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button id="zuStep" data-en="Clock once" data-uk="Такт">Clock once</button>
+            <button id="zuRun" data-en="Clock ×8" data-uk="Такт ×8">Clock ×8</button>
+            <button id="zuReset" class="secondary" data-en="Re-key" data-uk="Пере-ключити">Re-key</button>
+          </div>
+          <div class="hint" data-en="Top row: the 16 LFSR cells. Below: registers R1, R2 of the nonlinear F, and the recent keystream z." data-uk="Верхній рядок: 16 комірок LFSR. Нижче: регістри R1, R2 нелінійної F та остання гама z."></div>
+          <div class="readout" id="zuOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="No practical break of full ZUC; published analysis (guess-and-determine, algebraic, differential-of-the-initialisation) stays far from feasibility, and an initial-round weakness found during standardisation was fixed in ZUC-1.5 before deployment. Its successor <b>ZUC-256</b> targets 5G with 256-bit keys. As with every stream cipher the fatal error is reuse of a (key, IV) pair — it XORs two keystream-identical ciphertexts into a two-time pad."
+            data-uk="Практичного злому повного ZUC немає; опублікований аналіз (guess-and-determine, алгебричний, диференціал ініціалізації) лишається далеко від здійсненності, а слабкість початкових раундів, знайдену під час стандартизації, виправили у ZUC-1.5 до впровадження. Наступник <b>ZUC-256</b> орієнтований на 5G з 256-бітними ключами. Як і для кожного потокового шифру, фатальна помилка — повторне використання пари (ключ, IV): воно зводить два шифротексти зі спільною гамою до двократного блокнота."></span></div>
+    <div class="xrefs"><a href="standards.html#snow2">SNOW 3G</a> <a href="stream.html#chacha">ChaCha20</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Authentication &amp; Key Agreement (AKA)" data-uk="Автентифікація та узгодження ключів (AKA)">Authentication &amp; key agreement (AKA)</h3>
+
+  <!-- ============ MILENAGE ============ -->
+  <section id="milenage">
+    <span class="num" data-en="11 / MILENAGE (3GPP TS 35.206)" data-uk="11 / MILENAGE (3GPP TS 35.206)">11 / MILENAGE</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="MILENAGE — The AES/Rijndael-Based AKA Functions" data-uk="MILENAGE — функції AKA на основі AES/Rijndael">MILENAGE</span></h2>
+    <div class="formula" data-en="OPᶜ = OP ⊕ E_K(OP);  TEMP = E_K(RAND ⊕ OPᶜ);  fᵢ = E_K( rotᵣᵢ(TEMP ⊕ OPᶜ) ⊕ cᵢ ) ⊕ OPᶜ" data-uk="OPᶜ = OP ⊕ E_K(OP);  TEMP = E_K(RAND ⊕ OPᶜ);  fᵢ = E_K( rotᵣᵢ(TEMP ⊕ OPᶜ) ⊕ cᵢ ) ⊕ OPᶜ">OPᶜ = OP ⊕ E_K(OP);  TEMP = E_K(RAND ⊕ OPᶜ);  fᵢ = E_K( rot(TEMP ⊕ OPᶜ) ⊕ cᵢ ) ⊕ OPᶜ</div>
+    <p class="desc" data-en="MILENAGE is the standard example set for the seven <b>AKA</b> functions that let a SIM/USIM and the network authenticate each other and derive session keys. It is a <b>construction over AES</b>: E_K is one AES-128 encryption under the subscriber key K, personalised per-operator by a 128-bit constant <b>OP</b> (used only as its encrypted form OPᶜ). From the challenge RAND it derives <b>TEMP</b>, then produces five outputs via five rotate-then-encrypt legs, each with its own rotation rᵢ and constant cᵢ: <b>f1 = MAC-A</b> (network-authentication tag), <b>f2 = RES</b> (the subscriber's response), <b>f3 = CK</b> (cipher key), <b>f4 = IK</b> (integrity key) and <b>f5 = AK</b> (anonymity key, which masks the sequence number SQN). This section is <b>explanatory and schematic only</b> — it does not implement AES or compute any real values. The diagram shows the AKA challenge–response data flow."
+       data-uk="MILENAGE — це стандартний приклад набору з семи функцій <b>AKA</b>, що дають SIM/USIM і мережі взаємно автентифікуватися й виводити сеансові ключі. Це <b>конструкція над AES</b>: E_K — це одне шифрування AES-128 під ключем абонента K, персоналізоване для оператора 128-бітною константою <b>OP</b> (застосовується лише у зашифрованій формі OPᶜ). З виклику RAND виводиться <b>TEMP</b>, потім п'ять виходів через п'ять гілок «оберт-потім-шифрування», кожна зі своїм обертом rᵢ і константою cᵢ: <b>f1 = MAC-A</b> (тег автентифікації мережі), <b>f2 = RES</b> (відповідь абонента), <b>f3 = CK</b> (ключ шифрування), <b>f4 = IK</b> (ключ цілісності) і <b>f5 = AK</b> (ключ анонімності, що маскує номер послідовності SQN). Цей розділ — <b>лише пояснювальний і схематичний</b>: він не реалізує AES і не обчислює жодних справжніх значень. Діаграма показує потік даних «виклик–відповідь» AKA."></p>
+    <div id="refs-milenage"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="mlCanvas" width="300" height="300"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Schematic only — no cryptography is computed here. AuC = Authentication Centre; USIM = the SIM application on the card." data-uk="Лише схема — тут не обчислюється жодна криптографія. AuC = Центр автентифікації; USIM = SIM-застосунок на картці."></div>
+          <div class="readout" id="mlOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="MILENAGE inherits AES's strength and has no cryptographic break. Its real risks are operational: the per-operator constant OP is a shared secret whose leakage (or a weak OP) weakens every SIM in a batch, and — as the 2010s revealed — <b>SIM-key (Ki) theft at manufacturing</b> (the Gemalto/GCHQ affair) bypasses the maths entirely. Classic 3G AKA also lacks strong protection against <b>IMSI-catcher</b> identity exposure; 5G's SUCI concealment addresses that at the protocol layer, not inside MILENAGE."
+            data-uk="MILENAGE успадковує стійкість AES і не має криптографічного злому. Його справжні ризики — операційні: константа оператора OP є спільним секретом, витік якого (чи слабкий OP) послаблює кожну SIM у партії, а — як показали 2010-ті — <b>крадіжка ключа SIM (Ki) на виробництві</b> (справа Gemalto/GCHQ) повністю обходить математику. Класичний 3G AKA також не має надійного захисту від розкриття особи <b>перехоплювачами IMSI</b>; приховування SUCI у 5G розв'язує це на рівні протоколу, а не всередині MILENAGE."></span></div>
+    <div class="xrefs"><a href="symmetric.html#aes">AES</a> <a href="authprotocols.html#auth-rsa" data-en="Challenge–response auth" data-uk="Автентифікація «виклик–відповідь»">Challenge–response auth</a></div>
+  </section>
+
+  <!-- ============ TUAK ============ -->
+  <section id="tuak">
+    <span class="num" data-en="11 / TUAK (3GPP TS 35.231)" data-uk="11 / TUAK (3GPP TS 35.231)">11 / TUAK</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">O(n)</span>
+      <span data-en="TUAK — The Keccak-Based AKA Alternative" data-uk="TUAK — альтернатива AKA на основі Keccak">TUAK</span></h2>
+    <div class="formula">(MAC, RES, CK, IK, AK) = truncate( Keccak-f[1600]( K ‖ RAND ‖ OP ‖ INSTANCE ‖ … ) )</div>
+    <p class="desc" data-en="TUAK is the <b>second</b> example AKA function set standardised by 3GPP, offered so that operators are not dependent on a single algorithm family. Where MILENAGE builds on AES, TUAK builds on the <b>Keccak-f[1600] permutation</b> — the same 1600-bit permutation that underlies SHA-3. The subscriber key K, the operator field TOP/TOPᶜ, the challenge RAND, the sequence/AMF fields and an INSTANCE byte (which selects which output is being produced) are packed into the 1600-bit state; one application of the permutation diffuses everything, and the outputs <b>f1 = MAC-A</b>, <b>f2 = RES</b>, <b>f3 = CK</b>, <b>f4 = IK</b>, <b>f5 = AK</b> are read out as truncations of the result. Choosing TUAK means a second, structurally-different fallback should a weakness ever be found in AES or in MILENAGE's construction. This section is <b>explanatory and schematic only</b>: the diagram labels the permutation and its AKA outputs; no real Keccak computation is performed here."
+       data-uk="TUAK — це <b>другий</b> приклад набору функцій AKA, стандартизований 3GPP, запропонований, щоб оператори не залежали від однієї родини алгоритмів. Там, де MILENAGE будується на AES, TUAK будується на <b>перестановці Keccak-f[1600]</b> — тій самій 1600-бітній перестановці, що лежить в основі SHA-3. Ключ абонента K, поле оператора TOP/TOPᶜ, виклик RAND, поля послідовності/AMF та байт INSTANCE (що обирає, який вихід формується) пакуються у 1600-бітний стан; одне застосування перестановки дифундує все, а виходи <b>f1 = MAC-A</b>, <b>f2 = RES</b>, <b>f3 = CK</b>, <b>f4 = IK</b>, <b>f5 = AK</b> зчитуються як усічення результату. Вибір TUAK означає другий, структурно інший запасний варіант на випадок, якщо колись знайдуть слабкість в AES чи в конструкції MILENAGE. Цей розділ — <b>лише пояснювальний і схематичний</b>: діаграма позначає перестановку та її виходи AKA; жодного справжнього обчислення Keccak тут не виконується."></p>
+    <div id="refs-tuak"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="tuCanvas" width="300" height="300"></canvas>
+        <div class="controls">
+          <div class="hint" data-en="Schematic only — no Keccak permutation is computed here. INSTANCE selects which of f1…f5 the same state produces." data-uk="Лише схема — тут не обчислюється перестановка Keccak. INSTANCE обирає, яку з f1…f5 формує той самий стан."></div>
+          <div class="readout" id="tuOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="TUAK rests on the well-studied Keccak permutation and has no known cryptographic weakness; a formal analysis commissioned by 3GPP (2014) found it sound. In practice it is far less deployed than MILENAGE — a diversity insurance policy more than a workhorse. Its operational risks mirror MILENAGE's: protect the subscriber key K and the operator constant TOP, since the algorithm's strength cannot save a leaked long-term secret."
+            data-uk="TUAK спирається на добре вивчену перестановку Keccak і не має відомих криптографічних вад; формальний аналіз, замовлений 3GPP (2014), визнав його надійним. На практиці він розгорнутий значно менше, ніж MILENAGE — це радше страховка різноманіттям, ніж робоча конячка. Його операційні ризики дзеркалять MILENAGE: бережіть ключ абонента K і константу оператора TOP, бо стійкість алгоритму не врятує викрадений довготривалий секрет."></span></div>
+    <div class="xrefs"><a href="hash.html#sha3">SHA-3 (Keccak)</a> <a href="standards.html#kupyna">Kupyna</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+
+/* ---- GF(2^8) for AES (poly 0x11B) + computed AES S-box (shared by both toy engines) ---- */
+function gmul(a,b){ let p=0; for(let i=0;i<8;i++){ if(b&1)p^=a; const hi=a&0x80; a=(a<<1)&0xFF; if(hi)a^=0x1b; b>>=1; } return p; }
+const SBOX=(function(){
+  const anti=new Array(256),log=new Array(256); let x=1;
+  for(let i=0;i<255;i++){ anti[i]=x; log[x]=i; x=gmul(x,3); }
+  const minv=a=> a===0?0:anti[(255-log[a])%255];
+  const box=new Array(256);
+  for(let i=0;i<256;i++){ let b=minv(i),s=b;
+    for(let c=0;c<4;c++){ b=((b<<1)|(b>>7))&0xFF; s^=b; }
+    box[i]=s^0x63;
+  }
+  return box;
+})();
+const xt=a=>gmul(a,2);
+
+/* ---- small helpers ---- */
+const hex2=v=>v.toString(16).padStart(2,'0');
+const hex4=v=>(v>>>0).toString(16).padStart(4,'0');
+const hex8=v=>(v>>>0).toString(16).padStart(8,'0');
+const popcount=n=>{ let c=0; n=n>>>0; while(n){ c+=n&1; n>>>=1; } return c; };
+
+/* ====================================================================
+   1) KASUMI — toy 8-round Feistel (AES S-box round function) + avalanche
+   32-bit block (two 16-bit halves) so the diffusion heatmap has 32 cells.
+   ==================================================================== */
+const KS_KEY=0xA7C1F93E;
+const KS_RK=(function(){ const r=[]; for(let i=0;i<8;i++){ r.push(((KS_KEY>>>((i*7)%24)) ^ (0x9E37*(i+1)) ^ (i*0x5BD1)) & 0xFFFF); } return r; })();
+function ksF(x,k){                                   // 16-bit round function
+  const s=((SBOX[(x>>8)&0xFF]<<8)|SBOX[x&0xFF])&0xFFFF;
+  const rot=((s<<3)|(s>>>13))&0xFFFF;                // rotate-left 3
+  return (rot^k)&0xFFFF;
+}
+function ksEncTraj(block,rounds){                    // returns 32-bit state after each round
+  let L=(block>>>16)&0xFFFF, R=block&0xFFFF; const traj=[];
+  for(let r=0;r<rounds;r++){ const nL=R, nR=(L^ksF(R,KS_RK[r]))&0xFFFF; L=nL; R=nR; traj.push((((L<<16)>>>0)|R)>>>0); }
+  return traj;
+}
+function ksDec(state,rounds){                        // inverse, to prove it is a real cipher
+  let L=(state>>>16)&0xFFFF, R=state&0xFFFF;
+  for(let r=rounds-1;r>=0;r--){ const pL=(R^ksF(L,KS_RK[r]))&0xFFFF, pR=L; L=pL; R=pR; }
+  return (((L<<16)>>>0)|R)>>>0;
+}
+function ksParse(s){ s=(s||'').replace(/[^0-9a-fA-F]/g,'').padEnd(8,'0').slice(0,8); return parseInt(s,16)>>>0; }
+function drawKS(){
+  const rounds=+document.getElementById('ksR').value; document.getElementById('ksRV').textContent=rounds;
+  const inp=ksParse(document.getElementById('ksIn').value);
+  const inp2=(inp^0x00000001)>>>0;                   // flip 1 input bit (lsb)
+  const t1=ksEncTraj(inp,rounds), t2=ksEncTraj(inp2,rounds);
+  const out=t1[rounds-1], out2=t2[rounds-1];
+  const diff=popcount(out^out2);
+  // canvas: round-by-round diffusion heatmap (rows = rounds, 32 columns = bits)
+  const cv=document.getElementById('ksCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const cols=32, cw=(W-24)/cols, rh=Math.min(16,(H-16)/rounds), ox=22, oy=6;
+  for(let r=0;r<rounds;r++){
+    const d=(t1[r]^t2[r])>>>0;
+    for(let b=0;b<32;b++){ const on=(d>>>(31-b))&1; g.fillStyle=on?C.rose:C.grid; g.fillRect(ox+b*cw, oy+r*rh, cw-0.6, rh-1.5); }
+    g.fillStyle=C.dim; g.font='8px monospace'; g.fillText('r'+(r+1), 2, oy+r*rh+rh-3);
+  }
+  const uk=window.LANG==='uk';
+  document.getElementById('ksOut').innerHTML=
+    '<span class="k">'+(uk?'вхід':'input')+':</span> '+hex8(inp)+'  <span class="k">'+(uk?'вихід':'output')+':</span> <span class="a">'+hex8(out)+'</span>\n'+
+    '<span class="k">'+(uk?'лавина (1 біт входу →)':'avalanche (1 input bit →)')+':</span> <span class="s">'+diff+' / 32</span> '+
+    (uk?'вихідних бітів змінено':'output bits changed')+' ('+(diff/32*100).toFixed(0)+'%)';
+}
+
+/* ====================================================================
+   2) ZUC — toy LFSR + bit-reorganisation + nonlinear F (8-bit words)
+   Faithful structure of ZUC at 8-bit scale: 16-cell LFSR, BR carves
+   four words from nibbles, F holds two registers R1,R2 and two S-boxes.
+   ==================================================================== */
+const ALPHA=a=>xt(a)^(a&0x80?0x2d:0);                // toy GF(2^8) alpha-multiply
+function ZucEngine(seed){
+  let s=new Array(16).fill(0).map((_,i)=>SBOX[(i*11+seed)&0xFF]|1);   // nonzero LFSR fill
+  let R1=SBOX[seed&0xFF], R2=SBOX[(seed*5+1)&0xFF];
+  const hi=v=>(v>>4)&0xF, lo=v=>v&0xF;
+  return {
+    state:()=>({s:s.slice(),R1,R2}),
+    step(){
+      // bit-reorganisation: four toy words from LFSR nibbles (ZUC taps 15,14,11,9,7,5,2,0)
+      const X0=((hi(s[15])<<4)|lo(s[14]))&0xFF;
+      const X1=((lo(s[11])<<4)|hi(s[9]))&0xFF;
+      const X2=((lo(s[7])<<4)|hi(s[5]))&0xFF;
+      const X3=((lo(s[2])<<4)|hi(s[0]))&0xFF;
+      // nonlinear function F with memory R1, R2
+      const W =((X0^R1)+R2)&0xFF;
+      const W1=(R1+X1)&0xFF;
+      const W2=(R2^X2)&0xFF;
+      const nR1=SBOX[((W1&0xF0)|(W2>>4))&0xFF];       // S-box S1 (toy)
+      const nR2=SBOX[((W2&0xF0)|(W1>>4))&0xFF];       // S-box S2 (toy)
+      const z=(W^X3)&0xFF;                            // keystream word
+      // clock the LFSR (taps 0,4,10,13,15 with toy alpha feedback)
+      const fb=(ALPHA(s[0])^s[4]^s[10]^s[13]^ALPHA(s[15]))&0xFF || 1;
+      for(let i=0;i<15;i++) s[i]=s[i+1]; s[15]=fb;
+      R1=nR1; R2=nR2;
+      return z;
+    }
+  };
+}
+function makeZuc(canvasId,outId){
+  let eng=ZucEngine(0x3c), ks=[];
+  function draw(){
+    const st=eng.state();
+    const cv=document.getElementById(canvasId),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+    g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+    const cw=W/16;
+    for(let i=0;i<16;i++){ const v=st.s[i]; g.fillStyle='rgb('+(50+((v*0.7)|0))+',180,'+(160-((v*0.3)|0))+')'; g.fillRect(i*cw+1,10,cw-2,38);
+      g.fillStyle=C.dim; g.font='7px monospace'; g.fillText(hex2(v),i*cw+2,60); }
+    g.fillStyle=C.amber; g.font='10px monospace';
+    g.fillText('R1='+hex2(st.R1)+'  R2='+hex2(st.R2),8,84);
+    g.fillStyle=C.teal; g.fillText('z: '+ks.slice(-10).map(hex2).join(' '),8,104);
+    const uk=window.LANG==='uk';
+    document.getElementById(outId).innerHTML=
+      '<span class="k">LFSR:</span> <span class="a">'+st.s.map(hex2).join(' ')+'</span>\n'+
+      '<span class="k">F:</span> R1=<span class="s">'+hex2(st.R1)+'</span> R2=<span class="s">'+hex2(st.R2)+'</span>\n'+
+      '<span class="k">'+(uk?'гама (останні)':'keystream (recent)')+':</span> <span class="a">'+ks.slice(-16).map(hex2).join(' ')+'</span>';
+  }
+  return {
+    draw,
+    step(n){ for(let i=0;i<n;i++) ks.push(eng.step()); draw(); },
+    reset(){ eng=ZucEngine((Math.random()*256)|0); ks=[]; draw(); }
+  };
+}
+
+/* ====================================================================
+   3) MILENAGE — STATIC schematic of the AKA challenge-response flow.
+   No cryptography is computed; this only draws labelled boxes/arrows.
+   ==================================================================== */
+function box(g,x,y,w,h,fill,stroke){ g.fillStyle=fill; g.fillRect(x,y,w,h); g.strokeStyle=stroke; g.lineWidth=1; g.strokeRect(x,y,w,h); }
+function arrow(g,x1,y1,x2,y2,col){ g.strokeStyle=col; g.lineWidth=1.4; g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
+  const a=Math.atan2(y2-y1,x2-x1); g.beginPath(); g.moveTo(x2,y2); g.lineTo(x2-7*Math.cos(a-0.4),y2-7*Math.sin(a-0.4)); g.lineTo(x2-7*Math.cos(a+0.4),y2-7*Math.sin(a+0.4)); g.closePath(); g.fillStyle=col; g.fill(); g.lineWidth=1; }
+function drawMilenage(){
+  const uk=window.LANG==='uk';
+  const cv=document.getElementById('mlCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  g.textAlign='center'; g.font='9px monospace';
+  // two party headers
+  box(g,14,10,120,40,C.line,C.dim);
+  box(g,W-134,10,120,40,C.line,C.dim);
+  g.fillStyle=C.ink; g.font='bold 9px monospace';
+  g.fillText(uk?'Мережа / AuC':'Network / AuC',74,26);
+  g.fillText('USIM (SIM)',W-74,26);
+  g.fillStyle=C.dim; g.font='8px monospace';
+  g.fillText('K, OP',74,42); g.fillText('K, OP',W-74,42);
+  // challenge down
+  arrow(g,74,50,74,88,C.amber);
+  g.fillStyle=C.amber; g.font='8px monospace'; g.fillText(uk?'генерує RAND':'generates RAND',74,64);
+  arrow(g,90,96,W-90,96,C.amber);
+  g.fillStyle=C.amber; g.fillText('RAND ‖ AUTN  →',W/2,90);
+  // USIM computation block
+  box(g,W-150,108,140,120,'#12203a',C.teal);
+  g.fillStyle=C.teal; g.font='bold 9px monospace'; g.fillText(uk?'MILENAGE (E_K)':'MILENAGE (E_K)',W-80,122);
+  g.fillStyle=C.dim; g.font='8px monospace';
+  g.fillText('OPᶜ = OP ⊕ E_K(OP)',W-80,138);
+  g.fillText('TEMP = E_K(RAND⊕OPᶜ)',W-80,150);
+  const legs=[['f1','MAC-A'],['f2','RES'],['f3','CK'],['f4','IK'],['f5','AK']];
+  g.font='8px monospace';
+  legs.forEach((l,i)=>{ g.fillStyle=C.ink; g.fillText(l[0]+' = '+l[1], W-80, 166+i*12); });
+  // response up
+  arrow(g,W-90,236,90,236,C.teal);
+  g.fillStyle=C.teal; g.fillText('←  RES (f2)',W/2,230);
+  // verify + local keys
+  box(g,14,248,120,44,C.line,C.dim);
+  g.fillStyle=C.ink; g.font='bold 9px monospace'; g.fillText(uk?'звіряє RES':'checks RES',74,264);
+  g.fillStyle=C.dim; g.font='8px monospace'; g.fillText(uk?'CK, IK лишаються':'CK, IK stay',74,278);
+  g.fillText(uk?'у телефоні':'on the phone',74,288);
+  g.textAlign='left';
+  document.getElementById('mlOut').innerHTML=
+    '<span class="k">'+(uk?'СХЕМА — нічого не обчислюється':'SCHEMATIC — nothing is computed')+'</span>\n'+
+    '<span class="k">f1</span>=MAC-A  <span class="k">f2</span>=RES  <span class="k">f3</span>=CK\n'+
+    '<span class="k">f4</span>=IK  <span class="k">f5</span>=AK '+(uk?'(маскує SQN)':'(masks SQN)');
+}
+
+/* ====================================================================
+   4) TUAK — STATIC schematic of the Keccak-f[1600] AKA construction.
+   No Keccak permutation is computed; labelled boxes/arrows only.
+   ==================================================================== */
+function drawTuak(){
+  const uk=window.LANG==='uk';
+  const cv=document.getElementById('tuCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  g.textAlign='center'; g.font='8px monospace';
+  // input fields (left column)
+  const ins=['K','RAND','TOP / TOPᶜ','SQN ‖ AMF','INSTANCE'];
+  ins.forEach((t,i)=>{ const y=24+i*40; box(g,10,y,86,28,C.line,C.dim); g.fillStyle=C.ink; g.fillText(t,53,y+18); });
+  // permutation block (centre)
+  box(g,120,54,70,150,'#12203a',C.teal);
+  g.fillStyle=C.teal; g.font='bold 9px monospace';
+  g.fillText('Keccak-',155,120); g.fillText('f[1600]',155,134);
+  g.fillStyle=C.dim; g.font='7px monospace'; g.fillText(uk?'1600-біт':'1600-bit',155,150); g.fillText(uk?'стан':'state',155,160);
+  // arrows from inputs into permutation
+  ins.forEach((t,i)=>{ const y=24+i*40+14; arrow(g,96,y,120,Math.max(60,Math.min(200,y)),C.amber); });
+  // outputs (right column)
+  const outs=[['f1','MAC-A'],['f2','RES'],['f3','CK'],['f4','IK'],['f5','AK']];
+  outs.forEach((o,i)=>{ const y=24+i*40; box(g,W-96,y,86,28,C.line,C.dim);
+    g.fillStyle=C.ink; g.font='8px monospace'; g.fillText(o[0]+' = '+o[1],W-53,y+18);
+    arrow(g,190,129,W-96,y+14,C.teal); });
+  g.textAlign='left';
+  document.getElementById('tuOut').innerHTML=
+    '<span class="k">'+(uk?'СХЕМА — Keccak не обчислюється':'SCHEMATIC — Keccak is not computed')+'</span>\n'+
+    '<span class="k">'+(uk?'одна перестановка дифундує весь стан':'one permutation diffuses the whole state')+'</span>\n'+
+    '<span class="k">INSTANCE</span> '+(uk?'обирає f1…f5':'selects f1…f5');
+}
+
+/* ====================================================================
+   self-test banner (reused pattern): verify AES S-box + Feistel round-trip
+   ==================================================================== */
+function selfTest(){
+  const uk=window.LANG==='uk';
+  const sb=(SBOX[0]===0x63 && SBOX[1]===0x7c && SBOX[16]===0xca);
+  const pt=0x0123abcd>>>0; const ct=ksEncTraj(pt,8)[7]; const rt=(ksDec(ct,8)>>>0);
+  const feistel=(rt===pt);
+  document.getElementById('selftest').innerHTML=
+    '<span class="k">'+(uk?'Самоперевірка':'Self-test')+':</span>  '+
+    'AES S-box <span class="'+(sb?'a':'b')+'">'+(sb?'✓':'✗')+'</span>   '+
+    (uk?'Фейстель E∘D':'Feistel E∘D')+' <span class="'+(feistel?'a':'b')+'">'+(feistel?'✓':'✗')+'</span>   '+
+    ((sb&&feistel)?'<span class="a">'+(uk?'іграшкові рушії коректні':'toy engines correct')+'</span>':'<span class="b">FAIL</span>');
+}
+
+/* ====================================================================
+   refs + language wiring
+   ==================================================================== */
+const zuc=makeZuc('zuCanvas','zuOut');
+
+window.REFS={
+  kasumi:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/KASUMI',label:'Wikipedia: KASUMI'}},
+          {tag:'spec',en:{href:'https://www.3gpp.org/DynaReport/35202.htm',label:'3GPP TS 35.202 (KASUMI)'}},
+          {tag:'paper',en:{href:'https://eprint.iacr.org/2010/013',label:'Practical-time related-key attack (2010)'}}],
+  zuc:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Zuc_stream_cipher',label:'Wikipedia: ZUC'}},
+       {tag:'spec',en:{href:'https://www.gsma.com/security/wp-content/uploads/2019/05/eea3eia3zucv16.pdf',label:'128-EEA3 / 128-EIA3 ZUC specification'}},
+       {tag:'paper',en:{href:'https://eprint.iacr.org/2011/551',label:'ZUC security evaluation (ePrint)'}}],
+  milenage:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/MILENAGE',label:'Wikipedia: MILENAGE'}},
+            {tag:'spec',en:{href:'https://www.3gpp.org/DynaReport/35206.htm',label:'3GPP TS 35.206 (MILENAGE algorithm)'}},
+            {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Authentication_and_Key_Agreement',label:'AKA (Authentication and Key Agreement)'}}],
+  tuak:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/TUAK',label:'Wikipedia: TUAK'}},
+        {tag:'spec',en:{href:'https://www.3gpp.org/DynaReport/35231.htm',label:'3GPP TS 35.231 (TUAK algorithm)'}},
+        {tag:'fips',en:{href:'https://csrc.nist.gov/pubs/fips/202/final',label:'FIPS 202 (Keccak / SHA-3)'}}]
+};
+window.onLangChange=function(){
+  Object.keys(REFS).forEach(id=>{ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); });
+  selfTest(); drawKS(); zuc.draw(); drawMilenage(); drawTuak();
+};
+
+/* controls */
+['ksIn','ksR'].forEach(id=>document.getElementById(id).addEventListener('input',drawKS));
+document.getElementById('ksFlip').addEventListener('click',()=>{ let v=ksParse(document.getElementById('ksIn').value); const bit=(Math.random()*32)|0; v=(v^(1<<bit))>>>0; document.getElementById('ksIn').value=hex8(v); drawKS(); });
+document.getElementById('ksRand').addEventListener('click',()=>{ const v=((Math.random()*0x100000000)>>>0); document.getElementById('ksIn').value=hex8(v); drawKS(); });
+document.getElementById('zuStep').addEventListener('click',()=>zuc.step(1));
+document.getElementById('zuRun').addEventListener('click',()=>zuc.step(8));
+document.getElementById('zuReset').addEventListener('click',()=>zuc.reset());
+</script>
+</body>
+</html>

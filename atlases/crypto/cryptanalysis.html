@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cryptanalysis: discrete log &amp; factoring — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="analysis" data-palette="#7FDBCA,#F2A65A,#E8607A,#8FA8E8">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Sections 9 &amp; 10 · attacks on discrete log and factoring" data-uk="Розділи 9 і 10 · атаки на дискретний логарифм і факторизацію">Sections 9 &amp; 10 · attacks on discrete log and factoring</div>
+    <h1 data-en="Cryptanalysis:<br>discrete log &amp; factoring" data-uk="Криптоаналіз:<br>дискретний логарифм і факторизація" data-i18n-html="1">Cryptanalysis:<br>discrete log &amp; factoring</h1>
+    <div class="eq-hero">given g, gˣ mod p — find x &nbsp;·&nbsp; given n = p·q — find p, q</div>
+    <p class="lede" data-en="These pages are the attacker's toolkit. Public-key cryptography stands on two problems being <b>hard</b>: recovering an exponent x from gˣ mod p (discrete log), and splitting a modulus n into its prime factors. The algorithms below are exactly how those problems are chipped at — from the O(√n) meet-in-the-middle of baby-step giant-step to the sub-exponential number-field sieve and, on a quantum computer, Shor's polynomial-time break. Every strength box is inverted: it tells you which key sizes still resist the attack."
+       data-uk="Ці сторінки — інструментарій атакувальника. Криптографія з відкритим ключем тримається на тому, що дві задачі є <b>складними</b>: відновити показник x із gˣ mod p (дискретний логарифм) і розкласти модуль n на прості множники. Наведені алгоритми — це саме те, як ці задачі «підточують»: від O(√n) зустрічі посередині у baby-step giant-step до субекспоненційного решета числового поля і — на квантовому комп'ютері — поліноміального злому Шора. Кожен блок стійкості інвертований: він каже, які розміри ключів досі витримують атаку.">These pages are the attacker's toolkit…</p>
+    <div class="legend-lvls" id="lvlLegend"></div>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ================================================= LANDSCAPE / CHART -->
+  <section id="landscape">
+    <div class="num">00 / landscape</div>
+    <h2><span data-en="The Complexity Landscape" data-uk="Ландшафт складності">The complexity landscape</span></h2>
+    <p class="desc" data-en="Why is 2048-bit RSA rated at only ~112 bits of security? Because the best classical factoring algorithm is not brute force — it is the general number-field sieve, whose cost grows like <b>L[1/3]</b>, far slower than the exponential 2ⁿ a key length would suggest. This chart plots the effective <b>bits of work</b> (log₂ of the operation count) an attacker spends as a function of modulus bit-length, for the four cost classes that appear on this page. Read down from a bit-length to see where each attack lands."
+       data-uk="Чому 2048-бітний RSA оцінюють лише в ~112 біт стійкості? Бо найкращий класичний алгоритм факторизації — не повний перебір, а загальне решето числового поля, вартість якого зростає як <b>L[1/3]</b>, значно повільніше за експоненту 2ⁿ, яку «обіцяла б» довжина ключа. Графік показує ефективну <b>роботу в бітах</b> (log₂ кількості операцій) як функцію довжини модуля в бітах для чотирьох класів вартості з цієї сторінки.">Why is 2048-bit RSA rated at only ~112 bits…</p>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="cxCanvas" width="560" height="380"></canvas>
+        <div class="controls">
+          <div class="ctrl">
+            <label><span data-en="highlight bit-length" data-uk="підсвітити довжину">highlight bit-length</span> <span class="val" id="cxNVal">2048</span></label>
+            <input type="range" id="cxN" min="256" max="4096" step="64" value="2048">
+          </div>
+          <div class="legend">
+            <div><span class="dot" style="background:#7FDBCA"></span><span data-en="O(√n) — BSGS / rho (solid)" data-uk="O(√n) — BSGS / rho (суцільна)">O(√n) — BSGS / rho</span></div>
+            <div><span class="dot" style="background:#F2A65A"></span><span data-en="L[1/2] — QS / index calculus (dashed)" data-uk="L[1/2] — QS / index calculus (штрих)">L[1/2] — QS / index calc</span></div>
+            <div><span class="dot" style="background:#E8607A"></span><span data-en="L[1/3] — GNFS / NFS-DL (dotted)" data-uk="L[1/3] — GNFS / NFS-DL (пунктир)">L[1/3] — GNFS / NFS-DL</span></div>
+            <div><span class="dot" style="background:#8FA8E8"></span><span data-en="O(n³) quantum — Shor (dash-dot)" data-uk="O(n³) квантовий — Шор (штрих-пунктир)">O(n³) quantum — Shor</span></div>
+          </div>
+          <div class="readout" id="cxOut"></div>
+          <div class="hint" data-en="y-axis: log₂(operations) = effective security bits. The √n line is the wall a symmetric key would hit; sieve methods duck far below it, which is why RSA/DH keys must be an order of magnitude longer than symmetric keys for equal security."
+               data-uk="Вісь y: log₂(операцій) = ефективні біти стійкості. Лінія √n — це «стіна», у яку впиратиметься симетричний ключ; решета проходять значно нижче, тому ключі RSA/DH мають бути на порядок довшими за симетричні для тієї ж стійкості.">y-axis: log₂(operations)…</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ############################ PART A: DISCRETE LOG #################### -->
+  <div style="padding:44px 24px 4px;border-bottom:1px solid var(--line)">
+    <div class="eyebrow" data-en="Part A · section 9" data-uk="Частина A · розділ 9">Part A · section 9</div>
+    <h2 style="font-size:30px;margin:6px 0 8px" data-en="Discrete-Logarithm Attacks" data-uk="Атаки на дискретний логарифм">Discrete-logarithm attacks</h2>
+    <p class="desc" style="margin:0" data-en="Given a generator g of a group and an element h = gˣ, recover the exponent x. These methods attack Diffie–Hellman, ElGamal, DSA and elliptic-curve schemes."
+       data-uk="Дано генератор g групи та елемент h = gˣ; відновити показник x. Ці методи атакують Діффі–Хеллмана, Ель-Гамаля, DSA та схеми на еліптичних кривих.">Given a generator g of a group…</p>
+  </div>
+
+  <!-- =========================================================== SHANKS -->
+  <section id="shanks">
+    <div class="num">09.1 / Shanks</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c3">O(√n)</span> <span data-en="Baby-Step Giant-Step" data-uk="Baby-step giant-step (Шенкса)">Baby-step giant-step</span></h2>
+    <div class="formula">x = i·m + j,&nbsp; m = ⌈√n⌉,&nbsp; gʲ = h·(g⁻ᵐ)ⁱ</div>
+    <p class="desc" data-en="A deterministic <b>meet-in-the-middle</b>. Write the unknown x = i·m + j with m = ⌈√n⌉. Then gˣ = h becomes <b>gʲ = h·(g⁻ᵐ)ⁱ</b>. Precompute a table of all <b>baby steps</b> gʲ (j = 0…m−1), then take <b>giant steps</b> h·(g⁻ᵐ)ⁱ until one lands in the table — a collision gives x. It trades memory for time: √n table entries buy a √n-step search instead of n."
+       data-uk="Детермінована <b>зустріч посередині</b>. Запишемо невідоме x = i·m + j, де m = ⌈√n⌉. Тоді gˣ = h стає <b>gʲ = h·(g⁻ᵐ)ⁱ</b>. Спершу будуємо таблицю всіх <b>малих кроків</b> gʲ (j = 0…m−1), потім робимо <b>великі кроки</b> h·(g⁻ᵐ)ⁱ, доки один не потрапить у таблицю — колізія дає x. Це обмін пам'яті на час: √n записів таблиці замість n кроків дають пошук за √n.">A deterministic meet-in-the-middle…</p>
+    <div id="refs-shanks"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="bsgsCanvas" width="440" height="300"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="prime p" data-uk="просте p">prime p</span></label>
+            <select id="bsgsP"></select></div>
+          <div class="ctrl"><label><span data-en="generator g" data-uk="генератор g">generator g</span></label>
+            <input type="number" id="bsgsG" value="2" min="2" style="width:90px"></div>
+          <div class="ctrl"><label><span data-en="target h = gˣ" data-uk="ціль h = gˣ">target h = gˣ</span></label>
+            <input type="number" id="bsgsH" value="57" min="1" style="width:90px"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="bsgsRun" data-en="▶ solve (animate)" data-uk="▶ розв'язати (анімація)">▶ solve (animate)</button>
+            <button id="bsgsRand" class="secondary" data-en="↻ random x" data-uk="↻ випадкове x">↻ random x</button>
+          </div>
+          <div class="legend">
+            <div><span class="dot" style="background:#2C3A5C"></span><span data-en="baby step gʲ" data-uk="малий крок gʲ">baby step gʲ</span></div>
+            <div><span class="dot" style="background:#F2A65A"></span><span data-en="giant probe" data-uk="великий крок">giant probe</span></div>
+            <div><span class="dot" style="background:#7FDBCA"></span><span data-en="collision" data-uk="колізія">collision</span></div>
+          </div>
+          <div class="readout" id="bsgsOut"></div>
+        </div>
+      </div>
+    </div>
+    <p class="hint" data-en="Implementations: " data-uk="Реалізації: ">Implementations: </p>
+    <div class="refs" id="use-shanks"></div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="Time <b>and</b> memory both grow as √n, so BSGS is confined to small groups — a few tens of bits. Any group whose order has a large prime factor of ≥ 256 bits (e.g. a 256-bit elliptic curve, or a safe-prime DH group) puts √n ≈ 2¹²⁸ operations out of reach. The memory demand is what kills it first: storing 2⁶⁴ table entries is already impossible."
+            data-uk="Час <b>і</b> пам'ять зростають як √n, тож BSGS обмежений малими групами — кілька десятків біт. Будь-яка група, порядок якої має великий простий множник ≥ 256 біт (наприклад, 256-бітна еліптична крива або DH на безпечному простому), робить √n ≈ 2¹²⁸ операцій недосяжними. Першою «вбиває» саме вимога пам'яті: зберегти 2⁶⁴ записів уже неможливо."></span></div>
+    <div class="xrefs">
+      <a href="keyexchange.html#dh" data-en="→ Diffie–Hellman" data-uk="→ Діффі–Хеллман">→ Diffie–Hellman</a>
+      <a href="asymmetric.html#elgamal" data-en="→ ElGamal" data-uk="→ Ель-Гамаля">→ ElGamal</a>
+      <a href="#rho-dl" data-en="→ Pollard's rho (less memory)" data-uk="→ ρ Полларда (менше пам'яті)">→ Pollard's rho</a>
+      <a href="numbertheory.html#tonelli" data-en="→ Tonelli–Shanks" data-uk="→ Тонеллі–Шенкс">→ Tonelli–Shanks</a>
+    </div>
+  </section>
+
+  <!-- =========================================================== RHO-DL -->
+  <section id="rho-dl">
+    <div class="num">09.2 / Pollard ρ</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c3">O(√n)</span> <span data-en="Pollard's Rho — For Discrete Log &amp; Factoring" data-uk="ρ-алгоритм Полларда — для ДЛ і факторизації">Pollard's rho — discrete log &amp; factoring</span></h2>
+    <div class="formula">xᵢ₊₁ = f(xᵢ),&nbsp; ρ-shape: tail + cycle,&nbsp; Floyd: gcd / log at the collision</div>
+    <p class="desc" data-en="Pollard's rho keeps BSGS's √n running time but needs only <b>constant memory</b>. Iterate a pseudo-random map xᵢ₊₁ = f(xᵢ); the sequence eventually repeats, and plotted it traces the Greek letter <b>ρ</b> — a tail feeding into a cycle. Floyd's <b>tortoise and hare</b> (one pointer stepping once, one twice) detects the collision without storing the path. The same engine solves two problems: in <b>discrete-log</b> mode the collision yields the exponent x; in <b>factoring</b> mode a gcd at the collision yields a prime factor of n. Switch modes below."
+       data-uk="ρ-алгоритм Полларда зберігає час √n, як у BSGS, але потребує лише <b>сталої пам'яті</b>. Ітеруємо псевдовипадкове відображення xᵢ₊₁ = f(xᵢ); послідовність зрештою повторюється і на графіку креслить грецьку літеру <b>ρ</b> — «хвіст», що входить у цикл. <b>Черепаха і заєць</b> Флойда (один вказівник крокує раз, інший — двічі) виявляють колізію без збереження шляху. Один рушій розв'язує дві задачі: у режимі <b>ДЛ</b> колізія дає показник x; у режимі <b>факторизації</b> gcd у точці колізії дає простий множник n.">Pollard's rho keeps BSGS's √n running time…</p>
+    <div id="refs-rho-dl"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="rhoCanvas" width="440" height="330"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="mode" data-uk="режим">mode</span></label>
+            <select id="rhoMode">
+              <option value="dl" data-en="discrete log: g^x = h" data-uk="дискретний лог: g^x = h">discrete log: g^x = h</option>
+              <option value="factor" data-en="factoring: n = p·q" data-uk="факторизація: n = p·q">factoring: n = p·q</option>
+            </select></div>
+          <div class="ctrl"><label><span data-en="parameters" data-uk="параметри">parameters</span></label>
+            <select id="rhoPreset"></select></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="rhoRun" data-en="▶ run walk" data-uk="▶ запустити блукання">▶ run walk</button>
+            <button id="rhoRand" class="secondary" data-en="↻ new random" data-uk="↻ нове випадкове">↻ new random</button>
+          </div>
+          <div class="legend">
+            <div><span class="dot" style="background:#8FA8E8"></span><span data-en="tail" data-uk="хвіст">tail</span></div>
+            <div><span class="dot" style="background:#F2A65A"></span><span data-en="cycle" data-uk="цикл">cycle</span></div>
+            <div><span class="dot" style="background:#7FDBCA"></span><span data-en="tortoise" data-uk="черепаха">tortoise</span></div>
+            <div><span class="dot" style="background:#E8607A"></span><span data-en="hare" data-uk="заєць">hare</span></div>
+          </div>
+          <div class="readout" id="rhoOut"></div>
+        </div>
+      </div>
+    </div>
+    <p class="hint" data-en="Implementations: " data-uk="Реалізації: ">Implementations: </p>
+    <div class="refs" id="use-rho-dl"></div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="Rho is the <b>best generic attack on elliptic-curve discrete log</b> — there is no sub-exponential method for well-chosen curves. Its √n cost sets the rule: a curve of order ≈ 2²⁵⁶ (Curve25519, P-256) gives ~2¹²⁸ security. It fell to record computations only on small or specially-weak curves (e.g. the Certicom ECC2K-108 challenge). Groups with order ≥ 256 bits are safe; the Pollard-rho record for prime-field ECDLP is around 114 bits."
+            data-uk="Rho — <b>найкраща узагальнена атака на дискретний логарифм еліптичних кривих</b>: для добре обраних кривих субекспоненційного методу не існує. Її вартість √n задає правило: крива порядку ≈ 2²⁵⁶ (Curve25519, P-256) дає ~2¹²⁸ стійкості. Її долали лише на малих чи спеціально ослаблених кривих (наприклад, виклик Certicom ECC2K-108). Групи порядку ≥ 256 біт безпечні; рекорд Pollard-rho для ECDLP над простим полем — близько 114 біт."></span></div>
+    <div class="xrefs">
+      <a href="#rho-f" data-en="→ rho for factoring" data-uk="→ rho для факторизації">→ rho for factoring</a>
+      <a href="#kangaroo" data-en="→ kangaroo (bounded range)" data-uk="→ kangaroo (обмежений діапазон)">→ kangaroo</a>
+      <a href="edwards.html" data-en="→ elliptic curves" data-uk="→ еліптичні криві">→ elliptic curves</a>
+      <a href="keyexchange.html#ecdh" data-en="→ ECDH" data-uk="→ ECDH">→ ECDH</a>
+    </div>
+  </section>
+
+  <!-- ========================================================= KANGAROO -->
+  <section id="kangaroo">
+    <div class="num">09.3 / Pollard λ</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(√w)</span> <span data-en="Pollard's Lambda (Kangaroo)" data-uk="λ-алгоритм Полларда (kangaroo)">Pollard's lambda (kangaroo)</span></h2>
+    <div class="formula">x ∈ [a, b],&nbsp; w = b − a,&nbsp; cost ≈ O(√w),&nbsp; independent of group size</div>
+    <p class="desc" data-en="A cousin of rho for when the exponent x is known to lie in a <b>bounded interval</b> [a, b] of width w — much smaller than the whole group. Two <b>kangaroos</b> take pseudo-random jumps whose lengths depend only on their current position: a <b>tame</b> kangaroo starts from a known point and lays a trail of <b>distinguished points</b>; a <b>wild</b> kangaroo starts from the unknown h and jumps until it lands on the tame trail. The catch collapses the width to √w, regardless of how large the surrounding group is. Its λ shape comes from the two trails merging like the letter."
+       data-uk="Родич rho для випадку, коли показник x лежить у <b>обмеженому інтервалі</b> [a, b] ширини w — значно меншому за всю групу. Два <b>кенгуру</b> роблять псевдовипадкові стрибки, довжина яких залежить лише від поточної позиції: <b>ручний</b> кенгуру стартує з відомої точки й лишає слід із <b>виокремлених точок</b>; <b>дикий</b> кенгуру стартує з невідомого h і стрибає, доки не потрапить на слід ручного. Зустріч зводить ширину до √w, незалежно від розміру групи. Форма λ виникає, коли два сліди зливаються, як ця літера.">A cousin of rho for a bounded interval…</p>
+    <div id="refs-kangaroo"></div>
+    <div class="panel">
+      <div class="readout" id="kangOut"></div>
+    </div>
+    <div class="strength"><div class="st-title" data-en="Where it bites" data-uk="Де кусає">Where it bites</div>
+      <span data-en="Kangaroo is the standard attack when a private key is <b>partially known</b> — a leaked high or low bits reduce x to a short interval, and then √w is feasible even inside a 256-bit curve. It is the workhorse of Bitcoin puzzle-key recoveries. Defence: never leak partial exponent bits; use the full unbounded range. Full-width 256-bit keys keep √w ≈ 2¹²⁸."
+            data-uk="Kangaroo — стандартна атака, коли приватний ключ <b>частково відомий</b>: витік старших чи молодших біт зводить x до короткого інтервалу, і тоді √w здійсненне навіть усередині 256-бітної кривої. Це «робоча конячка» відновлення ключів у біткоїн-головоломках. Захист: не допускати витоку часткових біт показника; використовувати повний діапазон. Ключі повної ширини 256 біт тримають √w ≈ 2¹²⁸."></span></div>
+    <div class="xrefs">
+      <a href="#rho-dl" data-en="→ Pollard's rho" data-uk="→ ρ Полларда">→ Pollard's rho</a>
+      <a href="#shanks" data-en="→ baby-step giant-step" data-uk="→ baby-step giant-step">→ BSGS</a>
+      <a href="edwards.html" data-en="→ elliptic curves" data-uk="→ еліптичні криві">→ elliptic curves</a>
+    </div>
+  </section>
+
+  <!-- =========================================================== POHLIG -->
+  <section id="pohlig">
+    <div class="num">09.4 / Pohlig–Hellman</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c2">O(Σ√pᵢ)</span> <span data-en="Pohlig–Hellman" data-uk="Сільвера–Полліга–Геллмана">Pohlig–Hellman</span></h2>
+    <div class="formula">n = ∏ pᵢᵉⁱ&nbsp; ⇒&nbsp; solve x mod pᵢᵉⁱ each,&nbsp; recombine by CRT</div>
+    <p class="desc" data-en="Not an attack in itself but a devastating <b>reduction</b>: if the group order n = ∏ pᵢᵉⁱ is <b>smooth</b> (only small prime factors), the discrete log splits. Solve x modulo each prime power pᵢᵉⁱ in the small subgroup of that order (using BSGS or rho there), then glue the residues back with the <b>Chinese Remainder Theorem</b>. Cost drops from √n to Σ√pᵢ — the largest prime factor alone determines the difficulty. The live example below picks a smooth-order group, hides an exponent, and recovers it prime-by-prime with BigInt."
+       data-uk="Сама по собі не атака, а руйнівна <b>редукція</b>: якщо порядок групи n = ∏ pᵢᵉⁱ є <b>гладким</b> (лише малі прості множники), дискретний логарифм розпадається. Розв'язуємо x за модулем кожного степеня простого pᵢᵉⁱ у малій підгрупі того порядку (там через BSGS чи rho), а тоді склеюємо лишки <b>китайською теоремою про остачі</b>. Вартість падає з √n до Σ√pᵢ — складність визначає лише найбільший простий множник. Живий приклад нижче бере групу гладкого порядку, ховає показник і відновлює його простий-за-простим із BigInt.">Not an attack in itself but a devastating reduction…</p>
+    <div id="refs-pohlig"></div>
+    <div class="panel">
+      <div class="actor-row">
+        <div class="ctrl"><label><span data-en="prime p (smooth p−1)" data-uk="просте p (гладке p−1)">prime p</span></label>
+          <select id="phP"></select></div>
+        <div class="ctrl"><label><span data-en="generator g" data-uk="генератор g">generator g</span></label>
+          <input type="number" id="phG" value="2" min="2" style="width:80px"></div>
+        <div class="ctrl"><label><span data-en="secret x" data-uk="секрет x">secret x</span></label>
+          <input type="number" id="phX" value="123" min="1" style="width:90px"></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button id="phRun" data-en="▶ recover x by Pohlig–Hellman" data-uk="▶ відновити x через Пholig–Hellman">▶ recover x</button>
+        <button id="phRand" class="secondary" data-en="↻ random x" data-uk="↻ випадкове x">↻ random x</button>
+      </div>
+      <div class="readout" id="phOut"></div>
+    </div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="Pohlig–Hellman is why cryptographic groups must have order divisible by a <b>large prime</b>. A DH group with smooth order p−1 is trivially broken — this is the reason for <b>safe primes</b> (p = 2q+1, q prime) and prime-order elliptic curves. It also underlies <b>small-subgroup confinement</b> attacks when peers skip public-key validation. Defence: use safe-prime or prime-order groups and validate received points."
+            data-uk="Pohlig–Hellman — причина, чому криптографічні групи мусять мати порядок, що ділиться на <b>велике просте</b>. DH-група з гладким порядком p−1 ламається тривіально — саме тому потрібні <b>безпечні прості</b> (p = 2q+1, q просте) та еліптичні криві простого порядку. Він же лежить в основі атак <b>обмеження в малу підгрупу</b>, коли сторони не валідують відкритий ключ. Захист: безпечні прості / групи простого порядку та валідація отриманих точок."></span></div>
+    <div class="xrefs">
+      <a href="#shanks" data-en="→ BSGS (used per factor)" data-uk="→ BSGS (на кожен множник)">→ BSGS</a>
+      <a href="numbertheory.html" data-en="→ CRT / number theory" data-uk="→ КТО / теорія чисел">→ CRT</a>
+      <a href="keyexchange.html#dh" data-en="→ Diffie–Hellman" data-uk="→ Діффі–Хеллман">→ Diffie–Hellman</a>
+    </div>
+  </section>
+
+  <!-- ============================================================ INDEX -->
+  <section id="index">
+    <div class="num">09.5 / index calculus</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">L[1/2]</span> <span data-en="Index Calculus" data-uk="Index Calculus">Index calculus</span></h2>
+    <div class="formula">L_p[1/2, c] = exp( c·(ln p)^{1/2}·(ln ln p)^{1/2} )</div>
+    <p class="desc" data-en="The first <b>sub-exponential</b> discrete-log method, and the reason DL in a prime field ℤ_p* needs far larger p than an elliptic curve needs for the same security. Choose a <b>factor base</b> of small primes. In a relation-collection phase, find many powers gᵏ that factor completely over the base; each gives a linear equation in the unknown logs of the base primes. Solve that linear system (mod the group order) to learn the log of every small prime, then express the target h as a product over the base and read off x. Elliptic-curve groups have no analogue of 'small primes', which is why ECC stays exponential."
+       data-uk="Перший <b>субекспоненційний</b> метод дискретного логарифму — і причина, чому ДЛ у простому полі ℤ_p* потребує значно більшого p, ніж еліптична крива за тієї ж стійкості. Обираємо <b>факторну базу</b> малих простих. У фазі збору співвідношень знаходимо багато степенів gᵏ, що повністю розкладаються над базою; кожен дає лінійне рівняння у невідомих логарифмах базових простих. Розв'язуємо цю лінійну систему (за модулем порядку групи), дізнаємось логарифм кожного малого простого, потім виражаємо ціль h через базу і зчитуємо x. У груп еліптичних кривих немає аналога «малих простих», тому ECC лишається експоненційним.">The first sub-exponential discrete-log method…</p>
+    <div id="refs-index"></div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="Because of index calculus (and its NFS successor), <b>finite-field DH/DSA needs ≥ 2048-bit primes</b> for ~112-bit security, versus 256-bit elliptic curves for the same. It does <b>not</b> apply to generic elliptic curves — the decisive reason ECC keys are so much shorter. Weak or non-verified DH groups (Logjam) fall to precomputation-heavy index-calculus/NFS."
+            data-uk="Через index calculus (і його наступника NFS) <b>DH/DSA над скінченним полем потребують ≥ 2048-бітних простих</b> для ~112-бітної стійкості проти 256-бітних еліптичних кривих за тієї ж. До узагальнених еліптичних кривих він <b>не</b> застосовний — вирішальна причина, чому ключі ECC значно коротші. Слабкі чи неперевірені DH-групи (Logjam) падають від index-calculus/NFS з важкими попередніми обчисленнями."></span></div>
+    <div class="xrefs">
+      <a href="#nfs-dl" data-en="→ Number field sieve (DL)" data-uk="→ NFS (для ДЛ)">→ NFS-DL</a>
+      <a href="#qs" data-en="→ quadratic sieve (analogue)" data-uk="→ квадратичне решето (аналог)">→ quadratic sieve</a>
+      <a href="asymmetric.html#elgamal" data-en="→ ElGamal" data-uk="→ Ель-Гамаля">→ ElGamal</a>
+    </div>
+  </section>
+
+  <!-- =========================================================== NFS-DL -->
+  <section id="nfs-dl">
+    <div class="num">09.6 / NFS (DL)</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">L[1/3]</span> <span data-en="Number Field Sieve for Discrete Log" data-uk="Решето числового поля для ДЛ">Number field sieve (DL)</span></h2>
+    <div class="formula">L_p[1/3, (64/9)^{1/3}] = exp( 1.923·(ln p)^{1/3}·(ln ln p)^{2/3} )</div>
+    <p class="desc" data-en="The fastest classical algorithm for discrete log in large prime fields — the DL sibling of the factoring GNFS, sharing the same L[1/3] cost. It replaces index calculus's factor base with <b>smooth elements in number-field rings</b>, collecting relations by sieving over a two-dimensional region. A huge one-time <b>precomputation</b> per prime p cracks the field; afterward, individual logs are cheap. That structure is exactly what the <b>Logjam</b> attack exploited: many servers shared a handful of 512- and 1024-bit DH primes, so one precomputation broke them all."
+       data-uk="Найшвидший класичний алгоритм дискретного логарифму у великих простих полях — DL-родич факторизаційного GNFS з тією ж вартістю L[1/3]. Замість факторної бази index calculus він використовує <b>гладкі елементи в кільцях числових полів</b>, збираючи співвідношення просіюванням двовимірної області. Величезне разове <b>попереднє обчислення</b> на кожне просте p «зламує» поле; після цього окремі логарифми дешеві. Саме цю структуру використала атака <b>Logjam</b>: багато серверів ділили кілька 512- і 1024-бітних DH-простих, тож одне попереднє обчислення ламало їх усі.">The fastest classical algorithm for discrete log…</p>
+    <div id="refs-nfs-dl"></div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="A 795-bit prime-field discrete log (DLP-240) was computed in 2019 with CADO-NFS. <b>1024-bit DH is within reach of a nation-state precomputation</b> — deprecate it. Use ≥ 2048-bit primes for ~112-bit security, or move to elliptic curves where NFS does not apply. Never share a fixed small DH group across many hosts."
+            data-uk="795-бітний дискретний логарифм над простим полем (DLP-240) обчислили 2019 року за допомогою CADO-NFS. <b>1024-бітний DH — у межах досяжності попередніх обчислень рівня держави</b>, його треба виводити з ужитку. Використовуйте ≥ 2048-бітні прості для ~112-бітної стійкості або переходьте на еліптичні криві, де NFS не працює. Ніколи не діліть фіксовану малу DH-групу між багатьма хостами."></span></div>
+    <div class="xrefs">
+      <a href="#gnfs" data-en="→ GNFS (factoring twin)" data-uk="→ GNFS (близнюк факторизації)">→ GNFS</a>
+      <a href="#index" data-en="→ index calculus" data-uk="→ index calculus">→ index calculus</a>
+      <a href="keyexchange.html#dh" data-en="→ Diffie–Hellman" data-uk="→ Діффі–Хеллман">→ Diffie–Hellman</a>
+    </div>
+  </section>
+
+  <!-- ############################ PART B: FACTORING ###################### -->
+  <div style="padding:44px 24px 4px;border-bottom:1px solid var(--line)">
+    <div class="eyebrow" data-en="Part B · section 10" data-uk="Частина B · розділ 10">Part B · section 10</div>
+    <h2 style="font-size:30px;margin:6px 0 8px" data-en="Factorisation Attacks" data-uk="Атаки факторизації">Factorisation attacks</h2>
+    <p class="desc" style="margin:0" data-en="Given an RSA modulus n = p·q, recover the primes p and q — which reveals the private key. From schoolbook Fermat up to the number-field sieve that set the 829-bit RSA-250 record."
+       data-uk="Дано модуль RSA n = p·q; відновити прості p і q — це розкриває приватний ключ. Від «шкільного» Ферма до решета числового поля, яке встановило рекорд RSA-250 на 829 біт.">Given an RSA modulus n = p·q…</p>
+  </div>
+
+  <!-- ========================================================= FERMAT-F -->
+  <section id="fermat-f">
+    <div class="num">10.1 / Fermat</div>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c2">O(|p−q|)</span> <span data-en="Fermat's Factorisation Method" data-uk="Метод факторизації Ферма">Fermat's method</span></h2>
+    <div class="formula">n = a² − b² = (a−b)(a+b),&nbsp; a = ⌈√n⌉, ⌈√n⌉+1, …&nbsp; until a²−n is a square</div>
+    <p class="desc" data-en="Write n as a <b>difference of two squares</b>: n = a² − b² = (a−b)(a+b). Start at a = ⌈√n⌉ and step a upward, each time testing whether a² − n is a perfect square b². When it is, the factors fall straight out: <b>p = a − b, q = a + b</b>. The method is brilliant when p and q are <b>close</b> together (few steps) and useless when they are far apart. The stepper below shows a and √(a²−n) converging; the counter contrasts a close-factor n against a distant-factor n."
+       data-uk="Запишемо n як <b>різницю двох квадратів</b>: n = a² − b² = (a−b)(a+b). Починаємо з a = ⌈√n⌉ і збільшуємо a, щоразу перевіряючи, чи a² − n є повним квадратом b². Якщо так, множники випадають одразу: <b>p = a − b, q = a + b</b>. Метод блискучий, коли p і q <b>близькі</b> (мало кроків), і марний, коли вони далеко. Покроковий модуль нижче показує збіжність a і √(a²−n); лічильник порівнює n із близькими множниками проти n із далекими.">Write n as a difference of two squares…</p>
+    <div id="refs-fermat-f"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="fermatCanvas" width="440" height="300"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="odd n (or preset)" data-uk="непарне n (або пресет)">odd n</span></label>
+            <input type="number" id="fermatN" value="5959" min="3" style="width:130px"></div>
+          <div class="ctrl"><label><span data-en="presets" data-uk="пресети">presets</span></label>
+            <select id="fermatPreset">
+              <option value="5959" data-en="5959 = 59·101 (close)" data-uk="5959 = 59·101 (близькі)">5959 = 59·101 (close)</option>
+              <option value="1000009" data-en="1000009 = 293·3413 (far)" data-uk="1000009 = 293·3413 (далекі)">1000009 (far)</option>
+              <option value="9409" data-en="9409 = 97·97 (equal)" data-uk="9409 = 97·97 (рівні)">9409 = 97² (equal)</option>
+              <option value="25217" data-en="25217 = 151·167 (close)" data-uk="25217 = 151·167 (близькі)">25217 = 151·167</option>
+            </select></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="fermatStep" data-en="▶ step" data-uk="▶ крок">▶ step</button>
+            <button id="fermatRun" data-en="▶▶ run" data-uk="▶▶ пуск">▶▶ run</button>
+            <button id="fermatReset" class="secondary" data-en="↺ reset" data-uk="↺ скидання">↺ reset</button>
+          </div>
+          <div class="readout" id="fermatOut"></div>
+        </div>
+      </div>
+    </div>
+    <p class="hint" data-en="Implementations: " data-uk="Реалізації: ">Implementations: </p>
+    <div class="refs" id="use-fermat-f"></div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="Fermat is fatal to RSA keys whose primes are <b>too close</b>: |p − q| small means b ≈ 0 and n cracks in a handful of steps. FIPS 186 therefore requires |p − q| &gt; 2^(nlen/2−100). The <b>ROCA</b> weakness and several 2012 'badly-generated key' surveys found real deployed moduli falling to exactly this. Defence: generate p, q independently at full random; ensure they differ in their top bits."
+            data-uk="Ферма фатальний для ключів RSA, чиї прості <b>надто близькі</b>: мале |p − q| означає b ≈ 0, і n розкладається за кілька кроків. Тому FIPS 186 вимагає |p − q| &gt; 2^(nlen/2−100). Дефект <b>ROCA</b> та огляди «погано згенерованих ключів» 2012 року знаходили реальні розгорнуті модулі, що падали саме від цього. Захист: генерувати p, q незалежно й повністю випадково; забезпечити відмінність у старших бітах."></span></div>
+    <div class="xrefs">
+      <a href="asymmetric.html#rsa" data-en="→ RSA" data-uk="→ RSA">→ RSA</a>
+      <a href="#rho-f" data-en="→ Pollard's rho" data-uk="→ ρ Полларда">→ Pollard's rho</a>
+      <a href="numbertheory.html#legendre" data-en="→ quadratic residues" data-uk="→ квадратичні лишки">→ QR</a>
+    </div>
+  </section>
+
+  <!-- ============================================================ RHO-F -->
+  <section id="rho-f">
+    <div class="num">10.2 / Pollard ρ (factoring)</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c3">O(n^¼)</span> <span data-en="Pollard's Rho (Factoring)" data-uk="ρ-алгоритм Полларда (факторизація)">Pollard's rho (factoring)</span></h2>
+    <div class="formula">xᵢ₊₁ = xᵢ² + c mod n,&nbsp; d = gcd(|x_i − x_j|, n),&nbsp; 1 &lt; d &lt; n ⇒ factor</div>
+    <p class="desc" data-en="The factoring twin of the discrete-log rho — and the two are famously confused. Iterate xᵢ₊₁ = xᵢ² + c mod n. Although you compute modulo the <b>composite</b> n, the sequence secretly cycles modulo the hidden prime p much sooner (after ≈ √p ≈ n^¼ steps). Floyd's tortoise/hare detects that hidden cycle: at the collision <b>gcd(|xᵢ − xⱼ|, n)</b> shares the factor p, so the gcd is a non-trivial divisor. Constant memory, expected O(n^¼) time — ideal for pulling out <b>small factors</b> first."
+       data-uk="Факторизаційний близнюк rho для дискретного логарифму — і їх сумнозвісно плутають. Ітеруємо xᵢ₊₁ = xᵢ² + c mod n. Хоч обчислення йдуть за модулем <b>складеного</b> n, послідовність таємно циклиться за модулем прихованого простого p значно раніше (після ≈ √p ≈ n^¼ кроків). Черепаха/заєць Флойда виявляють цей прихований цикл: у колізії <b>gcd(|xᵢ − xⱼ|, n)</b> містить множник p, тож gcd — нетривіальний дільник. Стала пам'ять, очікуваний час O(n^¼) — ідеально, щоб спершу витягти <b>малі множники</b>.">The factoring twin of the discrete-log rho…</p>
+    <div id="refs-rho-f"></div>
+    <div class="panel">
+      <p class="hint" data-en="↑ Same engine as §9.2 — open the Pollard-rho walk above and switch its mode to “factoring: n = p·q” to watch the ρ collapse modulo the hidden prime and the gcd drop out the factor."
+         data-uk="↑ Той самий рушій, що й у §9.2 — відкрийте блукання Pollard-rho вище і перемкніть режим на «факторизація: n = p·q», щоб побачити, як ρ згортається за модулем прихованого простого і gcd видає множник.">Same engine as §9.2 — see above.</p>
+      <div style="margin-top:10px"><a href="#rho-dl"><button data-en="↑ go to the rho walk (factoring mode)" data-uk="↑ до блукання rho (режим факторизації)">↑ go to the rho walk</button></a></div>
+    </div>
+    <p class="hint" data-en="Implementations: " data-uk="Реалізації: ">Implementations: </p>
+    <div class="refs" id="use-rho-f"></div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="Rho's O(n^¼) depends on the <b>smallest</b> factor, so it clears small primes fast but stalls on a balanced RSA modulus: for n = p·q with p, q ≈ √n, the cost is ≈ n^¼ = 2^(bits/4) — about 2⁵¹² for RSA-2048, hopeless. It found the 8th Fermat number's factor (Brent–Pollard, 1980). Defence: use two large, balanced primes so no small factor exists; rho then offers nothing over the sieves."
+            data-uk="O(n^¼) у rho залежить від <b>найменшого</b> множника, тож малі прості він знімає швидко, але глухне на збалансованому модулі RSA: для n = p·q з p, q ≈ √n вартість ≈ n^¼ = 2^(біт/4) — близько 2⁵¹² для RSA-2048, безнадійно. Він знайшов множник 8-го числа Ферма (Брент–Поллард, 1980). Захист: два великі збалансовані прості, щоб малого множника не існувало; тоді rho не дає нічого понад решета."></span></div>
+    <div class="xrefs">
+      <a href="#rho-dl" data-en="→ rho for discrete log" data-uk="→ rho для ДЛ">→ rho for DL</a>
+      <a href="#p1" data-en="→ Pollard's p−1" data-uk="→ p−1 Полларда">→ Pollard's p−1</a>
+      <a href="asymmetric.html#rsa" data-en="→ RSA" data-uk="→ RSA">→ RSA</a>
+    </div>
+  </section>
+
+  <!-- =============================================================== P-1 -->
+  <section id="p1">
+    <div class="num">10.3 / Pollard p−1</div>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(B log B)</span> <span data-en="Pollard's p−1" data-uk="p−1 метод Полларда">Pollard's p−1</span></h2>
+    <div class="formula">M = lcm(1..B),&nbsp; a^M mod n,&nbsp; gcd(a^M − 1, n) reveals p&nbsp; if p−1 is B-smooth</div>
+    <p class="desc" data-en="A special-purpose attack that wins when <b>p − 1 has only small prime factors</b> (is B-smooth). By Fermat's little theorem, if p − 1 divides M then a^M ≡ 1 (mod p), so p divides a^M − 1 — and <b>gcd(a^M − 1, n)</b> exposes p. We build M = lcm(1..B) by raising a to each prime power ≤ B in turn, taking a gcd periodically. The slider sets the smoothness bound B; the readout shows the exact iteration where the factor drops out. Pick the ‘not smooth’ preset to watch the method fail — the gcd stays 1 until B is pushed impractically high."
+       data-uk="Спеціалізована атака, що спрацьовує, коли <b>p − 1 має лише малі прості множники</b> (є B-гладким). За малою теоремою Ферма, якщо p − 1 ділить M, то a^M ≡ 1 (mod p), отже p ділить a^M − 1 — і <b>gcd(a^M − 1, n)</b> виявляє p. Будуємо M = lcm(1..B), підносячи a до кожного степеня простого ≤ B по черзі, періодично беручи gcd. Повзунок задає межу гладкості B; вивід показує точну ітерацію, де випадає множник. Оберіть пресет «не гладке», щоб побачити провал методу — gcd лишається 1, доки B не піднімуть непрактично високо.">A special-purpose attack that wins when p − 1 is B-smooth…</p>
+    <div id="refs-p1"></div>
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="p1Canvas" width="440" height="240"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="modulus n = p·q" data-uk="модуль n = p·q">modulus n</span></label>
+            <select id="p1Preset"></select></div>
+          <div class="ctrl"><label><span data-en="smoothness bound B" data-uk="межа гладкості B">smoothness bound B</span> <span class="val" id="p1BVal">20</span></label>
+            <input type="range" id="p1B" min="3" max="60" step="1" value="20"></div>
+          <div style="display:flex;gap:8px">
+            <button id="p1Run" data-en="▶ run p−1" data-uk="▶ пуск p−1">▶ run p−1</button>
+          </div>
+          <div class="readout" id="p1Out"></div>
+        </div>
+      </div>
+    </div>
+    <p class="hint" data-en="Implementations: " data-uk="Реалізації: ">Implementations: </p>
+    <div class="refs" id="use-p1"></div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="p−1 (and its elliptic-curve cousin ECM) is why RSA key generation should use <b>strong primes</b> where p−1 has a large prime factor — otherwise a smooth p−1 leaks the key cheaply. Modern random 1024-bit primes are almost never smooth, so the risk is mainly against poorly-generated keys. Defence: verify p−1 and p+1 each contain a large prime factor, or simply use primes large enough that any smooth structure is astronomically unlikely."
+            data-uk="p−1 (і його еліптичний родич ECM) — причина, чому генерація ключів RSA має використовувати <b>сильні прості</b>, де p−1 має великий простий множник, інакше гладке p−1 дешево видає ключ. Сучасні випадкові 1024-бітні прості майже ніколи не гладкі, тож ризик — переважно для погано згенерованих ключів. Захист: перевіряти, що p−1 і p+1 містять великий простий множник, або просто брати достатньо великі прості, щоб гладка структура була астрономічно малоймовірною."></span></div>
+    <div class="xrefs">
+      <a href="#pohlig" data-en="→ Pohlig–Hellman (smoothness too)" data-uk="→ Pohlig–Hellman (теж гладкість)">→ Pohlig–Hellman</a>
+      <a href="#rho-f" data-en="→ Pollard's rho" data-uk="→ ρ Полларда">→ Pollard's rho</a>
+      <a href="asymmetric.html#rsa" data-en="→ RSA" data-uk="→ RSA">→ RSA</a>
+    </div>
+  </section>
+
+  <!-- =============================================================== QS -->
+  <section id="qs">
+    <div class="num">10.4 / quadratic sieve</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">L[1/2]</span> <span data-en="Quadratic Sieve (QS)" data-uk="Квадратичне решето (QS)">Quadratic sieve (QS)</span></h2>
+    <div class="formula">find x² ≡ y² (mod n),&nbsp; x ≢ ±y&nbsp; ⇒&nbsp; gcd(x−y, n) is a factor</div>
+    <p class="desc" data-en="The fastest factoring method for numbers up to ~100 digits, and the general-purpose successor to Fermat. The goal is a <b>congruence of squares</b> x² ≡ y² (mod n) with x ≢ ±y, because then gcd(x − y, n) is a proper factor. QS collects many values whose small parts factor over a fixed <b>factor base</b> — found efficiently by <b>sieving</b> a polynomial rather than trial-dividing each — then uses linear algebra over GF(2) to combine them into a square. Computing the square roots that seed the factor base uses <b>Tonelli–Shanks</b>."
+       data-uk="Найшвидший метод факторизації для чисел до ~100 знаків і універсальний наступник Ферма. Мета — <b>конгруенція квадратів</b> x² ≡ y² (mod n) з x ≢ ±y, бо тоді gcd(x − y, n) — власний множник. QS збирає багато значень, малі частини яких розкладаються над фіксованою <b>факторною базою</b> — знайдених ефективно <b>просіюванням</b> многочлена, а не пробним діленням кожного — а тоді через лінійну алгебру над GF(2) складає з них квадрат. Обчислення квадратних коренів для факторної бази використовує <b>Тонеллі–Шенкса</b>.">The fastest factoring method up to ~100 digits…</p>
+    <div id="refs-qs"></div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="QS factored RSA-129 (426 bits) in 1994. Its L[1/2] cost overtakes GNFS below ~100 digits but loses above; for cryptographic 2048-bit moduli it is hopelessly slow. No special key structure is needed to resist it — just adequate length. It remains the tool of choice for factoring numbers in the 60–100 digit range where GNFS's overhead is not yet worth it."
+            data-uk="QS факторизував RSA-129 (426 біт) у 1994 році. Його вартість L[1/2] переважає GNFS нижче ~100 знаків, але програє вище; для криптографічних 2048-бітних модулів він безнадійно повільний. Особлива структура ключа для стійкості не потрібна — лише достатня довжина. Він лишається інструментом вибору для чисел у діапазоні 60–100 знаків, де накладні витрати GNFS ще не виправдані."></span></div>
+    <div class="xrefs">
+      <a href="#gnfs" data-en="→ GNFS (faster above 100 digits)" data-uk="→ GNFS (швидше понад 100 знаків)">→ GNFS</a>
+      <a href="numbertheory.html#tonelli" data-en="→ Tonelli–Shanks" data-uk="→ Тонеллі–Шенкс">→ Tonelli–Shanks</a>
+      <a href="#index" data-en="→ index calculus (DL analogue)" data-uk="→ index calculus (аналог ДЛ)">→ index calculus</a>
+    </div>
+  </section>
+
+  <!-- ============================================================= GNFS -->
+  <section id="gnfs">
+    <div class="num">10.5 / GNFS</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">L[1/3]</span> <span data-en="General Number Field Sieve" data-uk="Загальне решето числового поля">General number field sieve (GNFS)</span></h2>
+    <div class="formula">L_n[1/3, (64/9)^{1/3}] = exp( 1.923·(ln n)^{1/3}·(ln ln n)^{2/3} )</div>
+    <p class="desc" data-en="The fastest classical factoring algorithm known, and the one that sets every RSA record. Like QS it seeks a congruence of squares, but it does the sieving inside a <b>number field</b> — an algebraic extension chosen from a polynomial with n as a root modulo a prime. This lowers the exponent from L[1/2] to <b>L[1/3]</b>, a decisive asymptotic win for large n. The phases — polynomial selection, relation sieving, linear algebra over a huge sparse matrix, and a final square root — are what packages like CADO-NFS and msieve/GGNFS orchestrate across clusters."
+       data-uk="Найшвидший відомий класичний алгоритм факторизації — і той, що встановлює кожен рекорд RSA. Як і QS, він шукає конгруенцію квадратів, але просіює всередині <b>числового поля</b> — алгебраїчного розширення, обраного з многочлена, для якого n є коренем за модулем простого. Це знижує показник з L[1/2] до <b>L[1/3]</b> — вирішальний асимптотичний виграш для великих n. Фази — вибір многочлена, просіювання співвідношень, лінійна алгебра над величезною розрідженою матрицею та фінальний квадратний корінь — оркеструють пакети на кшталт CADO-NFS та msieve/GGNFS на кластерах.">The fastest classical factoring algorithm known…</p>
+    <div id="refs-gnfs"></div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="The record is <b>RSA-250 (829 bits)</b>, factored in Feb 2020 with CADO-NFS (~2700 core-years). Extrapolating L[1/3]: <b>2048-bit RSA ≈ 112-bit security, 3072-bit ≈ 128-bit</b>. That is precisely why NIST deprecated 1024-bit RSA and recommends ≥ 2048 (≥ 3072 for long-term). No 2048-bit RSA modulus has ever been factored; the gap to RSA-250 is still enormous."
+            data-uk="Рекорд — <b>RSA-250 (829 біт)</b>, факторизований у лютому 2020 через CADO-NFS (~2700 ядро-років). Екстраполяція L[1/3]: <b>2048-бітний RSA ≈ 112 біт стійкості, 3072-бітний ≈ 128 біт</b>. Саме тому NIST вивів з ужитку 1024-бітний RSA і рекомендує ≥ 2048 (≥ 3072 для довготривалого). Жодного 2048-бітного модуля RSA ще не факторизовано; розрив до RSA-250 досі величезний."></span></div>
+    <div class="xrefs">
+      <a href="#nfs-dl" data-en="→ NFS for discrete log" data-uk="→ NFS для ДЛ">→ NFS-DL</a>
+      <a href="#qs" data-en="→ quadratic sieve" data-uk="→ квадратичне решето">→ quadratic sieve</a>
+      <a href="#shor-f" data-en="→ Shor (quantum break)" data-uk="→ Шор (квантовий злом)">→ Shor</a>
+      <a href="asymmetric.html#rsa" data-en="→ RSA" data-uk="→ RSA">→ RSA</a>
+    </div>
+  </section>
+
+  <!-- =========================================================== SHOR-F -->
+  <section id="shor-f">
+    <div class="num">10.6 / Shor</div>
+    <h2><span class="badge l3 lg">III</span> <span class="cx c3">O(n³) [q]</span> <span data-en="Shor's Algorithm (Quantum)" data-uk="Алгоритм Шора (квантовий)">Shor's algorithm (quantum)</span></h2>
+    <div class="formula">factoring ≡ period-finding:&nbsp; find r with aʳ ≡ 1 (mod n)&nbsp; via the quantum Fourier transform</div>
+    <p class="desc" data-en="On a large fault-tolerant <b>quantum computer</b>, Shor's algorithm factors n — and solves discrete log — in <b>polynomial time</b>, collapsing the L[1/3] wall entirely. The trick: factoring reduces to <b>period-finding</b>. Pick a random a and look for the order r of a modulo n (the smallest r with aʳ ≡ 1). A quantum Fourier transform extracts that period from a superposition in one shot; classically it is as hard as factoring. From r, gcd(a^{r/2} ± 1, n) yields a factor. This single result is the motivation for the entire post-quantum migration."
+       data-uk="На великому відмовостійкому <b>квантовому комп'ютері</b> алгоритм Шора факторизує n — і розв'язує дискретний логарифм — за <b>поліноміальний час</b>, повністю руйнуючи стіну L[1/3]. Хитрість: факторизація зводиться до <b>пошуку періоду</b>. Обираємо випадкове a і шукаємо порядок r числа a за модулем n (найменше r з aʳ ≡ 1). Квантове перетворення Фур'є видобуває цей період зі суперпозиції за один прохід; класично це так само складно, як факторизація. З r, gcd(a^{r/2} ± 1, n) дає множник. Саме цей результат — мотивація всієї постквантової міграції.">On a large fault-tolerant quantum computer…</p>
+    <div id="refs-shor-f"></div>
+    <div class="panel">
+      <div class="readout" id="shorOut"></div>
+    </div>
+    <div class="strength"><div class="st-title" data-en="What resists it" data-uk="Що витримує">What resists it</div>
+      <span data-en="<b>Nothing based on factoring or discrete log resists Shor</b> — RSA, DH, DSA and ECC all fall once a cryptographically-relevant quantum computer (millions of stable qubits) exists. Current hardware factors only trivial numbers, but the 'harvest now, decrypt later' threat is real for long-lived secrets. The only defence is migration to <b>post-quantum</b> schemes (lattices, codes, hashes). See the full quantum treatment for the circuit and qubit estimates."
+            data-uk="<b>Ніщо на основі факторизації чи дискретного логарифму не витримує Шора</b> — RSA, DH, DSA та ECC падають, щойно з'явиться криптографічно значущий квантовий комп'ютер (мільйони стабільних кубітів). Наявне обладнання факторизує лише тривіальні числа, але загроза «зібрати зараз, розшифрувати згодом» реальна для довгоживучих секретів. Єдиний захист — міграція на <b>постквантові</b> схеми (решітки, коди, хеші)."></span></div>
+    <div class="xrefs">
+      <a href="quantum.html#shor-q" data-en="→ Shor: full quantum treatment" data-uk="→ Шор: повний квантовий розбір">→ Shor (quantum.html)</a>
+      <a href="#gnfs" data-en="→ GNFS (best classical)" data-uk="→ GNFS (найкраще класичне)">→ GNFS</a>
+      <a href="asymmetric.html#pqc" data-en="→ post-quantum crypto" data-uk="→ постквантова крипто">→ PQC</a>
+      <a href="asymmetric.html#rsa" data-en="→ RSA" data-uk="→ RSA">→ RSA</a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="<b>Reading the strength boxes:</b> unlike the rest of the atlas, these algorithms <b>are</b> the attacks — so each strength box is inverted and states which key sizes still resist the method today. All demos use deliberately tiny parameters so every BigInt is legible; the asymptotics in the landscape chart are what actually govern real 2048–4096-bit moduli and 256-bit curves. Primary sources: the <b>Handbook of Applied Cryptography</b> (free online), the original Pollard (1974/1975/1978) and Shanks papers, and the record computations by CADO-NFS."
+     data-uk="<b>Як читати блоки стійкості:</b> на відміну від решти атласу, ці алгоритми <b>і є</b> атаками — тож кожен блок стійкості інвертований і каже, які розміри ключів досі витримують метод сьогодні. Усі демо навмисно беруть крихітні параметри, щоб кожен BigInt був читабельним; реальними 2048–4096-бітними модулями та 256-бітними кривими керує саме асимптотика з графіка ландшафту. Першоджерела: <b>Handbook of Applied Cryptography</b> (безкоштовно онлайн), оригінальні статті Полларда (1974/1975/1978) і Шенкса, а також рекордні обчислення CADO-NFS."
+     data-i18n-html="1">Reading the strength boxes…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+function UK(){ return window.LANG==='uk'; }
+// ===================== BigInt modular arithmetic helpers =====================
+function gcd(a,b){ a=a<0n?-a:a; b=b<0n?-b:b; while(b){ [a,b]=[b,a%b]; } return a; }
+function egcd(a,b){ if(b===0n) return [a,1n,0n]; const [g,x,y]=egcd(b,a%b); return [g,y,x-(a/b)*y]; }
+function modinv(a,m){ a=((a%m)+m)%m; const [g,x]=egcd(a,m); if(g!==1n) return null; return ((x%m)+m)%m; }
+function modpow(b,e,m){ b%=m; if(b<0n)b+=m; let r=1n; while(e>0n){ if(e&1n) r=r*b%m; b=b*b%m; e>>=1n; } return r; }
+function isqrt(n){ if(n<0n) return -1n; if(n<2n) return n; let x=n, y=(x+1n)/2n; while(y<x){ x=y; y=(x+n/x)/2n; } return x; }
+function isSquare(n){ if(n<0n) return false; const r=isqrt(n); return r*r===n; }
+function isPrime(n){ if(n<2n) return false; for(let i=2n;i*i<=n;i++){ if(n%i===0n) return false; } return true; }
+function multOrder(g,p){ // order of g mod p
+  let e=1n, cur=g%p;
+  while(cur!==1n){ cur=cur*g%p; e++; if(e>p) return -1n; }
+  return e;
+}
+function primeFactorsWithMult(n){ // returns [[p,e],...]
+  const f=[]; let m=n;
+  for(let d=2n; d*d<=m; d++){ if(m%d===0n){ let e=0n; while(m%d===0n){ m/=d; e++; } f.push([d,e]); } }
+  if(m>1n) f.push([m,1n]);
+  return f;
+}
+function fillSel(id, arr, def){
+  const el=document.getElementById(id);
+  el.innerHTML=arr.map(o=>{
+    const v=(typeof o==='object')?o.v:o, lab=(typeof o==='object')?o.l:o;
+    return '<option value="'+v+'"'+(String(v)===String(def)?' selected':'')+'>'+lab+'</option>';
+  }).join('');
+}
+const GRID='#1B2740', AX='#3A4A6B';
+function grid(ctx,w,h){
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle=GRID; ctx.lineWidth=1;
+  for(let x=0;x<=w;x+=w/12){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for(let y=0;y<=h;y+=h/10){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+}
+
+// ============================ REFERENCES =====================================
+const REFS = {
+  'shanks':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Baby-step_giant-step', label:'Baby-step giant-step'}},
+    {tag:'paper', en:{href:'https://cacr.uwaterloo.ca/hac/about/chap3.pdf', label:'HAC ch.3 (BSGS)'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1090/pspum/020/0316385', label:'Shanks 1971'}}
+  ],
+  'rho-dl':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Pollard%27s_rho_algorithm_for_logarithms', label:'Pollard rho for logarithms'},
+      uk:{href:'https://uk.wikipedia.org/wiki/%D0%A0%D0%BE-%D0%B0%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%BC_%D0%9F%D0%BE%D0%BB%D0%BB%D0%B0%D1%80%D0%B4%D0%B0', label:'ρ-алгоритм Полларда'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1090/S0025-5718-1978-0491431-9', label:'Pollard 1978'}},
+    {tag:'paper', en:{href:'https://cacr.uwaterloo.ca/hac/about/chap3.pdf', label:'HAC ch.3'}}
+  ],
+  'kangaroo':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Pollard%27s_kangaroo_algorithm', label:'Pollard kangaroo'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1007/s001450010010', label:'Pollard 2000 (kangaroo)'}},
+    {tag:'code', en:{href:'https://gitlab.inria.fr/cado-nfs/cado-nfs', label:'CADO-NFS'}}
+  ],
+  'pohlig':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Pohlig%E2%80%93Hellman_algorithm', label:'Pohlig–Hellman'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1109/TIT.1978.1055817', label:'Pohlig–Hellman 1978'}},
+    {tag:'code', en:{href:'https://github.com/sympy/sympy/blob/master/sympy/ntheory/residue_ntheory.py', label:'SymPy discrete_log'}}
+  ],
+  'index':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Index_calculus_algorithm', label:'Index calculus'}},
+    {tag:'paper', en:{href:'https://cacr.uwaterloo.ca/hac/about/chap3.pdf', label:'HAC ch.3 §3.6.5'}}
+  ],
+  'nfs-dl':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Number_field_sieve', label:'Number field sieve'}},
+    {tag:'code', en:{href:'https://gitlab.inria.fr/cado-nfs/cado-nfs', label:'CADO-NFS'}},
+    {tag:'paper', en:{href:'https://weakdh.org/', label:'Logjam / weakdh'}}
+  ],
+  'fermat-f':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Fermat%27s_factorization_method', label:"Fermat's factorization"}},
+    {tag:'code', en:{href:'https://github.com/sympy/sympy/blob/master/sympy/ntheory/factor_.py', label:'SymPy fermat_factor'}}
+  ],
+  'rho-f':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Pollard%27s_rho_algorithm', label:"Pollard's rho"}},
+    {tag:'paper', en:{href:'https://doi.org/10.1007/BF01933667', label:'Pollard 1975'}},
+    {tag:'code', en:{href:'https://github.com/sympy/sympy/blob/master/sympy/ntheory/factor_.py', label:'SymPy pollard_rho'}}
+  ],
+  'p1':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Pollard%27s_p_%E2%88%92_1_algorithm', label:'Pollard p−1'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1017/S0305004100049252', label:'Pollard 1974'}},
+    {tag:'code', en:{href:'https://gmplib.org/', label:'GMP / GMP-ECM'}}
+  ],
+  'qs':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Quadratic_sieve', label:'Quadratic sieve'}},
+    {tag:'code', en:{href:'https://github.com/radii/msieve', label:'msieve'}},
+    {tag:'paper', en:{href:'https://cacr.uwaterloo.ca/hac/about/chap3.pdf', label:'HAC ch.3 §3.2.6'}}
+  ],
+  'gnfs':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/General_number_field_sieve', label:'General number field sieve'}},
+    {tag:'code', en:{href:'https://gitlab.inria.fr/cado-nfs/cado-nfs', label:'CADO-NFS'}},
+    {tag:'code', en:{href:'https://sourceforge.net/projects/ggnfs/', label:'GGNFS / msieve'}},
+    {tag:'paper', en:{href:'https://listserv.nodak.edu/cgi-bin/wa.exe?A2=ind2002&L=NMBRTHRY&P=549', label:'RSA-250 announcement'}}
+  ],
+  'shor-f':[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Shor%27s_algorithm', label:"Shor's algorithm"},
+      uk:{href:'https://uk.wikipedia.org/wiki/%D0%90%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%BC_%D0%A8%D0%BE%D1%80%D0%B0', label:'Алгоритм Шора'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1137/S0097539795293172', label:'Shor 1997'}}
+  ]
+};
+const USE = {
+  'shanks':[{tag:'code', en:{href:'https://github.com/sympy/sympy/blob/master/sympy/ntheory/residue_ntheory.py', label:'SymPy'}},
+            {tag:'code', en:{href:'https://www.gap-system.org/', label:'GAP LogFFE'}}],
+  'rho-dl':[{tag:'code', en:{href:'https://github.com/sagemath/sage', label:'SageMath discrete_log_rho'}},
+            {tag:'code', en:{href:'https://pari.math.u-bordeaux.fr/', label:'PARI/GP znlog'}}],
+  'fermat-f':[{tag:'code', en:{href:'https://github.com/sympy/sympy/blob/master/sympy/ntheory/factor_.py', label:'SymPy'}}],
+  'rho-f':[{tag:'code', en:{href:'https://pari.math.u-bordeaux.fr/', label:'PARI/GP factorint'}},
+           {tag:'code', en:{href:'https://gmplib.org/', label:'GMP'}}],
+  'p1':[{tag:'code', en:{href:'https://gitlab.inria.fr/zimmerma/ecm', label:'GMP-ECM'}},
+        {tag:'code', en:{href:'https://pari.math.u-bordeaux.fr/', label:'PARI/GP'}}]
+};
+function renderRefs(){
+  for(const id in REFS){ const el=document.getElementById('refs-'+id); if(el) el.innerHTML=window.atlasRefs(REFS[id]); }
+  for(const id in USE){ const el=document.getElementById('use-'+id); if(el) el.innerHTML=window.atlasRefs(USE[id]).replace(/^<div class="refs">|<\/div>$/g,''); }
+}
+
+// =============================================================================
+//  DEMO 1 — Baby-step giant-step (#shanks)
+// =============================================================================
+const BSGS_PRIMES=[101n,197n,251n,347n,503n,761n,997n];
+let bsgsTimer=null;
+function bsgsInit(){
+  fillSel('bsgsP', BSGS_PRIMES.map(String), '251');
+  document.getElementById('bsgsRun').addEventListener('click', bsgsRun);
+  document.getElementById('bsgsRand').addEventListener('click', bsgsRandom);
+  ['bsgsP','bsgsG','bsgsH'].forEach(id=>document.getElementById(id).addEventListener('input', ()=>bsgsDraw(null)));
+  bsgsRandom();
+}
+function bsgsRandom(){
+  const p=BigInt(document.getElementById('bsgsP').value);
+  let g=BigInt(document.getElementById('bsgsG').value||'2');
+  const n=multOrder(g,p);
+  const x=1n+BigInt(Math.floor(Math.random()*Number(n>2n?n-1n:2n)));
+  document.getElementById('bsgsH').value=String(modpow(g,x,p));
+  bsgsDraw(null);
+}
+function bsgsCompute(){
+  const p=BigInt(document.getElementById('bsgsP').value);
+  const g=BigInt(document.getElementById('bsgsG').value||'2');
+  const h=((BigInt(document.getElementById('bsgsH').value||'1'))%p+p)%p;
+  const n=multOrder(g,p);
+  const m=isqrt(n-1n)+1n;                        // m = ceil(sqrt(n))
+  const baby=new Map();                          // g^j -> j
+  let cur=1n;
+  for(let j=0n;j<m;j++){ if(!baby.has(cur)) baby.set(cur,j); cur=cur*g%p; }
+  const gim=modinv(modpow(g,m,p),p);             // g^{-m}
+  let gamma=h, coll=null;
+  const probes=[];
+  for(let i=0n;i<=m;i++){
+    probes.push(gamma);
+    if(baby.has(gamma)){ coll={i, j:baby.get(gamma), val:gamma}; break; }
+    gamma=gamma*gim%p;
+  }
+  let x=null;
+  if(coll){ x=((coll.i*m+coll.j)%n+n)%n; }
+  return {p,g,h,n,m,baby,probes,coll,x};
+}
+function bsgsDraw(state){
+  const cv=document.getElementById('bsgsCanvas'), ctx=cv.getContext('2d');
+  const W=cv.width, H=cv.height; grid(ctx,W,H);
+  const S = state || bsgsCompute();
+  const m=Number(S.m);
+  const cols=Math.min(m, Math.ceil(Math.sqrt(m*1.6))+1);
+  const rows=Math.ceil(m/cols);
+  const pad=14, cellW=(W-2*pad)/cols, cellH=Math.min(20,(H*0.6-2*pad)/rows);
+  // baby-step dots
+  const shown = S.shownBaby===undefined? m : S.shownBaby;
+  ctx.font='9px JetBrains Mono';
+  for(let j=0;j<m;j++){
+    const r=Math.floor(j/cols), c=j%cols;
+    const cx=pad+c*cellW+cellW/2, cy=pad+r*cellH+cellH/2;
+    let color = j<shown ? '#2C3A5C' : '#151f36';
+    if(S.coll && Number(S.coll.j)===j && (S.phase===undefined||S.phase>=2)) color='#7FDBCA';
+    ctx.fillStyle=color; ctx.beginPath(); ctx.arc(cx,cy,Math.min(4,cellW*0.35),0,Math.PI*2); ctx.fill();
+  }
+  // giant probes as hops along a lower lane
+  const laneY=H-46;
+  ctx.strokeStyle=AX; ctx.beginPath(); ctx.moveTo(pad,laneY); ctx.lineTo(W-pad,laneY); ctx.stroke();
+  const pShown = S.shownProbe===undefined? S.probes.length : S.shownProbe;
+  const stepX=(W-2*pad)/Math.max(1,S.probes.length);
+  for(let i=0;i<pShown;i++){
+    const px=pad+i*stepX+stepX/2;
+    const hit=S.coll && Number(S.coll.i)===i;
+    ctx.fillStyle=hit?'#7FDBCA':'#F2A65A';
+    ctx.beginPath(); ctx.arc(px,laneY,hit?6:3.5,0,Math.PI*2); ctx.fill();
+    if(hit){ ctx.strokeStyle='#06110F'; ctx.lineWidth=1.4; ctx.stroke(); }
+  }
+  ctx.fillStyle='#8B97B4'; ctx.font='10px JetBrains Mono';
+  ctx.fillText((UK()?'малі кроки gʲ (таблиця, m=':'baby steps gʲ (table, m=')+m+')', pad, 11);
+  ctx.fillText(UK()?'великі кроки h·(g⁻ᵐ)ⁱ →':'giant steps h·(g⁻ᵐ)ⁱ →', pad, laneY-10);
+  // readout
+  const out=document.getElementById('bsgsOut');
+  const u=UK();
+  if(!S.coll && (S.phase===undefined)){
+    out.innerHTML='<span class="k">'+(u?'порядок n = ':'order n = ')+'</span>'+S.n+'   m = ⌈√n⌉ = <span class="a">'+S.m+'</span>\n'+(u?'натисніть «розв\'язати»':'press “solve”');
+    return;
+  }
+  if(S.coll){
+    out.innerHTML=
+      '<span class="k">'+(u?'порядок n':'order n')+'</span> = '+S.n+'   m = ⌈√n⌉ = <span class="a">'+S.m+'</span>\n'+
+      '<span class="s">'+(u?'колізія':'collision')+'</span>: '+(u?'великий крок':'giant')+' i='+S.coll.i+', '+(u?'малий крок':'baby')+' j='+S.coll.j+'  (g^'+S.coll.j+' = h·(g⁻ᵐ)^'+S.coll.i+' = '+S.coll.val+')\n'+
+      '<span class="b">x</span> = i·m + j = '+S.coll.i+'·'+S.m+' + '+S.coll.j+' = <span class="s">'+S.x+'</span>   '+
+      (modpow(S.g,S.x,S.p)===S.h?'✓ g^x = h':'✗');
+  } else {
+    out.innerHTML='<span class="b">'+(u?'колізії не знайдено — перевірте g (генератор?)':'no collision — check g (a generator?)')+'</span>';
+  }
+}
+function bsgsRun(){
+  if(bsgsTimer) clearInterval(bsgsTimer);
+  const S=bsgsCompute();
+  S.shownBaby=0; S.shownProbe=0; S.phase=1;
+  const m=Number(S.m);
+  bsgsDraw(S);
+  bsgsTimer=setInterval(()=>{
+    if(S.phase===1){
+      S.shownBaby+=Math.max(1,Math.ceil(m/24));
+      if(S.shownBaby>=m){ S.shownBaby=m; S.phase=2; }
+    } else {
+      S.shownProbe++;
+      if(S.coll && S.shownProbe>Number(S.coll.i)){ S.shownProbe=Number(S.coll.i)+1; clearInterval(bsgsTimer); bsgsTimer=null; }
+      else if(S.shownProbe>=S.probes.length){ clearInterval(bsgsTimer); bsgsTimer=null; }
+    }
+    bsgsDraw(S);
+  },70);
+}
+
+// =============================================================================
+//  DEMO 2 — Pollard's rho (dl + factoring)  (#rho-dl / #rho-f)
+// =============================================================================
+const RHO_DL=[  // {p, g}
+  {v:'227,2', l:'p=227, g=2'}, {v:'383,5', l:'p=383, g=5'},
+  {v:'467,2', l:'p=467, g=2'}, {v:'743,5', l:'p=743, g=5'}
+];
+const RHO_F=[   // {n, smallprime}
+  {v:'1517,37', l:'n=1517 = 37·41'}, {v:'8051,83', l:'n=8051 = 83·97'},
+  {v:'10403,101', l:'n=10403 = 101·103'}, {v:'16637,127', l:'n=16637 = 127·131'}
+];
+let rhoTimer=null, rhoState=null;
+function rhoInit(){
+  document.getElementById('rhoMode').addEventListener('change', rhoModeChange);
+  document.getElementById('rhoPreset').addEventListener('change', rhoBuild);
+  document.getElementById('rhoRun').addEventListener('click', rhoAnimate);
+  document.getElementById('rhoRand').addEventListener('click', ()=>{ rhoBuild(); });
+  rhoModeChange();
+}
+function rhoModeChange(){
+  const mode=document.getElementById('rhoMode').value;
+  fillSel('rhoPreset', mode==='dl'?RHO_DL:RHO_F);
+  rhoBuild();
+}
+function rhoBuild(){
+  const mode=document.getElementById('rhoMode').value;
+  const parts=document.getElementById('rhoPreset').value.split(',').map(s=>BigInt(s));
+  let keys=[], meta={}, seen=new Map(), mu=-1, lam=-1;
+  if(mode==='dl'){
+    const p=parts[0], g=parts[1], n=multOrder(g,p);
+    let x=1n+BigInt(Math.floor(Math.random()*Number(n>2n?n-1n:2n)));
+    const h=modpow(g,x,p);
+    // Pollard rho for DL with partition by value mod 3
+    let X=1n,a=0n,b=0n, res=null;
+    const recs=[]; // {val,a,b}
+    for(let i=0;i<4000;i++){
+      const key=X.toString();
+      if(seen.has(key)){ const j=seen.get(key); mu=j; lam=i-j;
+        const prev=recs[j];
+        const num=((a - prev.a)%n+n)%n, den=((prev.b - b)%n+n)%n;
+        const dinv=modinv(den,n);
+        if(dinv!==null) res=(num*dinv%n+n)%n;
+        break; }
+      seen.set(key,i); recs.push({val:X,a,b});
+      keys.push(X);
+      const s=X%3n;
+      if(s===0n){ X=X*X%p; a=a*2n%n; b=b*2n%n; }
+      else if(s===1n){ X=X*g%p; a=(a+1n)%n; }
+      else { X=X*h%p; b=(b+1n)%n; }
+    }
+    meta={mode,p,g,h,n,x,res};
+  } else {
+    const n=parts[0], sp=parts[1];
+    const c=1n+BigInt(Math.floor(Math.random()*3)); // c in 1..3
+    let X=2n+BigInt(Math.floor(Math.random()*4));
+    // draw the sequence reduced mod the hidden prime sp -> reveals rho
+    const seq=[];
+    for(let i=0;i<4000;i++){
+      seq.push(X);
+      const key=(X%sp).toString();
+      if(seen.has(key)){ mu=seen.get(key); lam=i-mu; break; }
+      seen.set(key,i);
+      keys.push(X%sp);
+      X=(X*X+c)%n;
+    }
+    // find factor via Floyd on full n
+    let t=2n,hh=2n,d=1n,fx=(v)=>(v*v+c)%n, steps=0, fac=null;
+    do{ t=fx(t); hh=fx(fx(hh)); d=gcd((t>hh?t-hh:hh-t),n); steps++; if(steps>5000)break; }while(d===1n);
+    if(d!==1n && d!==n) fac=d;
+    meta={mode,n,c,sp,fac,steps,seq};
+  }
+  rhoState={keys,mu:mu<0?keys.length-1:mu,lam:lam<0?1:lam,meta};
+  rhoLayout(rhoState);
+  rhoDraw(rhoState,0,0,false);
+  rhoReadout(rhoState,false);
+}
+function rhoLayout(S){
+  const cv=document.getElementById('rhoCanvas'); const W=cv.width,H=cv.height;
+  const mu=S.mu, lam=S.lam, total=mu+lam;
+  const cx=W*0.62, cy=H*0.5, R=Math.min(W,H)*0.26;
+  S.coords=[];
+  for(let i=0;i<total;i++){
+    if(i<mu){
+      const f=mu>0? i/mu : 0;
+      // tail comes in from left toward the loop's entry point (angle pi)
+      const ex=cx+Math.cos(Math.PI)*R, ey=cy+Math.sin(Math.PI)*R;
+      const sx=W*0.06, sy=H*0.16;
+      S.coords.push([sx+(ex-sx)*f, sy+(ey-sy)*f]);
+    } else {
+      const k=i-mu, ang=Math.PI + (k/lam)*Math.PI*2;
+      S.coords.push([cx+Math.cos(ang)*R, cy+Math.sin(ang)*R]);
+    }
+  }
+  S.total=total; S.cx=cx; S.cy=cy;
+}
+function rhoPos(S,i){ const mu=S.mu,lam=S.lam; return i<mu? i : mu+((i-mu)%lam); }
+function rhoDraw(S,tort,hare,markers){
+  const cv=document.getElementById('rhoCanvas'), ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height; grid(ctx,W,H);
+  const C=S.coords;
+  // path lines
+  ctx.lineWidth=1.6;
+  for(let i=0;i<S.total-1;i++){
+    const a=C[i], b=C[i+1];
+    ctx.strokeStyle = i<S.mu? '#3d4f78' : '#5a4a2e';
+    ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+  }
+  // close the loop
+  if(S.total>S.mu+1){ const a=C[S.total-1], b=C[S.mu];
+    ctx.strokeStyle='#5a4a2e'; ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke(); }
+  // nodes
+  for(let i=0;i<S.total;i++){
+    ctx.fillStyle = i<S.mu? '#8FA8E8' : '#F2A65A';
+    ctx.beginPath(); ctx.arc(C[i][0],C[i][1], i<S.mu?3:3.4,0,Math.PI*2); ctx.fill();
+  }
+  if(markers){
+    const pt=(i,col,r)=>{ const p=C[rhoPos(S,i)]; ctx.fillStyle=col; ctx.beginPath(); ctx.arc(p[0],p[1],r,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='#06110F'; ctx.lineWidth=1.5; ctx.stroke(); };
+    pt(hare,'#E8607A',6.5); pt(tort,'#7FDBCA',6.5);
+  }
+  ctx.fillStyle='#8B97B4'; ctx.font='10px JetBrains Mono';
+  ctx.fillText('ρ', S.cx-4, S.cy+4);
+}
+function rhoReadout(S,done){
+  const out=document.getElementById('rhoOut'); const u=UK(), m=S.meta;
+  if(m.mode==='dl'){
+    out.innerHTML=
+      '<span class="k">'+(u?'група':'group')+'</span> ℤ*_'+m.p+',  g='+m.g+',  ord(g)=<span class="a">'+m.n+'</span>\n'+
+      '<span class="k">'+(u?'ціль':'target')+'</span> h = g^x = '+m.h+'   ('+(u?'таємне':'secret')+' x='+m.x+')\n'+
+      (u?'хвіст μ=':'tail μ=')+S.mu+',  '+(u?'цикл λ=':'cycle λ=')+S.lam+'\n'+
+      (done? ('<span class="s">'+(u?'відновлено':'recovered')+' x = '+(m.res!==null?m.res:'—')+'</span>  '+(m.res===m.x?'✓':(m.res!==null?'(≡ mod ord)':'✗'))) : (u?'▶ запустіть блукання':'▶ run the walk'));
+  } else {
+    out.innerHTML=
+      '<span class="k">n</span> = '+m.n+' = '+m.sp+'·'+(m.n/m.sp)+'   f(x)=x²+'+m.c+' mod n\n'+
+      (u?'послідовність циклиться mod прихованого p=':'sequence cycles mod hidden p=')+m.sp+'\n'+
+      (u?'хвіст μ=':'tail μ=')+S.mu+',  '+(u?'цикл λ=':'cycle λ=')+S.lam+'  (≈√p)\n'+
+      (done? ('<span class="s">gcd(|xᵢ−xⱼ|, n) = '+(m.fac||'—')+'</span> '+(u?'після':'after')+' '+m.steps+' Floyd '+(u?'кроків':'steps')+'  '+(m.fac?'✓':'')) : (u?'▶ запустіть блукання':'▶ run the walk'));
+  }
+}
+function rhoAnimate(){
+  if(rhoTimer) clearInterval(rhoTimer);
+  const S=rhoState; if(!S) return;
+  let t=0,h=0, done=false;
+  rhoTimer=setInterval(()=>{
+    t+=1; h+=2;
+    const meet = t>0 && rhoPos(S,t)===rhoPos(S,h);
+    rhoDraw(S,t,h,true);
+    if(meet || t>S.total+S.lam+4){ clearInterval(rhoTimer); rhoTimer=null; rhoReadout(S,true); }
+  },140);
+}
+
+// =============================================================================
+//  DEMO 3 — Fermat factorisation stepper (#fermat-f)
+// =============================================================================
+let fermatState=null;
+function fermatInit(){
+  document.getElementById('fermatPreset').addEventListener('change', function(){
+    document.getElementById('fermatN').value=this.value; fermatReset();
+  });
+  document.getElementById('fermatN').addEventListener('input', fermatReset);
+  document.getElementById('fermatStep').addEventListener('click', ()=>fermatStep(1));
+  document.getElementById('fermatRun').addEventListener('click', ()=>fermatStep(9999));
+  document.getElementById('fermatReset').addEventListener('click', fermatReset);
+  fermatReset();
+}
+function fermatReset(){
+  let n=BigInt(document.getElementById('fermatN').value||'3');
+  if(n<3n) n=3n; if(n%2n===0n) n+=1n;
+  const a0=isqrt(n-1n)+1n;
+  fermatState={n, a:a0, a0, steps:0, done:false, hist:[]};
+  fermatDraw();
+}
+function fermatStep(k){
+  const S=fermatState; if(!S||S.done) { fermatDraw(); return; }
+  for(let i=0;i<k && !S.done;i++){
+    const b2=S.a*S.a - S.n;
+    const sq=isSquare(b2);
+    S.hist.push({a:S.a, b2, sq});
+    if(S.hist.length>200) S.hist.shift();
+    if(sq){
+      const b=isqrt(b2);
+      S.p=S.a-b; S.q=S.a+b; S.b=b; S.done=true;
+    } else { S.a+=1n; S.steps++; }
+  }
+  fermatDraw();
+}
+function fermatDraw(){
+  const S=fermatState;
+  const cv=document.getElementById('fermatCanvas'), ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height; grid(ctx,W,H);
+  // plot a (x) vs sqrt(a^2 - n) (y) convergence over recent history
+  const hist=S.hist;
+  const pad=30;
+  ctx.fillStyle='#8B97B4'; ctx.font='10px JetBrains Mono';
+  ctx.fillText('√(a²−n)', 4, 12);
+  ctx.fillText('a →', W-34, H-6);
+  if(hist.length){
+    const rn=Number(isqrt(S.n));
+    const maxRoot=Math.max(1, Math.sqrt(Number(hist[0].b2>0n?hist[0].b2:1n)));
+    const n=hist.length;
+    for(let i=0;i<n;i++){
+      const px=pad+(W-2*pad)*(n<=1?0.5:i/(n-1));
+      const rootv=hist[i].b2>0n? Math.sqrt(Number(hist[i].b2)) : 0;
+      const py=H-pad-(H-2*pad)*Math.min(1,rootv/maxRoot);
+      ctx.fillStyle=hist[i].sq?'#7FDBCA':'#F2A65A';
+      ctx.beginPath(); ctx.arc(px,py,hist[i].sq?6:3,0,Math.PI*2); ctx.fill();
+      if(hist[i].sq){ ctx.strokeStyle='#06110F'; ctx.lineWidth=1.4; ctx.stroke(); }
+      if(i>0){ ctx.strokeStyle='#3d4f78'; ctx.lineWidth=1;
+        const ppx=pad+(W-2*pad)*((i-1)/(n-1));
+        const pr=hist[i-1].b2>0n?Math.sqrt(Number(hist[i-1].b2)):0;
+        const ppy=H-pad-(H-2*pad)*Math.min(1,pr/maxRoot);
+        ctx.beginPath(); ctx.moveTo(ppx,ppy); ctx.lineTo(px,py); ctx.stroke(); }
+    }
+  }
+  const out=document.getElementById('fermatOut'); const u=UK();
+  const last=S.hist[S.hist.length-1];
+  let txt='<span class="k">n</span> = '+S.n+'   a₀ = ⌈√n⌉ = <span class="a">'+S.a0+'</span>   '+(u?'кроків':'steps')+': <span class="s">'+S.steps+'</span>\n';
+  if(last){
+    txt+='a = '+last.a+'   a²−n = '+last.b2+'   '+(u?'квадрат?':'square?')+' '+(last.sq?'<span class="s">'+(u?'так':'yes')+'</span>':'<span class="k">'+(u?'ні':'no')+'</span>')+'\n';
+  }
+  if(S.done){
+    txt+='<span class="b">b</span> = √(a²−n) = '+S.b+'\n<span class="s">n = (a−b)(a+b) = '+S.p+' · '+S.q+'</span>  '+(S.p*S.q===S.n?'✓':'✗');
+  } else {
+    txt+=(u?'натисніть «крок» / «пуск»':'press “step” / “run”');
+  }
+  out.innerHTML=txt;
+}
+
+// =============================================================================
+//  DEMO 4 — Pollard p-1 (#p1)
+// =============================================================================
+function p1Init(){
+  // Build good presets: p-1 smooth, and one failing (p-1 has a big prime factor)
+  const presets=[
+    {v:'8051', l:'n=8051 = 83·97,  raise B to ~32 to crack'},
+    {v:'9271', l:'n=9271 = 73·127,  p−1=72=2³·3² (smooth!)'},
+    {v:'19519', l:'n=19519 = 131·149,  p−1=130=2·5·13'},
+    {v:'FAIL:29893', l:'n=29893 = 167·179,  p−1,q−1 have big prime (fails)'}
+  ];
+  fillSel('p1Preset', presets, '9271');
+  document.getElementById('p1B').addEventListener('input', function(){
+    document.getElementById('p1BVal').textContent=this.value; p1Run();
+  });
+  document.getElementById('p1Preset').addEventListener('change', p1Run);
+  document.getElementById('p1Run').addEventListener('click', p1Run);
+  p1Run();
+}
+function p1Run(){
+  const raw=document.getElementById('p1Preset').value;
+  const n=BigInt(raw.replace('FAIL:',''));
+  const B=parseInt(document.getElementById('p1B').value);
+  // a^(lcm(1..B)) mod n, gcd checks after each prime power
+  let a=2n, d=1n;
+  const trace=[];
+  let found=null, foundAt=null;
+  // list primes up to B
+  const primes=[]; for(let i=2;i<=B;i++){ let pr=true; for(let j=2;j*j<=i;j++) if(i%j===0){pr=false;break;} if(pr) primes.push(i); }
+  let step=0;
+  outer:
+  for(const pr of primes){
+    let pe=pr; while(pe*pr<=B) pe*=pr;            // largest prime power ≤ B
+    a=modpow(a, BigInt(pe), n);
+    d=gcd(a-1n, n);
+    step++;
+    trace.push({pr, pe, a, d});
+    if(d>1n && d<n){ found=d; foundAt=step; break outer; }
+    if(d===n){ found='OVER'; foundAt=step; break outer; }
+  }
+  p1DrawTrace(trace, found, B);
+  const out=document.getElementById('p1Out'); const u=UK();
+  let txt='<span class="k">n</span> = '+n+'   a = 2   B = <span class="a">'+B+'</span>\n';
+  txt+=(u?'степені простих ≤ B: ':'prime powers ≤ B: ')+primes.join(', ')+'\n\n';
+  if(found && found!=='OVER'){
+    txt+='<span class="s">'+(u?'множник випав на кроці':'factor dropped at step')+' '+foundAt+'</span>: '+
+         'prime '+trace[foundAt-1].pr+' → gcd(a−1, n) = <span class="s">'+found+'</span>\n'+
+         'n = '+found+' · '+(n/found)+'  ✓';
+  } else if(found==='OVER'){
+    txt+='<span class="b">gcd = n</span> — '+(u?'зайшли задалеко (обидва p−1, q−1 гладкі при цьому B); зменште B.':'overshoot (both p−1, q−1 smooth at this B); lower B.');
+  } else {
+    txt+='<span class="b">gcd(a−1, n) = 1</span> '+(u?'на всьому діапазоні — p−1 НЕ B-гладке для цього B. Збільшуйте B… або метод тут безсилий.':'throughout — p−1 is NOT B-smooth for this B. Raise B… or the method is stuck here.');
+  }
+  out.innerHTML=txt;
+}
+function p1DrawTrace(trace, found, B){
+  const cv=document.getElementById('p1Canvas'), ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height; grid(ctx,W,H);
+  const pad=28;
+  ctx.fillStyle='#8B97B4'; ctx.font='10px JetBrains Mono';
+  ctx.fillText(UK()?'gcd(aᵢ−1, n) '+'по кроках':'gcd(aᵢ−1, n) per step', pad, 12);
+  const n=trace.length;
+  for(let i=0;i<n;i++){
+    const px=pad+(W-2*pad)*(n<=1?0.5:i/(n-1));
+    const hit=trace[i].d>1n;
+    const py=hit? H-pad-(H-2*pad)*0.85 : H-pad-(H-2*pad)*0.12;
+    if(i>0){ ctx.strokeStyle='#3d4f78'; ctx.lineWidth=1;
+      const ppx=pad+(W-2*pad)*((i-1)/(n-1)); const ph=trace[i-1].d>1n;
+      const ppy=ph? H-pad-(H-2*pad)*0.85 : H-pad-(H-2*pad)*0.12;
+      ctx.beginPath(); ctx.moveTo(ppx,ppy); ctx.lineTo(px,py); ctx.stroke(); }
+    ctx.fillStyle=(hit && found && found!=='OVER' && i===n-1)?'#7FDBCA':(hit?'#F2A65A':'#2C3A5C');
+    ctx.beginPath(); ctx.arc(px,py,hit?6:3.2,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#6b7690'; ctx.font='8px JetBrains Mono';
+    ctx.fillText(String(trace[i].pr), px-4, H-pad+12);
+  }
+  ctx.strokeStyle=AX; ctx.beginPath(); ctx.moveTo(pad,H-pad); ctx.lineTo(W-pad,H-pad); ctx.stroke();
+}
+
+// =============================================================================
+//  Pohlig–Hellman worked example (#pohlig)
+// =============================================================================
+const PH_PRIMES=[251n,257n,401n,577n,1009n]; // p-1 smooth-ish
+function phInit(){
+  fillSel('phP', PH_PRIMES.map(String), '251');
+  document.getElementById('phRun').addEventListener('click', phRun);
+  document.getElementById('phRand').addEventListener('click', phRandom);
+  ['phP','phG','phX'].forEach(id=>document.getElementById(id).addEventListener('input', phRun));
+  phRun();
+}
+function phRandom(){
+  const p=BigInt(document.getElementById('phP').value);
+  document.getElementById('phX').value=String(1n+BigInt(Math.floor(Math.random()*Number(p-2n))));
+  phRun();
+}
+// discrete log in a subgroup of order q (prime) by BSGS
+function dlogBSGS(base, target, mod, order){
+  const m=isqrt(order-1n)+1n;
+  const tbl=new Map(); let cur=1n;
+  for(let j=0n;j<m;j++){ if(!tbl.has(cur.toString())) tbl.set(cur.toString(),j); cur=cur*base%mod; }
+  const factor=modinv(modpow(base,m,mod),mod);
+  let gamma=target;
+  for(let i=0n;i<=m;i++){ if(tbl.has(gamma.toString())) return (i*m+tbl.get(gamma.toString()))%order; gamma=gamma*factor%mod; }
+  return null;
+}
+function phRun(){
+  const p=BigInt(document.getElementById('phP').value);
+  const g=BigInt(document.getElementById('phG').value||'2');
+  const out=document.getElementById('phOut'); const u=UK();
+  const n=multOrder(g,p);
+  if(n<0n){ out.innerHTML='<span class="b">'+(u?'g не в групі':'g not in group')+'</span>'; return; }
+  let x=((BigInt(document.getElementById('phX').value||'1'))%n+n)%n;
+  const h=modpow(g,x,p);
+  const facs=primeFactorsWithMult(n);
+  let lines=[];
+  lines.push('<span class="k">'+(u?'група':'group')+'</span> ℤ*_'+p+',  g='+g+',  ord(g) = n = <span class="a">'+n+'</span> = '+facs.map(f=>f[1]===1n?f[0]:f[0]+'^'+f[1]).join(' · '));
+  lines.push('<span class="k">'+(u?'ціль':'target')+'</span> h = g^x = '+h+'   ('+(u?'таємне':'secret')+' x='+x+', '+(u?'відновлюємо…':'recover…')+')');
+  lines.push('');
+  const residues=[], moduli=[];
+  for(const [pi,ei] of facs){
+    const pe=pi**ei;
+    // x mod pi^ei : lift digit by digit
+    let xk=0n;
+    const gsub=modpow(g, n/pi, p);              // element of order pi
+    for(let k=0n;k<ei;k++){
+      const exp=n/(pi**(k+1n));
+      const lhs=modpow( (h*modinv(modpow(g,xk,p),p))%p, exp, p);
+      const dk=dlogBSGS(gsub, lhs, p, pi);
+      xk=xk + (dk===null?0n:dk)*(pi**k);
+    }
+    xk=((xk%pe)+pe)%pe;
+    residues.push(xk); moduli.push(pe);
+    lines.push('  x ≡ <span class="s">'+xk+'</span> (mod '+pi+(ei>1n?'^'+ei:'')+' = '+pe+')');
+  }
+  // CRT recombine
+  let X=0n, M=1n; for(const m of moduli) M*=m;
+  for(let i=0;i<moduli.length;i++){ const Mi=M/moduli[i]; const yi=modinv(Mi%moduli[i], moduli[i]); X=(X+residues[i]*Mi%M*yi)%M; }
+  X=((X%M)+M)%M;
+  lines.push('');
+  lines.push('<span class="b">CRT</span>: x ≡ '+residues.map((r,i)=>r+' (mod '+moduli[i]+')').join(', '));
+  lines.push('<span class="s">x = '+X+'</span>   '+(X===x?'✓ '+(u?'збіг':'matches'):'✗'));
+  out.innerHTML=lines.join('\n');
+}
+
+// =============================================================================
+//  Shor static worked example (#shor-f)
+// =============================================================================
+function shorDemo(){
+  const out=document.getElementById('shorOut'); const u=UK();
+  const n=15n, a=7n;
+  // period of 7 mod 15: 7,4,13,1 -> r=4
+  let r=1n, cur=a%n; const seq=[cur];
+  while(cur!==1n){ cur=cur*a%n; seq.push(cur); r++; if(r>50n) break; }
+  const half=modpow(a, r/2n, n);
+  const f1=gcd(half-1n,n), f2=gcd(half+1n,n);
+  out.innerHTML=
+    '<span class="k">'+(u?'приклад':'example')+'</span>: n = 15, a = 7   ('+(u?'класична частина показана; квантово знаходиться лише період r':'classical part shown; only the period r needs the quantum step')+')\n'+
+    (u?'степені a mod n':'powers of a mod n')+': 7¹=7, 7²=4, 7³=13, 7⁴=1  ⇒  <span class="a">'+(u?'період':'period')+' r = '+r+'</span>\n'+
+    'a^(r/2) = 7² = '+half+' (mod 15)\n'+
+    '<span class="s">gcd(a^(r/2)−1, n) = gcd('+(half-1n)+', 15) = '+f1+'</span>,  gcd(+1) = '+f2+'\n'+
+    '<span class="b">15 = '+f1+' · '+f2+'</span>  ✓   '+(u?'квантове перетворення Фур\'є видобуває r за один прохід — див.':'the quantum Fourier transform extracts r in one shot — see')+' quantum.html#shor-q';
+}
+
+// =============================================================================
+//  Kangaroo static worked example (#kangaroo)
+// =============================================================================
+function kangDemo(){
+  const out=document.getElementById('kangOut'); const u=UK();
+  // toy: p=1019, g=2, x in [400,460]; illustrate the numbers
+  const p=1019n, g=2n, a=400n, b=460n, w=b-a;
+  const x=431n; const h=modpow(g,x,p);
+  out.innerHTML=
+    '<span class="k">'+(u?'приклад':'example')+'</span>: ℤ*_'+p+', g=2,  x ∈ ['+a+', '+b+'],  '+(u?'ширина':'width')+' w = '+w+'\n'+
+    'h = g^x = '+h+'   ('+(u?'таємне':'secret')+' x='+x+')\n'+
+    (u?'ручний кенгуру стартує з g^b і лишає слід виокремлених точок;':'tame kangaroo starts at g^b, drops distinguished points;')+'\n'+
+    (u?'дикий кенгуру стартує з h і стрибає до зустрічі — вартість ≈ √w ≈ ':'wild kangaroo starts at h and jumps until they meet — cost ≈ √w ≈ ')+Math.ceil(Math.sqrt(Number(w)))+' '+(u?'кроків':'steps')+'\n'+
+    '<span class="s">'+(u?'проти √n ≈ ':'vs √n ≈ ')+Math.ceil(Math.sqrt(Number(p)))+' '+(u?'для повної групи — ось виграш обмеженого діапазону':'for the full group — the bounded-range win')+'</span>';
+}
+
+// =============================================================================
+//  PAGE-LEVEL — complexity landscape chart (#landscape)
+// =============================================================================
+const LN2=Math.log(2);
+function secBits(kind, n){ // n = bit-length; return log2(operations)
+  const lnN=n*LN2, lnlnN=Math.log(lnN);
+  if(kind==='sqrt') return n/2;
+  if(kind==='L12'){ const c=1.0; return (c*Math.sqrt(lnN*lnlnN))/LN2; }
+  if(kind==='L13'){ const c=Math.cbrt(64/9); return (c*Math.cbrt(lnN)*Math.pow(lnlnN,2/3))/LN2; }
+  if(kind==='quantum') return 3*Math.log(n)/LN2 + 12; // ~n^3 gate count, small offset
+  return 0;
+}
+const CX_SERIES=[
+  {k:'sqrt', col:'#7FDBCA', dash:[], name:'O(√n)'},
+  {k:'L12', col:'#F2A65A', dash:[7,4], name:'L[1/2]'},
+  {k:'L13', col:'#E8607A', dash:[2,3], name:'L[1/3]'},
+  {k:'quantum', col:'#8FA8E8', dash:[8,3,2,3], name:'O(n³) quantum'}
+];
+function cxDraw(){
+  const cv=document.getElementById('cxCanvas'), ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height; grid(ctx,W,H);
+  const padL=42,padR=64,padT=16,padB=30;
+  const nMin=256,nMax=4096, yMax=280;
+  const X=n=>padL+(W-padL-padR)*(n-nMin)/(nMax-nMin);
+  const Y=v=>padT+(H-padT-padB)*(1-Math.min(v,yMax)/yMax);
+  // y gridlines / labels (security bits)
+  ctx.fillStyle='#8B97B4'; ctx.font='10px JetBrains Mono';
+  [0,56,80,112,128,192,256].forEach(v=>{
+    const y=Y(v); ctx.strokeStyle=GRID; ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(W-padR,y); ctx.stroke();
+    ctx.fillStyle='#6b7690'; ctx.fillText(v+'b', 6, y+3);
+  });
+  // x labels
+  [512,1024,2048,3072,4096].forEach(n=>{ if(n<=nMax){ const x=X(n); ctx.fillStyle='#6b7690'; ctx.fillText(String(n), x-14, H-8); } });
+  // highlight line
+  const hn=parseInt(document.getElementById('cxN').value);
+  const hx=X(hn); ctx.strokeStyle='#2C4A45'; ctx.setLineDash([3,3]); ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(hx,padT); ctx.lineTo(hx,H-padB); ctx.stroke(); ctx.setLineDash([]);
+  // curves
+  CX_SERIES.forEach(s=>{
+    ctx.strokeStyle=s.col; ctx.lineWidth=2.2; ctx.setLineDash(s.dash);
+    ctx.beginPath(); let first=true, lastY=0;
+    for(let n=nMin;n<=nMax;n+=32){ const v=secBits(s.k,n); const px=X(n),py=Y(v);
+      if(first){ctx.moveTo(px,py);first=false;}else ctx.lineTo(px,py); lastY=py; }
+    ctx.stroke(); ctx.setLineDash([]);
+    // direct label at right
+    ctx.fillStyle=s.col; ctx.font='9px JetBrains Mono';
+    ctx.fillText(s.name, W-padR+3, Math.max(padT+6,Math.min(H-padB,lastY))+3);
+  });
+  ctx.fillStyle='#8B97B4'; ctx.font='10px JetBrains Mono';
+  ctx.fillText(UK()?'біти стійкості = log₂(операцій)':'security bits = log₂(ops)', padL, 11);
+  // readout
+  const u=UK();
+  const vals=CX_SERIES.map(s=>s.name+' = '+Math.round(secBits(s.k,hn))+'b');
+  document.getElementById('cxOut').innerHTML=
+    '<span class="k">'+(u?'при довжині':'at bit-length')+'</span> n = <span class="a">'+hn+'</span> '+(u?'біт':'bits')+':\n'+
+    '<span class="s">'+vals[2]+'</span>  ('+(u?'найкраще класичне — GNFS/NFS':'best classical — GNFS/NFS')+')\n'+
+    vals[0]+'   '+vals[1]+'   '+vals[3]+'\n'+
+    (hn>=2000&&hn<=2100? ('<span class="b">'+(u?'→ 2048-бітний RSA ≈ 112-бітна стійкість':'→ 2048-bit RSA ≈ 112-bit security')+'</span>') : '');
+}
+function cxInit(){
+  document.getElementById('cxN').addEventListener('input', function(){
+    document.getElementById('cxNVal').textContent=this.value; cxDraw();
+  });
+  cxDraw();
+}
+
+// ================================ boot =======================================
+function renderLegend(){
+  const Lg=I18N[window.LANG].lvlLegend;
+  document.getElementById('lvlLegend').innerHTML=[1,2,3].map((n,i)=>'<span>'+window.atlasBadge(n)+' '+Lg[i]+'</span>').join('');
+}
+renderLegend(); renderRefs();
+cxInit();
+bsgsInit();
+rhoInit();
+fermatInit();
+p1Init();
+phInit();
+shorDemo();
+kangDemo();
+
+window.onLangChange=function(){
+  renderLegend(); renderRefs();
+  cxDraw();
+  bsgsDraw(null);
+  if(rhoState){ rhoLayout(rhoState); rhoDraw(rhoState,0,0,false); rhoReadout(rhoState,false); }
+  fermatDraw();
+  p1Run();
+  phRun();
+  shorDemo();
+  kangDemo();
+};
+</script>
+</body>
+</html>

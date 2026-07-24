@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital keying (ASK · FSK · PSK) — Wireless Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="keying">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Switching a carrier with bits" data-uk="Перемикання носія бітами">Digital keying</div>
+    <h1 data-en="Digital Keying — ASK, FSK, PSK" data-uk="Цифрові маніпуляції — ASK, FSK, PSK">Digital Keying — ASK · FSK · PSK</h1>
+    <div class="eq-hero">bits → symbols → { amplitude | frequency | phase }</div>
+    <p class="lede" data-en="Take the three analog knobs and let a <b>bit stream</b> switch them between fixed values, and you have the digital keying families: <b>ASK</b> (amplitude, incl. On-Off Keying), <b>FSK</b> (frequency, incl. GFSK/MSK/GMSK) and <b>PSK</b> (phase, incl. BPSK/QPSK/8-PSK). Higher-order schemes pack more bits per symbol but sit closer together, so they demand a cleaner channel. Below: a live amplitude waveform, a continuous-phase FSK generator with Gaussian shaping, and a full PSK constellation explorer with noise."
+       data-uk="Візьміть три аналогові «ручки» й дозвольте <b>потоку бітів</b> перемикати їх між фіксованими значеннями — і отримаєте родини цифрових маніпуляцій: <b>ASK</b> (амплітуда, вкл. OOK), <b>FSK</b> (частота, вкл. GFSK/MSK/GMSK) та <b>PSK</b> (фаза, вкл. BPSK/QPSK/8-PSK). Схеми вищого порядку пакують більше біт на символ, але точки ближчі, тож потрібен чистіший канал. Нижче: жива амплітудна форма, генератор FSK із неперервною фазою й гаусовим формуванням та повний оглядач сузір'їв PSK із шумом."></p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="Amplitude &amp; frequency keying" data-uk="Амплітудна та частотна маніпуляція">Amplitude &amp; frequency keying</h3>
+
+  <!-- ============ OOK ============ -->
+  <section id="ook">
+    <span class="num" data-en="01 / On-Off Keying" data-uk="01 / Увімк.-вимк. маніпуляція">01 / OOK</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">envelope</span>
+      <span data-en="OOK — On-Off Keying" data-uk="OOK — увімк.-вимк. маніпуляція">OOK — On-Off Keying</span></h2>
+    <div class="formula">s(t) = b(t) · cos(2π f_c t),  b ∈ {0, 1}</div>
+    <p class="desc" data-en="The bluntest digital scheme: the carrier is simply <b>on</b> for a 1 and <b>off</b> for a 0 — ASK with two levels. A receiver needs nothing but an envelope detector, which is why OOK dominates the cheapest hardware: 315/433 MHz remote controls, garage doors, passive RFID, and IrDA. The trade-offs are poor noise immunity (a fade looks like a 0) and no constant envelope. The demo runs a random bit stream; switch to 4-ASK to see multi-level amplitude keying carrying 2 bits per symbol."
+       data-uk="Найгрубіша цифрова схема: носій просто <b>увімкнено</b> для 1 і <b>вимкнено</b> для 0 — ASK із двома рівнями. Приймачу потрібен лише детектор обвідної, тому OOK панує в найдешевшому обладнанні: пульти 315/433 МГц, ворота гаражів, пасивні RFID та IrDA. Недоліки — слабка завадостійкість (завмирання схоже на 0) і відсутність сталої обвідної. Демо запускає випадковий потік бітів; перемкніть на 4-ASK, щоб побачити багаторівневу амплітудну маніпуляцію 2 біти/символ."></p>
+    <div id="refs-ook"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="oCanvas" width="360" height="170"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="scheme" data-uk="схема">scheme</span></label>
+            <select id="oScheme"><option value="ook">OOK (2-level)</option><option value="ask4">4-ASK (2 bits/sym)</option></select></div>
+          <button id="oNew" data-en="New random bits" data-uk="Нові випадкові біти">New random bits</button>
+          <div class="hint" data-en="Grey ticks mark symbol boundaries; the number above each is the transmitted symbol." data-uk="Сірі позначки — межі символів; число над кожним — переданий символ."></div>
+          <div class="readout" id="oOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="analog.html#am">AM</a> <a href="qam.html#qam">QAM</a> <a href="standards.html#zigbee">RFID / IoT</a></div>
+  </section>
+
+  <!-- ============ ASK ============ -->
+  <section id="ask">
+    <span class="num" data-en="02 / Amplitude Shift Keying" data-uk="02 / Амплітудна маніпуляція">02 / ASK</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">envelope</span>
+      <span data-en="ASK — Amplitude Shift Keying" data-uk="ASK — амплітудна маніпуляція">ASK — Amplitude Shift Keying</span></h2>
+    <div class="formula">s(t) = A_k · cos(2π f_c t),  A_k ∈ {A₀, A₁, …, A_{M−1}}</div>
+    <p class="desc" data-en="OOK generalised to <b>M amplitude levels</b>, carrying log₂M bits per symbol (use the 4-ASK option in the demo above). More levels mean higher throughput but tighter spacing and worse noise margin — the same trade every higher-order scheme faces. Pure ASK is uncommon on its own, but it lives on inside <b>EPC Gen2 RFID</b> (reader-to-tag), some remote controls, and as one axis of QAM."
+       data-uk="OOK, узагальнена до <b>M рівнів амплітуди</b>, що несе log₂M біт на символ (скористайтеся опцією 4-ASK у демо вище). Більше рівнів — вища пропускність, але щільніше розташування й гірший запас на шум — той самий компроміс кожної схеми вищого порядку. Чиста ASK рідкісна окремо, але живе всередині <b>EPC Gen2 RFID</b> (зчитувач→мітка), деяких пультів і як одна вісь QAM."></p>
+    <div id="refs-ask"></div>
+    <div class="readout" data-en="M = 4 levels → 2 bits/symbol.  Gray map: 00→A₀, 01→A₁, 11→A₂, 10→A₃.  Doubling M adds only 1 bit/symbol but halves the amplitude gap → ~6 dB more SNR needed per step." data-uk="M = 4 рівні → 2 біти/символ.  Код Ґрея: 00→A₀, 01→A₁, 11→A₂, 10→A₃.  Подвоєння M додає лише 1 біт/символ, але вдвічі зменшує проміжок амплітуди → ~6 дБ більше SNR на крок."></div>
+    <div class="xrefs"><a href="#ook">OOK</a> <a href="qam.html#qam">QAM</a></div>
+  </section>
+
+  <!-- ============ FSK ============ -->
+  <section id="fsk">
+    <span class="num" data-en="03 / Frequency Shift Keying" data-uk="03 / Частотна маніпуляція">03 / FSK</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">discrim.</span>
+      <span data-en="FSK — Frequency Shift Keying (+ MSK)" data-uk="FSK — частотна маніпуляція (+ MSK)">FSK — Frequency Shift Keying</span></h2>
+    <div class="formula">s(t) = cos( 2π f_c t + 2π h ∫ a(τ) dτ ),   h = modulation index</div>
+    <p class="desc" data-en="Each symbol picks a different tone. Because the amplitude never changes, FSK is easy to generate, works with a non-linear (efficient) power amplifier, and demodulates with a simple discriminator — perfect for paging (POCSAG, FLEX) and weather stations. The <b>modulation index</b> h scales the tone spacing; at h = 0.5 with continuous phase you get <b>MSK</b>, the tightest-spectrum orthogonal FSK. The demo builds a genuine continuous-phase signal from random bits; add a Gaussian filter (BT) to see the spectrum-narrowing that turns FSK into GFSK/GMSK."
+       data-uk="Кожен символ обирає інший тон. Оскільки амплітуда не змінюється, FSK легко генерувати, вона працює з нелінійним (ефективним) підсилювачем і демодулюється простим дискримінатором — ідеально для пейджингу (POCSAG, FLEX) і метеостанцій. <b>Індекс модуляції</b> h масштабує рознесення тонів; при h = 0,5 з неперервною фазою отримуємо <b>MSK</b> — ортогональну FSK з найвужчим спектром. Демо будує справжній сигнал із неперервною фазою з випадкових бітів; додайте гаусів фільтр (BT), щоб побачити звуження спектра, яке перетворює FSK на GFSK/GMSK."></p>
+    <div id="refs-fsk"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="fCanvas" width="360" height="180"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="scheme" data-uk="схема">scheme</span></label>
+            <select id="fScheme">
+              <option value="2fsk">2-FSK (h = 1)</option>
+              <option value="msk">MSK (h = 0.5)</option>
+              <option value="4fsk">4-FSK (2 bits/sym)</option>
+            </select></div>
+          <div class="ctrl"><label><span data-en="Gaussian filter BT (∞ = off)" data-uk="гаусів фільтр BT (∞ = вимк.)">Gaussian BT</span><span class="val" id="fBTV">off</span></label>
+            <input type="range" id="fBT" min="0" max="10" step="1" value="0"></div>
+          <button id="fNew" data-en="New random bits" data-uk="Нові випадкові біти">New random bits</button>
+          <div class="hint" data-en="Amber = the frequency-deviation command (smoothed by the Gaussian filter); teal = the resulting constant-envelope carrier." data-uk="Бурштиновий = команда девіації частоти (згладжена гаусовим фільтром); бірюзовий = отриманий носій зі сталою обвідною."></div>
+          <div class="readout" id="fOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="analog.html#fm">FM</a> <a href="#gfsk">GFSK</a> <a href="#gmsk">GMSK</a> <a href="standards.html#bluetooth">Bluetooth LE</a></div>
+  </section>
+
+  <!-- ============ GFSK ============ -->
+  <section id="gfsk">
+    <span class="num" data-en="04 / Gaussian FSK" data-uk="04 / Гаусова FSK">04 / GFSK</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">coherent</span>
+      <span data-en="GFSK — Gaussian Frequency Shift Keying" data-uk="GFSK — гаусова частотна маніпуляція">GFSK — Gaussian FSK</span></h2>
+    <div class="formula">g(t) = Gaussian( BT ) ∗ rect,  smaller BT ⇒ narrower spectrum, more ISI</div>
+    <p class="desc" data-en="A sharp rectangular frequency step has wide spectral skirts that spill into neighbouring channels. GFSK first passes the data through a <b>Gaussian low-pass filter</b>, rounding the transitions so the spectrum is compact. The filter's <b>BT product</b> (bandwidth × bit-period) tunes the trade: a small BT is spectrally clean but smears symbols together (inter-symbol interference); a large BT keeps symbols crisp but leaks. Bluetooth uses BT ≈ 0.5. The pulse-shape demo shows the Gaussian response widen and narrow as you move BT."
+       data-uk="Різкий прямокутний стрибок частоти має широкі спектральні «спідниці», що заходять у сусідні канали. GFSK спершу пропускає дані через <b>гаусів ФНЧ</b>, згладжуючи переходи, тож спектр стає компактним. <b>Добуток BT</b> фільтра (смуга × тривалість біта) налаштовує компроміс: мале BT — спектрально чисто, але змазує символи (міжсимвольна інтерференція); велике BT — символи чіткі, але спектр «тече». Bluetooth використовує BT ≈ 0,5. Демо форми імпульсу показує, як гаусів відгук розширюється й звужується зі зміною BT."></p>
+    <div id="refs-gfsk"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="gCanvas" width="300" height="170"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="BT product" data-uk="добуток BT">BT product</span><span class="val" id="gBTV">0.50</span></label>
+            <input type="range" id="gBT" min="0.2" max="1.5" step="0.05" value="0.5"></div>
+          <div class="hint" data-en="The curve is the Gaussian-shaped frequency pulse for one bit. Lower BT ⇒ wider, softer pulse ⇒ narrower RF spectrum but more overlap with neighbours." data-uk="Крива — гаусів частотний імпульс для одного біта. Менше BT ⇒ ширший, м'якший імпульс ⇒ вужчий РЧ-спектр, але більше перекриття із сусідами."></div>
+          <div class="readout" id="gOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="#fsk">FSK</a> <a href="#gmsk">GMSK</a> <a href="standards.html#bluetooth">Bluetooth</a> <a href="standards.html#dect">DECT</a></div>
+  </section>
+
+  <!-- ============ 4-FSK ============ -->
+  <section id="mfsk">
+    <span class="num" data-en="05 / M-ary FSK (2/4-FSK)" data-uk="05 / M-ічна FSK (2/4-FSK)">05 / M-ary FSK</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c1">discrim.</span>
+      <span data-en="2-FSK / 4-FSK — multi-tone keying" data-uk="2-FSK / 4-FSK — багатотонова маніпуляція">2-FSK / 4-FSK</span></h2>
+    <div class="formula">4-FSK: dibit → one of 4 tones {−3Δ, −Δ, +Δ, +3Δ}</div>
+    <p class="desc" data-en="Using four (or more) tones lets each symbol carry 2 bits, doubling the data rate for the same symbol rate. The receiver just decides which of the tones is present. 4-FSK appears in <b>DECT</b> variants, professional radio and legacy pagers. Select 4-FSK in the FSK demo above to watch a dibit stream drive four frequency levels."
+       data-uk="Використання чотирьох (або більше) тонів дозволяє кожному символу нести 2 біти, подвоюючи швидкість даних за тієї ж символьної швидкості. Приймач лише вирішує, який тон присутній. 4-FSK з'являється у варіантах <b>DECT</b>, професійному радіо й застарілих пейджерах. Оберіть 4-FSK у демо FSK вище, щоб побачити, як потік дибітів керує чотирма рівнями частоти."></p>
+    <div id="refs-mfsk"></div>
+    <div class="readout" data-en="dibit → tone:  00 → −3Δ   01 → −Δ   11 → +Δ   10 → +3Δ   (Gray-coded, so adjacent tones differ by one bit → fewer bit errors when a tone is misread as its neighbour)." data-uk="дибіт → тон:  00 → −3Δ   01 → −Δ   11 → +Δ   10 → +3Δ   (код Ґрея: сусідні тони різняться одним бітом → менше бітових помилок, коли тон сплутано із сусіднім)."></div>
+    <div class="xrefs"><a href="#fsk">FSK</a> <a href="standards.html#dect">DECT</a> <a href="standards.html#paging">Paging</a></div>
+  </section>
+
+  <!-- ============ MSK / GMSK ============ -->
+  <section id="msk">
+    <span class="num" data-en="06 / Minimum Shift Keying" data-uk="06 / Маніпуляція мінімальним зсувом">06 / MSK</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">coherent</span>
+      <span data-en="MSK — Minimum Shift Keying" data-uk="MSK — маніпуляція мінімальним зсувом">MSK — Minimum Shift Keying</span></h2>
+    <div class="formula">h = 0.5  (the smallest index giving orthogonal, continuous-phase tones)</div>
+    <p class="desc" data-en="MSK is the special case of continuous-phase FSK with modulation index exactly <b>h = 0.5</b> — the minimum spacing at which the two tones stay orthogonal over a symbol. That gives a constant envelope, a compact main lobe, and a phase that changes by exactly ±90° per bit (it can equally be seen as offset-QPSK with half-sine pulses). Select MSK in the FSK demo to see the smooth, gapless phase. Add a Gaussian pre-filter and MSK becomes <b>GMSK</b>."
+       data-uk="MSK — це окремий випадок FSK із неперервною фазою й індексом модуляції рівно <b>h = 0,5</b> — мінімальне рознесення, за якого два тони лишаються ортогональними на символі. Це дає сталу обвідну, компактну головну пелюстку й фазу, що змінюється рівно на ±90° за біт (її так само можна бачити як offset-QPSK із півсинусними імпульсами). Оберіть MSK у демо FSK, щоб побачити плавну безрозривну фазу. Додайте гаусів передфільтр — і MSK стає <b>GMSK</b>."></p>
+    <div id="refs-msk"></div>
+    <div class="xrefs"><a href="#fsk">FSK</a> <a href="#gmsk">GMSK</a> <a href="keying.html#oqpsk">O-QPSK</a></div>
+  </section>
+
+  <section id="gmsk">
+    <span class="num" data-en="07 / Gaussian MSK" data-uk="07 / Гаусова MSK">07 / GMSK</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">coherent</span>
+      <span data-en="GMSK — Gaussian Minimum Shift Keying" data-uk="GMSK — гаусова маніпуляція мінімальним зсувом">GMSK — Gaussian MSK</span></h2>
+    <div class="formula">GMSK = MSK + Gaussian pre-filter (GSM uses BT = 0.3)</div>
+    <p class="desc" data-en="Take MSK, add the Gaussian pulse-shaping of GFSK, and you get the modulation of <b>GSM</b> and <b>DECT</b>: constant envelope (so the phone's power amplifier can run in efficient saturation) and a very compact spectrum (so channels pack tightly). GSM's BT = 0.3 is aggressive shaping — spectrally excellent, at the cost of controlled inter-symbol interference the equaliser cleans up. It is the single most-deployed digital modulation in history by number of handsets. See the GFSK pulse-shape demo above with BT set low."
+       data-uk="Візьміть MSK, додайте гаусове формування імпульсу GFSK — і отримаєте модуляцію <b>GSM</b> та <b>DECT</b>: стала обвідна (тож підсилювач телефона працює в ефективному насиченні) і дуже компактний спектр (тож канали щільно пакуються). BT = 0,3 у GSM — агресивне формування: спектрально відмінно, ціною керованої міжсимвольної інтерференції, яку прибирає еквалайзер. Це найпоширеніша цифрова модуляція в історії за кількістю телефонів. Дивіться демо форми імпульсу GFSK вище з низьким BT."></p>
+    <div id="refs-gmsk"></div>
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="<b>GSM</b> (2G) worldwide, <b>DECT</b> cordless phones, some AIS ship transponders and satellite links. EDGE later overlaid 8-PSK on the very same GMSK air interface for higher rates."
+            data-uk="<b>GSM</b> (2G) у всьому світі, безпроводові телефони <b>DECT</b>, деякі суднові транспондери AIS і супутникові лінії. EDGE згодом наклав 8-PSK на той самий інтерфейс GMSK для вищих швидкостей."></span></div>
+    <div class="xrefs"><a href="#msk">MSK</a> <a href="#gfsk">GFSK</a> <a href="standards.html#gsm">GSM</a> <a href="#psk8">8-PSK / EDGE</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Phase-shift keying (PSK)" data-uk="Фазова маніпуляція (PSK)">Phase-shift keying (PSK)</h3>
+
+  <!-- ============ BPSK + explorer ============ -->
+  <section id="bpsk">
+    <span class="num" data-en="08 / Binary PSK + constellation explorer" data-uk="08 / Двійкова PSK + оглядач сузір'їв">08 / BPSK</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c2">coherent</span>
+      <span data-en="BPSK — Binary PSK (family explorer)" data-uk="BPSK — двійкова PSK (оглядач родини)">BPSK — Binary PSK</span></h2>
+    <div class="formula">s(t) = cos(2π f_c t + π·b),  b ∈ {0,1}  →  two antipodal points (0°, 180°)</div>
+    <p class="desc" data-en="BPSK places two symbols as far apart as a unit circle allows — 180° — so it is the <b>most noise-robust</b> of all PSK schemes, at just 1 bit/symbol. It anchors GPS C/A ranging codes, IEEE 802.15.4 sub-GHz, and RFID backscatter. The explorer below draws the ideal <b>constellation</b> for the whole PSK family and sprays received points with AWGN so you can see the clouds start to touch as the order rises: BPSK's clouds stay far apart; 8-PSK's crowd together and start crossing decision lines. Raise the noise and watch bit errors appear."
+       data-uk="BPSK розміщує два символи максимально далеко на одиничному колі — на 180° — тож вона <b>найстійкіша до шуму</b> серед усіх PSK, за 1 біт/символ. На ній тримаються далекомірні коди C/A GPS, IEEE 802.15.4 суб-ГГц і зворотне розсіювання RFID. Оглядач нижче малює ідеальне <b>сузір'я</b> для всієї родини PSK і розсіює прийняті точки з AWGN, тож видно, як хмари починають торкатися зі зростанням порядку: у BPSK вони далеко; у 8-PSK — тісняться й перетинають межі рішень. Підніміть шум і дивіться, як з'являються бітові помилки."></p>
+    <div id="refs-bpsk"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="pskCanvas" width="220" height="220"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="scheme" data-uk="схема">scheme</span></label>
+            <select id="pScheme">
+              <option value="bpsk">BPSK — 1 bit/sym</option>
+              <option value="qpsk">QPSK — 2 bits/sym</option>
+              <option value="psk8">8-PSK — 3 bits/sym</option>
+              <option value="pi4">π/4-DQPSK — 2 bits/sym</option>
+            </select></div>
+          <div class="ctrl"><label><span data-en="channel noise (Eb/N0)" data-uk="шум каналу (Eb/N0)">channel noise</span><span class="val" id="pNV">clean</span></label>
+            <input type="range" id="pNoise" min="0" max="30" step="1" value="6"></div>
+          <button id="pNew" data-en="Send 400 random symbols" data-uk="Надіслати 400 випадкових символів">Send 400 symbols</button>
+          <div class="readout" id="pOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="analog.html#pm">PM</a> <a href="standards.html#gnss">GPS</a> <a href="qam.html#qam">QAM</a></div>
+  </section>
+
+  <!-- ============ QPSK ============ -->
+  <section id="qpsk">
+    <span class="num" data-en="09 / Quadrature PSK" data-uk="09 / Квадратурна PSK">09 / QPSK</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">coherent</span>
+      <span data-en="QPSK — Quadrature PSK" data-uk="QPSK — квадратурна PSK">QPSK — Quadrature PSK</span></h2>
+    <div class="formula">4 phases (±45°, ±135°) · 2 bits/symbol · same BER as BPSK for same Eb/N0</div>
+    <p class="desc" data-en="QPSK sends two independent BPSK streams on the orthogonal cosine (I) and sine (Q) carriers, so it <b>doubles the bit rate in the same bandwidth</b> — and, remarkably, with the same bit-error rate as BPSK for a given energy per bit. It is the backbone of 3G/WCDMA, DVB-S/S2, GLONASS and satellite links. Gray-coding the four points (adjacent symbols differ by one bit) means a slip to a neighbour costs only one bit. Select QPSK in the explorer above."
+       data-uk="QPSK надсилає два незалежні потоки BPSK на ортогональних косинусному (I) та синусному (Q) носіях, тож <b>подвоює бітову швидкість у тій самій смузі</b> — і, що дивовижно, з тією ж імовірністю бітової помилки, що й BPSK, за заданої енергії на біт. Це основа 3G/WCDMA, DVB-S/S2, ГЛОНАСС і супутникових ліній. Кодування Ґрея чотирьох точок (сусідні символи різняться одним бітом) означає, що зісковзування до сусіда коштує лише одного біта. Оберіть QPSK в оглядачі вище."></p>
+    <div id="refs-qpsk"></div>
+    <div class="xrefs"><a href="#bpsk">BPSK</a> <a href="#oqpsk">O-QPSK</a> <a href="standards.html#umts">UMTS/3G</a> <a href="standards.html#dvb">DVB-S</a></div>
+  </section>
+
+  <!-- ============ O-QPSK ============ -->
+  <section id="oqpsk">
+    <span class="num" data-en="10 / Offset QPSK" data-uk="10 / QPSK зі зсувом">10 / O-QPSK</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">coherent</span>
+      <span data-en="O-QPSK — Offset QPSK" data-uk="O-QPSK — QPSK зі зсувом">O-QPSK — Offset QPSK</span></h2>
+    <div class="formula">delay Q by half a symbol ⇒ no 180° transitions ⇒ smaller envelope dips</div>
+    <p class="desc" data-en="Ordinary QPSK can flip both I and Q at once, swinging the phase a full 180° and driving the envelope momentarily through zero — which a non-linear amplifier turns into spectral splatter. O-QPSK <b>delays the Q stream by half a symbol</b> so only one axis changes at a time; the phase never jumps more than 90° and the envelope stays fuller. That constant-envelope friendliness is why <b>IEEE 802.15.4 (ZigBee, Thread)</b> uses O-QPSK with half-sine shaping (which is exactly MSK) at 2.4 GHz."
+       data-uk="Звичайна QPSK може перемкнути I та Q одночасно, розгойдавши фазу на всі 180° і на мить провівши обвідну через нуль — що нелінійний підсилювач перетворює на спектральні бризки. O-QPSK <b>затримує потік Q на півсимволу</b>, тож змінюється лише одна вісь за раз; фаза не стрибає більше ніж на 90°, а обвідна лишається повнішою. Саме ця дружність до сталої обвідної — причина, чому <b>IEEE 802.15.4 (ZigBee, Thread)</b> використовує O-QPSK із півсинусним формуванням (це і є MSK) на 2,4 ГГц."></p>
+    <div id="refs-oqpsk"></div>
+    <div class="xrefs"><a href="#qpsk">QPSK</a> <a href="#msk">MSK</a> <a href="standards.html#zigbee">ZigBee / Thread</a></div>
+  </section>
+
+  <!-- ============ π/4-DQPSK ============ -->
+  <section id="pi4dqpsk">
+    <span class="num" data-en="11 / π/4-DQPSK" data-uk="11 / π/4-DQPSK">11 / π/4-DQPSK</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">differ.</span>
+      <span data-en="π/4-DQPSK — rotating differential QPSK" data-uk="π/4-DQPSK — обертова диференціальна QPSK">π/4-DQPSK</span></h2>
+    <div class="formula">every symbol rotates the constellation by ±π/4 ⇒ 8 phase states, never through the origin</div>
+    <p class="desc" data-en="A clever hybrid: the constellation alternates between two QPSK sets offset by 45°, and the <b>data is carried in the phase change</b>, not the absolute phase (differential). Because a symbol is always drawn from the rotated set, the trajectory never passes through the origin (like O-QPSK, good for amplifiers), and differential decoding tolerates phase drift without a perfect carrier lock. It is the modulation of <b>TETRA</b> professional radio and Japan's PDC. Select it in the explorer to see all eight phase states."
+       data-uk="Хитрий гібрид: сузір'я чергується між двома наборами QPSK зі зсувом 45°, а <b>дані переносяться зміною фази</b>, а не абсолютною фазою (диференціально). Оскільки символ завжди береться з обернутого набору, траєкторія ніколи не проходить через початок (як в O-QPSK, добре для підсилювачів), а диференціальне декодування терпить дрейф фази без ідеального захоплення носія. Це модуляція професійного радіо <b>TETRA</b> та японського PDC. Оберіть її в оглядачі, щоб побачити всі вісім фазових станів."></p>
+    <div id="refs-pi4dqpsk"></div>
+    <div class="xrefs"><a href="#qpsk">QPSK</a> <a href="#dpsk">DPSK</a> <a href="standards.html#tetra">TETRA</a></div>
+  </section>
+
+  <!-- ============ 8-PSK ============ -->
+  <section id="psk8">
+    <span class="num" data-en="12 / 8-PSK" data-uk="12 / 8-PSK">12 / 8-PSK</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c3">coherent</span>
+      <span data-en="8-PSK — eight-phase keying" data-uk="8-PSK — восьмифазна маніпуляція">8-PSK</span></h2>
+    <div class="formula">8 phases · 3 bits/symbol · ~3.6 dB less noise margin than QPSK</div>
+    <p class="desc" data-en="Eight equally-spaced phases carry 3 bits per symbol — a 50% rate boost over QPSK — but the points are now only 45° apart, so 8-PSK needs a cleaner channel (about 3.6 dB more Eb/N0 for the same error rate). It is the higher-rate mode of <b>EDGE</b> (bolted onto GSM's GMSK interface) and of <b>Bluetooth EDR</b>. Select 8-PSK in the explorer and raise the noise: the eight clouds smear into one another far sooner than QPSK's four."
+       data-uk="Вісім рівновіддалених фаз несуть 3 біти на символ — приріст швидкості на 50% над QPSK — але тепер точки лише за 45° одна від одної, тож 8-PSK потребує чистішого каналу (близько 3,6 дБ більше Eb/N0 за тієї ж імовірності помилки). Це високошвидкісний режим <b>EDGE</b> (накладений на GMSK-інтерфейс GSM) і <b>Bluetooth EDR</b>. Оберіть 8-PSK в оглядачі й підніміть шум: вісім хмар змішуються набагато раніше, ніж чотири в QPSK."></p>
+    <div id="refs-psk8"></div>
+    <div class="xrefs"><a href="#qpsk">QPSK</a> <a href="qam.html#qam">16-QAM</a> <a href="standards.html#edge">EDGE</a></div>
+  </section>
+
+  <!-- ============ DPSK ============ -->
+  <section id="dpsk">
+    <span class="num" data-en="13 / Differential PSK" data-uk="13 / Диференціальна PSK">13 / DPSK</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">non-coh.</span>
+      <span data-en="DPSK — Differential PSK (DBPSK/DQPSK)" data-uk="DPSK — диференціальна PSK (DBPSK/DQPSK)">DPSK — Differential PSK</span></h2>
+    <div class="formula">encode: dₖ = dₖ₋₁ ⊕ bₖ (as phase);  decode: b̂ₖ = phase(dₖ) ⊕ phase(dₖ₋₁)</div>
+    <p class="desc" data-en="Coherent PSK needs the receiver to recover an absolute phase reference — hardware and time. DPSK sidesteps that by encoding each bit in the <b>change</b> of phase between consecutive symbols, so the previous symbol *is* the reference. No carrier-recovery loop is required, making it cheap and robust to slow phase drift, at a small penalty in noise performance. It powered the <b>original 1–2 Mbps 802.11</b> and Bluetooth. The demo differentially encodes your bits and decodes them back, proving recovery works with no absolute reference."
+       data-uk="Когерентна PSK потребує, щоб приймач відновив абсолютну опору фази — це апаратура й час. DPSK обходить це, кодуючи кожен біт у <b>зміні</b> фази між сусідніми символами, тож попередній символ *є* опорою. Контур відновлення носія не потрібен, що робить її дешевою й стійкою до повільного дрейфу фази, ціною невеликої втрати завадостійкості. На ній працювали <b>перші 802.11 1–2 Мбіт/с</b> і Bluetooth. Демо диференціально кодує ваші біти й декодує їх назад, доводячи, що відновлення працює без абсолютної опори."></p>
+    <div id="refs-dpsk"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <div class="controls" style="min-width:100%">
+          <div class="ctrl"><label><span data-en="message bits" data-uk="біти повідомлення">message bits</span></label>
+            <input type="text" id="dIn" value="10110" maxlength="16" style="width:100%"></div>
+          <div class="hint" data-en="Convention: bit 1 = flip phase (180°), bit 0 = keep phase. Reference symbol starts at phase 0." data-uk="Домовленість: біт 1 = переворот фази (180°), біт 0 = утримати фазу. Опорний символ починається з фази 0."></div>
+          <div class="readout" id="dOut"></div>
+        </div>
+      </div>
+    </div>
+    <div class="xrefs"><a href="#bpsk">BPSK</a> <a href="#pi4dqpsk">π/4-DQPSK</a> <a href="standards.html#sigfox">Sigfox</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="Digital keying · Wireless Atlas — from a diode-detected on/off carrier to noise-limited 8-PSK constellations." data-uk="Цифрові маніпуляції · Безпроводовий Атлас — від діодно-детектованого носія «увімк./вимк.» до обмежених шумом сузір'їв 8-PSK."></p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const CS=getComputedStyle(document.documentElement);
+const C_INK=CS.getPropertyValue('--ink').trim(), C_TEAL=CS.getPropertyValue('--teal').trim(),
+      C_AMBER=CS.getPropertyValue('--amber').trim(), C_ROSE=CS.getPropertyValue('--rose').trim(),
+      C_DIM=CS.getPropertyValue('--dim').trim(), C_LINE=CS.getPropertyValue('--line').trim();
+function randBits(n){ let s=[]; for(let i=0;i<n;i++)s.push(Math.random()<.5?0:1); return s; }
+function gaussPair(){ let u=1-Math.random(),v=Math.random();
+  const r=Math.sqrt(-2*Math.log(u)); return [r*Math.cos(2*Math.PI*v), r*Math.sin(2*Math.PI*v)]; }
+
+// ---- OOK / ASK amplitude demo ---------------------------------------
+const oC=document.getElementById('oCanvas'), oX=oC.getContext('2d');
+let oBits=randBits(8);
+function drawO(){
+  const scheme=document.getElementById('oScheme').value;
+  const w=oC.width,h=oC.height, mid=h*0.6, amp=h*0.34, fc=30;
+  const bitsPerSym = scheme==='ask4'?2:1, M=scheme==='ask4'?4:2;
+  oX.clearRect(0,0,w,h);
+  // symbol grouping
+  const syms=[]; for(let i=0;i<oBits.length;i+=bitsPerSym){
+    let v=0; for(let j=0;j<bitsPerSym;j++) v=(v<<1)|(oBits[i+j]||0); syms.push(v); }
+  const nsym=syms.length, sw=w/nsym;
+  oX.strokeStyle=C_LINE;
+  for(let i=0;i<=nsym;i++){ oX.beginPath(); oX.moveTo(i*sw,10); oX.lineTo(i*sw,h-6); oX.stroke(); }
+  // waveform
+  oX.strokeStyle=C_TEAL; oX.lineWidth=1.3; oX.beginPath();
+  for(let x=0;x<=w;x++){ const si=Math.min(nsym-1,Math.floor(x/sw));
+    const level=(M===2?syms[si]:syms[si]/(M-1));
+    const a=amp*(0.15+0.85*level);
+    const y=mid-a*Math.cos(2*Math.PI*fc*x/w);
+    if(x===0)oX.moveTo(x,y); else oX.lineTo(x,y);}
+  oX.stroke();
+  oX.fillStyle=C_DIM; oX.font='11px "JetBrains Mono",monospace';
+  syms.forEach((s,i)=>oX.fillText(M===2?String(s):s.toString(2).padStart(2,'0'), i*sw+sw/2-8, 12));
+  const L=window.LANG==='uk';
+  document.getElementById('oOut').innerHTML=
+    `<span class="k">${L?'біти':'bits'}</span> = <span class="a">${oBits.join('')}</span>\n`
+    +`<span class="k">${L?'рівнів':'levels'}</span> M = ${M}   <span class="k">${L?'біт/символ':'bits/sym'}</span> = ${bitsPerSym}`;
+}
+
+// ---- FSK continuous-phase demo --------------------------------------
+const fC=document.getElementById('fCanvas'), fX=fC.getContext('2d');
+let fBits=randBits(10);
+function drawF(){
+  const scheme=document.getElementById('fScheme').value;
+  const btRaw=+document.getElementById('fBT').value;
+  const w=fC.width,h=fC.height, midF=h*0.24, midC=h*0.66, ampC=h*0.24;
+  const fourLevel = scheme==='4fsk';
+  const bitsPerSym = fourLevel?2:1;
+  const hmod = scheme==='msk'?0.5:1;
+  // symbols → deviation
+  const devs=[]; for(let i=0;i<fBits.length;i+=bitsPerSym){
+    if(fourLevel){ const v=(fBits[i]<<1)|(fBits[i+1]||0);
+      devs.push([-3,-1,3,1][v]); } // gray-ish
+    else devs.push(fBits[i]?1:-1);
+  }
+  const nsym=devs.length, sw=w/nsym, N=w;
+  // per-sample deviation
+  let dev=new Array(N);
+  for(let x=0;x<N;x++){ dev[x]=devs[Math.min(nsym-1,Math.floor(x/sw))]; }
+  // gaussian smoothing
+  if(btRaw>0){ const sigma=btRaw*1.2; const k=Math.ceil(sigma*3); const ker=[];
+    let sum=0; for(let i=-k;i<=k;i++){ const g=Math.exp(-(i*i)/(2*sigma*sigma)); ker.push(g); sum+=g; }
+    const sm=new Array(N);
+    for(let x=0;x<N;x++){ let acc=0; for(let i=-k;i<=k;i++){ const xi=Math.min(N-1,Math.max(0,x+i)); acc+=dev[xi]*ker[i+k]; } sm[x]=acc/sum; }
+    dev=sm;
+  }
+  fX.clearRect(0,0,w,h);
+  fX.strokeStyle=C_LINE; for(let i=0;i<=nsym;i++){ fX.beginPath(); fX.moveTo(i*sw,4); fX.lineTo(i*sw,h-4); fX.stroke(); }
+  // deviation curve
+  fX.strokeStyle=C_AMBER; fX.lineWidth=1.3; fX.beginPath();
+  const dscale=fourLevel?9:2.4;
+  for(let x=0;x<N;x++){ const y=midF - dev[x]*(h*0.11)/dscale*3;
+    if(x===0)fX.moveTo(x,y); else fX.lineTo(x,y);} fX.stroke();
+  // integrate phase → carrier
+  const fc=18; let phase=0;
+  fX.strokeStyle=C_TEAL; fX.lineWidth=1.2; fX.beginPath();
+  for(let x=0;x<N;x++){ phase += 2*Math.PI*(fc + hmod*dev[x]*2)/N;
+    const y=midC - ampC*Math.cos(phase);
+    if(x===0)fX.moveTo(x,y); else fX.lineTo(x,y);} fX.stroke();
+  document.getElementById('fBTV').textContent = btRaw===0?'off':(0.15+btRaw*0.12).toFixed(2);
+  const L=window.LANG==='uk';
+  document.getElementById('fOut').innerHTML=
+    `<span class="k">${L?'схема':'scheme'}</span> = <span class="a">${scheme.toUpperCase()}</span>  h = ${hmod}\n`
+    +`<span class="k">${L?'формування':'shaping'}</span> = ${btRaw===0?(L?'прямокутне (широкий спектр)':'rectangular (wide spectrum)'):(L?'гаусове → GFSK/GMSK':'Gaussian → GFSK/GMSK')}`;
+}
+
+// ---- GFSK Gaussian pulse demo ---------------------------------------
+const gC=document.getElementById('gCanvas'), gX=gC.getContext('2d');
+function drawG(){
+  const bt=+document.getElementById('gBT').value;
+  const w=gC.width,h=gC.height, base=h-24, cx=w/2;
+  gX.clearRect(0,0,w,h);
+  gX.strokeStyle=C_LINE; gX.beginPath(); gX.moveTo(0,base); gX.lineTo(w,base); gX.stroke();
+  // rectangular reference
+  gX.strokeStyle=C_DIM; gX.globalAlpha=.5; gX.lineWidth=1;
+  gX.beginPath(); gX.moveTo(cx-40,base); gX.lineTo(cx-40,base-90); gX.lineTo(cx+40,base-90); gX.lineTo(cx+40,base); gX.stroke();
+  gX.globalAlpha=1;
+  // gaussian pulse: sigma inversely ~ BT
+  const sigma=40/(bt*2.2);
+  gX.strokeStyle=C_TEAL; gX.lineWidth=1.8; gX.beginPath();
+  for(let x=0;x<w;x++){ const dx=x-cx; const g=Math.exp(-(dx*dx)/(2*sigma*sigma));
+    const y=base-90*g; if(x===0)gX.moveTo(x,y); else gX.lineTo(x,y);} gX.stroke();
+  gX.fillStyle=C_DIM; gX.font='11px "JetBrains Mono",monospace';
+  gX.fillText(window.LANG==='uk'?'1 біт':'1 bit', cx-14, base+16);
+  document.getElementById('gBTV').textContent=bt.toFixed(2);
+  const L=window.LANG==='uk';
+  const cls = bt<0.4?(L?'дуже вузький спектр, велика ISI':'very narrow spectrum, high ISI')
+            : bt>1.0?(L?'широкий спектр, мала ISI':'wide spectrum, low ISI')
+            : (L?'збалансовано (Bluetooth ≈ 0.5)':'balanced (Bluetooth ≈ 0.5)');
+  document.getElementById('gOut').innerHTML=
+    `<span class="k">BT</span> = <span class="a">${bt.toFixed(2)}</span>\n<span class="s">${cls}</span>\n`
+    +`<span class="k">${L?'сірий':'grey'}</span> = ${L?'нефільтрований прямокутний імпульс':'unfiltered rectangular pulse'}`;
+}
+
+// ---- PSK constellation explorer -------------------------------------
+const pC=document.getElementById('pskCanvas'), pX=pC.getContext('2d');
+let pRx=[];
+function pskPoints(scheme){
+  let M = scheme==='bpsk'?2 : scheme==='psk8'?8 : scheme==='pi4'?8 : 4;
+  const pts=[]; for(let k=0;k<M;k++){ let ang;
+    if(scheme==='bpsk') ang=k*Math.PI;
+    else if(scheme==='qpsk') ang=Math.PI/4 + k*Math.PI/2;
+    else if(scheme==='psk8') ang=k*Math.PI/4;
+    else ang=k*Math.PI/4; // pi/4 shows 8 states
+    pts.push([Math.cos(ang),Math.sin(ang)]); }
+  return pts;
+}
+function genRx(){
+  const scheme=document.getElementById('pScheme').value;
+  const snr=+document.getElementById('pNoise').value;
+  const pts=pskPoints(scheme);
+  const usable = (scheme==='pi4')?4:pts.length;   // pi/4 transmits from 4-set each step
+  const sigma=Math.pow(10,-snr/20)*0.55 + 0.001;
+  pRx=[]; let errs=0;
+  for(let i=0;i<400;i++){ const s=Math.floor(Math.random()*usable);
+    let base = (scheme==='pi4') ? pts[(s*2 + (i&1))%8] : pts[s];
+    const g=gaussPair();
+    const rx=[base[0]+g[0]*sigma, base[1]+g[1]*sigma];
+    pRx.push(rx);
+    // nearest decision
+    let best=0,bd=1e9; for(let k=0;k<pts.length;k++){ const d=(rx[0]-pts[k][0])**2+(rx[1]-pts[k][1])**2; if(d<bd){bd=d;best=k;} }
+    const trueIdx=(scheme==='pi4')?((s*2+(i&1))%8):s;
+    if(best!==trueIdx) errs++;
+  }
+  pRx.errs=errs;
+}
+function drawP(){
+  const scheme=document.getElementById('pScheme').value;
+  const snr=+document.getElementById('pNoise').value;
+  const w=pC.width,h=pC.height, cx=w/2, cy=h/2, R=h*0.36;
+  pX.clearRect(0,0,w,h);
+  // axes + unit circle
+  pX.strokeStyle=C_LINE; pX.lineWidth=1;
+  pX.beginPath(); pX.moveTo(0,cy); pX.lineTo(w,cy); pX.moveTo(cx,0); pX.lineTo(cx,h); pX.stroke();
+  pX.beginPath(); pX.arc(cx,cy,R,0,2*Math.PI); pX.stroke();
+  // received cloud
+  pX.fillStyle='rgba(240,96,127,.5)';
+  pRx.forEach(p=>{ pX.beginPath(); pX.arc(cx+p[0]*R,cy-p[1]*R,1.3,0,2*Math.PI); pX.fill(); });
+  // ideal points
+  const pts=pskPoints(scheme);
+  pX.fillStyle=C_TEAL;
+  pts.forEach(p=>{ pX.beginPath(); pX.arc(cx+p[0]*R,cy-p[1]*R,4.5,0,2*Math.PI); pX.fill(); });
+  pX.fillStyle=C_DIM; pX.font='10px "JetBrains Mono",monospace';
+  pX.fillText('I',w-12,cy-5); pX.fillText('Q',cx+5,10);
+  document.getElementById('pNV').textContent = snr>=28?'clean':(snr+' dB');
+  const L=window.LANG==='uk';
+  const bps = scheme==='bpsk'?1 : scheme==='psk8'?3 : 2;
+  const ser = (pRx.errs!=null)?(100*pRx.errs/400).toFixed(1):'—';
+  document.getElementById('pOut').innerHTML=
+    `<span class="k">${L?'схема':'scheme'}</span> = <span class="a">${scheme==='pi4'?'π/4-DQPSK':scheme.toUpperCase()}</span>  ${bps} ${L?'біт/симв':'bits/sym'}\n`
+    +`<span class="k">${L?'символьних помилок':'symbol errors'}</span> = <span class="b">${pRx.errs??0}/400</span> (${ser}%)\n`
+    +`<span class="k">${L?'мін. відстань':'min distance'}</span> ${scheme==='bpsk'?'2.00':scheme==='psk8'?'0.77':'1.41'} ${L?'(радіус=1)':'(radius=1)'}`;
+}
+function refreshP(){ genRx(); drawP(); }
+
+// ---- DPSK worked example --------------------------------------------
+function drawD(){
+  const raw=(document.getElementById('dIn').value.replace(/[^01]/g,'')||'0');
+  const bits=raw.split('').map(Number);
+  let ph=0; const enc=[0]; // reference phase 0
+  bits.forEach(b=>{ ph=(ph+(b?1:0))%2; enc.push(ph); });
+  // decode: compare consecutive encoded phases
+  const dec=[]; for(let i=1;i<enc.length;i++) dec.push(enc[i]^enc[i-1]);
+  const L=window.LANG==='uk';
+  const phStr=enc.map(p=>p?'180°':'0°').join(' → ');
+  const ok = dec.join('')===bits.join('');
+  document.getElementById('dOut').innerHTML=
+    `<span class="k">${L?'вхідні біти':'input bits'}</span>      b = <span class="a">${bits.join(' ')}</span>\n`
+    +`<span class="k">${L?'фаза символів':'symbol phase'}</span>   = <span class="s">${phStr}</span>\n`
+    +`<span class="k">${L?'декодовано':'decoded'}</span>       b̂ = <span class="a">${dec.join(' ')}</span>\n`
+    +(ok?`<span style="color:${C_TEAL}">✓ ${L?'відновлено без абсолютної опори фази':'recovered with no absolute phase reference'}</span>`
+        :`<span class="b">✗ mismatch</span>`);
+}
+
+// ---- refs + wiring ---------------------------------------------------
+function fillRefs(){
+  const w=(en,uk)=>({tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/'+en,label:en.replace(/_/g,' ')},uk:uk?{href:'https://uk.wikipedia.org/wiki/'+uk,label:uk.replace(/_/g,' ')}:undefined});
+  document.getElementById('refs-ook').innerHTML=atlasRefs([w('On–off_keying','Амплітудна_маніпуляція')]);
+  document.getElementById('refs-ask').innerHTML=atlasRefs([w('Amplitude-shift_keying','Амплітудна_маніпуляція')]);
+  document.getElementById('refs-fsk').innerHTML=atlasRefs([w('Frequency-shift_keying','Частотна_маніпуляція'),w('Minimum-shift_keying')]);
+  document.getElementById('refs-gfsk').innerHTML=atlasRefs([w('Frequency-shift_keying'),{tag:'spec',en:{href:'https://www.bluetooth.com/specifications/specs/core-specification/',label:'Bluetooth Core'}}]);
+  document.getElementById('refs-mfsk').innerHTML=atlasRefs([w('Multiple_frequency-shift_keying')]);
+  document.getElementById('refs-msk').innerHTML=atlasRefs([w('Minimum-shift_keying')]);
+  document.getElementById('refs-gmsk').innerHTML=atlasRefs([w('Minimum-shift_keying'),{tag:'std',en:{href:'https://www.3gpp.org/technologies/gsm',label:'3GPP GSM'}}]);
+  document.getElementById('refs-bpsk').innerHTML=atlasRefs([w('Phase-shift_keying','Фазова_маніпуляція')]);
+  document.getElementById('refs-qpsk').innerHTML=atlasRefs([w('Phase-shift_keying','Фазова_маніпуляція')]);
+  document.getElementById('refs-oqpsk').innerHTML=atlasRefs([w('Phase-shift_keying'),{tag:'ieee',en:{href:'https://standards.ieee.org/ieee/802.15.4/7029/',label:'802.15.4'}}]);
+  document.getElementById('refs-pi4dqpsk').innerHTML=atlasRefs([w('Phase-shift_keying'),{tag:'etsi',en:{href:'https://www.etsi.org/technologies/tetra',label:'ETSI TETRA'}}]);
+  document.getElementById('refs-psk8').innerHTML=atlasRefs([w('Phase-shift_keying'),{tag:'std',en:{href:'https://www.3gpp.org/technologies/edge',label:'EDGE'}}]);
+  document.getElementById('refs-dpsk').innerHTML=atlasRefs([w('Differential_coding'),w('Phase-shift_keying')]);
+}
+document.getElementById('oScheme').addEventListener('change',drawO);
+document.getElementById('oNew').addEventListener('click',()=>{oBits=randBits(8);drawO();});
+document.getElementById('fScheme').addEventListener('change',drawF);
+document.getElementById('fBT').addEventListener('input',drawF);
+document.getElementById('fNew').addEventListener('click',()=>{fBits=randBits(10);drawF();});
+document.getElementById('gBT').addEventListener('input',drawG);
+document.getElementById('pScheme').addEventListener('change',refreshP);
+document.getElementById('pNoise').addEventListener('input',refreshP);
+document.getElementById('pNew').addEventListener('click',refreshP);
+document.getElementById('dIn').addEventListener('input',drawD);
+
+window.onLangChange=function(){ fillRefs(); drawO(); drawF(); drawG(); drawP(); drawD(); };
+fillRefs(); drawO(); drawF(); drawG(); refreshP(); drawD();
+</script>
+</body>
+</html>

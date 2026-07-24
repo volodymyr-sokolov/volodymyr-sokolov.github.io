@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analog modulations (AM · FM · SSB · PM) — Wireless Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="analog">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Continuous carriers — the origins of radio" data-uk="Неперервні носії — витоки радіо">Continuous carriers</div>
+    <h1 data-en="Analog Modulations" data-uk="Аналогові модуляції">Analog Modulations</h1>
+    <div class="eq-hero">s(t) = A(t)·cos( 2π f_c t + φ(t) )</div>
+    <p class="lede" data-en="Every analog scheme varies one of three knobs of a sinusoidal carrier — its <b>amplitude</b> A, its <b>frequency</b> f, or its <b>phase</b> φ — in step with the message. Amplitude modulation (AM) is the oldest and simplest; frequency modulation (FM) trades bandwidth for noise immunity; single sideband (SSB) strips AM down to its efficient core; and phase modulation (PM) is the analog parent of every digital PSK. Each section below has a live waveform or spectrum you can steer."
+       data-uk="Кожна аналогова схема змінює одну з трьох «ручок» синусоїдного носія — його <b>амплітуду</b> A, <b>частоту</b> f чи <b>фазу</b> φ — у такт із сигналом. Амплітудна модуляція (AM) — найстаріша й найпростіша; частотна (FM) міняє смугу на завадостійкість; однобічна смуга (SSB) прибирає з AM усе зайве; а фазова (PM) — аналоговий предок усіх цифрових PSK. У кожному розділі нижче є жива форма хвилі або спектр, якими можна керувати."></p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <!-- ============ AM ============ -->
+  <section id="am">
+    <span class="num" data-en="01 / Amplitude Modulation" data-uk="01 / Амплітудна модуляція">01 / AM</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">envelope</span>
+      <span data-en="AM — Amplitude Modulation" data-uk="AM — амплітудна модуляція">AM — Amplitude Modulation</span></h2>
+    <div class="formula">s(t) = [1 + m·cos(2π f_m t)] · cos(2π f_c t)</div>
+    <p class="desc" data-en="The message rides on the <b>envelope</b> of the carrier. The <b>modulation index</b> m sets how deep the swing is: at m = 1 the envelope just touches zero. Push m past 1 and you get <b>over-modulation</b> — the envelope tries to go negative, the waveform folds, and a cheap envelope detector produces harsh distortion. AM's virtue is a trivially cheap receiver (a diode and a capacitor); its costs are wasted power in the carrier and a full double-sideband spectrum. Drag the slider and watch the envelope pinch."
+       data-uk="Сигнал переноситься <b>обвідною</b> носія. <b>Індекс модуляції</b> m задає глибину коливання: при m = 1 обвідна ледь торкається нуля. Перевищіть m понад 1 — і отримаєте <b>перемодуляцію</b>: обвідна намагається стати від'ємною, форма хвилі згортається, а дешевий детектор обвідної дає різкі спотворення. Перевага AM — гранично дешевий приймач (діод і конденсатор); ціна — марна потужність у носії та повний двосмуговий спектр. Потягніть повзунок і дивіться, як обвідна стискається."></p>
+    <div id="refs-am"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="amCanvas" width="340" height="190"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="modulation index m" data-uk="індекс модуляції m">modulation index m</span><span class="val" id="amMV">0.7</span></label>
+            <input type="range" id="amM" min="0" max="1.5" step="0.01" value="0.7"></div>
+          <div class="ctrl"><label><span data-en="message frequency" data-uk="частота сигналу">message frequency</span><span class="val" id="amFV">2</span></label>
+            <input type="range" id="amF" min="1" max="5" step="1" value="2"></div>
+          <div class="hint" data-en="Teal = envelope 1 ± m·cos. When it crosses the centre line (m &gt; 1) the signal is over-modulated." data-uk="Бірюзовий = обвідна 1 ± m·cos. Коли вона перетинає центральну лінію (m &gt; 1), сигнал перемодульований."></div>
+          <div class="readout" id="amOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="Long/medium/short-wave broadcasting and the <b>aviation band</b> (118–137 MHz), where AM's graceful degradation lets two overlapping transmissions still be partly heard — a safety property VHF pilots rely on. Almost entirely superseded by FM and digital elsewhere."
+            data-uk="Радіомовлення ДХ/СХ/КХ та <b>авіаційний діапазон</b> (118–137 МГц), де плавна деградація AM дозволяє почути навіть дві накладені передачі — властивість безпеки, на яку покладаються пілоти. Майже всюди витіснена FM і цифровими."></span></div>
+    <div class="xrefs"><a href="keying.html#ook">OOK</a> <a href="keying.html#ask">ASK</a> <a href="qam.html#qam">QAM</a></div>
+  </section>
+
+  <!-- ============ FM ============ -->
+  <section id="fm">
+    <span class="num" data-en="02 / Frequency Modulation" data-uk="02 / Частотна модуляція">02 / FM</span>
+    <h2><span class="badge l1 lg">I</span> <span class="cx c1">discrim.</span>
+      <span data-en="FM — Frequency Modulation" data-uk="FM — частотна модуляція">FM — Frequency Modulation</span></h2>
+    <div class="formula">s(t) = cos( 2π f_c t + β·sin(2π f_m t) )</div>
+    <p class="desc" data-en="Here the message steers the carrier's <b>instantaneous frequency</b>; the amplitude stays constant, so amplitude noise (static, fading) simply doesn't reach the audio. The price is bandwidth: by <b>Carson's rule</b> the signal occupies roughly 2(Δf + f_m). The <b>modulation index</b> β = Δf / f_m controls how far the frequency swings. Turn β up and watch the wave bunch and stretch — tight where the message is high, loose where it is low."
+       data-uk="Тут сигнал керує <b>миттєвою частотою</b> носія; амплітуда стала, тож амплітудний шум (тріск, завмирання) просто не доходить до звуку. Ціна — смуга: за <b>правилом Карсона</b> сигнал займає близько 2(Δf + f_m). <b>Індекс модуляції</b> β = Δf / f_m задає розмах частоти. Збільшіть β — і хвиля то згущується, то розтягується: щільно там, де сигнал високий, розріджено там, де низький."></p>
+    <div id="refs-fm"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="fmCanvas" width="340" height="190"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="modulation index β" data-uk="індекс модуляції β">modulation index β</span><span class="val" id="fmBV">5</span></label>
+            <input type="range" id="fmB" min="0" max="12" step="0.1" value="5"></div>
+          <div class="ctrl"><label><span data-en="message frequency" data-uk="частота сигналу">message frequency</span><span class="val" id="fmFV">2</span></label>
+            <input type="range" id="fmF" min="1" max="4" step="1" value="2"></div>
+          <div class="hint" data-en="Amber = the message. The carrier below bunches up where the message is high." data-uk="Бурштиновий = сигнал. Носій нижче згущується там, де сигнал високий."></div>
+          <div class="readout" id="fmOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="VHF broadcast radio (the familiar 88–108 MHz band), the audio subcarrier of analog TV, two-way land-mobile radio, and the first cellular systems (<b>NMT</b>, <b>AMPS</b>). Its digital cousin FSK is everywhere in low-power IoT."
+            data-uk="УКХ-радіомовлення (звичний діапазон 88–108 МГц), звуковий носій аналогового ТБ, двосторонній рухомий радіозв'язок і перші стільникові системи (<b>NMT</b>, <b>AMPS</b>). Цифровий родич FSK — усюди в малопотужному IoT."></span></div>
+    <div class="xrefs"><a href="keying.html#fsk">FSK</a> <a href="keying.html#gmsk">GMSK</a> <a href="standards.html#gsm">GSM</a></div>
+  </section>
+
+  <!-- ============ SSB ============ -->
+  <section id="ssb">
+    <span class="num" data-en="03 / Single Sideband" data-uk="03 / Однобічна смуга">03 / SSB</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">coherent</span>
+      <span data-en="SSB — Single Sideband" data-uk="SSB — однобічна смуга">SSB — Single Sideband</span></h2>
+    <div class="formula">DSB = USB + LSB + carrier  →  SSB keeps one sideband only</div>
+    <p class="desc" data-en="A plain AM signal is wasteful twice over: it spends most of its power on a <b>carrier</b> that carries no information, and it transmits the message <b>twice</b> — once in the upper sideband (USB) and once in the lower (LSB), which are mirror images. SSB throws away the carrier and one sideband, cutting bandwidth in half and putting all the power into signal. The cost is a receiver that must re-insert a precise carrier reference (coherent detection). Toggle the spectrum below between DSB, USB and LSB."
+       data-uk="Звичайний AM-сигнал марнотратний двічі: більшість потужності йде на <b>носій</b>, що не несе інформації, і сигнал передається <b>двічі</b> — у верхній бічній смузі (USB) та нижній (LSB), які є дзеркальними. SSB відкидає носій і одну смугу, вдвічі звужуючи спектр і віддаючи всю потужність сигналу. Ціна — приймач, що має точно відновити опорний носій (когерентне детектування). Перемикайте спектр нижче між DSB, USB і LSB."></p>
+    <div id="refs-ssb"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="ssbCanvas" width="340" height="190"></canvas>
+        <div class="controls">
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            <button id="ssbDSB" data-en="DSB (full AM)" data-uk="DSB (повна AM)">DSB</button>
+            <button id="ssbUSB" data-en="USB" data-uk="USB">USB</button>
+            <button id="ssbLSB" data-en="LSB" data-uk="LSB">LSB</button>
+          </div>
+          <div class="hint" data-en="Vertical bars = spectrum. The tall teal line is the carrier; the sloped combs are the message sidebands." data-uk="Вертикальні смуги = спектр. Висока бірюзова лінія — носій; похилі гребінці — бічні смуги сигналу."></div>
+          <div class="readout" id="ssbOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="HF long-distance communication and <b>amateur radio</b>, where spectrum and power are precious. The same quadrature idea — keeping one sideband — reappears in digital form as offset-QPSK and vestigial-sideband (VSB) digital TV."
+            data-uk="КХ-зв'язок на далекі відстані та <b>аматорське радіо</b>, де спектр і потужність цінні. Та сама квадратурна ідея — залишити одну смугу — з'являється в цифровій формі як offset-QPSK і залишково-смугове (VSB) цифрове ТБ."></span></div>
+    <div class="xrefs"><a href="#am">AM</a> <a href="keying.html#oqpsk">O-QPSK</a> <a href="qam.html#qam">QAM (I/Q)</a></div>
+  </section>
+
+  <!-- ============ PM ============ -->
+  <section id="pm">
+    <span class="num" data-en="04 / Phase Modulation" data-uk="04 / Фазова модуляція">04 / PM</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">coherent</span>
+      <span data-en="PM — Phase Modulation" data-uk="PM — фазова модуляція">PM — Phase Modulation</span></h2>
+    <div class="formula">s(t) = cos( 2π f_c t + k_p·m(t) )</div>
+    <p class="desc" data-en="Phase modulation shifts the carrier's <b>phase</b> in proportion to the message. It is a close mathematical relative of FM — indeed FM is just PM of the message's integral — so the two share the constant-envelope, noise-immune character. PM matters most as the <b>bridge to digital</b>: quantise the phase to a few fixed values and you have BPSK, QPSK, 8-PSK and the whole PSK family. The demo shows how a slow message sweeps the carrier phase; watch the zero crossings slide."
+       data-uk="Фазова модуляція зсуває <b>фазу</b> носія пропорційно до сигналу. Це близький математичний родич FM — власне, FM є PM інтеграла сигналу — тож обидві мають сталу обвідну й завадостійкість. PM найважливіша як <b>міст до цифри</b>: квантуйте фазу до кількох фіксованих значень — і отримаєте BPSK, QPSK, 8-PSK і всю родину PSK. Демо показує, як повільний сигнал розгортає фазу носія; дивіться, як ковзають переходи через нуль."></p>
+    <div id="refs-pm"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="pmCanvas" width="340" height="190"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="phase deviation k_p (rad)" data-uk="девіація фази k_p (рад)">phase deviation k_p</span><span class="val" id="pmKV">2.0</span></label>
+            <input type="range" id="pmK" min="0" max="3.14" step="0.02" value="2.0"></div>
+          <div class="hint" data-en="Grey = unmodulated carrier reference; teal = phase-modulated carrier. The gap between the two is the coded phase." data-uk="Сірий = опорний немодульований носій; бірюзовий = фазомодульований носій. Розрив між ними — закодована фаза."></div>
+          <div class="readout" id="pmOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength use"><div class="st-title" data-en="Where it is used" data-uk="Де застосовується">Where it is used</div>
+      <span data-en="Rare as a pure analog scheme, but the conceptual root of the entire digital-phase world: <b>BPSK/QPSK/8-PSK</b> in satellite, cellular and Wi-Fi, and the constellation view used throughout this atlas."
+            data-uk="Рідкісна як чиста аналогова схема, але концептуальний корінь усього світу цифрової фази: <b>BPSK/QPSK/8-PSK</b> у супутнику, стільниковому та Wi-Fi, і сузір'я, що використовується в цьому атласі."></span></div>
+    <div class="xrefs"><a href="keying.html#bpsk">BPSK</a> <a href="keying.html#qpsk">QPSK</a> <a href="keying.html#psk8">8-PSK</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="Analog modulations · Wireless Atlas — the three knobs (A, f, φ) that every later scheme digitises." data-uk="Аналогові модуляції · Безпроводовий Атлас — три ручки (A, f, φ), які кожна пізніша схема оцифровує."></p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+// shared canvas helpers ------------------------------------------------
+const CS = getComputedStyle(document.documentElement);
+const C_INK=CS.getPropertyValue('--ink').trim(), C_TEAL=CS.getPropertyValue('--teal').trim(),
+      C_AMBER=CS.getPropertyValue('--amber').trim(), C_ROSE=CS.getPropertyValue('--rose').trim(),
+      C_DIM=CS.getPropertyValue('--dim').trim(), C_LINE=CS.getPropertyValue('--line').trim(),
+      C_GRID=CS.getPropertyValue('--grid').trim();
+function axes(ctx,w,h){
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle=C_LINE; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
+}
+function esc(){}
+
+// ---- AM demo ---------------------------------------------------------
+const amC=document.getElementById('amCanvas'), amX=amC.getContext('2d');
+function drawAM(){
+  const m=+document.getElementById('amM').value, fm=+document.getElementById('amF').value;
+  const w=amC.width,h=amC.height, mid=h/2, amp=h*0.38, fc=26;
+  axes(amX,w,h);
+  // envelope
+  amX.strokeStyle=C_TEAL; amX.lineWidth=1.5;
+  for(const sgn of [1,-1]){
+    amX.beginPath();
+    for(let x=0;x<=w;x++){ const t=x/w; const env=1+m*Math.cos(2*Math.PI*fm*t);
+      const y=mid - sgn*amp*env/2.5; if(x===0)amX.moveTo(x,y); else amX.lineTo(x,y);}
+    amX.stroke();
+  }
+  // signal
+  amX.strokeStyle=C_INK; amX.lineWidth=1;
+  amX.beginPath();
+  let over=false;
+  for(let x=0;x<=w;x++){ const t=x/w; const env=1+m*Math.cos(2*Math.PI*fm*t);
+    if(env<0)over=true;
+    const y=mid - amp*env/2.5*Math.cos(2*Math.PI*fc*t);
+    if(x===0)amX.moveTo(x,y); else amX.lineTo(x,y);}
+  amX.stroke();
+  document.getElementById('amMV').textContent=m.toFixed(2);
+  document.getElementById('amFV').textContent=fm;
+  const L=window.LANG==='uk';
+  document.getElementById('amOut').innerHTML =
+    (over?`<span class="b">${L?'⚠ ПЕРЕМОДУЛЯЦІЯ (m > 1) — обвідна від\'ємна':'⚠ OVER-MODULATED (m > 1) — envelope goes negative'}</span>\n`:'')
+    + `<span class="k">${L?'ефективність потужності':'power efficiency'}</span> η = m²/(2+m²) = <span class="a">${(m*m/(2+m*m)*100).toFixed(0)}%</span>\n`
+    + `<span class="k">${L?'смуга':'bandwidth'}</span> = 2·f_m  (${L?'двосмугова':'double-sideband'})`;
+}
+
+// ---- FM demo ---------------------------------------------------------
+const fmC=document.getElementById('fmCanvas'), fmX=fmC.getContext('2d');
+function drawFM(){
+  const beta=+document.getElementById('fmB').value, fm=+document.getElementById('fmF').value;
+  const w=fmC.width,h=fmC.height, mid=h*0.62, amp=h*0.28, fc=22;
+  axes(fmX,w,h);
+  // message (top)
+  fmX.strokeStyle=C_AMBER; fmX.lineWidth=1.4;
+  fmX.beginPath();
+  for(let x=0;x<=w;x++){ const t=x/w; const y=h*0.22 - amp*0.55*Math.sin(2*Math.PI*fm*t);
+    if(x===0)fmX.moveTo(x,y); else fmX.lineTo(x,y);}
+  fmX.stroke();
+  // FM carrier
+  fmX.strokeStyle=C_TEAL; fmX.lineWidth=1.2;
+  fmX.beginPath();
+  for(let x=0;x<=w;x++){ const t=x/w;
+    const phase=2*Math.PI*fc*t + beta*Math.sin(2*Math.PI*fm*t);
+    const y=mid - amp*Math.cos(phase);
+    if(x===0)fmX.moveTo(x,y); else fmX.lineTo(x,y);}
+  fmX.stroke();
+  document.getElementById('fmBV').textContent=beta.toFixed(1);
+  document.getElementById('fmFV').textContent=fm;
+  const L=window.LANG==='uk';
+  const bw=2*(beta+1)*fm;
+  document.getElementById('fmOut').innerHTML =
+    `<span class="k">${L?'девіація':'deviation'}</span> Δf = β·f_m = <span class="a">${(beta*fm).toFixed(1)}</span>\n`
+    + `<span class="k">${L?'смуга (Карсон)':'bandwidth (Carson)'}</span> ≈ 2(Δf+f_m) = <span class="s">${bw.toFixed(1)}</span>\n`
+    + `<span class="k">${L?'обвідна':'envelope'}</span> = ${L?'стала → стійка до амплітудного шуму':'constant → immune to amplitude noise'}`;
+}
+
+// ---- SSB demo --------------------------------------------------------
+const ssbC=document.getElementById('ssbCanvas'), ssbX=ssbC.getContext('2d');
+let ssbMode='DSB';
+function drawSSB(){
+  const w=ssbC.width,h=ssbC.height, base=h-26, cx=w/2;
+  ssbX.clearRect(0,0,w,h);
+  ssbX.strokeStyle=C_LINE; ssbX.beginPath(); ssbX.moveTo(0,base); ssbX.lineTo(w,base); ssbX.stroke();
+  // carrier line
+  if(ssbMode==='DSB'){
+    ssbX.strokeStyle=C_TEAL; ssbX.lineWidth=2;
+    ssbX.beginPath(); ssbX.moveTo(cx,base); ssbX.lineTo(cx,26); ssbX.stroke();
+  }
+  // sideband combs
+  ssbX.lineWidth=2;
+  for(let i=1;i<=8;i++){
+    const dx=i*15, hgt=(base-40)*(1 - i/11);
+    if(ssbMode!=='LSB'){ ssbX.strokeStyle=C_AMBER;
+      ssbX.beginPath(); ssbX.moveTo(cx+dx,base); ssbX.lineTo(cx+dx,base-hgt); ssbX.stroke(); }
+    if(ssbMode!=='USB'){ ssbX.strokeStyle=C_ROSE;
+      ssbX.beginPath(); ssbX.moveTo(cx-dx,base); ssbX.lineTo(cx-dx,base-hgt); ssbX.stroke(); }
+  }
+  ssbX.fillStyle=C_DIM; ssbX.font='11px "JetBrains Mono", monospace';
+  ssbX.fillText('f_c', cx-8, 20);
+  ssbX.fillText('LSB', 14, base+18); ssbX.fillText('USB', w-40, base+18);
+  const L=window.LANG==='uk';
+  const bw = ssbMode==='DSB'?'2·W':'W';
+  const pw = ssbMode==='DSB'?(L?'носій + 2 смуги':'carrier + 2 sidebands'):(L?'лише 1 смуга':'1 sideband only');
+  document.getElementById('ssbOut').innerHTML =
+    `<span class="k">${L?'режим':'mode'}</span> = <span class="a">${ssbMode}</span>   <span class="k">${L?'смуга':'bandwidth'}</span> = <span class="s">${bw}</span>\n`
+    + `<span class="k">${L?'передається':'transmitted'}</span> = ${pw}`;
+}
+
+// ---- PM demo ---------------------------------------------------------
+const pmC=document.getElementById('pmCanvas'), pmX=pmC.getContext('2d');
+function drawPM(){
+  const kp=+document.getElementById('pmK').value;
+  const w=pmC.width,h=pmC.height, mid=h/2, amp=h*0.34, fc=20, fm=1.3;
+  axes(pmX,w,h);
+  // reference carrier
+  pmX.strokeStyle=C_DIM; pmX.lineWidth=1; pmX.globalAlpha=.55;
+  pmX.beginPath();
+  for(let x=0;x<=w;x++){ const t=x/w; const y=mid-amp*Math.cos(2*Math.PI*fc*t);
+    if(x===0)pmX.moveTo(x,y); else pmX.lineTo(x,y);}
+  pmX.stroke(); pmX.globalAlpha=1;
+  // PM carrier
+  pmX.strokeStyle=C_TEAL; pmX.lineWidth=1.4;
+  pmX.beginPath();
+  for(let x=0;x<=w;x++){ const t=x/w;
+    const phase=2*Math.PI*fc*t + kp*Math.sin(2*Math.PI*fm*t);
+    const y=mid-amp*Math.cos(phase);
+    if(x===0)pmX.moveTo(x,y); else pmX.lineTo(x,y);}
+  pmX.stroke();
+  document.getElementById('pmKV').textContent=kp.toFixed(2);
+  const L=window.LANG==='uk';
+  document.getElementById('pmOut').innerHTML =
+    `<span class="k">${L?'макс. зсув фази':'max phase shift'}</span> = <span class="a">±${kp.toFixed(2)} rad</span> = ±${(kp*180/Math.PI).toFixed(0)}°\n`
+    + `<span class="k">${L?'квантуй фазу →':'quantise phase →'}</span> <span class="s">BPSK / QPSK / 8-PSK</span>`;
+}
+
+// ---- refs + boot -----------------------------------------------------
+function fillRefs(){
+  document.getElementById('refs-am').innerHTML = atlasRefs([
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Amplitude_modulation',label:'Amplitude modulation'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/Амплітудна_модуляція',label:'Амплітудна модуляція'}}
+  ]);
+  document.getElementById('refs-fm').innerHTML = atlasRefs([
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Frequency_modulation',label:'Frequency modulation'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/Частотна_модуляція',label:'Частотна модуляція'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Carson_bandwidth_rule',label:"Carson's rule"}}
+  ]);
+  document.getElementById('refs-ssb').innerHTML = atlasRefs([
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Single-sideband_modulation',label:'Single-sideband'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/Односмугова_модуляція',label:'Односмугова модуляція'}}
+  ]);
+  document.getElementById('refs-pm').innerHTML = atlasRefs([
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Phase_modulation',label:'Phase modulation'},
+                 uk:{href:'https://uk.wikipedia.org/wiki/Фазова_модуляція',label:'Фазова модуляція'}}
+  ]);
+}
+function redraw(){ drawAM(); drawFM(); drawSSB(); drawPM(); }
+['amM','amF','fmB','fmF','pmK'].forEach(id=>document.getElementById(id).addEventListener('input',redraw));
+document.getElementById('ssbDSB').addEventListener('click',()=>{ssbMode='DSB';drawSSB();});
+document.getElementById('ssbUSB').addEventListener('click',()=>{ssbMode='USB';drawSSB();});
+document.getElementById('ssbLSB').addEventListener('click',()=>{ssbMode='LSB';drawSSB();});
+
+window.onLangChange = function(){ fillRefs(); redraw(); };
+fillRefs(); redraw();
+</script>
+</body>
+</html>

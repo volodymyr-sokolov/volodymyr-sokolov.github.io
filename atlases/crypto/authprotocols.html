@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscriber authentication protocols — Crypto Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="authproto">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Section 11 — how an information system verifies who is calling"
+         data-uk="Розділ 11 — як інформаційна система перевіряє, хто звертається">Section 11</div>
+    <h1 data-en="Subscriber Authentication Protocols" data-uk="Протоколи автентифікації абонентів ІС">Authentication protocols</h1>
+    <p class="lede" data-en="Identification is a live conversation, not a static password: the verifier issues a fresh <b>challenge</b>, and only the holder of the secret can produce a valid <b>response</b>. Below: two challenge–response schemes on public-key cryptosystems, and two zero-knowledge protocols that prove knowledge of a secret while revealing nothing about it."
+       data-uk="Ідентифікація — це жива розмова, а не статичний пароль: перевіряч видає свіжий <b>виклик</b>, і лише власник секрету може дати правильну <b>відповідь</b>. Нижче: дві схеми «виклик–відповідь» на криптосистемах з відкритим ключем і два протоколи нульового розголошення, що доводять знання секрету, нічого про нього не розкриваючи.">Authentication protocols.</p>
+  </div>
+</header>
+
+<div class="wrap-wide">
+
+  <h3 class="sub" data-en="Based on Public-Key Cryptosystems" data-uk="На основі асиметричних криптосистем">Public-key based</h3>
+
+  <!-- ================= RSA-based ================= -->
+  <section id="auth-rsa">
+    <span class="num" data-en="11 / RSA authentication" data-uk="11 / Автентифікація RSA">11 / RSA</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+      <span data-en="RSA-Based Authentication" data-uk="Автентифікація на основі RSA">RSA-based authentication</span></h2>
+    <div class="formula">verifier: c ⟵ random;  prover: s = c^d mod N;  check s^e ≡ c (mod N)</div>
+    <p class="desc" data-en="A challenge–response identification: the verifier sends a random challenge c; the prover, holding the RSA private exponent d, returns s = c^d mod N (an RSA signature/decryption of the challenge); the verifier confirms s^e ≡ c using the public key. Only the true subscriber can answer, and — with a fresh random challenge — a replayed transcript is worthless."
+       data-uk="Ідентифікація «виклик–відповідь»: перевіряч надсилає випадковий виклик c; доводжувач, маючи приватний показник RSA d, повертає s = c^d mod N (RSA-підпис/розшифрування виклику); перевіряч підтверджує s^e ≡ c за відкритим ключем. Відповісти може лише справжній абонент, а зі свіжим випадковим викликом повторений запис нічого не вартий."></p>
+    <div id="refs-auth-rsa"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="hint" data-en="Toy key: p=61, q=53, N=3233, e=17, d=2753." data-uk="Іграшковий ключ: p=61, q=53, N=3233, e=17, d=2753."></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="rsaHonest" data-en="Run (honest prover)" data-uk="Запуск (чесний доводжувач)">Run (honest prover)</button>
+          <button id="rsaCheat" class="secondary" data-en="Run (impostor, no d)" data-uk="Запуск (самозванець, без d)">Run (impostor)</button>
+        </div>
+        <div class="readout" id="rsaOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Safe only with a <b>fresh random challenge</b> and proper padding. Signing raw attacker-chosen values is dangerous (RSA is multiplicatively malleable, enabling chosen-message forgery); real systems sign H(challenge ‖ context) with RSA-PSS and bind a nonce and timestamp against replay."
+            data-uk="Безпечно лише зі <b>свіжим випадковим викликом</b> і належним доповненням. Підписувати «сирі» значення, обрані зловмисником, небезпечно (RSA мультиплікативно піддатливий, що уможливлює підробку за обраним повідомленням); реальні системи підписують H(виклик ‖ контекст) через RSA-PSS і прив'язують одноразове значення й час проти повторів."></span></div>
+    <div class="xrefs"><a href="asymmetric.html#rsa">RSA</a> <a href="signatures.html#rsapss">RSA-PSS</a> <a href="authprotocols.html#auth-ecc">ECC auth</a></div>
+  </section>
+
+  <!-- ================= ECC-based ================= -->
+  <section id="auth-ecc">
+    <span class="num" data-en="11 / ECC authentication" data-uk="11 / Автентифікація ECC">11 / ECC</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(n³)</span>
+      <span data-en="ECC-Based Authentication (Schnorr Identification)" data-uk="Автентифікація на основі ECC (ідентифікація Шнорра)">ECC-based authentication</span></h2>
+    <div class="formula">R = k·G;  challenge e;  s = k + e·x (mod n);  check s·G = R + e·P</div>
+    <p class="desc" data-en="The elliptic-curve challenge–response: the subscriber's secret is a scalar x with public point P = x·G. The prover commits to a random point R = k·G, receives a challenge e, and answers s = k + e·x. The verifier checks s·G = R + e·P on the curve. Elliptic curves give the same strength as RSA/DLP with much shorter keys and faster arithmetic. The plot shows the toy curve's points; G, P and R are highlighted."
+       data-uk="Еліптичний варіант «виклик–відповідь»: секрет абонента — скаляр x з відкритою точкою P = x·G. Доводжувач фіксує випадкову точку R = k·G, отримує виклик e й відповідає s = k + e·x. Перевіряч перевіряє s·G = R + e·P на кривій. Еліптичні криві дають ту саму стійкість, що RSA/DLP, з набагато коротшими ключами й швидшою арифметикою. На графіку — точки іграшкової кривої; G, P і R виділені."></p>
+    <div id="refs-auth-ecc"></div>
+
+    <div class="panel">
+      <div class="canvas-row">
+        <canvas id="eccCanvas" width="300" height="300"></canvas>
+        <div class="controls">
+          <div class="ctrl"><label><span data-en="secret x" data-uk="секрет x">secret x</span><span class="val" id="eccXV">7</span></label>
+            <input type="range" id="eccX" min="1" max="30" value="7"></div>
+          <div class="ctrl"><label><span data-en="challenge e" data-uk="виклик e">challenge e</span><span class="val" id="eccEV">5</span></label>
+            <input type="range" id="eccE" min="0" max="30" value="5"></div>
+          <button id="eccNonce" data-en="New commitment k" data-uk="Нове зобов'язання k">New commitment k</button>
+          <div class="readout" id="eccOut"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Strong under the elliptic-curve discrete-log assumption. The critical pitfall is the commitment k: <b>reuse or predictability of k leaks the private key</b> (the Sony PS3 ECDSA break). Always draw k from a CSPRNG or derive it deterministically (RFC 6979)."
+            data-uk="Стійка за припущенням еліптичного дискретного логарифма. Критична пастка — зобов'язання k: <b>повторне використання або передбачуваність k розкриває приватний ключ</b> (злом ECDSA у Sony PS3). Завжди беріть k із CSPRNG або виводьте детерміновано (RFC 6979)."></span></div>
+    <div class="xrefs"><a href="keyexchange.html#ecdh">ECDH</a> <a href="signatures.html#eddsa">EdDSA</a> <a href="edwards.html" data-en="Edwards curves" data-uk="Криві Едвардса">Edwards curves</a></div>
+  </section>
+
+  <h3 class="sub" data-en="Based on Zero-Knowledge Proofs" data-uk="На основі доказів з нульовим розголошенням">Zero-knowledge based</h3>
+
+  <!-- ================= Fiat–Shamir ================= -->
+  <section id="auth-fs">
+    <span class="num" data-en="11 / Fiat–Shamir" data-uk="11 / Фіат–Шамір">11 / Fiat–Shamir</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(k·n²)</span>
+      <span data-en="Fiat–Shamir Identification" data-uk="Ідентифікація Фіата–Шаміра">Fiat–Shamir identification</span></h2>
+    <div class="formula">v = s² mod N;  x = r² mod N;  b ∈ {0,1};  y = r·s^b;  check y² ≡ x·v^b</div>
+    <p class="desc" data-en="A zero-knowledge proof of knowledge of a modular square root. Public: N and v = s² mod N; secret: s. Each round the prover commits x = r², the verifier flips a coin b, the prover reveals y = r·s^b, and the verifier checks y² ≡ x·v^b. A cheat who does not know s can prepare for only one of the two challenges, so each round halves the impostor's success chance — <b>k rounds ⇒ 2⁻ᵏ</b>. The verifier learns nothing about s."
+       data-uk="Доказ знання квадратного кореня за модулем з нульовим розголошенням. Відкрито: N і v = s² mod N; секрет: s. Щораунду доводжувач фіксує x = r², перевіряч підкидає монету b, доводжувач розкриває y = r·s^b, а перевіряч перевіряє y² ≡ x·v^b. Шахрай, який не знає s, може підготуватися лише до одного з двох викликів, тож кожен раунд удвічі зменшує його шанс — <b>k раундів ⇒ 2⁻ᵏ</b>. Перевіряч не дізнається нічого про s."></p>
+    <div id="refs-auth-fs"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="secret s" data-uk="секрет s">secret s</span><span class="val" id="fsSV">17</span></label>
+          <input type="range" id="fsS" min="2" max="200" value="17"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button id="fsRound" data-en="Honest round" data-uk="Чесний раунд">Honest round</button>
+          <button id="fsCheat" class="secondary" data-en="Impostor round" data-uk="Раунд самозванця">Impostor round</button>
+          <button id="fsReset" class="secondary" data-en="Reset" data-uk="Скинути">Reset</button>
+        </div>
+        <div class="readout" id="fsOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Sound and zero-knowledge against an honest verifier; run enough rounds to make 2⁻ᵏ negligible. The same commit–challenge–response shape, with the challenge replaced by a hash, yields non-interactive signatures (the Fiat–Shamir transform)."
+            data-uk="Коректний і з нульовим розголошенням проти чесного перевіряча; виконуйте досить раундів, щоб 2⁻ᵏ стало нехтовним. Та сама форма «зобов'язання–виклик–відповідь» із викликом, заміненим на геш, дає неінтерактивні підписи (перетворення Фіата–Шаміра)."></span></div>
+    <div class="xrefs"><a href="authprotocols.html#auth-ffs">Feige–Fiat–Shamir</a> <a href="advanced.html#schnorr-zk">Schnorr ZK</a> <a href="numbertheory.html#legendre" data-en="Quadratic residues" data-uk="Квадратичні лишки">Quadratic residues</a></div>
+  </section>
+
+  <!-- ================= Feige–Fiat–Shamir ================= -->
+  <section id="auth-ffs">
+    <span class="num" data-en="11 / Feige–Fiat–Shamir" data-uk="11 / Фейге–Фіат–Шамір">11 / FFS</span>
+    <h2><span class="badge l2 lg">II</span> <span class="cx c2">O(k·n²)</span>
+      <span data-en="Feige–Fiat–Shamir" data-uk="Протокол Фейге–Фіата–Шаміра">Feige–Fiat–Shamir</span></h2>
+    <div class="formula">vⱼ = sⱼ² mod N;  x = r² mod N;  e ∈ {0,1}ᵏ;  y = r·∏ sⱼ^{eⱼ};  check y² ≡ x·∏ vⱼ^{eⱼ}</div>
+    <p class="desc" data-en="A parallel, multi-secret generalisation of Fiat–Shamir. The prover holds k secrets s₁…s_k with public v_j = s_j² mod N and answers a <b>vector</b> challenge e ∈ {0,1}ᵏ in a single round: y = r·∏ s_j^{e_j}, verified by y² ≡ x·∏ v_j^{e_j}. One round already drives the impostor's success to 2⁻ᵏ, so far fewer message exchanges are needed."
+       data-uk="Паралельне багатосекретне узагальнення Фіата–Шаміра. Доводжувач має k секретів s₁…s_k з відкритими v_j = s_j² mod N і відповідає на <b>векторний</b> виклик e ∈ {0,1}ᵏ за один раунд: y = r·∏ s_j^{e_j}, що перевіряється як y² ≡ x·∏ v_j^{e_j}. Уже один раунд знижує шанс самозванця до 2⁻ᵏ, тож потрібно значно менше обмінів повідомленнями."></p>
+    <div id="refs-auth-ffs"></div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="ctrl"><label><span data-en="number of secrets k" data-uk="кількість секретів k">secrets k</span><span class="val" id="ffsKV">3</span></label>
+          <input type="range" id="ffsK" min="1" max="6" value="3"></div>
+        <button id="ffsRound" data-en="Run one round" data-uk="Виконати раунд">Run one round</button>
+        <div class="readout" id="ffsOut"></div>
+      </div>
+    </div>
+
+    <div class="strength"><div class="st-title" data-en="Security status" data-uk="Криптостійкість">Security status</div>
+      <span data-en="Trades rounds for parallelism: k secrets give 2⁻ᵏ soundness per round, cutting communication versus single-bit Fiat–Shamir. Security still rests on the hardness of factoring N; keep the secrets and randomness fresh."
+            data-uk="Обмінює раунди на паралелізм: k секретів дають коректність 2⁻ᵏ за раунд, зменшуючи комунікацію проти однобітового Фіата–Шаміра. Стійкість так само спирається на складність факторизації N; тримайте секрети й випадковість свіжими."></span></div>
+    <div class="xrefs"><a href="authprotocols.html#auth-fs">Fiat–Shamir</a> <a href="advanced.html#ffs">FFS (ZKP page)</a> <a href="cryptanalysis.html#gnfs" data-en="Factoring" data-uk="Факторизація">Factoring</a></div>
+  </section>
+
+</div>
+
+<footer class="wrap-wide">
+  <p data-en="© 2026 Volodymyr Sokolov — Crypto Atlas" data-uk="© 2026 Володимир Соколов — Крипто-Атлас">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+const C={teal:'#7FDBCA',amber:'#F2A65A',rose:'#E8607A',dim:'#8B97B4',ink:'#E8ECF4',grid:'#233150',panel:'#0E1626',line:'#1B2740'};
+function bmod(a,m){a%=m;return a<0n?a+m:a;}
+function modpow(b,e,m){b=bmod(b,m);let r=1n;while(e>0n){if(e&1n)r=r*b%m;b=b*b%m;e>>=1n;}return r;}
+function egcd(a,b){let x=0n,x1=1n,y=1n,y1=0n;while(b){const q=a/b;[a,b]=[b,a-q*b];[x1,x]=[x,x1-q*x];[y1,y]=[y,y1-q*y];}return[a,x1,y1];}
+function randBig(n){return BigInt(1+Math.floor(Math.random()*(Number(n)-2)));}
+
+/* ---------- 1) RSA authentication ---------- */
+const R_N=3233n, R_E=17n, R_D=2753n;
+function rsaRun(honest){
+  const c=randBig(R_N);                       // verifier challenge
+  const s = honest ? modpow(c,R_D,R_N)        // prover uses d
+                   : randBig(R_N);            // impostor guesses
+  const check=modpow(s,R_E,R_N);
+  const ok=(check===c);
+  const uk=window.LANG==='uk';
+  document.getElementById('rsaOut').innerHTML=
+    '<span class="k">'+(uk?'Перевіряч → виклик':'Verifier → challenge')+' c =</span> <span class="s">'+c+'</span>\n'+
+    '<span class="k">'+(uk?'Доводжувач → відповідь':'Prover → response')+' s = c^d mod N =</span> <span class="a">'+s+'</span>'+
+    (honest?'':' <span class="b">('+(uk?'вгадано':'guessed')+')</span>')+'\n'+
+    '<span class="k">'+(uk?'Перевірка':'Check')+' s^e mod N =</span> <span class="a">'+check+'</span> '+
+    (ok?'= c → <span class="a">'+(uk?'ПРИЙНЯТО ✓':'ACCEPT ✓')+'</span>'
+       :'≠ c → <span class="b">'+(uk?'ВІДХИЛЕНО ✗':'REJECT ✗')+'</span>');
+}
+
+/* ---------- 2) ECC (Schnorr identification on a toy curve) ---------- */
+const E_P=97n, E_A=2n, E_B=3n, INF=null;
+function ecAdd(P,Q){
+  if(P===INF)return Q; if(Q===INF)return P;
+  const [x1,y1]=P,[x2,y2]=Q;
+  if(x1===x2 && bmod(y1+y2,E_P)===0n) return INF;
+  let m;
+  if(x1===x2&&y1===y2){ m=bmod((3n*x1*x1+E_A)*egcd(2n*y1%E_P,E_P)[1],E_P); }
+  else { m=bmod((y2-y1)*egcd(bmod(x2-x1,E_P),E_P)[1],E_P); }
+  const x3=bmod(m*m-x1-x2,E_P), y3=bmod(m*(x1-x3)-y1,E_P);
+  return [x3,y3];
+}
+function ecMul(k,P){ let R=INF,Q=P; k=BigInt(k); while(k>0n){ if(k&1n)R=ecAdd(R,Q); Q=ecAdd(Q,Q); k>>=1n; } return R; }
+function ecPoints(){ const pts=[]; for(let x=0n;x<E_P;x++){ const rhs=bmod(x*x*x+E_A*x+E_B,E_P);
+  for(let y=0n;y<E_P;y++){ if(y*y%E_P===rhs) pts.push([x,y]); } } return pts; }
+const E_PTS=ecPoints();
+const E_G=E_PTS[0];
+let E_N=(function(){ let n=1n,Q=E_G; while(Q!==INF){ Q=ecAdd(Q,E_G); n++; if(n>1000n)break; } return n; })();
+let eccK=randBig(E_N);
+function drawECC(){
+  const x=BigInt(+eccX.value % Number(E_N)); const e=BigInt(+eccE.value);
+  eccXV.textContent=eccX.value; eccEV.textContent=eccE.value;
+  const P=ecMul(x,E_G);                     // public key
+  const R=ecMul(eccK,E_G);                  // commitment
+  const s=bmod(eccK+e*x,E_N);               // response
+  const lhs=ecMul(s,E_G);
+  const rhs=ecAdd(R,ecMul(e,P));
+  const ok=(lhs===INF&&rhs===INF)||(lhs&&rhs&&lhs[0]===rhs[0]&&lhs[1]===rhs[1]);
+  // plot
+  const cv=document.getElementById('eccCanvas'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  g.fillStyle=C.panel; g.fillRect(0,0,W,H);
+  const sx=v=>4+Number(v)/Number(E_P-1n)*(W-8), sy=v=>H-4-Number(v)/Number(E_P-1n)*(H-8);
+  g.fillStyle=C.grid; E_PTS.forEach(pt=>{ g.beginPath(); g.arc(sx(pt[0]),sy(pt[1]),1.8,0,7); g.fill(); });
+  const mark=(pt,col,r)=>{ if(!pt)return; g.fillStyle=col; g.beginPath(); g.arc(sx(pt[0]),sy(pt[1]),r,0,7); g.fill(); };
+  mark(E_G,C.dim,3.2); mark(P,C.amber,3.5); mark(R,C.teal,3.5);
+  const uk=window.LANG==='uk';
+  document.getElementById('eccOut').innerHTML=
+    '<span class="k">y²=x³+2x+3 mod 97,  |⟨G⟩| = '+E_N+'</span>\n'+
+    '<span class="k">G=</span>('+E_G[0]+','+E_G[1]+')  <span class="s">P=x·G=</span>'+(P?'('+P[0]+','+P[1]+')':'∞')+'  <span class="a">R=k·G=</span>'+(R?'('+R[0]+','+R[1]+')':'∞')+'\n'+
+    '<span class="k">s = k+e·x mod n =</span> <span class="a">'+s+'</span>\n'+
+    '<span class="k">'+(uk?'перевірка':'check')+' s·G = R+e·P →</span> '+
+    (ok?'<span class="a">'+(uk?'ПРИЙНЯТО ✓':'ACCEPT ✓')+'</span>':'<span class="b">✗</span>');
+}
+
+/* ---------- 3) Fiat–Shamir ---------- */
+const FS_N=3233n;
+let fsRounds=0, fsPass=0;
+function fsDo(honest){
+  const s=BigInt(+fsS.value); fsSV.textContent=fsS.value;
+  const v=s*s%FS_N;
+  const b=BigInt(Math.random()<0.5?0:1);
+  let x,y,note='';
+  if(honest){
+    const r=randBig(FS_N); x=r*r%FS_N; y=(r*modpow(s,b,FS_N))%FS_N;
+  } else {
+    // impostor picks the response y first, guesses the challenge b̂, and
+    // back-computes a commitment x = y²·v^{−b̂}. Verifier's check
+    // y² ≡ x·v^b  becomes  y² ≡ y²·v^{b−b̂}, which holds iff b == b̂.
+    const guess=BigInt(Math.random()<0.5?0:1);
+    y=randBig(FS_N);
+    const vinv=bmod(egcd(v,FS_N)[1],FS_N);
+    x=bmod(y*y%FS_N*modpow(vinv,guess,FS_N),FS_N);
+    note=' (b̂='+guess+')';
+  }
+  const lhs=y*y%FS_N, rhs=(x*modpow(v,b,FS_N))%FS_N;
+  const ok=(lhs===rhs);
+  fsRounds++; if(ok)fsPass++;
+  const uk=window.LANG==='uk';
+  document.getElementById('fsOut').innerHTML=
+    '<span class="k">N='+FS_N+', v=s² mod N='+v+'</span>\n'+
+    '<span class="k">'+(uk?'зобов\'язання':'commit')+' x=</span> <span class="s">'+x+'</span>'+note+'\n'+
+    '<span class="k">'+(uk?'виклик':'challenge')+' b=</span> <span class="a">'+b+'</span>   '+
+    '<span class="k">'+(uk?'відповідь':'response')+' y=</span> <span class="a">'+y+'</span>\n'+
+    '<span class="k">y² mod N=</span>'+lhs+'  <span class="k">x·v^b mod N=</span>'+rhs+' → '+
+    (ok?'<span class="a">✓</span>':'<span class="b">✗</span>')+'\n'+
+    '<span class="k">'+(uk?'пройдено':'passed')+':</span> '+fsPass+' / '+fsRounds+
+    (honest?'':'   <span class="b">'+(uk?'самозванець виграє лише коли b=b̂ (½)':'impostor wins only when b=b̂ (½)')+'</span>');
+}
+
+/* ---------- 4) Feige–Fiat–Shamir ---------- */
+const FFS_N=3233n;
+function ffsDo(){
+  const k=+ffsK.value; ffsKV.textContent=k;
+  const s=[],v=[]; for(let j=0;j<k;j++){ const sj=randBig(FFS_N); s.push(sj); v.push(sj*sj%FFS_N); }
+  const r=randBig(FFS_N); const x=r*r%FFS_N;
+  const e=[]; for(let j=0;j<k;j++) e.push(Math.random()<0.5?0:1);
+  let y=r; for(let j=0;j<k;j++) if(e[j]) y=y*s[j]%FFS_N;
+  const lhs=y*y%FFS_N;
+  let rhs=x; for(let j=0;j<k;j++) if(e[j]) rhs=rhs*v[j]%FFS_N;
+  const ok=(lhs===rhs);
+  const uk=window.LANG==='uk';
+  document.getElementById('ffsOut').innerHTML=
+    '<span class="k">N='+FFS_N+'</span>\n'+
+    '<span class="k">'+(uk?'відкриті':'public')+' vⱼ=</span> '+v.map(x=>'<span class="s">'+x+'</span>').join(', ')+'\n'+
+    '<span class="k">'+(uk?'виклик':'challenge')+' e=</span> <span class="a">['+e.join(',')+']</span>\n'+
+    '<span class="k">'+(uk?'відповідь':'response')+' y=</span> <span class="a">'+y+'</span>\n'+
+    '<span class="k">y² mod N=</span>'+lhs+'  <span class="k">x·∏vⱼ^{eⱼ}=</span>'+rhs+' → '+
+    (ok?'<span class="a">'+(uk?'ПРИЙНЯТО ✓':'ACCEPT ✓')+'</span>':'<span class="b">✗</span>')+'\n'+
+    '<span class="k">'+(uk?'шанс самозванця за раунд':'impostor chance per round')+' = 2⁻'+k+' = '+(1/Math.pow(2,k)).toFixed(4)+'</span>';
+}
+
+/* ---------- wiring ---------- */
+window.REFS={
+  'auth-rsa':[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Challenge%E2%80%93response_authentication',label:'Wikipedia: challenge–response'}},
+              {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/RSA_(cryptosystem)',label:'Wikipedia: RSA'}}],
+  'auth-ecc':[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Schnorr_signature',label:'Wikipedia: Schnorr'}},
+              {tag:'rfc',en:{href:'https://www.rfc-editor.org/rfc/rfc6979',label:'RFC 6979 (deterministic k)'}}],
+  'auth-fs':[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Feige%E2%80%93Fiat%E2%80%93Shamir_identification_scheme',label:'Wikipedia: Fiat–Shamir'}},
+             {tag:'paper',en:{href:'https://doi.org/10.1007/3-540-47721-7_12',label:'Fiat & Shamir (1986)'}}],
+  'auth-ffs':[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Feige%E2%80%93Fiat%E2%80%93Shamir_identification_scheme',label:'Wikipedia: Feige–Fiat–Shamir'}},
+              {tag:'paper',en:{href:'https://doi.org/10.1007/BF02351717',label:'Feige, Fiat, Shamir (1988)'}}]
+};
+window.onLangChange=function(){
+  ['auth-rsa','auth-ecc','auth-fs','auth-ffs'].forEach(id=>{
+    const el=document.getElementById('refs-'+id); if(el&&REFS[id]) el.innerHTML=window.atlasRefs(REFS[id]);
+  });
+  drawECC(); ffsDo();
+  document.getElementById('rsaOut').textContent=window.LANG==='uk'?'Натисніть «Запуск».':'Press “Run”.';
+  document.getElementById('fsOut').textContent=window.LANG==='uk'?'Натисніть «Чесний раунд».':'Press “Honest round”.';
+};
+document.getElementById('rsaHonest').addEventListener('click',()=>rsaRun(true));
+document.getElementById('rsaCheat').addEventListener('click',()=>rsaRun(false));
+['eccX','eccE'].forEach(id=>document.getElementById(id).addEventListener('input',drawECC));
+document.getElementById('eccNonce').addEventListener('click',()=>{ eccK=randBig(E_N); drawECC(); });
+document.getElementById('fsRound').addEventListener('click',()=>fsDo(true));
+document.getElementById('fsCheat').addEventListener('click',()=>fsDo(false));
+document.getElementById('fsReset').addEventListener('click',()=>{ fsRounds=0; fsPass=0;
+  document.getElementById('fsOut').textContent=window.LANG==='uk'?'Скинуто.':'Reset.'; });
+document.getElementById('ffsK').addEventListener('input',ffsDo);
+document.getElementById('ffsRound').addEventListener('click',ffsDo);
+</script>
+</body>
+</html>
