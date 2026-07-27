@@ -67,6 +67,7 @@ First Online: 27 September 2025
   title     = {Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies},
   booktitle = {2025 Digital Economy Concepts and Technologies (DECaT)},
   address   = {Kyiv, Ukraine},
+  volume    = {4029},
   publisher = {CEUR},
   year      = {2025},
   month     = apr,

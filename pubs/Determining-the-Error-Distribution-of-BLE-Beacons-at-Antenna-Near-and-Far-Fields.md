@@ -65,6 +65,7 @@ First Online: 11 September 2025
   title     = {Determining the Error Distribution of BLE Beacons at Antenna Near and Far Fields},
   booktitle = {2025 4th International Conference on Cyber Hygiene & Conflict Management in Global Information Networks (CH&CMiGIN)},
   address   = {Kyiv, Ukraine},
+  volume    = {4024},
   publisher = {CEUR},
   year      = {2025},
   month     = jun,

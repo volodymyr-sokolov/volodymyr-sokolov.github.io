@@ -66,6 +66,7 @@ First Online: 24 October 2024
   title     = {Model to Formation Data Base of Secondary Parameters for Assessing Status of the State Secret Protection},
   booktitle = {2024 Cyber Security and Data Protection (CSDP)},
   address   = {Lviv, Ukraine},
+  volume    = {3800},
   publisher = {CEUR},
   year      = {2024},
   month     = jun,

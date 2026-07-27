@@ -70,6 +70,7 @@ First Online: 26 August 2025
   title     = {Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files},
   booktitle = {2024 Classic, Quantum, and Post-Quantum Cryptography (CQPC)},
   address   = {Kyiv, Ukraine},
+  volume    = {4016},
   publisher = {CEUR},
   year      = {2025},
   month     = aug,

@@ -112,6 +112,8 @@
 
 ## Workshop Papers (CEUR-WS)
 
+2026 [Neural Network Modeling for Student Competency Development](Neural-Network-Modeling-for-Student-Competency-Development.md)
+
 2025 [Machine Learning Methods for Detecting Intrusions based on Network Traffic Analysis](Machine-Learning-Methods-for-Detecting-Intrusions-based-on-Network-Traffic-Analysis.md)
 
 2025 [Intelligent System for Simulation Modeling and Research of Information Objects](Intelligent-System-for-Simulation-Modeling-and-Research-of-Information-Objects.md)

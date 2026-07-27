@@ -70,6 +70,7 @@ First Online: 16 August 2022
   title     = {Decentralized Access Demarcation System Construction in Situational Center Network},
   booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
   address   = {Kyiv, Ukraine},
+  volume    = {3188},
   publisher = {CEUR},
   year      = {2021},
   month     = oct,

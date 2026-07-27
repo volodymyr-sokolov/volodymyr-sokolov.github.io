@@ -69,6 +69,7 @@ First Online: 20 March 2024
   title     = {Person-of-Interest Detection on Mobile Forensics Data — AI-Driven Roadmap},
   booktitle = {2024 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {3654},
   publisher = {CEUR},
   year      = {2024},
   month     = feb,

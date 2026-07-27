@@ -75,6 +75,7 @@ First Online: 24 December 2022
   title     = {Modeling CSIKE Algorithm on Non-Cyclic Edwards Curves},
   booktitle = {2022 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {3288},
   publisher = {CEUR},
   year      = {2022},
   month     = oct,

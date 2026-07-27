@@ -66,6 +66,7 @@ First Online: 22 June 2019
   title     = {Security Rating Metrics for Distributed Wireless Systems},
   booktitle = {2019 8th International Conference on “Mathematics. Information Technologies. Education” (MoMLeT&DS)},
   address   = {Shatsk, Ukraine},
+  volume    = {2386},
   publisher = {CEUR},
   year      = {2019},
   month     = jun,

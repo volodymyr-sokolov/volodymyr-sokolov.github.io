@@ -70,6 +70,7 @@ First Online: 7 July 2025
   title     = {Effectiveness of Information Security Control using Audit Logs},
   booktitle = {2025 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {3991},
   publisher = {CEUR},
   year      = {2025},
   month     = feb,

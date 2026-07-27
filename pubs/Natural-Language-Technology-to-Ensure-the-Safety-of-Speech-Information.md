@@ -70,6 +70,7 @@ First Online: 16 August 2022
   title     = {Natural Language Technology to Ensure the Safety of Speech Information},
   booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
   address   = {Kyiv, Ukraine},
+  volume    = {3187},
   publisher = {CEUR},
   year      = {2021},
   month     = oct,

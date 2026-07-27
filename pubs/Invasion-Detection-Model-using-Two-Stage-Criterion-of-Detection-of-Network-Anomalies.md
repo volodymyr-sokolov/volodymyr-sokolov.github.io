@@ -71,6 +71,7 @@ First Online: 23 November 2020
   title     = {Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies},
   booktitle = {2020 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {2746},
   publisher = {CEUR},
   year      = {2020},
   month     = jul,

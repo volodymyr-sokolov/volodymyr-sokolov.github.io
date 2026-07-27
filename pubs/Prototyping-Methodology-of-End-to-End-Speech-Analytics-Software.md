@@ -68,6 +68,7 @@ First Online: 29 December 2022
   title     = {Prototyping Methodology of End-to-End Speech Analytics Software},
   booktitle = {2022 Modern Machine Learning Technologies and Data Science Workshop (MoMLeT&DS)},
   address   = {Leiden, The Netherlands},
+  volume    = {3312},
   publisher = {CEUR},
   year      = {2022},
   month     = nov,

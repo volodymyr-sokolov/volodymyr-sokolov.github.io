@@ -66,6 +66,7 @@ First Online: 19 April 2024
   title     = {Tokenomics and Perspectives of Proof of Stake},
   booktitle = {2024 Digital Economy Concepts and Technologies (DECaT)},
   address   = {Kyiv, Ukraine},
+  volume    = {3665},
   publisher = {CEUR},
   year      = {2024},
   month     = apr,

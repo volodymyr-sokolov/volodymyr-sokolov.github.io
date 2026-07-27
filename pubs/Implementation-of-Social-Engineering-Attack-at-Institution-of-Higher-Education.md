@@ -66,6 +66,7 @@ First Online: 19 August 2020
   title     = {Implementation of Social Engineering Attack at Institution of Higher Education},
   booktitle = {2019 International Workshop on Cyber Hygiene (CybHyg)},
   address   = {Kyiv, Ukraine},
+  volume    = {2654},
   publisher = {CEUR},
   year      = {2019},
   month     = nov,

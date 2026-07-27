@@ -67,6 +67,7 @@ First Online: 30 October 2023
   title     = {Dynamic Model of Guarantee Capacity and Cyber Security Management in the Critical Automated Systems},
   booktitle = {2022 2nd International Conference on Conflict Management in Global Information Networks (CMiGiN)},
   address   = {Kyiv, Ukraine},
+  volume    = {3530},
   publisher = {CEUR},
   year      = {2022},
   month     = nov,

@@ -67,6 +67,7 @@ First Online: 25 September 2025
   title     = {Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats},
   booktitle = {2025 Cyber Security and Data Protection (CSDP)},
   address   = {Lviv, Ukraine},
+  volume    = {4042},
   publisher = {CEUR},
   year      = {2025},
   month     = jul,

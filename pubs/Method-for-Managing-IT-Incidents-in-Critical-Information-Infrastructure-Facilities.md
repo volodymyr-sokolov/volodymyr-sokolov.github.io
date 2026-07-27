@@ -69,6 +69,7 @@ First Online: 9 November 2024
   title     = {Method for Managing IT Incidents in Critical Information Infrastructure Facilities},
   booktitle = {2024 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
   address   = {Kyiv, Ukraine},
+  volume    = {3826},
   publisher = {CEUR},
   year      = {2024},
   month     = oct,

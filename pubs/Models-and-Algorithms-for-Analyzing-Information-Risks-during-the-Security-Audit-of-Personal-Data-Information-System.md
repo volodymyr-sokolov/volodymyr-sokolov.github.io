@@ -67,6 +67,7 @@ First Online: 21 February 2025
   title     = {Models and Algorithms for Analyzing Information Risks during the Security Audit of Personal Data Information System},
   booktitle = {2024 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks (CH&CMiGIN)},
   address   = {Kyiv, Ukraine},
+  volume    = {3925},
   publisher = {CEUR},
   year      = {2024},
   month     = jan,

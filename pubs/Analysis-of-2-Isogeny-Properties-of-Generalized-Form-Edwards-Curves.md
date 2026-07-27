@@ -71,6 +71,7 @@ First Online: 23 November 2020
   title     = {Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves},
   booktitle = {2020 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {2746},
   publisher = {CEUR},
   year      = {2020},
   month     = jul,

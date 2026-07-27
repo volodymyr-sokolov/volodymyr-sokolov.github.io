@@ -68,6 +68,7 @@ First Online: 21 February 2025
   title     = {A System for Assessing the Interdependencies of Information System Agents in Information Security Risk Management using Cognitive Maps},
   booktitle = {2024 3rd International Conference on Cyber Hygiene and Conflict Management in Global Information Networks (CH&CMiGIN)},
   address   = {Kyiv, Ukraine},
+  volume    = {3925},
   publisher = {CEUR},
   year      = {2024},
   month     = jan,

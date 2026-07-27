@@ -65,6 +65,7 @@ First Online: 30 September 2025
   title     = {Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements},
   booktitle = {2025 Information Control Systems & Technologies (ICST)},
   address   = {Odesa, Ukraine},
+  volume    = {4048},
   publisher = {CEUR},
   year      = {2025},
   month     = sep,

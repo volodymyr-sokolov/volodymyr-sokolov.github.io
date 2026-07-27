@@ -66,6 +66,7 @@ First Online: 19 May 2022
   title     = {Stability Verification of Self-Organized Wireless Networks with Block Encryption},
   booktitle = {2022 5th International Workshop on Computer Modeling and Intelligent Systems (CMIS)},
   address   = {Zaporizhzhia, Ukraine},
+  volume    = {3137},
   publisher = {CEUR},
   year      = {2022},
   month     = may,

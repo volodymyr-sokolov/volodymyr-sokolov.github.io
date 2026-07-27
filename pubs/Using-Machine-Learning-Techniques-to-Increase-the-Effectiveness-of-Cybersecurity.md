@@ -70,6 +70,7 @@ First Online: 16 August 2022
   title     = {Using Machine Learning Techniques to Increase the Effectiveness of Cybersecurity},
   booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
   address   = {Kyiv, Ukraine},
+  volume    = {3188},
   publisher = {CEUR},
   year      = {2021},
   month     = oct,

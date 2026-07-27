@@ -67,6 +67,7 @@ First Online: 3 July 2020
   title     = {Techniques Comparison for Natural Language Processing},
   booktitle = {2020 2nd International Workshop on Modern Machine Learning Technologies and Data Science (MoMLeT+DS)},
   address   = {Lviv-Shatsk, Ukraine},
+  volume    = {2631},
   publisher = {CEUR},
   year      = {2020},
   month     = jun,

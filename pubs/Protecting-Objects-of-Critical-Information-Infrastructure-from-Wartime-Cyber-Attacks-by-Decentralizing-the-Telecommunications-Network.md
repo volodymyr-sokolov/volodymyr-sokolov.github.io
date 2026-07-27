@@ -70,6 +70,7 @@ First Online: 16 November 2023
   title     = {Protecting Objects of Critical Information Infrastructure from Wartime Cyber Attacks by Decentralizing the Telecommunications Network},
   booktitle = {2023 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
   address   = {Kyiv, Ukraine},
+  volume    = {3550},
   publisher = {CEUR},
   year      = {2023},
   month     = oct,

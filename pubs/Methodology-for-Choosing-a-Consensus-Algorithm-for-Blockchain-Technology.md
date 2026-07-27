@@ -67,6 +67,7 @@ First Online: 19 April 2024
   title     = {Methodology for Choosing a Consensus Algorithm for Blockchain Technology},
   booktitle = {2024 Digital Economy Concepts and Technologies (DECaT)},
   address   = {Kyiv, Ukraine},
+  volume    = {3665},
   publisher = {CEUR},
   year      = {2024},
   month     = apr,

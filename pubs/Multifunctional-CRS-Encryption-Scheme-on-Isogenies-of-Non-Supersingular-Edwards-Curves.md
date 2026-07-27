@@ -70,6 +70,7 @@ First Online: 13 October 2023
   title     = {Multifunctional CRS Encryption Scheme on Isogenies of Non-Supersingular Edwards Curves},
   booktitle = {2023 Classic, Quantum, and Post-Quantum Cryptography (CQPC)},
   address   = {Kyiv, Ukraine},
+  volume    = {3504},
   publisher = {CEUR},
   year      = {2023},
   month     = aug,

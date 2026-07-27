@@ -74,6 +74,7 @@ First Online: 16 June 2023
   title     = {CSIKE-ENC Combined Encryption Scheme with Optimized Degrees of Isogeny Distribution},
   booktitle = {2023 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {3421},
   publisher = {CEUR},
   year      = {2023},
   month     = feb,

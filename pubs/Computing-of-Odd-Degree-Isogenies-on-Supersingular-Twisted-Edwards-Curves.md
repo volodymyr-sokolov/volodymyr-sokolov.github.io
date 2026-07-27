@@ -74,6 +74,7 @@ First Online: 7 August 2021
   title     = {Computing of Odd Degree Isogenies on Supersingular Twisted Edwards Curves},
   booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {2923},
   publisher = {CEUR},
   year      = {2021},
   month     = jan,

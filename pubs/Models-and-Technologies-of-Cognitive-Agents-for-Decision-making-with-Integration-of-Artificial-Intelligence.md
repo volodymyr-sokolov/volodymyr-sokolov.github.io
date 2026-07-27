@@ -66,6 +66,7 @@ First Online: 1 August 2025
   title     = {Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence},
   booktitle = {2025 Modern Data Science Technologies Doctoral Consortium (MoDaST)},
   address   = {Lviv, Ukraine},
+  volume    = {4005},
   publisher = {CEUR},
   year      = {2025},
   month     = jun,

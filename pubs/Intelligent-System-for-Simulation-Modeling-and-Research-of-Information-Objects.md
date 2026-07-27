@@ -65,6 +65,7 @@ First Online: 530 October 2025
   title     = {Intelligent System for Simulation Modeling and Research of Information Objects},
   booktitle = {2025 Software Engineering and Semantic Technologies (SEST)},
   address   = {Kyiv, Ukraine},
+  volume    = {4053},
   publisher = {CEUR},
   year      = {2025},
   month     = may,

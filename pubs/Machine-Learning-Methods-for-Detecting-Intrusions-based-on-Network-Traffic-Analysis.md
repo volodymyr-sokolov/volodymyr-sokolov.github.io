@@ -84,6 +84,7 @@ First Online: 29 December 2025
   title     = {Machine Learning Methods for Detecting Intrusions based on Network Traffic Analysis},
   booktitle = {2025 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
   address   = {Kyiv, Ukraine},
+  volume    = {4145},
   publisher = {CEUR},
   year      = {2025},
   month     = oct,

@@ -75,6 +75,7 @@ First Online: 16 August 2022
   title     = {Implementation of the CSIDH Algorithm Model on Supersingular Twisted and Quadratic Edwards Curves},
   booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
   address   = {Kyiv, Ukraine},
+  volume    = {3187},
   publisher = {CEUR},
   year      = {2021},
   month     = oct,

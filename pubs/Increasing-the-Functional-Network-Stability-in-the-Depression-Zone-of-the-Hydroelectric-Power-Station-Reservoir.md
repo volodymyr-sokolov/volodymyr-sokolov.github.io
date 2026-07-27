@@ -68,6 +68,7 @@ First Online: 6 June 2022
   title     = {Increasing the Functional Network Stability in the Depression Zone of the Hydroelectric Power Station Reservoir},
   booktitle = {2022 Emerging Technology Trends on the Smart Industry and the Internet of Things (TTSIIT)},
   address   = {Kyiv, Ukraine},
+  volume    = {3149},
   publisher = {CEUR},
   year      = {2022},
   month     = jan,

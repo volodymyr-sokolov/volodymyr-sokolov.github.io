@@ -68,6 +68,7 @@ First Online: 9 November 2024
   title     = {Research of the Graphic Model of the Points of the Elliptic Curve in the Edward Form},
   booktitle = {2024 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
   address   = {Kyiv, Ukraine},
+  volume    = {3826},
   publisher = {CEUR},
   year      = {2024},
   month     = oct,

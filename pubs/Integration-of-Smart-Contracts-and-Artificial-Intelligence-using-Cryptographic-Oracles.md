@@ -70,6 +70,7 @@ First Online: 12 November 2024
   title     = {Integration of Smart Contracts and Artificial Intelligence using Cryptographic Oracles},
   booktitle = {2024 Classic, Quantum, and Post-Quantum Cryptography (CQPC)},
   address   = {Kyiv, Ukraine},
+  volume    = {3829},
   publisher = {CEUR},
   year      = {2024},
   month     = aug,

@@ -70,6 +70,7 @@ First Online: 20 March 2024
   title     = {Resistance to Replay Attacks of Remote Control Protocols using the 433 MHz Radio Channel},
   booktitle = {2024 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {3654},
   publisher = {CEUR},
   year      = {2024},
   month     = feb,

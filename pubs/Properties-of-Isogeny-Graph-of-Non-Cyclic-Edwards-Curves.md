@@ -68,6 +68,7 @@ First Online: 16 November 2023
   title     = {Properties of Isogeny Graph of Non-Cyclic Edwards Curves},
   booktitle = {2023 Cybersecurity Providing in Information and Telecommunication Systems II (CPITS-II)},
   address   = {Kyiv, Ukraine},
+  volume    = {3550},
   publisher = {CEUR},
   year      = {2023},
   month     = oct,

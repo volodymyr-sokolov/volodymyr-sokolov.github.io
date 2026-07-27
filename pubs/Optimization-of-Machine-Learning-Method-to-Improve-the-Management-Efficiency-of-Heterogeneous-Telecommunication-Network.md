@@ -70,6 +70,7 @@ First Online: 24 December 2022
   title     = {Optimization of Machine Learning Method to Improve the Management Efficiency of Heterogeneous Telecommunication Network},
   booktitle = {2022 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {3288},
   publisher = {CEUR},
   year      = {2022},
   month     = oct,

@@ -68,6 +68,7 @@ First Online: 16 June 2023
   title     = {Smart Home Subsystem for Calculating the Quality of Public Utilities},
   booktitle = {2023 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {3421},
   publisher = {CEUR},
   year      = {2023},
   month     = feb,

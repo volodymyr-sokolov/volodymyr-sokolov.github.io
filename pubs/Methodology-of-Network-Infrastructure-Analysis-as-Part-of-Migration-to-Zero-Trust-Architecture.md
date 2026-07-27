@@ -70,6 +70,7 @@ First Online: 24 October 2024
   title     = {Methodology of Network Infrastructure Analysis as Part of Migration to Zero-Trust Architecture},
   booktitle = {2024 Cyber Security and Data Protection (CSDP)},
   address   = {Lviv, Ukraine},
+  volume    = {3800},
   publisher = {CEUR},
   year      = {2024},
   month     = jun,

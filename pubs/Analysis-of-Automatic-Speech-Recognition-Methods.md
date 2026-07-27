@@ -70,6 +70,7 @@ First Online: 7 August 2021
   title     = {Analysis of Automatic Speech Recognition Methods},
   booktitle = {2021 Cybersecurity Providing in Information and Telecommunication Systems (CPITS)},
   address   = {Kyiv, Ukraine},
+  volume    = {2923},
   publisher = {CEUR},
   year      = {2021},
   month     = jan,
