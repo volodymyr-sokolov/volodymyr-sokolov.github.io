@@ -56,6 +56,8 @@
 
 ## Conference Papers (IEEE)
 
+2026 [Cryptographically Resilient Random Number Generators based on Entropy Sources in Information Security Systems](Cryptographically-Resilient-Random-Number-Generators-based-on-Entropy-Sources-in-Information-Security-Systems.md)
+
 2026 [Telecommunication Network Availability after Hydroelectric Power Plant Reservoir Dam Incident](Telecommunication-Network-Availability-after-Hydroelectric-Power-Plant-Reservoir-Dam-Incident.md)
 
 2026 [Determining the Bandwidth of a Multilayer VPN](Determining-the-Bandwidth-of-a-Multilayer-VPN.md)
@@ -111,6 +113,8 @@
 2013 [Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11](Research-Results-of-the-Impact-of-Spatial-and-Polarization-Value-of-the-Antennas-on-Network-Capacity-of-Wireless.md)
 
 ## Workshop Papers (CEUR-WS)
+
+2026 [Secure Self-Adaptive Recurrent Neural Networks for Intelligent Image Recognition in the Internet of Things Environments](Secure-Self-Adaptive-Recurrent-Neural-Networks-for-Intelligent-Image-Recognition-in-the-Internet-of-Things-Environments.md)
 
 2026 [Neural Network Modeling for Student Competency Development](Neural-Network-Modeling-for-Student-Competency-Development.md)
 

@@ -50,7 +50,7 @@ First Online: 25 September 2025
 
 ### APA
 
-<small class="citation">`Skladannyi, P., Kostiuk Y., Khorolska, K., Bebeshko, B., & Sokolov, V. (2025). Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats. In Workshop on Cyber Security and Data Protection (Vol. 4042, pp. 17–36).`</small>
+<small class="citation">`Skladannyi, P., Kostiuk, Y., Khorolska, K., Bebeshko, B., & Sokolov, V. (2025). Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats. In Workshop on Cyber Security and Data Protection (Vol. 4042, pp. 17–36).`</small>
 
 ### IEEE
 
