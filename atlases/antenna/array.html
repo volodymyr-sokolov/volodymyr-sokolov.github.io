@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Array Antennas — Antenna Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="array">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Family 04 · many elements, one steerable pattern" data-uk="Сім'я 04 · багато елементів, одна керована ДН">Family 04 · many elements, one steerable pattern</div>
+    <h1 data-en="Array Antennas" data-uk="Антенні решітки">Array Antennas</h1>
+    <div class="eq-hero">AF(θ) = Σ wₙ·e^{ j·n·(k·d·cosθ + β) }</div>
+    <p class="lede" data-en="Combine many elements and their patterns multiply into a beam you can steer, sharpen and split — electronically, at the speed of a phase shifter. Add elements, scan the beam, taper the amplitudes: the array factor, grating lobes and directivity all respond live."
+       data-uk="Об'єднайте багато елементів — і їхні ДН перемножуються в промінь, який можна сканувати, звужувати й ділити електронно, зі швидкістю фазообертача. Додавайте елементи, скануйте промінь, задавайте спад амплітуд: множник решітки, дифракційні пелюстки й спрямованість реагують миттєво.">Combine many elements…</p>
+  </div>
+</header>
+
+<div class="wrap-wide" id="sections"></div>
+
+<footer class="wrap-wide">
+  <p data-en="Patterns are the array factor of isotropic elements (element pattern omitted); directivity is integrated from that factor. Real arrays fold in the element pattern and mutual coupling (MoM/FEM), and beamforming networks add their own insertion phase and loss."
+     data-uk="ДН — множник решітки ізотропних елементів (ДН елемента опущено); спрямованість інтегровано з нього. Реальні решітки враховують ДН елемента та взаємний зв'язок (MoM/FEM), а мережі формування додають власну фазу й втрати.">Patterns are the array factor…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script src="js/antenna.js"></script>
+<script src="js/pattern3d.js"></script>
+<script>
+const AL=window.AntennaLab, V='var(--teal)', A='var(--amber)', D2R=AL.D2R, R2D=AL.R2D;
+
+// element dots along a horizontal line, centred, with amplitude-scaled radius
+function elementRow(cx,cy,N,pitchPx,weights){
+  let s=''; const x0=cx-(N-1)*pitchPx/2;
+  for(let i=0;i<N;i++){ const w=weights?weights[i]/Math.max.apply(null,weights):1;
+    s+=`<circle class="schem-node" cx="${(x0+i*pitchPx).toFixed(1)}" cy="${cy}" r="${(2+3*w).toFixed(1)}"/>`; }
+  s+=`<line class="schem-wire-dim" x1="${x0}" y1="${cy}" x2="${x0+(N-1)*pitchPx}" y2="${cy}"/>`;
+  return s;
+}
+// Taylor-ish amplitude taper (raised cosine on a pedestal) for N elements
+function taperWeights(N, on){
+  const w=[]; for(let i=0;i<N;i++){ w.push(on? (0.35+0.65*Math.pow(Math.sin(Math.PI*(i+0.5)/N),1.4)) : 1); } return w;
+}
+
+// Full HPBW even when the beam sits at 0° (analyzePattern only sees the right
+// half there, so use the doubling findHPBW; for scanned beams use analyze).
+function beamHPBW(fnBeam){
+  const an=AL.analyzePattern(fnBeam,180,0.2);
+  if(an.peakDeg<0.6){ const s=AL.sampleHalf(fnBeam,0.1,90); const h=AL.findHPBW(s,fnBeam); return (h==null)?an.hpbw*2:h; }
+  return an.hpbw;
+}
+
+const ARR=[];
+
+/* 4.1 Phased array */
+ARR.push({
+  id:'phased-array', num:'4.1', lvl:2, plot:'full',
+  desc:{en:"A uniform linear array with a progressive phase β between elements steers the beam to sinθ₀ = −β/(kd) — no moving parts. Push the spacing past one wavelength and a second, unwanted grating lobe appears; taper the amplitudes to trade beamwidth for lower sidelobes.",
+        uk:"Рівномірна лінійна решітка з прогресивною фазою β між елементами скеровує промінь до sinθ₀ = −β/(kd) — без рухомих частин. Крок понад одну довжину хвилі породжує другу, небажану дифракційну пелюстку; спад амплітуд обмінює ширину променя на нижчі бічні пелюстки."},
+  methods:[
+    {id:'uniform', en:'Uniform array factor', uk:'Рівномірний множник',
+     desc:{en:"Equal-amplitude elements give the sharpest beam for a given size, at a fixed first sidelobe of −13.3 dB. Steering multiplies the beamwidth by 1/cosθ₀ and a grating lobe enters once d·(1+|sinθ₀|) ≥ λ.",
+           uk:"Рівні амплітуди дають найгостріший промінь для заданого розміру при фіксованій першій пелюстці −13.3 дБ. Сканування множить ширину на 1/cosθ₀, а дифракційна пелюстка входить, щойно d·(1+|sinθ₀|) ≥ λ."},
+     formula:[{en:"AF = sin(Nψ/2)/(N·sin(ψ/2)),  ψ = k·d·cosγ + β,  β = −k·d·sinθ₀",uk:"AF = sin(Nψ/2)/(N·sin(ψ/2)),  ψ = k·d·cosγ + β,  β = −k·d·sinθ₀"},
+              {en:"D₀ ≈ 2N·(d/λ)  (broadside, isotropic elements)",uk:"D₀ ≈ 2N·(d/λ)  (широка сторона, ізотропні елементи)"}]},
+    {id:'taper', en:'Amplitude taper', uk:'Спад амплітуд',
+     desc:{en:"Weighting the elements down toward the edges (Taylor/Chebyshev) suppresses the sidelobes to −20…−30 dB, at the cost of a wider main beam and a slightly lower directivity (the taper efficiency).",
+           uk:"Спад амплітуд до країв (Тейлора/Чебишова) пригнічує бічні пелюстки до −20…−30 дБ ціною ширшого головного променя й трохи нижчої спрямованості (ефективність спаду)."},
+     formula:[{en:"AF = Σ wₙ·e^{ jnψ } / Σ wₙ  — lower SLL, wider beam",uk:"AF = Σ wₙ·e^{ jnψ } / Σ wₙ  — нижча пелюстка, ширший промінь"}]}
+  ],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:40000,value:3},
+    {id:'N',kind:'range',en:'Elements N',uk:'Елементів N',min:2,max:32,step:1,value:8,fmt:v=>v.toFixed(0)},
+    {id:'d',kind:'range',en:'Spacing d',uk:'Крок d',min:0.3,max:1.2,step:0.01,value:0.5,fmt:v=>v.toFixed(2)+' λ'},
+    {id:'scan',kind:'range',en:'Scan angle θ₀',uk:'Кут скану θ₀',min:0,max:60,step:1,value:0,fmt:v=>v.toFixed(0)+'°'}
+  ],
+  compute(s,method){
+    const N=Math.round(s.N), d=s.d, beta=-2*Math.PI*d*Math.sin(s.scan*D2R);
+    const w=taperWeights(N, method==='taper');
+    // γ from array axis; broadside = 90°. plot angle deg: 0=broadside(up) → γ=90-deg
+    const AF=g=>AL.arrayFactorWeighted(g, d, beta, w);
+    const fnBeam=deg=>AF((90-deg)*D2R);
+    const D=AL.directivityAxial(g=>AF(g));
+    // find main lobe (near scan angle) + sidelobe via analyze over the visible span
+    const an=AL.analyzePattern(fnBeam, 90, 0.2);
+    // grating lobe test
+    const grating = d*(1+Math.abs(Math.sin(s.scan*D2R))) >= 1.0;
+    const cx=200, cy=150, pitch=Math.min(260/Math.max(N-1,1), 26);
+    const lamCmA=AL.lambdaOf(s.f*1e9)*100, pxA=pitch/(d*lamCmA);
+    const bl=54, bx=cx+bl*Math.sin(s.scan*D2R), by=cy-24-bl*Math.cos(s.scan*D2R);
+    // elevation: the row of radiators, with the scanned beam
+    let schemE=AL.rulerSVG(40,26,lamCmA,pxA)+AL.CAP_E();
+    schemE+=elementRow(cx,cy,N,pitch,w);
+    for(let i=0;i<N;i++){ const x=cx-(N-1)*pitch/2+i*pitch;
+      schemE+=`<line class="schem-driven" x1="${x.toFixed(1)}" y1="${cy-12}" x2="${x.toFixed(1)}" y2="${cy+12}"/>`; }
+    schemE+=`<text class="schem-label" x="${cx-(N-1)*pitch/2}" y="${cy+34}">N = ${N} · d = ${d.toFixed(2)} λ</text>`;
+    schemE+=`<defs><marker id="ar-phaE" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" style="fill:${V}"/></marker></defs>`;
+    schemE+=`<line style="stroke:${V};stroke-width:1.8" x1="${cx}" y1="${cy-24}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" marker-end="url(#ar-phaE)"/>`;
+    schemE+=`<text class="schem-label" style="fill:${V}" x="${(bx+6).toFixed(1)}" y="${(by+4).toFixed(1)}">θ₀ = ${s.scan.toFixed(0)}°</text>`;
+    // plan: the same row from above — every element is end-on
+    let schemH=AL.rulerSVG(40,26,lamCmA,pxA)+AL.CAP_H();
+    schemH+=`<line class="schem-wire-dim" x1="${cx-(N-1)*pitch/2}" y1="${cy}" x2="${cx+(N-1)*pitch/2}" y2="${cy}"/>`;
+    for(let i=0;i<N;i++) schemH+=AL.conductorEndOn(cx-(N-1)*pitch/2+i*pitch,cy,Math.min(5,pitch/3));
+    schemH+=AL.dimLineH(cx-(N-1)*pitch/2,cx-(N-1)*pitch/2+pitch,cy+30,`d = ${d.toFixed(2)} λ`);
+    schemH+=`<text class="schem-label" x="${cx-(N-1)*pitch/2}" y="${cy-24}">${AL.tr('array axis — the pattern is a fan about it','вісь решітки — ДН віялова навколо неї')}</text>`;
+    // widest spacing that still keeps the grating lobe out of real space
+    const dOpt=1/(1+Math.abs(Math.sin(s.scan*D2R)));
+    const optima=[{id:'d', value:dOpt, tag:'h',
+      label:AL.tr(`d ≈ ${dOpt.toFixed(2)} λ — widest spacing with no grating lobe at θ₀ = ${s.scan.toFixed(0)}°`,
+                  `d ≈ ${dOpt.toFixed(2)} λ — макс. крок без дифракційної пелюстки`)}];
+    return {schemE, schemH, fnBeam, optima,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:(N-1)*d, sizeLabel:'aperture = '+((N-1)*d).toFixed(1)+' λ', gainDbi:D.dBi},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'),v:D.dBi.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW',v:beamHPBW(fnBeam).toFixed(1)+'°'},
+        {k:AL.tr('First SLL','1-а бок.'),v:(an.sll==null?'—':an.sll.toFixed(1)+' '+AL.unit('dB'))},
+        {k:AL.tr('Grating lobe','Дифр. пелюстка'),v:grating?AL.tr('YES','Є'):AL.tr('none','нема')}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Phased_array',label:'Phased array'},uk:{href:'https://uk.wikipedia.org/wiki/Фазована_антенна_решітка',label:'Фазована решітка'}},
+        {tag:'book',en:{href:'https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061',label:'Balanis, ch. 6'}}],
+  strength:{en:"Electronic steering in microseconds is why radar (AESA) and 5G mmWave live on phased arrays. The hard limits: grating lobes cap the element spacing near λ/2, scan loss drops gain as cosθ₀, and every element needs its own phase/amplitude control.",
+            uk:"Електронне сканування за мікросекунди — причина, чому радари (AESA) та 5G mmWave стоять на фазованих решітках. Жорсткі межі: дифракційні пелюстки обмежують крок до ~λ/2, втрата сканування знижує підсилення як cosθ₀, а кожен елемент потребує власного керування фазою/амплітудою."},
+  xrefs:[['#massive-mimo','Massive MIMO','Massive MIMO'],['#butler','Butler matrix','Матриця Батлера'],['reflector.html#parabolic','vs reflector','vs рефлектор']]
+});
+
+/* 4.2 Massive MIMO */
+ARR.push({
+  id:'massive-mimo', num:'4.2', lvl:2, plot:'half',
+  desc:{en:"A large two-dimensional grid — dozens to hundreds of elements — that forms many narrow beams at once and serves many users on the same time-frequency resource. The beamforming array gain is simply the element count in dB.",
+        uk:"Велика двовимірна сітка — десятки-сотні елементів — що формує одразу багато вузьких променів і обслуговує багатьох користувачів на тому самому ресурсі. Підсилення формування променя — просто число елементів у дБ."},
+  methods:[{id:'af', en:'Array factor + channel model', uk:'Множник решітки + модель каналу',
+     desc:{en:"The planar array factor sets the beam; on top, a statistical channel model predicts how many users can be separated spatially. Coherent combining of M elements gives an array gain of 10·log₁₀(M).",
+           uk:"Планарний множник решітки задає промінь; поверх нього статистична модель каналу передбачає, скільки користувачів можна рознести просторово. Когерентне складання M елементів дає підсилення 10·log₁₀(M)."},
+     formula:[{en:"array gain = 10·log₁₀(N_row·N_col),  HPBW ≈ 51/(N·d/λ)° per axis",uk:"підсилення = 10·log₁₀(N_ряд·N_стовп),  HPBW ≈ 51/(N·d/λ)° по осі"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:40000,value:3.5},
+    {id:'rows',kind:'range',en:'Rows',uk:'Рядів',min:2,max:16,step:1,value:8,fmt:v=>v.toFixed(0)},
+    {id:'cols',kind:'range',en:'Columns',uk:'Стовпців',min:2,max:16,step:1,value:8,fmt:v=>v.toFixed(0)},
+    {id:'d',kind:'range',en:'Spacing d',uk:'Крок d',min:0.4,max:0.7,step:0.01,value:0.5,fmt:v=>v.toFixed(2)+' λ'}
+  ],
+  compute(s){
+    const R=Math.round(s.rows), C=Math.round(s.cols), M=R*C, Ncol=C;
+    const apLam=C*s.d;  // horizontal aperture in λ
+    const fnBeam=a=>AL.apertureUniform(a*D2R, apLam);
+    const arrayGain=10*Math.log10(M);
+    const samp=AL.sampleHalf(fnBeam,0.05,60), hp=AL.findHPBW(samp,fnBeam);
+    // schematic: grid of dots
+    const cx=200, cy=120, pitch=Math.min(200/Math.max(C-1,1),18,110/Math.max(R-1,1));
+    const lamCmM=AL.lambdaOf(s.f*1e9)*100, pxM=pitch/(s.d*lamCmM);
+    const x0=cx-(C-1)*pitch/2, y0=cy-(R-1)*pitch/2;
+    // The panel faces UP, so the plan view is the face of the array and the
+    // elevation is one column of it seen edge-on.
+    let schemH=AL.rulerSVG(40,26,lamCmM,pxM)+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="${x0-10}" y="${y0-10}" width="${(C-1)*pitch+20}" height="${(R-1)*pitch+20}" rx="4"/>`;
+    for(let r=0;r<R;r++) for(let c=0;c<C;c++)
+      schemH+=`<circle class="schem-node" cx="${(x0+c*pitch).toFixed(1)}" cy="${(y0+r*pitch).toFixed(1)}" r="2.4"/>`;
+    schemH+=`<text class="schem-label" x="${x0-10}" y="${y0-18}">${R}×${C} = ${M} ${AL.tr('elements','елементів')}</text>`;
+    schemH+=AL.dimLineH(x0,x0+(C-1)*pitch,y0+(R-1)*pitch+26,`${((C-1)*s.d).toFixed(1)} λ`);
+    let schemE=AL.rulerSVG(40,26,lamCmM,pxM)+AL.CAP_E();
+    schemE+=`<rect class="schem-fill" x="${x0-10}" y="${cy-7}" width="${(C-1)*pitch+20}" height="14" rx="3"/>`;
+    for(let c=0;c<C;c++) schemE+=AL.conductorEndOn(x0+c*pitch,cy,Math.min(4.5,pitch/3));
+    schemE+=`<text class="schem-label" x="${x0-10}" y="${cy-22}">${AL.tr('one row edge-on · panel is R×C','один ряд з торця · панель R×C')}</text>`;
+    schemE+=AL.boresightArrow(cx,cy-46,30,V,'mmE');
+    schemE+=AL.dimLineH(x0,x0+pitch,cy+28,`d = ${s.d.toFixed(2)} λ`);
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:apLam, sizeLabel:R+'×'+C+' · '+apLam.toFixed(1)+' λ wide', gainDbi:arrayGain},
+      readouts:[
+        {k:AL.tr('Elements','Елементів'),v:M.toFixed(0)},
+        {k:AL.tr('Array gain','Підсилення'),v:arrayGain.toFixed(1)+' '+AL.unit('dB')},
+        {k:AL.tr('HPBW (azimuth)','HPBW (азимут)'),v:AL.fmtDeg(hp)},
+        {k:AL.tr('Spatial streams','Просторові потоки'),v:'≤ '+Math.min(R,C).toFixed(0)}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Massive_MIMO',label:'Massive MIMO'}},
+        {tag:'paper',en:{href:'https://doi.org/10.1109/MSP.2011.2178495',label:'Rusek et al., Scaling up MIMO'}}],
+  strength:{en:"The core of 5G capacity: hundreds of elements multiply spectral efficiency by serving many users on the same resource block. The challenge is the RF chain count, calibration and the compute for real-time digital beamforming.",
+            uk:"Ядро ємності 5G: сотні елементів множать спектральну ефективність, обслуговуючи багатьох користувачів на одному ресурсі. Виклик — число ВЧ-трактів, калібрування та обчислення для цифрового формування в реальному часі."},
+  xrefs:[['#phased-array','Phased array','Фазована решітка'],['#mimo','MIMO array','MIMO-решітка'],['sector.html#sector-panel','Sector panel','Секторна панель']]
+});
+
+/* 4.3 MIMO array */
+ARR.push({
+  id:'mimo', num:'4.3', lvl:2, plot:'full',
+  desc:{en:"A handful of co-located antennas that are deliberately de-correlated so each carries an independent spatial stream. The key figure is the envelope correlation coefficient (ECC): keep it low — mostly by spacing the antennas — and capacity scales with the number of streams.",
+        uk:"Кілька суміщених антен, навмисно декорельованих, щоб кожна несла незалежний просторовий потік. Ключовий показник — коефіцієнт кореляції обвідних (ECC): тримайте його низьким (переважно рознесенням антен), і ємність росте з числом потоків."},
+  methods:[{id:'af', en:'Array factor + coupling correction', uk:'Множник + корекція зв’язку',
+     desc:{en:"Closely spaced antennas couple, which correlates their patterns and eats capacity. ECC falls as the spacing grows past about half a wavelength; MoM/FEM corrects the residual coupling for the final design.",
+           uk:"Близько розташовані антени зв'язуються, корелюючи ДН і з'їдаючи ємність. ECC падає, коли крок перевищує ~пів-хвилі; MoM/FEM коригує залишковий зв'язок для фінальної конструкції."},
+     formula:[{en:"ECC ≈ sinc²(2·d/λ) (idealised),  C ≈ N_stream·log₂(1+SNR)",uk:"ECC ≈ sinc²(2·d/λ) (ідеаліз.),  C ≈ N_потік·log₂(1+SNR)"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:2.4},
+    {id:'N',kind:'select',en:'Configuration',uk:'Конфігурація',value:'4',
+     options:[{value:'2',en:'2×2',uk:'2×2'},{value:'4',en:'4×4',uk:'4×4'},{value:'8',en:'8×8',uk:'8×8'}]},
+    {id:'d',kind:'range',en:'Antenna spacing d',uk:'Крок антен d',min:0.1,max:1.0,step:0.01,value:0.5,fmt:v=>v.toFixed(2)+' λ'}
+  ],
+  compute(s){
+    const N=parseInt(s.N,10);
+    const ecc=Math.pow(AL.sinc(2*Math.PI*s.d),2);
+    const effStreams=N*(1-0.6*ecc); // correlation eats capacity
+    const fnBeam=a=>AL.dipolePattern((90-a)*D2R,0.5); // element pattern shown
+    const cx=200, cy=125, pitch=Math.min(220/Math.max(N-1,1),40);
+    const x0=cx-(N-1)*pitch/2;
+    const lamCmI=AL.lambdaOf(s.f*1e9)*100, pxI=pitch/(s.d*lamCmI);
+    let schemE=AL.rulerSVG(40,26,lamCmI,pxI)+AL.CAP_E();
+    for(let i=0;i<N;i++){ const x=x0+i*pitch;
+      schemE+=`<line class="schem-driven" x1="${x}" y1="${cy-16}" x2="${x}" y2="${cy+16}"/><circle class="schem-node" cx="${x}" cy="${cy}" r="2"/>`; }
+    schemE+=`<text class="schem-label" x="${x0}" y="${cy-26}">${N} ${AL.tr('independent antennas','незалежних антен')} · d = ${s.d.toFixed(2)} λ</text>`;
+    if(x0<cx-6) schemE+=AL.dimLineH(x0,x0+pitch,cy+34,`d`);
+    let schemH=AL.rulerSVG(40,26,lamCmI,pxI)+AL.CAP_H();
+    for(let i=0;i<N;i++) schemH+=AL.conductorEndOn(x0+i*pitch,cy,Math.min(5,pitch/3));
+    schemH+=AL.azimuthCircle(x0,cy,26,A);
+    schemH+=`<text class="schem-label" x="${x0}" y="${cy-30}">${AL.tr('each element is omni in azimuth','кожен елемент всенапрямлений')}</text>`;
+    if(x0<cx-6) schemH+=AL.dimLineH(x0,x0+pitch,cy+34,`d = ${s.d.toFixed(2)} λ`);
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:(N-1)*s.d, sizeLabel:'span = '+((N-1)*s.d).toFixed(1)+' λ'},
+      readouts:[
+        {k:AL.tr('Streams','Потоків'),v:N+'×'+N},
+        {k:'ECC',v:ecc.toFixed(3)},
+        {k:AL.tr('Capacity ×','Ємність ×'),v:effStreams.toFixed(1)+'×'},
+        {k:AL.tr('Coupling','Зв’язок'),v:s.d<0.4?AL.tr('high','високий'):AL.tr('low','низький')}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/MIMO',label:'MIMO'}},
+        {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/IEEE_802.11n-2009',label:'802.11n MIMO'}}],
+  strength:{en:"The reason Wi-Fi and LTE throughput keeps climbing without more spectrum: independent spatial streams multiply capacity. The catch is that gains vanish in low-scattering (line-of-sight) channels and when antennas sit too close to de-correlate.",
+            uk:"Причина, чому пропускна здатність Wi-Fi і LTE зростає без нового спектра: незалежні просторові потоки множать ємність. Пастка — виграш зникає в каналах прямої видимості (мало розсіяння) і коли антени надто близькі для декореляції."},
+  xrefs:[['#massive-mimo','Massive MIMO','Massive MIMO'],['wire.html#pifa','Handset antennas','Антени телефонів'],['#phased-array','Phased array','Фазована решітка']]
+});
+
+/* 4.4 Butler matrix */
+ARR.push({
+  id:'butler', num:'4.4', lvl:2, plot:'full',
+  desc:{en:"A passive beamforming network of hybrids and phase shifters that feeds an N-element array from N input ports — and each port produces a different fixed beam, all at once. Selecting a port selects a beam; the beams are mutually orthogonal.",
+        uk:"Пасивна мережа формування з гібридів і фазообертачів, що живить N-елементну решітку з N входів — і кожен вхід дає окремий фіксований промінь, усі одночасно. Вибір входу — вибір променя; промені взаємно ортогональні."},
+  methods:[{id:'net', en:'Array factor + network', uk:'Множник + мережа',
+     desc:{en:"An N×N Butler matrix applies a set of linear phase gradients β_m = (2m−1)π/N, steering N beams that cross over at a fixed level. The pattern of each beam is just the uniform array factor with its own progressive phase.",
+           uk:"Матриця Батлера N×N задає набір лінійних градієнтів фази β_m = (2m−1)π/N, скеровуючи N променів, що перетинаються на фіксованому рівні. ДН кожного променя — рівномірний множник решітки зі своєю прогресивною фазою."},
+     formula:[{en:"β_m = (2m−1)·π/N,  beam at sinθ_m = β_m/(k·d)",uk:"β_m = (2m−1)·π/N,  промінь при sinθ_m = β_m/(k·d)"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:40000,value:5},
+    {id:'N',kind:'select',en:'Matrix size N',uk:'Розмір N',value:'4',options:[{value:'4',en:'4×4',uk:'4×4'},{value:'8',en:'8×8',uk:'8×8'}]},
+    {id:'beam',kind:'range',en:'Selected beam',uk:'Вибраний промінь',min:1,max:8,step:1,value:1,fmt:v=>v.toFixed(0)},
+    {id:'d',kind:'range',en:'Spacing d',uk:'Крок d',min:0.4,max:0.6,step:0.01,value:0.5,fmt:v=>v.toFixed(2)+' λ'}
+  ],
+  compute(s){
+    const N=parseInt(s.N,10), d=s.d;
+    const m=AL.clamp(Math.round(s.beam),1,N);
+    // phase set: β_m = ±(2r-1)π/N; map beam index 1..N to a signed value
+    const idx = m-(N/2)-0.5; // centred
+    const beta = (2*Math.abs(idx))/1 * Math.sign(idx) * Math.PI/N;
+    const scan = Math.asin(AL.clamp(-beta/(2*Math.PI*d),-1,1))*R2D;
+    const AF=g=>AL.arrayFactor(g,N,d,beta);
+    const fnBeam=deg=>AF((90-deg)*D2R);
+    const D=AL.directivityAxial(g=>AF(g));
+    const cx=200, cy=95, pitch=Math.min(220/Math.max(N-1,1),30);
+    const bx=cx-(N-1)*pitch/2, bw=(N-1)*pitch, by=cy+40;
+    const lamCmB=AL.lambdaOf(s.f*1e9)*100, pxB=pitch/(d*lamCmB);
+    let schemE=AL.rulerSVG(40,26,lamCmB,pxB)+AL.CAP_E();
+    schemE+=elementRow(cx,cy,N,pitch,null);
+    schemE+=`<rect class="schem-fill" x="${bx}" y="${by}" width="${bw}" height="26" rx="4"/>`;
+    schemE+=`<text class="schem-label" x="${cx}" y="${by+16}" text-anchor="middle">Butler ${N}×${N}</text>`;
+    for(let i=0;i<N;i++){ schemE+=`<line class="schem-wire-dim" x1="${bx+i*pitch}" y1="${cy+6}" x2="${bx+i*pitch}" y2="${by}"/>`;
+      schemE+=`<circle class="${(i+1===m)?'schem-driven':'schem-node'}" cx="${bx + i*(bw/(N-1||1))}" cy="${by+30}" r="${(i+1===m)?4:2.4}"/>`; }
+    schemE+=`<text class="schem-label" x="${cx}" y="${by+46}" text-anchor="middle">${AL.tr('input ports (beam','входи (промінь')} ${m})</text>`;
+    const bl=52, bxA=cx+bl*Math.sin(scan*D2R), byA=cy-14-bl*Math.cos(scan*D2R);
+    schemE+=`<defs><marker id="ar-butE" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" style="fill:${V}"/></marker></defs>`;
+    schemE+=`<line style="stroke:${V};stroke-width:1.8" x1="${cx}" y1="${cy-14}" x2="${bxA.toFixed(1)}" y2="${byA.toFixed(1)}" marker-end="url(#ar-butE)"/>`;
+    schemE+=`<text class="schem-label" style="fill:${V}" x="${(bxA+6).toFixed(1)}" y="${(byA+4).toFixed(1)}">${scan.toFixed(0)}°</text>`;
+    let schemH=AL.rulerSVG(40,26,lamCmB,pxB)+AL.CAP_H();
+    schemH+=`<line class="schem-wire-dim" x1="${bx}" y1="${cy}" x2="${bx+bw}" y2="${cy}"/>`;
+    for(let i=0;i<N;i++) schemH+=AL.conductorEndOn(bx+i*pitch,cy,Math.min(5,pitch/3));
+    schemH+=AL.dimLineH(bx,bx+pitch,cy+30,`d = ${d.toFixed(2)} λ`);
+    schemH+=`<text class="schem-label" x="${bx}" y="${cy-26}">${AL.tr('N ports → N fixed beams','N входів → N фіксованих променів')}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:(N-1)*d, sizeLabel:'aperture = '+((N-1)*d).toFixed(1)+' λ', gainDbi:D.dBi},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'),v:D.dBi.toFixed(1)+' '+AL.unit('dBi')},
+        {k:AL.tr('Beam angle','Кут променя'),v:scan.toFixed(0)+'°'},
+        {k:AL.tr('Beams','Променів'),v:N.toFixed(0)},
+        {k:AL.tr('Selected','Вибрано'),v:'#'+m}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Butler_matrix',label:'Butler matrix'}}],
+  strength:{en:"A fully passive, broadband, lossless-in-principle way to make N simultaneous beams — no phase shifters, no DC power. It is the switched-beam workhorse for cellular sectors and simple multi-beam satellite payloads; the beams are fixed, not continuously steerable.",
+            uk:"Повністю пасивний, широкосмуговий, у принципі без втрат спосіб зробити N одночасних променів — без фазообертачів і живлення. Це основа комутованих променів для стільникових секторів і простих багатопроменевих супутників; промені фіксовані, не плавно керовані."},
+  xrefs:[['#phased-array','Phased array','Фазована решітка'],['lens.html#luneburg','Luneburg (multi-beam)','Люнеберга'],['sector.html#sector-panel','Sector panel','Секторна панель']]
+});
+
+/* 4.5 Stacked Yagi */
+ARR.push({
+  id:'stacked-yagi', num:'4.5', lvl:3, plot:'full',
+  desc:{en:"Several Yagis fed together and stacked in a bay. Each Yagi already has endfire gain; stacking them broadside adds roughly 10·log₁₀(M) more and narrows the pattern in the stacking plane — the classic way to squeeze a few more dB out of a point-to-point link.",
+        uk:"Кілька Yagi, живлених разом і складених у батарею. Кожна Yagi вже має осьове підсилення; складання їх у широку сторону додає приблизно 10·log₁₀(M) і звужує ДН у площині складання — класичний спосіб вичавити ще кілька дБ із лінії «точка-точка»."},
+  methods:[{id:'mom', en:'MoM + stack array factor', uk:'MoM + множник стека',
+     desc:{en:"Each Yagi is an endfire array (reflector + driven + directors); the bay multiplies that element pattern by the array factor of M stacked feeds. Optimum stacking distance is around one wavelength — closer wastes aperture, farther grows grating lobes.",
+           uk:"Кожна Yagi — осьова решітка (рефлектор + активний + директори); батарея множить цю ДН елемента на множник решітки з M стеків. Оптимальна відстань стека — близько однієї довжини хвилі; ближче марнує розкрив, далі росте дифракційна пелюстка."},
+     formula:[{en:"G ≈ G_yagi + 10·log₁₀(M) − stacking loss,  d_stack ≈ 0.8–1.2 λ",uk:"G ≈ G_yagi + 10·log₁₀(M) − втрата стека,  d_стек ≈ 0.8–1.2 λ"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.6},
+    {id:'bays',kind:'range',en:'Stacked bays M',uk:'Стеків M',min:1,max:8,step:1,value:2,fmt:v=>v.toFixed(0)},
+    {id:'ndir',kind:'range',en:'Directors per Yagi',uk:'Директорів на Yagi',min:2,max:16,step:1,value:6,fmt:v=>v.toFixed(0)},
+    {id:'dstack',kind:'range',en:'Stack spacing',uk:'Крок стека',min:0.5,max:1.6,step:0.05,value:1.0,fmt:v=>v.toFixed(2)+' λ'}
+  ],
+  compute(s){
+    const M=Math.round(s.bays), nd=Math.round(s.ndir), dst=s.dstack;
+    // single Yagi endfire (reflector + driven + directors), beam up (0°)
+    const pos=[-0.25,0]; const w=[1,1]; for(let k=1;k<=nd;k++){ pos.push(k*0.2); w.push(Math.max(0.55,1-0.03*k)); }
+    const yagi=g=>{ let re=0,im=0,sw=0; for(let n=0;n<pos.length;n++){ const ph=2*Math.PI*pos[n]*(Math.cos(g)-1); re+=w[n]*Math.cos(ph); im+=w[n]*Math.sin(ph); sw+=w[n]; } return Math.hypot(re,im)/sw; };
+    // stack array factor (broadside, M elements spaced dst) modulates in the stacking plane;
+    // for the single-cut plot we multiply the endfire pattern by the broadside stack factor
+    const stackAF=g=>AL.arrayFactor(g,M,dst,0);
+    const fnBeam=deg=>{ const g=deg*D2R; return yagi(g)*stackAF(Math.PI/2 - g); };
+    const Dsingle=AL.directivityAxial(g=>yagi(g));
+    const gain=Dsingle.dBi + 10*Math.log10(M) - (M>1?0.5:0);
+    const hpbw=beamHPBW(fnBeam);
+    const fb=20*Math.log10((fnBeam(0)+1e-9)/(fnBeam(180)+1e-9));
+    // schematic: M yagis stacked vertically
+    const cx=200, top=60, colH=170, pitch=Math.min(colH/Math.max(M,1),60);
+    const lamCmS=AL.lambdaOf(s.f*1e9)*100, pxS=pitch/(dst*lamCmS);
+    let schemE=AL.rulerSVG(40,26,lamCmS,pxS)+AL.CAP_E();
+    for(let bmi=0;bmi<M;bmi++){ const y=top+bmi*pitch+ (colH-(M-1)*pitch)/2;
+      const bx=cx-70; schemE+=`<line class="schem-wire-dim" x1="${bx}" y1="${y}" x2="${bx+150}" y2="${y}"/>`;
+      schemE+=`<line class="schem-wire" x1="${bx}" y1="${y-9}" x2="${bx}" y2="${y+9}"/>`;
+      schemE+=`<line class="schem-driven" x1="${bx+18}" y1="${y-8}" x2="${bx+18}" y2="${y+8}"/>`;
+      for(let k=1;k<=Math.min(nd,10);k++) schemE+=`<line class="schem-wire" x1="${bx+18+k*12}" y1="${y-6}" x2="${bx+18+k*12}" y2="${y+6}"/>`;
+    }
+    schemE+=`<text class="schem-label" x="${cx-70}" y="${top+ (colH-(M-1)*pitch)/2 -14}">${M} ${AL.tr('bays','стеків')} · ${nd} dir</text>`;
+    if(M>1) schemE+=AL.dimLineV(cx+86,top+(colH-(M-1)*pitch)/2,top+pitch+(colH-(M-1)*pitch)/2,`${dst.toFixed(2)} λ`);
+    schemE+=AL.boresightArrow(cx+82,top+colH/2,26,V,'styE');
+    // plan: the bays sit one above another, so from above they superimpose
+    const cyH=125, bxH=cx-70;
+    let schemH=AL.rulerSVG(40,26,lamCmS,pxS)+AL.CAP_H();
+    schemH+=`<line class="schem-wire-dim" x1="${bxH}" y1="${cyH}" x2="${bxH+150}" y2="${cyH}"/>`;
+    schemH+=AL.conductorEndOn(bxH,cyH,6);
+    schemH+=AL.conductorEndOn(bxH+18,cyH,6);
+    for(let k=1;k<=Math.min(nd,10);k++) schemH+=AL.conductorEndOn(bxH+18+k*12,cyH,4);
+    schemH+=AL.boresightArrow(bxH+152,cyH,26,A,'styH');
+    schemH+=`<text class="schem-label" x="${bxH}" y="${cyH-26}">${AL.tr('all bays superimpose from above','стеки збігаються при погляді згори')}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:Math.max((M-1)*dst, nd*0.2+0.25),
+              sizeLabel:'boom '+(nd*0.2+0.25).toFixed(2)+'λ · stack '+((M-1)*dst).toFixed(2)+'λ',
+              gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'),v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW',v:hpbw.toFixed(0)+'°'},
+        {k:'F/B',v:fb.toFixed(1)+' '+AL.unit('dB')},
+        {k:AL.tr('Bays','Стеків'),v:M.toFixed(0)}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Yagi%E2%80%93Uda_antenna',label:'Yagi-Uda antenna'}},
+        {tag:'code',en:{href:'https://www.nec2.org/',label:'NEC-2'}}],
+  strength:{en:"When one Yagi is not enough and a dish is impractical, stacking is the cheap answer for VHF/UHF DX and long Wi-Fi shots. The gain per doubling is only ~3 dB and phasing/matching the bays correctly is the tricky part.",
+            uk:"Коли однієї Yagi мало, а тарілка незручна, стекування — дешева відповідь для VHF/UHF DX і далеких Wi-Fi ліній. Підсилення на подвоєння лише ~3 дБ, а правильне фазування/узгодження стеків — найскладніше."},
+  xrefs:[['wire.html#yagi','Single Yagi','Одна Yagi'],['#phased-array','Phased array','Фазована решітка'],['wire.html#lpda','Log-periodic','Логоперіодична']]
+});
+
+/* ====================================================================== */
+/*  PAGE BUILDER (shared)                                                   */
+/* ====================================================================== */
+function catGet(id){ return CATALOG.flatMap(s=>s.antennas).find(x=>x.id===id)||{}; }
+function planesHTMLFor(id){
+  return `
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_schem" viewBox="0 0 400 250"></svg></div>
+    </div>
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_plot" viewBox="0 0 400 380"></svg>
+        <div class="plane-readout">
+          ${[0,1,2,3].map(i=>`<div class="item"><div class="k" id="${id}_k${i}"></div><div class="v" id="${id}_v${i}">-</div></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+function fillExtras(a){
+  const c=catGet(a.id);
+  const rf=document.getElementById('refs-'+a.id); if(rf) rf.innerHTML=window.atlasRefs(a.refs);
+  const tg=document.getElementById('tags-'+a.id); if(tg) tg.innerHTML=window.atlasTags(c.std,c.mod,c.mth);
+}
+function buildSections(list, root){
+  root.innerHTML=list.map(a=>{
+    const c=catGet(a.id), multi=a.methods&&a.methods.length>1;
+    const mdesc=(a.methods||[]).map((m,i)=>
+      `<div class="method-body${(multi&&i>0)?' hidden':''}" data-method="${m.id}">
+         <div class="desc-cols">
+           <div><h4 data-en="${m.en}" data-uk="${m.uk}">${m.en}</h4>
+             <p data-en="${m.desc.en}" data-uk="${m.desc.uk}">${m.desc.en}</p></div>
+           <div>${(m.formula||[]).map(f=>`<span class="formula" data-en="${f.en}" data-uk="${f.uk}">${f.en}</span>`).join('')}</div>
+         </div>
+       </div>`).join('');
+    return `<section id="${a.id}">
+      <div class="num" data-en="${a.num} / array" data-uk="${a.num} / решітка">${a.num} / array</div>
+      <h2><span class="badge l${a.lvl} lg">${['','I','II','III'][a.lvl]}</span>
+          <span data-en="${c.en}" data-uk="${c.uk}">${c.en}</span></h2>
+      <div id="tags-${a.id}"></div>
+      <p class="desc" data-en="${a.desc.en}" data-uk="${a.desc.uk}">${a.desc.en}</p>
+      <div class="method-desc">${mdesc}</div>
+      <div class="panel"><div id="exp-${a.id}"></div></div>
+      <div id="refs-${a.id}"></div>
+      <div class="strength"><div class="st-title" data-en="Design notes" data-uk="Проєктні нотатки">Design notes</div>
+        <span data-en="${a.strength.en}" data-uk="${a.strength.uk}">${a.strength.en}</span></div>
+      <div class="xrefs">${(a.xrefs||[]).map(x=>`<a href="${x[0]}" data-en="${x[1]}" data-uk="${x[2]}">${x[1]}</a>`).join('')}</div>
+    </section>`;
+  }).join('');
+}
+function mountOne(a){
+  AL.mount(a.id,{ methods:(a.methods&&a.methods.length>1)?a.methods:null, controls:a.controls, planesHTML:AL.planesTwo(a.id),
+    render:function(ctx){
+      const out=a.compute(ctx.state, ctx.methodId);
+      AL.renderPlanes(a.id, out, a);
+      if(out.enable) for(const cid in out.enable) ctx.enable(cid,out.enable[cid]);
+    }});
+  fillExtras(a);
+}
+buildSections(ARR, document.getElementById('sections'));
+ARR.forEach(mountOne);
+window.onLangChangePage=function(){ ARR.forEach(fillExtras); };
+</script>
+</body>
+</html>

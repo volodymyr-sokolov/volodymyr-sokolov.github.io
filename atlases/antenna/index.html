@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Antenna Atlas — type catalogue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="home">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Antenna types · standards · modulations · methods" data-uk="Типи антен · стандарти · модуляції · методи">Antenna types · standards · modulations · methods</div>
+    <h1 data-en="An Atlas of Antennas" data-uk="Атлас антен">An Atlas of Antennas</h1>
+    <p class="lede" id="lede"></p>
+    <div class="filter-note" id="filterNote"></div>
+    <div class="legend-lvls filterable" id="lvlLegend"></div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="view-switch" id="viewSwitch">
+    <a href="#" data-view="topic"></a>
+    <a href="#" data-view="alpha"></a>
+  </div>
+  <span class="count-pill" id="countPill"></span>
+</div>
+
+<main class="catalog" id="catalogRoot"></main>
+
+<footer class="wrap">
+  <p data-en="© 2026 Volodymyr Sokolov · Antenna Atlas — a bilingual visual field guide. All calculators run offline in your browser."
+     data-uk="© 2026 Володимир Соколов · Атлас антен — двомовний візуальний путівник. Усі калькулятори працюють офлайн у вашому браузері.">© 2026 Volodymyr Sokolov</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script>
+// ---- catalogue view + method-level filter state ----------------------
+const FILT_KEY='antatlas-filter';
+const FILT = { lvl:new Set([1,2,3]), view:'topic' };
+(function loadFilt(){
+  try{
+    const s=JSON.parse(localStorage.getItem(FILT_KEY)||'{}');
+    if(Array.isArray(s.lvl)&&s.lvl.length) FILT.lvl=new Set(s.lvl.map(Number));
+    if(s.view==='alpha'||s.view==='topic') FILT.view=s.view;
+  }catch(e){}
+})();
+function saveFilt(){
+  localStorage.setItem(FILT_KEY, JSON.stringify({lvl:[...FILT.lvl], view:FILT.view}));
+}
+// id → localized name, for cross-links
+const ID2NAME={};
+CATALOG.forEach(s=>s.antennas.forEach(a=>{ ID2NAME[a.id]={en:a.en,uk:a.uk}; }));
+
+function antVisible(a){ return FILT.lvl.has(a.lvl); }
+
+// ---- render the method-level legend as a clickable filter ------------
+function renderLegend(){
+  const L=[I18N[window.LANG].methodLvl1,I18N[window.LANG].methodLvl2,I18N[window.LANG].methodLvl3];
+  const chips=[1,2,3].map((n,i)=>
+    `<span class="flt${FILT.lvl.has(n)?'':' off'}" data-v="${n}" role="button" tabindex="0">${window.atlasBadge(n)} ${L[i]}</span>`).join('');
+  document.getElementById('lvlLegend').innerHTML=chips;
+  document.querySelectorAll('#lvlLegend .flt').forEach(el=>{
+    const act=()=>toggleLvl(Number(el.getAttribute('data-v')));
+    el.addEventListener('click', act);
+    el.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); } });
+  });
+  document.getElementById('filterNote').textContent=I18N[window.LANG].methodLegend;
+  document.getElementById('lede').textContent=I18N[window.LANG].catalogLede;
+}
+function toggleLvl(v){
+  if(FILT.lvl.has(v)){ if(FILT.lvl.size<=1) return; FILT.lvl.delete(v); }
+  else FILT.lvl.add(v);
+  saveFilt(); renderLegend(); renderCatalog();
+}
+
+// ---- view switch (by family / alphabetical) --------------------------
+function renderViewSwitch(){
+  const a=document.querySelectorAll('#viewSwitch a');
+  a[0].textContent=I18N[window.LANG].viewTopic;
+  a[1].textContent=I18N[window.LANG].viewAlpha;
+  a.forEach(el=>el.classList.toggle('active', el.getAttribute('data-view')===FILT.view));
+}
+function wireViewSwitch(){
+  document.querySelectorAll('#viewSwitch a').forEach(el=>{
+    el.addEventListener('click', e=>{
+      e.preventDefault();
+      FILT.view=el.getAttribute('data-view');
+      saveFilt(); renderViewSwitch(); renderCatalog();
+    });
+  });
+}
+
+// ---- tags row for a tile ---------------------------------------------
+function tagsRow(a){
+  const L=I18N[window.LANG];
+  const chip=(cls,k,v)=>`<span class="tag ${cls}"><span class="tk">${k}</span>${v}</span>`;
+  let s='';
+  (a.std||[]).slice(0,4).forEach(v=>s+=chip('std',L.tagStd,v));
+  (a.mod||[]).slice(0,3).forEach(v=>s+=chip('mod',L.tagMod,v));
+  (a.mth||[]).forEach(v=>s+=chip('mth',L.tagMth,v));
+  return `<div class="tags cat-tags">${s}</div>`;
+}
+
+// ---- one antenna tile ------------------------------------------------
+function antTile(a, lang){
+  const name=lang==='uk'?a.uk:a.en;
+  const desc=lang==='uk'?a.dUk:a.dEn;
+  const href=a.href||(window.HREFS&&HREFS[a.id])||null;
+  const impl=href?` <span class="impl">${I18N[lang].openCalc} →</span>`:'';
+  const cls=href?'algo-item link':'algo-item';
+  const open=href?` onclick="location.href='${href}'"`:'';
+  return `<div class="${cls}" id="ant-${a.id}"${open}
+            data-hay="${(a.en+' '+a.uk+' '+(a.alias||'')).toLowerCase()}">
+      ${window.atlasBadge(a.lvl)}
+      <div class="body">
+        <p class="name">${name}${impl}</p>
+        <p class="adesc">${desc}</p>
+        ${tagsRow(a)}
+      </div>
+    </div>`;
+}
+
+// ---- render the full catalogue ---------------------------------------
+function renderCatalog(){
+  const lang=window.LANG;
+  const root=document.getElementById('catalogRoot');
+  let total=0, shown=0;
+  CATALOG.forEach(s=>s.antennas.forEach(a=>{ total++; if(antVisible(a)) shown++; }));
+
+  if(FILT.view==='alpha'){
+    const all=[];
+    CATALOG.forEach(s=>s.antennas.forEach(a=>{ if(antVisible(a)) all.push(a); }));
+    all.sort((x,y)=>{
+      const nx=(lang==='uk'?x.uk:x.en), ny=(lang==='uk'?y.uk:y.en);
+      return nx.localeCompare(ny, lang==='uk'?'uk':'en', {sensitivity:'base'});
+    });
+    root.innerHTML=`<div class="algo-grid">${all.map(a=>antTile(a,lang)).join('')}</div>`;
+  } else {
+    root.innerHTML=CATALOG.map(sec=>{
+      const vis=sec.antennas.filter(antVisible);
+      if(!vis.length) return '';
+      const items=vis.map(a=>antTile(a,lang)).join('');
+      const secName=lang==='uk'?sec.uk:sec.en;
+      const secDesc=lang==='uk'?sec.descUk:sec.descEn;
+      return `<section class="cat-section" id="sec-${sec.id}">
+          <span class="num">${String(sec.id).padStart(2,'0')}</span>
+          <h2>${secName}</h2>
+          <p class="sec-desc">${secDesc}</p>
+          <div class="algo-grid">${items}</div>
+        </section>`;
+    }).join('');
+  }
+
+  const families=CATALOG.length, T=I18N[lang];
+  const cnt=(shown===total)?`${total}`:`${shown} / ${total}`;
+  document.getElementById('countPill').textContent=`${cnt} ${T.types} · ${families} ${T.families}`;
+}
+
+// re-render whenever language changes (called by site.js)
+window.onLangChange=function(){
+  renderLegend();
+  renderViewSwitch();
+  renderCatalog();
+  if(location.hash.startsWith('#ant-')){
+    const el=document.getElementById(location.hash.slice(1));
+    if(el){ el.scrollIntoView({block:'center'}); el.classList.add('flash'); }
+  }
+};
+
+wireViewSwitch();
+</script>
+</body>
+</html>

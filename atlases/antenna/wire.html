@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wire Antennas — Antenna Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="wire">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Family 01 · conductors with standing or traveling current" data-uk="Сім'я 01 · провідники з нерухомою чи біжучою хвилею">Family 01 · conductors with standing or traveling current</div>
+    <h1 data-en="Wire Antennas" data-uk="Дротові антени">Wire Antennas</h1>
+    <div class="eq-hero">F(θ) = [cos(π·L/λ·cosθ) − cos(π·L/λ)] / sinθ</div>
+    <p class="lede" data-en="From the half-wave dipole to the terminated rhombic: fourteen wire antennas, each with a live pattern calculator, dynamic schematic, and the closed-form or numerical method used to design it. Change the length, the element count or the number of turns and watch the diagram and the radiation pattern follow."
+       data-uk="Від напівхвильового диполя до узгодженого ромба: чотирнадцять дротових антен, кожна з живим калькулятором ДН, динамічною схемою та аналітичним чи чисельним методом розрахунку. Змінюйте довжину, кількість елементів чи витків — і схема з діаграмою напрямленості реагують миттєво.">Fourteen wire antennas…</p>
+  </div>
+</header>
+
+<div class="wrap-wide" id="sections"></div>
+
+<footer class="wrap-wide">
+  <p data-en="Models are teaching-grade: patterns from the thin-wire / array-factor theory named on each card, impedances from the induced-EMF method. Real designs use full-wave NEC/MoM solvers — the method tags point you there."
+     data-uk="Моделі навчального рівня: діаграми — з теорії тонкого проводу / множника решітки, названої на кожній картці; опори — методом наведених ЕРС. Реальні конструкції рахують повнохвильовими розв'язувачами NEC/MoM — мітки методів вказують куди дивитись.">Models are teaching-grade…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script src="js/antenna.js"></script>
+<script src="js/pattern3d.js"></script>
+<script>
+const AL = window.AntennaLab;
+const V = 'var(--teal)', A = 'var(--amber)';
+
+/* ---------- shared schematic helpers ---------------------------------- */
+// isotropic px/cm scale so the λ ruler is physically meaningful
+function scaleFor(maxCm, budgetPx){ return budgetPx / Math.max(maxCm, 0.01); }
+
+// a horizontal wire rod centred at (cx,cy), total length Lpx, feed gap at centre
+function rodH(cx, cy, Lpx, cls){
+  const gap = 5, x0 = cx - Lpx/2, x1 = cx + Lpx/2;
+  return `<line class="${cls}" x1="${x0}" y1="${cy}" x2="${cx-gap}" y2="${cy}"/>`+
+         `<line class="${cls}" x1="${cx+gap}" y1="${cy}" x2="${x1}" y2="${cy}"/>`+
+         `<circle class="schem-node" cx="${cx-gap}" cy="${cy}" r="2"/>`+
+         `<circle class="schem-node" cx="${cx+gap}" cy="${cy}" r="2"/>`;
+}
+// a vertical wire rod from (x,y0) up length Lpx
+function rodV(x, y0, Lpx, cls){
+  return `<line class="${cls}" x1="${x}" y1="${y0}" x2="${x}" y2="${y0-Lpx}"/>`;
+}
+
+/* ====================================================================== */
+/*  ANTENNA DEFINITIONS                                                    */
+/*  Each object → one <section> with a full interactive calculator.        */
+/* ====================================================================== */
+const WIRE = [];
+
+/* ---- 1.1 Dipole ------------------------------------------------------ */
+WIRE.push({
+  id:'dipole', num:'1.1', lvl:2, cat:'dipole',
+  methods:[
+    {id:'induced', en:'Induced-EMF', uk:'Наведені ЕРС',
+     desc:{en:"Closed-form radiation resistance and reactance from the induced-EMF integral over the assumed sinusoidal current — the classic hand method behind the 73 Ω half-wave figure.",
+           uk:"Замкнені формули опору випромінювання й реактансу з інтеграла наведених ЕРС по синусоїдному струму — класичний ручний метод, що дає 73 Ом для напівхвильового."},
+     formula:[{en:"R_r = η/2π·[C+ln(kL)−Ci(kL)+½sin(kL)(Si(2kL)−2Si(kL))+…]",
+               uk:"R_r = η/2π·[C+ln(kL)−Ci(kL)+½sin(kL)(Si(2kL)−2Si(kL))+…]"},
+              {en:"Z_in = (R_r + jX_m) / sin²(kL/2)", uk:"Z_вх = (R_r + jX_m) / sin²(kL/2)"}]},
+    {id:'mom', en:'MoM (thin-wire)', uk:'MoM (тонкий провід)',
+     desc:{en:"The thin-wire integral equation (Pocklington/Hallén) solved numerically — the basis of NEC/NEC2. Here we show the same current-distribution pattern; a full MoM additionally resolves the exact current and mutual coupling.",
+           uk:"Інтегральне рівняння тонкого проводу (Поклінгтона/Галлена), розв'язане чисельно — основа NEC/NEC2. Тут показано ту саму ДН по розподілу струму; повний MoM додатково знаходить точний струм і взаємний зв'язок."},
+     formula:[{en:"F(θ) = [cos(πL/λ·cosθ) − cos(πL/λ)] / sinθ",
+               uk:"F(θ) = [cos(πL/λ·cosθ) − cos(πL/λ)] / sinθ"}]}
+  ],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.3},
+    {id:'L', kind:'range', en:'Length L', uk:'Довжина L', min:0.1, max:1.6, step:0.01, value:0.5,
+     fmt:v=>v.toFixed(2)+' λ'},
+    {id:'a', kind:'range', en:'Wire radius a', uk:'Радіус проводу a', min:0.0002, max:0.02, step:0.0002, value:0.001,
+     fmt:v=>v.toFixed(4)+' λ'}
+  ],
+  desc:{en:"Two collinear conductors fed at the centre. Length in wavelengths sets everything: the pattern narrows and grows sidelobes past 1 λ, and the input impedance sweeps through resonance near 0.48 λ.",
+        uk:"Два колінеарні провідники, що живляться в центрі. Довжина у довжинах хвиль визначає все: за 1 λ ДН звужується й обростає пелюстками, а вхідний опір проходить резонанс біля 0.48 λ."},
+  plot:'full',
+  compute(s){
+    const Llam=s.L, aLam=s.a, lamCm=AL.lambdaOf(s.f*1e9)*100;
+    const axis=th=>AL.dipolePattern(th,Llam);
+    const fnBeam=a=>AL.dipolePattern((90-a)*AL.D2R,Llam); // beam broadside → up
+    const D=AL.directivityAxial(axis);
+    const Z=AL.dipoleZ(Llam,aLam);
+    const samp=AL.sampleHalf(fnBeam,0.25,90);
+    const hp=AL.findHPBW(samp,fnBeam), sl=AL.findFirstSidelobe(samp);
+    // Two projections of a VERTICAL half-wave dipole: the E (vertical) plane
+    // contains the wire, the H (azimuth) plane sees it end-on and is a circle.
+    const px=scaleFor(Llam*lamCm,140), Lpx=Llam*lamCm*px, cx=190, cy=125;
+    let schemE=AL.rulerSVG(40,30,lamCm,px)+AL.CAP_E();
+    schemE+=AL.rodVert(cx,cy,Lpx,'schem-driven');
+    schemE+=AL.dimLineV(cx+14,cy-Lpx/2,cy+Lpx/2,`L = ${Llam.toFixed(2)} λ`);
+    schemE+=`<text class="schem-label" x="${cx}" y="${cy+Lpx/2+20}" text-anchor="middle">${(Llam*lamCm).toFixed(1)} ${AL.unit('cm')}</text>`;
+    schemE+=AL.boresightArrow(cx+88,cy,34,V,'dipE');
+    let schemH=AL.rulerSVG(40,30,lamCm,px)+AL.CAP_H();
+    schemH+=AL.azimuthCircle(cx,cy,58,A);
+    schemH+=AL.conductorEndOn(cx,cy,6);
+    schemH+=AL.boresightArrow(cx+10,cy,44,A,'dipH');
+    schemH+=`<text class="schem-label" x="${cx}" y="${cy+78}" text-anchor="middle">${AL.tr('omnidirectional in azimuth','всенапрямлена за азимутом')}</text>`;
+    const vswrRef=Math.abs((Math.hypot(Z.Rin,Z.Xin)-73)/(Math.hypot(Z.Rin,Z.Xin)+73));
+    const Lres=AL.findRoot(x=>AL.dipoleZ(x,aLam).Xin, 0.30, 0.70);
+    const Lmax=AL.argMax(x=>AL.directivityAxial(th=>AL.dipolePattern(th,x)).lin, 0.4, 1.6, 24);
+    const optima=[];
+    if(Lres) optima.push({id:'L', value:Lres, tag:'e',
+      label:AL.tr(`L \u2248 ${Lres.toFixed(3)} \u03bb \u2014 resonant (X_in = 0)`,
+                  `L \u2248 ${Lres.toFixed(3)} \u03bb \u2014 \u0440\u0435\u0437\u043e\u043d\u0430\u043d\u0441 (X_\u0432\u0445 = 0)`)});
+    optima.push({id:'L', value:Lmax, tag:'h',
+      label:AL.tr(`L \u2248 ${Lmax.toFixed(2)} \u03bb \u2014 maximum directivity`,
+                  `L \u2248 ${Lmax.toFixed(2)} \u03bb \u2014 \u043c\u0430\u043a\u0441\u0438\u043c\u0443\u043c \u0441\u043f\u0440\u044f\u043c\u043e\u0432\u0430\u043d\u043e\u0441\u0442\u0456`)});
+    return {schemE, schemH, fnBeam, optima,
+      meta3d:{lamCm, sizeLam:Llam, sizeLabel:'L = '+Llam.toFixed(2)+' λ', gainDbi:D.dBi},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'), v:D.dBi.toFixed(2)+' '+AL.unit('dBi')},
+        {k:'HPBW', v:AL.fmtDeg(hp)},
+        {k:AL.tr('First SLL','1-а бок. пелюстка'), v:AL.fmtDb(sl.level)},
+        {k:AL.tr('Z_in','Z_вх'), v:Z.Rin.toFixed(0)+(Z.Xin>=0?'+':'−')+'j'+Math.abs(Z.Xin).toFixed(0)+' '+AL.unit('ohm')}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Dipole_antenna',label:'Dipole antenna'}, uk:{href:'https://uk.wikipedia.org/wiki/Диполь',label:'Диполь'}},
+    {tag:'book', en:{href:'https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061',label:'Balanis, Antenna Theory'}},
+    {tag:'code', en:{href:'https://www.nec2.org/',label:'NEC-2 thin-wire MoM'}}
+  ],
+  strength:{en:"The reference antenna: 2.15 dBi, 73 Ω at a half wavelength. Real dipoles need a balun (the feed is balanced) and shorten ~2–5 % for resonance because of the wire radius (end effect).",
+            uk:"Еталонна антена: 2.15 дБі, 73 Ом на пів-хвилі. Реальні диполі потребують балуна (живлення симетричне) й коротшають на ~2–5 % для резонансу через радіус проводу (крайовий ефект)."},
+  xrefs:[['#folded-dipole','Folded dipole','Складений диполь'],['#monopole','Monopole','Монополь'],['#yagi','Yagi-Uda','Уда-Яги']]
+});
+
+/* ---- 1.2 Folded dipole ---------------------------------------------- */
+WIRE.push({
+  id:'folded-dipole', num:'1.2', lvl:2,
+  desc:{en:"A half-wave dipole closed into a narrow loop. The two parallel conductors carry equal in-phase currents, stepping the feed impedance up by the square of the current-division ratio — 4× for equal-radius conductors, giving ≈ 292 Ω.",
+        uk:"Напівхвильовий диполь, замкнений у вузьку петлю. Два паралельні провідники несуть рівні синфазні струми, підвищуючи вхідний опір у квадрат відношення поділу струму — у 4 рази для однакових провідників, тобто ≈ 292 Ом."},
+  methods:[{id:'tl', en:'Transmission-line model', uk:'Модель лінії передачі',
+     desc:{en:"The folded dipole = a radiating (antenna) mode superposed on a non-radiating transmission-line mode. The impedance step is (1+α)² where α is the current-division ratio set by the two conductor radii.",
+           uk:"Складений диполь = випромінювальна (антенна) мода плюс невипромінювальна мода лінії передачі. Крок опору = (1+α)², де α — відношення поділу струму, задане радіусами двох провідників."},
+     formula:[{en:"Z_in ≈ (1+α)²·Z_dipole,  α = ln(D/a₂)/ln(D/a₁)", uk:"Z_вх ≈ (1+α)²·Z_диполя,  α = ln(D/a₂)/ln(D/a₁)"},
+              {en:"equal radii → Z_in ≈ 4·73 ≈ 292 Ω", uk:"однакові радіуси → Z_вх ≈ 4·73 ≈ 292 Ом"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.1},
+    {id:'ratio', kind:'range', en:'Radius ratio a₁/a₂', uk:'Відношення a₁/a₂', min:0.2, max:5, step:0.1, value:1,
+     fmt:v=>v.toFixed(1)},
+    {id:'D', kind:'range', en:'Conductor spacing D', uk:'Відстань D', min:0.005, max:0.05, step:0.001, value:0.02,
+     fmt:v=>v.toFixed(3)+' λ'}
+  ],
+  plot:'full',
+  compute(s){
+    const lamCm=AL.lambdaOf(s.f*1e9)*100;
+    const fnBeam=a=>AL.dipolePattern((90-a)*AL.D2R,0.5);
+    const axis=th=>AL.dipolePattern(th,0.5);
+    const D=AL.directivityAxial(axis);
+    // current-division ratio from conductor radii (a1 driven, a2 folded)
+    const a1=0.001, a2=a1*s.ratio, Dd=s.D;
+    const alpha=Math.log(Dd/a2)/Math.log(Dd/a1);
+    const step=Math.pow(1+alpha,2);
+    const Zin=step*73.1;
+    const px=scaleFor(0.5*lamCm,220), Lpx=0.5*lamCm*px, cx=200, cy=120, gap=8;
+    // upright narrow loop: the two conductors are side by side in plan view
+    let schemE=AL.rulerSVG(40,30,lamCm,px)+AL.CAP_E();
+    schemE+=`<path class="schem-driven" d="M ${cx-gap},${cy-Lpx/2} L ${cx-gap},${cy+Lpx/2} Q ${cx},${cy+Lpx/2+7} ${cx+gap},${cy+Lpx/2} L ${cx+gap},${cy-Lpx/2} Q ${cx},${cy-Lpx/2-7} ${cx-gap},${cy-Lpx/2} Z"/>`;
+    schemE+=`<circle class="schem-node" cx="${cx-gap}" cy="${cy-3}" r="2"/><circle class="schem-node" cx="${cx-gap}" cy="${cy+3}" r="2"/>`;
+    schemE+=AL.dimLineV(cx+18,cy-Lpx/2,cy+Lpx/2,`L ≈ 0.50 λ`);
+    schemE+=`<text class="schem-label" x="${cx}" y="${cy+Lpx/2+22}" text-anchor="middle">${(0.5*lamCm).toFixed(1)} ${AL.unit('cm')}</text>`;
+    schemE+=AL.boresightArrow(cx+88,cy,30,V,'fdE');
+    let schemH=AL.rulerSVG(40,30,lamCm,px)+AL.CAP_H();
+    schemH+=AL.azimuthCircle(cx,cy,58,A);
+    schemH+=AL.conductorEndOn(cx-7,cy,5);
+    schemH+=AL.conductorEndOn(cx+7,cy,5);
+    schemH+=`<text class="schem-label" x="${cx}" y="${cy+24}" text-anchor="middle">D = ${(s.D*100).toFixed(1)} ${AL.unit('cm')}</text>`;
+    schemH+=AL.boresightArrow(cx+14,cy,42,A,'fdH');
+    schemH+=`<text class="schem-label" x="${cx}" y="${cy+78}" text-anchor="middle">${AL.tr('omnidirectional in azimuth','всенапрямлена за азимутом')}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm, sizeLam:0.5, sizeLabel:'L ≈ 0.50 λ', gainDbi:D.dBi},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'), v:D.dBi.toFixed(2)+' '+AL.unit('dBi')},
+        {k:AL.tr('Impedance step','Крок опору'), v:step.toFixed(2)+'×'},
+        {k:AL.tr('Z_in','Z_вх'), v:Zin.toFixed(0)+' '+AL.unit('ohm')},
+        {k:AL.tr('Match to 300 Ω','Узгодж. з 300 Ом'), v:(20*Math.log10(Math.abs((Zin-300)/(Zin+300))+1e-6)).toFixed(1)+' '+AL.unit('dB')}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Dipole_antenna#Folded_dipole',label:'Folded dipole'}},
+    {tag:'book', en:{href:'https://www.arrl.org/arrl-antenna-book',label:'ARRL Antenna Book'}}
+  ],
+  strength:{en:"Four-times the dipole impedance matches 300 Ω twin-lead directly and widens the bandwidth; the folded structure also DC-grounds the element. The classic FM/TV Yagi driven element.",
+            uk:"Учетверо більший опір напряму узгоджується з 300-омною стрічкою й розширює смугу; складена структура ще й заземлює елемент по постійному струму. Класичний активний елемент FM/ТБ Yagi."},
+  xrefs:[['#dipole','Dipole','Диполь'],['#yagi','Yagi-Uda','Уда-Яги'],['aperture.html#slot','Slot (Babinet)','Щілина (Бабіне)']]
+});
+
+/* ---- 1.3 Monopole ---------------------------------------------------- */
+WIRE.push({
+  id:'monopole', num:'1.3', lvl:2,
+  desc:{en:"A quarter-wave rod over a ground plane. Image theory replaces the ground with the mirror half of a dipole: the pattern is the upper half of the dipole doughnut, the directivity doubles (+3 dB) and the radiation resistance halves (≈ 36 Ω).",
+        uk:"Чвертьхвильовий штир над площиною землі. Теорія зображень замінює землю дзеркальною половиною диполя: ДН — верхня половина диполевого «бублика», спрямованість подвоюється (+3 дБ), а опір випромінювання вдвічі менший (≈ 36 Ом)."},
+  methods:[{id:'image', en:'Image theory + induced-EMF', uk:'Зображення + наведені ЕРС',
+     desc:{en:"An ideal infinite ground plane is modelled by an image monopole below it. Above the plane the fields are identical to a dipole of twice the length; below, they are zero — so the monopole radiates the same power into half the space.",
+           uk:"Ідеальна нескінченна земля моделюється дзеркальним монополем під нею. Над площиною поля тотожні диполю подвійної довжини; під нею — нулю, тож монополь випромінює ту саму потужність у половину простору."},
+     formula:[{en:"D_monopole = 2·D_dipole,  R_r,mono = ½·R_r,dipole ≈ 36 Ω",
+               uk:"D_монополь = 2·D_диполь,  R_r,моно = ½·R_r,диполь ≈ 36 Ом"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.9},
+    {id:'H', kind:'range', en:'Height H', uk:'Висота H', min:0.05, max:0.8, step:0.005, value:0.25,
+     fmt:v=>v.toFixed(3)+' λ'},
+    {id:'a', kind:'range', en:'Wire radius a', uk:'Радіус a', min:0.0002, max:0.02, step:0.0002, value:0.001,
+     fmt:v=>v.toFixed(4)+' λ'}
+  ],
+  plot:'full',
+  compute(s){
+    const Llam=2*s.H, lamCm=AL.lambdaOf(s.f*1e9)*100;
+    const axis=th=>AL.dipolePattern(th,Llam);
+    // upper hemisphere only: pattern zero for a>90 (below ground). beam at horizon? For a monopole the max is along the ground plane (a=90). Orient plot: 0=up(zenith), lobe toward horizon.
+    const fnBeam=a=>{ const ae=a%360; if(ae>90&&ae<270) return 0; return AL.dipolePattern(a*AL.D2R,Llam); };
+    const D=AL.directivityAxial(axis); const Dm=D.dBi+3.01;
+    const Z=AL.dipoleZ(Llam,s.a); const Rin=Z.Rin/2, Xin=Z.Xin/2;
+    const px=scaleFor(s.H*lamCm,150), Hpx=s.H*lamCm*px, gx=200, gy=200;
+    let schemE=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_E();
+    schemE+=AL.groundHatch(gx-92,gx+92,gy);
+    schemE+=rodV(gx,gy,Hpx,'schem-driven');
+    schemE+=`<circle class="schem-node" cx="${gx}" cy="${gy}" r="2.5"/>`;
+    schemE+=AL.dimLineV(gx+16,gy-Hpx,gy,`H = ${(s.H*lamCm).toFixed(1)} ${AL.unit('cm')} = ${s.H.toFixed(2)} λ`);
+    schemE+=`<text class="schem-label" x="${gx+50}" y="${gy+22}">${AL.tr('ground plane','площина землі')}</text>`;
+    schemE+=AL.boresightArrow(gx+96,gy-Hpx*0.15,30,V,'monE');
+    // plan: the whip is end-on at the centre of the ground plane
+    const gyH=125;
+    let schemH=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_H();
+    schemH+=`<circle class="schem-fill" cx="${gx}" cy="${gyH}" r="72"/>`;
+    schemH+=AL.azimuthCircle(gx,gyH,58,A);
+    schemH+=AL.conductorEndOn(gx,gyH,6);
+    schemH+=AL.boresightArrow(gx+10,gyH,44,A,'monH');
+    schemH+=`<text class="schem-label" x="${gx}" y="${gyH+88}" text-anchor="middle">${AL.tr('ground plane · omni in azimuth','площина землі · всенапрямлена')}</text>`;
+    const Hres=AL.findRoot(x=>AL.dipoleZ(2*x,s.a).Xin, 0.15, 0.35);
+    const optima=Hres?[{id:'H', value:Hres, tag:'e',
+      label:AL.tr(`H \u2248 ${Hres.toFixed(3)} \u03bb \u2014 resonant (X_in = 0)`,
+                  `H \u2248 ${Hres.toFixed(3)} \u03bb \u2014 \u0440\u0435\u0437\u043e\u043d\u0430\u043d\u0441 (X_\u0432\u0445 = 0)`)}]:null;
+    return {schemE, schemH, fnBeam, optima,
+      meta3d:{lamCm, sizeLam:s.H, sizeLabel:'H = '+s.H.toFixed(2)+' λ', gainDbi:Dm},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'), v:Dm.toFixed(2)+' '+AL.unit('dBi')},
+        {k:AL.tr('R_r (input)','R_r (вхід)'), v:Rin.toFixed(0)+' '+AL.unit('ohm')},
+        {k:AL.tr('X_in','X_вх'), v:(Xin>=0?'+':'−')+Math.abs(Xin).toFixed(0)+' '+AL.unit('ohm')},
+        {k:AL.tr('vs 50 Ω','до 50 Ом'), v:(20*Math.log10(Math.abs((Math.hypot(Rin,Xin)-50)/(Math.hypot(Rin,Xin)+50))+1e-6)).toFixed(1)+' '+AL.unit('dB')}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Monopole_antenna',label:'Monopole antenna'}, uk:{href:'https://uk.wikipedia.org/wiki/Штирова_антена',label:'Штирова антена'}},
+    {tag:'book', en:{href:'https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061',label:'Balanis, ch. 4'}}
+  ],
+  strength:{en:"36 Ω is a decent match to 50 Ω coax without a balun — hence every whip, car and base-station rod. A finite/imperfect ground tilts the pattern up and raises loss; radial or roof counterpoises approximate the ideal plane.",
+            uk:"36 Ом — прийнятне узгодження з 50-омним коаксіалом без балуна, тож усі штирі та автомобільні антени. Скінченна/недосконала земля піднімає ДН угору й додає втрати; радіальні противаги наближують ідеальну площину."},
+  xrefs:[['#dipole','Dipole','Диполь'],['#rubber-duck','Rubber duck','Гумова качечка'],['#discone','Discone','Дискоконусна']]
+});
+
+/* ---- 1.4 IFA / ILA --------------------------------------------------- */
+WIRE.push({
+  id:'ifa', num:'1.4', lvl:3,
+  desc:{en:"A monopole bent over parallel to the ground plane. The horizontal arm adds top-loading so the antenna resonates when the total unfolded length ≈ λ/4, at a fraction of the height. The shorting pin and feed pin position tune resonance and match.",
+        uk:"Монополь, зігнутий паралельно землі. Горизонтальне плече дає верхнє навантаження, тож антена резонує, коли повна розгорнута довжина ≈ λ/4, за частки висоти. Положення закорочувального й живильного штирів налаштовує резонанс і узгодження."},
+  methods:[{id:'fem', en:'Resonant model (FEM-calibrated)', uk:'Резонансна модель (калібр. FEM)',
+     desc:{en:"The bent near-field region defies simple closed forms, so FEM/MoM is used in practice. This calculator uses the standard quarter-wave resonance condition on the unfolded length and an empirical bandwidth from the enclosed volume.",
+           uk:"Зігнута ближньопольова ділянка не має простих замкнених форм, тож на практиці беруть FEM/MoM. Цей калькулятор використовує стандартну умову чвертьхвильового резонансу по розгорнутій довжині та емпіричну смугу від об'єму."},
+     formula:[{en:"f_res ≈ c / [4·(L_h + H)]   (unfolded quarter-wave)",
+               uk:"f_рез ≈ c / [4·(L_г + H)]   (розгорнута чверть хвилі)"},
+              {en:"BW ∝ antenna volume / λ³   (Chu limit trend)", uk:"Смуга ∝ об'єм / λ³   (тренд межі Чу)"}]}],
+  controls:[
+    {id:'Lh', kind:'range', en:'Horizontal arm L_h', uk:'Горизонт. плече L_г', min:5, max:120, step:1, value:40,
+     fmt:v=>v.toFixed(0)+' '+AL.unit('mm')},
+    {id:'H', kind:'range', en:'Height H', uk:'Висота H', min:2, max:30, step:0.5, value:8,
+     fmt:v=>v.toFixed(1)+' '+AL.unit('mm')},
+    {id:'feed', kind:'range', en:'Feed offset', uk:'Зсув живлення', min:0.05, max:0.6, step:0.01, value:0.2,
+     fmt:v=>(v*100).toFixed(0)+' %'}
+  ],
+  plot:'full',
+  compute(s){
+    const totalMm=s.Lh+s.H, fresHz=AL.c/(4*totalMm/1000), fres=fresHz/1e9;
+    const lamMm=AL.c/fresHz*1000;
+    // pattern ~ tilted monopole/dipole ~0.25λ effective; roughly omni figure-8, tilted
+    const fnBeam=a=>0.35+0.65*Math.abs(AL.dipolePattern((90-a*0.75)*AL.D2R,0.4));
+    // bandwidth heuristic: match quality vs feed offset
+    const vol=s.Lh*s.H*1.0, bwPct=AL.clamp(vol/ (lamMm*lamMm) *120, 0.8, 12);
+    const matchDb=-3-14*Math.exp(-Math.pow((s.feed-0.22)/0.12,2));
+    const px=6, cx=140, cy=150;
+    const Lhpx=s.Lh*px/10*3, Hpx=s.H*px/10*3;
+    const pxL=Math.min(150/Math.max(totalMm,1),3.2)*10/10, lamCmI=lamMm/10;
+    const fx=cx+s.feed*Lhpx;
+    let schemE=AL.rulerSVG(40,28,lamCmI,180/lamCmI/6)+AL.CAP_E();
+    schemE+=AL.groundHatch(cx-24,cx+Lhpx+44,cy);
+    schemE+=`<path class="schem-driven" d="M ${cx},${cy} L ${cx},${cy-Hpx} L ${cx+Lhpx},${cy-Hpx}"/>`;
+    schemE+=`<line class="schem-driven" x1="${fx}" y1="${cy-Hpx}" x2="${fx}" y2="${cy}"/>`;
+    schemE+=`<circle class="schem-node" cx="${fx}" cy="${cy}" r="2.5"/>`;
+    schemE+=`<text class="schem-label" x="${cx-4}" y="${cy-Hpx-6}">${AL.tr('short','КЗ')}</text>`;
+    schemE+=`<text class="schem-label" x="${fx+3}" y="${cy-6}">${AL.tr('feed','живл.')}</text>`;
+    schemE+=AL.dimLineV(cx-16,cy-Hpx,cy,`H`);
+    schemE+=AL.dimLineH(cx,cx+Lhpx,cy+30,`L_h = ${s.Lh.toFixed(0)} ${AL.unit('mm')}`);
+    // plan: the horizontal arm lies over the ground plane, pins seen end-on
+    const cyH=130;
+    let schemH=AL.rulerSVG(40,28,lamCmI,180/lamCmI/6)+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="${cx-34}" y="${cyH-46}" width="${Lhpx+78}" height="92" rx="4"/>`;
+    schemH+=`<line class="schem-driven" x1="${cx}" y1="${cyH}" x2="${cx+Lhpx}" y2="${cyH}"/>`;
+    schemH+=AL.conductorEndOn(cx,cyH,5);
+    schemH+=AL.conductorEndOn(fx,cyH,5);
+    schemH+=`<text class="schem-label" x="${cx-6}" y="${cyH-12}">${AL.tr('short','КЗ')}</text>`;
+    schemH+=`<text class="schem-label" x="${fx+4}" y="${cyH-12}">${AL.tr('feed','живл.')}</text>`;
+    schemH+=`<text class="schem-label" x="${cx+Lhpx+8}" y="${cyH+4}">${AL.tr('arm','плече')}</text>`;
+    schemH+=`<text class="schem-label" x="${cx-30}" y="${cyH+60}">${AL.tr('ground plane','площина землі')}</text>`;
+    // the match model peaks at a feed tap 22 % along the arm
+    const optima=[{id:'feed', value:0.22, tag:'e',
+      label:AL.tr('feed tap \u2248 22 % of the arm \u2014 best match',
+                  '\u0432\u0456\u0434\u0432\u0456\u0434 \u2248 22 % \u043f\u043b\u0435\u0447\u0430 \u2014 \u043d\u0430\u0439\u043a\u0440\u0430\u0449\u0435 \u0443\u0437\u0433\u043e\u0434\u0436\u0435\u043d\u043d\u044f')}];
+    return {schemE, schemH, fnBeam, optima,
+      meta3d:{lamCm:lamMm/10, sizeLam:totalMm/lamMm, sizeLabel:'L_h+H = '+(totalMm/lamMm).toFixed(3)+' λ'},
+      readouts:[
+        {k:AL.tr('Resonance f','Резонанс f'), v:fres.toFixed(2)+' '+AL.unit('GHz')},
+        {k:'λ/4', v:(lamMm/4).toFixed(1)+' '+AL.unit('mm')},
+        {k:AL.tr('Bandwidth','Смуга'), v:'≈ '+bwPct.toFixed(1)+' %'},
+        {k:AL.tr('Match |S11|','Узгодж. |S11|'), v:matchDb.toFixed(1)+' '+AL.unit('dB')}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Inverted-F_antenna',label:'Inverted-F antenna'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1109/MAP.2003.1232163',label:'IFA/PIFA review (IEEE APM)'}}
+  ],
+  strength:{en:"Low profile with a decent 50 Ω match makes the IFA the default embedded antenna for ISM modules. The price is narrow bandwidth (a few percent) — the fundamental Chu-limit penalty of a small antenna.",
+            uk:"Малий профіль із прийнятним узгодженням 50 Ом робить IFA типовою вбудованою антеною ISM-модулів. Ціна — вузька смуга (кілька відсотків), фундаментальна плата за малу антену (межа Чу)."},
+  xrefs:[['#pifa','PIFA','PIFA'],['#monopole','Monopole','Монополь'],['printed.html#patch','Patch','Патч']]
+});
+
+/* ---- 1.5 PIFA -------------------------------------------------------- */
+WIRE.push({
+  id:'pifa', num:'1.5', lvl:3,
+  desc:{en:"The planar Inverted-F — a shorted rectangular patch. A shorting wall lets the patch resonate at roughly half the length of an ordinary λ/2 patch, and a dielectric substrate shrinks it further. The staple handset antenna.",
+        uk:"Планарна обернена F — закорочений прямокутний патч. Закорочувальна стінка дає резонанс при вдвічі меншій довжині, ніж звичайний λ/2 патч, а діелектрична підкладка стискає його ще. Основна антена мобільних телефонів."},
+  methods:[{id:'cavity', en:'Cavity model', uk:'Резонаторна модель',
+     desc:{en:"A first-order patch approximation treats the volume under the patch as a resonant cavity. For a shorted (PIFA) patch the resonance condition combines the length and width into an effective quarter-wave; the dielectric constant scales it.",
+           uk:"Наближення першого порядку розглядає об'єм під патчем як резонатор. Для закороченого (PIFA) патча умова резонансу поєднує довжину й ширину в ефективну чверть хвилі; діелектрична стала масштабує її."},
+     formula:[{en:"f_res ≈ c / [4·(L + W)·√ε_r]   (shorted patch)",
+               uk:"f_рез ≈ c / [4·(L + W)·√ε_r]   (закорочений патч)"}]}],
+  controls:[
+    {id:'L', kind:'range', en:'Patch length L', uk:'Довжина L', min:5, max:60, step:0.5, value:25, fmt:v=>v.toFixed(1)+' '+AL.unit('mm')},
+    {id:'W', kind:'range', en:'Patch width W', uk:'Ширина W', min:2, max:40, step:0.5, value:10, fmt:v=>v.toFixed(1)+' '+AL.unit('mm')},
+    {id:'h', kind:'range', en:'Height h', uk:'Висота h', min:1, max:12, step:0.5, value:6, fmt:v=>v.toFixed(1)+' '+AL.unit('mm')},
+    {id:'er', kind:'range', en:'Substrate ε_r', uk:'Підкладка ε_r', min:1, max:10, step:0.1, value:1, fmt:v=>v.toFixed(1)}
+  ],
+  plot:'full',
+  compute(s){
+    const fresHz=AL.c/(4*(s.L+s.W)/1000*Math.sqrt(s.er)), fres=fresHz/1e9;
+    const fnBeam=a=>0.4+0.6*Math.abs(Math.cos((a)*AL.D2R*0.5)); // hemispherical-ish
+    const bwPct=AL.clamp(6*s.h/ (s.L) *Math.sqrt(1/s.er)*3, 1, 15);
+    const px=4, cx=150, cy=150, Lpx=s.L*px, Wpx=Math.max(s.W*px*0.6,14), hpx=s.h*px;
+    const lamCmP=AL.c/fresHz*100;
+    let schemE=AL.rulerSVG(40,28,lamCmP,px*10)+AL.CAP_E();
+    schemE+=`<rect class="schem-fill" x="${cx-Lpx/2}" y="${cy-hpx}" width="${Lpx}" height="6"/>`;
+    schemE+=AL.groundHatch(cx-Lpx/2-14,cx+Lpx/2+14,cy);
+    schemE+=`<line class="schem-driven" x1="${cx-Lpx/2}" y1="${cy-hpx}" x2="${cx-Lpx/2}" y2="${cy}"/>`;
+    schemE+=`<line class="schem-driven" x1="${cx-Lpx/2+Lpx*0.3}" y1="${cy-hpx}" x2="${cx-Lpx/2+Lpx*0.3}" y2="${cy}"/>`;
+    schemE+=`<circle class="schem-node" cx="${cx-Lpx/2+Lpx*0.3}" cy="${cy}" r="2.5"/>`;
+    schemE+=`<text class="schem-label" x="${cx-Lpx/2-4}" y="${cy-hpx-6}">${AL.tr('short wall','КЗ стінка')}</text>`;
+    schemE+=AL.dimLineH(cx-Lpx/2,cx+Lpx/2,cy+28,`L = ${s.L.toFixed(1)} ${AL.unit('mm')}`);
+    schemE+=AL.dimLineV(cx-Lpx/2-16,cy-hpx,cy,`h`);
+    // plan: the patch face, L × W, with the shorting wall along one edge
+    const Wpx2=Math.max(s.W*px,16), cyH=120;
+    let schemH=AL.rulerSVG(40,28,lamCmP,px*10)+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="${cx-Lpx/2}" y="${cyH-Wpx2/2}" width="${Lpx}" height="${Wpx2}"/>`;
+    schemH+=`<rect x="${cx-Lpx/2}" y="${cyH-Wpx2/2}" width="${Lpx}" height="${Wpx2}" fill="none" stroke="var(--teal)" stroke-width="2"/>`;
+    schemH+=`<line class="schem-driven" x1="${cx-Lpx/2}" y1="${cyH-Wpx2/2}" x2="${cx-Lpx/2}" y2="${cyH+Wpx2/2}" stroke-width="4"/>`;
+    schemH+=AL.conductorEndOn(cx-Lpx/2+Lpx*0.3,cyH,5);
+    schemH+=`<text class="schem-label" x="${cx-Lpx/2-4}" y="${cyH-Wpx2/2-6}">${AL.tr('short wall','КЗ стінка')}</text>`;
+    schemH+=AL.dimLineH(cx-Lpx/2,cx+Lpx/2,cyH+Wpx2/2+22,`L = ${s.L.toFixed(1)} ${AL.unit('mm')}`);
+    schemH+=AL.dimLineV(cx+Lpx/2+14,cyH-Wpx2/2,cyH+Wpx2/2,`W = ${s.W.toFixed(1)}`);
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.c/fresHz*100, sizeLam:s.L/(AL.c/fresHz*1000), sizeLabel:'L = '+(s.L/(AL.c/fresHz*1000)).toFixed(3)+' λ'},
+      readouts:[
+        {k:AL.tr('Resonance f','Резонанс f'), v:fres.toFixed(2)+' '+AL.unit('GHz')},
+        {k:AL.tr('Size vs λ/2 patch','Розмір vs λ/2'), v:'≈ 50 %'},
+        {k:AL.tr('Bandwidth','Смуга'), v:'≈ '+bwPct.toFixed(1)+' %'},
+        {k:AL.tr('Directivity','Спрямованість'), v:'≈ 4–6 '+AL.unit('dBi')}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Planar_inverted-F_antenna',label:'PIFA'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1109/MAP.2003.1232163',label:'IFA/PIFA review'}}
+  ],
+  strength:{en:"Compact, planar and easily multiband (add slots/branches). Efficiency and bandwidth trade directly against height h and ground clearance — the handset designer's constant fight. Raising ε_r shrinks it but narrows the band.",
+            uk:"Компактна, планарна, легко багатодіапазонна (додай слоти/гілки). ККД і смуга прямо конкурують із висотою h та зазором до землі — вічна боротьба розробника телефонів. Вищий ε_r стискає її, але звужує смугу."},
+  xrefs:[['#ifa','IFA','IFA'],['printed.html#patch','Patch','Патч'],['printed.html#meander','Meander line','Меандрова']]
+});
+
+/* ---- 1.6 Loop -------------------------------------------------------- */
+WIRE.push({
+  id:'loop', num:'1.6', lvl:1,
+  methods:[
+    {id:'small', en:'Small loop (Biot–Savart)', uk:'Мала рамка (Біо–Савара)',
+     desc:{en:"When the circumference is a small fraction of λ the current is uniform and the loop is a magnetic dipole: pattern ∝ sinθ (a doughnut around the loop axis), directivity 1.5, and a radiation resistance that scales as the fourth power of circumference — tiny, so the loop is dominated by ohmic loss.",
+           uk:"Коли периметр — мала частка λ, струм рівномірний і рамка є магнітним диполем: ДН ∝ sinθ («бублик» навколо осі), спрямованість 1.5, а опір випромінювання росте як четвертий степінь периметра — крихітний, тож переважають омічні втрати."},
+     formula:[{en:"R_r = 20π²·N²·(C/λ)⁴ Ω   (C = circumference)",
+               uk:"R_r = 20π²·N²·(C/λ)⁴ Ом   (C = периметр)"},
+              {en:"F(θ) = sinθ,   D = 1.5 (1.76 dBi)", uk:"F(θ) = sinθ,   D = 1.5 (1.76 дБі)"}]},
+    {id:'resonant', en:'Resonant loop (C ≈ 1 λ)', uk:'Резонансна рамка (C ≈ 1 λ)',
+     desc:{en:"When the circumference approaches one wavelength the current is no longer uniform, the pattern maximum swings onto the loop axis, the radiation resistance rises to ≈ 100 Ω and directivity reaches ≈ 3.4 dBi — the full-wave 'quad' loop.",
+           uk:"Коли периметр наближається до довжини хвилі, струм уже нерівномірний, максимум ДН переходить на вісь рамки, опір випромінювання зростає до ≈ 100 Ом, а спрямованість сягає ≈ 3.4 дБі — повнохвильова рамка «квад»."},
+     formula:[{en:"C ≈ 1 λ:  R_r ≈ 100 Ω,  D ≈ 3.4 dBi,  max on axis",
+               uk:"C ≈ 1 λ:  R_r ≈ 100 Ом,  D ≈ 3.4 дБі,  макс. на осі"}]}
+  ],
+  desc:{en:"A closed conductor loop couples to the magnetic field. Its behaviour changes completely between the electrically-small regime (NFC, RFID, AM) and the resonant full-wave regime (quad).",
+        uk:"Замкнутий контур зв'язується з магнітним полем. Його поведінка цілком різна в електрично-малому режимі (NFC, RFID, AM) та резонансному повнохвильовому (квад)."},
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.014},
+    {id:'C', kind:'range', en:'Circumference C', uk:'Периметр C', min:0.02, max:1.2, step:0.01, value:0.1, fmt:v=>v.toFixed(2)+' λ'},
+    {id:'N', kind:'range', en:'Turns N', uk:'Витків N', min:1, max:30, step:1, value:1, fmt:v=>v.toFixed(0)}
+  ],
+  plot:'full',
+  compute(s, method){
+    const lamCm=AL.lambdaOf(s.f*1e9)*100, radLam=s.C/(2*Math.PI);
+    let fnBeam, Rr, Dd;
+    if(method==='resonant'){
+      // full-wave loop: max on axis, pattern narrower; approx by cos-ish lobe on axis
+      fnBeam=a=>Math.pow(Math.abs(Math.cos(a*AL.D2R)),1.3)*0.85+0.15;
+      Rr=100*Math.pow(s.C,0); Dd=3.4;
+    } else {
+      fnBeam=a=>AL.smallLoopPattern((90-a)*AL.D2R); // sinθ doughnut, axis vertical
+      Rr=20*Math.PI*Math.PI*s.N*s.N*Math.pow(s.C,4); Dd=1.76;
+    }
+    const px=scaleFor(2*radLam*lamCm,120), rpx=radLam*lamCm*px, cx=200, cy=125;
+    // The loop lies HORIZONTAL (axis vertical) — that is what makes the
+    // azimuth pattern omnidirectional. Edge-on from the side, a circle in plan.
+    let schemE=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_E();
+    for(let t=0;t<Math.min(s.N,6);t++)
+      schemE+=`<line class="schem-driven" x1="${cx-rpx}" y1="${cy+t*2.4}" x2="${cx+rpx}" y2="${cy+t*2.4}"/>`;
+    schemE+=`<line class="schem-dim" x1="${cx}" y1="${cy-52}" x2="${cx}" y2="${cy+40}" stroke-dasharray="3,3"/>`;
+    schemE+=`<text class="schem-label" x="${cx+4}" y="${cy-54}">${AL.tr('loop axis (null)','вісь рамки (нуль)')}</text>`;
+    schemE+=AL.boresightArrow(cx+rpx+12,cy,30,V,'loopE');
+    schemE+=AL.dimLineH(cx-rpx,cx+rpx,cy+40,`⌀ = ${(2*radLam*lamCm).toFixed(1)} ${AL.unit('cm')}`);
+    let schemH=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_H();
+    schemH+=AL.azimuthCircle(cx,cy,Math.max(rpx+26,50),A);
+    for(let t=0;t<Math.min(s.N,6);t++)
+      schemH+=`<circle class="schem-driven" cx="${cx}" cy="${cy}" r="${Math.max(rpx-t*1.6,1)}" fill="none"/>`;
+    schemH+=`<circle class="schem-node" cx="${cx-4}" cy="${cy+rpx}" r="2"/><circle class="schem-node" cx="${cx+4}" cy="${cy+rpx}" r="2"/>`;
+    schemH+=`<text class="schem-label" x="${cx}" y="${cy+rpx+40}" text-anchor="middle">C = ${(s.C*lamCm).toFixed(1)} ${AL.unit('cm')} = ${s.C.toFixed(2)} λ</text>`;
+    const optima = (method==='resonant')
+      ? [{id:'C', value:1.0, tag:'e',
+          label:AL.tr('C = 1.00 \u03bb \u2014 full-wave resonance',
+                      'C = 1.00 \u03bb \u2014 \u043f\u043e\u0432\u043d\u043e\u0445\u0432\u0438\u043b\u044c\u043e\u0432\u0438\u0439 \u0440\u0435\u0437\u043e\u043d\u0430\u043d\u0441')}]
+      : [{id:'C', value:0.1, tag:'h',
+          label:AL.tr('C \u2272 0.10 \u03bb \u2014 upper limit of the small-loop model',
+                      'C \u2272 0.10 \u03bb \u2014 \u043c\u0435\u0436\u0430 \u043c\u043e\u0434\u0435\u043b\u0456 \u043c\u0430\u043b\u043e\u0457 \u0440\u0430\u043c\u043a\u0438')}];
+    return {schemE, schemH, fnBeam, optima, hplane: method==='resonant'?'same':'omni',
+      meta3d:{lamCm, sizeLam:s.C, sizeLabel:'C = '+s.C.toFixed(2)+' λ', gainDbi:Dd},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'), v:Dd.toFixed(2)+' '+AL.unit('dBi')},
+        {k:AL.tr('R_rad','R_випр'), v:(Rr<0.01?Rr.toExponential(1):Rr.toFixed(Rr<10?2:0))+' '+AL.unit('ohm')},
+        {k:AL.tr('Regime','Режим'), v:method==='resonant'?AL.tr('full-wave','повнохвильова'):AL.tr('magnetic dipole','магн. диполь')},
+        {k:AL.tr('Turns N','Витків N'), v:s.N.toFixed(0)}
+      ], enable:{N:method!=='resonant'}};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Loop_antenna',label:'Loop antenna'}, uk:{href:'https://uk.wikipedia.org/wiki/Рамкова_антена',label:'Рамкова антена'}},
+    {tag:'iso', en:{href:'https://www.iso.org/standard/73599.html',label:'ISO/IEC 14443 (NFC)'}}
+  ],
+  strength:{en:"The tiny radiation resistance (µΩ–mΩ) makes small loops inefficient radiators but excellent, hum-rejecting receive antennas and the basis of all near-field NFC/RFID coupling. Multiple turns multiply R_r by N².",
+            uk:"Крихітний опір випромінювання (мкОм–мОм) робить малі рамки неефективними випромінювачами, але чудовими приймальними антенами та основою всього ближньопольового зв'язку NFC/RFID. Кілька витків множать R_r на N²."},
+  xrefs:[['rfid.html#nfc-loop','NFC loop','NFC-рамка'],['#helical','Helical','Гвинтова'],['#dipole','Dipole','Диполь']]
+});
+
+/* ---- 1.7 Helical ----------------------------------------------------- */
+WIRE.push({
+  id:'helical', num:'1.7', lvl:2,
+  methods:[
+    {id:'axial', en:'Axial mode (Kraus)', uk:'Осьовий режим (Крауса)',
+     desc:{en:"When the circumference is about one wavelength the helix radiates a directional, circularly-polarised endfire beam along its axis. Kraus's traveling-wave formulas give gain, beamwidth and axial ratio directly from the number of turns and the pitch.",
+           uk:"Коли периметр ≈ одна довжина хвилі, спіраль випромінює спрямований осьовий промінь колової поляризації вздовж осі. Формули біжучої хвилі Крауса дають підсилення, ширину променя та осьове відношення прямо з числа витків і кроку."},
+     formula:[{en:"G ≈ 8.3 + 10·log₁₀(C_λ²·N·S_λ) dBi,   HPBW ≈ 52 / (C_λ√(N·S_λ))°",
+               uk:"G ≈ 8.3 + 10·log₁₀(C_λ²·N·S_λ) дБі,   HPBW ≈ 52 / (C_λ√(N·S_λ))°"},
+              {en:"axial ratio AR = (2N+1)/(2N)   → 1 as N grows", uk:"осьове відн. AR = (2N+1)/(2N)   → 1 зі зростанням N"}]},
+    {id:'normal', en:'Normal mode', uk:'Нормальний режим',
+     desc:{en:"When the helix is small compared with λ it behaves like a short dipole in series with a small loop: a low-gain, omnidirectional radiator (pattern ∝ sinθ) polarised along the axis. This is the 'rubber-duck' regime.",
+           uk:"Коли спіраль мала порівняно з λ, вона поводиться як короткий диполь послідовно з малою рамкою: низькопідсилювальний всенаправлений випромінювач (ДН ∝ sinθ), поляризований уздовж осі. Це режим «гумової качечки»."},
+     formula:[{en:"D ≈ 1.5 (1.76 dBi),  pattern ∝ sinθ,  bandwidth narrow",
+               uk:"D ≈ 1.5 (1.76 дБі),  ДН ∝ sinθ,  смуга вузька"}]}
+  ],
+  desc:{en:"A conductor wound as a helix. The single geometry gives two utterly different antennas depending on how the circumference compares with the wavelength.",
+        uk:"Провідник, намотаний спіраллю. Одна геометрія дає дві геть різні антени залежно від співвідношення периметра й довжини хвилі."},
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:1.5},
+    {id:'N', kind:'range', en:'Turns N', uk:'Витків N', min:2, max:30, step:1, value:10, fmt:v=>v.toFixed(0)},
+    {id:'Clam', kind:'range', en:'Circumference C', uk:'Периметр C', min:0.2, max:1.4, step:0.01, value:1.0, fmt:v=>v.toFixed(2)+' λ'},
+    {id:'pitch', kind:'range', en:'Pitch angle α', uk:'Кут кроку α', min:4, max:20, step:0.5, value:13, fmt:v=>v.toFixed(1)+'°'}
+  ],
+  plot:'full',
+  compute(s, method){
+    const Slam=s.Clam*Math.tan(s.pitch*AL.D2R); // spacing per turn in λ
+    let fnBeam, G, hpbw, ar;
+    if(method==='normal'){
+      fnBeam=a=>AL.smallLoopPattern((90-a)*AL.D2R);
+      G=1.76; hpbw=90; ar='—';
+    } else {
+      G=8.3+10*Math.log10(Math.max(s.Clam*s.Clam*s.N*Slam,1e-3));
+      hpbw=52/(s.Clam*Math.sqrt(Math.max(s.N*Slam,1e-3)));
+      ar=((2*s.N+1)/(2*s.N)).toFixed(2);
+      // endfire array of N turns, spacing Slam, ordinary endfire (beam along axis=up=0)
+      fnBeam=a=>{ const g=a*AL.D2R;
+        const psi=2*Math.PI*Slam*(Math.cos(g)-1); const den=Math.sin(psi/2);
+        const AFa=Math.abs(den)<1e-9?1:Math.abs(Math.sin(s.N*psi/2)/(s.N*den));
+        return AFa; };
+    }
+    // Axial mode fires along the helix axis, which we lay HORIZONTAL so the
+    // boresight is on the horizon like every other endfire antenna here; the
+    // helix is a body of revolution about it, so both views are the same.
+    // Normal mode radiates broadside from a vertical coil — an omni whip.
+    const lamCmH=AL.lambdaOf(s.f*1e9)*100, pxH=Math.min(150/(s.Clam*lamCmH+0.01),16);
+    const axial=(method!=='normal');
+    const turns=Math.min(s.N,16), rxH=Math.max(s.Clam*lamCmH*pxH/(2*Math.PI),6);
+    let schemE, schemH;
+    if(axial){
+      const x0=70, len=Math.min(s.N*Slam*lamCmH*pxH,210), dx=len/turns;
+      let d=`M ${x0},${125-rxH}`;
+      for(let i=0;i<turns;i++){ const x=x0+i*dx;
+        d+=` C ${x},${125+rxH*1.4} ${x+dx},${125+rxH*1.4} ${x+dx},${125-rxH}`; }
+      let g=AL.rulerSVG(40,28,lamCmH,pxH)+AL.CAP_SAME();
+      g+=`<line class="schem-outline" x1="${x0-10}" y1="${125-rxH-16}" x2="${x0-10}" y2="${125+rxH+16}" stroke-width="3"/>`;
+      g+=`<text class="schem-label" x="${x0-34}" y="${125+rxH+30}">${AL.tr('reflector','рефлектор')}</text>`;
+      g+=`<path class="schem-driven" d="${d}" fill="none"/>`;
+      g+=`<circle class="schem-node" cx="${x0}" cy="${125-rxH}" r="2.5"/>`;
+      g+=`<line class="schem-dim" x1="${x0-10}" y1="125" x2="${x0+len+16}" y2="125" stroke-dasharray="3,3"/>`;
+      g+=AL.dimLineH(x0,x0+len,125+rxH+22,`N·S = ${(s.N*Slam).toFixed(2)} λ`);
+      g+=AL.dimLineV(x0+len+30,125-rxH,125+rxH,`C = ${s.Clam.toFixed(2)} λ`);
+      schemE=g+AL.boresightArrow(x0+len+16,125,30,V,'helE');
+      schemH=(g+AL.boresightArrow(x0+len+16,125,30,A,'helH'))
+             .replace(/id="ar-helE/g,'id="ar-helH');
+    } else {
+      const cxN=190, coilH=150, dyN=coilH/turns;
+      let d=`M ${cxN-rxH},${50}`;
+      for(let i=0;i<turns;i++){ const y=50+i*dyN;
+        d+=` C ${cxN+rxH},${y+dyN*0.25} ${cxN+rxH},${y+dyN*0.75} ${cxN-rxH},${y+dyN}`; }
+      schemE=AL.rulerSVG(40,28,lamCmH,pxH)+AL.CAP_E();
+      schemE+=`<path class="schem-driven" d="${d}" fill="none"/>`;
+      schemE+=AL.groundHatch(cxN-70,cxN+70,50+coilH+10);
+      schemE+=AL.dimLineV(cxN+rxH+18,50,50+coilH,`N·S`);
+      schemE+=AL.boresightArrow(cxN+70,50+coilH*0.4,30,V,'helE');
+      schemH=AL.rulerSVG(40,28,lamCmH,pxH)+AL.CAP_H();
+      schemH+=AL.azimuthCircle(cxN,125,Math.max(rxH+30,52),A);
+      schemH+=`<circle class="schem-driven" cx="${cxN}" cy="125" r="${rxH}" fill="none"/>`;
+      schemH+=AL.conductorEndOn(cxN,125,5);
+      schemH+=AL.boresightArrow(cxN+10,125,44,A,'helH');
+      schemH+=`<text class="schem-label" x="${cxN}" y="${125+Math.max(rxH+30,52)+18}" text-anchor="middle">${AL.tr('omnidirectional in azimuth','всенапрямлена за азимутом')}</text>`;
+    }
+    // Kraus's axial-mode window: C ~ 1 lambda and a 12-14 deg pitch
+    const optima = (method!=='normal') ? [
+      {id:'Clam', value:1.0, tag:'h',
+       label:AL.tr('C = 1.00 \u03bb \u2014 centre of the axial-mode window (0.75\u20131.33 \u03bb)',
+                   'C = 1.00 \u03bb \u2014 \u0446\u0435\u043d\u0442\u0440 \u0432\u0456\u043a\u043d\u0430 \u043e\u0441\u044c\u043e\u0432\u043e\u0433\u043e \u0440\u0435\u0436\u0438\u043c\u0443 (0.75\u20131.33 \u03bb)')},
+      {id:'pitch', value:13, tag:'e',
+       label:AL.tr('\u03b1 = 13\u00b0 \u2014 optimum pitch angle (12\u201314\u00b0)',
+                   '\u03b1 = 13\u00b0 \u2014 \u043e\u043f\u0442\u0438\u043c\u0430\u043b\u044c\u043d\u0438\u0439 \u043a\u0443\u0442 \u043a\u0440\u043e\u043a\u0443 (12\u201314\u00b0)')}
+    ] : null;
+    return {schemE, schemH, fnBeam, optima, hplane: method==='normal'?'omni':'same',
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:(method==='normal'?s.Clam:s.N*Slam), sizeLabel:(method==='normal'?'C = '+s.Clam.toFixed(2)+' λ':'N·S = '+(s.N*Slam).toFixed(2)+' λ'), gainDbi:G},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'), v:G.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW', v:method==='normal'?'~90°':hpbw.toFixed(0)+'°'},
+        {k:AL.tr('Axial ratio','Осьове відн.'), v:ar},
+        {k:AL.tr('Spacing S','Крок S'), v:Slam.toFixed(3)+' λ'}
+      ], enable:{Clam:true, pitch:method!=='normal'}};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Helical_antenna',label:'Helical antenna'}},
+    {tag:'book', en:{href:'https://www.google.com/books/edition/Antennas/O0-PQgAACAAJ',label:'Kraus, Antennas'}}
+  ],
+  strength:{en:"Axial-mode helices give easy circular polarisation and 10–15 dBi from a few turns — the classic satellite/GNSS uplink antenna. The design is broadband (the 3/4 < C_λ < 4/3 window) and forgiving.",
+            uk:"Осьові спіралі дають легку колову поляризацію та 10–15 дБі з кількох витків — класична антена супутник/ГНСС. Конструкція широкосмугова (вікно 3/4 < C_λ < 4/3) й невибаглива."},
+  xrefs:[['#rubber-duck','Rubber duck','Гумова качечка'],['travelingwave.html#leaky-wave','Traveling-wave','Біжуча хвиля'],['#loop','Loop','Рамка']]
+});
+
+/* ---- 1.8 Rubber duck ------------------------------------------------- */
+WIRE.push({
+  id:'rubber-duck', num:'1.8', lvl:3,
+  desc:{en:"A normal-mode helical monopole in a flexible dielectric jacket. Winding the conductor into a helix and loading it with dielectric makes a physically short whip resonate — trading efficiency and bandwidth for pocket size.",
+        uk:"Спіральний монополь нормального режиму в гнучкій діелектричній оболонці. Намотка провідника спіраллю та діелектричне навантаження змушують фізично короткий штир резонувати — жертвуючи ККД і смугою заради розміру."},
+  methods:[{id:'mom', en:'Helical-monopole model', uk:'Модель спірального монополя',
+     desc:{en:"A full-wave MoM model of the wound wire is needed for accuracy; here we use the normal-mode result — an omnidirectional monopole-like pattern with an effective length set by the winding, and an efficiency that falls with foreshortening.",
+           uk:"Для точності потрібен повнохвильовий MoM намотаного проводу; тут беремо нормальний режим — всенаправлену ДН монопольного типу з ефективною довжиною від намотки та ККД, що падає із вкороченням."},
+     formula:[{en:"L_eff ≈ N·√(C² + S²)   (unwound wire), f_res set by L_eff ≈ λ/4",
+               uk:"L_еф ≈ N·√(C² + S²)   (розгорнутий провід), f_рез при L_еф ≈ λ/4"}]}],
+  controls:[
+    {id:'phys', kind:'range', en:'Physical length', uk:'Фізична довжина', min:20, max:120, step:1, value:50, fmt:v=>v.toFixed(0)+' '+AL.unit('mm')},
+    {id:'N', kind:'range', en:'Turns N', uk:'Витків N', min:8, max:60, step:1, value:30, fmt:v=>v.toFixed(0)},
+    {id:'dia', kind:'range', en:'Coil diameter', uk:'Діаметр котушки', min:2, max:12, step:0.5, value:5, fmt:v=>v.toFixed(1)+' '+AL.unit('mm')}
+  ],
+  plot:'full',
+  compute(s){
+    const S=s.phys/s.N, C=Math.PI*s.dia, Leff=s.N*Math.sqrt(C*C+S*S); // mm unwound
+    const fresHz=AL.c/(4*Leff/1000), fres=fresHz/1e9;
+    const foreshort=s.phys/(1000*AL.c/fresHz/4); // phys / (λ/4)
+    const eff=AL.clamp(30+55*foreshort,15,75);
+    const fnBeam=a=>AL.smallLoopPattern((90-a)*AL.D2R)*0.9+0.1;
+    const cx=190, top=55, coilH=Math.min(s.phys*1.6,150), turns=Math.min(s.N,22), dy=coilH/turns, rx=s.dia*2;
+    const lamCmR=AL.c/fresHz*100, pxR=Math.min(150/lamCmR,14);
+    let d=`M ${cx-rx},${top}`;
+    for(let i=0;i<turns;i++){ const y=top+i*dy; d+=` C ${cx+rx},${y+dy*0.25} ${cx+rx},${y+dy*0.75} ${cx-rx},${y+dy}`; }
+    let schemE=AL.rulerSVG(40,28,lamCmR,pxR)+AL.CAP_E();
+    schemE+=`<rect class="schem-fill" x="${cx-rx-5}" y="${top-6}" width="${2*rx+10}" height="${coilH+12}" rx="6" opacity="0.4"/>`;
+    schemE+=`<path class="schem-driven" d="${d}" fill="none"/>`;
+    schemE+=AL.groundHatch(cx-62,cx+62,top+coilH+10);
+    schemE+=`<circle class="schem-node" cx="${cx-rx}" cy="${top+coilH}" r="2.5"/>`;
+    schemE+=AL.dimLineV(cx+rx+16,top,top+coilH,`${s.phys.toFixed(0)} ${AL.unit('mm')}`);
+    schemE+=`<text class="schem-label" x="${cx-rx-2}" y="${top-10}">N = ${s.N.toFixed(0)}</text>`;
+    schemE+=AL.boresightArrow(cx+64,top+coilH*0.45,30,V,'rdE');
+    let schemH=AL.rulerSVG(40,28,lamCmR,pxR)+AL.CAP_H();
+    schemH+=AL.azimuthCircle(cx,125,56,A);
+    schemH+=`<circle class="schem-fill" cx="${cx}" cy="125" r="${rx+5}"/>`;
+    schemH+=`<circle class="schem-driven" cx="${cx}" cy="125" r="${rx}" fill="none"/>`;
+    schemH+=AL.conductorEndOn(cx,125,4);
+    schemH+=AL.boresightArrow(cx+10,125,42,A,'rdH');
+    schemH+=`<text class="schem-label" x="${cx}" y="${125+74}" text-anchor="middle">${AL.tr('jacketed coil · omni in azimuth','котушка в оболонці · всенапрямлена')}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.c/fresHz*100, sizeLam:s.phys/(AL.c/fresHz*1000), sizeLabel:'L = '+(s.phys/(AL.c/fresHz*1000)).toFixed(3)+' λ'},
+      readouts:[
+        {k:AL.tr('Resonance f','Резонанс f'), v:fres.toFixed(2)+' '+AL.unit('GHz')},
+        {k:AL.tr('Unwound L','Розгорн. L'), v:(Leff).toFixed(0)+' '+AL.unit('mm')},
+        {k:AL.tr('Efficiency','ККД'), v:'≈ '+eff.toFixed(0)+' %'},
+        {k:AL.tr('Directivity','Спрямованість'), v:'≈ 1.8 '+AL.unit('dBi')}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Rubber_ducky_antenna',label:'Rubber ducky antenna'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Helical_antenna#Normal_mode',label:'Normal-mode helix'}}
+  ],
+  strength:{en:"Rugged, flexible and short — every handheld radio uses one. The compromise is efficiency: a 50 mm duck at 145 MHz is a small fraction of λ/4, so most gain is given up versus a full quarter-wave whip.",
+            uk:"Міцна, гнучка й коротка — стоїть на кожній рації. Компроміс — ККД: 50-мм «качечка» на 145 МГц є малою часткою λ/4, тож більшість підсилення втрачено проти повного чвертьхвильового штиря."},
+  xrefs:[['#helical','Helical (normal mode)','Гвинтова (норм.)'],['#monopole','Monopole','Монополь']]
+});
+
+/* ---- 1.9 Yagi-Uda ---------------------------------------------------- */
+WIRE.push({
+  id:'yagi', num:'1.9', lvl:3,
+  desc:{en:"A driven dipole with a reflector behind it and one or more directors in front. The parasitic elements re-radiate with phases that reinforce forward and cancel backward, forming an endfire beam. Add directors and the beam sharpens — watch the schematic and the pattern change together.",
+        uk:"Активний диполь із рефлектором позаду й одним чи кількома директорами попереду. Пасивні елементи перевипромінюють із фазами, що підсилюють уперед і гасять назад, формуючи осьовий промінь. Додайте директорів — промінь звужується; схема й ДН змінюються разом."},
+  methods:[{id:'nec', en:'Endfire array model (MoM/NEC)', uk:'Модель осьової решітки (MoM/NEC)',
+     desc:{en:"A real Yagi is solved with MoM/NEC because the parasitic currents come from mutual coupling. This calculator models the boom as an ordinary endfire array (reflector + driven + N directors) — the element count drives both the schematic and the directivity, computed by integrating the array factor.",
+           uk:"Реальну Yagi рахують MoM/NEC, бо пасивні струми виникають із взаємного зв'язку. Цей калькулятор моделює стрілу як звичайну осьову решітку (рефлектор + активний + N директорів) — число елементів керує і схемою, і спрямованістю, обчисленою інтегруванням множника решітки."},
+     formula:[{en:"AF(γ) = Σ wₙ·exp[j·2π·zₙ·(cosγ − 1)],   γ from boom axis",
+               uk:"AF(γ) = Σ wₙ·exp[j·2π·zₙ·(cosγ − 1)],   γ від осі стріли"},
+              {en:"D = 2 / ∫₀^π |AF(γ)|²·sinγ dγ   (boom-symmetric)",
+               uk:"D = 2 / ∫₀^π |AF(γ)|²·sinγ dγ   (симетрія по стрілі)"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.6},
+    {id:'ndir', kind:'range', en:'Directors', uk:'Директорів', min:0, max:20, step:1, value:5, fmt:v=>v.toFixed(0)},
+    {id:'sdir', kind:'range', en:'Director spacing', uk:'Крок директорів', min:0.1, max:0.4, step:0.01, value:0.2, fmt:v=>v.toFixed(2)+' λ'},
+    {id:'sref', kind:'range', en:'Reflector spacing', uk:'Відстань рефлектора', min:0.1, max:0.35, step:0.01, value:0.25, fmt:v=>v.toFixed(2)+' λ'}
+  ],
+  plot:'full',
+  compute(s){
+    const lamCm=AL.lambdaOf(s.f*1e9)*100;
+    // element positions (λ): reflector at -sref, driven 0, directors +k*sdir
+    const pos=[-s.sref, 0]; const w=[1.0,1.0];
+    for(let kk=1;kk<=s.ndir;kk++){ pos.push(kk*s.sdir); w.push(Math.max(0.55,1-0.03*kk)); }
+    const AF=g=>{ let re=0,im=0,sw=0; for(let n=0;n<pos.length;n++){ const ph=2*Math.PI*pos[n]*(Math.cos(g)-1);
+      re+=w[n]*Math.cos(ph); im+=w[n]*Math.sin(ph); sw+=w[n]; } return Math.hypot(re,im)/sw; };
+    const fnBeam=a=>AF(a*AL.D2R);
+    const D=AL.directivityAxial(g=>AF(g));
+    const samp=AL.sampleHalf(fnBeam,0.25,180);
+    const hp=AL.findHPBW(samp,fnBeam);
+    const fb=20*Math.log10((fnBeam(0)+1e-9)/(fnBeam(180)+1e-9));
+    const boom=(pos[pos.length-1]-pos[0]);
+    // schematic: boom with elements. reflector longest, directors shortest.
+    const px=scaleFor(boom*lamCm+ s.sref*lamCm, 300), y=125, x0=50;
+    const zpx=z=>x0+(z-pos[0])*lamCm*px;
+    const half=(len)=>len*lamCm*px*0.5;
+    // E: the vertical plane through the boom — elements stand up in it.
+    // H: looking down on the same boom — every element is now end-on.
+    let schemE=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_E();
+    schemE+=`<line class="schem-wire-dim" x1="${zpx(pos[0])}" y1="${y}" x2="${zpx(pos[pos.length-1])}" y2="${y}"/>`;
+    schemE+=`<line class="schem-wire" x1="${zpx(pos[0])}" y1="${y-half(0.52)}" x2="${zpx(pos[0])}" y2="${y+half(0.52)}"/>`;
+    schemE+=`<line class="schem-driven" x1="${zpx(0)}" y1="${y-half(0.48)}" x2="${zpx(0)}" y2="${y+half(0.48)}"/>`;
+    schemE+=`<circle class="schem-node" cx="${zpx(0)}" cy="${y}" r="2.5"/>`;
+    for(let kk=1;kk<=s.ndir;kk++){ const z=kk*s.sdir; schemE+=`<line class="schem-wire" x1="${zpx(z)}" y1="${y-half(0.45)}" x2="${zpx(z)}" y2="${y+half(0.45)}"/>`; }
+    schemE+=`<text class="schem-label" x="${zpx(pos[0])}" y="${y+half(0.52)+13}" text-anchor="middle">R</text>`;
+    schemE+=`<text class="schem-label" x="${zpx(0)}" y="${y+half(0.48)+13}" text-anchor="middle">D</text>`;
+    schemE+=AL.boresightArrow(zpx(pos[pos.length-1])+8,y,30,V,'yagiE');
+    schemE+=`<text class="schem-label" x="${x0}" y="${y-half(0.52)-8}">${s.ndir} ${AL.tr('directors','директорів')} · boom ${boom.toFixed(2)} λ</text>`;
+    let schemH=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_H();
+    schemH+=`<line class="schem-wire-dim" x1="${zpx(pos[0])}" y1="${y}" x2="${zpx(pos[pos.length-1])}" y2="${y}"/>`;
+    schemH+=AL.conductorEndOn(zpx(pos[0]),y,6);
+    schemH+=AL.conductorEndOn(zpx(0),y,6);
+    for(let kk=1;kk<=s.ndir;kk++) schemH+=AL.conductorEndOn(zpx(kk*s.sdir),y,4.5);
+    schemH+=AL.boresightArrow(zpx(pos[pos.length-1])+10,y,30,A,'yagiH');
+    schemH+=`<text class="schem-label" x="${zpx(pos[0])}" y="${y+22}" text-anchor="middle">R</text>`;
+    schemH+=`<text class="schem-label" x="${zpx(0)}" y="${y+22}" text-anchor="middle">D</text>`;
+    schemH+=`<text class="schem-label" x="${x0}" y="${y-26}">${AL.tr('elements end-on along the boom','елементи з торця вздовж стріли')}</text>`;
+    // scan the model itself for the spacings that maximise directivity
+    const dirFor=(sd,sr)=>{
+      const pp=[-sr,0], ww=[1,1];
+      for(let kk=1;kk<=s.ndir;kk++){ pp.push(kk*sd); ww.push(Math.max(0.55,1-0.03*kk)); }
+      const af=g=>{ let re=0,im=0,sw=0;
+        for(let n=0;n<pp.length;n++){ const ph=2*Math.PI*pp[n]*(Math.cos(g)-1);
+          re+=ww[n]*Math.cos(ph); im+=ww[n]*Math.sin(ph); sw+=ww[n]; }
+        return Math.hypot(re,im)/sw; };
+      let sum=0; const NQ=120;
+      for(let i=0;i<=NQ;i++){ const th=Math.PI*i/NQ, v=af(th);
+        sum+=(i===0||i===NQ?1:(i%2?4:2))*v*v*Math.sin(th); }
+      sum*=(Math.PI/NQ)/3;
+      return sum>1e-9 ? 2/sum : 0;
+    };
+    const sdOpt=AL.argMax(x=>dirFor(x,s.sref), 0.10, 0.40, 14);
+    const srOpt=AL.argMax(x=>dirFor(s.sdir,x), 0.10, 0.35, 12);
+    const optima=[
+      {id:'sdir', value:sdOpt, tag:'h',
+       label:AL.tr(`director spacing \u2248 ${sdOpt.toFixed(2)} \u03bb for peak gain with ${s.ndir} directors`,
+                   `\u043a\u0440\u043e\u043a \u0434\u0438\u0440\u0435\u043a\u0442\u043e\u0440\u0456\u0432 \u2248 ${sdOpt.toFixed(2)} \u03bb \u0434\u043b\u044f \u043c\u0430\u043a\u0441\u0438\u043c\u0443\u043c\u0443`)},
+      {id:'sref', value:srOpt, tag:'e',
+       label:AL.tr(`reflector spacing \u2248 ${srOpt.toFixed(2)} \u03bb`,
+                   `\u0432\u0456\u0434\u0441\u0442\u0430\u043d\u044c \u0440\u0435\u0444\u043b\u0435\u043a\u0442\u043e\u0440\u0430 \u2248 ${srOpt.toFixed(2)} \u03bb`)}
+    ];
+    return {schemE, schemH, fnBeam, optima,
+      meta3d:{lamCm, sizeLam:boom, sizeLabel:'boom = '+boom.toFixed(2)+' λ', gainDbi:D.dBi},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'), v:D.dBi.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW', v:AL.fmtDeg(hp)},
+        {k:'F/B', v:fb.toFixed(1)+' '+AL.unit('dB')},
+        {k:AL.tr('Elements','Елементів'), v:(2+s.ndir).toFixed(0)}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Yagi%E2%80%93Uda_antenna',label:'Yagi-Uda antenna'}, uk:{href:'https://uk.wikipedia.org/wiki/Антена_Уда-Ягі',label:'Антена Уда-Яги'}},
+    {tag:'code', en:{href:'https://www.nec2.org/',label:'NEC-2'}},
+    {tag:'nist', en:{href:'https://nvlpubs.nist.gov/nistpubs/Legacy/TN/nbstechnicalnote688.pdf',label:'Viezbicke NBS TN-688'}}
+  ],
+  strength:{en:"Cheap, rugged, 10–17 dBi — the definitive TV/point-to-point antenna. Gain rises roughly with the log of boom length, so doubling elements adds only a few dB; bandwidth is narrow because the parasitics are resonant.",
+            uk:"Дешева, міцна, 10–17 дБі — еталонна ТБ / «точка-точка» антена. Підсилення росте приблизно як логарифм довжини стріли, тож подвоєння елементів додає лише кілька дБ; смуга вузька через резонансні пасивні елементи."},
+  xrefs:[['#dipole','Dipole','Диполь'],['#lpda','Log-periodic','Логоперіодична'],['array.html#stacked-yagi','Stacked Yagi','Стекована Yagi']]
+});
+
+/* ---- 1.10 LPDA ------------------------------------------------------- */
+WIRE.push({
+  id:'lpda', num:'1.10', lvl:3,
+  desc:{en:"A row of dipoles whose lengths and spacings scale by a constant ratio τ. At any frequency only the near-resonant dipoles (the 'active region') radiate, so the pattern and impedance stay almost constant over a huge band — a frequency-independent antenna.",
+        uk:"Ряд диполів, довжини й відстані яких масштабуються сталим коефіцієнтом τ. На будь-якій частоті випромінюють лише близькі до резонансу диполі («активна ділянка»), тож ДН та опір майже сталі у величезній смузі — частотно-незалежна антена."},
+  methods:[{id:'nec', en:'Scaled-dipole model (MoM/NEC)', uk:'Модель масштабованих диполів (MoM/NEC)',
+     desc:{en:"The full set is solved with MoM. The design geometry follows Carrel: the scale factor τ and spacing factor σ fix the apex angle, the active-region size and hence the directivity. This calculator draws the τ-scaled dipoles and estimates gain from τ and σ.",
+           uk:"Повний набір рахують MoM. Геометрія за Каррелом: коефіцієнти τ і σ задають кут розкриву, розмір активної ділянки й спрямованість. Калькулятор малює τ-масштабовані диполі й оцінює підсилення з τ та σ."},
+     formula:[{en:"L_{n+1}=τ·Lₙ,  d_{n+1}=τ·dₙ,  σ = dₙ/(2·L_{n+1}),  cot α = 4σ/(1−τ)",
+               uk:"L_{n+1}=τ·Lₙ,  d_{n+1}=τ·dₙ,  σ = dₙ/(2·L_{n+1}),  cot α = 4σ/(1−τ)"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.3},
+    {id:'Ndip', kind:'range', en:'Dipoles N', uk:'Диполів N', min:4, max:20, step:1, value:9, fmt:v=>v.toFixed(0)},
+    {id:'tau', kind:'range', en:'Scale τ', uk:'Масштаб τ', min:0.8, max:0.96, step:0.005, value:0.88, fmt:v=>v.toFixed(3)},
+    {id:'sigma', kind:'range', en:'Spacing σ', uk:'Розрідж. σ', min:0.05, max:0.22, step:0.005, value:0.15, fmt:v=>v.toFixed(3)}
+  ],
+  plot:'full',
+  compute(s){
+    // Carrel directivity approximation (rises with τ→1 and optimal σ)
+    const Dlin=1.1+ 7.7*Math.pow(s.tau,1)* (1 - Math.pow((s.sigma-0.165)/0.16,2)*0.5);
+    const G=10*Math.log10(Math.max(Dlin,1.3))+ (s.tau-0.8)*10;
+    const bwRatio=Math.pow(1/s.tau, s.Ndip-1); // frequency ratio spanned
+    // active-region endfire pattern (toward apex/short end = up)
+    const nAct=3; const fnBeam=a=>{ const g=a*AL.D2R;
+      let re=0,im=0; for(let n=0;n<nAct;n++){ const z=n*0.15; const ph=2*Math.PI*z*(Math.cos(g)-1)+Math.PI*n;
+        re+=Math.cos(ph); im+=Math.sin(ph);} const af=Math.hypot(re,im)/nAct;
+      return af*Math.abs(AL.dipolePattern(Math.max((90-a)*AL.D2R,1e-3),0.5)*0.5+0.5); };
+    // schematic: N dipoles of scaled length along a boom, apex to the right(up)
+    const y=125, x0=350; let L0=95; const px=1; // longest at left
+    let xs=[], Ls=[], x=x0, Lp=L0;
+    for(let n=0;n<s.Ndip;n++){ xs.push(x); Ls.push(Lp); const d=2*s.sigma*Lp; x-=d; Lp*=s.tau; }
+    const lamCmL=AL.lambdaOf(s.f*1e9)*100, pxL=L0/(0.5*lamCmL);
+    let schemE=AL.rulerSVG(40,28,lamCmL,pxL)+AL.CAP_E();
+    schemE+=`<line class="schem-wire-dim" x1="${xs[xs.length-1]}" y1="${y}" x2="${xs[0]}" y2="${y}"/>`;
+    for(let n=0;n<s.Ndip;n++){ const h=Ls[n]/2;
+      schemE+=`<line class="${(n===Math.floor(s.Ndip*0.55))?'schem-driven':'schem-wire'}" x1="${xs[n]}" y1="${y-h}" x2="${xs[n]}" y2="${y+h}"/>`; }
+    schemE+=AL.boresightArrow(xs[xs.length-1]-38,y,30,V,'lpdaE');
+    schemE+=`<text class="schem-label" x="${x0-40}" y="${y-56}">τ = ${s.tau.toFixed(3)} · N = ${s.Ndip}</text>`;
+    schemE+=`<text class="schem-label" x="${xs[xs.length-1]-40}" y="${y+50}">${AL.tr('apex / high f','вершина / вис. f')}</text>`;
+    let schemH=AL.rulerSVG(40,28,lamCmL,pxL)+AL.CAP_H();
+    schemH+=`<line class="schem-wire-dim" x1="${xs[xs.length-1]}" y1="${y}" x2="${xs[0]}" y2="${y}"/>`;
+    for(let n=0;n<s.Ndip;n++) schemH+=AL.conductorEndOn(xs[n],y,Math.max(2.6,Ls[n]/22));
+    schemH+=AL.boresightArrow(xs[xs.length-1]-40,y,30,A,'lpdaH');
+    schemH+=`<text class="schem-label" x="${x0-40}" y="${y-30}">${AL.tr('scaled dipoles end-on, longest at the rear','масштабовані диполі з торця, найдовший ззаду')}</text>`;
+    // Carrel's optimum spacing factor for the chosen scale factor tau
+    const sgOpt=0.258*s.tau-0.066;
+    const optima=[{id:'sigma', value:sgOpt, tag:'h',
+      label:AL.tr(`σ ≈ ${sgOpt.toFixed(3)} — Carrel optimum for τ = ${s.tau.toFixed(3)}`,
+                  `σ ≈ ${sgOpt.toFixed(3)} — оптимум Каррела`)}];
+    return {schemE, schemH, fnBeam, optima,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:(xs[0]-xs[s.Ndip-1])/L0*0.5, sizeLabel:'boom ≈ '+((xs[0]-xs[s.Ndip-1])/L0*0.5).toFixed(2)+' λ_max', gainDbi:G},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'), v:G.toFixed(1)+' '+AL.unit('dBi')},
+        {k:AL.tr('Band ratio','Смуга f_max/f_min'), v:bwRatio.toFixed(1)+':1'},
+        {k:AL.tr('Apex angle α','Кут α'), v:(Math.atan(4*s.sigma/(1-s.tau))*AL.R2D).toFixed(0)+'°'},
+        {k:AL.tr('Dipoles','Диполів'), v:s.Ndip.toFixed(0)}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Log-periodic_antenna',label:'Log-periodic antenna'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1109/TAP.1961.1138041',label:'Carrel, LPDA design (1961)'}}
+  ],
+  strength:{en:"Constant gain and impedance over 10:1 or wider bandwidths make LPDAs the workhorse of EMC test ranges and wideband monitoring. Gain is modest (6–11 dBi) — the price of frequency independence — and only the active region radiates at any instant.",
+            uk:"Стале підсилення й опір у смузі 10:1 і ширше роблять LPDA основою EMC-полігонів і широкосмугового моніторингу. Підсилення помірне (6–11 дБі) — плата за частотну незалежність; випромінює лише активна ділянка."},
+  xrefs:[['#yagi','Yagi-Uda','Уда-Яги'],['#dipole','Dipole','Диполь'],['array.html#stacked-yagi','Arrays','Решітки']]
+});
+
+/* ---- 1.11 Discone ---------------------------------------------------- */
+WIRE.push({
+  id:'discone', num:'1.11', lvl:3,
+  desc:{en:"A disc above a cone. The tapered geometry has no single resonance, so it works from a low cutoff (set by the cone slant ≈ λ/4) up over a decade with a near-constant 50 Ω match and a vertically-polarised, omnidirectional, slightly downtilted pattern.",
+        uk:"Диск над конусом. Звужена геометрія не має єдиного резонансу, тож працює від нижньої межі (нахил конуса ≈ λ/4) на декаду вгору з майже сталим узгодженням 50 Ом і вертикально-поляризованою всенаправленою, злегка нахиленою ДН."},
+  methods:[{id:'bor', en:'Body-of-revolution MoM', uk:'MoM тіл обертання',
+     desc:{en:"The axisymmetric geometry is efficiently solved by body-of-revolution MoM. The key design number is the low-frequency cutoff, where the cone slant height reaches a quarter wavelength; above it the antenna is broadband.",
+           uk:"Осесиметричну геометрію ефективно розв'язує MoM тіл обертання. Ключове число — нижня межа, де нахилена висота конуса сягає чверті хвилі; вище антена широкосмугова."},
+     formula:[{en:"f_low ≈ c / (4·L_slant),   bandwidth typically > 10:1",
+               uk:"f_low ≈ c / (4·L_нахилу),   смуга зазвичай > 10:1"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.5},
+    {id:'slant', kind:'range', en:'Cone slant L', uk:'Нахил конуса L', min:50, max:600, step:5, value:170, fmt:v=>v.toFixed(0)+' '+AL.unit('mm')},
+    {id:'angle', kind:'range', en:'Cone half-angle', uk:'Півкут конуса', min:20, max:45, step:1, value:30, fmt:v=>v.toFixed(0)+'°'}
+  ],
+  plot:'full',
+  compute(s){
+    const flowHz=AL.c/(4*s.slant/1000), flow=flowHz/1e9;
+    const above=s.f>=flow;
+    const octaves=Math.log2(3/Math.max(flow,0.001));
+    // pattern: omni in azimuth; elevation lobe tilted down slightly (monopole-like), main near horizon
+    const fnBeam=a=>{ // 0=up(zenith). Max near horizon (a=90..110)
+      const el=a; const lobe=Math.exp(-Math.pow((el-95)/38,2))+0.15*Math.exp(-Math.pow((el-265)/40,2));
+      return AL.clamp(lobe,0,1); };
+    const cx=190, apex=205, slantPx=Math.min(s.slant*0.28,110), ha=s.angle*AL.D2R;
+    const dx=slantPx*Math.sin(ha), dy=slantPx*Math.cos(ha);
+    const lamCmD=AL.lambdaOf(s.f*1e9)*100, pxD=Math.min(140/lamCmD,10);
+    const discY=apex-dy-14, discR=dx*1.05;
+    let schemE=AL.rulerSVG(40,26,lamCmD,pxD)+AL.CAP_E();
+    schemE+=`<path class="schem-fill" d="M ${cx},${apex} L ${cx-dx},${apex-dy} L ${cx+dx},${apex-dy} Z"/>`;
+    schemE+=`<ellipse class="schem-driven" cx="${cx}" cy="${discY}" rx="${discR}" ry="6"/>`;
+    schemE+=`<line class="schem-driven" x1="${cx}" y1="${apex}" x2="${cx}" y2="${discY}"/>`;
+    schemE+=`<circle class="schem-node" cx="${cx}" cy="${apex-dy-2}" r="2.5"/>`;
+    schemE+=AL.dimLineV(cx+dx+20,apex-dy,apex,`L = ${s.slant} ${AL.unit('mm')}`);
+    schemE+=`<text class="schem-label" x="${cx-discR}" y="${discY-8}">${AL.tr('disc','диск')}</text>`;
+    schemE+=`<text class="schem-label" x="${cx+dx+4}" y="${apex}">${AL.tr('cone','конус')}</text>`;
+    schemE+=AL.boresightArrow(cx+dx+34,apex-dy*0.4,28,V,'dcE');
+    // plan: concentric — the disc over the base of the cone
+    const cyH=125;
+    let schemH=AL.rulerSVG(40,26,lamCmD,pxD)+AL.CAP_H();
+    schemH+=AL.azimuthCircle(cx,cyH,Math.max(dx+30,58),A);
+    schemH+=`<circle class="schem-fill" cx="${cx}" cy="${cyH}" r="${dx}"/>`;
+    schemH+=`<circle class="schem-driven" cx="${cx}" cy="${cyH}" r="${discR}" fill="none"/>`;
+    schemH+=AL.conductorEndOn(cx,cyH,4);
+    schemH+=AL.boresightArrow(cx+8,cyH,Math.max(dx+34,62),A,'dcH');
+    schemH+=`<text class="schem-label" x="${cx}" y="${cyH+Math.max(dx+30,58)+18}" text-anchor="middle">${AL.tr('disc over cone base · omni','диск над основою конуса · всенапр.')}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:(s.slant/10)/(AL.lambdaOf(s.f*1e9)*100), sizeLabel:'L = '+((s.slant/10)/(AL.lambdaOf(s.f*1e9)*100)).toFixed(2)+' λ'},
+      readouts:[
+        {k:AL.tr('Low cutoff','Нижня межа'), v:flow.toFixed(3)+' '+AL.unit('GHz')},
+        {k:AL.tr('In band?','У смузі?'), v:above?AL.tr('yes','так'):AL.tr('below cutoff','нижче межі')},
+        {k:AL.tr('Bandwidth','Смуга'), v:'> 10:1'},
+        {k:AL.tr('Directivity','Спрямованість'), v:'≈ 2–4 '+AL.unit('dBi')}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Discone_antenna',label:'Discone antenna'}}
+  ],
+  strength:{en:"A single discone covers a scanner's whole VHF/UHF range with no tuning — unbeatable for wideband monitoring. Gain is low (it is omnidirectional) and it is vertically polarised only.",
+            uk:"Один дискоконус покриває весь діапазон VHF/UHF сканера без налаштування — неперевершений для широкосмугового моніторингу. Підсилення низьке (всенаправлена), поляризація лише вертикальна."},
+  xrefs:[['#monopole','Monopole','Монополь'],['aperture.html#biconical','Biconical','Біконічна'],['#collinear','Collinear','Колінеарна'] ]
+});
+
+/* ---- 1.12 Rhombic ---------------------------------------------------- */
+WIRE.push({
+  id:'rhombic', num:'1.12', lvl:1,
+  desc:{en:"Four long wires arranged as a diamond and terminated in a resistor at the far apex. Each leg carries a traveling wave; the four beams combine into a strong, low-angle, unidirectional lobe toward the termination — the classic long-haul HF antenna.",
+        uk:"Чотири довгі проводи у формі ромба з узгоджувальним резистором на дальній вершині. Кожне плече несе біжучу хвилю; чотири промені складаються в сильну низькокутну односпрямовану пелюстку до навантаження — класична далека КХ-антена."},
+  methods:[{id:'tw', en:'Traveling-wave theory', uk:'Теорія біжучої хвилі',
+     desc:{en:"With a matched termination there is no reflected wave, so each leg is a traveling-wave long-wire radiator. The array of four legs is designed so their maxima align at the wanted elevation; the tilt (leg) angle and leg length set the beam.",
+           uk:"З узгодженим навантаженням відбитої хвилі немає, тож кожне плече — довгопровідний випромінювач біжучої хвилі. Чотири плечі проєктують так, щоб максимуми збіглися на потрібному куті місця; кут нахилу й довжина плеча задають промінь."},
+     formula:[{en:"long wire:  |F| = |sin(π·ℓ/λ·(1−cosψ)) / (1−cosψ)|,  ℓ = leg length",
+               uk:"довгий провід:  |F| = |sin(π·ℓ/λ·(1−cosψ)) / (1−cosψ)|,  ℓ = довжина плеча"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.014},
+    {id:'leg', kind:'range', en:'Leg length ℓ', uk:'Довжина плеча ℓ', min:1, max:8, step:0.1, value:4, fmt:v=>v.toFixed(1)+' λ'},
+    {id:'tilt', kind:'range', en:'Tilt angle', uk:'Кут нахилу', min:40, max:80, step:1, value:70, fmt:v=>v.toFixed(0)+'°'}
+  ],
+  plot:'full',
+  compute(s){
+    const L=s.leg;
+    // long-wire traveling-wave pattern = element factor sinθ × traveling-wave
+    // array factor sinc[(πL/λ)(1−cosθ)]. θ measured from the wire axis.
+    const lw=psi=>{ const u=1-Math.cos(psi), arg=Math.PI*L*u;
+      const sc=Math.abs(u)<1e-9?1:Math.sin(arg)/arg; return Math.abs(Math.sin(psi))*Math.abs(sc); };
+    const fnBeam=a=>lw(a*AL.D2R);
+    const D=AL.directivityAxial(g=>lw(Math.max(g,1e-3)));
+    const an=AL.analyzePattern(fnBeam,90,0.25);   // main lobe is off-axis
+    // A rhombic is a horizontal wire diamond slung above ground: the diamond
+    // shape only exists in PLAN, and the elevation shows it as one flat span.
+    const cx=190, cy=118, halfW=88, halfH=Math.min(20+L*8,64);
+    const lamCmB=AL.lambdaOf(s.f*1e9)*100, pxB=halfW/(L*lamCmB)*2;
+    let schemH=AL.rulerSVG(40,26,lamCmB,pxB)+AL.CAP_H();
+    schemH+=`<path class="schem-driven" d="M ${cx-halfW},${cy} L ${cx},${cy-halfH} L ${cx+halfW},${cy} L ${cx},${cy+halfH} Z"/>`;
+    schemH+=`<circle class="schem-node" cx="${cx-halfW}" cy="${cy}" r="2.5"/>`;
+    schemH+=`<rect class="schem-fill" x="${cx+halfW-3}" y="${cy-6}" width="12" height="12"/>`;
+    schemH+=`<text class="schem-label" x="${cx+halfW+2}" y="${cy-9}">R_term</text>`;
+    schemH+=`<text class="schem-label" x="${cx-halfW-30}" y="${cy+3}">${AL.tr('feed','живл.')}</text>`;
+    schemH+=AL.boresightArrow(cx+halfW+16,cy,26,A,'rhH');
+    schemH+=`<text class="schem-label" x="${cx-20}" y="${cy-halfH-8}">ℓ = ${L.toFixed(1)} λ ${AL.tr('per leg','на плече')}</text>`;
+    const gyR=180, hR=34;
+    let schemE=AL.rulerSVG(40,26,lamCmB,pxB)+AL.CAP_E();
+    schemE+=AL.groundHatch(cx-halfW-16,cx+halfW+22,gyR);
+    schemE+=`<line class="schem-driven" x1="${cx-halfW}" y1="${gyR-hR}" x2="${cx+halfW}" y2="${gyR-hR}"/>`;
+    schemE+=`<line class="schem-wire-dim" x1="${cx-halfW}" y1="${gyR-hR}" x2="${cx-halfW}" y2="${gyR}"/>`;
+    schemE+=`<line class="schem-wire-dim" x1="${cx+halfW}" y1="${gyR-hR}" x2="${cx+halfW}" y2="${gyR}"/>`;
+    schemE+=`<circle class="schem-node" cx="${cx-halfW}" cy="${gyR-hR}" r="2.5"/>`;
+    schemE+=`<rect class="schem-fill" x="${cx+halfW-3}" y="${gyR-hR-6}" width="12" height="12"/>`;
+    schemE+=`<text class="schem-label" x="${cx-halfW-8}" y="${gyR-hR-10}">${AL.tr('both legs superimposed','обидва плеча збігаються')}</text>`;
+    schemE+=AL.dimLineV(cx+halfW+30,gyR-hR,gyR,AL.tr('height','висота'));
+    schemE+=`<defs><marker id="ar-rhE" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" style="fill:${V}"/></marker></defs>`;
+    schemE+=`<line style="stroke:${V};stroke-width:1.6" x1="${cx+halfW}" y1="${gyR-hR}" x2="${(cx+halfW+52).toFixed(1)}" y2="${(gyR-hR-52*Math.tan(an.peakDeg*AL.D2R)).toFixed(1)}" marker-end="url(#ar-rhE)"/>`;
+    schemE+=`<text class="schem-label" style="fill:${V}" x="${cx+halfW+18}" y="${gyR-hR-30}">${an.peakDeg.toFixed(0)}°</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:L, sizeLabel:'ℓ = '+L.toFixed(1)+' λ per leg', gainDbi:D.dBi},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'), v:D.dBi.toFixed(1)+' '+AL.unit('dBi')},
+        {k:AL.tr('Beam elevation','Кут пелюстки'), v:an.peakDeg.toFixed(0)+'° '+AL.tr('from axis','від осі')},
+        {k:AL.tr('Lobe HPBW','Ширина пел.'), v:an.hpbw.toFixed(0)+'°'},
+        {k:AL.tr('Termination','Навантаження'), v:'600–800 '+AL.unit('ohm')}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Rhombic_antenna',label:'Rhombic antenna'}},
+    {tag:'book', en:{href:'https://archive.org/details/radioantennaengi00lapo',label:'Laport, Radio Antenna Engineering'}}
+  ],
+  strength:{en:"Very high gain (up to ~17 dBi) and broadband — the mainstay of pre-satellite intercontinental shortwave. The cost is a large plot of land and ~1/3 of the power dissipated in the terminating resistor.",
+            uk:"Дуже високе підсилення (до ~17 дБі) й широкосмуговість — основа досупутникового міжконтинентального КХ. Ціна — велика ділянка землі та ~1/3 потужності, розсіяної в резисторі."},
+  xrefs:[['#beverage','Beverage','Бевереджа'],['travelingwave.html#leaky-wave','Traveling-wave','Біжуча хвиля'],['#lpda','Log-periodic','Логоперіодична']]
+});
+
+/* ---- 1.13 Beverage --------------------------------------------------- */
+WIRE.push({
+  id:'beverage', num:'1.13', lvl:1,
+  desc:{en:"A long wire, a fraction of a wavelength above ground, terminated at the far end. The wave tilt of the ground pulls a small horizontal field component that the wire integrates over its length — a superb directional receiving antenna for the low bands, poor as a transmitter.",
+        uk:"Довгий провід, на частку хвилі над землею, узгоджений на дальньому кінці. Нахил фронту земної хвилі дає малу горизонтальну складову, яку провід інтегрує по довжині — чудова приймальна спрямована антена для НЧ-діапазонів, погана для передачі."},
+  methods:[{id:'tw', en:'Traveling-wave (ground-wave)', uk:'Біжуча хвиля (земна хвиля)',
+     desc:{en:"The forward-fired traveling wave adds in phase with the tilted ground wave along the wire. Directivity grows with length up to an optimum; beyond it the pattern breaks into lobes. Height and ground quality set the wave-tilt coupling.",
+           uk:"Біжуча хвиля вперед складається у фазі з нахиленою земною хвилею вздовж проводу. Спрямованість росте з довжиною до оптимуму; далі ДН розпадається на пелюстки. Висота й якість ґрунту задають зв'язок із нахилом фронту."},
+     formula:[{en:"|F| = |sin(π·ℓ/λ·(1−cosψ)) / (1−cosψ)|,   optimum ℓ ≈ 1–3 λ",
+               uk:"|F| = |sin(π·ℓ/λ·(1−cosψ)) / (1−cosψ)|,   оптимум ℓ ≈ 1–3 λ"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.007},
+    {id:'len', kind:'range', en:'Wire length ℓ', uk:'Довжина ℓ', min:0.5, max:6, step:0.1, value:2, fmt:v=>v.toFixed(1)+' λ'},
+    {id:'h', kind:'range', en:'Height above ground', uk:'Висота над землею', min:0.005, max:0.1, step:0.005, value:0.02, fmt:v=>v.toFixed(3)+' λ'}
+  ],
+  plot:'full',
+  compute(s){
+    const L=s.len;
+    const lw=psi=>{ const u=1-Math.cos(psi), arg=Math.PI*L*u;
+      const sc=Math.abs(u)<1e-9?1:Math.sin(arg)/arg; return Math.abs(Math.sin(psi))*Math.abs(sc); };
+    const fnBeam=a=>lw(a*AL.D2R);
+    const D=AL.directivityAxial(g=>lw(Math.max(g,1e-3)));
+    const an=AL.analyzePattern(fnBeam,90,0.25);   // main lobe is off-axis
+    const cx=190, gy=175, Lpx=170, hpx=Math.max(s.h*600,10);
+    const lamCmV=AL.lambdaOf(s.f*1e9)*100, pxV=Lpx/(L*lamCmV);
+    let schemE=AL.rulerSVG(40,26,lamCmV,pxV)+AL.CAP_E();
+    schemE+=AL.groundHatch(cx-Lpx/2-14,cx+Lpx/2+22,gy);
+    schemE+=`<line class="schem-driven" x1="${cx-Lpx/2}" y1="${gy-hpx}" x2="${cx+Lpx/2}" y2="${gy-hpx}"/>`;
+    schemE+=`<line class="schem-wire-dim" x1="${cx-Lpx/2}" y1="${gy-hpx}" x2="${cx-Lpx/2}" y2="${gy}"/>`;
+    schemE+=`<circle class="schem-node" cx="${cx-Lpx/2}" cy="${gy}" r="2.5"/>`;
+    schemE+=`<rect class="schem-fill" x="${cx+Lpx/2-3}" y="${gy-hpx-5}" width="10" height="10"/>`;
+    schemE+=`<text class="schem-label" x="${cx+Lpx/2+8}" y="${gy-hpx-6}">R</text>`;
+    schemE+=AL.dimLineV(cx-Lpx/2-18,gy-hpx,gy,`h`);
+    schemE+=AL.dimLineH(cx-Lpx/2,cx+Lpx/2,gy+26,`ℓ = ${L.toFixed(1)} λ`);
+    schemE+=`<defs><marker id="ar-bevE" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" style="fill:${V}"/></marker></defs>`;
+    schemE+=`<line style="stroke:${V};stroke-width:1.6" x1="${cx+Lpx/2}" y1="${gy-hpx}" x2="${(cx+Lpx/2+50).toFixed(1)}" y2="${(gy-hpx-50*Math.tan(an.peakDeg*AL.D2R)).toFixed(1)}" marker-end="url(#ar-bevE)"/>`;
+    schemE+=`<text class="schem-label" style="fill:${V}" x="${cx+Lpx/2+16}" y="${gy-hpx-28}">${an.peakDeg.toFixed(0)}°</text>`;
+    // plan: one straight wire, feed one end, terminator the other
+    const cyH=125;
+    let schemH=AL.rulerSVG(40,26,lamCmV,pxV)+AL.CAP_H();
+    schemH+=`<line class="schem-driven" x1="${cx-Lpx/2}" y1="${cyH}" x2="${cx+Lpx/2}" y2="${cyH}"/>`;
+    schemH+=`<circle class="schem-node" cx="${cx-Lpx/2}" cy="${cyH}" r="3"/>`;
+    schemH+=`<rect class="schem-fill" x="${cx+Lpx/2-3}" y="${cyH-5}" width="10" height="10"/>`;
+    schemH+=`<text class="schem-label" x="${cx-Lpx/2-6}" y="${cyH-10}">${AL.tr('feed','живл.')}</text>`;
+    schemH+=`<text class="schem-label" x="${cx+Lpx/2+8}" y="${cyH-6}">R_term</text>`;
+    schemH+=AL.boresightArrow(cx+Lpx/2+18,cyH,26,A,'bevH');
+    schemH+=AL.dimLineH(cx-Lpx/2,cx+Lpx/2,cyH+30,`ℓ = ${L.toFixed(1)} λ`);
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:L, sizeLabel:'ℓ = '+L.toFixed(1)+' λ', gainDbi:D.dBi},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'), v:D.dBi.toFixed(1)+' '+AL.unit('dBi')},
+        {k:AL.tr('Beam elevation','Кут пелюстки'), v:an.peakDeg.toFixed(0)+'° '+AL.tr('from axis','від осі')},
+        {k:AL.tr('Lobe HPBW','Ширина пел.'), v:an.hpbw.toFixed(0)+'°'},
+        {k:AL.tr('Use','Застосування'), v:AL.tr('receive only','лише прийом')}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Beverage_antenna',label:'Beverage antenna'}}
+  ],
+  strength:{en:"Unbeatable signal-to-noise on 160/80 m receive because it rejects high-angle noise and is directional; efficiency is terrible (most power lost in ground/termination) so it is never used to transmit.",
+            uk:"Неперевершене співвідношення сигнал/шум на 160/80 м у прийомі: відкидає високий кут і спрямована; ККД жахливий (потужність гине в землі/навантаженні), тож ніколи не передає."},
+  xrefs:[['#rhombic','Rhombic','Ромбічна'],['#dipole','Dipole','Диполь']]
+});
+
+/* ---- 1.14 T / Fan dipole -------------------------------------------- */
+WIRE.push({
+  id:'tfan', num:'1.14', lvl:3,
+  desc:{en:"Wire antennas that fight the low bands' huge wavelengths. A T-antenna adds a horizontal top-hat to a short vertical, capacitively lengthening it; a fan dipole hangs several dipoles of different lengths from one feed for multiband coverage.",
+        uk:"Дротові антени проти величезних довжин хвиль НЧ-діапазонів. T-антена додає горизонтальний «капелюх» до короткої вертикалі, ємнісно подовжуючи її; віялоподібний диполь підвішує кілька диполів різної довжини на одне живлення для багатодіапазонності."},
+  methods:[{id:'induced', en:'Top-loaded / multi-wire (induced-EMF)', uk:'Верхнє навантаж. / багатопровідна (наведені ЕРС)',
+     desc:{en:"Top-loading raises the current at the base, increasing the effective height of a short vertical without more mast. For a fan dipole each branch resonates near its own half-wave band; the feed sees whichever branch is resonant.",
+           uk:"Верхнє навантаження піднімає струм біля основи, збільшуючи ефективну висоту короткої вертикалі без вищої щогли. У віялоподібному диполі кожна гілка резонує біля свого пів-хвильового діапазону; живлення бачить резонансну гілку."},
+     formula:[{en:"h_eff = h·[1 − (tan(kh/2))/(kh/2)]⁻¹ (top-loading raises h_eff toward h)",
+               uk:"h_еф = h·[1 − (tan(kh/2))/(kh/2)]⁻¹ (верхнє навантаж. піднімає h_еф до h)"}]}],
+  controls:[
+    {id:'band', kind:'select', en:'Fan branch (band)', uk:'Гілка (діапазон)', value:'14',
+     options:[{value:'7',en:'40 m (7 MHz)',uk:'40 м (7 МГц)'},{value:'14',en:'20 m (14 MHz)',uk:'20 м (14 МГц)'},{value:'21',en:'15 m (21 MHz)',uk:'15 м (21 МГц)'},{value:'28',en:'10 m (28 MHz)',uk:'10 м (28 МГц)'}]},
+    {id:'top', kind:'range', en:'Top-hat length', uk:'Довжина капелюха', min:0, max:0.25, step:0.005, value:0.1, fmt:v=>v.toFixed(3)+' λ'}
+  ],
+  plot:'full',
+  compute(s){
+    const fMHz=parseFloat(s.band), lamCm=AL.c/(fMHz*1e6)*100;
+    const fnBeam=a=>AL.dipolePattern((90-a)*AL.D2R,0.5);
+    const axis=th=>AL.dipolePattern(th,0.5); const D=AL.directivityAxial(axis);
+    // A T / fan is a VERTICAL radiator with capacity hats — upright, like the
+    // other omni wires, with the hat wires spreading horizontally.
+    const cx=190, cy=125, px=scaleFor(0.5*lamCm,150), Lpx=0.5*lamCm*px, topPx=s.top*lamCm*px;
+    let schemE=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_E();
+    schemE+=AL.rodVert(cx,cy,Lpx,'schem-driven');
+    schemE+=`<line class="schem-wire" x1="${cx-topPx}" y1="${cy-Lpx/2}" x2="${cx+topPx}" y2="${cy-Lpx/2}"/>`;
+    schemE+=`<line class="schem-wire" x1="${cx-topPx}" y1="${cy+Lpx/2}" x2="${cx+topPx}" y2="${cy+Lpx/2}"/>`;
+    schemE+=`<text class="schem-label" x="${cx+topPx+4}" y="${cy-Lpx/2-4}">${AL.tr('capacity hat','ємнісний капелюх')}</text>`;
+    schemE+=AL.dimLineV(cx+topPx+16,cy-Lpx/2,cy+Lpx/2,`≈ λ/2`);
+    schemE+=`<text class="schem-label" x="${cx}" y="${cy+Lpx/2+22}" text-anchor="middle">${(0.5*lamCm/100).toFixed(1)} ${AL.unit('m')} @ ${fMHz} ${AL.unit('MHz')}</text>`;
+    schemE+=AL.boresightArrow(cx+topPx+70,cy,30,V,'tfE');
+    let schemH=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_H();
+    schemH+=AL.azimuthCircle(cx,cy,Math.max(topPx+26,56),A);
+    for(let q=0;q<6;q++){ const ang=q*Math.PI/3;
+      schemH+=`<line class="schem-wire" x1="${cx}" y1="${cy}" x2="${(cx+topPx*Math.cos(ang)).toFixed(1)}" y2="${(cy+topPx*Math.sin(ang)).toFixed(1)}"/>`; }
+    schemH+=AL.conductorEndOn(cx,cy,6);
+    schemH+=AL.boresightArrow(cx+10,cy,Math.max(topPx+30,60),A,'tfH');
+    schemH+=`<text class="schem-label" x="${cx}" y="${cy+Math.max(topPx+26,56)+18}" text-anchor="middle">${AL.tr('hat wires · omni in azimuth','дроти капелюха · всенапрямлена')}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm, sizeLam:0.5, sizeLabel:'L ≈ 0.50 λ', gainDbi:2.15},
+      readouts:[
+        {k:AL.tr('Band','Діапазон'), v:fMHz.toFixed(0)+' '+AL.unit('MHz')},
+        {k:AL.tr('Half-wave','Пів-хвиля'), v:(0.5*lamCm/100).toFixed(1)+' '+AL.unit('m')},
+        {k:AL.tr('Directivity','Спрямованість'), v:D.dBi.toFixed(2)+' '+AL.unit('dBi')},
+        {k:AL.tr('Top-load gain','Виграш капелюха'), v:'+'+(s.top*40).toFixed(0)+'% h_eff'}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/T-antenna',label:'T-antenna'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Fan_dipole',label:'Fan dipole'}}
+  ],
+  strength:{en:"Top-loading is the standard trick for efficient LF/MF verticals where a full λ/4 mast is impossible; fan dipoles give cheap multiband HF from a single feedline. Bandwidth per branch is still narrow.",
+            uk:"Верхнє навантаження — стандартний прийом для ефективних НЧ/СЧ вертикалей, де повна щогла λ/4 неможлива; віялоподібні диполі дають дешевий багатодіапазонний КХ з одного фідера. Смуга гілки все ж вузька."},
+  xrefs:[['#dipole','Dipole','Диполь'],['#monopole','Monopole','Монополь']]
+});
+
+/* ====================================================================== */
+/*  PAGE BUILDER — turns each WIRE entry into a section + mounted explorer  */
+/* ====================================================================== */
+// Standard planes column (schematic svg + polar plot svg + 4 readouts).
+function planesHTMLFor(id){
+  return `
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_schem" viewBox="0 0 400 250"></svg></div>
+    </div>
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_plot" viewBox="0 0 400 380"></svg>
+        <div class="plane-readout">
+          ${[0,1,2,3].map(i=>`<div class="item"><div class="k" id="${id}_k${i}"></div><div class="v" id="${id}_v${i}">-</div></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+function fillExtras(a){
+  const rf=document.getElementById('refs-'+a.id); if(rf) rf.innerHTML=window.atlasRefs(a.refs);
+  const tg=document.getElementById('tags-'+a.id); if(tg) tg.innerHTML=window.atlasTags(a.tags.std,a.tags.mod,a.tags.mth);
+}
+
+// Mount one explorer. mount() replaces #exp-<id> with the controls + planes
+// columns, so the schematic/plot svg targets come from planesHTMLFor().
+function mountOne(a){
+  AL.mount(a.id,{ methods:(a.methods&&a.methods.length>1)?a.methods:null, controls:a.controls, planesHTML:AL.planesTwo(a.id),
+    render:function(ctx){
+      const out=a.compute(ctx.state, ctx.methodId);
+      AL.renderPlanes(a.id, out, a);
+      if(out.enable) for(const cid in out.enable) ctx.enable(cid,out.enable[cid]);
+    }});
+  fillExtras(a);
+}
+
+// section markup builder (separated so mount can supply the planes)
+function buildSections(list, root){
+  root.innerHTML=list.map(a=>{
+    const multi=a.methods&&a.methods.length>1;
+    const mdesc=(a.methods||[]).map((m,i)=>
+      `<div class="method-body${(multi&&i>0)?' hidden':''}" data-method="${m.id}">
+         <div class="desc-cols">
+           <div><h4 data-en="${m.en}" data-uk="${m.uk}">${m.en}</h4>
+             <p data-en="${m.desc.en}" data-uk="${m.desc.uk}">${m.desc.en}</p></div>
+           <div>${(m.formula||[]).map(f=>`<span class="formula" data-en="${f.en}" data-uk="${f.uk}">${f.en}</span>`).join('')}</div>
+         </div>
+       </div>`).join('');
+    return `<section id="${a.id}">
+      <div class="num" data-en="${a.num} / wire" data-uk="${a.num} / дротова">${a.num} / wire</div>
+      <h2><span class="badge l${a.lvl} lg">${['','I','II','III'][a.lvl]}</span>
+          <span data-en="${a.en}" data-uk="${a.uk}">${a.en}</span></h2>
+      <div id="tags-${a.id}"></div>
+      <p class="desc" data-en="${a.desc.en}" data-uk="${a.desc.uk}">${a.desc.en}</p>
+      <div class="method-desc">${mdesc}</div>
+      <div class="panel"><div id="exp-${a.id}"></div></div>
+      <div id="refs-${a.id}"></div>
+      <div class="strength">
+        <div class="st-title" data-en="Design notes" data-uk="Проєктні нотатки">Design notes</div>
+        <span data-en="${a.strength.en}" data-uk="${a.strength.uk}">${a.strength.en}</span>
+      </div>
+      <div class="xrefs">${(a.xrefs||[]).map(x=>`<a href="${x[0]}" data-en="${x[1]}" data-uk="${x[2]}">${x[1]}</a>`).join('')}</div>
+    </section>`;
+  }).join('');
+}
+
+// names in WIRE lack en/uk/tags — pull them from CATALOG so data stays single-source
+WIRE.forEach(a=>{ const c=CATALOG.flatMap(s=>s.antennas).find(x=>x.id===a.id)||{};
+  a.en=c.en||a.id; a.uk=c.uk||a.id; a.tags={std:c.std||[],mod:c.mod||[],mth:c.mth||[]}; });
+
+buildSections(WIRE, document.getElementById('sections'));
+WIRE.forEach(mountOne);
+
+// re-fill refs/tags on language change (mount re-renders the explorers)
+window.onLangChangePage=function(){ WIRE.forEach(fillExtras); };
+</script>
+</body>
+</html>

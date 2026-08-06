@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reflector Antennas — Antenna Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="reflector">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Family 03 · a shaped conducting surface focuses a feed into a pencil beam" data-uk="Сім'я 03 · профільована провідна поверхня фокусує опромінювач у голчастий промінь">Family 03 · a shaped conducting surface focuses a feed into a pencil beam</div>
+    <h1 data-en="Reflector Antennas" data-uk="Рефлекторні антени">Reflector Antennas</h1>
+    <div class="eq-hero">G = η·(πD/λ)²</div>
+    <p class="lede" data-en="From the prime-focus dish to the wire-grid mesh: five reflector antennas, each with a live aperture calculator, a dynamic cross-section schematic and the physical-optics or image-theory method behind it. Grow the diameter, tilt the offset, close the corner — the geometry redraws and the pencil beam narrows in step."
+       data-uk="Від тарілки прямого фокуса до дротяної сітки: п'ять рефлекторних антен, кожна з живим калькулятором апертури, динамічною схемою перерізу та методом фізичної оптики чи теорії зображень. Збільшуйте діаметр, нахиляйте офсет, стуляйте кут — геометрія перемальовується, а голчастий промінь звужується синхронно.">Five reflector antennas…</p>
+  </div>
+</header>
+
+<div class="wrap-wide" id="sections"></div>
+
+<footer class="wrap-wide">
+  <p data-en="Models are teaching-grade: gains from the aperture-efficiency formula G = η·(πD/λ)², beams from the uniform-circular-aperture (Airy) cut, the corner reflector from an exact image-theory source sum. Real dishes are designed with full physical-optics / GTD surface integration — the method tags point you there."
+     data-uk="Моделі навчального рівня: підсилення — з формули апертурної ефективності G = η·(πD/λ)², промені — з рівномірної кругової апертури (Ейрі), кутовий рефлектор — з точної суми джерел-зображень. Реальні тарілки рахують повним інтегруванням фізичної оптики / GTD по поверхні — мітки методів вказують куди дивитись.">Models are teaching-grade…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script src="js/antenna.js"></script>
+<script src="js/pattern3d.js"></script>
+<script>
+const AL = window.AntennaLab;
+const V = 'var(--teal)', A = 'var(--amber)';
+
+/* ---------- shared schematic helpers ---------------------------------- */
+function scaleFor(maxCm, budgetPx){ return budgetPx / Math.max(maxCm, 0.01); }
+
+// Parabolic cross-section opening UP. Vertex at (cx,cyV); focus F px above it.
+// Depth-to-width ratio is set entirely by f/D (physics); width scales with D.
+function parabolaPath(cx, cyV, widthPx, fd){
+  const half = widthPx/2, F = fd*widthPx, depth = half*half/(4*F);
+  let d='', N=44;
+  for(let i=0;i<=N;i++){ const x=-half+widthPx*i/N, y=cyV - x*x/(4*F);
+    d += (i===0?'M ':'L ') + (cx+x).toFixed(1)+','+y.toFixed(1)+' '; }
+  return {d, depth, F, half};
+}
+
+/* ====================================================================== */
+/*  ANTENNA DEFINITIONS                                                     */
+/* ====================================================================== */
+const REFL = [];
+
+/* ---- 3.1 Parabolic dish (prime focus) -------------------------------- */
+REFL.push({
+  id:'parabolic', num:'3.1', lvl:2, plot:'half',
+  desc:{en:"A paraboloid turns the spherical wave of a focal-point feed into a plane wave across its aperture: every ray from the focus travels an equal path to the aperture plane, so the whole mouth radiates in phase. Gain rises as the square of diameter-in-wavelengths, tempered by how efficiently the feed illuminates the surface.",
+        uk:"Параболоїд перетворює сферичну хвилю опромінювача у фокусі на плоску хвилю по всій апертурі: кожен промінь із фокуса проходить однаковий шлях до площини апертури, тож увесь розкрив випромінює синфазно. Підсилення росте як квадрат діаметра в довжинах хвиль, зменшене тим, наскільки ефективно опромінювач засвічує поверхню."},
+  methods:[
+    {id:'po', en:'Physical optics (aperture efficiency)', uk:'Фізична оптика (апертурна ефективність)',
+     desc:{en:"The aperture-efficiency model: gain is the ideal (πD/λ)² scaled by an overall efficiency η that folds together illumination taper, spillover, blockage and surface error. Heavier edge taper lowers sidelobes but slightly lowers η and widens the beam.",
+           uk:"Модель апертурної ефективності: підсилення — ідеальне (πD/λ)², помножене на загальну ефективність η, що поєднує спад засвітки, перелив, затінення й похибку поверхні. Сильніший спад на краю знижує бічні пелюстки, але трохи зменшує η й розширює промінь."},
+     formula:[{en:"G = 10·log₁₀[ η·(πD/λ)² ] dBi",
+               uk:"G = 10·log₁₀[ η·(πD/λ)² ] дБі"},
+              {en:"η ≈ 0.75 − 0.012·(edge taper, dB),  clamped 0.45…0.75",
+               uk:"η ≈ 0.75 − 0.012·(спад краю, дБ),  межі 0.45…0.75"}]},
+    {id:'go', en:'Geometric optics (ideal illumination)', uk:'Геометрична оптика (ідеальна засвітка)',
+     desc:{en:"The upper bound: a uniformly and perfectly illuminated aperture with η = 1. Ray tracing collimates every focal ray to the aperture plane; the resulting Airy pattern and 100 % efficiency are the ceiling any real feed works below.",
+           uk:"Верхня межа: рівномірно й ідеально засвічена апертура з η = 1. Трасування променів колімує кожен промінь фокуса до площини апертури; отримана діаграма Ейрі та 100 % ефективність — стеля, під яким працює будь-який реальний опромінювач."},
+     formula:[{en:"G_max = 10·log₁₀[ (πD/λ)² ] dBi   (η = 1)",
+               uk:"G_max = 10·log₁₀[ (πD/λ)² ] дБі   (η = 1)"}]}
+  ],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:40000,value:10},
+    {id:'D', kind:'range', en:'Dish diameter D', uk:'Діаметр тарілки D', min:0.3, max:5, step:0.1, value:1.2, fmt:v=>v.toFixed(1)+' '+AL.unit('m')},
+    {id:'fd', kind:'range', en:'Focal ratio f/D', uk:'Фокальне відн. f/D', min:0.3, max:0.8, step:0.01, value:0.45, fmt:v=>v.toFixed(2)},
+    {id:'taper', kind:'range', en:'Edge taper', uk:'Спад на краю', min:0, max:20, step:0.5, value:10, fmt:v=>v.toFixed(1)+' '+AL.unit('dB')}
+  ],
+  compute(s, method){
+    const lam=AL.lambdaOf(s.f*1e9), lamCm=lam*100, Dlam=s.D/lam;
+    const eff = method==='go' ? 1.0 : AL.clamp(0.75-0.012*s.taper, 0.45, 0.75);
+    const fnBeam=a=>AL.apertureCircular(a*AL.D2R, Dlam);
+    const gain=10*Math.log10(eff*Math.pow(Math.PI*Dlam,2));
+    const samp=AL.sampleHalf(fnBeam,0.05,90);
+    const hp=AL.findHPBW(samp,fnBeam), sl=AL.findFirstSidelobe(samp);
+    // schematic: parabola cross-section (opening up), feed at focus, boresight up
+    const cx=200, cyV=205, widthPx=AL.clamp(s.D*50,70,210), px=scaleFor(s.D*100,widthPx);
+    const par=parabolaPath(cx,cyV,widthPx,s.fd);
+    const foc=cyV-par.F;
+    let schemE=AL.rulerSVG(36,28,lamCm,px)+AL.CAP_E();
+    schemE+=`<path class="schem-outline" d="${par.d}" fill="none"/>`;
+    schemE+=`<line class="schem-dim" x1="${cx}" y1="${cyV}" x2="${cx}" y2="${foc}" stroke-dasharray="3,3"/>`;
+    schemE+=`<circle class="schem-driven" cx="${cx}" cy="${foc}" r="4"/>`;
+    schemE+=`<text class="schem-label" x="${cx+8}" y="${foc+3}">${AL.tr('feed (focus)','опром. (фокус)')}</text>`;
+    schemE+=AL.boresightArrow(cx, foc-14, 30, V, 'paraE');
+    schemE+=AL.dimLineH(cx-par.half, cx+par.half, cyV+18, `D = ${s.D.toFixed(1)} ${AL.unit('m')} = ${Dlam.toFixed(0)} λ`);
+    // plan: the circular aperture face-on, feed and its support struts
+    const cyH=125, RH=Math.min(par.half,96);
+    let schemH=AL.rulerSVG(36,28,lamCm,px*RH/Math.max(par.half,1))+AL.CAP_H();
+    schemH+=`<circle class="schem-fill" cx="${cx}" cy="${cyH}" r="${RH}"/>`;
+    schemH+=`<circle class="schem-outline" cx="${cx}" cy="${cyH}" r="${RH}" fill="none"/>`;
+    for(let q=0;q<3;q++){ const ang=q*2*Math.PI/3-Math.PI/2;
+      schemH+=`<line class="schem-wire-dim" x1="${cx}" y1="${cyH}" x2="${(cx+RH*Math.cos(ang)).toFixed(1)}" y2="${(cyH+RH*Math.sin(ang)).toFixed(1)}"/>`; }
+    schemH+=`<circle class="schem-driven" cx="${cx}" cy="${cyH}" r="5"/>`;
+    schemH+=`<text class="schem-label" x="${cx+10}" y="${cyH+3}">${AL.tr('feed + struts','опром. + розтяжки')}</text>`;
+    schemH+=AL.dimLineH(cx-RH,cx+RH,cyH+RH+18,`D = ${Dlam.toFixed(0)} λ`);
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm, sizeLam:Dlam, sizeLabel:'D = '+Dlam.toFixed(0)+' λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'), v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW', v:AL.fmtDeg(hp)},
+        {k:AL.tr('First SLL','1-а бок. пелюстка'), v:AL.fmtDb(sl.level)},
+        {k:'f/D', v:s.fd.toFixed(2)}
+      ], enable:{taper:method!=='go'}};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Parabolic_antenna',label:'Parabolic antenna'}, uk:{href:'https://uk.wikipedia.org/wiki/Параболічна_антена',label:'Параболічна антена'}},
+    {tag:'book', en:{href:'https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061',label:'Balanis, Antenna Theory, ch. 15'}},
+    {tag:'book', en:{href:'https://us.artechhouse.com/Reflector-Antennas-P1.aspx',label:'Rusch & Potter, Reflector Antennas'}}
+  ],
+  strength:{en:"The workhorse of high-gain microwave: 30–60 dBi from a single surface, limited only by diameter, frequency and surface accuracy (RMS error should stay below λ/16). An f/D near 0.4 is a deep dish that spills little but demands a wide-angle feed; f/D near 0.7 is shallow and easy to feed but spills more past the rim.",
+            uk:"Робоча конячка високопідсилювального НВЧ: 30–60 дБі з однієї поверхні, обмежені лише діаметром, частотою й точністю поверхні (СКВ похибки має бути менше λ/16). f/D близько 0.4 — глибока тарілка з малим переливом, але потребує ширококутного опромінювача; f/D близько 0.7 — мілка, легка для засвітки, але переливає більше за край."},
+  xrefs:[['aperture.html#horn','Horn feed','Рупорний опромінювач'],['#cassegrain','Cassegrain','Кассегрена'],['#offset-dish','Offset dish','Офсетна тарілка']]
+});
+
+/* ---- 3.2 Cassegrain / Gregorian -------------------------------------- */
+REFL.push({
+  id:'cassegrain', num:'3.2', lvl:2, plot:'half',
+  desc:{en:"A dual-reflector system: a small hyperbolic subreflector near the main-dish focus folds the ray path back so the feed sits at the vertex, next to the low-noise receiver. The price is central blockage — the subreflector shadows the middle of the aperture — which the design keeps small.",
+        uk:"Дворефлекторна система: малий гіперболічний субрефлектор біля фокуса головної тарілки згортає хід променів назад, тож опромінювач стоїть у вершині, поряд із малошумним приймачем. Ціна — центральне затінення: субрефлектор заступає середину апертури — конструкція тримає його малим."},
+  methods:[
+    {id:'po', en:'Physical optics (dual reflector)', uk:'Фізична оптика (дворефлекторна)',
+     desc:{en:"Both surfaces are treated by physical optics; the equivalent single-dish aperture efficiency (here ≈ 0.65) is reduced by central blockage from the subreflector. Blockage efficiency is the fraction of aperture area left unshadowed, squared for the field ratio.",
+           uk:"Обидві поверхні розглядають фізичною оптикою; еквівалентна апертурна ефективність однієї тарілки (тут ≈ 0.65) зменшена центральним затіненням субрефлектора. Ефективність затінення — частка незатіненої площі апертури, у квадраті для відношення полів."},
+     formula:[{en:"η_b = (1 − (d_sub/D)²)²,   G = 10·log₁₀[ 0.65·η_b·(πD/λ)² ] dBi",
+               uk:"η_b = (1 − (d_sub/D)²)²,   G = 10·log₁₀[ 0.65·η_b·(πD/λ)² ] дБі"}]}
+  ],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:40000,value:12},
+    {id:'D', kind:'range', en:'Main dish D', uk:'Головна тарілка D', min:0.5, max:8, step:0.1, value:3, fmt:v=>v.toFixed(1)+' '+AL.unit('m')},
+    {id:'dsub', kind:'range', en:'Subreflector d/D', uk:'Субрефлектор d/D', min:0.05, max:0.25, step:0.01, value:0.12, fmt:v=>(v*100).toFixed(0)+' %'}
+  ],
+  compute(s){
+    const lam=AL.lambdaOf(s.f*1e9), lamCm=lam*100, Dlam=s.D/lam;
+    const etaB=Math.pow(1-s.dsub*s.dsub,2);
+    const gain=10*Math.log10(0.65*etaB*Math.pow(Math.PI*Dlam,2));
+    const blockLoss=10*Math.log10(etaB);
+    const fnBeam=a=>AL.apertureCircular(a*AL.D2R, Dlam);
+    const samp=AL.sampleHalf(fnBeam,0.05,90);
+    const hp=AL.findHPBW(samp,fnBeam);
+    // schematic: main parabola + convex subreflector disc near front + feed at vertex
+    const cx=200, cyV=205, widthPx=AL.clamp(s.D*26,80,210), px=scaleFor(s.D*100,widthPx);
+    const par=parabolaPath(cx,cyV,widthPx,0.4);
+    const foc=cyV-par.F, subY=cyV-par.F*0.72, subW=Math.max(s.dsub*widthPx,10);
+    let schemE=AL.rulerSVG(36,28,lamCm,px)+AL.CAP_E();
+    schemE+=`<path class="schem-outline" d="${par.d}" fill="none"/>`;
+    schemE+=`<path class="schem-fill" d="M ${cx-subW/2},${subY} Q ${cx},${subY-subW*0.5} ${cx+subW/2},${subY} Z"/>`;
+    schemE+=`<text class="schem-label" x="${cx+subW/2+4}" y="${subY-2}">${AL.tr('sub','суб')}</text>`;
+    schemE+=`<line class="schem-dim" x1="${cx}" y1="${subY}" x2="${cx}" y2="${cyV}" stroke-dasharray="3,3"/>`;
+    schemE+=`<circle class="schem-driven" cx="${cx}" cy="${cyV}" r="4"/>`;
+    schemE+=`<text class="schem-label" x="${cx+8}" y="${cyV+2}">${AL.tr('feed (vertex)','опром. (вершина)')}</text>`;
+    schemE+=AL.boresightArrow(cx, foc-4, 28, V, 'cassE');
+    schemE+=AL.dimLineH(cx-par.half, cx+par.half, cyV+18, `D = ${s.D.toFixed(1)} ${AL.unit('m')} = ${Dlam.toFixed(0)} λ`);
+    // plan: aperture face-on with the subreflector blocking the middle
+    const cyH=125, RH=Math.min(par.half,96), rSub=Math.max(s.dsub*RH,6);
+    let schemH=AL.rulerSVG(36,28,lamCm,px*RH/Math.max(par.half,1))+AL.CAP_H();
+    schemH+=`<circle class="schem-fill" cx="${cx}" cy="${cyH}" r="${RH}"/>`;
+    schemH+=`<circle class="schem-outline" cx="${cx}" cy="${cyH}" r="${RH}" fill="none"/>`;
+    for(let q=0;q<4;q++){ const ang=q*Math.PI/2+Math.PI/4;
+      schemH+=`<line class="schem-wire-dim" x1="${cx}" y1="${cyH}" x2="${(cx+RH*Math.cos(ang)).toFixed(1)}" y2="${(cyH+RH*Math.sin(ang)).toFixed(1)}"/>`; }
+    schemH+=`<circle class="schem-outline" cx="${cx}" cy="${cyH}" r="${rSub}" style="fill:rgba(139,151,180,.28)"/>`;
+    schemH+=`<text class="schem-label" x="${cx+rSub+6}" y="${cyH+3}">${AL.tr('subreflector blockage','затінення субрефлектором')}</text>`;
+    schemH+=AL.dimLineH(cx-RH,cx+RH,cyH+RH+18,`D = ${Dlam.toFixed(0)} λ`);
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm, sizeLam:Dlam, sizeLabel:'D = '+Dlam.toFixed(0)+' λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'), v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW', v:AL.fmtDeg(hp)},
+        {k:AL.tr('Blockage loss','Втрати затінення'), v:blockLoss.toFixed(2)+' '+AL.unit('dB')},
+        {k:AL.tr('Sub dia','Діам. субрефл.'), v:(s.dsub*s.D*100).toFixed(1)+' '+AL.unit('cm')}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Cassegrain_antenna',label:'Cassegrain antenna'}, uk:{href:'https://uk.wikipedia.org/wiki/Антена_Кассегрена',label:'Антена Кассегрена'}},
+    {tag:'book', en:{href:'https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061',label:'Balanis, Antenna Theory'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1109/PROC.1966.4626',label:'Hannan, Cassegrain geometry (Proc. IEEE)'}}
+  ],
+  strength:{en:"Folding the optics puts the receiver at the vertex, cutting feed-line loss and letting the subreflector shape the illumination for high efficiency — the standard for satellite ground stations, deep-space and radio-astronomy dishes. Keep the subreflector under ~10 % of D or blockage eats the gain it saves.",
+            uk:"Згортання оптики ставить приймач у вершину, зменшуючи втрати фідера й дозволяючи субрефлектору формувати засвітку для високої ефективності — стандарт наземних супутникових станцій, далекого космосу й радіоастрономії. Тримайте субрефлектор менше ~10 % від D, інакше затінення з'їсть виграш."},
+  xrefs:[['#parabolic','Prime-focus dish','Тарілка прямого фокуса'],['aperture.html#horn','Horn feed','Рупорний опромінювач'],['#offset-dish','Offset dish','Офсетна тарілка']]
+});
+
+/* ---- 3.3 Offset-fed parabolic ---------------------------------------- */
+REFL.push({
+  id:'offset-dish', num:'3.3', lvl:2, plot:'half',
+  desc:{en:"An offset dish uses only a slice of the paraboloid, well off the axis, so the feed and its support sit entirely outside the beam. Zero aperture blockage lifts efficiency and cleans up the sidelobes, at the cost of an asymmetric geometry that raises cross-polarisation as the offset angle grows.",
+        uk:"Офсетна тарілка використовує лише скибку параболоїда, далеко від осі, тож опромінювач і його кріплення повністю поза променем. Нульове затінення апертури підвищує ефективність і очищає бічні пелюстки ціною асиметричної геометрії, що збільшує крос-поляризацію зі зростанням кута офсету."},
+  methods:[
+    {id:'po', en:'PO + cross-pol (Ludwig-3)', uk:'ФО + крос-поляр. (Людвіг-3)',
+     desc:{en:"Physical optics for the copolar gain (η ≈ 0.70, no blockage) plus the Ludwig third-definition estimate of cross-polarisation, which for an offset reflector rises roughly linearly with the offset angle. Real designs feed-tilt or use matched feeds to claw some of it back.",
+           uk:"Фізична оптика для співполярного підсилення (η ≈ 0.70, без затінення) плюс оцінка крос-поляризації за третім означенням Людвіга, що для офсетного рефлектора росте приблизно лінійно з кутом офсету. Реальні конструкції нахиляють опромінювач або беруть узгоджені опромінювачі, щоб частину повернути."},
+     formula:[{en:"G = 10·log₁₀[ 0.70·(πD/λ)² ] dBi",
+               uk:"G = 10·log₁₀[ 0.70·(πD/λ)² ] дБі"},
+              {en:"XPD ≈ −35 + 0.45·(offset angle, deg)  dB",
+               uk:"XPD ≈ −35 + 0.45·(кут офсету, град)  дБ"}]}
+  ],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:40000,value:12},
+    {id:'D', kind:'range', en:'Aperture D', uk:'Апертура D', min:0.3, max:2, step:0.05, value:0.6, fmt:v=>v.toFixed(2)+' '+AL.unit('m')},
+    {id:'off', kind:'range', en:'Offset angle', uk:'Кут офсету', min:10, max:45, step:1, value:25, fmt:v=>v.toFixed(0)+'°'}
+  ],
+  compute(s){
+    const lam=AL.lambdaOf(s.f*1e9), lamCm=lam*100, Dlam=s.D/lam;
+    const gain=10*Math.log10(0.70*Math.pow(Math.PI*Dlam,2));
+    const xpol=-35+0.45*s.off;
+    const fnBeam=a=>AL.apertureCircular(a*AL.D2R, Dlam);
+    const samp=AL.sampleHalf(fnBeam,0.05,90);
+    const hp=AL.findHPBW(samp,fnBeam);
+    // schematic: an offset (upper) slice of a parabola + feed off to the side
+    const cx=210, cyV=235, widthPx=AL.clamp(s.D*70,80,180);
+    const px=scaleFor(s.D*100,widthPx);
+    const F=0.5*widthPx;
+    // draw the offset slice: x from 0.15w..1.15w of the full parabola (never crosses axis)
+    const x0=widthPx*0.18, x1=widthPx*1.18;
+    let d='', N=36;
+    for(let i=0;i<=N;i++){ const x=x0+(x1-x0)*i/N, y=cyV - x*x/(4*F);
+      d += (i===0?'M ':'L ') + (cx-widthPx*0.6+x).toFixed(1)+','+y.toFixed(1)+' '; }
+    let schemE=AL.rulerSVG(36,26,lamCm,px)+AL.CAP_E();
+    schemE+=`<path class="schem-outline" d="${d}" fill="none"/>`;
+    // feed off to the side; offset angle sets its height along the rim line
+    const midX=cx-widthPx*0.6+(x0+x1)/2, midY=cyV - Math.pow((x0+x1)/2,2)/(4*F);
+    const fr=1+(s.off-10)/40; // 1..1.875
+    const fx=cx-widthPx*0.55, fy=midY+56*fr;
+    schemE+=`<circle class="schem-driven" cx="${fx}" cy="${fy}" r="4"/>`;
+    schemE+=`<text class="schem-label" x="${fx-6}" y="${fy+15}">${AL.tr('offset feed','офсет. опром.')}</text>`;
+    schemE+=`<line class="schem-dim" x1="${fx}" y1="${fy}" x2="${midX}" y2="${midY}" stroke-dasharray="3,3"/>`;
+    schemE+=`<text class="schem-label" x="${fx+14}" y="${fy-6}">${AL.tr('offset','офсет')} ${s.off.toFixed(0)}°</text>`;
+    schemE+=AL.boresightArrow(midX, midY-16, 30, V, 'offE');
+    // plan: the offset aperture, feed clear of it — no blockage at all
+    const cyH=120, RH=Math.min(widthPx*0.5,92);
+    let schemH=AL.rulerSVG(36,26,lamCm,px*RH/Math.max(widthPx*0.5,1))+AL.CAP_H();
+    schemH+=`<circle class="schem-fill" cx="${cx}" cy="${cyH}" r="${RH}"/>`;
+    schemH+=`<circle class="schem-outline" cx="${cx}" cy="${cyH}" r="${RH}" fill="none"/>`;
+    schemH+=`<circle class="schem-driven" cx="${cx}" cy="${cyH+RH+22}" r="5"/>`;
+    schemH+=`<text class="schem-label" x="${cx+10}" y="${cyH+RH+26}">${AL.tr('feed sits outside the aperture — no blockage','опромінювач поза розкривом — без затінення')}</text>`;
+    schemH+=`<line class="schem-dim" x1="${cx}" y1="${cyH+RH+22}" x2="${cx}" y2="${cyH}" stroke-dasharray="3,3"/>`;
+    schemH+=AL.dimLineH(cx-RH,cx+RH,cyH-RH-10,`D = ${Dlam.toFixed(0)} λ`);
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm, sizeLam:Dlam, sizeLabel:'D = '+Dlam.toFixed(0)+' λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'), v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW', v:AL.fmtDeg(hp)},
+        {k:AL.tr('Cross-pol','Крос-поляр.'), v:xpol.toFixed(1)+' '+AL.unit('dB')},
+        {k:AL.tr('Efficiency','ККД'), v:'70 %'}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Offset_dish_antenna',label:'Offset dish antenna'}, uk:{href:'https://uk.wikipedia.org/wiki/Супутникова_антена',label:'Супутникова антена'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1109/TAP.1973.1140406',label:'Ludwig, definition of cross-polarisation (IEEE TAP)'}},
+    {tag:'book', en:{href:'https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061',label:'Balanis, Antenna Theory'}}
+  ],
+  strength:{en:"Blockage-free means every square metre of aperture works and the sidelobes are clean — why almost every home satellite-TV dish is an offset slice, and why it tilts back yet points at the sky. The catch is cross-polarisation and beam squint that worsen with offset angle, limiting reuse in dual-polarised links.",
+            uk:"Відсутність затінення означає, що працює кожен квадратний метр апертури, а бічні пелюстки чисті — тому майже кожна домашня супутникова тарілка є офсетною скибкою й, нахилена назад, дивиться в небо. Заковика — крос-поляризація й зсув променя, що погіршуються з кутом офсету, обмежуючи повторне використання в двополяризаційних лініях."},
+  xrefs:[['#parabolic','Prime-focus dish','Тарілка прямого фокуса'],['#cassegrain','Cassegrain','Кассегрена'],['aperture.html#horn','Horn feed','Рупорний опромінювач']]
+});
+
+/* ---- 3.4 Corner reflector -------------------------------------------- */
+REFL.push({
+  id:'corner', num:'3.4', lvl:2, plot:'full',
+  desc:{en:"A driven dipole sits in front of two flat metal sheets meeting at an angle. For an included angle of 180°/n the flat walls are reproduced exactly by 2n−1 image sources, whose fields add forward and cancel backward — a compact way to turn a dipole's 2 dBi into a directional 10–13 dBi beam without a curved surface.",
+        uk:"Активний диполь стоїть перед двома пласкими металевими листами, що сходяться під кутом. Для кута розхилу 180°/n пласкі стінки точно відтворюються 2n−1 джерелами-зображеннями, поля яких додаються вперед і гасяться назад — компактний спосіб перетворити 2 дБі диполя на спрямований промінь 10–13 дБі без викривленої поверхні."},
+  methods:[
+    {id:'image', en:'Image theory', uk:'Теорія зображень',
+     desc:{en:"Exact for an included angle 180°/n with infinite plates: the corner is replaced by a ring of 2n sources on a circle of radius s (the driven-to-apex spacing), with alternating sign. The pattern is the coherent sum of driven plus images; directivity comes from integrating that pattern.",
+           uk:"Точно для кута розхилу 180°/n з нескінченними стінками: кут замінюється кільцем із 2n джерел на колі радіуса s (відстань диполь–вершина) із чергуванням знаку. Діаграма — когерентна сума активного й зображень; спрямованість — з інтегрування цієї діаграми."},
+     formula:[{en:"F(φ) = | Σⱼ (−1)ʲ · exp[ j·2π·s·cos(φ − j·α) ] |,   j = 0…2n−1",
+               uk:"F(φ) = | Σⱼ (−1)ʲ · exp[ j·2π·s·cos(φ − j·α) ] |,   j = 0…2n−1"},
+              {en:"α = 180°/n,   images = 2n − 1,   s in wavelengths",
+               uk:"α = 180°/n,   зображень = 2n − 1,   s у довжинах хвиль"}]},
+    {id:'mom', en:'MoM (finite corner)', uk:'MoM (скінченний кут)',
+     desc:{en:"Real plates are finite and not perfect image planes, so a method-of-moments (or NEC) solve is used in practice: it resolves currents on the actual sheets, the leakage past their edges and the drop in gain versus the infinite-plate image result. Here the same image pattern is shown as the finite-corner approximation.",
+           uk:"Реальні стінки скінченні й не є ідеальними площинами зображень, тож на практиці беруть метод моментів (або NEC): він знаходить струми на самих листах, витік за їхні краї та падіння підсилення проти нескінченних стінок. Тут та сама діаграма зображень показана як наближення для скінченного кута."},
+     formula:[{en:"solve Z·I = V on the plate + dipole mesh;  finite plates ⇒ gain a few tenths dB below image theory",
+               uk:"розв'язати Z·I = V на сітці стінок + диполя;  скінченні стінки ⇒ підсилення на кілька десятих дБ нижче теорії зображень"}]}
+  ],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.6},
+    {id:'angle', kind:'select', en:'Corner angle α', uk:'Кут α', value:'90',
+     options:[{value:'90',en:'90°',uk:'90°'},{value:'60',en:'60°',uk:'60°'},{value:'45',en:'45°',uk:'45°'}]},
+    {id:'s', kind:'range', en:'Driven-to-apex s', uk:'Відстань диполь–вершина s', min:0.3, max:0.8, step:0.01, value:0.5, fmt:v=>v.toFixed(2)+' λ'}
+  ],
+  compute(s){
+    const alpha=parseFloat(s.angle), n=Math.round(180/alpha), sp=s.s;
+    // image-theory magnitude toward plot angle deg (0° = forward along bisector)
+    function mag(deg){
+      let re=0, im=0;
+      for(let j=0;j<2*n;j++){
+        const ang=(deg - j*alpha)*AL.D2R, ph=2*Math.PI*sp*Math.cos(ang), sgn=(j%2===0)?1:-1;
+        re+=sgn*Math.cos(ph); im+=sgn*Math.sin(ph);
+      }
+      return Math.hypot(re,im);
+    }
+    // radiation only into the front wedge — the metal plates block the rest
+    const front=a=>{ const w=((a%360)+360)%360; return !(w>90&&w<270); };
+    // The image sum lives in the plane PERPENDICULAR to the driven dipole —
+    // i.e. the horizontal one, which is where the V of plates is seen. The
+    // vertical cut is the driven half-wave dipole's own ≈78° pattern. They
+    // were the wrong way round: the narrow lobe was being drawn in the
+    // vertical panel and then spun into a pencil beam the antenna never has.
+    const fnLobe=a=>front(a)?mag(a):0;
+    const fnH=fnLobe;
+    const fnBeam=a=>front(a)?Math.abs(AL.dipolePattern((90-a)*AL.D2R,0.5)):0;
+    // directivity from the beamwidth product: H-plane = the image-sum forward
+    // lobe, E-plane = the driven half-wave dipole (≈78°). D ≈ 41253/(θ_E·θ_H).
+    // analyzePattern only scans 0..90°, so for a lobe centred on boresight it
+    // returns the HALF width — double it before using the beamwidth-product
+    // directivity formula, which wants full widths.
+    const anC=AL.analyzePattern(fnLobe,90,0.25), hpbwH=Math.max(2*anC.hpbw,5), hpbwE=78;
+    const dir={dBi:10*Math.log10(41253/(hpbwE*hpbwH))};
+    const lamCm=AL.lambdaOf(s.f*1e9)*100;
+    // schematic: two plates meeting at apex with included angle alpha, driven dipole at s on bisector
+    const cx=200, ay=215, pxLam=92, halfR=(alpha/2)*AL.D2R, plateLen=140;
+    const p1x=cx+plateLen*Math.sin(halfR), p1y=ay-plateLen*Math.cos(halfR);
+    const p2x=cx-plateLen*Math.sin(halfR), p2y=ay-plateLen*Math.cos(halfR);
+    const dy=ay-sp*pxLam, pxC=pxLam/lamCm;
+    // plan: looking down the driven dipole — this is the plane the image sum
+    // lives in, so it is the V of plates with the element end-on
+    let schemH=AL.rulerSVG(36,26,lamCm,pxC)+AL.CAP_H();
+    schemH+=`<line class="schem-outline" x1="${cx}" y1="${ay}" x2="${p1x.toFixed(1)}" y2="${p1y.toFixed(1)}"/>`;
+    schemH+=`<line class="schem-outline" x1="${cx}" y1="${ay}" x2="${p2x.toFixed(1)}" y2="${p2y.toFixed(1)}"/>`;
+    schemH+=`<circle class="schem-node" cx="${cx}" cy="${ay}" r="2.5"/>`;
+    schemH+=`<text class="schem-label" x="${cx+6}" y="${ay+12}">${AL.tr('apex','вершина')} α=${alpha}°</text>`;
+    schemH+=AL.conductorEndOn(cx,dy,6);
+    schemH+=`<text class="schem-label" x="${cx+12}" y="${dy+3}">${AL.tr('driven, end-on','активний, з торця')}</text>`;
+    schemH+=AL.dimLineV(cx-24, dy, ay, `s = ${sp.toFixed(2)} λ`);
+    schemH+=AL.boresightArrow(cx, dy-18, 30, A, 'cornH');
+    // elevation: the plates edge-on, the half-wave dipole standing between them
+    const hDip=0.5*pxLam, cyE=125;
+    let schemE=AL.rulerSVG(36,26,lamCm,pxC)+AL.CAP_E();
+    schemE+=`<rect class="schem-fill" x="${cx-58}" y="${cyE-hDip*1.3}" width="16" height="${hDip*2.6}"/>`;
+    schemE+=`<rect class="schem-fill" x="${cx+42}" y="${cyE-hDip*1.3}" width="16" height="${hDip*2.6}"/>`;
+    schemE+=`<text class="schem-label" x="${cx-72}" y="${cyE-hDip*1.3-8}">${AL.tr('plates edge-on','пластини з торця')}</text>`;
+    schemE+=`<line class="schem-driven" x1="${cx}" y1="${cyE-hDip}" x2="${cx}" y2="${cyE-4}"/>`;
+    schemE+=`<line class="schem-driven" x1="${cx}" y1="${cyE+4}" x2="${cx}" y2="${cyE+hDip}"/>`;
+    schemE+=`<circle class="schem-node" cx="${cx}" cy="${cyE-4}" r="2"/><circle class="schem-node" cx="${cx}" cy="${cyE+4}" r="2"/>`;
+    schemE+=AL.dimLineV(cx+14,cyE-hDip,cyE+hDip,`λ/2`);
+    schemE+=AL.boresightArrow(cx+70,cyE,28,V,'cornE');
+    return {schemE, schemH, fnBeam, fnH,
+      meta3d:{lamCm, sizeLam:sp, sizeLabel:'s = '+sp.toFixed(2)+' λ', gainDbi:dir.dBi},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'), v:dir.dBi.toFixed(1)+' '+AL.unit('dBi')},
+        {k:AL.tr('Corner angle','Кут розхилу'), v:alpha+'°'},
+        {k:AL.tr('Images','Зображень'), v:String(2*n-1)},
+        {k:AL.tr('Spacing s','Відстань s'), v:sp.toFixed(2)+' λ'}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Corner_reflector_antenna',label:'Corner reflector antenna'}, uk:{href:'https://uk.wikipedia.org/wiki/Кутовий_відбивач',label:'Кутовий відбивач'}},
+    {tag:'paper', en:{href:'https://doi.org/10.1109/JRPROC.1940.228775',label:'Kraus, The corner-reflector antenna (Proc. IRE 1940)'}},
+    {tag:'book', en:{href:'https://www.google.com/books/edition/Antennas/O0-PQgAACAAJ',label:'Kraus, Antennas'}}
+  ],
+  strength:{en:"Cheap, rugged and broadband: two grilles and a dipole give 10–13 dBi with a clean front-to-back ratio, and closing the angle from 90° to 45° tightens the beam further. The apex spacing s tunes the input impedance and the exact gain — near 0.5 λ is the usual sweet spot for the 90° corner.",
+            uk:"Дешевий, міцний і широкосмуговий: дві решітки й диполь дають 10–13 дБі з чистим відношенням вперед/назад, а стуляння кута з 90° до 45° ще звужує промінь. Відстань до вершини s налаштовує вхідний опір і точне підсилення — близько 0.5 λ є типовим оптимумом для 90° кута."},
+  xrefs:[['wire.html#yagi','Yagi-Uda','Уда-Яги'],['wire.html#dipole','Driven dipole','Активний диполь'],['#parabolic','Parabolic dish','Параболічна тарілка']]
+});
+
+/* ---- 3.5 Grid / mesh parabolic --------------------------------------- */
+REFL.push({
+  id:'grid-dish', num:'3.5', lvl:2, plot:'half',
+  desc:{en:"A parabolic reflector built from parallel wires instead of a solid sheet. As long as the wire spacing is a small fraction of a wavelength the grid reflects the co-polarised field almost perfectly while letting wind through, cutting weight and load. Leakage — and gain loss — grow as the spacing approaches λ.",
+        uk:"Параболічний рефлектор із паралельних дротів замість суцільного листа. Поки крок дротів — мала частка довжини хвилі, сітка майже ідеально відбиває співполярне поле, пропускаючи вітер, зменшуючи вагу й навантаження. Витік — і втрата підсилення — ростуть, коли крок наближається до λ."},
+  methods:[
+    {id:'po', en:'PO with grid reflection coefficient', uk:'ФО з коеф. відбиття сітки',
+     desc:{en:"Physical optics on the effective solid dish, scaled by a grid efficiency that captures the wire-grid reflection coefficient: a tightly-spaced grid reflects like a sheet (η_grid → 1), while spacing toward λ/10 and beyond leaks a growing fraction of the incident power through the aperture.",
+           uk:"Фізична оптика по еквівалентній суцільній тарілці, помножена на ефективність сітки, що враховує коефіцієнт відбиття дротяної решітки: щільна сітка відбиває як лист (η_grid → 1), тоді як крок до λ/10 і далі пропускає дедалі більшу частку падаючої потужності крізь апертуру."},
+     formula:[{en:"η_grid = clamp[ 1 − 0.15·(g / 0.1)², 0.4, 1.0 ]",
+               uk:"η_grid = clamp[ 1 − 0.15·(g / 0.1)², 0.4, 1.0 ]"},
+              {en:"G = 10·log₁₀[ 0.55·η_grid·(πD/λ)² ] dBi",
+               uk:"G = 10·log₁₀[ 0.55·η_grid·(πD/λ)² ] дБі"}]}
+  ],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:40000,value:5},
+    {id:'D', kind:'range', en:'Aperture D', uk:'Апертура D', min:0.3, max:2, step:0.05, value:0.9, fmt:v=>v.toFixed(2)+' '+AL.unit('m')},
+    {id:'g', kind:'range', en:'Wire spacing g', uk:'Крок дротів g', min:0.02, max:0.2, step:0.005, value:0.05, fmt:v=>v.toFixed(3)+' λ'}
+  ],
+  compute(s){
+    const lam=AL.lambdaOf(s.f*1e9), lamCm=lam*100, Dlam=s.D/lam;
+    const etaGrid=AL.clamp(1-Math.pow(s.g/0.1,2)*0.15, 0.4, 1.0);
+    const gain=10*Math.log10(0.55*etaGrid*Math.pow(Math.PI*Dlam,2));
+    const fnBeam=a=>AL.apertureCircular(a*AL.D2R, Dlam);
+    const samp=AL.sampleHalf(fnBeam,0.05,90);
+    const hp=AL.findHPBW(samp,fnBeam);
+    // schematic: parabola drawn as parallel vertical grid ticks; density scales with g
+    const cx=200, cyV=205, widthPx=AL.clamp(s.D*80,80,210), px=scaleFor(s.D*100,widthPx);
+    const par=parabolaPath(cx,cyV,widthPx,0.45);
+    const nLines=Math.round(AL.clamp(0.5/s.g, 5, 30));
+    const foc=cyV-par.F;
+    let schemE=AL.rulerSVG(36,28,lamCm,px)+AL.CAP_E();
+    schemE+=`<path class="schem-dim" d="${par.d}" fill="none" stroke-dasharray="2,3"/>`;
+    for(let i=0;i<=nLines;i++){
+      const x=-par.half + widthPx*i/nLines, gx=cx+x, gy=cyV - x*x/(4*par.F);
+      schemE+=`<line class="schem-wire" x1="${gx.toFixed(1)}" y1="${gy.toFixed(1)}" x2="${gx.toFixed(1)}" y2="${(cyV-2).toFixed(1)}"/>`;
+    }
+    schemE+=`<circle class="schem-driven" cx="${cx}" cy="${foc}" r="4"/>`;
+    schemE+=`<text class="schem-label" x="${cx+8}" y="${foc+3}">${AL.tr('feed','опром.')}</text>`;
+    schemE+=`<line class="schem-dim" x1="${cx}" y1="${cyV}" x2="${cx}" y2="${foc}" stroke-dasharray="3,3"/>`;
+    schemE+=AL.boresightArrow(cx, foc-14, 28, V, 'gridE');
+    schemE+=AL.dimLineH(cx-par.half, cx+par.half, cyV+18, `D = ${s.D.toFixed(2)} ${AL.unit('m')} = ${Dlam.toFixed(0)} λ`);
+    // plan: the wire grid across the circular aperture — the reason a grid dish
+    // only works for one polarisation
+    const cyH=125, RH=Math.min(par.half,94);
+    let schemH=AL.rulerSVG(36,28,lamCm,px*RH/Math.max(par.half,1))+AL.CAP_H();
+    schemH+=`<circle class="schem-fill" cx="${cx}" cy="${cyH}" r="${RH}"/>`;
+    for(let i=0;i<=nLines;i++){
+      const x=-RH+2*RH*i/nLines, hgt=Math.sqrt(Math.max(RH*RH-x*x,0));
+      schemH+=`<line class="schem-wire" x1="${(cx+x).toFixed(1)}" y1="${(cyH-hgt).toFixed(1)}" x2="${(cx+x).toFixed(1)}" y2="${(cyH+hgt).toFixed(1)}"/>`;
+    }
+    schemH+=`<circle class="schem-outline" cx="${cx}" cy="${cyH}" r="${RH}" fill="none"/>`;
+    schemH+=`<circle class="schem-driven" cx="${cx}" cy="${cyH}" r="4"/>`;
+    schemH+=`<text class="schem-label" x="${cx-RH}" y="${cyH-RH-8}">${AL.tr('wires parallel to E — single polarisation','дроти паралельні E — одна поляризація')}</text>`;
+    schemH+=AL.dimLineH(cx-RH,cx+RH,cyH+RH+18,`g = ${s.g.toFixed(3)} λ`);
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm, sizeLam:Dlam, sizeLabel:'D = '+Dlam.toFixed(0)+' λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'), v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW', v:AL.fmtDeg(hp)},
+        {k:AL.tr('Grid efficiency','ККД сітки'), v:(etaGrid*100).toFixed(0)+' %'},
+        {k:AL.tr('Wire spacing','Крок дротів'), v:s.g.toFixed(3)+' λ'}
+      ]};
+  },
+  refs:[
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Parabolic_antenna#Gain',label:'Parabolic antenna (grid/mesh)'}, uk:{href:'https://uk.wikipedia.org/wiki/Параболічна_антена',label:'Параболічна антена'}},
+    {tag:'wiki', en:{href:'https://en.wikipedia.org/wiki/Polarizer#Wire-grid_polarizers',label:'Wire-grid reflection'}},
+    {tag:'book', en:{href:'https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061',label:'Balanis, Antenna Theory'}}
+  ],
+  strength:{en:"Wind-permeable and light, the grid dish is the choice for long-range Wi-Fi and WISP backhaul on a mast: it survives gusts a solid dish would fold under, at a modest efficiency penalty. It works only for one linear polarisation (parallel to the wires) — the leakage that lets wind through also lets the cross-polarised field escape.",
+            uk:"Проникна для вітру й легка, сітчаста тарілка — вибір для далекого Wi-Fi і backhaul WISP на щоглі: вона витримує пориви, під якими суцільна тарілка склалася б, ціною помірної втрати ефективності. Працює лише для однієї лінійної поляризації (уздовж дротів) — витік, що пропускає вітер, випускає й крос-поляризоване поле."},
+  xrefs:[['#parabolic','Solid parabolic dish','Суцільна параболічна'],['#corner','Corner reflector','Кутовий рефлектор'],['array.html#phased-array','Phased array','Фазована решітка']]
+});
+
+/* ====================================================================== */
+/*  PAGE BUILDER                                                            */
+/* ====================================================================== */
+function planesHTMLFor(id){
+  return `
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_schem" viewBox="0 0 400 250"></svg></div>
+    </div>
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_plot" viewBox="0 0 400 380"></svg>
+        <div class="plane-readout">
+          ${[0,1,2,3].map(i=>`<div class="item"><div class="k" id="${id}_k${i}"></div><div class="v" id="${id}_v${i}">-</div></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+function fillExtras(a){
+  const rf=document.getElementById('refs-'+a.id); if(rf) rf.innerHTML=window.atlasRefs(a.refs);
+  const tg=document.getElementById('tags-'+a.id); if(tg) tg.innerHTML=window.atlasTags(a.tags.std,a.tags.mod,a.tags.mth);
+}
+
+function mountOne(a){
+  AL.mount(a.id,{ methods:(a.methods&&a.methods.length>1)?a.methods:null, controls:a.controls, planesHTML:AL.planesTwo(a.id),
+    render:function(ctx){
+      const out=a.compute(ctx.state, ctx.methodId);
+      AL.renderPlanes(a.id, out, a);
+      if(out.enable) for(const cid in out.enable) ctx.enable(cid,out.enable[cid]);
+    }});
+  fillExtras(a);
+}
+
+function buildSections(list, root){
+  root.innerHTML=list.map(a=>{
+    const multi=a.methods&&a.methods.length>1;
+    const mdesc=(a.methods||[]).map((m,i)=>
+      `<div class="method-body${(multi&&i>0)?' hidden':''}" data-method="${m.id}">
+         <div class="desc-cols">
+           <div><h4 data-en="${m.en}" data-uk="${m.uk}">${m.en}</h4>
+             <p data-en="${m.desc.en}" data-uk="${m.desc.uk}">${m.desc.en}</p></div>
+           <div>${(m.formula||[]).map(f=>`<span class="formula" data-en="${f.en}" data-uk="${f.uk}">${f.en}</span>`).join('')}</div>
+         </div>
+       </div>`).join('');
+    return `<section id="${a.id}">
+      <div class="num" data-en="${a.num} / reflector" data-uk="${a.num} / рефлектор">${a.num} / reflector</div>
+      <h2><span class="badge l${a.lvl} lg">${['','I','II','III'][a.lvl]}</span>
+          <span data-en="${a.en}" data-uk="${a.uk}">${a.en}</span></h2>
+      <div id="tags-${a.id}"></div>
+      <p class="desc" data-en="${a.desc.en}" data-uk="${a.desc.uk}">${a.desc.en}</p>
+      <div class="method-desc">${mdesc}</div>
+      <div class="panel"><div id="exp-${a.id}"></div></div>
+      <div id="refs-${a.id}"></div>
+      <div class="strength">
+        <div class="st-title" data-en="Design notes" data-uk="Проєктні нотатки">Design notes</div>
+        <span data-en="${a.strength.en}" data-uk="${a.strength.uk}">${a.strength.en}</span>
+      </div>
+      <div class="xrefs">${(a.xrefs||[]).map(x=>`<a href="${x[0]}" data-en="${x[1]}" data-uk="${x[2]}">${x[1]}</a>`).join('')}</div>
+    </section>`;
+  }).join('');
+}
+
+// names/tags come from CATALOG so data stays single-source
+REFL.forEach(a=>{ const c=CATALOG.flatMap(s=>s.antennas).find(x=>x.id===a.id)||{};
+  a.en=c.en||a.id; a.uk=c.uk||a.id; a.tags={std:c.std||[],mod:c.mod||[],mth:c.mth||[]}; });
+
+buildSections(REFL, document.getElementById('sections'));
+REFL.forEach(mountOne);
+
+window.onLangChangePage=function(){ REFL.forEach(fillExtras); };
+</script>
+</body>
+</html>

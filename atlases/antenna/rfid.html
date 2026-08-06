@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RFID / NFC Antennas — Antenna Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="rfid">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Family 09 · near-field coupling and backscatter" data-uk="Сім'я 09 · ближньопольовий зв'язок і зворотне розсіювання">Family 09 · near-field coupling and backscatter</div>
+    <h1 data-en="RFID &amp; NFC Antennas" data-uk="Антени RFID та NFC">RFID &amp; NFC Antennas</h1>
+    <div class="eq-hero">r_read = (λ/4π)·√(EIRP·G_tag / P_sens)</div>
+    <p class="lede" data-en="Two ends of the short-range spectrum. UHF RFID is a far-field, backscatter link where the read range follows the radar-style Friis budget; NFC is a near-field, magnetically-coupled loop where the range is essentially the coil radius. Change the power budget or the coil and watch the range respond."
+       data-uk="Два кінці спектра малого радіусу. UHF RFID — далекопольова лінія зі зворотним розсіюванням, де дальність зчитування слідує бюджету Фрііса радарного типу; NFC — ближньопольова магнітно-зв'язана рамка, де дальність — по суті радіус котушки. Змінюйте бюджет потужності чи котушку — і дальність реагує.">Two ends of the short-range spectrum…</p>
+  </div>
+</header>
+
+<div class="wrap-wide" id="sections"></div>
+
+<footer class="wrap-wide">
+  <p data-en="UHF read range is the forward-link Friis limit (the tag's own backscatter and reader sensitivity usually make the return link less critical). NFC range uses the on-axis Biot–Savart field of a circular coil — a near-field, not a radiation, calculation."
+     data-uk="Дальність UHF — межа прямої лінії за Фріісом (зворотне розсіювання мітки й чутливість зчитувача зазвичай роблять зворотну лінію менш критичною). Дальність NFC — осьове поле Біо–Савара кругової котушки — ближньопольовий, а не випромінювальний розрахунок.">UHF read range is the Friis limit…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script src="js/antenna.js"></script>
+<script src="js/pattern3d.js"></script>
+<script>
+const AL=window.AntennaLab, V='var(--teal)', A='var(--amber)', D2R=AL.D2R, R2D=AL.R2D;
+
+const RF=[];
+
+/* 9.1 UHF RFID */
+RF.push({
+  id:'uhf-rfid', num:'9.1', lvl:3, plot:'full',
+  desc:{en:"A passive tag is a dipole-like antenna feeding a chip that harvests power from the reader and replies by modulating its own reflection (backscatter). The read range is set by the forward link: how far the reader's EIRP still delivers the chip's turn-on power.",
+        uk:"Пасивна мітка — диполеподібна антена, що живить чип, який збирає потужність від зчитувача й відповідає, модулюючи власне відбиття (зворотне розсіювання). Дальність зчитування задає пряма лінія: наскільки далеко EIRP зчитувача ще дає чипу потужність увімкнення."},
+  methods:[{id:'mom', en:'MoM (backscatter analysis)', uk:'MoM (зворотне розсіювання)',
+     desc:{en:"MoM resolves the tag antenna and its complex-conjugate match to the chip. The read range follows the Friis forward-link budget; the tag's radiation pattern (dipole-like) sets the angular coverage.",
+           uk:"MoM розв'язує антену мітки та її комплексно-спряжене узгодження з чипом. Дальність слідує прямому бюджету Фрііса; ДН мітки (диполеподібна) задає кутове покриття."},
+     formula:[{en:"r = (λ/4π)·√(EIRP·G_tag / P_sens)",uk:"r = (λ/4π)·√(EIRP·G_tag / P_sens)"},
+              {en:"path loss = 20·log₁₀(4πr/λ) dB",uk:"втрати шляху = 20·log₁₀(4πr/λ) дБ"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.915},
+    {id:'eirp',kind:'range',en:'Reader EIRP',uk:'EIRP зчитувача',min:20,max:36,step:0.5,value:36,fmt:v=>v.toFixed(1)+' dBm'},
+    {id:'gtag',kind:'range',en:'Tag gain',uk:'Підсилення мітки',min:-3,max:4,step:0.1,value:2,fmt:v=>v.toFixed(1)+' '+AL.unit('dBi')},
+    {id:'psens',kind:'range',en:'Chip sensitivity',uk:'Чутливість чипа',min:-22,max:-10,step:0.5,value:-18,fmt:v=>v.toFixed(1)+' dBm'}
+  ],
+  compute(s){
+    const lam=AL.lambdaOf(s.f*1e9);   // the shared freq control reports GHz
+    // linear power ratio inside the sqrt: 10^((EIRP + Gtag - Psens)/10) but Gtag already dBi
+    const marginDb=s.eirp + s.gtag - s.psens;
+    const r=(lam/(4*Math.PI))*Math.sqrt(Math.pow(10, marginDb/10));
+    const pathLoss=20*Math.log10(4*Math.PI*r/lam);
+    const fnBeam=a=>AL.dipolePattern((90-a)*D2R,0.5); // meandered dipole tag
+    const cx=200, cy=125, Lpx=120;
+    const lamCmR=lam*100, pxR=Lpx/(0.5*lamCmR);
+    let schemE=AL.rulerSVG(40,26,lamCmR,pxR)+AL.CAP_E();
+    schemE+=`<line class="schem-driven" x1="${cx}" y1="${cy-Lpx/2}" x2="${cx}" y2="${cy-6}"/><line class="schem-driven" x1="${cx}" y1="${cy+6}" x2="${cx}" y2="${cy+Lpx/2}"/>`;
+    schemE+=`<rect class="schem-fill" x="${cx-5}" y="${cy-5}" width="10" height="10"/>`;
+    schemE+=`<text class="schem-label" x="${cx+10}" y="${cy+3}">IC</text>`;
+    schemE+=AL.dimLineV(cx+30,cy-Lpx/2,cy+Lpx/2,`≈ λ/2`);
+    schemE+=`<text class="schem-label" x="${cx}" y="${cy+Lpx/2+20}" text-anchor="middle">${AL.tr('dipole tag','мітка-диполь')} @ ${AL.fmtFreqMHz(s.f*1000)}</text>`;
+    schemE+=AL.boresightArrow(cx+80,cy,28,V,'rfE');
+    let schemH=AL.rulerSVG(40,26,lamCmR,pxR)+AL.CAP_H();
+    schemH+=AL.azimuthCircle(cx,cy,58,A);
+    schemH+=AL.conductorEndOn(cx,cy,6);
+    schemH+=AL.boresightArrow(cx+10,cy,44,A,'rfH');
+    schemH+=`<text class="schem-label" x="${cx}" y="${cy+78}" text-anchor="middle">${AL.tr('tag seen end-on · omni in azimuth','мітка з торця · всенапрямлена')}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:lam*100, sizeLam:0.5, sizeLabel:'L ≈ 0.50 λ', gainDbi:s.gtag},
+      readouts:[
+        {k:AL.tr('Read range','Дальність'),v:r.toFixed(1)+' '+AL.unit('m')},
+        {k:AL.tr('Wavelength','Довжина хвилі'),v:(lam*100).toFixed(1)+' '+AL.unit('cm')},
+        {k:AL.tr('Link margin','Запас лінії'),v:marginDb.toFixed(1)+' '+AL.unit('dB')},
+        {k:AL.tr('Path loss','Втрати шляху'),v:pathLoss.toFixed(1)+' '+AL.unit('dB')}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Radio-frequency_identification',label:'RFID'}},
+        {tag:'iso',en:{href:'https://www.gs1.org/standards/epc-rfid/uhf-air-interface-protocol',label:'EPC Gen2 (ISO 18000-63)'}}],
+  strength:{en:"Battery-free identification at several metres, pennies per tag — the backbone of retail, logistics and inventory. Range collapses near metal and liquids (which detune the tag) and is capped by regulatory EIRP limits and the chip's turn-on sensitivity.",
+            uk:"Ідентифікація без батареї на кілька метрів, копійки за мітку — основа рітейлу, логістики й обліку. Дальність падає біля металу й рідин (що розлагоджують мітку) й обмежена регуляторними межами EIRP та чутливістю ввімкнення чипа."},
+  xrefs:[['#nfc-loop','NFC loop','NFC-рамка'],['wire.html#dipole','Dipole','Диполь'],['printed.html#meander','Meander tag','Меандрова мітка']]
+});
+
+/* 9.2 NFC loop */
+RF.push({
+  id:'nfc-loop', num:'9.2', lvl:1, plot:'full',
+  desc:{en:"At 13.56 MHz the wavelength is 22 metres, so NFC never radiates — it works by transformer-like magnetic coupling between two coils. The on-axis field of the reader coil falls off sharply once you pass its radius, which is exactly why the practical read range is about one coil radius.",
+        uk:"На 13.56 МГц довжина хвилі — 22 метри, тож NFC ніколи не випромінює — він працює трансформаторним магнітним зв'язком двох котушок. Осьове поле котушки зчитувача різко спадає за її радіусом, тому практична дальність — приблизно один радіус котушки."},
+  methods:[{id:'quasi', en:'Quasistatic (Biot–Savart)', uk:'Квазістатика (Біо–Савара)',
+     desc:{en:"Because the coil is tiny compared with the wavelength, the field is quasistatic: the on-axis magnetic field of a circular loop follows Biot–Savart, and the coupling coefficient between reader and tag coils falls as (a²/(a²+z²))^{3/2}.",
+           uk:"Оскільки котушка крихітна проти довжини хвилі, поле квазістатичне: осьове магнітне поле кругового витка слідує Біо–Савару, а коефіцієнт зв'язку між котушками зчитувача й мітки падає як (a²/(a²+z²))^{3/2}."},
+     formula:[{en:"H(z) = N·I·a² / [2·(a²+z²)^{3/2}],  H peaks then halves near z ≈ 0.77·a",uk:"H(z) = N·I·a² / [2·(a²+z²)^{3/2}],  H падає вдвічі при z ≈ 0.77·a"},
+              {en:"L ≈ μ₀·N²·a·[ln(8a/w) − 2]  (single-layer coil)",uk:"L ≈ μ₀·N²·a·[ln(8a/w) − 2]  (одношарова котушка)"}]}],
+  controls:[
+    {id:'dia',kind:'range',en:'Coil diameter',uk:'Діаметр котушки',min:10,max:120,step:2,value:50,fmt:v=>v.toFixed(0)+' '+AL.unit('mm')},
+    {id:'N',kind:'range',en:'Turns N',uk:'Витків N',min:1,max:12,step:1,value:4,fmt:v=>v.toFixed(0)},
+    {id:'w',kind:'range',en:'Track width',uk:'Ширина доріжки',min:0.2,max:3,step:0.1,value:1,fmt:v=>v.toFixed(1)+' '+AL.unit('mm')}
+  ],
+  compute(s){
+    const a=s.dia/2/1000, N=Math.round(s.N), w=s.w/1000;
+    // inductance (single-layer approximation)
+    const mu0=4*Math.PI*1e-7;
+    const L=mu0*N*N*a*(Math.log(8*a/w)-2);
+    // practical read range: field halves at z≈0.766a; operating range ~ coil radius
+    const zHalf=a*Math.sqrt(Math.pow(2,2/3)-1); // where H = H0/2
+    const range=a*1000; // ≈ radius, in mm
+    const fnBeam=deg=>AL.smallLoopPattern((90-deg)*D2R)*0.9+0.1; // magnetic-dipole doughnut
+    const cx=200, cy=125, R=Math.min(s.dia*1.4,90);
+    // A card coil is flat: face-on in plan, a stack of turns edge-on from the side.
+    // A 13.56 MHz coil is ~10⁻³ λ across — a wavelength ruler would be 22 m
+    // wide, so these two views carry a note instead of the usual λ scale.
+    const NOTλ=`<text class="schem-view" x="8" y="18" data-en="not to λ scale — the coil is ~10⁻³ λ across (near-field device)" data-uk="не в масштабі λ — котушка ~10⁻³ λ (пристрій ближньої зони)">${AL.tr('not to λ scale — the coil is ~10⁻³ λ across (near-field device)','не в масштабі λ — котушка ~10⁻³ λ (пристрій ближньої зони)')}</text>`;
+    let schemH=NOTλ+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="${cx-R-16}" y="${cy-R-12}" width="${2*R+32}" height="${2*R+24}" rx="6" opacity="0.3"/>`;
+    for(let t=0;t<Math.min(N,6);t++) schemH+=`<circle class="schem-driven" cx="${cx}" cy="${cy}" r="${(R-t*3).toFixed(1)}" fill="none"/>`;
+    schemH+=`<circle class="schem-node" cx="${cx-6}" cy="${cy+R}" r="2"/><circle class="schem-node" cx="${cx+6}" cy="${cy+R}" r="2"/>`;
+    schemH+=`<text class="schem-label" x="${cx-R-16}" y="${cy-R-18}">N = ${N} · ⌀ ${s.dia.toFixed(0)} ${AL.unit('mm')} ${AL.tr('printed coil','друкована котушка')}</text>`;
+    schemH+=AL.dimLineH(cx-R,cx+R,cy+R+20,`⌀ ${s.dia.toFixed(0)} ${AL.unit('mm')}`);
+    let schemE=NOTλ+AL.CAP_E();
+    for(let t=0;t<Math.min(N,6);t++)
+      schemE+=`<line class="schem-driven" x1="${cx-R+t*3}" y1="${cy+t*2}" x2="${cx+R-t*3}" y2="${cy+t*2}"/>`;
+    schemE+=`<rect class="schem-fill" x="${cx-R-16}" y="${cy-4}" width="${2*R+32}" height="20" rx="3" opacity="0.3"/>`;
+    schemE+=`<line class="schem-dim" x1="${cx}" y1="${cy-70}" x2="${cx}" y2="${cy+40}" stroke-dasharray="3,3"/>`;
+    schemE+=`<text class="schem-label" style="fill:${V}" x="${cx+6}" y="${cy-72}">${AL.tr('coil axis — the coupling direction','вісь котушки — напрям зв\'язку')}</text>`;
+    schemE+=AL.boresightArrow(cx+R+22,cy,26,V,'nfcE');
+    schemE+=`<text class="schem-label" x="${cx-R-16}" y="${cy+34}">${AL.tr('card edge-on · near-field magnetic coupling','картка з торця · магнітний зв\'язок ближньої зони')}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.c/13.56e6*100, sizeLam:(s.dia/1000)/(AL.c/13.56e6), sizeLabel:'⌀ = '+((s.dia/1000)/(AL.c/13.56e6)).toExponential(1)+' λ @ 13.56 MHz'},
+      readouts:[
+        {k:AL.tr('Read range','Дальність'),v:'≈ '+range.toFixed(0)+' '+AL.unit('mm')},
+        {k:AL.tr('Field half at z','Поле ½ при z'),v:(zHalf*1000).toFixed(0)+' '+AL.unit('mm')},
+        {k:AL.tr('Inductance','Індуктивність'),v:(L*1e6).toFixed(2)+' µH'},
+        {k:AL.tr('Turns','Витків'),v:N.toFixed(0)}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Near-field_communication',label:'NFC'}},
+        {tag:'iso',en:{href:'https://www.iso.org/standard/73599.html',label:'ISO/IEC 14443'}}],
+  strength:{en:"Secure, tap-to-pay short range is a feature, not a bug: the ~1-radius coupling distance stops eavesdropping and cross-reads. The engineering is all about coil inductance, Q and matching to the 13.56 MHz chip — a resonance problem, not a radiation one.",
+            uk:"Безпечна дальність «тапни-заплати» — це перевага, а не вада: відстань зв'язку ~1 радіус зупиняє підслуховування й хибні зчитування. Уся інженерія — про індуктивність котушки, добротність Q і узгодження з чипом 13.56 МГц — задача резонансу, а не випромінювання."},
+  xrefs:[['wire.html#loop','Loop antenna','Рамкова антена'],['#uhf-rfid','UHF RFID','UHF RFID']]
+});
+
+/* ====================================================================== */
+/*  PAGE BUILDER (shared)                                                   */
+/* ====================================================================== */
+function catGet(id){ return CATALOG.flatMap(s=>s.antennas).find(x=>x.id===id)||{}; }
+function planesHTMLFor(id){
+  return `
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_schem" viewBox="0 0 400 250"></svg></div>
+    </div>
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_plot" viewBox="0 0 400 380"></svg>
+        <div class="plane-readout">
+          ${[0,1,2,3].map(i=>`<div class="item"><div class="k" id="${id}_k${i}"></div><div class="v" id="${id}_v${i}">-</div></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+function fillExtras(a){
+  const c=catGet(a.id);
+  const rf=document.getElementById('refs-'+a.id); if(rf) rf.innerHTML=window.atlasRefs(a.refs);
+  const tg=document.getElementById('tags-'+a.id); if(tg) tg.innerHTML=window.atlasTags(c.std,c.mod,c.mth);
+}
+function buildSections(list, root){
+  root.innerHTML=list.map(a=>{
+    const c=catGet(a.id), multi=a.methods&&a.methods.length>1;
+    const mdesc=(a.methods||[]).map((m,i)=>
+      `<div class="method-body${(multi&&i>0)?' hidden':''}" data-method="${m.id}">
+         <div class="desc-cols">
+           <div><h4 data-en="${m.en}" data-uk="${m.uk}">${m.en}</h4>
+             <p data-en="${m.desc.en}" data-uk="${m.desc.uk}">${m.desc.en}</p></div>
+           <div>${(m.formula||[]).map(f=>`<span class="formula" data-en="${f.en}" data-uk="${f.uk}">${f.en}</span>`).join('')}</div>
+         </div>
+       </div>`).join('');
+    return `<section id="${a.id}">
+      <div class="num" data-en="${a.num} / RFID" data-uk="${a.num} / RFID">${a.num} / RFID</div>
+      <h2><span class="badge l${a.lvl} lg">${['','I','II','III'][a.lvl]}</span>
+          <span data-en="${c.en}" data-uk="${c.uk}">${c.en}</span></h2>
+      <div id="tags-${a.id}"></div>
+      <p class="desc" data-en="${a.desc.en}" data-uk="${a.desc.uk}">${a.desc.en}</p>
+      <div class="method-desc">${mdesc}</div>
+      <div class="panel"><div id="exp-${a.id}"></div></div>
+      <div id="refs-${a.id}"></div>
+      <div class="strength"><div class="st-title" data-en="Design notes" data-uk="Проєктні нотатки">Design notes</div>
+        <span data-en="${a.strength.en}" data-uk="${a.strength.uk}">${a.strength.en}</span></div>
+      <div class="xrefs">${(a.xrefs||[]).map(x=>`<a href="${x[0]}" data-en="${x[1]}" data-uk="${x[2]}">${x[1]}</a>`).join('')}</div>
+    </section>`;
+  }).join('');
+}
+function mountOne(a){
+  AL.mount(a.id,{ methods:(a.methods&&a.methods.length>1)?a.methods:null, controls:a.controls, planesHTML:AL.planesTwo(a.id),
+    render:function(ctx){
+      const out=a.compute(ctx.state, ctx.methodId);
+      AL.renderPlanes(a.id, out, a);
+      if(out.enable) for(const cid in out.enable) ctx.enable(cid,out.enable[cid]);
+    }});
+  fillExtras(a);
+}
+buildSections(RF, document.getElementById('sections'));
+RF.forEach(mountOne);
+window.onLangChangePage=function(){ RF.forEach(fillExtras); };
+</script>
+</body>
+</html>

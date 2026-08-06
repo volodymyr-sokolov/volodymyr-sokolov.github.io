@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sector & Panel Antennas — Antenna Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="sector">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Family 08 · stacked columns shape the cellular beam" data-uk="Сім'я 08 · складені стовпці формують стільниковий промінь">Family 08 · stacked columns shape the cellular beam</div>
+    <h1 data-en="Sector &amp; Panel Antennas" data-uk="Секторні та панельні антени">Sector &amp; Panel Antennas</h1>
+    <div class="eq-hero">G ≈ 10·log₁₀(2N·d/λ) + 10·log₁₀(360/HPBW_az)</div>
+    <p class="lede" data-en="The workhorses on every cell tower and rooftop. A vertical column of elements makes a beam that is wide in azimuth (to cover a sector) but narrow in elevation (to concentrate power at the horizon), with an electrical downtilt to aim it at the cell edge. Stack more elements for gain; tilt to trade coverage for interference control."
+       data-uk="Робочі конячки кожної вежі й даху. Вертикальний стовпець елементів формує промінь, широкий за азимутом (щоб покрити сектор) і вузький за кутом місця (щоб зосередити потужність на горизонті), з електричним нахилом на край стільника. Більше елементів — більше підсилення; нахил обмінює покриття на керування завадами.">The workhorses on every cell tower…</p>
+  </div>
+</header>
+
+<div class="wrap-wide" id="sections"></div>
+
+<footer class="wrap-wide">
+  <p data-en="The plot is the vertical (elevation) cut — the array factor of the stacked column with its progressive downtilt phase. Azimuth beamwidth comes from the single element; total gain combines the two. Real panels add null-fill and side-lobe shaping."
+     data-uk="ДН — вертикальний (за кутом місця) переріз: множник решітки складеного стовпця з прогресивною фазою нахилу. Азимутальну ширину дає один елемент; повне підсилення поєднує обидві. Реальні панелі додають заповнення нулів і формування пелюсток.">The plot is the vertical cut…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script src="js/antenna.js"></script>
+<script src="js/pattern3d.js"></script>
+<script>
+const AL=window.AntennaLab, V='var(--teal)', A='var(--amber)', D2R=AL.D2R, R2D=AL.R2D;
+
+// draw a vertical column of N element ticks
+function columnSchem(cx, top, colH, N, label){
+  const pitch=colH/Math.max(N,1); let s='';
+  for(let i=0;i<N;i++){ const y=top+i*pitch+pitch/2; s+=`<line class="schem-driven" x1="${cx-11}" y1="${y}" x2="${cx+11}" y2="${y}"/><circle class="schem-node" cx="${cx}" cy="${y}" r="1.8"/>`; }
+  s+=`<line class="schem-wire-dim" x1="${cx}" y1="${top}" x2="${cx}" y2="${top+colH}"/>`;
+  s+=`<rect class="schem-fill" x="${cx-18}" y="${top-6}" width="36" height="${colH+12}" rx="4" opacity="0.25"/>`;
+  s+=`<text class="schem-label" x="${cx-16}" y="${top-10}">${label}</text>`;
+  return s;
+}
+
+const SC=[];
+
+/* 8.1 Sector panel */
+SC.push({
+  id:'sector-panel', num:'8.1', lvl:2, plot:'full',
+  desc:{en:"A flat array of a dozen or so elements in a vertical column behind a reflector back-plane. The column concentrates energy into a narrow elevation beam; the back-plane and element shape set a ~65° azimuth sector. A progressive phase tilts the elevation beam a few degrees down toward the cell edge.",
+        uk:"Плоска решітка з десятка елементів у вертикальному стовпці за екраном-рефлектором. Стовпець зосереджує енергію у вузький промінь за кутом місця; екран і форма елемента задають сектор ~65° за азимутом. Прогресивна фаза нахиляє промінь на кілька градусів донизу, до краю стільника."},
+  methods:[{id:'af', en:'Array factor + element', uk:'Множник + елемент',
+     desc:{en:"The vertical array factor of N elements sets the elevation beam and gain; the single-element pattern (with the reflector) sets the azimuth sector. Electrical downtilt is a progressive phase β = −k·d·sin(tilt) applied down the column.",
+           uk:"Вертикальний множник N елементів задає промінь і підсилення за кутом місця; ДН одного елемента (з рефлектором) задає азимутальний сектор. Електричний нахил — прогресивна фаза β = −k·d·sin(нахил) уздовж стовпця."},
+     formula:[{en:"G ≈ 10·log₁₀(2N·d/λ) + 10·log₁₀(360/HPBW_az)",uk:"G ≈ 10·log₁₀(2N·d/λ) + 10·log₁₀(360/HPBW_az)"},
+              {en:"beam tilt = −tilt°,  V-HPBW ≈ 51·λ/(N·d)°",uk:"нахил променя = −нахил°,  V-HPBW ≈ 51·λ/(N·d)°"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:2.1},
+    {id:'N',kind:'range',en:'Elements in column',uk:'Елементів у стовпці',min:2,max:20,step:1,value:10,fmt:v=>v.toFixed(0)},
+    {id:'d',kind:'range',en:'Element spacing',uk:'Крок елементів',min:0.5,max:1.0,step:0.01,value:0.9,fmt:v=>v.toFixed(2)+' λ'},
+    {id:'tilt',kind:'range',en:'Electrical downtilt',uk:'Електр. нахил',min:0,max:12,step:0.5,value:4,fmt:v=>v.toFixed(1)+'°'},
+    {id:'az',kind:'select',en:'Azimuth sector',uk:'Азим. сектор',value:'65',options:[{value:'65',en:'65°',uk:'65°'},{value:'90',en:'90°',uk:'90°'},{value:'120',en:'120°',uk:'120°'}]}
+  ],
+  compute(s){
+    const N=Math.round(s.N), d=s.d, tilt=s.tilt, az=parseFloat(s.az);
+    const beta=-2*Math.PI*d*Math.sin(tilt*D2R);
+    // elevation cut: plot angle deg = elevation from horizon (0=horizon=up). array axis vertical → γ from axis = 90-elev
+    const AF=g=>AL.arrayFactor(g,N,d,beta);
+    const fnBeam=deg=>AF((90-deg)*D2R);
+    const arrGain=10*Math.log10(2*N*d), azGain=10*Math.log10(360/az);
+    const gain=arrGain+azGain;
+    const an=AL.analyzePattern(fnBeam,90,0.1);
+    const vh=51/(N*d);
+    // horizontal (azimuth) plane: a front sector lobe of −3 dB full width = az
+    const fnH=deg=>{ const w=((deg%360)+360)%360, dd=(w>180?w-360:w);
+      return (Math.abs(dd)>=90)?0.03:Math.exp(-2.77*Math.pow(dd/az,2)); };
+    const lamCmS=AL.lambdaOf(s.f*1e9)*100, pxS=150/((N-1)*d*lamCmS);
+    let schem=AL.rulerSVG(230,26,lamCmS,pxS)+AL.CAP_E();
+    schem+=columnSchem(120, 55, 150, N, `${N}×`);
+    // downtilt beam arrow (tilted below horizon)
+    const bx=150+70*Math.cos(tilt*D2R), by=130+70*Math.sin(tilt*D2R);
+    schem+=`<defs><marker id="ar-sec" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" style="fill:${V}"/></marker></defs>`;
+    schem+=`<line class="schem-dim" x1="150" y1="130" x2="240" y2="130" stroke-dasharray="3,3"/>`;
+    schem+=`<line style="stroke:${V};stroke-width:1.6" x1="150" y1="130" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" marker-end="url(#ar-sec)"/>`;
+    schem+=`<text class="schem-label" style="fill:${V}" x="${bx+3}" y="${by+4}">−${tilt.toFixed(1)}°</text>`;
+    const schemE=schem;
+    // plan: the reflector panel with the azimuth sector it illuminates
+    const cxH=190, cyH=150, rW=Math.min(az*1.1,132);
+    let schemH=AL.rulerSVG(40,26,lamCmS,pxS)+AL.CAP_H();
+    schemH+=`<path class="schem-fill" d="M ${cxH},${cyH} L ${(cxH-rW*Math.sin(az/2*D2R)).toFixed(1)},${(cyH-rW*Math.cos(az/2*D2R)).toFixed(1)} A ${rW},${rW} 0 0 1 ${(cxH+rW*Math.sin(az/2*D2R)).toFixed(1)},${(cyH-rW*Math.cos(az/2*D2R)).toFixed(1)} Z" opacity="0.35"/>`;
+    schemH+=`<line class="schem-outline" x1="${cxH-26}" y1="${cyH+8}" x2="${cxH+26}" y2="${cyH+8}" stroke-width="4"/>`;
+    schemH+=AL.conductorEndOn(cxH,cyH,6);
+    schemH+=`<text class="schem-label" x="${cxH-26}" y="${cyH+26}">${AL.tr('reflector, elements end-on','рефлектор, елементи з торця')}</text>`;
+    schemH+=AL.boresightArrow(cxH,cyH-rW-10,26,A,'secH').replace('x1="'+(cxH)+'"','x1="'+(cxH)+'"');
+    schemH+=`<text class="schem-label" x="${cxH}" y="${cyH-rW-16}" text-anchor="middle">${az}° ${AL.tr('azimuth sector','азимутальний сектор')}</text>`;
+    const dOpt=1/(1+Math.abs(Math.sin(tilt*D2R)));
+    const optima=[{id:'d', value:dOpt, tag:'e',
+      label:AL.tr(`d \u2248 ${dOpt.toFixed(2)} \u03bb \u2014 widest spacing with no grating lobe at ${tilt.toFixed(1)}\u00b0 tilt`,
+                  `d \u2248 ${dOpt.toFixed(2)} \u03bb \u2014 \u043c\u0430\u043a\u0441. \u043a\u0440\u043e\u043a \u0431\u0435\u0437 \u0434\u0438\u0444\u0440\u0430\u043a\u0446\u0456\u0439\u043d\u043e\u0457 \u043f\u0435\u043b\u044e\u0441\u0442\u043a\u0438`)}];
+    return {schemE, schemH, fnBeam, fnH, optima,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:(N-1)*d, sizeLabel:'column = '+((N-1)*d).toFixed(1)+' λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'),v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:AL.tr('V-HPBW','V-HPBW'),v:vh.toFixed(1)+'°'},
+        {k:AL.tr('H-HPBW','H-HPBW'),v:az.toFixed(0)+'°'},
+        {k:AL.tr('Downtilt','Нахил'),v:'−'+tilt.toFixed(1)+'°'}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Sector_antenna',label:'Sector antenna'}},
+        {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Cell_site',label:'Cell site'}}],
+  strength:{en:"Three 120° or six 65° panels cover a full cell with high gain and controllable downtilt — the backbone of every mobile network. Modern panels add remote electrical tilt and per-column phase for beam-shaping; the trade is always coverage radius versus inter-cell interference.",
+            uk:"Три панелі 120° чи шість 65° покривають цілий стільник із високим підсиленням і керованим нахилом — основа кожної мобільної мережі. Сучасні панелі додають дистанційний електричний нахил і фазу на стовпець для формування; компроміс завжди — радіус покриття проти міжстільникових завад."},
+  xrefs:[['#collinear','Collinear','Колінеарна'],['array.html#massive-mimo','Massive MIMO','Massive MIMO'],['array.html#phased-array','Phased array','Фазована решітка']]
+});
+
+/* 8.2 Collinear / omni */
+SC.push({
+  id:'collinear', num:'8.2', lvl:2, plot:'full',
+  desc:{en:"A vertical stack of dipoles all fed in phase. In the horizontal plane it stays omnidirectional, but stacking squashes the doughnut into a thin disc at the horizon — turning the dipole's 2 dBi into 6–10 dBi of useful omnidirectional gain for a hotspot or gateway.",
+        uk:"Вертикальний стек диполів, живлених синфазно. У горизонтальній площині лишається всенаправленим, але стекування сплющує «бублик» у тонкий диск на горизонті — перетворюючи 2 дБі диполя на 6–10 дБі корисного всенаправленого підсилення для хот-споту чи шлюзу."},
+  methods:[{id:'af', en:'Collinear array factor', uk:'Множник колінеарного стеку',
+     desc:{en:"Feeding N half-wave dipoles in phase, spaced about one wavelength, gives a broadside array along the vertical. The array factor narrows the elevation beam while azimuth stays omnidirectional; gain rises roughly as 10·log₁₀(N).",
+           uk:"Синфазне живлення N напівхвильових диполів із кроком ≈ одна хвиля дає широкосторонню решітку по вертикалі. Множник звужує промінь за кутом місця, а азимут лишається всенаправленим; підсилення росте приблизно як 10·log₁₀(N)."},
+     formula:[{en:"G ≈ 2.15 + 10·log₁₀(N),   HPBW_el ≈ 51·λ/(N·d)°",uk:"G ≈ 2.15 + 10·log₁₀(N),   HPBW_ел ≈ 51·λ/(N·d)°"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.45},
+    {id:'N',kind:'range',en:'Stacked dipoles N',uk:'Диполів у стеку N',min:1,max:16,step:1,value:4,fmt:v=>v.toFixed(0)},
+    {id:'d',kind:'range',en:'Spacing',uk:'Крок',min:0.5,max:1.0,step:0.01,value:0.9,fmt:v=>v.toFixed(2)+' λ'}
+  ],
+  compute(s){
+    const N=Math.round(s.N), d=s.d;
+    const AF=g=>AL.arrayFactor(g,N,d,0);
+    // vertical (elevation) cut: 0° = horizon = up; array axis vertical → γ = 90−elev
+    const fn=deg=>AF((90-deg)*D2R);
+    const gain=2.15+10*Math.log10(N);
+    const an=AL.analyzePattern(fn,90,0.1);
+    // HPBW around horizon (peak at 0): double the half
+    const s2=AL.sampleHalf(fn,0.1,90), hp=AL.findHPBW(s2,fn);
+    const lamCmC=AL.lambdaOf(s.f*1e9)*100, pxC=165/((N-1)*d*lamCmC);
+    let schemE=AL.rulerSVG(40,26,lamCmC,pxC)+AL.CAP_E();
+    schemE+=columnSchem(200, 45, 165, N, `${N}× λ/2`);
+    schemE+=AL.boresightArrow(266,130,28,V,'colE');
+    let schemH=AL.rulerSVG(40,26,lamCmC,pxC)+AL.CAP_H();
+    schemH+=AL.azimuthCircle(190,130,60,A);
+    schemH+=AL.conductorEndOn(190,130,6);
+    schemH+=AL.boresightArrow(200,130,46,A,'colH');
+    schemH+=`<text class="schem-label" x="190" y="212" text-anchor="middle">${AL.tr('stack seen end-on · omni in azimuth','стек з торця · всенапрямлена')}</text>`;
+    const optima=[{id:'d', value:0.95, tag:'e',
+      label:AL.tr('d \u2248 0.95 \u03bb \u2014 just below the grating-lobe limit (max gain)',
+                  'd \u2248 0.95 \u03bb \u2014 \u0442\u0440\u043e\u0445\u0438 \u043d\u0438\u0436\u0447\u0435 \u043c\u0435\u0436\u0456 \u0434\u0438\u0444\u0440\u0430\u043a\u0446\u0456\u0439\u043d\u043e\u0457 \u043f\u0435\u043b\u044e\u0441\u0442\u043a\u0438')}];
+    return {schemE, schemH, fnBeam:fn, optima,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:(N-1)*d, sizeLabel:'stack = '+((N-1)*d).toFixed(1)+' λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'),v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:AL.tr('Elevation HPBW','HPBW кута місця'),v:(hp==null?'—':hp.toFixed(1)+'°')},
+        {k:AL.tr('Azimuth','Азимут'),v:AL.tr('omni 360°','всенапр. 360°')},
+        {k:AL.tr('Dipoles','Диполів'),v:N.toFixed(0)}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Collinear_antenna_array',label:'Collinear array'}}],
+  strength:{en:"Maximum omnidirectional gain from a slim vertical whip — the standard Wi-Fi hotspot, LoRaWAN gateway and LMR base antenna. Push the stack too tall and the elevation beam narrows so much that nearby users fall into the first null; null-fill phasing fixes it at some gain cost.",
+            uk:"Максимальне всенаправлене підсилення зі стрункого вертикального штиря — стандартна антена хот-споту Wi-Fi, шлюзу LoRaWAN і бази LMR. Надто високий стек звужує промінь так, що ближні користувачі потрапляють у перший нуль; заповнення нулів це виправляє ціною підсилення."},
+  xrefs:[['#sector-panel','Sector panel','Секторна панель'],['wire.html#dipole','Dipole','Диполь'],['wire.html#discone','Discone','Дискоконусна']]
+});
+
+/* ====================================================================== */
+/*  PAGE BUILDER (shared)                                                   */
+/* ====================================================================== */
+function catGet(id){ return CATALOG.flatMap(s=>s.antennas).find(x=>x.id===id)||{}; }
+function planesHTMLFor(id){
+  return `
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_schem" viewBox="0 0 400 250"></svg></div>
+    </div>
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_plot" viewBox="0 0 400 380"></svg>
+        <div class="plane-readout">
+          ${[0,1,2,3].map(i=>`<div class="item"><div class="k" id="${id}_k${i}"></div><div class="v" id="${id}_v${i}">-</div></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+function fillExtras(a){
+  const c=catGet(a.id);
+  const rf=document.getElementById('refs-'+a.id); if(rf) rf.innerHTML=window.atlasRefs(a.refs);
+  const tg=document.getElementById('tags-'+a.id); if(tg) tg.innerHTML=window.atlasTags(c.std,c.mod,c.mth);
+}
+function buildSections(list, root){
+  root.innerHTML=list.map(a=>{
+    const c=catGet(a.id), multi=a.methods&&a.methods.length>1;
+    const mdesc=(a.methods||[]).map((m,i)=>
+      `<div class="method-body${(multi&&i>0)?' hidden':''}" data-method="${m.id}">
+         <div class="desc-cols">
+           <div><h4 data-en="${m.en}" data-uk="${m.uk}">${m.en}</h4>
+             <p data-en="${m.desc.en}" data-uk="${m.desc.uk}">${m.desc.en}</p></div>
+           <div>${(m.formula||[]).map(f=>`<span class="formula" data-en="${f.en}" data-uk="${f.uk}">${f.en}</span>`).join('')}</div>
+         </div>
+       </div>`).join('');
+    return `<section id="${a.id}">
+      <div class="num" data-en="${a.num} / sector" data-uk="${a.num} / секторна">${a.num} / sector</div>
+      <h2><span class="badge l${a.lvl} lg">${['','I','II','III'][a.lvl]}</span>
+          <span data-en="${c.en}" data-uk="${c.uk}">${c.en}</span></h2>
+      <div id="tags-${a.id}"></div>
+      <p class="desc" data-en="${a.desc.en}" data-uk="${a.desc.uk}">${a.desc.en}</p>
+      <div class="method-desc">${mdesc}</div>
+      <div class="panel"><div id="exp-${a.id}"></div></div>
+      <div id="refs-${a.id}"></div>
+      <div class="strength"><div class="st-title" data-en="Design notes" data-uk="Проєктні нотатки">Design notes</div>
+        <span data-en="${a.strength.en}" data-uk="${a.strength.uk}">${a.strength.en}</span></div>
+      <div class="xrefs">${(a.xrefs||[]).map(x=>`<a href="${x[0]}" data-en="${x[1]}" data-uk="${x[2]}">${x[1]}</a>`).join('')}</div>
+    </section>`;
+  }).join('');
+}
+function mountOne(a){
+  AL.mount(a.id,{ methods:(a.methods&&a.methods.length>1)?a.methods:null, controls:a.controls, planesHTML:AL.planesTwo(a.id),
+    render:function(ctx){
+      const out=a.compute(ctx.state, ctx.methodId);
+      AL.renderPlanes(a.id, out, a);
+      if(out.enable) for(const cid in out.enable) ctx.enable(cid,out.enable[cid]);
+    }});
+  fillExtras(a);
+}
+buildSections(SC, document.getElementById('sections'));
+SC.forEach(mountOne);
+window.onLangChangePage=function(){ SC.forEach(fillExtras); };
+</script>
+</body>
+</html>

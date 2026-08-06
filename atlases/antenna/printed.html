@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Printed / Microstrip Antennas — Antenna Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="printed">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Family 05 · conductors etched on a dielectric substrate" data-uk="Сім'я 05 · провідники на діелектричній підкладці">Family 05 · conductors etched on a dielectric substrate</div>
+    <h1 data-en="Printed / Microstrip Antennas" data-uk="Друковані / мікросмужкові антени">Printed / Microstrip Antennas</h1>
+    <div class="eq-hero">f_res = c / (2·L·√ε_eff)</div>
+    <p class="lede" data-en="Flat, cheap, mass-producible and integrable with the circuit board. From the resonant patch to the wideband Vivaldi and the self-similar fractal, these antennas trade a little efficiency and bandwidth for a form factor you can print. Change a dimension and watch resonance, size and pattern respond."
+       data-uk="Плоскі, дешеві, масові й інтегровані з платою. Від резонансного патча до широкосмугового Вівальді й самоподібного фрактала — ці антени міняють трохи ККД і смуги на форм-фактор, який можна надрукувати. Змініть розмір — і резонанс, габарит та ДН відреагують.">Flat, cheap, mass-producible…</p>
+  </div>
+</header>
+
+<div class="wrap-wide" id="sections"></div>
+
+<footer class="wrap-wide">
+  <p data-en="The patch uses the cavity / transmission-line resonance model; miniaturised and self-similar geometries are approximated from their unfolded electrical length. Accurate design of any of these needs a full-wave FEM/MoM/FDTD solver — the method tags say which."
+     data-uk="Патч використовує резонансну модель резонатора / лінії передачі; мініатюризовані та самоподібні геометрії наближено з розгорнутої електричної довжини. Точний розрахунок будь-якої потребує повнохвильового FEM/MoM/FDTD — мітки методів кажуть якого.">The patch uses the cavity model…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script src="js/antenna.js"></script>
+<script src="js/pattern3d.js"></script>
+<script>
+const AL=window.AntennaLab, V='var(--teal)', A='var(--amber)', D2R=AL.D2R;
+// front-hemisphere broadside pattern (0°=broadside up), zero behind the ground plane
+function broadside(a, sharp){ const w=((a%360)+360)%360; if(w>90&&w<270) return 0;
+  return Math.pow(Math.max(Math.cos(a*D2R),0), sharp||1); }
+
+const PR=[];
+
+/* 5.1 Patch */
+PR.push({
+  id:'patch', num:'5.1', lvl:2, plot:'full',
+  desc:{en:"A rectangular conductor a fraction of a millimetre above a ground plane. It resonates when the length is about half a wavelength in the substrate, radiating broadside from the two open (fringing) edges. Bandwidth is set almost entirely by the substrate height.",
+        uk:"Прямокутний провідник за частку міліметра над площиною землі. Резонує, коли довжина ≈ пів-хвилі в підкладці, випромінюючи в широку сторону з двох відкритих (крайових) країв. Смугу майже цілком задає висота підкладки."},
+  methods:[
+    {id:'cavity', en:'Cavity model', uk:'Резонаторна модель',
+     desc:{en:"The volume under the patch is a leaky resonant cavity; the dominant mode sets the resonance and the two radiating slots set the broadside pattern. The effective permittivity accounts for the field partly in air.",
+           uk:"Об'єм під патчем — витікаючий резонатор; домінантна мода задає резонанс, а дві випромінювальні щілини — ДН у широку сторону. Ефективна діелектрична стала враховує поле частково в повітрі."},
+     formula:[{en:"ε_eff = (ε_r+1)/2 + (ε_r−1)/2·(1+12h/W)^{−1/2}",uk:"ε_eff = (ε_r+1)/2 + (ε_r−1)/2·(1+12h/W)^{−1/2}"},
+              {en:"f_res = c / (2·L·√ε_eff),   BW ≈ 3.8·(h/λ₀)·(W/L)",uk:"f_рез = c / (2·L·√ε_eff),   BW ≈ 3.8·(h/λ₀)·(W/L)"}]},
+    {id:'tl', en:'Transmission-line model', uk:'Модель лінії передачі',
+     desc:{en:"The patch is a wide microstrip line open at both ends. The fringing fields extend the electrical length by ΔL past each edge, so the physical length must be shortened to hit resonance.",
+           uk:"Патч — широка мікросмужкова лінія, відкрита з обох кінців. Крайові поля подовжують електричну довжину на ΔL за кожен край, тож фізичну довжину треба вкоротити для резонансу."},
+     formula:[{en:"ΔL/h = 0.412·(ε_eff+0.3)(W/h+0.264)/[(ε_eff−0.258)(W/h+0.8)]",uk:"ΔL/h = 0.412·(ε_eff+0.3)(W/h+0.264)/[(ε_eff−0.258)(W/h+0.8)]"},
+              {en:"f_res = c / (2·(L+2ΔL)·√ε_eff)",uk:"f_рез = c / (2·(L+2ΔL)·√ε_eff)"}]}
+  ],
+  controls:[
+    {id:'L',kind:'range',en:'Length L',uk:'Довжина L',min:2,max:40,step:0.5,value:12,fmt:v=>v.toFixed(1)+' '+AL.unit('mm')},
+    {id:'W',kind:'range',en:'Width W',uk:'Ширина W',min:2,max:50,step:0.5,value:16,fmt:v=>v.toFixed(1)+' '+AL.unit('mm')},
+    {id:'h',kind:'range',en:'Substrate h',uk:'Підкладка h',min:0.2,max:4,step:0.1,value:1.6,fmt:v=>v.toFixed(1)+' '+AL.unit('mm')},
+    {id:'er',kind:'range',en:'Permittivity ε_r',uk:'Діелектрик ε_r',min:1,max:12,step:0.1,value:4.4,fmt:v=>v.toFixed(1)}
+  ],
+  compute(s,method){
+    const W=s.W, L=s.L, h=s.h, er=s.er;
+    const eeff=(er+1)/2 + (er-1)/2*Math.pow(1+12*h/W,-0.5);
+    let Leff=L;
+    if(method==='tl'){ const dL=h*0.412*((eeff+0.3)*(W/h+0.264))/((eeff-0.258)*(W/h+0.8)); Leff=L+2*dL; }
+    const fres=AL.c/(2*(Leff/1000)*Math.sqrt(eeff))/1e9;
+    const lam0=AL.c/(fres*1e9);
+    const bw=3.77*((er-1)/(er*er))*(W/L)*(h/1000/lam0)*100;   // Balanis patch BW
+    const Wlam=W/1000/lam0;
+    const fnBeam=a=>broadside(a,1)*AL.apertureUniform(a*D2R, Math.max(Wlam,0.3));
+    const D=AL.directivityAxial(g=>{ const deg=g*AL.R2D; return broadside(deg,1)*AL.apertureUniform(g, Math.max(Wlam,0.3)); });
+    const cx=200, cy=125, px=Math.min(200/Math.max(W,L),6), Lpx=L*px, Wpx=W*px;
+    const lamCmP=lam0*100, pxP=px*10;
+    // the patch radiates upward, so the plan view is its face
+    let schemH=AL.rulerSVG(40,26,lamCmP,pxP)+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="${cx-Wpx/2}" y="${cy-Lpx/2}" width="${Wpx}" height="${Lpx}" opacity="0.5"/>`;
+    schemH+=`<rect x="${cx-Wpx/2}" y="${cy-Lpx/2}" width="${Wpx}" height="${Lpx}" fill="none" stroke="var(--teal)" stroke-width="2"/>`;
+    schemH+=`<circle class="schem-node" cx="${cx-Wpx*0.2}" cy="${cy}" r="2.5"/>`;
+    schemH+=`<text class="schem-label" x="${cx-Wpx/2}" y="${cy-Lpx/2-6}">${AL.tr('patch','патч')} L×W, ε_r=${er.toFixed(1)}</text>`;
+    schemH+=AL.dimLineV(cx+Wpx/2+14,cy-Lpx/2,cy+Lpx/2,`L=${L.toFixed(1)}`);
+    schemH+=AL.dimLineH(cx-Wpx/2,cx+Wpx/2,cy+Lpx/2+16,`W=${W.toFixed(1)} ${AL.unit('mm')}`);
+    // elevation: the stack-up — ground, substrate h, patch, feed pin
+    const hpx=Math.max(h*px*3,7), cyE=140;
+    let schemE=AL.rulerSVG(40,26,lamCmP,pxP)+AL.CAP_E();
+    schemE+=`<rect class="schem-fill" x="${cx-Wpx/2-8}" y="${cyE-hpx}" width="${Wpx+16}" height="${hpx}" opacity="0.35"/>`;
+    schemE+=`<line class="schem-driven" x1="${cx-Wpx/2}" y1="${cyE-hpx}" x2="${cx+Wpx/2}" y2="${cyE-hpx}" stroke-width="4"/>`;
+    schemE+=AL.groundHatch(cx-Wpx/2-8,cx+Wpx/2+8,cyE);
+    schemE+=`<line class="schem-wire" x1="${cx-Wpx*0.2}" y1="${cyE-hpx}" x2="${cx-Wpx*0.2}" y2="${cyE}"/>`;
+    schemE+=`<circle class="schem-node" cx="${cx-Wpx*0.2}" cy="${cyE}" r="2.5"/>`;
+    schemE+=`<text class="schem-label" x="${cx-Wpx/2}" y="${cyE-hpx-8}">${AL.tr('patch','патч')}</text>`;
+    schemE+=`<text class="schem-label" x="${cx+Wpx/2+12}" y="${cyE+14}">${AL.tr('ground','земля')}</text>`;
+    schemE+=AL.dimLineV(cx-Wpx/2-22,cyE-hpx,cyE,`h=${h.toFixed(1)}`);
+    schemE+=AL.boresightArrow(cx+Wpx/2+30,cyE-hpx,26,V,'ptE');
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:lam0*100, sizeLam:Wlam, sizeLabel:'W='+Wlam.toFixed(2)+'λ · L='+(L/1000/lam0).toFixed(2)+'λ', gainDbi:D.dBi},
+      readouts:[
+        {k:AL.tr('Resonance f','Резонанс f'),v:fres.toFixed(2)+' '+AL.unit('GHz')},
+        {k:AL.tr('Directivity','Спрямованість'),v:D.dBi.toFixed(1)+' '+AL.unit('dBi')},
+        {k:AL.tr('Bandwidth','Смуга'),v:'≈ '+bw.toFixed(1)+' %'},
+        {k:'ε_eff',v:eeff.toFixed(2)}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Patch_antenna',label:'Patch antenna'}},
+        {tag:'book',en:{href:'https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061',label:'Balanis, ch. 14'}}],
+  strength:{en:"The default antenna of the printed era — GPS pucks, Wi-Fi, 5G and automotive-radar arrays. Cheap and low-profile, but inherently narrowband (a few percent) and lossy on high-ε_r substrates; a thicker, low-ε_r substrate buys bandwidth at the cost of size.",
+            uk:"Типова антена друкованої ери — GPS-«шайби», Wi-Fi, 5G та автомобільні радари. Дешева й низькопрофільна, але вузькосмугова (кілька відсотків) і з втратами на високому ε_r; товща підкладка з низьким ε_r дає смугу ціною розміру."},
+  xrefs:[['wire.html#pifa','PIFA','PIFA'],['#meander','Meander','Меандрова'],['aperture.html#slot','Slot','Щілина']]
+});
+
+/* 5.3 Meander line */
+PR.push({
+  id:'meander', num:'5.3', lvl:3, plot:'full',
+  desc:{en:"A conductor folded back and forth in a serpentine so a resonant quarter- or half-wave fits in a tiny footprint. Every fold adds electrical length without physical length — at the price of efficiency and bandwidth as the folds couple to each other.",
+        uk:"Провідник, складений туди-сюди звивисто, щоб резонансна чверть- чи пів-хвиля вмістилася в крихітному місці. Кожен виток додає електричну довжину без фізичної — ціною ККД і смуги, бо витки зв'язуються між собою."},
+  methods:[{id:'fw', en:'Full-wave (FEM/MoM)', uk:'Повнохвильовий (FEM/MoM)',
+     desc:{en:"The serpentine defies closed-form analysis, so a full-wave solver is used. To first order the antenna resonates when the total unfolded trace length reaches a quarter wavelength; the size reduction is the ratio of footprint to unfolded length.",
+           uk:"Звивиста доріжка не має замкненого опису, тож беруть повнохвильовий розв'язувач. У першому наближенні антена резонує, коли розгорнута довжина доріжки сягає чверті хвилі; зменшення розміру — відношення габариту до розгорнутої довжини."},
+     formula:[{en:"L_trace = N·(2·h_m + p),  f_res ≈ c/(4·L_trace·√ε_eff)",uk:"L_доріж = N·(2·h_м + p),  f_рез ≈ c/(4·L_доріж·√ε_eff)"}]}],
+  controls:[
+    {id:'seg',kind:'range',en:'Meander sections N',uk:'Секцій N',min:2,max:20,step:1,value:8,fmt:v=>v.toFixed(0)},
+    {id:'hm',kind:'range',en:'Meander height',uk:'Висота меандру',min:1,max:12,step:0.5,value:4,fmt:v=>v.toFixed(1)+' '+AL.unit('mm')},
+    {id:'pitch',kind:'range',en:'Pitch',uk:'Крок',min:1,max:6,step:0.5,value:2,fmt:v=>v.toFixed(1)+' '+AL.unit('mm')},
+    {id:'er',kind:'range',en:'ε_r',uk:'ε_r',min:1,max:6,step:0.1,value:4.4,fmt:v=>v.toFixed(1)}
+  ],
+  compute(s){
+    const N=Math.round(s.seg), eeff=(s.er+1)/2;
+    const Ltrace=N*(2*s.hm+s.pitch); // mm
+    const footprint=N*s.pitch;
+    const fres=AL.c/(4*(Ltrace/1000)*Math.sqrt(eeff))/1e9;
+    const reduction=(1-footprint/Ltrace)*100;
+    const fnBeam=a=>AL.smallLoopPattern((90-a)*D2R)*0.85+0.15; // short-antenna omni-ish
+    const cx=200, cy=130, px=Math.min(240/(N*s.pitch),8), pp=s.pitch*px, hh=s.hm*px, x0=cx-N*pp/2;
+    let d=`M ${x0},${cy}`;
+    for(let i=0;i<N;i++){ const x=x0+i*pp; const up=(i%2===0)? -hh:hh; d+=` L ${x},${cy+up} L ${x+pp},${cy+up} L ${x+pp},${cy}`; }
+    const lamCmM=AL.c/(fres*1e9)*100, pxM=px*10;
+    let schemH=AL.rulerSVG(40,26,lamCmM,pxM)+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="${x0-12}" y="${cy-hh-12}" width="${N*pp+24}" height="${2*hh+24}" rx="3" opacity="0.35"/>`;
+    schemH+=`<path class="schem-driven" d="${d}" fill="none"/>`;
+    schemH+=`<circle class="schem-node" cx="${x0}" cy="${cy}" r="2.5"/>`;
+    schemH+=`<text class="schem-label" x="${x0}" y="${cy-hh-18}">N = ${N} · L_trace = ${Ltrace.toFixed(0)} ${AL.unit('mm')}</text>`;
+    schemH+=AL.dimLineH(x0,x0+N*pp,cy+hh+22,`${AL.tr('footprint','габарит')} ${footprint.toFixed(0)} ${AL.unit('mm')}`);
+    // elevation: a printed trace is flat — edge-on it is just the board
+    const cyE=140;
+    let schemE=AL.rulerSVG(40,26,lamCmM,pxM)+AL.CAP_E();
+    schemE+=`<rect class="schem-fill" x="${x0-12}" y="${cyE}" width="${N*pp+24}" height="7" opacity="0.5"/>`;
+    schemE+=`<line class="schem-driven" x1="${x0}" y1="${cyE-1.5}" x2="${x0+N*pp}" y2="${cyE-1.5}" stroke-width="3"/>`;
+    schemE+=`<circle class="schem-node" cx="${x0}" cy="${cyE-1.5}" r="2.5"/>`;
+    schemE+=`<text class="schem-label" x="${x0-12}" y="${cyE-14}">${AL.tr('copper trace on the board, edge-on','мідна доріжка на платі, з торця')}</text>`;
+    schemE+=`<text class="schem-label" x="${x0-12}" y="${cyE+22}">ε_r = ${s.er.toFixed(1)}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.c/(fres*1e9)*100, sizeLam:footprint/(AL.c/(fres*1e9)*1000), sizeLabel:'footprint = '+(footprint/(AL.c/(fres*1e9)*1000)).toFixed(3)+' λ'},
+      readouts:[
+        {k:AL.tr('Resonance f','Резонанс f'),v:fres.toFixed(2)+' '+AL.unit('GHz')},
+        {k:AL.tr('Unfolded length','Розгорн. довж.'),v:Ltrace.toFixed(0)+' '+AL.unit('mm')},
+        {k:AL.tr('Size reduction','Зменш. розміру'),v:reduction.toFixed(0)+' %'},
+        {k:AL.tr('Directivity','Спрямованість'),v:'≈ 1.8 '+AL.unit('dBi')}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Meander_line',label:'Meander line'}},
+        {tag:'paper',en:{href:'https://doi.org/10.1109/8.865232',label:'Meander-line miniaturisation (IEEE TAP)'}}],
+  strength:{en:"The go-to way to fit a UHF antenna into a ZigBee/BLE tag or an RFID label. Miniaturisation is bought directly from efficiency and bandwidth — the fundamental small-antenna (Chu) penalty — so a heavily folded meander is a poor but tiny radiator.",
+            uk:"Стандартний спосіб вмістити UHF-антену в мітку ZigBee/BLE чи RFID-етикетку. Мініатюризацію купують прямо з ККД і смуги — фундаментальна плата малої антени (Чу) — тож сильно складений меандр є поганим, але крихітним випромінювачем."},
+  xrefs:[['#chip','Chip antenna','Чип-антена'],['wire.html#ifa','IFA','IFA'],['rfid.html#uhf-rfid','RFID tag','RFID-мітка']]
+});
+
+/* 5.4 Chip / ceramic */
+PR.push({
+  id:'chip', num:'5.4', lvl:3, plot:'full',
+  desc:{en:"A surface-mount block of high-permittivity ceramic with a printed radiator inside. The dielectric loading shrinks the resonant length by √ε_r, so a whole antenna fits in a component the size of a grain of rice — at a steep cost in efficiency and bandwidth.",
+        uk:"Поверхнево-монтований блок кераміки з високим ε_r із друкованим випромінювачем усередині. Діелектричне навантаження стискає резонансну довжину в √ε_r, тож ціла антена вміщується в компонент розміром із рисове зерно — ціною ККД і смуги."},
+  methods:[{id:'fw', en:'Full-wave (proprietary structure)', uk:'Повнохвильовий (власна структура)',
+     desc:{en:"The internal meander/helix is proprietary and only a full-wave solve captures it. The design lever is the ceramic permittivity: raising ε_r shrinks the part but narrows the band and lowers radiation efficiency.",
+           uk:"Внутрішній меандр/спіраль є власним, і лише повнохвильовий розв'язок його враховує. Важіль конструкції — ε_r кераміки: вищий ε_r стискає компонент, але звужує смугу й знижує ККД."},
+     formula:[{en:"L_eff ≈ L_phys·√ε_r,  f_res set by L_eff ≈ λ/4",uk:"L_еф ≈ L_фіз·√ε_r,  f_рез при L_еф ≈ λ/4"}]}],
+  controls:[
+    {id:'len',kind:'range',en:'Chip length',uk:'Довжина чипа',min:2,max:12,step:0.5,value:5,fmt:v=>v.toFixed(1)+' '+AL.unit('mm')},
+    {id:'er',kind:'range',en:'Ceramic ε_r',uk:'Кераміка ε_r',min:4,max:40,step:1,value:20,fmt:v=>v.toFixed(0)},
+    {id:'eff',kind:'range',en:'Target efficiency',uk:'Цільовий ККД',min:30,max:80,step:1,value:55,fmt:v=>v.toFixed(0)+' %'}
+  ],
+  compute(s){
+    const Leff=s.len*Math.sqrt(s.er); // effective length mm
+    const fres=AL.c/(4*(Leff/1000))/1e9;
+    const bw=AL.clamp(12/Math.sqrt(s.er),1,6);
+    const fnBeam=a=>AL.smallLoopPattern((90-a)*D2R)*0.8+0.2;
+    const cx=200, cy=130, w=s.len*10, hgt=s.len*5;
+    const lamCmC=AL.c/(fres*1e9)*100, pxC=Math.min(120/lamCmC,12);
+    let schemH=AL.rulerSVG(40,26,lamCmC,pxC)+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="${cx-w/2}" y="${cy-hgt/2}" width="${w}" height="${hgt}" rx="3"/>`;
+    // internal meander hint
+    let d=`M ${cx-w/2+4},${cy}`; for(let i=0;i<4;i++){ const x=cx-w/2+4+i*(w-8)/4; d+=` L ${x},${cy-hgt/3} L ${x+(w-8)/8},${cy-hgt/3} L ${x+(w-8)/8},${cy+hgt/3} L ${x+(w-8)/4},${cy+hgt/3} L ${x+(w-8)/4},${cy}`; }
+    schemH+=`<path class="schem-driven" d="${d}" fill="none" opacity="0.8"/>`;
+    schemH+=`<text class="schem-label" x="${cx-w/2}" y="${cy-hgt/2-6}">${AL.tr('ceramic block, internal meander','керам. блок, внутрішній меандр')} ε_r=${s.er}</text>`;
+    schemH+=AL.dimLineH(cx-w/2,cx+w/2,cy+hgt/2+16,`${s.len.toFixed(1)} ${AL.unit('mm')}`);
+    // elevation: the chip standing on the PCB, keep-out under it
+    const cyE=150, hC=hgt*0.5;
+    let schemE=AL.rulerSVG(40,26,lamCmC,pxC)+AL.CAP_E();
+    schemE+=`<rect class="schem-fill" x="${cx-w/2-30}" y="${cyE}" width="${w+60}" height="7" opacity="0.5"/>`;
+    schemE+=`<rect class="schem-fill" x="${cx-w/2}" y="${cyE-hC}" width="${w}" height="${hC}" rx="2"/>`;
+    schemE+=`<line class="schem-driven" x1="${cx-w/2}" y1="${cyE}" x2="${cx-w/2+6}" y2="${cyE}" stroke-width="3"/>`;
+    schemE+=`<line class="schem-driven" x1="${cx+w/2-6}" y1="${cyE}" x2="${cx+w/2}" y2="${cyE}" stroke-width="3"/>`;
+    schemE+=`<text class="schem-label" x="${cx-w/2}" y="${cyE-hC-8}">${AL.tr('chip on PCB, ground keep-out beneath','чип на платі, виріз у землі під ним')}</text>`;
+    schemE+=`<text class="schem-label" x="${cx+w/2+8}" y="${cyE+20}">PCB</text>`;
+    schemE+=AL.boresightArrow(cx,cyE-hC-26,26,V,'chE');
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.c/(fres*1e9)*100, sizeLam:s.len/(AL.c/(fres*1e9)*1000), sizeLabel:'L = '+(s.len/(AL.c/(fres*1e9)*1000)).toFixed(3)+' λ'},
+      readouts:[
+        {k:AL.tr('Resonance f','Резонанс f'),v:fres.toFixed(2)+' '+AL.unit('GHz')},
+        {k:AL.tr('Effective length','Ефект. довжина'),v:Leff.toFixed(1)+' '+AL.unit('mm')},
+        {k:AL.tr('Bandwidth','Смуга'),v:'≈ '+bw.toFixed(1)+' %'},
+        {k:AL.tr('Efficiency','ККД'),v:s.eff.toFixed(0)+' %'}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Dielectric_resonator_antenna',label:'Dielectric resonator antenna'}}],
+  strength:{en:"The smallest practical antenna for BLE, Wi-Fi and GNSS modules — a single reflow-soldered part with a matched footprint. It needs a specified ground clearance and its efficiency is modest; higher ε_r means smaller but worse.",
+            uk:"Найменша практична антена для модулів BLE, Wi-Fi і ГНСС — одна деталь, припаяна оплавленням, зі стандартним посадковим місцем. Потребує заданого зазору до землі, а ККД помірний; вищий ε_r — менше, але гірше."},
+  xrefs:[['#meander','Meander','Меандрова'],['wire.html#rubber-duck','Rubber duck','Гумова качечка']]
+});
+
+/* 5.5 Fractal */
+PR.push({
+  id:'fractal', num:'5.5', lvl:3, plot:'full',
+  desc:{en:"A self-similar shape — Koch, Sierpinski, Minkowski — repeated at ever-smaller scales. The repeated structure packs long electrical length into a small area (miniaturisation) and, because each scale resonates, gives several harmonically-unrelated bands from one element.",
+        uk:"Самоподібна форма — Коха, Серпінського, Мінковського — повторена у все менших масштабах. Повторення пакує довгу електричну довжину в малу площу (мініатюризація) і, оскільки кожен масштаб резонує, дає кілька негармонічних діапазонів з одного елемента."},
+  methods:[{id:'fw', en:'Full-wave (numerical)', uk:'Повнохвильовий (чисельний)',
+     desc:{en:"Only a numerical solver captures the self-similar geometry. Each iteration adds electrical length (lowering the fundamental) and introduces an additional resonance, so the number of usable bands rises roughly with the iteration order.",
+           uk:"Лише чисельний розв'язувач враховує самоподібну геометрію. Кожна ітерація додає електричну довжину (знижуючи основну частоту) й вводить додатковий резонанс, тож число діапазонів росте приблизно з порядком ітерації."},
+     formula:[{en:"Koch length factor = (4/3)^n;  f₁ falls ∝ (3/4)^n,  bands ≈ n+1",uk:"Коефіцієнт довжини Коха = (4/3)^n;  f₁ падає ∝ (3/4)^n,  діапазонів ≈ n+1"}]}],
+  controls:[
+    {id:'iter',kind:'range',en:'Iterations n',uk:'Ітерацій n',min:0,max:4,step:1,value:2,fmt:v=>v.toFixed(0)},
+    {id:'base',kind:'range',en:'Base size',uk:'Базовий розмір',min:10,max:120,step:5,value:60,fmt:v=>v.toFixed(0)+' '+AL.unit('mm')}
+  ],
+  compute(s){
+    const n=Math.round(s.iter), base=s.base;
+    const factor=Math.pow(4/3,n);
+    const Leff=base*factor;
+    const f1=AL.c/(2*(Leff/1000))/1e9;
+    const bands=n+1;
+    const fnBeam=a=>AL.dipolePattern((90-a)*D2R,0.5);
+    // schematic: Koch curve of order n
+    function koch(p1,p2,depth){ if(depth===0) return [p1,p2];
+      const dx=(p2[0]-p1[0])/3, dy=(p2[1]-p1[1])/3;
+      const a=[p1[0]+dx,p1[1]+dy], b=[p1[0]+2*dx,p1[1]+2*dy];
+      const ang=Math.atan2(dy,dx)-Math.PI/3, len=Math.hypot(dx,dy);
+      const peak=[a[0]+len*Math.cos(ang),a[1]+len*Math.sin(ang)];
+      return [].concat(koch(p1,a,depth-1).slice(0,-1),koch(a,peak,depth-1).slice(0,-1),koch(peak,b,depth-1).slice(0,-1),koch(b,p2,depth-1)); }
+    const pts=koch([70,150],[330,150],Math.min(n,4));
+    let d='M '+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L ');
+    const lamCmF=AL.c/(f1*1e9)*100, pxF=260/(base);
+    let schemH=AL.rulerSVG(40,26,lamCmF,pxF*10)+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="58" y="96" width="284" height="76" rx="3" opacity="0.3"/>`;
+    schemH+=`<path class="schem-driven" d="${d}" fill="none"/>`;
+    schemH+=`<circle class="schem-node" cx="200" cy="150" r="2.5"/>`;
+    schemH+=`<text class="schem-label" x="70" y="126">Koch n=${n} · ×${factor.toFixed(2)} ${AL.tr('wire length in the same span','довжина проводу в тому ж габариті')}</text>`;
+    schemH+=AL.dimLineH(70,330,182,`${AL.tr('span','габарит')} = ${base.toFixed(0)} ${AL.unit('mm')}`);
+    let schemE=AL.rulerSVG(40,26,lamCmF,pxF*10)+AL.CAP_E();
+    schemE+=`<rect class="schem-fill" x="58" y="140" width="284" height="7" opacity="0.5"/>`;
+    schemE+=`<line class="schem-driven" x1="70" y1="138" x2="330" y2="138" stroke-width="3"/>`;
+    schemE+=`<circle class="schem-node" cx="200" cy="138" r="2.5"/>`;
+    schemE+=`<text class="schem-label" x="70" y="124">${AL.tr('the fractal is planar — edge-on it is one flat trace','фрактал плоский — з торця це одна пласка доріжка')}</text>`;
+    schemE+=AL.boresightArrow(200,112,26,V,'frE');
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.c/(f1*1e9)*100, sizeLam:base/(AL.c/(f1*1e9)*1000), sizeLabel:'span = '+(base/(AL.c/(f1*1e9)*1000)).toFixed(3)+' λ'},
+      readouts:[
+        {k:AL.tr('Lowest band f₁','Нижній діап. f₁'),v:f1.toFixed(2)+' '+AL.unit('GHz')},
+        {k:AL.tr('Length factor','Коеф. довжини'),v:'×'+factor.toFixed(2)},
+        {k:AL.tr('Usable bands','Діапазонів'),v:bands.toFixed(0)},
+        {k:AL.tr('Iterations','Ітерацій'),v:n.toFixed(0)}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Fractal_antenna',label:'Fractal antenna'}},
+        {tag:'paper',en:{href:'https://doi.org/10.1109/74.997888',label:'Gianvittorio & Rahmat-Samii, Fractal antennas'}}],
+  strength:{en:"Multiband and compact from one element — handy for combo Wi-Fi/BT/cellular modules. The gains are real but modest, and the fine features raise ohmic loss and are hard to manufacture repeatably; a well-designed meander often does as well.",
+            uk:"Багатодіапазонність і компактність з одного елемента — зручно для комбо Wi-Fi/BT/стільникових модулів. Виграш реальний, але помірний, а дрібні деталі підвищують омічні втрати й важко відтворюються; добрий меандр часто не гірший."},
+  xrefs:[['#meander','Meander','Меандрова'],['#patch','Patch','Патч'],['wire.html#lpda','Log-periodic','Логоперіодична']]
+});
+
+/* 5.6 Vivaldi */
+PR.push({
+  id:'vivaldi', num:'5.6', lvl:3, plot:'full',
+  desc:{en:"An exponentially tapered slot etched on a board. The wave travels along the slot and radiates where the taper matches free space, giving an endfire beam over an enormous bandwidth — the slot simply presents a different λ-wide radiating region at each frequency.",
+        uk:"Експоненційно звужена щілина на платі. Хвиля рухається вздовж щілини й випромінює там, де звуження узгоджується з простором, даючи осьовий промінь у величезній смузі — щілина просто представляє іншу λ-широку ділянку на кожній частоті."},
+  methods:[{id:'fw', en:'Full-wave (FEM/FDTD)', uk:'Повнохвильовий (FEM/FDTD)',
+     desc:{en:"The travelling-wave, frequency-dependent radiation region needs a broadband time- or frequency-domain solver. The low-frequency limit is set by the wide (mouth) opening ≈ λ/2; gain grows with the tapered length in wavelengths.",
+           uk:"Біжуча хвиля з частотно-залежною ділянкою випромінювання потребує широкосмугового розв'язувача в часовій чи частотній області. Нижню межу задає широкий отвір (гирло) ≈ λ/2; підсилення росте зі звуженою довжиною в довжинах хвиль."},
+     formula:[{en:"f_low ≈ c/(2·W_mouth),  G ≈ 10·log₁₀(10·L/λ) dBi (endfire trend)",uk:"f_low ≈ c/(2·W_гирла),  G ≈ 10·log₁₀(10·L/λ) дБі (осьовий тренд)"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:30000,value:8},
+    {id:'mouth',kind:'range',en:'Mouth width',uk:'Ширина гирла',min:10,max:120,step:5,value:40,fmt:v=>v.toFixed(0)+' '+AL.unit('mm')},
+    {id:'len',kind:'range',en:'Taper length',uk:'Довжина звуж.',min:20,max:200,step:5,value:80,fmt:v=>v.toFixed(0)+' '+AL.unit('mm')}
+  ],
+  compute(s){
+    const lam=AL.lambdaOf(s.f*1e9), Llam=s.len/1000/lam;
+    const flow=AL.c/(2*s.mouth/1000)/1e9, above=s.f>=flow;
+    const gain=AL.clamp(10*Math.log10(10*Math.max(Llam,0.3)),3,17);
+    // endfire beam up; sharpen with length
+    const fnBeam=a=>Math.pow(Math.max(Math.cos(a*D2R),0),Math.max(1,1.5*Llam));
+    // AL.analyzeCut scans BOTH sides of the peak; AL.analyzePattern only
+    // scans 0..maxDeg, which halves the width of a lobe sitting on boresight.
+    const an=AL.analyzeCut(fnBeam,90);
+    const cx=200, cy=130, px=Math.min(300/s.len,3), Lpx=s.len*px, Wpx=s.mouth*px, x0=cx-Lpx/2;
+    // exponential taper (two curves)
+    let up=`M ${x0},${cy}`, dn=`M ${x0},${cy}`;
+    const nS=20; for(let i=1;i<=nS;i++){ const t=i/nS, x=x0+t*Lpx, y=(Wpx/2)*(Math.exp(3*t)-1)/(Math.exp(3)-1);
+      up+=` L ${x.toFixed(1)},${(cy-y).toFixed(1)}`; dn+=` L ${x.toFixed(1)},${(cy+y).toFixed(1)}`; }
+    const lamCmVv=lam*100, pxVv=px*10;
+    // the board stands in the E plane: the flare shows there, edge-on in plan
+    let schemE=AL.rulerSVG(40,26,lamCmVv,pxVv)+AL.CAP_E();
+    schemE+=`<path class="schem-fill" d="${up} L ${x0+Lpx},${cy+ (Wpx/2)} ${dn.replace('M','L')} Z" opacity="0.4"/>`;
+    schemE+=`<path class="schem-driven" d="${up}" fill="none"/><path class="schem-driven" d="${dn}" fill="none"/>`;
+    schemE+=`<circle class="schem-node" cx="${x0}" cy="${cy}" r="2.5"/>`;
+    schemE+=AL.boresightArrow(x0+Lpx+8,cy,26,V,'vivE');
+    schemE+=AL.dimLineV(x0+Lpx+2,cy-Wpx/2,cy+Wpx/2,`${s.mouth.toFixed(0)} ${AL.unit('mm')}`);
+    schemE+=`<text class="schem-label" x="${x0}" y="${cy-Wpx/2-10}">${AL.tr('exponential slot flare','експоненційне розкриття щілини')}</text>`;
+    const cyH=130;
+    let schemH=AL.rulerSVG(40,26,lamCmVv,pxVv)+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="${x0}" y="${cyH-4}" width="${Lpx}" height="8" opacity="0.5"/>`;
+    schemH+=`<line class="schem-driven" x1="${x0}" y1="${cyH}" x2="${x0+Lpx}" y2="${cyH}" stroke-width="2"/>`;
+    schemH+=`<circle class="schem-node" cx="${x0}" cy="${cyH}" r="2.5"/>`;
+    schemH+=AL.boresightArrow(x0+Lpx+8,cyH,26,A,'vivH');
+    schemH+=AL.dimLineH(x0,x0+Lpx,cyH+26,`L = ${Llam.toFixed(2)} λ`);
+    schemH+=`<text class="schem-label" x="${x0}" y="${cyH-18}">${AL.tr('board edge-on — endfire along its length','плата з торця — випромінення вздовж неї')}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:lam*100, sizeLam:Llam, sizeLabel:'L = '+Llam.toFixed(2)+' λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'),v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW',v:isFinite(an.hpbw)?an.hpbw.toFixed(0)+'°':'—'},
+        {k:AL.tr('Low cutoff','Нижня межа'),v:flow.toFixed(2)+' '+AL.unit('GHz')},
+        {k:AL.tr('In band?','У смузі?'),v:above?AL.tr('yes','так'):AL.tr('below','нижче')}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Vivaldi_antenna',label:'Vivaldi antenna'}},
+        {tag:'paper',en:{href:'https://doi.org/10.1049/ip-h-2.1988.0016',label:'Gibson, The Vivaldi aerial'}}],
+  strength:{en:"Multi-octave bandwidth and a directional endfire beam make Vivaldis the element of choice for UWB, ground-penetrating radar and wideband imaging arrays. They are electrically long and need a good ground/board, so they are not compact.",
+            uk:"Багатооктавна смуга й спрямований осьовий промінь роблять Вівальді елементом вибору для UWB, георадарів і широкосмугових зображувальних решіток. Вони електрично довгі й потребують доброї землі/плати, тож не компактні."},
+  xrefs:[['aperture.html#slot','Slot','Щілина'],['#patch','Patch','Патч'],['array.html#phased-array','UWB arrays','UWB-решітки']]
+});
+
+/* ====================================================================== */
+/*  PAGE BUILDER (shared)                                                   */
+/* ====================================================================== */
+function catGet(id){ return CATALOG.flatMap(s=>s.antennas).find(x=>x.id===id)||{}; }
+function planesHTMLFor(id){
+  return `
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_schem" viewBox="0 0 400 250"></svg></div>
+    </div>
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_plot" viewBox="0 0 400 380"></svg>
+        <div class="plane-readout">
+          ${[0,1,2,3].map(i=>`<div class="item"><div class="k" id="${id}_k${i}"></div><div class="v" id="${id}_v${i}">-</div></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+function fillExtras(a){
+  const c=catGet(a.id);
+  const rf=document.getElementById('refs-'+a.id); if(rf) rf.innerHTML=window.atlasRefs(a.refs);
+  const tg=document.getElementById('tags-'+a.id); if(tg) tg.innerHTML=window.atlasTags(c.std,c.mod,c.mth);
+}
+function buildSections(list, root){
+  root.innerHTML=list.map(a=>{
+    const c=catGet(a.id), multi=a.methods&&a.methods.length>1;
+    const mdesc=(a.methods||[]).map((m,i)=>
+      `<div class="method-body${(multi&&i>0)?' hidden':''}" data-method="${m.id}">
+         <div class="desc-cols">
+           <div><h4 data-en="${m.en}" data-uk="${m.uk}">${m.en}</h4>
+             <p data-en="${m.desc.en}" data-uk="${m.desc.uk}">${m.desc.en}</p></div>
+           <div>${(m.formula||[]).map(f=>`<span class="formula" data-en="${f.en}" data-uk="${f.uk}">${f.en}</span>`).join('')}</div>
+         </div>
+       </div>`).join('');
+    return `<section id="${a.id}">
+      <div class="num" data-en="${a.num} / printed" data-uk="${a.num} / друкована">${a.num} / printed</div>
+      <h2><span class="badge l${a.lvl} lg">${['','I','II','III'][a.lvl]}</span>
+          <span data-en="${c.en}" data-uk="${c.uk}">${c.en}</span></h2>
+      <div id="tags-${a.id}"></div>
+      <p class="desc" data-en="${a.desc.en}" data-uk="${a.desc.uk}">${a.desc.en}</p>
+      <div class="method-desc">${mdesc}</div>
+      <div class="panel"><div id="exp-${a.id}"></div></div>
+      <div id="refs-${a.id}"></div>
+      <div class="strength"><div class="st-title" data-en="Design notes" data-uk="Проєктні нотатки">Design notes</div>
+        <span data-en="${a.strength.en}" data-uk="${a.strength.uk}">${a.strength.en}</span></div>
+      <div class="xrefs">${(a.xrefs||[]).map(x=>`<a href="${x[0]}" data-en="${x[1]}" data-uk="${x[2]}">${x[1]}</a>`).join('')}</div>
+    </section>`;
+  }).join('');
+}
+function mountOne(a){
+  AL.mount(a.id,{ methods:(a.methods&&a.methods.length>1)?a.methods:null, controls:a.controls, planesHTML:AL.planesTwo(a.id),
+    render:function(ctx){
+      const out=a.compute(ctx.state, ctx.methodId);
+      AL.renderPlanes(a.id, out, a);
+      if(out.enable) for(const cid in out.enable) ctx.enable(cid,out.enable[cid]);
+    }});
+  fillExtras(a);
+}
+buildSections(PR, document.getElementById('sections'));
+PR.forEach(mountOne);
+window.onLangChangePage=function(){ PR.forEach(fillExtras); };
+</script>
+</body>
+</html>

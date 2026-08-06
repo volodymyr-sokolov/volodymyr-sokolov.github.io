@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lens Antennas — Antenna Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="lens">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Family 07 · a dielectric refracts the wavefront into a beam" data-uk="Сім'я 07 · діелектрик заломлює фронт у промінь">Family 07 · a dielectric refracts the wavefront into a beam</div>
+    <h1 data-en="Lens Antennas" data-uk="Лінзові антени">Lens Antennas</h1>
+    <div class="eq-hero">G = ε·(π·D/λ)²,   n = √ε_r</div>
+    <p class="lede" data-en="Like a reflector but in transmission: a shaped or graded-index dielectric collimates a feed's spherical wave into a plane wave — with no feed blockage and, for the Luneburg sphere, many independent beams at once. Common at mmWave, where a lens is small and low-loss."
+       data-uk="Як рефлектор, але на просвіт: профільований чи градієнтний діелектрик колімує сферичну хвилю опромінювача у плоску — без затінення, а для сфери Люнеберга — з багатьма незалежними променями одразу. Поширені на mmWave, де лінза мала й з малими втратами.">Like a reflector but in transmission…</p>
+  </div>
+</header>
+
+<div class="wrap-wide" id="sections"></div>
+
+<footer class="wrap-wide">
+  <p data-en="Gain uses the aperture model G = ε·(πD/λ)²; the beam is the uniform circular-aperture (Airy) cut. Real lenses are designed by geometric-optics ray tracing through the dielectric plus physical optics on the exit aperture — the method tags point there."
+     data-uk="Підсилення — модель розкриву G = ε·(πD/λ)²; промінь — переріз рівномірного кругового розкриву (Ейрі). Реальні лінзи проєктують трасуванням променів геометричної оптики крізь діелектрик плюс фізична оптика на вихідній апертурі.">Gain uses the aperture model…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script src="js/antenna.js"></script>
+<script src="js/pattern3d.js"></script>
+<script>
+const AL=window.AntennaLab, V='var(--teal)', A='var(--amber)', D2R=AL.D2R, R2D=AL.R2D;
+
+const LN=[];
+
+/* 7.1 Dielectric lens */
+LN.push({
+  id:'dielectric-lens', num:'7.1', lvl:2, plot:'half',
+  desc:{en:"A block of low-loss dielectric shaped so every ray from the focal feed emerges as a parallel beam. Because the lens works in transmission the feed sits behind it — no blockage — and the refractive index n = √ε_r sets how strongly the surface bends the rays.",
+        uk:"Блок діелектрика малих втрат, профільований так, щоб кожен промінь від фокального опромінювача виходив паралельним пучком. Оскільки лінза працює на просвіт, опромінювач стоїть позаду — без затінення — а показник заломлення n = √ε_r задає, наскільки сильно поверхня згинає промені."},
+  methods:[{id:'go', en:'Geometric optics + PO', uk:'Геометрична оптика + ФО',
+     desc:{en:"Ray tracing (geometric optics) through the dielectric fixes the surface profile that collimates the feed; physical optics on the flat exit aperture then gives the radiation pattern and gain, exactly as for a reflector of the same diameter.",
+           uk:"Трасування променів (геометрична оптика) крізь діелектрик задає профіль поверхні, що колімує опромінювач; фізична оптика на плоскій вихідній апертурі дає ДН і підсилення — так само, як для рефлектора того ж діаметра."},
+     formula:[{en:"surface: (n−1)·r = n·d − d₀ (hyperbolic lens),  G = ε·(π·D/λ)²",uk:"поверхня: (n−1)·r = n·d − d₀ (гіперболічна лінза),  G = ε·(π·D/λ)²"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:110000,value:60},
+    {id:'D',kind:'range',en:'Diameter D',uk:'Діаметр D',min:2,max:40,step:0.5,value:10,fmt:v=>v.toFixed(1)+' '+AL.unit('cm')},
+    {id:'er',kind:'range',en:'Permittivity ε_r',uk:'Діелектрик ε_r',min:2,max:12,step:0.1,value:2.5,fmt:v=>v.toFixed(1)}
+  ],
+  compute(s){
+    const lam=AL.lambdaOf(s.f*1e9), Dlam=(s.D/100)/lam, n=Math.sqrt(s.er), eff=0.60;
+    const fnBeam=a=>AL.apertureCircular(a*D2R,Dlam);
+    const gain=10*Math.log10(eff*Math.pow(Math.PI*Dlam,2));
+    const samp=AL.sampleHalf(fnBeam,0.05,30), hp=AL.findHPBW(samp,fnBeam);
+    const cx=200, cy=140, px=Math.min(200/s.D,10), R=s.D*px/2, th=R*0.5;
+    // plano-convex lens: flat back, convex front
+    const lamCmD=lam*100;
+    let schem=AL.rulerSVG(36,26,lamCmD,px)+AL.CAP_SAME();
+    schem+=`<path class="schem-fill" d="M ${cx-th},${cy-R} L ${cx-th},${cy+R} Q ${cx+th*1.3},${cy} ${cx-th},${cy-R} Z"/>`;
+    const fx=cx-th-60; schem+=`<circle class="schem-node" cx="${fx}" cy="${cy}" r="3"/>`;
+    // rays from feed → parallel out
+    for(let k=-2;k<=2;k++){ const y=cy+k*R*0.4;
+      schem+=`<line class="schem-dim" x1="${fx}" y1="${cy}" x2="${cx-th}" y2="${y}"/>`;
+      schem+=`<line class="schem-driven" x1="${cx+th*0.6}" y1="${y}" x2="${cx+th*0.6+40}" y2="${y}"/>`; }
+    schem+=`<text class="schem-label" x="${fx-4}" y="${cy-8}">${AL.tr('feed','опром.')}</text>`;
+    schem+=`<text class="schem-label" x="${cx-th}" y="${cy-R-6}">n = ${n.toFixed(2)}</text>`;
+    schem+=AL.dimLineV(cx+th*1.4+6,cy-R,cy+R,`D=${s.D.toFixed(1)} ${AL.unit('cm')} = ${Dlam.toFixed(1)} λ`);
+    // a rotationally symmetric lens really does look the same from the side
+    // and from above — the caption says so rather than leaving it ambiguous
+    const schemE=schem, schemH=schem;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:lam*100, sizeLam:Dlam, sizeLabel:'D = '+Dlam.toFixed(1)+' λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'),v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW',v:AL.fmtDeg(hp)},
+        {k:AL.tr('Index n','Показник n'),v:n.toFixed(2)},
+        {k:'D/λ',v:Dlam.toFixed(1)}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Lens_antenna',label:'Lens antenna'}}],
+  strength:{en:"At mmWave a lens is physically small, low-loss and free of feed blockage, giving clean high-gain beams for 5G FR2 links and automotive radar. The drawbacks are weight, thickness and dielectric loss, all of which worsen at lower frequencies — hence lenses are rare below ~20 GHz.",
+            uk:"На mmWave лінза фізично мала, з малими втратами й без затінення, даючи чисті високопідсилювальні промені для 5G FR2 і автомобільних радарів. Мінуси — вага, товщина й діелектричні втрати, що гіршають на нижчих частотах, тож лінзи рідкісні нижче ~20 ГГц."},
+  xrefs:[['#luneburg','Luneburg lens','Лінза Люнеберга'],['reflector.html#parabolic','Parabolic','Параболічна'],['aperture.html#horn','Horn feed','Опромінювач-рупор']]
+});
+
+/* 7.2 Luneburg lens */
+LN.push({
+  id:'luneburg', num:'7.2', lvl:2, plot:'half',
+  desc:{en:"A dielectric sphere whose refractive index falls from √2 at the centre to 1 at the surface. This exact gradient focuses any plane wave to a point on the opposite surface — so a feed placed anywhere on the sphere produces a beam in the opposite direction, and many feeds give many independent beams at once.",
+        uk:"Діелектрична сфера, показник заломлення якої падає від √2 у центрі до 1 на поверхні. Цей точний градієнт фокусує будь-яку плоску хвилю в точку на протилежній поверхні — тож опромінювач у будь-якому місці сфери дає промінь у протилежному напрямку, а багато опромінювачів — багато незалежних променів одразу."},
+  methods:[{id:'go', en:'GO ray tracing (graded index)', uk:'Трасування ГО (градієнт)',
+     desc:{en:"Rays curve continuously through the graded-index medium n(r) = √(2 − (r/R)²) and exit as a collimated beam. Moving the feed around the sphere steers the beam by the same angle; physical optics on the exit aperture gives the gain.",
+           uk:"Промені плавно вигинаються в середовищі зі змінним показником n(r) = √(2 − (r/R)²) і виходять колімованим пучком. Переміщення опромінювача навколо сфери повертає промінь на той самий кут; фізична оптика на вихідній апертурі дає підсилення."},
+     formula:[{en:"n(r) = √(2 − (r/R)²),  n_centre = √2 ≈ 1.414,  n_surface = 1",uk:"n(r) = √(2 − (r/R)²),  n_центр = √2 ≈ 1.414,  n_пов = 1"},
+              {en:"G = ε·(π·D/λ)²  per beam, any pointing angle",uk:"G = ε·(π·D/λ)²  на промінь, будь-який кут"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:80000,value:24},
+    {id:'D',kind:'range',en:'Sphere diameter D',uk:'Діаметр сфери D',min:5,max:60,step:1,value:20,fmt:v=>v.toFixed(0)+' '+AL.unit('cm')},
+    {id:'beam',kind:'range',en:'Beam pointing',uk:'Напрям променя',min:-60,max:60,step:1,value:0,fmt:v=>v.toFixed(0)+'°'}
+  ],
+  compute(s){
+    const lam=AL.lambdaOf(s.f*1e9), Dlam=(s.D/100)/lam, eff=0.55, thB=s.beam;
+    const fnBeam=deg=>AL.apertureCircular((deg-thB)*D2R,Dlam);
+    const gain=10*Math.log10(eff*Math.pow(Math.PI*Dlam,2));
+    // AL.analyzeCut scans BOTH sides of the peak; AL.analyzePattern only
+    // scans 0..maxDeg, which halves the width of a lobe sitting on boresight.
+    const an=AL.analyzeCut(fnBeam,90);
+    const cx=200, cy=140, R=Math.min(s.D*3,90);
+    const lamCmU=lam*100, pxU=R*2/s.D;
+    let schem=AL.rulerSVG(36,26,lamCmU,pxU)+AL.CAP_E();
+    for(let k=4;k>=1;k--){ const r=R*k/4, sh=(k===4)?0.05:0.12;
+      schem+=`<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" fill="rgba(127,219,202,${sh})" stroke="var(--line)"/>`; }
+    schem+=`<text class="schem-label" x="${cx-8}" y="${cy}">n=√2</text>`;
+    // feed on the sphere opposite the beam
+    const fa=(thB+180)*D2R, fx=cx+R*Math.sin(fa), fy=cy-R*Math.cos(fa);
+    schem+=`<circle class="schem-node" cx="${fx.toFixed(1)}" cy="${fy.toFixed(1)}" r="3"/>`;
+    // beam arrow
+    const ba=thB*D2R, bx=cx+ (R+40)*Math.sin(ba), by=cy-(R+40)*Math.cos(ba);
+    schem+=`<defs><marker id="ar-lun" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" style="fill:${V}"/></marker></defs>`;
+    schem+=`<line style="stroke:${V};stroke-width:1.6" x1="${cx}" y1="${cy}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" marker-end="url(#ar-lun)"/>`;
+    schem+=`<text class="schem-label" style="fill:${V}" x="${bx+3}" y="${by}">${thB}°</text>`;
+    schem+=`<text class="schem-label" x="${fx+4}" y="${fy}">${AL.tr('feed','опром.')}</text>`;
+    const schemE=schem;
+    // plan: the same sphere, ringed with the other feeds it can carry at once
+    let schemH=AL.rulerSVG(36,26,lamCmU,pxU)+AL.CAP_H();
+    schemH+=`<circle cx="${cx}" cy="${cy}" r="${R.toFixed(1)}" fill="rgba(127,219,202,0.07)" stroke="var(--line)"/>`;
+    for(let q=-3;q<=3;q++){ const a2=(thB+180+q*22)*D2R;
+      const fx2=cx+R*Math.sin(a2), fy2=cy-R*Math.cos(a2);
+      schemH+=`<circle class="${q===0?'schem-driven':'schem-node'}" cx="${fx2.toFixed(1)}" cy="${fy2.toFixed(1)}" r="${q===0?4:2.4}"/>`; }
+    schemH+=`<text class="schem-label" x="${cx-R}" y="${cy+R+22}">${AL.tr('many feeds around the sphere = many beams at once','багато опромінювачів = багато променів одночасно')}</text>`;
+    schemH+=AL.boresightArrow(cx+R+8,cy,26,A,'lunH');
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:lam*100, sizeLam:Dlam, sizeLabel:'D = '+Dlam.toFixed(1)+' λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain per beam','Підсил. на промінь'),v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW',v:isFinite(an.hpbw)?an.hpbw.toFixed(1)+'°':'—'},
+        {k:AL.tr('Beam angle','Кут променя'),v:thB+'°'},
+        {k:AL.tr('Simultaneous beams','Одночасних променів'),v:AL.tr('many','багато')}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Luneburg_lens',label:'Luneburg lens'}}],
+  strength:{en:"One passive sphere makes as many wide-angle, high-gain beams as you have feeds — ideal for multi-beam SATCOM, radar and 5G multi-sector base stations. The catch is the bulky, heavy graded-index sphere; modern designs approximate the gradient with stepped-permittivity shells or 3-D-printed lattices.",
+            uk:"Одна пасивна сфера дає стільки ширококутних високопідсилювальних променів, скільки опромінювачів — ідеально для багатопроменевого SATCOM, радарів і багатосекторних БС 5G. Мінус — громіздка важка градієнтна сфера; сучасні конструкції наближують градієнт ступінчастими оболонками чи 3D-друкованими ґратками."},
+  xrefs:[['#dielectric-lens','Dielectric lens','Діелектрична лінза'],['#metal-plate','Metal-plate lens','Металопластинчаста лінза'],['array.html#butler','Butler matrix','Матриця Батлера']]
+});
+
+/* 7.3 Metal-plate (waveguide) lens */
+LN.push({
+  id:'metal-plate', num:'7.3', lvl:2, plot:'half',
+  desc:{en:"A stack of parallel conducting plates, each pair a parallel-plate waveguide. In the TE₁₀ mode the phase velocity exceeds c, so the effective index n = √(1 − (λ/2a)²) is LESS than one: the lens is concave — thin at the centre, thick at the rim — and built entirely from metal, so it is light and essentially lossless. Kock's 1946 'accelerating' lens.",
+        uk:"Пакет паралельних провідних пластин, кожна пара — плоский хвилевід. У моді TE₁₀ фазова швидкість перевищує c, тож ефективний показник n = √(1 − (λ/2a)²) МЕНШИЙ за одиницю: лінза увігнута — тонка в центрі, товста на краю — і виконана цілком з металу, тому легка й практично без втрат. «Прискорювальна» лінза Кока, 1946."},
+  methods:[{id:'go', en:'GO ray tracing (n<1) + PO', uk:'Трасування ГО (n<1) + ФО',
+     desc:{en:"Equal-optical-path ray tracing with n < 1 gives an ELLIPTICAL feed-side surface r = (1−n)F/(1 − n·cosθ) instead of the dielectric lens's hyperbola. Because n is a function of λ/2a the design is inherently narrowband; stepping the profile into zones of λ/(1−n) thins the lens but narrows the band further. Physical optics on the flat exit aperture gives the pattern and gain.",
+           uk:"Трасування променів рівного оптичного шляху при n < 1 дає ЕЛІПТИЧНУ поверхню з боку опромінювача r = (1−n)F/(1 − n·cosθ) замість гіперболи діелектричної лінзи. Оскільки n залежить від λ/2a, конструкція принципово вузькосмугова; розбиття профілю на зони по λ/(1−n) тоншає лінзу, але ще звужує смугу. Фізична оптика на плоскій вихідній апертурі дає ДН і підсилення."},
+     formula:[{en:"n = √(1 − (λ/2a)²) < 1   (cut-off at a = λ/2)",uk:"n = √(1 − (λ/2a)²) < 1   (відсічка при a = λ/2)"},
+              {en:"surface: r(θ) = (1−n)·F / (1 − n·cosθ)  — an ellipse",uk:"поверхня: r(θ) = (1−n)·F / (1 − n·cosθ)  — еліпс"},
+              {en:"zone step Δt = λ/(1−n),   Δf/f ≈ 25·n / [K·(1+n)] %",uk:"крок зони Δt = λ/(1−n),   Δf/f ≈ 25·n / [K·(1+n)] %"},
+              {en:"G = ε·(π·D/λ)²",uk:"G = ε·(π·D/λ)²"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:60000,value:12},
+    {id:'D',kind:'range',en:'Aperture D',uk:'Апертура D',min:5,max:60,step:0.5,value:20,fmt:v=>v.toFixed(1)+' '+AL.unit('cm')},
+    {id:'aLam',kind:'range',en:'Plate spacing a',uk:'Крок пластин a',min:0.52,max:2,step:0.01,value:0.7,fmt:v=>v.toFixed(2)+' λ'},
+    {id:'FD',kind:'range',en:'Focal ratio F/D',uk:'Фокусне F/D',min:0.3,max:1.5,step:0.05,value:0.7,fmt:v=>v.toFixed(2)},
+    {id:'zoned',kind:'select',en:'Profile',uk:'Профіль',value:'zoned',
+     options:[{value:'zoned',en:'Zoned (stepped)',uk:'Зонована (ступінчаста)'},
+              {value:'solid',en:'Solid (unzoned)',uk:'Суцільна (без зон)'}]}
+  ],
+  compute(s){
+    const lam=AL.lambdaOf(s.f*1e9), lamCm=lam*100;
+    const n=Math.sqrt(Math.max(1-Math.pow(1/(2*s.aLam),2), 1e-4));  // a in λ ⇒ λ/2a = 1/(2·aLam)
+    const Dcm=s.D, Dlam=Dcm/lamCm, Fcm=s.FD*Dcm, zoned=(s.zoned==='zoned');
+    // Elliptical feed-side surface r(θ) = (1−n)F/(1 − n·cosθ), measured from the
+    // focus; the vertex sits at z = F and the rim pulls back toward the feed.
+    const rOf=th=>(1-n)*Fcm/(1-n*Math.cos(th));
+    const thetaAt=h=>{                        // θ whose ray hits height h·D/2
+      let lo=0, hi=Math.PI/2-1e-4;
+      for(let it=0;it<40;it++){ const mid=(lo+hi)/2;
+        if(rOf(mid)*Math.sin(mid) < h*Dcm/2) lo=mid; else hi=mid; }
+      return (lo+hi)/2;
+    };
+    const thMax=thetaAt(1);
+    // Thickness profile t(θ) = F − r·cosθ: zero on axis, `bulk` at the rim.
+    const bulkCm=Fcm-rOf(thMax)*Math.cos(thMax);
+    const zoneCm=lamCm/(1-n);                 // one full wave of path in the plates
+    const K=zoned ? Math.max(1, Math.ceil(bulkCm/zoneCm)) : 1;
+    const tMaxCm=zoned ? Math.min(bulkCm, zoneCm) : bulkCm;
+    // Zone steps shadow part of the aperture; every extra zone costs efficiency.
+    const eff=AL.clamp(0.58-0.045*(K-1), 0.25, 0.58);
+    const gain=10*Math.log10(eff*Math.pow(Math.PI*Dlam,2));
+    const bwPct=25*n/(K*(1+n));               // Kock's zoned metal-lens rule of thumb
+    const fnBeam=deg=>AL.apertureCircular(deg*D2R,Dlam);
+    const samp=AL.sampleHalf(fnBeam,0.05,40), hp=AL.findHPBW(samp,fnBeam);
+    const nPlates=Math.max(2, Math.round(Dcm/(s.aLam*lamCm))+1);
+
+    /* ---- schematic: plate stack, stepped elliptical face, feed + rays ---- */
+    const cy=130, feedX=48;
+    const px=Math.min(105/Dcm, 190/Math.max(Fcm,0.1), 14);   // isotropic, so the λ ruler is real
+    const Rpx=Dcm*px/2, backX=feedX+Fcm*px;                  // flat exit face at z = F
+    const drawn=Math.min(nPlates, 41);                       // cap the drawn plate count
+    let schem=AL.rulerSVG(30,26,lamCm,px)+AL.CAP_E();
+    for(let k=0;k<drawn;k++){
+      const y=cy-Rpx+2*Rpx*k/(drawn-1), h=Math.abs(y-cy)/Math.max(Rpx,1e-6);
+      const t=Fcm-rOf(thetaAt(h))*Math.cos(thetaAt(h));       // thickness at this height
+      const tDraw=zoned ? (t % zoneCm) : t;
+      schem+=`<line class="schem-wire" x1="${(backX-tDraw*px).toFixed(1)}" y1="${y.toFixed(1)}" x2="${backX.toFixed(1)}" y2="${y.toFixed(1)}"/>`;
+    }
+    schem+=`<line class="schem-dim" x1="${backX.toFixed(1)}" y1="${(cy-Rpx).toFixed(1)}" x2="${backX.toFixed(1)}" y2="${(cy+Rpx).toFixed(1)}"/>`;
+    // feed at the focus + rays in / collimated out
+    schem+=`<circle class="schem-node" cx="${feedX}" cy="${cy}" r="3.5"/>`;
+    schem+=`<text class="schem-label" x="${feedX}" y="${cy-9}" text-anchor="middle">${AL.tr('feed','опром.')}</text>`;
+    for(let q=-2;q<=2;q++){ const y=cy+q*Rpx*0.45;
+      schem+=`<line class="schem-dim" x1="${feedX}" y1="${cy}" x2="${(backX-tMaxCm*px-2).toFixed(1)}" y2="${y.toFixed(1)}"/>`;
+      schem+=`<line class="schem-driven" x1="${(backX+3).toFixed(1)}" y1="${y.toFixed(1)}" x2="${(backX+30).toFixed(1)}" y2="${y.toFixed(1)}"/>`; }
+    schem+=AL.boresightArrow(backX+36,cy,34,V,'mpl');
+    schem+=AL.dimLineV(backX+104,cy-Rpx,cy+Rpx,`D = ${Dcm.toFixed(1)} ${AL.unit('cm')} = ${Dlam.toFixed(1)} λ`);
+    schem+=`<text class="schem-label" x="30" y="${(cy+Rpx+24).toFixed(1)}">n = ${n.toFixed(3)} · ${nPlates} ${AL.tr('plates','пластин')} · ${K} ${AL.tr('zone(s)','зон')} · t = ${tMaxCm.toFixed(2)} ${AL.unit('cm')}</text>`;
+    const schemE=schem;
+    // plan: looking down on the stack you see the top plate face-on — the
+    // plates only guide the polarisation parallel to them
+    let schemH=AL.rulerSVG(30,26,lamCm,px)+AL.CAP_H();
+    schemH+=`<path class="schem-fill" d="M ${(backX-tMaxCm*px).toFixed(1)},${(cy-Rpx).toFixed(1)} L ${backX.toFixed(1)},${(cy-Rpx).toFixed(1)} L ${backX.toFixed(1)},${(cy+Rpx).toFixed(1)} L ${(backX-tMaxCm*px).toFixed(1)},${(cy+Rpx).toFixed(1)} Z"/>`;
+    schemH+=`<circle class="schem-node" cx="${feedX}" cy="${cy}" r="3.5"/>`;
+    schemH+=`<text class="schem-label" x="${feedX}" y="${cy-9}" text-anchor="middle">${AL.tr('feed','опром.')}</text>`;
+    for(let q=-2;q<=2;q++){ const y=cy+q*Rpx*0.45;
+      schemH+=`<line class="schem-dim" x1="${feedX}" y1="${cy}" x2="${(backX-tMaxCm*px-2).toFixed(1)}" y2="${y.toFixed(1)}"/>`; }
+    schemH+=AL.boresightArrow(backX+36,cy,34,A,'mplH');
+    schemH+=AL.dimLineV(backX+104,cy-Rpx,cy+Rpx,`D = ${Dlam.toFixed(1)} λ`);
+    schemH+=`<text class="schem-label" x="30" y="${(cy+Rpx+24).toFixed(1)}">${AL.tr('plate faces — works only for E ∥ plates','площини пластин — лише для E ∥ пластин')}</text>`;
+
+    // Kock's practical index window is n = 0.5...0.6: below it the lens gets
+    // impossibly thick, above it the bandwidth collapses
+    const aFor=nn=>1/(2*Math.sqrt(1-nn*nn));
+    const optima=[{id:'aLam', value:aFor(0.55), tag:'h',
+      label:AL.tr(`a \u2248 ${aFor(0.55).toFixed(2)} \u03bb \u2192 n = 0.55, the usual design compromise`,
+                  `a \u2248 ${aFor(0.55).toFixed(2)} \u03bb \u2192 n = 0.55, \u0437\u0432\u0438\u0447\u0430\u0439\u043d\u0438\u0439 \u043a\u043e\u043c\u043f\u0440\u043e\u043c\u0456\u0441`)}];
+    return {schemE, schemH, fnBeam, optima,
+      meta3d:{lamCm, sizeLam:Dlam, sizeLabel:'D = '+Dlam.toFixed(1)+' λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'),v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:'HPBW',v:AL.fmtDeg(hp)},
+        {k:AL.tr('Index n','Показник n'),v:n.toFixed(3)},
+        {k:AL.tr('Zones · Δf/f','Зон · Δf/f'),v:K+' · '+bwPct.toFixed(1)+' %'}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Lens_antenna',label:'Lens antenna'}},
+        {tag:'paper',en:{href:'https://ieeexplore.ieee.org/document/1697352',label:'Kock, Metal-Lens Antennas (Proc. IRE 1946)'}},
+        {tag:'book',en:{href:'https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061',label:'Balanis, Antenna Theory'}}],
+  strength:{en:"All-metal, so it is light, temperature-stable and free of dielectric loss — historically the way to build a large lens before low-loss plastics. Two costs come with n < 1: the index depends on λ/2a, so bandwidth is narrow (and narrower with every zone you add), and the plates only work for the polarisation parallel to them, making the lens strictly single-polarisation.",
+            uk:"Повністю металева, тож легка, термостабільна й без діелектричних втрат — історично єдиний спосіб зробити велику лінзу до появи малошумних пластиків. Плата за n < 1 подвійна: показник залежить від λ/2a, тож смуга вузька (і вужча з кожною доданою зоною), а пластини працюють лише для паралельної їм поляризації — лінза строго однополяризаційна."},
+  xrefs:[['#dielectric-lens','Dielectric lens','Діелектрична лінза'],['#luneburg','Luneburg lens','Лінза Люнеберга'],['aperture.html#waveguide','Waveguide feed','Хвилевідний опромінювач']]
+});
+
+/* ====================================================================== */
+/*  PAGE BUILDER (shared)                                                   */
+/* ====================================================================== */
+function catGet(id){ return CATALOG.flatMap(s=>s.antennas).find(x=>x.id===id)||{}; }
+function planesHTMLFor(id){
+  return `
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_schem" viewBox="0 0 400 250"></svg></div>
+    </div>
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_plot" viewBox="0 0 400 380"></svg>
+        <div class="plane-readout">
+          ${[0,1,2,3].map(i=>`<div class="item"><div class="k" id="${id}_k${i}"></div><div class="v" id="${id}_v${i}">-</div></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+function fillExtras(a){
+  const c=catGet(a.id);
+  const rf=document.getElementById('refs-'+a.id); if(rf) rf.innerHTML=window.atlasRefs(a.refs);
+  const tg=document.getElementById('tags-'+a.id); if(tg) tg.innerHTML=window.atlasTags(c.std,c.mod,c.mth);
+}
+function buildSections(list, root){
+  root.innerHTML=list.map(a=>{
+    const c=catGet(a.id), multi=a.methods&&a.methods.length>1;
+    const mdesc=(a.methods||[]).map((m,i)=>
+      `<div class="method-body${(multi&&i>0)?' hidden':''}" data-method="${m.id}">
+         <div class="desc-cols">
+           <div><h4 data-en="${m.en}" data-uk="${m.uk}">${m.en}</h4>
+             <p data-en="${m.desc.en}" data-uk="${m.desc.uk}">${m.desc.en}</p></div>
+           <div>${(m.formula||[]).map(f=>`<span class="formula" data-en="${f.en}" data-uk="${f.uk}">${f.en}</span>`).join('')}</div>
+         </div>
+       </div>`).join('');
+    return `<section id="${a.id}">
+      <div class="num" data-en="${a.num} / lens" data-uk="${a.num} / лінзова">${a.num} / lens</div>
+      <h2><span class="badge l${a.lvl} lg">${['','I','II','III'][a.lvl]}</span>
+          <span data-en="${c.en}" data-uk="${c.uk}">${c.en}</span></h2>
+      <div id="tags-${a.id}"></div>
+      <p class="desc" data-en="${a.desc.en}" data-uk="${a.desc.uk}">${a.desc.en}</p>
+      <div class="method-desc">${mdesc}</div>
+      <div class="panel"><div id="exp-${a.id}"></div></div>
+      <div id="refs-${a.id}"></div>
+      <div class="strength"><div class="st-title" data-en="Design notes" data-uk="Проєктні нотатки">Design notes</div>
+        <span data-en="${a.strength.en}" data-uk="${a.strength.uk}">${a.strength.en}</span></div>
+      <div class="xrefs">${(a.xrefs||[]).map(x=>`<a href="${x[0]}" data-en="${x[1]}" data-uk="${x[2]}">${x[1]}</a>`).join('')}</div>
+    </section>`;
+  }).join('');
+}
+function mountOne(a){
+  AL.mount(a.id,{ methods:(a.methods&&a.methods.length>1)?a.methods:null, controls:a.controls, planesHTML:AL.planesTwo(a.id),
+    render:function(ctx){
+      const out=a.compute(ctx.state, ctx.methodId);
+      AL.renderPlanes(a.id, out, a);
+      if(out.enable) for(const cid in out.enable) ctx.enable(cid,out.enable[cid]);
+    }});
+  fillExtras(a);
+}
+buildSections(LN, document.getElementById('sections'));
+LN.forEach(mountOne);
+window.onLangChangePage=function(){ LN.forEach(fillExtras); };
+</script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traveling-Wave & Leaky-Wave Antennas — Antenna Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="travelingwave">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Family 06 · energy radiates as it travels along the guide" data-uk="Сім'я 06 · енергія випромінюється, рухаючись уздовж напрямної">Family 06 · energy radiates as it travels along the guide</div>
+    <h1 data-en="Traveling-Wave &amp; Leaky-Wave" data-uk="Антени біжучої та витікаючої хвилі">Traveling-Wave &amp; Leaky-Wave</h1>
+    <div class="eq-hero">sinθ_beam = β(f)/k₀</div>
+    <p class="lede" data-en="A wave running down a guiding structure that radiates as it goes points its beam at an angle set by the guided phase velocity — and because that velocity changes with frequency, the beam scans. Sweep the frequency on the leaky-wave calculator and watch the beam swing. The endfire traveling-wave wire antennas (helix, rhombic, Beverage) live on their own pages."
+       data-uk="Хвиля, що біжить напрямною структурою й випромінює дорогою, скеровує промінь під кутом, який задає фазова швидкість у структурі — а оскільки ця швидкість змінюється з частотою, промінь сканується. Змінюйте частоту в калькуляторі витікаючої хвилі й дивіться, як хитається промінь. Осьові дротові антени біжучої хвилі (спіраль, ромб, Бевереджа) — на своїх сторінках.">A wave running down a guiding structure…</p>
+  </div>
+</header>
+
+<div class="wrap-wide" id="sections"></div>
+
+<footer class="wrap-wide">
+  <p data-en="The leaky-wave beam angle uses a uniform-guide dispersion sinθ = √(1−(f_c/f)²); the pattern is the steered uniform-aperture factor. Real leaky-wave antennas need transverse-resonance or full-wave eigenmode analysis for the exact β(f) and leakage rate."
+     data-uk="Кут променя витікаючої хвилі використовує дисперсію однорідної напрямної sinθ = √(1−(f_c/f)²); ДН — рознесений множник рівномірного розкриву. Реальні антени потребують аналізу поперечного резонансу чи повнохвильових власних мод для точних β(f) і швидкості витікання.">The leaky-wave beam angle uses a uniform-guide dispersion…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script src="js/antenna.js"></script>
+<script src="js/pattern3d.js"></script>
+<script>
+const AL=window.AntennaLab, V='var(--teal)', A='var(--amber)', D2R=AL.D2R, R2D=AL.R2D;
+
+const TW=[];
+
+/* 6.1 Leaky-wave */
+TW.push({
+  id:'leaky-wave', num:'6.1', lvl:2, plot:'full',
+  desc:{en:"A waveguide or microstrip line that deliberately lets a little power escape all along its length. The leaked wave forms a beam whose angle is fixed by the guided phase constant β — and since β rises with frequency, the beam scans smoothly from near-broadside toward endfire as you tune. No phase shifters needed.",
+        uk:"Хвилевід чи мікросмужка, що навмисно випускає трохи потужності по всій довжині. Витікла хвиля формує промінь, кут якого задає фазова стала β — а оскільки β росте з частотою, промінь плавно сканується від майже широкої сторони до осьового напрямку при перестроюванні. Фазообертачі не потрібні."},
+  methods:[
+    {id:'disp', en:'Dispersion (transverse resonance)', uk:'Дисперсія (поперечний резонанс)',
+     desc:{en:"Transverse-resonance analysis gives the guided phase constant β(f). Above the cutoff the beam points at sinθ = β/k₀; as frequency climbs from cutoff the ratio grows from 0 (broadside) toward 1 (endfire), sweeping the beam across the forward quadrant.",
+           uk:"Аналіз поперечного резонансу дає фазову сталу β(f). Вище відсічки промінь дивиться під sinθ = β/k₀; коли частота росте від відсічки, відношення зростає від 0 (широка сторона) до 1 (осьовий), проводячи промінь передньою чвертю."},
+     formula:[{en:"β/k₀ = √(1 − (f_c/f)²),   sinθ_beam = β/k₀",uk:"β/k₀ = √(1 − (f_c/f)²),   sinθ_пром = β/k₀"},
+              {en:"HPBW ≈ 0.886·λ/(L·cosθ_beam)   (aperture length L)",uk:"HPBW ≈ 0.886·λ/(L·cosθ_пром)   (довжина розкриву L)"}]},
+    {id:'fem', en:'FEM eigenmode solver', uk:'FEM власних мод',
+     desc:{en:"A full-wave eigenmode solve gives the complex propagation constant β − jα directly, where the leakage rate α sets the aperture illumination (and thus the sidelobes) and how much power reaches the far end. Here the beam angle follows the same dispersion.",
+           uk:"Повнохвильовий розв'язок власних мод дає комплексну сталу поширення β − jα напряму, де швидкість витікання α задає освітлення розкриву (а отже бічні пелюстки) й скільки потужності доходить до кінця. Тут кут променя слідує тій самій дисперсії."},
+     formula:[{en:"γ = α + jβ;  radiated fraction = 1 − e^{−2αL}",uk:"γ = α + jβ;  випромінена частка = 1 − e^{−2αL}"}]}
+  ],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:40000,value:12},
+    {id:'fc',kind:'range',en:'Cutoff f_c',uk:'Відсічка f_c',min:3,max:20,step:0.1,value:6,fmt:v=>v.toFixed(1)+' '+AL.unit('GHz')},
+    {id:'L',kind:'range',en:'Aperture length L',uk:'Довжина розкриву L',min:2,max:30,step:0.5,value:10,fmt:v=>v.toFixed(1)+' λ'}
+  ],
+  compute(s){
+    const above=s.f>s.fc;
+    const bk = above ? Math.sqrt(1-Math.pow(s.fc/s.f,2)) : 0;   // β/k0
+    const thBeam = Math.asin(AL.clamp(bk,0,0.999))*R2D;         // from broadside
+    const Llam=s.L;
+    // steered uniform aperture: beam at thBeam from broadside (0°=broadside=up)
+    const fnBeam=deg=>{ const u=Math.PI*Llam*(Math.sin(deg*D2R)-Math.sin(thBeam*D2R)); return Math.abs(AL.sinc(u)); };
+    // AL.analyzeCut scans BOTH sides of the peak; AL.analyzePattern only
+    // scans 0..maxDeg, which halves the width of a lobe sitting on boresight.
+    const an=AL.analyzeCut(fnBeam,90);
+    const D=10*Math.log10(2*Llam*Math.max(Math.cos(thBeam*D2R),0.1)); // aperture directivity trend
+    // schematic: horizontal guide with leakage slots, beam arrow at thBeam
+    const cx=200, cy=170, gx0=70, gx1=330;
+    const lamCmL=AL.lambdaOf(s.f*1e9)*100, pxL=(gx1-gx0)/(Llam*lamCmL);
+    let schemE=AL.rulerSVG(40,26,lamCmL,pxL)+AL.CAP_E();
+    schemE+=`<rect class="schem-fill" x="${gx0}" y="${cy-8}" width="${gx1-gx0}" height="16"/>`;
+    for(let x=gx0+14;x<gx1-6;x+=16) schemE+=`<line class="schem-driven" x1="${x}" y1="${cy-8}" x2="${x+7}" y2="${cy-8}"/>`;
+    schemE+=`<circle class="schem-node" cx="${gx0}" cy="${cy}" r="3"/><text class="schem-label" x="${gx0-4}" y="${cy+22}">${AL.tr('feed','живл.')}</text>`;
+    let schem=schemE;
+    // beam arrow from centre, angle thBeam measured from vertical (up)
+    const bl=70, bx=cx+bl*Math.sin(thBeam*D2R), by=cy-8-bl*Math.cos(thBeam*D2R);
+    schem+=`<defs><marker id="ar-lw" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" style="fill:${V}"/></marker></defs>`;
+    schem+=`<line style="stroke:${V};stroke-width:1.6" x1="${cx}" y1="${cy-8}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" marker-end="url(#ar-lw)"/>`;
+    schem+=`<text class="schem-label" style="fill:${V}" x="${bx+4}" y="${by}">θ = ${thBeam.toFixed(0)}°</text>`;
+    schem+=`<text class="schem-label" x="${gx0}" y="${cy-18}">${AL.tr('leaky guide','витікаюча напрямна')} L = ${Llam.toFixed(1)} λ</text>`;
+    schemE=schem;
+    // plan: the slot row along the top wall — the beam scans in ELEVATION only
+    const cyH=125;
+    let schemH=AL.rulerSVG(40,26,lamCmL,pxL)+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="${gx0}" y="${cyH-22}" width="${gx1-gx0}" height="44"/>`;
+    for(let x=gx0+14;x<gx1-6;x+=16) schemH+=`<rect class="schem-driven" x="${x}" y="${cyH-4}" width="9" height="8" style="fill:var(--teal)"/>`;
+    schemH+=`<circle class="schem-node" cx="${gx0}" cy="${cyH}" r="3"/>`;
+    schemH+=`<text class="schem-label" x="${gx0}" y="${cyH-30}">${AL.tr('leakage slots in the broad wall','щілини витікання в широкій стінці')}</text>`;
+    schemH+=AL.dimLineH(gx0,gx1,cyH+38,`L = ${Llam.toFixed(1)} λ`);
+    schemH+=`<text class="schem-label" x="${gx0}" y="${cyH+58}">${AL.tr('the beam scans in elevation, not azimuth','промінь сканує за кутом місця, не азимутом')}</text>`;
+    return {schemE, schemH, fnBeam,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:Llam, sizeLabel:'L = '+Llam.toFixed(1)+' λ', gainDbi:D},
+      readouts:[
+        {k:AL.tr('Beam angle','Кут променя'),v:above?thBeam.toFixed(0)+'° '+AL.tr('from broadside','від бр. сторони'):AL.tr('cutoff','відсічка')},
+        {k:'β/k₀',v:bk.toFixed(3)},
+        {k:'HPBW',v:(above&&isFinite(an.hpbw))?an.hpbw.toFixed(1)+'°':'—'},
+        {k:AL.tr('Directivity','Спрямованість'),v:above?D.toFixed(1)+' '+AL.unit('dBi'):'—'}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Leaky_wave_antenna',label:'Leaky-wave antenna'}},
+        {tag:'paper',en:{href:'https://doi.org/10.1109/TAP.2012.2194637',label:'Jackson & Oliner, Leaky-wave antennas'}}],
+  strength:{en:"Frequency scanning with zero moving parts and no phase shifters — cheap beam-steering for automotive radar and mmWave backhaul. The beam angle is tied to frequency, so you cannot steer and change frequency independently, and broadside itself is an awkward operating point (the open stopband).",
+            uk:"Частотне сканування без рухомих частин і фазообертачів — дешеве керування променем для автомобільних радарів і mmWave бекхолу. Кут променя прив'язаний до частоти, тож не можна сканувати й міняти частоту незалежно, а сама широка сторона — незручна точка (відкрита зона зупинки)."},
+  xrefs:[['wire.html#helical','Helical (axial)','Гвинтова (осьова)'],['wire.html#rhombic','Rhombic','Ромбічна'],['wire.html#beverage','Beverage','Бевереджа'],['array.html#phased-array','Phased array','Фазована решітка']]
+});
+
+/* ====================================================================== */
+/*  PAGE BUILDER (shared)                                                   */
+/* ====================================================================== */
+function catGet(id){ return CATALOG.flatMap(s=>s.antennas).find(x=>x.id===id)||{}; }
+function planesHTMLFor(id){
+  return `
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_schem" viewBox="0 0 400 250"></svg></div>
+    </div>
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_plot" viewBox="0 0 400 380"></svg>
+        <div class="plane-readout">
+          ${[0,1,2,3].map(i=>`<div class="item"><div class="k" id="${id}_k${i}"></div><div class="v" id="${id}_v${i}">-</div></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+function fillExtras(a){
+  const c=catGet(a.id);
+  const rf=document.getElementById('refs-'+a.id); if(rf) rf.innerHTML=window.atlasRefs(a.refs);
+  const tg=document.getElementById('tags-'+a.id); if(tg) tg.innerHTML=window.atlasTags(c.std,c.mod,c.mth);
+}
+function buildSections(list, root){
+  root.innerHTML=list.map(a=>{
+    const c=catGet(a.id), multi=a.methods&&a.methods.length>1;
+    const mdesc=(a.methods||[]).map((m,i)=>
+      `<div class="method-body${(multi&&i>0)?' hidden':''}" data-method="${m.id}">
+         <div class="desc-cols">
+           <div><h4 data-en="${m.en}" data-uk="${m.uk}">${m.en}</h4>
+             <p data-en="${m.desc.en}" data-uk="${m.desc.uk}">${m.desc.en}</p></div>
+           <div>${(m.formula||[]).map(f=>`<span class="formula" data-en="${f.en}" data-uk="${f.uk}">${f.en}</span>`).join('')}</div>
+         </div>
+       </div>`).join('');
+    return `<section id="${a.id}">
+      <div class="num" data-en="${a.num} / traveling-wave" data-uk="${a.num} / біжуча хвиля">${a.num} / traveling-wave</div>
+      <h2><span class="badge l${a.lvl} lg">${['','I','II','III'][a.lvl]}</span>
+          <span data-en="${c.en}" data-uk="${c.uk}">${c.en}</span></h2>
+      <div id="tags-${a.id}"></div>
+      <p class="desc" data-en="${a.desc.en}" data-uk="${a.desc.uk}">${a.desc.en}</p>
+      <div class="method-desc">${mdesc}</div>
+      <div class="panel"><div id="exp-${a.id}"></div></div>
+      <div id="refs-${a.id}"></div>
+      <div class="strength"><div class="st-title" data-en="Design notes" data-uk="Проєктні нотатки">Design notes</div>
+        <span data-en="${a.strength.en}" data-uk="${a.strength.uk}">${a.strength.en}</span></div>
+      <div class="xrefs">${(a.xrefs||[]).map(x=>`<a href="${x[0]}" data-en="${x[1]}" data-uk="${x[2]}">${x[1]}</a>`).join('')}</div>
+    </section>`;
+  }).join('');
+}
+function mountOne(a){
+  AL.mount(a.id,{ methods:(a.methods&&a.methods.length>1)?a.methods:null, controls:a.controls, planesHTML:AL.planesTwo(a.id),
+    render:function(ctx){
+      const out=a.compute(ctx.state, ctx.methodId);
+      AL.renderPlanes(a.id, out, a);
+      if(out.enable) for(const cid in out.enable) ctx.enable(cid,out.enable[cid]);
+    }});
+  fillExtras(a);
+}
+buildSections(TW, document.getElementById('sections'));
+TW.forEach(mountOne);
+window.onLangChangePage=function(){ TW.forEach(fillExtras); };
+</script>
+</body>
+</html>
