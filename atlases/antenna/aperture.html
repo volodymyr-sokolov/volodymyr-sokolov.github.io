@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aperture Antennas — Antenna Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="aperture">
+
+<div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow" data-en="Family 02 · a physical opening radiates the guided wave" data-uk="Сім'я 02 · фізичний розкрив випромінює напрямну хвилю">Family 02 · a physical opening radiates the guided wave</div>
+    <h1 data-en="Aperture Antennas" data-uk="Апертурні антени">Aperture Antennas</h1>
+    <div class="eq-hero">G = (4π/λ²)·ε·A_phys</div>
+    <p class="lede" data-en="Gain follows the aperture area in wavelengths. The horn calculator carries two methodologies — an ideal in-phase aperture and the full Fresnel-integral model with quadratic phase error — exactly as an antenna engineer would compare them. Slot, open waveguide and biconical antennas complete the family."
+       data-uk="Підсилення визначає площа розкриву в довжинах хвиль. Калькулятор рупора має дві методології — ідеальний синфазний розкрив і повну модель з інтегралами Френеля та квадратичною фазовою похибкою — саме так, як їх порівнює інженер. Щілинна, хвилеводна та біконічна антени доповнюють сім'ю.">Gain follows the aperture area…</p>
+  </div>
+</header>
+
+<div class="wrap-wide" id="sections"></div>
+
+<footer class="wrap-wide">
+  <p data-en="Horn patterns are computed from the assumed aperture field (Fourier / physical-optics limit); the full model adds the quadratic phase error via Fresnel integrals. Impedance and bandwidth are first-order TE₁₀ estimates."
+     data-uk="ДН рупора обчислено із заданого поля розкриву (границя Фур'є / фізичної оптики); повна модель додає квадратичну фазову похибку через інтеграли Френеля. Опір і смуга — оцінки першого порядку за TE₁₀.">Horn patterns…</p>
+</footer>
+
+<script src="js/catalog.js"></script>
+<script src="js/site.js"></script>
+<script src="js/antenna.js"></script>
+<script src="js/pattern3d.js"></script>
+<script>
+const AL=window.AntennaLab, V='var(--teal)', A='var(--amber)', D2R=AL.D2R;
+
+/* ====================================================================== */
+/*  HORN — two methodologies: simplified aperture vs full Fresnel model    */
+/*  Ported from horn_antenna_pattern.html, re-based on the shared engine.   */
+/* ====================================================================== */
+function patternE_simple(th,k,b){ const X=(k*b/2)*Math.sin(th); return AL.sinc(X); }
+function patternH_simple(th,k,a){ const X=(k*a/2)*Math.sin(th); const d=1-Math.pow(2*X/Math.PI,2);
+  if(Math.abs(d)<1e-4) return Math.PI/4; return Math.cos(X)/d; }
+// aperture integral with quadratic phase (complete-the-square → Fresnel)
+function apertureIntegral(sinT,k,dim,rho,lambda){
+  const su=Math.sqrt(2/(lambda*rho)), factor=Math.sqrt(lambda*rho/2);
+  const u1=(-dim/2+rho*sinT)*su, u2=(dim/2+rho*sinT)*su;
+  const F1=AL.fresnelIntegral(u1), F2=AL.fresnelIntegral(u2);
+  const reI=F2.C-F1.C, imI=F2.S-F1.S, ph=-k*rho*sinT*sinT/2, cp=Math.cos(ph), sp=Math.sin(ph);
+  return {re:factor*(cp*reI-sp*imI), im:factor*(cp*imI+sp*reI)};
+}
+function apMagE(sinT,k,b,rho,lambda){ const I=apertureIntegral(sinT,k,b,rho,lambda); return Math.hypot(I.re,I.im); }
+function apMagH(sinT,k,a,rho,lambda){ const sh=lambda/(2*a);
+  const Ip=apertureIntegral(sinT+sh,k,a,rho,lambda), Im=apertureIntegral(sinT-sh,k,a,rho,lambda);
+  return Math.hypot(0.5*(Ip.re+Im.re),0.5*(Ip.im+Im.im)); }
+function patE_full_raw(th,k,b,rho,lam){ return (1+Math.cos(th))/2*apMagE(Math.sin(th),k,b,rho,lam); }
+function patH_full_raw(th,k,a,rho,lam){ return (1+Math.cos(th))/2*apMagH(Math.sin(th),k,a,rho,lam); }
+function normalize(fn){ const f0=Math.abs(fn(0))||1; return r=>fn(r)/f0; }
+
+// horn schematic (flared waveguide) — isotropic px/cm so the λ ruler is real
+function hornSchematic(dimCm,Lcm,dimSym,color,showPhase,lamCm,pxPerCm){
+  const originX=50, cy=132, lenPx=Lcm*pxPerCm, halfAp=(dimCm/2)*pxPerCm;
+  const throat=Math.max(2.5,Math.min(halfAp*0.35,8)), apX=originX+lenPx, wgX0=originX-20;
+  let s=AL.rulerSVG(originX,30,lamCm,pxPerCm);
+  s+=`<rect class="schem-fill" x="${wgX0}" y="${cy-throat}" width="20" height="${throat*2}"/>`;
+  s+=`<path class="schem-outline" d="M ${originX},${cy-throat} L ${apX},${cy-halfAp} L ${apX},${cy+halfAp} L ${originX},${cy+throat} Z"/>`;
+  if(showPhase){ const bow=Math.min(14,halfAp*0.35);
+    s+=`<path class="schem-phase" style="stroke:${color}" d="M ${apX-bow},${cy-halfAp} Q ${apX+bow},${cy} ${apX-bow},${cy+halfAp}"/>`; }
+  s+=AL.boresightArrow(apX+10,cy,40,color,dimSym);
+  const dimY=cy+Math.max(halfAp,throat)+26;
+  s+=AL.dimLineH(originX,apX,dimY,`L = ${Lcm.toFixed(1)} ${AL.unit('cm')}`);
+  s+=AL.dimLineV(apX+60,cy-halfAp,cy+halfAp,`${dimSym} = ${dimCm.toFixed(1)} ${AL.unit('cm')}`);
+  return s;
+}
+
+function hornPlanes(){
+  const mk=(p,dotColor,titleEn,titleUk,sEn,sUk)=>`
+    <div class="plane-panel">
+      <div class="plane-title"><span class="dot" style="background:${dotColor}"></span><span data-en="${titleEn}" data-uk="${titleUk}">${titleEn}</span></div>
+      <div class="sub-panel"><svg id="horn_schem${p}" viewBox="0 0 400 250"></svg></div>
+      <div class="sub-panel"><svg id="horn_plot${p}" viewBox="0 0 400 330"></svg>
+        <div class="plane-readout">
+          <div class="item"><div class="k">HPBW</div><div class="v" id="horn_hpbw${p}">-</div></div>
+          <div class="item"><div class="k" data-en="1st SLL" data-uk="1-а бок.">1st SLL</div><div class="v" id="horn_sl${p}">-</div></div>
+          <div class="item"><div class="k" data-en="lobe angle" data-uk="кут пелюстки">lobe angle</div><div class="v" id="horn_sla${p}">-</div></div>
+          <div class="item"><div class="k">${sEn}</div><div class="v" id="horn_spar${p}">-</div></div>
+        </div>
+      </div>
+    </div>`;
+  return mk('H',A,'H-plane (horizontal)','H-площина (горизонтальна)','S_H','S_H')+
+         mk('E',V,'E-plane (vertical)','E-площина (вертикальна)','S_E','S_E')+
+         (AL.panel3dHTML ? AL.panel3dHTML('horn') : '');
+}
+
+const hornGroups=`
+  <div class="group"><div class="group-title"><span data-en="Gain &amp; aperture" data-uk="Підсилення й апертура"></span></div>
+    <div class="grid2">
+      <div class="item"><div class="k">G, <span class="no-caps">dBi</span></div><div class="v" id="horn_gain">-</div></div>
+      <div class="item"><div class="k">G, <span class="no-caps">dBd</span></div><div class="v" id="horn_gaind">-</div></div>
+      <div class="item"><div class="k" data-en="Aperture eff. ε" data-uk="КВП апертури ε"></div><div class="v" id="horn_eff">-</div></div>
+      <div class="item"><div class="k" data-en="Eff. area" data-uk="Ефект. площа"></div><div class="v sm" id="horn_aeff">-</div></div>
+      <div class="item wide"><div class="note" id="horn_gnote"></div></div>
+    </div>
+  </div>
+  <div class="group"><div class="group-title"><span data-en="Aperture match" data-uk="Узгодження розкриву"></span><span class="est" data-en="rough TE₁₀ estimate" data-uk="груба оцінка TE₁₀"></span></div>
+    <div class="grid2">
+      <div class="item"><div class="k">Z_w</div><div class="v" id="horn_zw">-</div></div>
+      <div class="item"><div class="k">VSWR</div><div class="v" id="horn_vswr">-</div></div>
+    </div>
+  </div>
+  <div class="group"><div class="group-title"><span data-en="Frequency band" data-uk="Частотна смуга"></span></div>
+    <div class="grid2">
+      <div class="item"><div class="k">f_c TE₁₀</div><div class="v sm" id="horn_fc">-</div></div>
+      <div class="item"><div class="k">f_c TE₂₀</div><div class="v sm" id="horn_fc2">-</div></div>
+      <div class="item wide"><div class="k" data-en="single-mode band" data-uk="одномодова смуга"></div><div class="v sm" id="horn_band">-</div><div class="note" id="horn_bnote"></div></div>
+    </div>
+  </div>`;
+
+function hornRender(ctx){
+  const s=ctx.state, mode=ctx.methodId||'simple';
+  const fGHz=s.f, aCm=s.a, bCm=s.b, Lcm=s.L;
+  const lam=AL.lambdaOf(fGHz*1e9), lamCm=lam*100, k=AL.kOf(lam);
+  const aM=aCm/100, bM=bCm/100, LM=Lcm/100;
+  let fnE, fnH, eff;
+  if(mode==='simple'){
+    fnE=r=>patternE_simple(r,k,bM); fnH=r=>patternH_simple(r,k,aM); eff=8/(Math.PI*Math.PI);
+  } else {
+    fnE=normalize(r=>patE_full_raw(r,k,bM,LM,lam)); fnH=normalize(r=>patH_full_raw(r,k,aM,LM,lam));
+    const IE0=apMagE(0,k,bM,LM,lam), IH0=apMagH(0,k,aM,LM,lam);
+    eff=(IE0*IE0*IH0*IH0)/((aM*bM/2)*(aM*bM));
+  }
+  const sampE=AL.sampleHalf(d=>Math.abs(fnE(d*D2R)),0.25,90);
+  const sampH=AL.sampleHalf(d=>Math.abs(fnH(d*D2R)),0.25,90);
+  const hpE=AL.findHPBW(sampE,d=>Math.abs(fnE(d*D2R))), hpH=AL.findHPBW(sampH,d=>Math.abs(fnH(d*D2R)));
+  const slE=AL.findFirstSidelobe(sampE), slH=AL.findFirstSidelobe(sampH);
+  const Ae=eff*aM*bM, gain=10*Math.log10(4*Math.PI*Ae/(lam*lam));
+  // per-plane readouts
+  ctx.byId('horn_hpbwE').textContent=AL.fmtDeg(hpE); ctx.byId('horn_hpbwH').textContent=AL.fmtDeg(hpH);
+  ctx.byId('horn_slE').textContent=AL.fmtDb(slE.level); ctx.byId('horn_slH').textContent=AL.fmtDb(slH.level);
+  ctx.byId('horn_slaE').textContent=AL.fmtAng(slE.angle); ctx.byId('horn_slaH').textContent=AL.fmtAng(slH.angle);
+  // gain group
+  ctx.byId('horn_gain').textContent=gain.toFixed(1); ctx.byId('horn_gaind').textContent=(gain-2.15).toFixed(1);
+  ctx.byId('horn_eff').textContent=eff.toFixed(3); ctx.byId('horn_aeff').textContent=(Ae*1e4).toFixed(1)+' '+AL.unit('cm')+'²';
+  ctx.byId('horn_gnote').textContent = mode==='full'
+    ? AL.tr('ε from the Fresnel integrals — phase error already included.','ε з інтегралів Френеля — фазову похибку вже враховано.')
+    : AL.tr('In-phase limit ε = 8/π²; a real finite-length horn gives less.','Синфазна границя ε = 8/π²; реальний рупор скінченної довжини дає менше.');
+  // impedance / VSWR (TE10)
+  const eta0=AL.ETA0, prop=aM>lam/2;
+  if(prop){ const Zw=eta0/Math.sqrt(1-Math.pow(lam/(2*aM),2)), g=Math.abs((Zw-eta0)/(Zw+eta0)), vswr=(1+g)/(1-g);
+    ctx.byId('horn_zw').textContent=Zw.toFixed(0)+' '+AL.unit('ohm'); ctx.byId('horn_vswr').textContent=vswr.toFixed(2);
+  } else { ctx.byId('horn_zw').textContent=AL.tr('cutoff','запредільно'); ctx.byId('horn_vswr').textContent='—'; }
+  const f_te10=AL.c/(2*aM), f_te20=AL.c/aM, f_v2=AL.c/(aM*Math.sqrt(3));
+  ctx.byId('horn_fc').textContent=(f_te10/1e9).toFixed(2)+' '+AL.unit('GHz');
+  ctx.byId('horn_fc2').textContent=(f_te20/1e9).toFixed(2)+' '+AL.unit('GHz');
+  ctx.byId('horn_band').textContent=(f_v2/1e9).toFixed(2)+'–'+(f_te20/1e9).toFixed(2)+' '+AL.unit('GHz');
+  const inBand=fGHz*1e9>=f_v2 && fGHz*1e9<=f_te20;
+  ctx.byId('horn_bnote').textContent=inBand?AL.tr('f inside band','f у смузі'):AL.tr('f outside band','f поза смугою');
+  ctx.byId('horn_bnote').style.color=inBand?'var(--teal)':'var(--rose)';
+  // S-parameters (phase error) per plane
+  const S_E=(bM*bM)/(8*lam*LM), S_H=(aM*aM)/(8*lam*LM);
+  const sPar=(node,S,tgt)=>{ if(mode!=='full'){ ctx.byId(node).textContent='n/a'; return; }
+    const opt=Math.abs(S-tgt)<=0.03; ctx.byId(node).innerHTML=S.toFixed(3)+(opt?' <span class="tag-optimal shown">opt</span>':''); };
+  sPar('horn_sparE',S_E,0.25); sPar('horn_sparH',S_H,0.375);
+  // enable L only in full mode
+  ctx.enable('L', mode==='full');
+  // schematics (shared isotropic scale)
+  const pxPerCm=Math.min(190/Lcm,70/(Math.max(aCm,bCm)/2)), showPhase=(mode==='full');
+  ctx.byId('horn_schemH').innerHTML=hornSchematic(aCm,Lcm,'a',A,showPhase,lamCm,pxPerCm);
+  ctx.byId('horn_schemE').innerHTML=hornSchematic(bCm,Lcm,'b',V,showPhase,lamCm,pxPerCm);
+  // polar plots (semicircle, boresight up)
+  const CX=200,CY=300,R=250*0.72;
+  ctx.byId('horn_plotH').innerHTML=AL.polarGridHalf(CX,CY,R)+AL.polarTraceHalf(sampH,CX,CY,R,A,'rgba(242,166,90,0.12)');
+  ctx.byId('horn_plotE').innerHTML=AL.polarGridHalf(CX,CY,R)+AL.polarTraceHalf(sampE,CX,CY,R,V,'rgba(127,219,202,0.12)');
+  /* Optimum-gain marks, exactly as in horn_antenna_pattern.html: the classic
+     optimum horn has S_H = 0.375 and S_E = 0.25, which fixes a, b and L
+     against each other. Only meaningful once the quadratic phase error is in
+     the model — in the in-phase approximation L does not affect the pattern
+     at all, so there is nothing to optimise. */
+  if(mode==='full'){
+    const aOpt=Math.sqrt(3*lamCm*Lcm), bOpt=Math.sqrt(2*lamCm*Lcm);
+    const lOptH=(aCm*aCm)/(3*lamCm), lOptE=(bCm*bCm)/(2*lamCm);
+    AL.applyOptima('horn',[
+      {id:'a', value:aOpt,  tag:'h', label:AL.tr(`a ≈ ${aOpt.toFixed(1)} cm at this L (S_H = 0.375)`,
+                                                 `a ≈ ${aOpt.toFixed(1)} см при цьому L (S_H = 0.375)`)},
+      {id:'b', value:bOpt,  tag:'e', label:AL.tr(`b ≈ ${bOpt.toFixed(1)} cm at this L (S_E = 0.25)`,
+                                                 `b ≈ ${bOpt.toFixed(1)} см при цьому L (S_E = 0.25)`)},
+      {id:'L', value:lOptH, tag:'h', label:AL.tr(`L ≈ ${lOptH.toFixed(1)} cm at this a`,
+                                                 `L ≈ ${lOptH.toFixed(1)} см при цьому a`)},
+      {id:'L', value:lOptE, tag:'e', label:AL.tr(`L ≈ ${lOptE.toFixed(1)} cm at this b`,
+                                                 `L ≈ ${lOptE.toFixed(1)} см при цьому b`)}
+    ]);
+  } else {
+    AL.applyOptima('horn',null);
+  }
+
+  // 3-D pattern: the horn's cuts are in radians, draw3d wants degrees
+  if(AL.draw3d) AL.draw3d('horn',{
+    fnE:d=>Math.abs(fnE(d*D2R)), fnH:d=>Math.abs(fnH(d*D2R)), plot:'half',
+    meta:{lamCm, gainDbi:gain, sizeLam:Math.max(aCm,bCm)/lamCm,
+          sizeLabel:`a=${(aCm/lamCm).toFixed(2)}λ · b=${(bCm/lamCm).toFixed(2)}λ`}});
+}
+
+/* ====================================================================== */
+/*  Simpler aperture antennas (single polar plot)                          */
+/* ====================================================================== */
+const APER=[];
+
+/* 2.2 Slot */
+APER.push({
+  id:'slot', num:'2.2', lvl:2, plot:'full',
+  desc:{en:"A slot cut into a conducting sheet. By Babinet's principle it is the exact complement of a dipole of the same shape — the E and H fields simply swap. A resonant λ/2 slot therefore radiates like a dipole but with a high, dipole-complementary impedance.",
+        uk:"Щілина у провідному листі. За принципом Бабіне вона є точним доповненням диполя тієї ж форми — поля E та H міняються місцями. Резонансна λ/2 щілина випромінює як диполь, але з високим, комплементарним опором."},
+  methods:[
+    {id:'babinet', en:"Babinet's principle", uk:'Принцип Бабіне',
+     desc:{en:"The complementary metal/aperture pair obeys Babinet: the slot's field pattern equals the dual dipole's, and the impedances multiply to a constant. This gives the slot impedance in closed form from the dipole value.",
+           uk:"Комплементарна пара метал/отвір підкоряється Бабіне: ДН щілини дорівнює ДН двоїстого диполя, а опори перемножуються у сталу. Це дає опір щілини в замкненій формі з опору диполя."},
+     formula:[{en:"Z_slot · Z_dipole = η²/4 ≈ (376.7)²/4",uk:"Z_щіл · Z_диполя = η²/4 ≈ (376.7)²/4"},
+              {en:"resonant λ/2 slot:  Z_slot ≈ 486 Ω",uk:"резонансна λ/2 щілина:  Z_щіл ≈ 486 Ом"}]},
+    {id:'mom', en:'MoM (finite plane)', uk:'MoM (скінченна площина)',
+     desc:{en:"Babinet assumes an infinite, perfectly conducting sheet. A real finite plane and waveguide feed are handled by MoM, which shifts resonance and adds ground-plane diffraction ripple to the pattern.",
+           uk:"Бабіне припускає нескінченний ідеальний лист. Реальну скінченну площину та хвилеводне живлення рахує MoM, що зміщує резонанс і додає дифракційну брижу від країв площини."},
+     formula:[{en:"pattern ≈ dual dipole; finite-plane diffraction added numerically",uk:"ДН ≈ двоїстий диполь; дифракцію скінченної площини додано чисельно"}]}
+  ],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:3},
+    {id:'L',kind:'range',en:'Slot length L',uk:'Довжина щілини L',min:0.2,max:1.0,step:0.01,value:0.5,fmt:v=>v.toFixed(2)+' λ'},
+    {id:'w',kind:'range',en:'Slot width w',uk:'Ширина щілини w',min:0.005,max:0.1,step:0.005,value:0.02,fmt:v=>v.toFixed(3)+' λ'}
+  ],
+  compute(s){
+    const Llam=s.L;
+    const axis=th=>AL.dipolePattern(th,Llam);
+    const fnBeam=a=>AL.dipolePattern((90-a)*D2R,Llam);
+    const D=AL.directivityAxial(axis);
+    const Zdip=AL.dipoleZ(Llam,s.w/2).Rin, Zslot=Math.pow(AL.ETA0,2)/(4*Math.max(Zdip,1));
+    const lamCm=AL.lambdaOf(s.f*1e9)*100;
+    const px=Math.min(190/(Llam*lamCm),1), Lpx=Llam*lamCm*px, cx=200, cy=125;
+    const wPx=Math.max(s.w*lamCm*px,4);
+    // plan: looking down on the sheet edge — the slot's LENGTH is across it
+    let schemH=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_H();
+    schemH+=`<line class="schem-outline" x1="${cx-150}" y1="${cy}" x2="${cx-Lpx/2}" y2="${cy}" stroke-width="5"/>`;
+    schemH+=`<line class="schem-outline" x1="${cx+Lpx/2}" y1="${cy}" x2="${cx+150}" y2="${cy}" stroke-width="5"/>`;
+    schemH+=`<circle class="schem-node" cx="${cx}" cy="${cy}" r="2.5"/>`;
+    schemH+=AL.dimLineH(cx-Lpx/2,cx+Lpx/2,cy+34,`L = ${(Llam*lamCm).toFixed(1)} ${AL.unit('cm')} = ${Llam.toFixed(2)} λ`);
+    schemH+=`<text class="schem-label" x="${cx-148}" y="${cy-12}">${AL.tr('conducting sheet, edge-on','провідний лист з торця')}</text>`;
+    schemH+=AL.boresightArrow(cx,cy-56,34,A,'slotH').replace(/x1="([0-9.]+)" y1="([0-9.]+)" x2="([0-9.]+)"/,'x1="$1" y1="$2" x2="$3"');
+    // elevation: the same sheet edge, now vertical — the slot's WIDTH shows
+    let schemE=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_E();
+    schemE+=`<line class="schem-outline" x1="${cx}" y1="${cy-88}" x2="${cx}" y2="${cy-wPx/2}" stroke-width="5"/>`;
+    schemE+=`<line class="schem-outline" x1="${cx}" y1="${cy+wPx/2}" x2="${cx}" y2="${cy+88}" stroke-width="5"/>`;
+    schemE+=`<circle class="schem-node" cx="${cx}" cy="${cy}" r="2.5"/>`;
+    schemE+=AL.dimLineV(cx+14,cy-wPx/2,cy+wPx/2,`w = ${(s.w*lamCm).toFixed(2)} ${AL.unit('cm')}`);
+    schemE+=`<text class="schem-label" x="${cx-120}" y="${cy-96}">${AL.tr('sheet edge-on, slot seen across its width','лист з торця, щілина по ширині')}</text>`;
+    schemE+=AL.boresightArrow(cx+96,cy,34,V,'slotE');
+    // Babinet: the slot resonates where its complementary dipole does
+    const Lres=AL.findRoot(x=>AL.dipoleZ(x,s.w/2).Xin, 0.30, 0.70);
+    const optima=Lres?[{id:'L', value:Lres, tag:'e',
+      label:AL.tr(`L \u2248 ${Lres.toFixed(3)} \u03bb \u2014 resonant (complementary dipole)`,
+                  `L \u2248 ${Lres.toFixed(3)} \u03bb \u2014 \u0440\u0435\u0437\u043e\u043d\u0430\u043d\u0441`)}]:null;
+    return {schemE, schemH, fnBeam, optima,
+      meta3d:{lamCm, sizeLam:Llam, sizeLabel:'L = '+Llam.toFixed(2)+' λ', gainDbi:D.dBi},
+      readouts:[
+        {k:AL.tr('Directivity','Спрямованість'),v:D.dBi.toFixed(2)+' '+AL.unit('dBi')},
+        {k:'Z_slot',v:Zslot.toFixed(0)+' '+AL.unit('ohm')},
+        {k:'Z_dipole',v:Zdip.toFixed(0)+' '+AL.unit('ohm')},
+        {k:AL.tr('Product','Добуток'),v:'η²/4'}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Slot_antenna',label:'Slot antenna'}},
+        {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Babinet%27s_principle',label:"Babinet's principle"}}],
+  strength:{en:"Flush-mountable into aircraft skins, radar walls and waveguide runs — the slot radiates without protruding. The very high impedance needs matching, and a single slot radiates from both faces unless backed by a cavity.",
+            uk:"Урівень вбудовується в обшивку літаків, стінки радарів і хвилеводи — щілина випромінює, не виступаючи. Дуже високий опір потребує узгодження, а одна щілина випромінює з обох боків без резонатора ззаду."},
+  xrefs:[['wire.html#dipole','Dipole (complement)','Диполь (доповнення)'],['#waveguide','Waveguide','Хвилевід'],['array.html#phased-array','Slotted arrays','Щілинні решітки']]
+});
+
+/* 2.3 Open-ended waveguide */
+APER.push({
+  id:'waveguide', num:'2.3', lvl:2, plot:'full',
+  desc:{en:"An open waveguide flange is the simplest aperture antenna: the TE₁₀ mode field radiates straight out. Gain is modest (a few dBi), the pattern broad, but it is the canonical feed and calibration standard for reflectors and ranges.",
+        uk:"Відкритий фланець хвилеводу — найпростіша апертурна антена: поле моди TE₁₀ випромінює прямо назовні. Підсилення помірне (кілька дБі), ДН широка, але це канонічний опромінювач і калібрувальний еталон."},
+  methods:[{id:'fourier', en:'Aperture (Fourier) method', uk:'Апертурний метод (Фур’є)',
+     desc:{en:"The radiated pattern is the Fourier transform of the aperture field. For the TE₁₀ mode this is a uniform distribution across b (E-plane → sinc) and a cosine across a (H-plane → cosine pattern), evaluated directly.",
+           uk:"ДН — перетворення Фур'є поля розкриву. Для моди TE₁₀ це рівномірний розподіл по b (E-площина → sinc) та косинус по a (H-площина → косинусна ДН), обчислені напряму."},
+     formula:[{en:"E-plane: sinc((π b/λ)·sinθ)   H-plane: cos(X)/[1−(2X/π)²]",uk:"E-площ.: sinc((π b/λ)·sinθ)   H-площ.: cos(X)/[1−(2X/π)²]"},
+              {en:"G ≈ (4π/λ²)·0.81·a·b   (TE₁₀ aperture efficiency ≈ 0.81)",uk:"G ≈ (4π/λ²)·0.81·a·b   (КВП TE₁₀ ≈ 0.81)"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:10},
+    {id:'a',kind:'range',en:'Broad wall a',uk:'Широка стінка a',min:1,max:8,step:0.1,value:2.3,fmt:v=>v.toFixed(1)+' '+AL.unit('cm')},
+    {id:'b',kind:'range',en:'Narrow wall b',uk:'Вузька стінка b',min:0.5,max:4,step:0.1,value:1.0,fmt:v=>v.toFixed(1)+' '+AL.unit('cm')}
+  ],
+  compute(s){
+    const lam=AL.lambdaOf(s.f*1e9), lamCm=lam*100, aLam=s.a/lamCm, bLam=s.b/lamCm;
+    // E-plane = uniform over b (vertical); H-plane = cosine over a (horizontal)
+    const fnE=ang=>AL.apertureUniform(ang*D2R, bLam);
+    const fnH=ang=>AL.apertureCosine(ang*D2R, aLam);
+    const fnBeam=fnE;
+    const eff=0.81, Ae=eff*(s.a/100)*(s.b/100), gain=10*Math.log10(4*Math.PI*Ae/(lam*lam));
+    const sampE=AL.sampleHalf(d=>AL.apertureUniform(d*D2R,bLam),0.1,90);
+    const sampH=AL.sampleHalf(d=>AL.apertureCosine(d*D2R,aLam),0.1,90);
+    const hpE=AL.findHPBW(sampE,d=>AL.apertureUniform(d*D2R,bLam));
+    const hpH=AL.findHPBW(sampH,d=>AL.apertureCosine(d*D2R,aLam));
+    const fc=AL.c/(2*s.a/100)/1e9;
+    const px=Math.min(150/s.a,60), cx=200, cy=120, apx=s.a*px, apy=s.b*px;
+    const guide=90;
+    // plan: broad wall a across, guide running back from the open aperture
+    let schemH=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_H();
+    schemH+=`<rect class="schem-fill" x="${cx-guide}" y="${cy-apx/2}" width="${guide}" height="${apx}"/>`;
+    schemH+=`<line class="schem-outline" x1="${cx}" y1="${cy-apx/2}" x2="${cx}" y2="${cy+apx/2}" stroke-dasharray="4,3"/>`;
+    schemH+=AL.dimLineV(cx+16,cy-apx/2,cy+apx/2,`a = ${s.a.toFixed(1)} ${AL.unit('cm')} = ${aLam.toFixed(2)} λ`);
+    schemH+=`<text class="schem-label" x="${cx-guide}" y="${cy-apx/2-8}">${AL.tr('broad wall (H-plane)','широка стінка (площина H)')}</text>`;
+    schemH+=AL.boresightArrow(cx+8,cy,34,A,'wgH');
+    // elevation: narrow wall b, same guide from the side
+    let schemE=AL.rulerSVG(40,28,lamCm,px)+AL.CAP_E();
+    schemE+=`<rect class="schem-fill" x="${cx-guide}" y="${cy-apy/2}" width="${guide}" height="${apy}"/>`;
+    schemE+=`<line class="schem-outline" x1="${cx}" y1="${cy-apy/2}" x2="${cx}" y2="${cy+apy/2}" stroke-dasharray="4,3"/>`;
+    schemE+=AL.dimLineV(cx+16,cy-apy/2,cy+apy/2,`b = ${s.b.toFixed(1)} ${AL.unit('cm')} = ${bLam.toFixed(2)} λ`);
+    schemE+=`<text class="schem-label" x="${cx-guide}" y="${cy-apy/2-8}">${AL.tr('narrow wall (E-plane)','вузька стінка (площина E)')}</text>`;
+    schemE+=AL.boresightArrow(cx+8,cy,34,V,'wgE');
+    // standard rectangular guide: a ~ 0.7 lambda at band centre, b ~ a/2
+    const aOpt=0.7*lamCm, bOpt=0.35*lamCm;
+    const optima=[
+      {id:'a', value:aOpt, tag:'h',
+       label:AL.tr(`a \u2248 ${aOpt.toFixed(2)} cm = 0.70 \u03bb \u2014 single-mode band centre`,
+                   `a \u2248 ${aOpt.toFixed(2)} \u0441\u043c = 0.70 \u03bb \u2014 \u0446\u0435\u043d\u0442\u0440 \u043e\u0434\u043d\u043e\u043c\u043e\u0434\u043e\u0432\u043e\u0457 \u0441\u043c\u0443\u0433\u0438`)},
+      {id:'b', value:bOpt, tag:'e',
+       label:AL.tr(`b \u2248 ${bOpt.toFixed(2)} cm = a/2 \u2014 standard aspect ratio`,
+                   `b \u2248 ${bOpt.toFixed(2)} \u0441\u043c = a/2 \u2014 \u0441\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u0435 \u0432\u0456\u0434\u043d\u043e\u0448\u0435\u043d\u043d\u044f`)}
+    ];
+    return {schemE, schemH, fnBeam, fnE, fnH, optima,
+      meta3d:{lamCm, sizeLam:Math.max(aLam,bLam), sizeLabel:'a='+aLam.toFixed(2)+'λ · b='+bLam.toFixed(2)+'λ', gainDbi:gain},
+      readouts:[
+        {k:AL.tr('Gain','Підсилення'),v:gain.toFixed(1)+' '+AL.unit('dBi')},
+        {k:AL.tr('HPBW E','HPBW E'),v:AL.fmtDeg(hpE)},
+        {k:AL.tr('HPBW H','HPBW H'),v:AL.fmtDeg(hpH)},
+        {k:'f_c TE₁₀',v:fc.toFixed(2)+' '+AL.unit('GHz')}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Waveguide_(radio_frequency)',label:'RF waveguide'}},
+        {tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Horn_antenna',label:'Aperture antennas'}}],
+  strength:{en:"A stable, well-characterised low-gain reference — the standard gain feed and probe on antenna ranges. Directivity is limited because the aperture is only ~1 λ; a horn is just an open waveguide flared up in size.",
+            uk:"Стабільний, добре охарактеризований еталон низького підсилення — стандартний опромінювач і зонд на антенних полігонах. Спрямованість обмежена, бо розкрив лише ~1 λ; рупор — це той самий фланець, розширений у розмірі."},
+  xrefs:[['#horn','Horn','Рупор'],['#slot','Slot','Щілина'],['reflector.html#parabolic','Reflector feed','Опромінювач рефлектора']]
+});
+
+/* 2.4 Biconical */
+APER.push({
+  id:'biconical', num:'2.4', lvl:1, plot:'full',
+  desc:{en:"Two cones joined at their apexes. Treating the structure as a uniform, tapered transmission line (Schelkunoff) gives a real characteristic impedance set only by the cone angle — so the antenna is inherently broadband and omnidirectional in the H-plane.",
+        uk:"Два конуси, з'єднані вершинами. Розгляд структури як однорідної звуженої лінії передачі (Шелкунов) дає дійсний хвильовий опір, що залежить лише від кута конуса — тож антена широкосмугова й всенаправлена в H-площині."},
+  methods:[{id:'schelkunoff', en:'Schelkunoff transmission-line', uk:'Лінія передачі Шелкунова',
+     desc:{en:"Schelkunoff models the biconical antenna as a radial transmission line of constant characteristic impedance, which depends only on the cone half-angle. Widening the cone lowers the impedance and broadens the match.",
+           uk:"Шелкунов моделює біконічну антену як радіальну лінію передачі сталого хвильового опору, що залежить лише від півкута конуса. Ширший конус знижує опір і розширює узгодження."},
+     formula:[{en:"Z₀ = 120·ln[cot(θ_h/2)]   (θ_h = cone half-angle)",uk:"Z₀ = 120·ln[cot(θ_h/2)]   (θ_h = півкут конуса)"}]}],
+  controls:[
+    {id:'f',kind:'freq',en:'Frequency f',uk:'Частота f',fmin:1,fmax:10000,value:0.3},
+    {id:'half',kind:'range',en:'Cone half-angle θ_h',uk:'Півкут конуса θ_h',min:1,max:60,step:1,value:30,fmt:v=>v.toFixed(0)+'°'},
+    {id:'len',kind:'range',en:'Cone length',uk:'Довжина конуса',min:0.1,max:1.0,step:0.01,value:0.25,fmt:v=>v.toFixed(2)+' λ'}
+  ],
+  compute(s){
+    const Z0=120*Math.log(1/Math.tan(s.half*D2R/2));
+    // fat dipole → doughnut; broadens (fills nulls) as cone widens
+    const fill=s.half/90;
+    const fnBeam=a=>{ const base=AL.smallLoopPattern((90-a)*D2R); return (1-fill)*base+fill*0.5+0.0; };
+    const D=1.76; // ~short/fat dipole
+    const cx=200, cy=125, len=Math.min(s.len*260,110), ha=s.half*D2R;
+    const dx=len*Math.sin(ha), dy=len*Math.cos(ha);
+    const lamCmB=AL.lambdaOf(s.f*1e9)*100, pxB=Math.min(140/lamCmB,12);
+    let schemE=AL.rulerSVG(40,28,lamCmB,pxB)+AL.CAP_E();
+    schemE+=`<path class="schem-fill" d="M ${cx},${cy} L ${cx-dx},${cy-dy} L ${cx+dx},${cy-dy} Z"/>`;
+    schemE+=`<path class="schem-fill" d="M ${cx},${cy} L ${cx-dx},${cy+dy} L ${cx+dx},${cy+dy} Z"/>`;
+    schemE+=`<circle class="schem-node" cx="${cx}" cy="${cy}" r="2.5"/>`;
+    schemE+=`<line class="schem-dim" x1="${cx}" y1="${cy-dy-16}" x2="${cx}" y2="${cy+dy+16}" stroke-dasharray="3,3"/>`;
+    schemE+=`<text class="schem-label" x="${cx+dx+4}" y="${cy-dy}">θ_h = ${s.half}°</text>`;
+    schemE+=AL.dimLineV(cx+dx+34,cy-dy,cy+dy,`2ℓ = ${(2*s.len).toFixed(2)} λ`);
+    schemE+=AL.boresightArrow(cx+dx+70,cy,28,V,'bicE');
+    let schemH=AL.rulerSVG(40,28,lamCmB,pxB)+AL.CAP_H();
+    schemH+=AL.azimuthCircle(cx,cy,Math.max(dx+30,58),A);
+    schemH+=`<circle class="schem-fill" cx="${cx}" cy="${cy}" r="${dx}"/>`;
+    schemH+=AL.conductorEndOn(cx,cy,5);
+    schemH+=AL.boresightArrow(cx+8,cy,Math.max(dx+34,62),A,'bicH');
+    schemH+=`<text class="schem-label" x="${cx}" y="${cy+Math.max(dx+30,58)+18}" text-anchor="middle">${AL.tr('cone rims · omni in azimuth','краї конусів · всенапрямлена')}</text>`;
+    // Z0 = 120*ln[cot(theta_h/2)] inverts to the half-angle for a wanted Z0
+    const halfFor=Z=>2*Math.atan(1/Math.exp(Z/120))*AL.R2D;
+    const h50=halfFor(50), h75=halfFor(75);
+    const optima=[
+      {id:'half', value:h75, tag:'h',
+       label:AL.tr(`θ_h ≈ ${h75.toFixed(0)}° → Z₀ = 75 Ω`,
+                   `θ_h ≈ ${h75.toFixed(0)}° → Z₀ = 75 Ом`)},
+      {id:'half', value:h50, tag:'e',
+       label:AL.tr(`θ_h ≈ ${h50.toFixed(0)}° → Z₀ = 50 Ω`,
+                   `θ_h ≈ ${h50.toFixed(0)}° → Z₀ = 50 Ом`)}
+    ];
+    return {schemE, schemH, fnBeam, optima,
+      meta3d:{lamCm:AL.lambdaOf(s.f*1e9)*100, sizeLam:s.len, sizeLabel:'cone ℓ = '+s.len.toFixed(2)+' λ', gainDbi:D},
+      readouts:[
+        {k:'Z₀',v:Z0.toFixed(0)+' '+AL.unit('ohm')},
+        {k:AL.tr('Directivity','Спрямованість'),v:D.toFixed(2)+' '+AL.unit('dBi')},
+        {k:AL.tr('Bandwidth','Смуга'),v:s.half>20?'> 4:1':'≈ 2:1'},
+        {k:AL.tr('Pattern','ДН'),v:AL.tr('omni (H-plane)','всенапр. (H)')}
+      ]};
+  },
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Biconical_antenna',label:'Biconical antenna'}}],
+  strength:{en:"The constant-impedance taper gives multi-octave bandwidth with an omnidirectional azimuth pattern — the standard EMC-emissions and spectrum-monitoring antenna. Directivity is low by design.",
+            uk:"Звуження сталого опору дає багатооктавну смугу з всенаправленою азимутальною ДН — стандартна антена EMC-вимірювань і моніторингу спектра. Спрямованість низька за призначенням."},
+  xrefs:[['wire.html#discone','Discone','Дискоконусна'],['wire.html#dipole','Dipole','Диполь'],['#horn','Horn','Рупор']]
+});
+
+/* ====================================================================== */
+/*  PAGE BUILDER                                                            */
+/* ====================================================================== */
+function catGet(id){ return CATALOG.flatMap(s=>s.antennas).find(x=>x.id===id)||{}; }
+function planesHTMLFor(id){
+  return `
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_schem" viewBox="0 0 400 250"></svg></div>
+    </div>
+    <div class="plane-panel" style="flex:1 1 100%; min-width:300px;">
+      <div class="sub-panel"><svg id="${id}_plot" viewBox="0 0 400 380"></svg>
+        <div class="plane-readout">
+          ${[0,1,2,3].map(i=>`<div class="item"><div class="k" id="${id}_k${i}"></div><div class="v" id="${id}_v${i}">-</div></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+function methodDescHTML(a){
+  const multi=a.methods&&a.methods.length>1;
+  return `<div class="method-desc">`+(a.methods||[]).map((m,i)=>
+    `<div class="method-body${(multi&&i>0)?' hidden':''}" data-method="${m.id}">
+       <div class="desc-cols">
+         <div><h4 data-en="${m.en}" data-uk="${m.uk}">${m.en}</h4>
+           <p data-en="${m.desc.en}" data-uk="${m.desc.uk}">${m.desc.en}</p></div>
+         <div>${(m.formula||[]).map(f=>`<span class="formula" data-en="${f.en}" data-uk="${f.uk}">${f.en}</span>`).join('')}</div>
+       </div>
+     </div>`).join('')+`</div>`;
+}
+function sectionHTML(a, expInner){
+  const c=catGet(a.id);
+  return `<section id="${a.id}">
+    <div class="num" data-en="${a.num} / aperture" data-uk="${a.num} / апертурна">${a.num} / aperture</div>
+    <h2><span class="badge l${a.lvl} lg">${['','I','II','III'][a.lvl]}</span>
+        <span data-en="${c.en}" data-uk="${c.uk}">${c.en}</span></h2>
+    <div id="tags-${a.id}"></div>
+    <p class="desc" data-en="${a.desc.en}" data-uk="${a.desc.uk}">${a.desc.en}</p>
+    ${methodDescHTML(a)}
+    <div class="panel"><div id="exp-${a.id}">${expInner||''}</div></div>
+    <div id="refs-${a.id}"></div>
+    <div class="strength"><div class="st-title" data-en="Design notes" data-uk="Проєктні нотатки">Design notes</div>
+      <span data-en="${a.strength.en}" data-uk="${a.strength.uk}">${a.strength.en}</span></div>
+    <div class="xrefs">${(a.xrefs||[]).map(x=>`<a href="${x[0]}" data-en="${x[1]}" data-uk="${x[2]}">${x[1]}</a>`).join('')}</div>
+  </section>`;
+}
+function fillExtras(a){
+  const c=catGet(a.id);
+  const rf=document.getElementById('refs-'+a.id); if(rf) rf.innerHTML=window.atlasRefs(a.refs);
+  const tg=document.getElementById('tags-'+a.id); if(tg) tg.innerHTML=window.atlasTags(c.std,c.mod,c.mth);
+}
+function mountSimple(a){
+  AL.mount(a.id,{ methods:(a.methods&&a.methods.length>1)?a.methods:null, controls:a.controls, planesHTML:AL.planesTwo(a.id),
+    render:function(ctx){
+      const out=a.compute(ctx.state, ctx.methodId);
+      AL.renderPlanes(a.id, out, a);
+      if(out.enable) for(const cid in out.enable) ctx.enable(cid,out.enable[cid]);
+    }});
+  fillExtras(a);
+}
+
+// horn descriptor (for the section markup + method desc)
+const hornMeta={ id:'horn', num:'2.1', lvl:2,
+  methods:[
+    {id:'simple',en:'Simplified aperture',uk:'Спрощена (розкрив)',
+     desc:{en:"In-phase (synphase) aperture: the field phase is uniform across the opening (no quadratic phase error). The pattern depends only on the aperture sizes a, b and the frequency, through k = 2π/λ. The horn length L does not change the pattern here.",
+           uk:"Синфазний розкрив: фаза поля однакова по всьому розкриву (без квадратичної фазової похибки). ДН залежить лише від розмірів a, b та частоти через k = 2π/λ. Довжина рупора L тут на форму ДН не впливає."},
+     formula:[{en:"E-plane: F_E(θ) = sin(X)/X,  X = (k·b/2)·sinθ",uk:"E-площ.: F_E(θ) = sin(X)/X,  X = (k·b/2)·sinθ"},
+              {en:"H-plane: F_H(θ) = cos(X)/[1−(2X/π)²],  X = (k·a/2)·sinθ",uk:"H-площ.: F_H(θ) = cos(X)/[1−(2X/π)²],  X = (k·a/2)·sinθ"},
+              {en:"in-phase aperture efficiency  ε = 8/π² ≈ 0.811",uk:"КВП синфазного розкриву  ε = 8/π² ≈ 0.811"}]},
+    {id:'full',en:'Full (Fresnel)',uk:'Повна (Френель)',
+     desc:{en:"The wave spreads from the horn apex as a spherical front. A finite length L accumulates a quadratic phase error at the aperture edges, described by S = dim²/(8λL). As S grows the main lobe widens and sidelobes rise. Optimum-gain horns: S_E ≈ 0.25, S_H ≈ 0.375.",
+           uk:"Хвиля розходиться від вершини рупора сферичним фронтом. Скінченна довжина L накопичує на краях квадратичну фазову похибку S = dim²/(8λL). Зі зростанням S головна пелюстка ширшає, бічні зростають. Рупори оптимального підсилення: S_E ≈ 0.25, S_H ≈ 0.375."},
+     formula:[{en:"S = dim²/(8·λ·L),  dim = b (E) or a (H)",uk:"S = dim²/(8·λ·L),  dim = b (E) чи a (H)"},
+              {en:"F(θ) via Fresnel integrals C(t), S(t) of the aperture field",uk:"F(θ) через інтеграли Френеля C(t), S(t) поля розкриву"},
+              {en:"optimum horn ε ≈ 0.51 (classic value)",uk:"оптимальний рупор ε ≈ 0.51 (класичне значення)"}]}
+  ],
+  desc:{en:"A flared waveguide. Switch between the ideal in-phase aperture and the full Fresnel model to see exactly how a finite horn length trades peak gain for a filled-in, wider pattern — the central design compromise of every horn.",
+        uk:"Розширений хвилевід. Перемикайтесь між ідеальним синфазним розкривом і повною моделлю Френеля, щоб побачити, як скінченна довжина рупора обмінює пікове підсилення на ширшу ДН — головний компроміс кожного рупора."},
+  refs:[{tag:'wiki',en:{href:'https://en.wikipedia.org/wiki/Horn_antenna',label:'Horn antenna'}},
+        {tag:'book',en:{href:'https://www.wiley.com/en-us/Antenna+Theory%3A+Analysis+and+Design%2C+4th+Edition-p-9781118642061',label:'Balanis, ch. 13'}}],
+  strength:{en:"Rugged, low-loss and broadband, with predictable gain — the reference feed for reflectors and the standard-gain horn used to calibrate everything else. The only real trade-off is the length needed for low phase error at high gain.",
+            uk:"Міцний, малих втрат, широкосмуговий, із передбачуваним підсиленням — еталонний опромінювач рефлекторів і рупор-еталон для калібрування. Єдиний компроміс — довжина, потрібна для малої фазової похибки при високому підсиленні."},
+  xrefs:[['#waveguide','Open waveguide','Відкритий хвилевід'],['reflector.html#parabolic','Parabolic feed','Опромінювач параболи'],['array.html#phased-array','Phased array','Фазована решітка']]
+};
+
+// build all sections
+const root=document.getElementById('sections');
+root.innerHTML = sectionHTML(hornMeta) + APER.map(a=>sectionHTML(a)).join('');
+
+// mount horn (bespoke two-plane) + simple ones
+AL.mount('horn',{ methods:hornMeta.methods, controls:[
+  {id:'f',kind:'range',en:'Frequency f',uk:'Частота f',min:1,max:40,step:0.1,value:10,fmt:v=>v.toFixed(1)+' '+AL.unit('GHz')},
+  {id:'a',kind:'range',en:'Aperture a (H-plane)',uk:'Розкрив a (H-площ.)',min:1,max:20,step:0.1,value:6,fmt:v=>v.toFixed(1)+' '+AL.unit('cm')},
+  {id:'b',kind:'range',en:'Aperture b (E-plane)',uk:'Розкрив b (E-площ.)',min:1,max:20,step:0.1,value:4.5,fmt:v=>v.toFixed(1)+' '+AL.unit('cm')},
+  {id:'L',kind:'range',en:'Horn length L',uk:'Довжина рупора L',min:3,max:40,step:0.5,value:12,fmt:v=>v.toFixed(1)+' '+AL.unit('cm')}
+], groupsHTML:hornGroups, planesHTML:hornPlanes(), render:hornRender });
+fillExtras(hornMeta);
+
+APER.forEach(mountSimple);
+
+window.onLangChangePage=function(){ fillExtras(hornMeta); APER.forEach(fillExtras); };
+</script>
+</body>
+</html>
