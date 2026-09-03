@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Теми магістерських робіт з кібербезпеки — каталог</title>
+<meta name="description" content="Каталог із 91 теми магістерських робіт з кібербезпеки та інформаційної безпеки: 10 напрямів, фільтри за складністю, типом роботи, обладнанням і резервуванням.">
+<meta property="og:title" content="Теми магістерських робіт з кібербезпеки">
+<meta property="og:description" content="91 тема у 10 напрямах з проблематикою, метою та планом-анотацією.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#e9edf1;
+  --surface:#ffffff;
+  --surface-2:#f4f6f9;
+  --ink:#0f1a26;
+  --ink-soft:#3c4a58;
+  --muted:#65727f;
+  --rule:#d3dae1;
+  --rule-soft:#e4e9ee;
+  --accent:#0b5c63;
+  --accent-soft:#e0eeee;
+  --l1:#2f7a5e;
+  --l2:#8f6111;
+  --l3:#963240;
+  --star-off:#c8d1da;
+  --focus:#0b5c63;
+  --shell:min(1160px,100% - 3rem);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+body{
+  margin:0;background:var(--paper);color:var(--ink);overflow-wrap:break-word;
+  font-family:"Commissioner",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:16px;line-height:1.55;font-weight:400;
+  font-variant-numeric:tabular-nums;
+}
+h1,h2,h3{margin:0;font-weight:600;line-height:1.2}
+p{margin:0}
+a{color:var(--accent)}
+button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:2px}
+.shell{width:var(--shell);margin-inline:auto}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- stars ---------- */
+.stars{display:inline-flex;gap:1px;line-height:1}
+.stars i{font-style:normal;color:var(--star-off);font-size:.92em}
+.stars[data-l="1"] i:nth-child(-n+1){color:var(--l1)}
+.stars[data-l="2"] i:nth-child(-n+2){color:var(--l2)}
+.stars[data-l="3"] i:nth-child(-n+3){color:var(--l3)}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(2.2rem,5.5vw,4.2rem) 0 2rem}
+.hero__title{
+  font-weight:600;font-size:clamp(1.9rem,5vw,3.2rem);line-height:1.06;
+  letter-spacing:-.015em;max-width:20ch;
+}
+.hero__title span{display:block}
+.hero__title .thin{font-weight:300;color:var(--ink-soft)}
+.hero__lede{margin-top:1.5rem;max-width:62ch;font-size:1.02rem;color:var(--ink-soft)}
+.hero__lede + .hero__lede{margin-top:.7rem}
+
+/* ---------- directions menu ---------- */
+.menu-wrap{margin-top:2.4rem;border-top:1px solid var(--rule)}
+.menu-wrap__head{display:flex;flex-wrap:wrap;gap:.35rem 1.2rem;align-items:baseline;padding:.85rem 0 .9rem}
+.menu-wrap__head h2{font-size:1rem;font-weight:600}
+.menu-wrap__head p{font-size:.86rem;color:var(--muted)}
+.menu{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--rule);min-height:2rem}
+.menu li + li{border-top:1px solid var(--rule-soft)}
+.menu__item{
+  display:flex;align-items:baseline;gap:.9rem;width:100%;text-align:left;
+  padding:.6rem .95rem;transition:background .12s ease;
+}
+.menu__item:hover{background:var(--surface-2)}
+.menu__item[aria-pressed="true"]{background:var(--accent);color:#fff}
+.menu__item[aria-pressed="true"] .menu__count{color:rgba(255,255,255,.8)}
+.menu__letter{font-weight:600;min-width:1.3rem;font-size:.95rem}
+.menu__name{flex:1;font-size:.95rem;line-height:1.35}
+.menu__count{font-size:.82rem;color:var(--muted);white-space:nowrap}
+
+/* ---------- controls ---------- */
+.bar{position:sticky;top:0;z-index:20;background:rgba(233,237,241,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);margin-top:2.4rem}
+.bar__in{display:flex;flex-wrap:wrap;gap:.7rem 1.4rem;align-items:center;padding:.7rem 0}
+.bar__filters{display:flex;flex-wrap:wrap;gap:.7rem 1.4rem;align-items:center}
+.bar__toggle{display:none}
+.bar__toggle[aria-expanded="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.group{display:flex;align-items:center;gap:.3rem}
+.group__label{font-size:.78rem;color:var(--muted);margin-right:.15rem}
+.chip{
+  padding:.32rem .6rem;font-size:.83rem;border:1px solid var(--rule);border-radius:3px;
+  background:var(--surface);color:var(--ink-soft);transition:background .12s ease,border-color .12s ease;
+}
+.chip:hover{border-color:#b6c1cb}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip--lv{padding:.34rem .5rem;line-height:1}
+.chip--lv[aria-pressed="true"]{background:var(--surface);border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.bar__end{margin-left:auto;display:flex;align-items:center;gap:1.2rem;font-size:.83rem;color:var(--muted)}
+.linkish{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+
+/* ---------- list ---------- */
+main{padding-bottom:5rem}
+.dir{margin-top:3.2rem;scroll-margin-top:5rem}
+.dir__head{display:flex;gap:1rem;align-items:flex-start;padding-bottom:.7rem;border-bottom:2px solid var(--ink)}
+.dir__glyph{font-weight:600;font-size:1.35rem;line-height:1.25;min-width:1.4em}
+.dir__title{font-size:1.22rem;line-height:1.25;max-width:44ch}
+.dir__count{margin-left:auto;font-size:.8rem;color:var(--muted);white-space:nowrap;padding-top:.35rem}
+.rows{background:var(--surface);border:1px solid var(--rule);border-top:none}
+.row{border-top:1px solid var(--rule-soft)}
+.rows > .row:first-child{border-top:none}
+.row__btn{display:flex;gap:.9rem;width:100%;text-align:left;padding:.8rem .95rem;align-items:flex-start}
+.row__btn:hover{background:var(--surface-2)}
+.row__id{font-size:.78rem;color:var(--muted);min-width:2.3rem;padding-top:.22rem;letter-spacing:.02em}
+.row__main{flex:1;min-width:0}
+.row__title{display:block;font-size:1rem;font-weight:500;line-height:1.35;max-width:66ch}
+.row--reserved .row__title{color:var(--muted)}
+.row__meta{display:flex;flex-wrap:wrap;gap:.35rem .8rem;align-items:center;margin-top:.35rem;font-size:.8rem;color:var(--muted)}
+.tag{padding:.05rem .38rem;border:1px solid var(--rule);border-radius:2px;font-size:.75rem;color:var(--ink-soft);background:var(--surface-2)}
+.tag--hw{border-color:#c8b18a;background:#fbf4e8;color:#7a5a18}
+.tag--res{border-color:#c3a7ab;background:#faeef0;color:#8a2f3c}
+.row__caret{color:var(--muted);padding-top:.3rem;transition:transform .18s ease}
+.row.is-open .row__caret{transform:rotate(90deg)}
+.row.is-open{background:var(--surface-2)}
+.row.is-open .row__btn:hover{background:transparent}
+.panel{display:none;padding:.2rem .95rem 1.35rem 4.1rem}
+.row.is-open .panel{display:block}
+.panel p{max-width:76ch;font-size:.94rem;color:var(--ink-soft);margin-bottom:.7rem}
+.panel b{color:var(--ink);font-weight:600}
+.panel__foot{display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;align-items:center;margin-top:1rem;padding-top:.7rem;border-top:1px solid var(--rule-soft);font-size:.82rem;color:var(--muted)}
+.panel__foot span{max-width:72ch}
+.share{margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;color:var(--accent);padding:.25rem .4rem;border-radius:3px}
+.share:hover{background:var(--accent-soft)}
+.share svg{display:block}
+.share__done{font-size:.78rem}
+
+.empty,.state{margin-top:3rem;padding:2.5rem 1.5rem;text-align:center;background:var(--surface);border:1px solid var(--rule)}
+.empty h2,.state h2{font-size:1.05rem;margin-bottom:.4rem}
+.empty p,.state p{color:var(--muted);font-size:.92rem;max-width:56ch;margin-inline:auto}
+.state code{background:var(--surface-2);border:1px solid var(--rule);padding:.05rem .3rem;border-radius:2px;font-size:.86em}
+
+/* ---------- reference sections ---------- */
+.ref{margin-top:4.5rem;scroll-margin-top:5rem}
+.ref__head{font-size:1.35rem;padding-bottom:.6rem;border-bottom:2px solid var(--ink);font-weight:600;letter-spacing:-.01em}
+.ref__lede{margin-top:1rem;max-width:76ch;color:var(--ink-soft);font-size:.95rem}
+.deflist{margin-top:1.4rem;display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.deflist > div{background:var(--surface);padding:.8rem .95rem;display:grid;grid-template-columns:11rem 1fr;gap:1rem}
+.deflist dt{font-weight:600;font-size:.92rem;display:flex;align-items:center;gap:.5rem}
+.deflist dd{margin:0;color:var(--ink-soft);font-size:.92rem;max-width:74ch}
+.crit{margin-top:1.4rem;background:var(--surface);border:1px solid var(--rule)}
+.crit__item{padding:.9rem .95rem;border-top:1px solid var(--rule-soft)}
+.crit__item:first-child{border-top:none}
+.crit__top{display:flex;gap:.8rem;align-items:baseline}
+.crit__w{font-weight:600;color:var(--accent);min-width:3rem;font-size:.9rem}
+.crit__t{font-weight:600;font-size:.97rem}
+.crit__item p{margin-top:.35rem;margin-left:3.8rem;color:var(--ink-soft);font-size:.92rem;max-width:74ch}
+table{border-collapse:collapse;width:100%;margin-top:1.4rem;background:var(--surface);font-size:.9rem}
+th,td{border:1px solid var(--rule);padding:.55rem .7rem;text-align:left;vertical-align:top}
+th{background:var(--surface-2);font-weight:600}
+td:first-child{white-space:nowrap;font-weight:600}
+.note{margin-top:1.6rem;padding:1.1rem 1.2rem;background:var(--accent-soft);border-left:3px solid var(--accent);max-width:80ch;font-size:.94rem;color:var(--ink-soft)}
+.note + .note{margin-top:.8rem}
+footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);font-size:.83rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.6rem 1.5rem}
+
+@media (max-width:900px){
+  :root{--shell:min(1160px,100% - 2rem)}
+  .deflist > div{grid-template-columns:1fr;gap:.2rem}
+  .panel{padding-left:.95rem}
+  .crit__item p{margin-left:0}
+}
+@media (max-width:700px){
+  .bar__toggle{display:inline-block}
+  .bar__filters{display:none;width:100%;flex-direction:column;align-items:flex-start;gap:.55rem}
+  .bar.is-open .bar__filters{display:flex}
+  .group{flex-wrap:wrap}
+}
+@media (max-width:560px){
+  .row__btn{padding:.75rem .7rem}
+  .hero__title{max-width:none}
+  .menu__item{gap:.6rem;padding:.55rem .7rem}
+  .share{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+@media print{
+  .bar,.menu-wrap,.row__caret,.share{display:none}
+  body{background:#fff;font-size:11pt}
+  .panel{display:block!important;padding-left:0}
+  .row{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="hero shell">
+  <h1 class="hero__title"><span>Теми магістерських робіт</span><span class="thin">з кібербезпеки</span></h1>
+  <p class="hero__lede">Кожна тема сформульована так, щоб мати вимірюваний результат (артефакт: прототип, набір даних, методика, порівняльне дослідження) і придатність до захисту за 8–10 місяців роботи.</p>
+  <p class="hero__lede">Оберіть напрям у меню або скористайтеся фільтрами. Кожна тема містить проблематику, мету й план-анотацію.</p>
+
+  <nav class="menu-wrap" aria-label="Напрями досліджень">
+    <div class="menu-wrap__head">
+      <h2>Напрями досліджень</h2>
+      <p>Натисніть напрям, щоб залишити тільки його теми</p>
+    </div>
+    <ul class="menu" id="menu"></ul>
+  </nav>
+</header>
+
+<div class="bar">
+  <div class="bar__in shell">
+    <button class="chip bar__toggle" id="filtersToggle" aria-expanded="false" aria-controls="filters">Фільтри</button>
+
+    <div class="bar__filters" id="filters">
+      <div class="group" role="group" aria-label="Складність">
+        <span class="group__label">Складність</span>
+        <button class="chip chip--lv" data-filter="lv:1" aria-pressed="false" title="Складність 1"><span class="stars" data-l="1" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 1</span></button><button class="chip chip--lv" data-filter="lv:2" aria-pressed="false" title="Складність 2"><span class="stars" data-l="2" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 2</span></button><button class="chip chip--lv" data-filter="lv:3" aria-pressed="false" title="Складність 3"><span class="stars" data-l="3" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 3</span></button>
+      </div>
+
+      <div class="group" role="group" aria-label="Тип роботи">
+        <span class="group__label">Тип</span>
+        <button class="chip" data-filter="tp:practical" aria-pressed="false">практична</button>
+        <button class="chip" data-filter="tp:mixed" aria-pressed="false">змішана</button>
+        <button class="chip" data-filter="tp:theoretical" aria-pressed="false">теоретична</button>
+      </div>
+
+      <div class="group" role="group" aria-label="Обладнання">
+        <span class="group__label">Обладнання</span>
+        <button class="chip" data-filter="eq:base" aria-pressed="false">базове</button>
+        <button class="chip" data-filter="eq:special" aria-pressed="false">спеціальне</button>
+      </div>
+
+      <div class="group" role="group" aria-label="Резерв">
+        <span class="group__label">Резерв</span>
+        <button class="chip" data-filter="res:free" aria-pressed="false">вільні</button>
+        <button class="chip" data-filter="res:taken" aria-pressed="false">зарезервовані</button>
+      </div>
+    </div>
+
+    <div class="bar__end">
+      <span id="count">91 тема</span>
+      <button class="linkish" id="toggleAll">Розгорнути всі</button>
+    </div>
+  </div>
+</div>
+
+<main class="shell">
+  <div class="state" id="loading"><h2>Завантаження тем…</h2><p>Дані читаються з файлу topics.json.</p></div>
+
+  <div class="state" id="error" hidden>
+    <h2>Не вдалося прочитати topics.json</h2>
+    <p>Файл <code>topics.json</code> має лежати поруч із <code>index.html</code>, а сторінку треба відкривати через вебсервер. Локально це робить команда <code>python3 -m http.server</code> у теці з файлами; на GitHub Pages усе працює одразу.</p>
+  </div>
+
+  <div id="list"></div>
+
+  <div class="empty" id="empty" hidden>
+    <h2>За такими умовами тем немає</h2>
+    <p>Натисніть активні фільтри ще раз, щоб зняти частину умов.</p>
+  </div>
+
+  <section class="ref" id="legend">
+    <h2 class="ref__head">Як читати картку теми</h2>
+    <p class="ref__lede">Кожна тема позначена рівнем складності, типом роботи й вимогами до обладнання. Ці позначки — орієнтир для планування часу й ресурсів, а не оцінка майбутньої роботи.</p>
+    <dl class="deflist"><div><dt><span class="stars" data-l="1" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span> Складність 1</dt><dd>Робота з відомою методикою й доступними даними. Основна цінність — коректне застосування, порівняння, узагальнення. Ризик недосягнення результату низький.</dd></div><div><dt><span class="stars" data-l="2" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span> Складність 2</dt><dd>Потрібна власна реалізація прототипу або побудова експериментального стенда, робота з нестандартними даними, самостійне проєктування методики. Базовий рівень для магістерської роботи.</dd></div><div><dt><span class="stars" data-l="3" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span> Складність 3</dt><dd>Потрібні глибокі спеціальні знання (криптоаналіз, реверс-інжиніринг, формальна верифікація, апаратні атаки), рідкісне обладнання або значний обсяг інженерної роботи. Висока ймовірність публікації, але й вищий ризик.</dd></div></dl>
+    <dl class="deflist" style="margin-top:1rem"><div><dt>Теоретична</dt><dd>аналітичне дослідження, моделі, методики, порівняльний та нормативний аналіз</dd></div><div><dt>Практична</dt><dd>прототип, стенд, експеримент, вимірювання</dd></div><div><dt>Теоретично-практична (змішана)</dt><dd>методика + її експериментальна перевірка (найтиповіший формат).</dd></div></dl>
+    <div class="note"><b>Обладнання.</b> якщо зазначено «базове» — достатньо персонального комп&#x27;ютера з можливістю віртуалізації (16+ ГБ ОЗП), доступу до хмарного/безкоштовного тарифу та відкритого ПЗ. Інше обладнання вказано явно.</div>
+    <div class="note"><b>Зарезервовано.</b> Тему вже закріплено за здобувачем, тож вона доступна лише для ознайомлення. Щоб бачити тільки доступні теми, увімкніть фільтр «вільні».</div>
+  </section>
+
+  <section class="ref" id="criteria">
+    <h2 class="ref__head">Критерії оцінювання</h2>
+    <p class="ref__lede">Критерії застосовні до всіх тем; для практичних і теоретичних робіт зміщується вага (для практичних вагоміші «Технічна реалізація» та «Експеримент», для теоретичних — «Аналіз стану питання» та «Наукова аргументація»).</p>
+    <div class="crit"><div class="crit__item"><div class="crit__top"><span class="crit__w">10%</span><span class="crit__t">Актуальність і постановка задачі</span></div><p>Проблема сформульована чітко, її актуальність обґрунтована посиланнями на сучасні джерела, стан загроз чи регуляторні вимоги. Мета, об&#x27;єкт, предмет і завдання узгоджені між собою; сформульовано перевірювані дослідницькі питання або гіпотези. Окреслено межі роботи (що входить і що свідомо лишається поза розглядом).</p></div><div class="crit__item"><div class="crit__top"><span class="crit__w">15%</span><span class="crit__t">Аналіз стану питання</span></div><p>Огляд літератури повний, актуальний і критичний, а не описовий: джерела зіставлені, показано розбіжності й прогалини. Переважають першоджерела (рецензовані публікації, стандарти, офіційні документи). Явно сформульовано, який саме розрив у знаннях закриває робота (наукова новизна) і чим підхід відрізняється від наявних.</p></div><div class="crit__item"><div class="crit__top"><span class="crit__w">15%</span><span class="crit__t">Обґрунтованість методології</span></div><p>Обраний метод відповідає меті; пояснено, чому саме він, а не альтернативи. Для експериментів визначено змінні, контрольні умови, метрики й критерії успіху до початку вимірювань. Для робіт з даними описано походження, підготовку, обмеження та ризик витоку між навчальною й тестовою вибірками. Методологія викладена так, щоб роботу можна було відтворити.</p></div><div class="crit__item"><div class="crit__top"><span class="crit__w">20%</span><span class="crit__t">Технічна реалізація / глибина аналізу</span></div><p>Для практичних робіт: коректність і якість реалізації (архітектура, читабельність, тестування, відтворюваність збірки й запуску), відповідність прототипу поставленій задачі. Для теоретичних: глибина, строгість і несуперечливість аналізу, коректність моделей і доведень. Складність фактично виконаного відповідає магістерському рівню й заявленій категорії складності.</p></div><div class="crit__item"><div class="crit__top"><span class="crit__w">20%</span><span class="crit__t">Експеримент, результати та їх достовірність</span></div><p>Результати отримано за описаною методикою й підтверджують (або спростовують) гіпотези. Обсяг даних достатній; де доречно — наведено повторюваність, варіативність і статистичну значущість, а не поодинокі запуски. Проведено порівняння з базовими підходами чи наявними рішеннями. Обмеження й загрози валідності чесно проговорені; негативні результати не приховані.</p></div><div class="crit__item"><div class="crit__top"><span class="crit__w">10%</span><span class="crit__t">Наукова аргументація та висновки</span></div><p>Висновки випливають із результатів і не виходять за їх межі (немає надузагальнень). Відповіді на дослідницькі питання надано прямо. Внесок роботи сформульовано конкретно; окреслено напрями подальших досліджень і практичну застосовність.</p></div><div class="crit__item"><div class="crit__top"><span class="crit__w">5%</span><span class="crit__t">Оформлення, мова та академічна доброчесність</span></div><p>Структура відповідає вимогам до кваліфікаційної роботи; рисунки, таблиці й формули пронумеровані, підписані й згадані в тексті. Мова точна, термінологія послідовна. Цитування коректне й повне; текстові й ілюстративні запозичення оформлені за правилами; результат перевірки на запозичення в межах норм закладу. Використання генеративних інструментів (за наявності) задеклароване відповідно до політики закладу.</p></div><div class="crit__item"><div class="crit__top"><span class="crit__w">5%</span><span class="crit__t">Етика, правові аспекти та безпека досліджень</span></div><p>Дослідження з атакувальним складником виконані виключно у власному/ізольованому середовищі або з письмового дозволу власника систем. Дотримано принципів мінімізації шкоди й відповідального розкриття вразливостей. Роботи з людьми проведені за етичним протоколом (поінформована згода, знеособлення, погодження за потреби). Роботи з персональними даними відповідають вимогам законодавства; зразки шкідливого ПЗ й чутливі дані оброблялися безпечно.</p></div></div>
+
+    <h3 style="margin-top:2rem;font-size:1.05rem">Підсумкова шкала</h3>
+    <table>
+      <thead><tr><th>Сума</th><th>Оцінка</th><th>Тлумачення</th></tr></thead>
+      <tbody><tr><td>90–100</td><td>A - Відмінно</td><td>Відмінний рівень знань (умінь) в межах обов’язкового матеріалу з можливими незначними недоліками.</td></tr><tr><td>82-89</td><td>B - Дуже добре</td><td>Достатньо високий рівень знань (умінь) в межах обов’язкового матеріалу без суттєвих (грубих).</td></tr><tr><td>75-81</td><td>C - Добре</td><td>В цілому добрий рівень знань (умінь) з незначною кількістю помилок.</td></tr><tr><td>69-74</td><td>D - Задовільно</td><td>Посередній рівень знань (умінь) із значною кількістю недоліків, достатній для подальшого навчання.</td></tr><tr><td>60-68</td><td>E - Достатньо</td><td>Мінімально можливий допустимий рівень.</td></tr><tr><td>35-59</td><td>FX - Незадовільно з можливістю повторного складання</td><td>Незадовільний рівень знань, з можливістю повторного перескладання за умови належного самостійного доопрацювання.</td></tr><tr><td>1-34</td><td>F - Незадовільно з обов’язковим повторним вивченням курсу</td><td>Досить низький рівень знань (умінь), що вимагає повторного вивчення дисципліни.</td></tr></tbody>
+    </table>
+
+    <div class="note" style="margin-top:2rem"><b>Як обрати тему.</b> Оптимальна робота — та, де збігаються три чинники: тема відповідає інтересам і наявним компетенціям здобувача; необхідне обладнання й дані реально доступні впродовж навчання; результат має вимірюваний артефакт (прототип, набір даних, методику чи порівняльне дослідження). Роботи складності 3 й теми, що потребують спеціального обладнання, доцільно брати за умови завчасного доступу до ресурсів і готовності до вищого ризику; складність 1–2 надійніша за обмеженого часу. Для будь-якої теми з атакувальним складником етичні й правові рамки слід узгодити з керівником до початку практичної частини.</div>
+  </section>
+</main>
+
+<footer class="shell">
+  <span>91 тема у 10 напрямах</span>
+  <span><a href="#legend">Позначки</a></span>
+  <span><a href="#criteria">Критерії оцінювання</a></span>
+</footer>
+
+<script>
+
+const GROUP = {
+  'Практична':'practical',
+  'Теоретична':'theoretical',
+  'Змішана':'mixed',
+  'Теоретично-практична':'mixed',
+  'Теоретично-практична (змішана)':'mixed'
+};
+const state = {lv:new Set(), tp:new Set(), eq:'all', res:'all', dir:new Set()};
+let DIRS = [], all = [], TOTAL = 0;
+
+function plural(n){
+  const d10 = n % 10, d100 = n % 100;
+  if (d10 === 1 && d100 !== 11) return n + ' тема';
+  if (d10 >= 2 && d10 <= 4 && (d100 < 12 || d100 > 14)) return n + ' теми';
+  return n + ' тем';
+}
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const stars = l => `<span class="stars" data-l="${l}" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span>`;
+const SHARE_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 13.4l7.2 4.2M15.6 6.4l-7.2 4.2"/></svg>';
+
+const listEl = document.getElementById('list');
+const countEl = document.getElementById('count');
+const emptyEl = document.getElementById('empty');
+const loadingEl = document.getElementById('loading');
+const errorEl = document.getElementById('error');
+const menuEl = document.getElementById('menu');
+
+/* ---- load ---- */
+fetch('topics.json', {cache:'no-cache'})
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(init)
+  .catch(() => { loadingEl.hidden = true; errorEl.hidden = false; });
+
+function init(doc){
+  DIRS = doc.directions || [];
+  DIRS.forEach(d => d.topics.forEach(t => {
+    t.group = GROUP[t.type] || 'mixed';
+    all.push(Object.assign({dir:d.letter}, t));
+  }));
+  TOTAL = all.length;
+
+  menuEl.innerHTML = DIRS.map(d => `
+    <li><button class="menu__item" data-letter="${d.letter}" aria-pressed="false">
+      <span class="menu__letter">${esc(d.letter)}</span>
+      <span class="menu__name">${esc(d.title)}</span>
+      <span class="menu__count">${d.topics.length}</span>
+    </button></li>`).join('');
+
+  listEl.innerHTML = DIRS.map(d => `
+    <section class="dir" id="dir-${d.letter}" data-dir="${d.letter}">
+      <div class="dir__head">
+        <div class="dir__glyph">${esc(d.letter)}</div>
+        <h2 class="dir__title">${esc(d.title)}</h2>
+        <div class="dir__count"><span class="js-dcount">${d.topics.length}</span> / ${d.topics.length}</div>
+      </div>
+      <div class="rows">
+        ${d.topics.map(t => `
+        <article class="row${t.reserved ? ' row--reserved' : ''}" id="${esc(t.id)}">
+          <button class="row__btn" aria-expanded="false" aria-controls="p-${esc(t.id)}">
+            <span class="row__id">${esc(t.id)}</span>
+            <span class="row__main">
+              <span class="row__title">${esc(t.title)}</span>
+              <span class="row__meta">
+                ${stars(t.complexity)}
+                <span class="vh">Складність ${t.complexity} з 3.</span>
+                <span>${esc(String(t.type).toLowerCase())}</span>
+                ${t.base_equipment === false ? '<span class="tag tag--hw">спеціальне обладнання</span>' : ''}
+                ${t.reserved ? '<span class="tag tag--res">зарезервовано</span>' : ''}
+              </span>
+            </span>
+            <span class="row__caret" aria-hidden="true">›</span>
+          </button>
+          <div class="panel" id="p-${esc(t.id)}">
+            <p><b>Проблематика.</b> ${esc(t.problem)}</p>
+            <p><b>Мета.</b> ${esc(t.goal)}</p>
+            <p><b>План-анотація.</b> ${esc(t.plan)}</p>
+            <div class="panel__foot">
+              <span>Обладнання: ${esc(t.equipment)}</span>
+              ${t.reserved && t.reserved_by ? `<span>Зарезервовано: ${esc(t.reserved_by)}</span>` : ''}
+              <button class="share" data-share="${esc(t.id)}" aria-label="Поділитися посиланням на тему ${esc(t.id)}" title="Поділитися">${SHARE_ICON}</button>
+            </div>
+          </div>
+        </article>`).join('')}
+      </div>
+    </section>`).join('');
+
+  loadingEl.hidden = true;
+  apply();
+  openHash();
+}
+
+/* ---- filtering ---- */
+function match(t){
+  if (state.lv.size && !state.lv.has(String(t.complexity))) return false;
+  if (state.tp.size && !state.tp.has(t.group)) return false;
+  if (state.eq === 'base' && t.base_equipment === false) return false;
+  if (state.eq === 'special' && t.base_equipment !== false) return false;
+  if (state.res === 'free' && t.reserved) return false;
+  if (state.res === 'taken' && !t.reserved) return false;
+  if (state.dir.size && !state.dir.has(t.dir)) return false;
+  return true;
+}
+
+function apply(){
+  let shown = 0;
+  DIRS.forEach(d => {
+    const sec = document.getElementById('dir-' + d.letter);
+    let n = 0;
+    d.topics.forEach(t => {
+      const ok = match(Object.assign({dir:d.letter}, t));
+      document.getElementById(t.id).hidden = !ok;
+      if (ok) n++;
+    });
+    sec.querySelector('.js-dcount').textContent = n;
+    sec.hidden = n === 0;
+    shown += n;
+  });
+  countEl.textContent = shown === TOTAL ? plural(TOTAL) : `${shown} з ${TOTAL}`;
+  emptyEl.hidden = shown !== 0;
+}
+
+/* ---- controls ---- */
+document.querySelectorAll('[data-filter]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const [kind, val] = btn.dataset.filter.split(':');
+    if (kind === 'eq' || kind === 'res'){
+      state[kind] = state[kind] === val ? 'all' : val;
+      document.querySelectorAll('[data-filter^="' + kind + ':"]').forEach(b =>
+        b.setAttribute('aria-pressed', String(b.dataset.filter === kind + ':' + state[kind])));
+    } else {
+      const set = state[kind];
+      set.has(val) ? set.delete(val) : set.add(val);
+      btn.setAttribute('aria-pressed', String(set.has(val)));
+    }
+    apply();
+  });
+});
+
+menuEl.addEventListener('click', e => {
+  const btn = e.target.closest('[data-letter]');
+  if (!btn) return;
+  const L = btn.dataset.letter;
+  state.dir.has(L) ? state.dir.delete(L) : state.dir.add(L);
+  btn.setAttribute('aria-pressed', String(state.dir.has(L)));
+  apply();
+  if (state.dir.has(L)) document.getElementById('dir-' + L).scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* ---- share / expand ---- */
+listEl.addEventListener('click', e => {
+  const shareBtn = e.target.closest('[data-share]');
+  if (shareBtn){
+    const id = shareBtn.dataset.share;
+    const url = location.origin + location.pathname + '#' + id;
+    const title = document.getElementById(id).querySelector('.row__title').textContent;
+    history.replaceState(null, '', '#' + id);
+    if (navigator.share){
+      navigator.share({title, url}).catch(() => {});
+    } else if (navigator.clipboard){
+      navigator.clipboard.writeText(url).then(() => flash(shareBtn)).catch(() => flash(shareBtn));
+    } else {
+      flash(shareBtn);
+    }
+    return;
+  }
+  const btn = e.target.closest('.row__btn');
+  if (!btn) return;
+  const row = btn.closest('.row');
+  const open = row.classList.toggle('is-open');
+  btn.setAttribute('aria-expanded', String(open));
+});
+
+function flash(btn){
+  if (btn.querySelector('.share__done')) return;
+  const s = document.createElement('span');
+  s.className = 'share__done';
+  s.textContent = 'Скопійовано';
+  btn.appendChild(s);
+  setTimeout(() => s.remove(), 1600);
+}
+
+let allOpen = false;
+document.getElementById('toggleAll').addEventListener('click', e => {
+  allOpen = !allOpen;
+  document.querySelectorAll('.row').forEach(r => {
+    r.classList.toggle('is-open', allOpen);
+    r.querySelector('.row__btn').setAttribute('aria-expanded', String(allOpen));
+  });
+  e.target.textContent = allOpen ? 'Згорнути всі' : 'Розгорнути всі';
+});
+
+/* ---- mobile filters ---- */
+const bar = document.querySelector('.bar');
+const fToggle = document.getElementById('filtersToggle');
+fToggle.addEventListener('click', () => {
+  const open = bar.classList.toggle('is-open');
+  fToggle.setAttribute('aria-expanded', String(open));
+});
+
+/* ---- deep link ---- */
+function openHash(){
+  const id = decodeURIComponent(location.hash.slice(1));
+  const row = id && document.getElementById(id);
+  if (row && row.classList.contains('row')){
+    row.classList.add('is-open');
+    row.querySelector('.row__btn').setAttribute('aria-expanded','true');
+    row.scrollIntoView({block:'center'});
+  }
+}
+window.addEventListener('hashchange', openHash);
+
+</script>
+</body>
+</html>
