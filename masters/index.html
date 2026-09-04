@@ -101,9 +101,12 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 }
 .chip:hover{border-color:#b6c1cb}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
-.chip--all[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
+.chip[aria-pressed="false"]{background:transparent;border-style:dashed;color:var(--muted)}
+.chip[aria-pressed="false"]:hover{border-style:solid;background:var(--surface)}
 .chip--lv{padding:.34rem .5rem;line-height:1}
-.chip--lv[aria-pressed="true"]{background:var(--surface);border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.chip--lv[aria-pressed="true"]{background:var(--surface);border-color:var(--ink);border-style:solid;box-shadow:inset 0 0 0 1px var(--ink)}
+.chip--lv[aria-pressed="false"] .stars i{color:var(--star-off)}
+.chip--lv[aria-pressed="false"]{opacity:.5}
 .bar__end{margin-left:auto;display:flex;align-items:center;gap:1.2rem;font-size:.83rem;color:var(--muted)}
 .linkish{color:var(--accent);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 
@@ -211,7 +214,7 @@ footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);fo
 <header class="hero shell">
   <h1 class="hero__title"><span>Теми магістерських робіт</span><span class="thin">з кібербезпеки</span></h1>
   <p class="hero__lede">Кожна тема сформульована так, щоб мати вимірюваний результат (артефакт: прототип, набір даних, методика, порівняльне дослідження) і придатність до захисту за 8–10 місяців роботи.</p>
-  <p class="hero__lede">Оберіть напрям у меню або скористайтеся фільтрами. Кожна тема містить проблематику, мету й план-анотацію.</p>
+  <p class="hero__lede">Оберіть напрям у меню або зніміть у фільтрах те, що вам не підходить. Кожна тема містить проблематику, мету й план-анотацію.</p>
 
   <nav class="menu-wrap" aria-label="Напрями досліджень">
     <div class="menu-wrap__head">
@@ -229,30 +232,26 @@ footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);fo
     <div class="bar__filters" id="filters">
       <div class="group" role="group" aria-label="Складність">
         <span class="group__label">Складність</span>
-        <button class="chip chip--all" data-filter="lv:all" aria-pressed="true">усі</button>
-        <button class="chip chip--lv" data-filter="lv:1" aria-pressed="false" title="Складність 1"><span class="stars" data-l="1" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 1</span></button><button class="chip chip--lv" data-filter="lv:2" aria-pressed="false" title="Складність 2"><span class="stars" data-l="2" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 2</span></button><button class="chip chip--lv" data-filter="lv:3" aria-pressed="false" title="Складність 3"><span class="stars" data-l="3" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 3</span></button>
+        <button class="chip chip--lv" data-filter="lv:1" aria-pressed="true" title="Складність 1"><span class="stars" data-l="1" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 1</span></button><button class="chip chip--lv" data-filter="lv:2" aria-pressed="true" title="Складність 2"><span class="stars" data-l="2" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 2</span></button><button class="chip chip--lv" data-filter="lv:3" aria-pressed="true" title="Складність 3"><span class="stars" data-l="3" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 3</span></button>
       </div>
 
       <div class="group" role="group" aria-label="Тип роботи">
         <span class="group__label">Тип</span>
-        <button class="chip chip--all" data-filter="tp:all" aria-pressed="true">усі</button>
-        <button class="chip" data-filter="tp:practical" aria-pressed="false">практична</button>
-        <button class="chip" data-filter="tp:mixed" aria-pressed="false">змішана</button>
-        <button class="chip" data-filter="tp:theoretical" aria-pressed="false">теоретична</button>
+        <button class="chip" data-filter="tp:practical" aria-pressed="true">практична</button>
+        <button class="chip" data-filter="tp:mixed" aria-pressed="true">змішана</button>
+        <button class="chip" data-filter="tp:theoretical" aria-pressed="true">теоретична</button>
       </div>
 
       <div class="group" role="group" aria-label="Обладнання">
         <span class="group__label">Обладнання</span>
-        <button class="chip chip--all" data-filter="eq:all" aria-pressed="true">усі</button>
-        <button class="chip" data-filter="eq:base" aria-pressed="false">базове</button>
-        <button class="chip" data-filter="eq:special" aria-pressed="false">спеціальне</button>
+        <button class="chip" data-filter="eq:base" aria-pressed="true">базове</button>
+        <button class="chip" data-filter="eq:special" aria-pressed="true">спеціальне</button>
       </div>
 
       <div class="group" role="group" aria-label="Резерв">
         <span class="group__label">Резерв</span>
-        <button class="chip chip--all" data-filter="res:all" aria-pressed="true">усі</button>
-        <button class="chip" data-filter="res:free" aria-pressed="false">вільні</button>
-        <button class="chip" data-filter="res:taken" aria-pressed="false">зарезервовані</button>
+        <button class="chip" data-filter="res:free" aria-pressed="true">вільні</button>
+        <button class="chip" data-filter="res:taken" aria-pressed="true">зарезервовані</button>
       </div>
     </div>
 
@@ -275,7 +274,7 @@ footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);fo
 
   <div class="empty" id="empty" hidden>
     <h2>За такими умовами тем немає</h2>
-    <p>Спробуйте послабити умови — наприклад, повернути «усі» в котромусь із фільтрів.</p>
+    <p>Схоже, у якійсь групі фільтрів знято всі варіанти. Увімкніть потрібні знову або поверніть початковий стан.</p>
     <button class="chip" id="resetAll">Показати всі теми</button>
   </div>
 
@@ -285,7 +284,7 @@ footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);fo
     <dl class="deflist"><div><dt><span class="stars" data-l="1" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span> Складність 1</dt><dd>Робота з відомою методикою й доступними даними. Основна цінність — коректне застосування, порівняння, узагальнення. Ризик недосягнення результату низький.</dd></div><div><dt><span class="stars" data-l="2" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span> Складність 2</dt><dd>Потрібна власна реалізація прототипу або побудова експериментального стенда, робота з нестандартними даними, самостійне проєктування методики. Базовий рівень для магістерської роботи.</dd></div><div><dt><span class="stars" data-l="3" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span> Складність 3</dt><dd>Потрібні глибокі спеціальні знання (криптоаналіз, реверс-інжиніринг, формальна верифікація, апаратні атаки), рідкісне обладнання або значний обсяг інженерної роботи. Висока ймовірність публікації, але й вищий ризик.</dd></div></dl>
     <dl class="deflist" style="margin-top:1rem"><div><dt>Теоретична</dt><dd>аналітичне дослідження, моделі, методики, порівняльний та нормативний аналіз</dd></div><div><dt>Практична</dt><dd>прототип, стенд, експеримент, вимірювання</dd></div><div><dt>Теоретично-практична (змішана)</dt><dd>методика + її експериментальна перевірка (найтиповіший формат).</dd></div></dl>
     <div class="note"><b>Обладнання.</b> якщо зазначено «базове» — достатньо персонального комп&#x27;ютера з можливістю віртуалізації (16+ ГБ ОЗП), доступу до хмарного/безкоштовного тарифу та відкритого ПЗ. Інше обладнання вказано явно.</div>
-    <div class="note"><b>Зарезервовано.</b> Тему вже закріплено за здобувачем, тож вона доступна лише для ознайомлення. У меню напрямів рахуються тільки вільні теми; щоб сховати зайняті зі списку, увімкніть фільтр «вільні».</div>
+    <div class="note"><b>Зарезервовано.</b> Тему вже закріплено за здобувачем, тож вона доступна лише для ознайомлення. У меню напрямів рахуються тільки вільні теми; щоб сховати зайняті зі списку, зніміть у фільтрах варіант «зарезервовані».</div>
   </section>
 
   <section class="ref" id="criteria">
@@ -318,8 +317,10 @@ const GROUP = {
   'Теоретично-практична':'mixed',
   'Теоретично-практична (змішана)':'mixed'
 };
-/* lv, tp: множинний вибір (порожня множина = усі). eq, res: один із варіантів. dir: один напрям або null. */
-const state = {lv:new Set(), tp:new Set(), eq:'all', res:'all', dir:null};
+/* Усі чотири групи — множинний вибір; на старті ввімкнені всі варіанти.
+   Знятий варіант ховає відповідні теми. dir: один напрям або null. */
+const OPTS = {lv:['1','2','3'], tp:['practical','mixed','theoretical'], eq:['base','special'], res:['free','taken']};
+const state = {lv:new Set(OPTS.lv), tp:new Set(OPTS.tp), eq:new Set(OPTS.eq), res:new Set(OPTS.res), dir:null};
 let DIRS = [], TOTAL = 0;
 
 function plural(n){
@@ -414,12 +415,10 @@ function init(doc){
 
 /* ---- фільтрація ---- */
 function match(t){
-  if (state.lv.size && !state.lv.has(String(t.complexity))) return false;
-  if (state.tp.size && !state.tp.has(t.group)) return false;
-  if (state.eq === 'base' && t.base_equipment === false) return false;
-  if (state.eq === 'special' && t.base_equipment !== false) return false;
-  if (state.res === 'free' && t.reserved) return false;
-  if (state.res === 'taken' && !t.reserved) return false;
+  if (!state.lv.has(String(t.complexity))) return false;
+  if (!state.tp.has(t.group)) return false;
+  if (!state.eq.has(t.base_equipment === false ? 'special' : 'base')) return false;
+  if (!state.res.has(t.reserved ? 'taken' : 'free')) return false;
   return true;
 }
 
@@ -444,17 +443,14 @@ function apply(){
 }
 
 function activeCount(){
-  return (state.lv.size ? 1 : 0) + (state.tp.size ? 1 : 0) +
-         (state.eq !== 'all' ? 1 : 0) + (state.res !== 'all' ? 1 : 0) + (state.dir ? 1 : 0);
+  return Object.keys(OPTS).reduce((n, k) => n + (state[k].size < OPTS[k].length ? 1 : 0), 0)
+         + (state.dir ? 1 : 0);
 }
 
 function syncChips(){
   document.querySelectorAll('[data-filter]').forEach(b => {
     const [kind, val] = b.dataset.filter.split(':');
-    let on;
-    if (kind === 'lv' || kind === 'tp') on = (val === 'all') ? state[kind].size === 0 : state[kind].has(val);
-    else on = state[kind] === val;
-    b.setAttribute('aria-pressed', String(on));
+    b.setAttribute('aria-pressed', String(state[kind].has(val)));
   });
   menuEl.querySelectorAll('[data-letter]').forEach(b =>
     b.setAttribute('aria-pressed', String((b.dataset.letter || null) === state.dir)));
@@ -473,12 +469,7 @@ function keepInView(force){
 document.querySelectorAll('[data-filter]').forEach(btn => {
   btn.addEventListener('click', () => {
     const [kind, val] = btn.dataset.filter.split(':');
-    if (kind === 'lv' || kind === 'tp'){
-      if (val === 'all') state[kind].clear();
-      else state[kind].has(val) ? state[kind].delete(val) : state[kind].add(val);
-    } else {
-      state[kind] = val;
-    }
+    state[kind].has(val) ? state[kind].delete(val) : state[kind].add(val);
     apply();
     keepInView(false);
   });
@@ -494,7 +485,8 @@ menuEl.addEventListener('click', e => {
 });
 
 document.getElementById('resetAll').addEventListener('click', () => {
-  state.lv.clear(); state.tp.clear(); state.eq = 'all'; state.res = 'all'; state.dir = null;
+  Object.keys(OPTS).forEach(k => { state[k] = new Set(OPTS[k]); });
+  state.dir = null;
   apply();
   keepInView(true);
 });
