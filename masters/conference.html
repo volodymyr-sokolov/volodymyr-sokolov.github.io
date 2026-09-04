@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Студентська наукова конференція «Безпека інформаційно-комунікаційних систем» (БІКС)</title>
+<meta name="description" content="Студентська наукова конференція «Безпека інформаційно-комунікаційних систем» (БІКС), Київський столичний університет імені Бориса Грінченка. Вимоги до тез і шаблон LaTeX.">
+<meta property="og:title" content="Конференція БІКС">
+<meta property="og:description" content="Безпека інформаційно-комунікаційних систем — студентська наукова конференція та шаблон тез.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="nav" aria-label="Розділи сайту"><div class="nav__in shell"><a href="index.html">Теми магістерських робіт</a><a href="udk.html">Підбір УДК</a><a href="conference.html" aria-current="page">Конференція БІКС</a></div></nav>
+
+<header class="hero shell">
+  <h1 class="hero__title"><span>Безпека інформаційно-комунікаційних систем</span></h1>
+  <p class="hero__lede">Студентська наукова конференція БІКС. Київський столичний університет імені Бориса Грінченка, Київ, Україна, 26 жовтня 2025 року.</p>
+</header>
+
+<main class="shell">
+  <section class="ref" style="margin-top:1rem">
+    <h2 class="ref__head">Про конференцію</h2>
+    <p class="ref__lede">Метою конференції «Безпека інформаційно-комунікаційних систем» є створення платформи для магістрантів та аспірантів напрямку навчання 12 «Інформаційні системи», де вони можуть обговорити сучасні тенденції у сфері кібербезпеки та управління ризиками, захисту критичної інфраструктури, приватності безпроводових і сенсорних мереж, безпеки IoT та IoMT, методів маршрутизації для забезпечення кіберзахисту, а також досліджень у напрямах кібербезпеки, штучного інтелекту, машинного навчання, протидії діпфейк-атакам і сучасної криптографії.</p>
+    <p class="ref__lede">Конференція заохочує подання наукових праць, присвячених актуальним питанням кібербезпеки, та вітає нові застосування відповідних методів для розв'язання реальних прикладних завдань.</p>
+
+    <dl class="imprint">
+      <div><dt>Повна назва</dt><dd>Студентська наукова конференція «Безпека інформаційно-комунікаційних систем» (БІКС)</dd></div>
+      <div><dt>Редактор</dt><dd>В. Соколов</dd></div>
+      <div><dt>Організатор</dt><dd>Київський столичний університет імені Бориса Грінченка, факультет інформаційних технологій та математики</dd></div>
+      <div><dt>Дата проведення</dt><dd>26 жовтня 2025 року</dd></div>
+      <div><dt>УДК</dt><dd class="mono"><a class="udc" href="udk.html?q=316.776%3A004.056">316.776:004.056</a></dd></div>
+      <div><dt>ББК</dt><dd class="mono">16.8</dd></div>
+      <div><dt>Шифр видання</dt><dd class="mono">Б402</dd></div>
+      <div><dt>Рекомендовано до видання</dt><dd>Вченою радою факультету інформаційних технологій та математики Київського столичного університету імені Бориса Грінченка, протокол №10 від 19.11.2025</dd></div>
+      <div><dt>Адреса</dt><dd>вул. Бульварно-Кудрявська, 18/2, 04053, Київ, Україна</dd></div>
+      <div><dt>Ліцензія</dt><dd><a href="https://creativecommons.org/licenses/by/4.0/" rel="license">Creative Commons Attribution 4.0 International (CC BY 4.0)</a></dd></div>
+    </dl>
+  </section>
+
+  <section class="ref" id="template">
+    <h2 class="ref__head">Шаблон тез</h2>
+    <p class="ref__lede">Тези готують у LaTeX за класом <span class="mono">sics.cls</span>. Архів містить приклад із поясненням усіх елементів оформлення: титульний блок, анотації двома мовами, формули, таблиці, рисунки та бібліографію в BibTeX.</p>
+
+    <a class="dl" href="sics-template.zip" download><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M5 20h14"/></svg> Завантажити архів із прикладом</a>
+
+    <div class="filelist"><div><code>paper-example.tex</code><span>головний документ, який ви редагуєте</span></div><div><code>sics.cls</code><span>користувацький клас конференції (обов&#x27;язковий)</span></div><div><code>sics.bst</code><span>стиль бібліографії (обов&#x27;язковий)</span></div><div><code>sources.bib</code><span>ваша бібліографія у форматі BibTeX</span></div><div><code>fig1.png, fig2.jpg</code><span>рисунки, на які посилається головний документ</span></div></div>
+
+    <details class="fold">
+      <summary>Структура та обсяг публікації</summary>
+      <div class="fold__body">
+        <p style="margin-top:0">Загальний обсяг публікації — шість сторінок шаблону. Структура будується за схемою IMRAD (Introduction, Methods, Results, and Discussion). Обсяг анотації — 500–600 символів із пробілами.</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Розділ</th><th>Обсяг, стор.</th><th>Коментарі</th></tr></thead>
+            <tbody><tr><td>Назва, анотація, ключові слова</td><td class="c">≈ 2/3</td><td></td></tr><tr><td>Вступ</td><td class="c">≈ 2/3</td><td>актуальність, новизна, мета, предмет, об&#x27;єкт, часткові завдання</td></tr><tr><td>Методи та моделі</td><td class="c">≈ 2/3</td><td>формули, алгоритми, схеми, діаграми</td></tr><tr><td>Результати</td><td class="c">≈ 1 2/3</td><td></td></tr><tr><td>Обговорення</td><td class="c">≈ 2/3</td><td>самокритика, порівняння, обмеження</td></tr><tr><td>Висновки</td><td class="c">≈ 1/2</td><td>2–3 абзаци</td></tr><tr><td>Подяки та гранти</td><td class="c">≈ 1/8</td><td>опційно</td></tr><tr><td>Джерела</td><td class="c">≈ 1</td><td>8–10 джерел</td></tr><tr><td>Додатки</td><td class="c">—</td><td>краще не застосовувати</td></tr></tbody>
+          </table>
+        </div>
+        <p>Рекомендовано не більше трьох рисунків: схема або алгоритм, скріншот або фотографія, графік або діаграма. Скріншоти командного рядка чи коду без графічних елементів наводять як лістинги.</p>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>Правила оформлення</summary>
+      <div class="fold__body">
+        <ul>
+          <li>Першим автором вказується магістрант, другим — його науковий керівник.</li>
+          <li>Індекс УДК тез визначають за міжнародними таблицями; попередній варіант можна підібрати на <a href="udk.html">сторінці підбору УДК</a>.</li>
+          <li>Назва, анотація та ключові слова подаються українською та англійською мовами; ключових слів — до п'яти.</li>
+          <li>Усі джерела вносяться у файл <span class="mono">sources.bib</span> у форматі BibTeX; посилання на використані джерела обов'язкові.</li>
+          <li>Використання додаткових пакетів дозволяється лише тоді, коли задум не реалізується наявними у шаблоні засобами.</li>
+          <li>Звіт подається як проєкт разом зі згенерованим PDF, краще у вигляді незапароленого ZIP-архіву.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="fold">
+      <summary>Як зібрати PDF</summary>
+      <div class="fold__body">
+        <p style="margin-top:0">Документ збирається XeLaTeX. Для офлайн-редагування підходить MiKTeX разом із TeXstudio, для онлайн — Overleaf (у ньому потрібно вручну вибрати компілятор XeLaTeX). Найпростіший спосіб із командного рядка:</p>
+        <pre>latexmk -xelatex -interaction=nonstopmode paper-example.tex</pre>
+        <p>Якщо latexmk недоступний, той самий результат дає ручна послідовність із чотирьох проходів:</p>
+        <pre>xelatex -interaction=nonstopmode paper-example.tex
+bibtex paper-example
+xelatex -interaction=nonstopmode paper-example.tex
+xelatex -interaction=nonstopmode paper-example.tex</pre>
+        <p>Перший прохід створює <span class="mono">.aux</span> із записами <span class="mono">\citation</span>, bibtex формує <span class="mono">.bbl</span>, третій вставляє бібліографію й фіксує номери сторінок, четвертий доводить перехресні посилання та закладки hyperref. У PowerShell команди розділяють крапкою з комою, бо <span class="mono">&amp;&amp;</span> там не працює.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="ref">
+    <h2 class="ref__head">З чого почати</h2>
+    <p class="ref__lede">Оберіть тему в <a href="index.html">каталозі магістерських робіт</a>, узгодьте її з науковим керівником, підберіть індекс УДК і готуйте тези за шаблоном. Теми каталогу відповідають тематиці конференції, тож результати магістерського дослідження можна подавати сюди частинами протягом року.</p>
+  </section>
+</main>
+
+<footer class="shell">
+  <span>Конференція БІКС</span>
+  <span>CC BY 4.0</span>
+  <span><a href="index.html">Теми магістерських робіт</a></span>
+  <span><a href="udk.html">Підбір УДК</a></span>
+</footer>
+</body>
+</html>
