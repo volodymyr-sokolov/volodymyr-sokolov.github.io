@@ -31,7 +31,7 @@
   --shell:min(1160px,100% - 3rem);
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 [hidden]{display:none!important}
 body{
   margin:0;background:var(--paper);color:var(--ink);overflow-wrap:break-word;
@@ -78,17 +78,21 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 }
 .menu__item:hover{background:var(--surface-2)}
 .menu__item[aria-pressed="true"]{background:var(--accent);color:#fff}
-.menu__item[aria-pressed="true"] .menu__count{color:rgba(255,255,255,.8)}
+.menu__item[aria-pressed="true"] .menu__count{color:rgba(255,255,255,.82)}
+.menu__item--all .menu__name{font-weight:600}
 .menu__letter{font-weight:600;min-width:1.3rem;font-size:.95rem}
 .menu__name{flex:1;font-size:.95rem;line-height:1.35}
 .menu__count{font-size:.82rem;color:var(--muted);white-space:nowrap}
+.menu__count[data-free="0"]{opacity:.55}
 
 /* ---------- controls ---------- */
-.bar{position:sticky;top:0;z-index:20;background:rgba(233,237,241,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);margin-top:2.4rem}
+.bar{position:sticky;top:0;z-index:20;background:rgba(233,237,241,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);margin-top:2.4rem}
 .bar__in{display:flex;flex-wrap:wrap;gap:.7rem 1.4rem;align-items:center;padding:.7rem 0}
 .bar__filters{display:flex;flex-wrap:wrap;gap:.7rem 1.4rem;align-items:center}
 .bar__toggle{display:none}
 .bar__toggle[aria-expanded="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.bar__badge{display:inline-block;margin-left:.35rem;padding:0 .3rem;border-radius:8px;background:var(--accent);color:#fff;font-size:.72rem;line-height:1.35}
+.bar__toggle[aria-expanded="true"] .bar__badge{background:#fff;color:var(--accent)}
 .group{display:flex;align-items:center;gap:.3rem}
 .group__label{font-size:.78rem;color:var(--muted);margin-right:.15rem}
 .chip{
@@ -97,6 +101,7 @@ button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:p
 }
 .chip:hover{border-color:#b6c1cb}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip--all[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
 .chip--lv{padding:.34rem .5rem;line-height:1}
 .chip--lv[aria-pressed="true"]{background:var(--surface);border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .bar__end{margin-left:auto;display:flex;align-items:center;gap:1.2rem;font-size:.83rem;color:var(--muted)}
@@ -112,20 +117,27 @@ main{padding-bottom:5rem}
 .rows{background:var(--surface);border:1px solid var(--rule);border-top:none}
 .row{border-top:1px solid var(--rule-soft)}
 .rows > .row:first-child{border-top:none}
-.row__btn{display:flex;gap:.9rem;width:100%;text-align:left;padding:.8rem .95rem;align-items:flex-start}
-.row__btn:hover{background:var(--surface-2)}
-.row__id{font-size:.78rem;color:var(--muted);min-width:2.3rem;padding-top:.22rem;letter-spacing:.02em}
+.row__head{display:flex;gap:.9rem;padding:.8rem .95rem;align-items:flex-start;cursor:pointer}
+.row__head:hover{background:var(--surface-2)}
+.row__id{font-size:.78rem;color:var(--muted);min-width:2.3rem;padding-top:.22rem;letter-spacing:.02em;user-select:none}
 .row__main{flex:1;min-width:0}
-.row__title{display:block;font-size:1rem;font-weight:500;line-height:1.35;max-width:66ch}
+.row__title{
+  font-size:1rem;font-weight:500;line-height:1.35;max-width:66ch;
+  cursor:text;user-select:text;-webkit-user-select:text;
+}
 .row--reserved .row__title{color:var(--muted)}
-.row__meta{display:flex;flex-wrap:wrap;gap:.35rem .8rem;align-items:center;margin-top:.35rem;font-size:.8rem;color:var(--muted)}
+.row__meta{display:flex;flex-wrap:wrap;gap:.35rem .8rem;align-items:center;margin-top:.35rem;font-size:.8rem;color:var(--muted);user-select:none}
 .tag{padding:.05rem .38rem;border:1px solid var(--rule);border-radius:2px;font-size:.75rem;color:var(--ink-soft);background:var(--surface-2)}
 .tag--hw{border-color:#c8b18a;background:#fbf4e8;color:#7a5a18}
 .tag--res{border-color:#c3a7ab;background:#faeef0;color:#8a2f3c}
-.row__caret{color:var(--muted);padding-top:.3rem;transition:transform .18s ease}
-.row.is-open .row__caret{transform:rotate(90deg)}
+.row__toggle{
+  color:var(--muted);font-size:1.1rem;line-height:1;padding:.28rem .35rem;border-radius:3px;
+  transition:transform .18s ease,background .12s ease;user-select:none;
+}
+.row__toggle:hover{background:var(--rule-soft);color:var(--ink)}
+.row.is-open .row__toggle{transform:rotate(90deg)}
 .row.is-open{background:var(--surface-2)}
-.row.is-open .row__btn:hover{background:transparent}
+.row.is-open .row__head:hover{background:transparent}
 .panel{display:none;padding:.2rem .95rem 1.35rem 4.1rem}
 .row.is-open .panel{display:block}
 .panel p{max-width:76ch;font-size:.94rem;color:var(--ink-soft);margin-bottom:.7rem}
@@ -141,6 +153,7 @@ main{padding-bottom:5rem}
 .empty h2,.state h2{font-size:1.05rem;margin-bottom:.4rem}
 .empty p,.state p{color:var(--muted);font-size:.92rem;max-width:56ch;margin-inline:auto}
 .state code{background:var(--surface-2);border:1px solid var(--rule);padding:.05rem .3rem;border-radius:2px;font-size:.86em}
+.empty button{margin-top:1rem}
 
 /* ---------- reference sections ---------- */
 .ref{margin-top:4.5rem;scroll-margin-top:5rem}
@@ -178,15 +191,15 @@ footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);fo
   .group{flex-wrap:wrap}
 }
 @media (max-width:560px){
-  .row__btn{padding:.75rem .7rem}
+  .row__head{padding:.75rem .7rem}
   .hero__title{max-width:none}
   .menu__item{gap:.6rem;padding:.55rem .7rem}
   .share{margin-left:0}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
 
 @media print{
-  .bar,.menu-wrap,.row__caret,.share{display:none}
+  .bar,.menu-wrap,.row__toggle,.share{display:none}
   body{background:#fff;font-size:11pt}
   .panel{display:block!important;padding-left:0}
   .row{break-inside:avoid}
@@ -203,7 +216,7 @@ footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);fo
   <nav class="menu-wrap" aria-label="Напрями досліджень">
     <div class="menu-wrap__head">
       <h2>Напрями досліджень</h2>
-      <p>Натисніть напрям, щоб залишити тільки його теми</p>
+      <p>Цифра праворуч — скільки тем ще вільні</p>
     </div>
     <ul class="menu" id="menu"></ul>
   </nav>
@@ -211,16 +224,18 @@ footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);fo
 
 <div class="bar">
   <div class="bar__in shell">
-    <button class="chip bar__toggle" id="filtersToggle" aria-expanded="false" aria-controls="filters">Фільтри</button>
+    <button class="chip bar__toggle" id="filtersToggle" aria-expanded="false" aria-controls="filters">Фільтри<span id="badge"></span></button>
 
     <div class="bar__filters" id="filters">
       <div class="group" role="group" aria-label="Складність">
         <span class="group__label">Складність</span>
+        <button class="chip chip--all" data-filter="lv:all" aria-pressed="true">усі</button>
         <button class="chip chip--lv" data-filter="lv:1" aria-pressed="false" title="Складність 1"><span class="stars" data-l="1" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 1</span></button><button class="chip chip--lv" data-filter="lv:2" aria-pressed="false" title="Складність 2"><span class="stars" data-l="2" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 2</span></button><button class="chip chip--lv" data-filter="lv:3" aria-pressed="false" title="Складність 3"><span class="stars" data-l="3" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span><span class="vh">Складність 3</span></button>
       </div>
 
       <div class="group" role="group" aria-label="Тип роботи">
         <span class="group__label">Тип</span>
+        <button class="chip chip--all" data-filter="tp:all" aria-pressed="true">усі</button>
         <button class="chip" data-filter="tp:practical" aria-pressed="false">практична</button>
         <button class="chip" data-filter="tp:mixed" aria-pressed="false">змішана</button>
         <button class="chip" data-filter="tp:theoretical" aria-pressed="false">теоретична</button>
@@ -228,12 +243,14 @@ footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);fo
 
       <div class="group" role="group" aria-label="Обладнання">
         <span class="group__label">Обладнання</span>
+        <button class="chip chip--all" data-filter="eq:all" aria-pressed="true">усі</button>
         <button class="chip" data-filter="eq:base" aria-pressed="false">базове</button>
         <button class="chip" data-filter="eq:special" aria-pressed="false">спеціальне</button>
       </div>
 
       <div class="group" role="group" aria-label="Резерв">
         <span class="group__label">Резерв</span>
+        <button class="chip chip--all" data-filter="res:all" aria-pressed="true">усі</button>
         <button class="chip" data-filter="res:free" aria-pressed="false">вільні</button>
         <button class="chip" data-filter="res:taken" aria-pressed="false">зарезервовані</button>
       </div>
@@ -258,7 +275,8 @@ footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);fo
 
   <div class="empty" id="empty" hidden>
     <h2>За такими умовами тем немає</h2>
-    <p>Натисніть активні фільтри ще раз, щоб зняти частину умов.</p>
+    <p>Спробуйте послабити умови — наприклад, повернути «усі» в котромусь із фільтрів.</p>
+    <button class="chip" id="resetAll">Показати всі теми</button>
   </div>
 
   <section class="ref" id="legend">
@@ -267,7 +285,7 @@ footer{margin-top:4rem;padding:1.6rem 0 3rem;border-top:1px solid var(--rule);fo
     <dl class="deflist"><div><dt><span class="stars" data-l="1" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span> Складність 1</dt><dd>Робота з відомою методикою й доступними даними. Основна цінність — коректне застосування, порівняння, узагальнення. Ризик недосягнення результату низький.</dd></div><div><dt><span class="stars" data-l="2" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span> Складність 2</dt><dd>Потрібна власна реалізація прототипу або побудова експериментального стенда, робота з нестандартними даними, самостійне проєктування методики. Базовий рівень для магістерської роботи.</dd></div><div><dt><span class="stars" data-l="3" aria-hidden="true"><i>★</i><i>★</i><i>★</i></span> Складність 3</dt><dd>Потрібні глибокі спеціальні знання (криптоаналіз, реверс-інжиніринг, формальна верифікація, апаратні атаки), рідкісне обладнання або значний обсяг інженерної роботи. Висока ймовірність публікації, але й вищий ризик.</dd></div></dl>
     <dl class="deflist" style="margin-top:1rem"><div><dt>Теоретична</dt><dd>аналітичне дослідження, моделі, методики, порівняльний та нормативний аналіз</dd></div><div><dt>Практична</dt><dd>прототип, стенд, експеримент, вимірювання</dd></div><div><dt>Теоретично-практична (змішана)</dt><dd>методика + її експериментальна перевірка (найтиповіший формат).</dd></div></dl>
     <div class="note"><b>Обладнання.</b> якщо зазначено «базове» — достатньо персонального комп&#x27;ютера з можливістю віртуалізації (16+ ГБ ОЗП), доступу до хмарного/безкоштовного тарифу та відкритого ПЗ. Інше обладнання вказано явно.</div>
-    <div class="note"><b>Зарезервовано.</b> Тему вже закріплено за здобувачем, тож вона доступна лише для ознайомлення. Щоб бачити тільки доступні теми, увімкніть фільтр «вільні».</div>
+    <div class="note"><b>Зарезервовано.</b> Тему вже закріплено за здобувачем, тож вона доступна лише для ознайомлення. У меню напрямів рахуються тільки вільні теми; щоб сховати зайняті зі списку, увімкніть фільтр «вільні».</div>
   </section>
 
   <section class="ref" id="criteria">
@@ -300,8 +318,9 @@ const GROUP = {
   'Теоретично-практична':'mixed',
   'Теоретично-практична (змішана)':'mixed'
 };
-const state = {lv:new Set(), tp:new Set(), eq:'all', res:'all', dir:new Set()};
-let DIRS = [], all = [], TOTAL = 0;
+/* lv, tp: множинний вибір (порожня множина = усі). eq, res: один із варіантів. dir: один напрям або null. */
+const state = {lv:new Set(), tp:new Set(), eq:'all', res:'all', dir:null};
+let DIRS = [], TOTAL = 0;
 
 function plural(n){
   const d10 = n % 10, d100 = n % 100;
@@ -319,8 +338,9 @@ const emptyEl = document.getElementById('empty');
 const loadingEl = document.getElementById('loading');
 const errorEl = document.getElementById('error');
 const menuEl = document.getElementById('menu');
+const barEl = document.querySelector('.bar');
 
-/* ---- load ---- */
+/* ---- завантаження даних ---- */
 fetch('topics.json', {cache:'no-cache'})
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(init)
@@ -330,41 +350,49 @@ function init(doc){
   DIRS = doc.directions || [];
   DIRS.forEach(d => d.topics.forEach(t => {
     t.group = GROUP[t.type] || 'mixed';
-    all.push(Object.assign({dir:d.letter}, t));
+    t.reserved = t.reserved === true;
   }));
-  TOTAL = all.length;
+  TOTAL = DIRS.reduce((s, d) => s + d.topics.length, 0);
+  const freeTotal = DIRS.reduce((s, d) => s + d.topics.filter(t => !t.reserved).length, 0);
 
-  menuEl.innerHTML = DIRS.map(d => `
-    <li><button class="menu__item" data-letter="${d.letter}" aria-pressed="false">
-      <span class="menu__letter">${esc(d.letter)}</span>
-      <span class="menu__name">${esc(d.title)}</span>
-      <span class="menu__count">${d.topics.length}</span>
-    </button></li>`).join('');
+  menuEl.innerHTML = `
+    <li><button class="menu__item menu__item--all" data-letter="" aria-pressed="true">
+      <span class="menu__letter" aria-hidden="true"></span>
+      <span class="menu__name">Усі напрями</span>
+      <span class="menu__count" data-free="${freeTotal}">${freeTotal}</span>
+    </button></li>` + DIRS.map(d => {
+      const free = d.topics.filter(t => !t.reserved).length;
+      return `<li><button class="menu__item" data-letter="${d.letter}" aria-pressed="false">
+        <span class="menu__letter">${esc(d.letter)}</span>
+        <span class="menu__name">${esc(d.title)}</span>
+        <span class="menu__count" data-free="${free}" title="Вільних тем">${free}</span>
+      </button></li>`;
+    }).join('');
 
   listEl.innerHTML = DIRS.map(d => `
     <section class="dir" id="dir-${d.letter}" data-dir="${d.letter}">
       <div class="dir__head">
         <div class="dir__glyph">${esc(d.letter)}</div>
         <h2 class="dir__title">${esc(d.title)}</h2>
-        <div class="dir__count"><span class="js-dcount">${d.topics.length}</span> / ${d.topics.length}</div>
+        <div class="dir__count"><span class="js-dcount">${d.topics.length}</span> з ${d.topics.length}</div>
       </div>
       <div class="rows">
         ${d.topics.map(t => `
         <article class="row${t.reserved ? ' row--reserved' : ''}" id="${esc(t.id)}">
-          <button class="row__btn" aria-expanded="false" aria-controls="p-${esc(t.id)}">
+          <div class="row__head">
             <span class="row__id">${esc(t.id)}</span>
-            <span class="row__main">
-              <span class="row__title">${esc(t.title)}</span>
-              <span class="row__meta">
+            <div class="row__main">
+              <h3 class="row__title">${esc(t.title)}</h3>
+              <div class="row__meta">
                 ${stars(t.complexity)}
                 <span class="vh">Складність ${t.complexity} з 3.</span>
                 <span>${esc(String(t.type).toLowerCase())}</span>
                 ${t.base_equipment === false ? '<span class="tag tag--hw">спеціальне обладнання</span>' : ''}
                 ${t.reserved ? '<span class="tag tag--res">зарезервовано</span>' : ''}
-              </span>
-            </span>
-            <span class="row__caret" aria-hidden="true">›</span>
-          </button>
+              </div>
+            </div>
+            <button class="row__toggle" aria-expanded="false" aria-controls="p-${esc(t.id)}" aria-label="Показати опис теми ${esc(t.id)}">›</button>
+          </div>
           <div class="panel" id="p-${esc(t.id)}">
             <p><b>Проблематика.</b> ${esc(t.problem)}</p>
             <p><b>Мета.</b> ${esc(t.goal)}</p>
@@ -384,7 +412,7 @@ function init(doc){
   openHash();
 }
 
-/* ---- filtering ---- */
+/* ---- фільтрація ---- */
 function match(t){
   if (state.lv.size && !state.lv.has(String(t.complexity))) return false;
   if (state.tp.size && !state.tp.has(t.group)) return false;
@@ -392,7 +420,6 @@ function match(t){
   if (state.eq === 'special' && t.base_equipment !== false) return false;
   if (state.res === 'free' && t.reserved) return false;
   if (state.res === 'taken' && !t.reserved) return false;
-  if (state.dir.size && !state.dir.has(t.dir)) return false;
   return true;
 }
 
@@ -400,9 +427,10 @@ function apply(){
   let shown = 0;
   DIRS.forEach(d => {
     const sec = document.getElementById('dir-' + d.letter);
+    const dirOk = !state.dir || state.dir === d.letter;
     let n = 0;
     d.topics.forEach(t => {
-      const ok = match(Object.assign({dir:d.letter}, t));
+      const ok = dirOk && match(t);
       document.getElementById(t.id).hidden = !ok;
       if (ok) n++;
     });
@@ -412,36 +440,66 @@ function apply(){
   });
   countEl.textContent = shown === TOTAL ? plural(TOTAL) : `${shown} з ${TOTAL}`;
   emptyEl.hidden = shown !== 0;
+  syncChips();
 }
 
-/* ---- controls ---- */
+function activeCount(){
+  return (state.lv.size ? 1 : 0) + (state.tp.size ? 1 : 0) +
+         (state.eq !== 'all' ? 1 : 0) + (state.res !== 'all' ? 1 : 0) + (state.dir ? 1 : 0);
+}
+
+function syncChips(){
+  document.querySelectorAll('[data-filter]').forEach(b => {
+    const [kind, val] = b.dataset.filter.split(':');
+    let on;
+    if (kind === 'lv' || kind === 'tp') on = (val === 'all') ? state[kind].size === 0 : state[kind].has(val);
+    else on = state[kind] === val;
+    b.setAttribute('aria-pressed', String(on));
+  });
+  menuEl.querySelectorAll('[data-letter]').forEach(b =>
+    b.setAttribute('aria-pressed', String((b.dataset.letter || null) === state.dir)));
+  const n = activeCount();
+  document.getElementById('badge').innerHTML = n ? `<span class="bar__badge">${n}</span>` : '';
+}
+
+/* Прокрутка після зміни фільтра: якщо список уже вище екрана — піднімаємось до його початку,
+   інакше сторінка залишається на місці. */
+function keepInView(force){
+  const top = listEl.getBoundingClientRect().top + window.scrollY - barEl.offsetHeight - 12;
+  if (force || window.scrollY > top) window.scrollTo({top: Math.max(top, 0), behavior:'smooth'});
+}
+
+/* ---- перемикачі фільтрів ---- */
 document.querySelectorAll('[data-filter]').forEach(btn => {
   btn.addEventListener('click', () => {
     const [kind, val] = btn.dataset.filter.split(':');
-    if (kind === 'eq' || kind === 'res'){
-      state[kind] = state[kind] === val ? 'all' : val;
-      document.querySelectorAll('[data-filter^="' + kind + ':"]').forEach(b =>
-        b.setAttribute('aria-pressed', String(b.dataset.filter === kind + ':' + state[kind])));
+    if (kind === 'lv' || kind === 'tp'){
+      if (val === 'all') state[kind].clear();
+      else state[kind].has(val) ? state[kind].delete(val) : state[kind].add(val);
     } else {
-      const set = state[kind];
-      set.has(val) ? set.delete(val) : set.add(val);
-      btn.setAttribute('aria-pressed', String(set.has(val)));
+      state[kind] = val;
     }
     apply();
+    keepInView(false);
   });
 });
 
+/* ---- меню напрямів (один напрям або всі) ---- */
 menuEl.addEventListener('click', e => {
   const btn = e.target.closest('[data-letter]');
   if (!btn) return;
-  const L = btn.dataset.letter;
-  state.dir.has(L) ? state.dir.delete(L) : state.dir.add(L);
-  btn.setAttribute('aria-pressed', String(state.dir.has(L)));
+  state.dir = btn.dataset.letter || null;
   apply();
-  if (state.dir.has(L)) document.getElementById('dir-' + L).scrollIntoView({behavior:'smooth', block:'start'});
+  keepInView(true);
 });
 
-/* ---- share / expand ---- */
+document.getElementById('resetAll').addEventListener('click', () => {
+  state.lv.clear(); state.tp.clear(); state.eq = 'all'; state.res = 'all'; state.dir = null;
+  apply();
+  keepInView(true);
+});
+
+/* ---- розгортання тем і кнопка «поділитися» ---- */
 listEl.addEventListener('click', e => {
   const shareBtn = e.target.closest('[data-share]');
   if (shareBtn){
@@ -449,20 +507,32 @@ listEl.addEventListener('click', e => {
     const url = location.origin + location.pathname + '#' + id;
     const title = document.getElementById(id).querySelector('.row__title').textContent;
     history.replaceState(null, '', '#' + id);
-    if (navigator.share){
-      navigator.share({title, url}).catch(() => {});
-    } else if (navigator.clipboard){
-      navigator.clipboard.writeText(url).then(() => flash(shareBtn)).catch(() => flash(shareBtn));
-    } else {
-      flash(shareBtn);
-    }
+    if (navigator.share) navigator.share({title, url}).catch(() => {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => flash(shareBtn)).catch(() => flash(shareBtn));
+    else flash(shareBtn);
     return;
   }
-  const btn = e.target.closest('.row__btn');
-  if (!btn) return;
-  const row = btn.closest('.row');
-  const open = row.classList.toggle('is-open');
+  const head = e.target.closest('.row__head');
+  if (!head) return;
+  /* назву теми лишаємо для виділення й копіювання: клік по ній нічого не розгортає */
+  if (e.target.closest('.row__title')) return;
+  const sel = window.getSelection && window.getSelection();
+  if (sel && !sel.isCollapsed) return;
+  toggleRow(head.closest('.row'));
+});
+
+function toggleRow(row, force){
+  const open = row.classList.toggle('is-open', force);
+  const btn = row.querySelector('.row__toggle');
   btn.setAttribute('aria-expanded', String(open));
+  btn.setAttribute('aria-label', (open ? 'Сховати' : 'Показати') + ' опис теми ' + row.id);
+}
+
+let allOpen = false;
+document.getElementById('toggleAll').addEventListener('click', e => {
+  allOpen = !allOpen;
+  document.querySelectorAll('.row').forEach(r => toggleRow(r, allOpen));
+  e.target.textContent = allOpen ? 'Згорнути всі' : 'Розгорнути всі';
 });
 
 function flash(btn){
@@ -474,31 +544,18 @@ function flash(btn){
   setTimeout(() => s.remove(), 1600);
 }
 
-let allOpen = false;
-document.getElementById('toggleAll').addEventListener('click', e => {
-  allOpen = !allOpen;
-  document.querySelectorAll('.row').forEach(r => {
-    r.classList.toggle('is-open', allOpen);
-    r.querySelector('.row__btn').setAttribute('aria-expanded', String(allOpen));
-  });
-  e.target.textContent = allOpen ? 'Згорнути всі' : 'Розгорнути всі';
-});
-
-/* ---- mobile filters ---- */
-const bar = document.querySelector('.bar');
+/* ---- фільтри на вузькому екрані ---- */
 const fToggle = document.getElementById('filtersToggle');
 fToggle.addEventListener('click', () => {
-  const open = bar.classList.toggle('is-open');
-  fToggle.setAttribute('aria-expanded', String(open));
+  fToggle.setAttribute('aria-expanded', String(barEl.classList.toggle('is-open')));
 });
 
-/* ---- deep link ---- */
+/* ---- посилання на тему ---- */
 function openHash(){
   const id = decodeURIComponent(location.hash.slice(1));
   const row = id && document.getElementById(id);
   if (row && row.classList.contains('row')){
-    row.classList.add('is-open');
-    row.querySelector('.row__btn').setAttribute('aria-expanded','true');
+    toggleRow(row, true);
     row.scrollIntoView({block:'center'});
   }
 }
