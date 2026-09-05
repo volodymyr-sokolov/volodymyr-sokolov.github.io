@@ -312,3 +312,49 @@ pre{
   .row{break-inside:avoid}
   details.fold > .fold__body{display:block!important}
 }
+
+/* ============================================================
+   Перевірка тез (вбудований валідатор архіву)
+   ============================================================ */
+#sicsv{margin-top:1.6rem}
+#sicsv *{box-sizing:border-box}
+.sicsv-drop{
+  display:block;border:1px dashed var(--rule);background:var(--surface);
+  padding:1.8rem 1.2rem;text-align:center;cursor:pointer;border-radius:3px;
+  transition:border-color .14s ease,background .14s ease;
+}
+.sicsv-drop:hover,.sicsv-drop.sicsv-over{border-color:var(--accent);background:var(--accent-soft)}
+.sicsv-drop strong{display:block;margin-bottom:.35rem;font-weight:600;font-size:.98rem}
+.sicsv-drop > span{display:block;color:var(--muted);font-size:.87rem;max-width:52ch;margin-inline:auto}
+#sicsv input[type=file]{display:none}
+.sicsv-file{margin-top:.85rem;font-size:.85rem;color:var(--muted)}
+.sicsv-sum{display:flex;gap:.5rem;flex-wrap:wrap;margin:1.5rem 0 .2rem}
+.sicsv-pill{
+  border:1px solid var(--rule);border-radius:3px;padding:.25rem .7rem;
+  font-size:.83rem;font-weight:600;background:var(--surface);color:var(--ink-soft);
+}
+.sicsv-pill.e{color:#8a2f3c;border-color:#c3a7ab;background:#faeef0}
+.sicsv-pill.w{color:#7a5a18;border-color:#c8b18a;background:#fbf4e8}
+.sicsv-pill.o{color:#245c47;border-color:#a7c6b6;background:#eaf4ee}
+.sicsv-udc{
+  margin-top:.9rem;padding:.7rem .95rem;font-size:.9rem;color:var(--ink-soft);
+  background:var(--accent-soft);border-left:3px solid var(--accent);max-width:76ch;
+}
+#sicsv h3{font-size:1rem;margin:1.8rem 0 .7rem}
+#sicsv-out > p{font-size:.94rem;color:var(--ink-soft);margin-top:.9rem;max-width:76ch}
+.sicsv-item{
+  background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--rule);
+  padding:.75rem .95rem;margin-bottom:.5rem;
+}
+.sicsv-item.e{border-left-color:var(--l3)}
+.sicsv-item.w{border-left-color:var(--l2)}
+.sicsv-item b{display:block;margin-bottom:.2rem;font-weight:600;font-size:.95rem}
+.sicsv-d{font-size:.92rem;color:var(--ink-soft);max-width:76ch}
+.sicsv-fix{margin-top:.4rem;font-size:.9rem;color:var(--muted);max-width:76ch}
+.sicsv-fix::before{content:"Як виправити: ";font-weight:600;color:var(--ink)}
+#sicsv pre{margin-top:.6rem;font-size:.8rem}
+#sicsv code{
+  font-family:var(--mono);font-size:.9em;background:var(--surface-2);
+  border:1px solid var(--rule);padding:.03em .3em;border-radius:2px;
+}
+.sicsv-none{color:var(--muted);font-style:italic}
