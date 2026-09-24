@@ -281,6 +281,32 @@ pre{
   color:var(--ink-soft);line-height:1.5;
 }
 
+/* ============================================================
+   Сторінка посібника «Основи наукових досліджень»
+   ============================================================ */
+.viewer{margin-top:1rem}
+.viewer__head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.2rem}
+.viewer__head .ref__head{flex:1 1 100%}
+.viewer__back{margin-top:.8rem;font-size:.88rem;color:var(--muted)}
+.viewer__frame{margin-top:1.2rem;background:var(--surface);border:1px solid var(--rule)}
+.viewer__frame iframe{display:block;width:100%;height:min(82vh,960px);border:0}
+.viewer__actions{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.4rem}
+.viewer__actions .dl{margin-top:1rem}
+.viewer__actions .linkish,.viewer__meta{margin-top:1rem;font-size:.9rem}
+.viewer__meta{color:var(--muted)}
+.viewer__hint{margin-top:.7rem;font-size:.84rem;color:var(--muted);max-width:76ch}
+.bar__find{flex:1 1 20rem;min-width:0;max-width:34rem}
+.bar__find input{
+  width:100%;font:inherit;font-size:.9rem;color:var(--ink);background:var(--surface);
+  border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:3px;padding:.42rem .65rem;
+}
+.bar__find input:focus{outline:2px solid var(--focus);outline-offset:2px}
+.dir__lede{margin-top:.7rem;margin-bottom:.9rem;max-width:76ch;font-size:.93rem;color:var(--ink-soft)}
+.dir__lede + .rows{border-top:1px solid var(--rule)}
+.pg{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+.pg:hover{border-bottom-style:solid}
+.panel .keys .tag{display:inline-block;margin:0 .15rem .25rem 0}
+
 /* ---------- адаптив ---------- */
 @media (max-width:900px){
   :root{--shell:min(1160px,100% - 2rem)}
@@ -295,6 +321,8 @@ pre{
   .bar.is-open .bar__filters{display:flex}
   .group{flex-wrap:wrap}
   .nav__in{gap:0 1.1rem}
+  .viewer__frame{display:none}
+  .bar__find{flex-basis:100%;max-width:none}
 }
 @media (max-width:560px){
   .row__head{padding:.75rem .7rem}
