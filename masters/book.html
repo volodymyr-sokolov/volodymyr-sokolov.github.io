@@ -37,10 +37,11 @@
       <p class="viewer__back" id="back" hidden></p>
     </div>
     <div class="viewer__frame" id="frame">
-      <iframe id="pdfFrame" src="osnovy-naukovykh-doslidzhen.pdf#page=1&amp;view=FitH" title="Основи наукових досліджень — PDF" loading="lazy"></iframe>
+      <iframe id="pdfFrame" title="Основи наукових досліджень — PDF"></iframe>
     </div>
     <div class="viewer__actions">
       <a class="dl" href="osnovy-naukovykh-doslidzhen.pdf" download><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M5 20h14"/></svg> Завантажити PDF</a>
+      <button class="btn btn--ghost" id="fullBtn" type="button">На весь екран</button>
       <a class="linkish" href="osnovy-naukovykh-doslidzhen.pdf" target="_blank" rel="noopener">Відкрити в новій вкладці</a>
       <span class="viewer__meta">251 с. · 1 МБ</span>
     </div>
@@ -236,19 +237,41 @@ document.getElementById('resetAll').addEventListener('click', () => {
 /* ---------- перегляд PDF на сторінці ---------- */
 const frameBox = document.getElementById('frame');
 const backEl = document.getElementById('back');
-function openPage(p, fromId, fromLabel){
+/* Сторінка A5 за 100 % має ширину ≈ 559 px; масштаб підбираємо так, щоб вона заповнила рамку за шириною.
+   zoom=N розуміють і вбудований переглядач Chrome/Edge, і pdf.js у Firefox. */
+function fitZoom(){
+  const w = frameBox.clientWidth || 900;
+  return Math.max(100, Math.min(250, Math.floor((w - 60) / 559 * 100)));
+}
+const pdfSrc = page => `${PDF}#page=${page}&zoom=${fitZoom()}`;
+let curPage = 1;
+/* Переглядач PDF не завжди реагує на зміну лише #page у src, тому рамку щоразу створюємо заново. */
+function loadFrame(page){
+  curPage = page;
   const old = document.getElementById('pdfFrame');
   const f = document.createElement('iframe');
   f.id = 'pdfFrame';
   f.title = old.title;
-  f.src = `${PDF}#page=${p + OFFSET}&view=FitH`;
+  f.src = pdfSrc(page);
   old.replaceWith(f);
+}
+function openPage(p, fromId, fromLabel){
+  loadFrame(p + OFFSET);
   if (fromId){
     backEl.innerHTML = `Відкрито с. ${p}. <a href="#${esc(fromId)}">Повернутися до «${esc(fromLabel)}»</a>`;
     backEl.hidden = false;
   }
   document.getElementById('pdf').scrollIntoView({behavior:'smooth', block:'start'});
 }
+/* на вузькому екрані рамку сховано — PDF не завантажуємо */
+if (frameBox.offsetParent) loadFrame(1);
+
+/* на весь екран: рамка займає весь екран, масштаб перераховуємо за новою шириною */
+const fullBtn = document.getElementById('fullBtn');
+if (!frameBox.requestFullscreen) fullBtn.hidden = true;
+fullBtn.addEventListener('click', () => { frameBox.requestFullscreen().catch(() => {}); });
+document.addEventListener('fullscreenchange', () => setTimeout(() => loadFrame(curPage), 150));
+
 document.addEventListener('click', e => {
   const a = e.target.closest('a.pg');
   if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;

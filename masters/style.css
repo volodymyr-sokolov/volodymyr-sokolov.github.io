@@ -289,7 +289,10 @@ pre{
 .viewer__head .ref__head{flex:1 1 100%}
 .viewer__back{margin-top:.8rem;font-size:.88rem;color:var(--muted)}
 .viewer__frame{margin-top:1.2rem;background:var(--surface);border:1px solid var(--rule)}
-.viewer__frame iframe{display:block;width:100%;height:min(82vh,960px);border:0}
+.viewer__frame iframe{display:block;width:100%;height:calc(100vh - 5rem);min-height:520px;border:0}
+.viewer__frame:fullscreen{background:var(--surface)}
+.viewer__frame:fullscreen iframe{height:100vh}
+.viewer__actions .btn{margin-top:1rem;padding:.62rem 1rem}
 .viewer__actions{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.4rem}
 .viewer__actions .dl{margin-top:1rem}
 .viewer__actions .linkish,.viewer__meta{margin-top:1rem;font-size:.9rem}
