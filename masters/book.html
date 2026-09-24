@@ -241,7 +241,7 @@ const backEl = document.getElementById('back');
    zoom=N розуміють і вбудований переглядач Chrome/Edge, і pdf.js у Firefox. */
 function fitZoom(){
   const w = frameBox.clientWidth || 900;
-  return Math.max(100, Math.min(150, Math.floor((w - 60) / 559 * 100)));
+  return Math.max(100, Math.min(146, Math.floor((w - 60) / 559 * 100)));
 }
 const pdfSrc = page => `${PDF}#page=${page}&zoom=${fitZoom()}`;
 let curPage = 1;
