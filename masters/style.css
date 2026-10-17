@@ -417,3 +417,21 @@ pre{
 .confs__note{margin-top:1.6rem;max-width:80ch;font-size:.85rem;color:var(--muted)}
 @media (max-width:900px){.confs{grid-template-columns:1fr;max-width:34rem}}
 
+
+/* картки однакової висоти та ширини (сторінка «Курси») */
+.confs--equal{margin-top:4.5rem;scroll-margin-top:5rem;align-items:stretch;row-gap:1.4rem}
+.confs--equal:first-of-type{margin-top:3rem}
+.confs--equal > .ref__head{grid-column:1 / -1;margin-bottom:-.4rem}
+.confs--equal .conf{display:flex;flex-direction:column;align-items:center}
+.confs--equal .conf__logo{height:150px;display:flex;align-items:center;justify-content:center;width:100%}
+.confs--equal .conf__logo img{width:auto;height:auto;max-height:100%;max-width:60%}
+.confs--equal .conf__title{flex:1}
+.confs--equal .vols{align-self:stretch}
+/* сітка карток усередині .ref (сторінка «Конференція БІКС») */
+.confs--inline,.confs--inline:first-of-type{margin-top:1rem}
+@media (max-width:900px){.confs--equal{max-width:none;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.confs--equal{grid-template-columns:1fr}}
+.issue{margin-top:1.4rem;display:flex;flex-wrap:wrap;align-items:center;gap:.8rem 1.6rem;background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--accent);padding:1.1rem 1.3rem}
+.issue__main{flex:1 1 22rem;min-width:0}
+.issue__title{font-size:1rem;font-weight:600}
+.issue__meta{margin-top:.3rem;font-size:.88rem;color:var(--muted)}
