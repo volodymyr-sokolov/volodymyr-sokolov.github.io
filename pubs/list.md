@@ -1,5 +1,9 @@
 ## Articles
 
+2026 [Asymmetric Interference Perception Method in Short-Range Wireless Systems](Asymmetric-Interference-Perception-Method-in-Short-Range-Wireless-Systems.md)
+
+2026 [A Semantically Oriented Method for Knowledge Representation in Artificial Intelligence Systems for Cybersecurity](A-Semantically-Oriented-Method-for-Knowledge-Representation-in-Artificial-Intelligence-Systems-for-Cybersecurity.md)
+
 2026 [Methodological Approaches to Assessing Enterprise Information Security using a Process-Oriented Approach](Methodological-Approaches-to-Assessing-Enterprise-Information-Security-using-a-Process-Oriented-Approach.md)
 
 2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md)
@@ -113,6 +117,12 @@
 2013 [Research Results of the Impact of Spatial and Polarization Value of the Antennas on Network Capacity of Wireless Channels Standard IEEE 802.11](Research-Results-of-the-Impact-of-Spatial-and-Polarization-Value-of-the-Antennas-on-Network-Capacity-of-Wireless.md)
 
 ## Workshop Papers (CEUR-WS)
+
+2026 [Logical Inference Models Based on Fuzzy Production Rules for Intelligent Cyberthreat Detection Systems](Logical-Inference-Models-Based-on-Fuzzy-Production-Rules-for-Intelligent-Cyberthreat-Detection-Systems.md)
+
+2026 [Real-Time Bluetooth Low Energy Vulnerability Detection Using TinyML on Edge Devices](Real-Time-Bluetooth-Low-Energy-Vulnerability-Detection Using-TinyML-on-Edge-Devices.md)
+
+2026 [A Software-Defined-Radio Replay Attack on Bluetooth Low Energy Devices](A-Software-Defined-Radio-Replay-Attack-on-Bluetooth-Low-Energy-Devices.md)
 
 2026 [Secure Self-Adaptive Recurrent Neural Networks for Intelligent Image Recognition in the Internet of Things Environments](Secure-Self-Adaptive-Recurrent-Neural-Networks-for-Intelligent-Image-Recognition-in-the-Internet-of-Things-Environments.md)
 
