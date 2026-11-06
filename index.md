@@ -12,9 +12,6 @@ Sep&nbsp;2005&nbsp;—<br />Aug&nbsp;2018 | Senior Lecturer at [State University
 
 ## Professional Career
 
-   | 
-:-----|:-----
-
 Sep&nbsp;2022&nbsp;—<br />Jul&nbsp;2023 | Senior Business Analyst / Proxy Product Owner (TeleCom) in [Pivotal Commware](https://pivotalcommware.com/), USA
 
 Aug&nbsp;2021&nbsp;—<br />Feb&nbsp;2022 | Senior System Analyst (FinTech) in [Raiffeisen Bank](https://raiffeisen.ua/), UA
