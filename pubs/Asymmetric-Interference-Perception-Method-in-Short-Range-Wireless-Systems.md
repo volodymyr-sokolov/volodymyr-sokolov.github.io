@@ -74,6 +74,5 @@ First Online: 14 October 2026
   doi       = {10.3390/a19100883},
   url       = {https://www.mdpi.com/1999-4893/19/10/883},
   eid       = {2-s2.0-85205045796},
-<!--  isi       = {001323200100001}, -->
   language  = {en},
 }`</small>
