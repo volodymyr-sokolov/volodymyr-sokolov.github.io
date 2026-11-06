@@ -44,6 +44,10 @@ As an editor and reviewer, I have participated in the editorial boards of confer
 
 ## Publications
 
+2026 [Asymmetric Interference Perception Method in Short-Range Wireless Systems](pubs/Asymmetric-Interference-Perception-Method-in-Short-Range-Wireless-Systems.md)
+
+2026 [A Semantically Oriented Method for Knowledge Representation in Artificial Intelligence Systems for Cybersecurity](A-Semantically-Oriented-Method-for-Knowledge-Representation-in-Artificial-Intelligence-Systems-for-Cybersecurity.md)
+
 2026 [Network Traffic Analysis and Management](pubs/Network-Traffic-Analysis-and-Management.md)
 
 2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](pubs/Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md)
