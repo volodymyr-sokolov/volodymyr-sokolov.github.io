@@ -41,9 +41,9 @@ First Online: 14 October 2026
 
 * ISSN: [1999-4893](https://portal.issn.org/resource/ISSN/1999-4893) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-85205045796](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85205045796) (Q2)
-<!--* WOS: [001323200100001](https://www.webofscience.com/wos/woscc/full-record/WOS:001323200100001) (Q2)
+<!-- * WOS: [001323200100001](https://www.webofscience.com/wos/woscc/full-record/WOS:001323200100001) (Q2)
 * INSPEC: 17014667
-* DBLP: [journals/cryptography/BessalovSA24](https://dblp.org/rec/journals/cryptography/BessalovSA24)-->
+* DBLP: [journals/cryptography/BessalovSA24](https://dblp.org/rec/journals/cryptography/BessalovSA24) -->
 
 ## Cite
 
@@ -70,7 +70,7 @@ First Online: 14 October 2026
   publisher = {MDPI AG},
   year      = {2026},
   month     = oct,
-  pages     = {34},
+  pages     = {883},
   doi       = {10.3390/a19100883},
   url       = {https://www.mdpi.com/1999-4893/19/10/883},
   eid       = {2-s2.0-85205045796},
