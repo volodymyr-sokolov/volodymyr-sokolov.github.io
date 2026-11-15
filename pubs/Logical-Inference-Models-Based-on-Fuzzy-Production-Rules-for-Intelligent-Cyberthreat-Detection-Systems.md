@@ -65,7 +65,7 @@ First Online: 3 October 2026
 <small class="citation">`@inproceedings{Kostiuk_Skladannyi_Khorolska_Bebeshko_Sokolov_2026,
   author    = {Kostiuk, Yuliia and Skladannyi, Pavlo and Khorolska, Karyna and Bebeshko, Bohdan and Sokolov, Volodymyr},
   title     = {Logical Inference Models Based on Fuzzy Production Rules for Intelligent Cyberthreat Detection Systems},
-  booktitle = {2026 5th International Workshop on Conflict Management in Global Information Networks (CSDP)},
+  booktitle = {2026 5th International Workshop on Conflict Management in Global Information Networks (CMiGIN)},
   address   = {Lviv, Ukraine},
   volume    = {4281},
   publisher = {CEUR},
