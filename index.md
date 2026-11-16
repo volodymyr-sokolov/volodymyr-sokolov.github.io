@@ -44,21 +44,21 @@ As an editor and reviewer, I have participated in the editorial boards of confer
 
 ## Publications
 
-2026 [Asymmetric Interference Perception Method in Short-Range Wireless Systems](pubs/Asymmetric-Interference-Perception-Method-in-Short-Range-Wireless-Systems.md) <img src="/icons/scopus-q2.svg" height="24" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="24" align="absmiddle">
+2026 [Asymmetric Interference Perception Method in Short-Range Wireless Systems](pubs/Asymmetric-Interference-Perception-Method-in-Short-Range-Wireless-Systems.md) <img src="/icons/scopus-q2.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="20" align="absmiddle">
 
-2026 [A Semantically Oriented Method for Knowledge Representation in Artificial Intelligence Systems for Cybersecurity](pubs/A-Semantically-Oriented-Method-for-Knowledge-Representation-in-Artificial-Intelligence-Systems-for-Cybersecurity.html) <img src="/icons/scopus-q2.svg" height="24" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="24" align="absmiddle">
+2026 [A Semantically Oriented Method for Knowledge Representation in Artificial Intelligence Systems for Cybersecurity](pubs/A-Semantically-Oriented-Method-for-Knowledge-Representation-in-Artificial-Intelligence-Systems-for-Cybersecurity.html) <img src="/icons/scopus-q2.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="20" align="absmiddle">
 
-2026 [Network Traffic Analysis and Management](pubs/Network-Traffic-Analysis-and-Management.md) <img src="/icons/scopus-non.svg" height="24" align="absmiddle">
+2026 [Network Traffic Analysis and Management](pubs/Network-Traffic-Analysis-and-Management.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
-2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](pubs/Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md) <img src="/icons/scopus-q2.svg" height="24" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="24" align="absmiddle">
+2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](pubs/Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md) <img src="/icons/scopus-q2.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="20" align="absmiddle">
 
-2023 [Brainwave-based Authentication using Features Fusion](pubs/Brainwave-based-Authentication-using-Features-Fusion.md) <img src="/icons/scopus-q1.svg" height="24" align="absmiddle"> <img src="/icons/wos-cc-q1.svg" height="24" align="absmiddle">
+2023 [Brainwave-based Authentication using Features Fusion](pubs/Brainwave-based-Authentication-using-Features-Fusion.md) <img src="/icons/scopus-q1.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-q1.svg" height="20" align="absmiddle">
 
-2021 [Information Security Risk Assessment](pubs/Information-Security-Risk-Assessment.md) <img src="/icons/scopus-non.svg" height="24" align="absmiddle">
+2021 [Information Security Risk Assessment](pubs/Information-Security-Risk-Assessment.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
-2020 [Wireless Sensors for Brain Activity — A Survey](pubs/Wireless-Sensors-for-Brain-Activity-A-Survey.md) <img src="/icons/scopus-q2.svg" height="24" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="24" align="absmiddle">
+2020 [Wireless Sensors for Brain Activity — A Survey](pubs/Wireless-Sensors-for-Brain-Activity-A-Survey.md) <img src="/icons/scopus-q2.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="20" align="absmiddle">
 
-2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](pubs/Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md) <img src="/icons/scopus-q2.svg" height="24" align="absmiddle">
+2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](pubs/Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md) <img src="/icons/scopus-q2.svg" height="20" align="absmiddle">
 
 [See more](/pubs/list.md)
 
