@@ -46,7 +46,7 @@ As an editor and reviewer, I have participated in the editorial boards of confer
 
 2026 [Asymmetric Interference Perception Method in Short-Range Wireless Systems](pubs/Asymmetric-Interference-Perception-Method-in-Short-Range-Wireless-Systems.md) [Scopus Q2, WoS Q2]
 
-2026 [A Semantically Oriented Method for Knowledge Representation in Artificial Intelligence Systems for Cybersecurity](A-Semantically-Oriented-Method-for-Knowledge-Representation-in-Artificial-Intelligence-Systems-for-Cybersecurity.html) [Scopus Q2, WoS Q2]
+2026 [A Semantically Oriented Method for Knowledge Representation in Artificial Intelligence Systems for Cybersecurity](pubs/A-Semantically-Oriented-Method-for-Knowledge-Representation-in-Artificial-Intelligence-Systems-for-Cybersecurity.html) [Scopus Q2, WoS Q2]
 
 2026 [Network Traffic Analysis and Management](pubs/Network-Traffic-Analysis-and-Management.md) [Scopus]
 
