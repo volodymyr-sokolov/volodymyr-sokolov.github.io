@@ -42,8 +42,8 @@ First Online: 3 October 2026
 ## Indices
 
 * ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-105054095855](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105054095855) <img src="/icons/scopus-non.svg" height="24" align="absmiddle">
-* WOS: [001907078100010](https://www.webofscience.com/wos/woscc/full-record/WOS:001907078100010) <img src="/icons/wos-cc-non.svg" height="24" align="absmiddle">
+* EID: [2-s2.0-105054095855](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105054095855)
+* WOS: [001907078100010](https://www.webofscience.com/wos/woscc/full-record/WOS:001907078100010)
 * URN: [urn:nbn:de:0074-4281-x](https://nbn-resolving.org/xml/urn:nbn:de:0074-4281-x)
 
 <!--

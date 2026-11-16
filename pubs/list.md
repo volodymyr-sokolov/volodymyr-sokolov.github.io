@@ -1,8 +1,8 @@
 ## Articles
 
-2026 [Asymmetric Interference Perception Method in Short-Range Wireless Systems](Asymmetric-Interference-Perception-Method-in-Short-Range-Wireless-Systems.md) <img src="/icons/scopus-q2.svg" height="24" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="24" align="absmiddle">
+2026 [Asymmetric Interference Perception Method in Short-Range Wireless Systems](Asymmetric-Interference-Perception-Method-in-Short-Range-Wireless-Systems.md) <img src="/icons/scopus-q2.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="20" align="absmiddle">
 
-2026 [A Semantically Oriented Method for Knowledge Representation in Artificial Intelligence Systems for Cybersecurity](A-Semantically-Oriented-Method-for-Knowledge-Representation-in-Artificial-Intelligence-Systems-for-Cybersecurity.md) <img src="/icons/scopus-q2.svg" height="24" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="24" align="absmiddle">
+2026 [A Semantically Oriented Method for Knowledge Representation in Artificial Intelligence Systems for Cybersecurity](A-Semantically-Oriented-Method-for-Knowledge-Representation-in-Artificial-Intelligence-Systems-for-Cybersecurity.md) <img src="/icons/scopus-q2.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-q2.svg" height="20" align="absmiddle">
 
 2026 [Methodological Approaches to Assessing Enterprise Information Security using a Process-Oriented Approach](Methodological-Approaches-to-Assessing-Enterprise-Information-Security-using-a-Process-Oriented-Approach.md)
 
@@ -28,7 +28,7 @@
 
 ## Book Chapter
 
-2026 [Network Traffic Analysis and Management](Network-Traffic-Analysis-and-Management.md) <img src="/icons/scopus-non.svg" height="24" align="absmiddle">
+2026 [Network Traffic Analysis and Management](Network-Traffic-Analysis-and-Management.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
 ## Book Chapters (Springer)
 
@@ -118,11 +118,11 @@
 
 ## Workshop Papers (CEUR-WS)
 
-2026 [Logical Inference Models Based on Fuzzy Production Rules for Intelligent Cyberthreat Detection Systems](Logical-Inference-Models-Based-on-Fuzzy-Production-Rules-for-Intelligent-Cyberthreat-Detection-Systems.md) <img src="/icons/scopus-non.svg" height="24" align="absmiddle"> <img src="/icons/wos-cc-non.svg" height="24" align="absmiddle">
+2026 [Logical Inference Models Based on Fuzzy Production Rules for Intelligent Cyberthreat Detection Systems](Logical-Inference-Models-Based-on-Fuzzy-Production-Rules-for-Intelligent-Cyberthreat-Detection-Systems.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-non.svg" height="20" align="absmiddle">
 
-2026 [Real-Time Bluetooth Low Energy Vulnerability Detection Using TinyML on Edge Devices](Real-Time-Bluetooth-Low-Energy-Vulnerability-Detection Using-TinyML-on-Edge-Devices.md) <img src="/icons/scopus-non.svg" height="24" align="absmiddle"> <img src="/icons/wos-cc-non.svg" height="24" align="absmiddle">
+2026 [Real-Time Bluetooth Low Energy Vulnerability Detection Using TinyML on Edge Devices](Real-Time-Bluetooth-Low-Energy-Vulnerability-Detection Using-TinyML-on-Edge-Devices.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-non.svg" height="20" align="absmiddle">
 
-2026 [A Software-Defined-Radio Replay Attack on Bluetooth Low Energy Devices](A-Software-Defined-Radio-Replay-Attack-on-Bluetooth-Low-Energy-Devices.md) <img src="/icons/scopus-non.svg" height="24" align="absmiddle"> <img src="/icons/wos-cc-non.svg" height="24" align="absmiddle">
+2026 [A Software-Defined-Radio Replay Attack on Bluetooth Low Energy Devices](A-Software-Defined-Radio-Replay-Attack-on-Bluetooth-Low-Energy-Devices.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-non.svg" height="20" align="absmiddle">
 
 2026 [Secure Self-Adaptive Recurrent Neural Networks for Intelligent Image Recognition in the Internet of Things Environments](Secure-Self-Adaptive-Recurrent-Neural-Networks-for-Intelligent-Image-Recognition-in-the-Internet-of-Things-Environments.md)
 
