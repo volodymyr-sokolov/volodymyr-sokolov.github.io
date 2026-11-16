@@ -43,8 +43,12 @@ First Online: 24 September 2026
 
 * ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-105052408329](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105052408329)
+* WOS: [001903456400024](https://www.webofscience.com/wos/woscc/full-record/WOS:001903456400024)
 * URN: [urn:nbn:de:0074-4271-x](https://nbn-resolving.org/xml/urn:nbn:de:0074-4271-x)
-<!--* DBLP: [conf/csdp/KostiukSKVK26](https://dblp.org/rec/conf/csdp/KostiukSKVK26)-->
+
+<!--
+* DBLP: [conf/csdp/KostiukSKVK26](https://dblp.org/rec/conf/csdp/KostiukSKVK26)
+-->
 
 ## Cite
 
