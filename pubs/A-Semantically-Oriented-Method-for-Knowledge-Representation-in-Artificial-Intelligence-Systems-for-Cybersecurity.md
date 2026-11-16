@@ -44,8 +44,8 @@ First Online: 1 October 2026
 
 * ISSN: [2078-2489](https://portal.issn.org/resource/ISSN/2078-2489) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-105054938284](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105054938284) (Q2)
-<!-- * WOS: [001323200100001](https://www.webofscience.com/wos/woscc/full-record/WOS:001323200100001) (Q2)
-* INSPEC: 17014667
+* WOS: [001914369900001](https://www.webofscience.com/wos/woscc/full-record/WOS:001914369900001) (Q2)
+<!-- * INSPEC: 17014667
 * DBLP: [journals/cryptography/BessalovSA24](https://dblp.org/rec/journals/cryptography/BessalovSA24) -->
 
 ## Cite
