@@ -56,7 +56,7 @@ As an editor and reviewer, I have participated in the editorial boards of confer
 
 2021 [Information Security Risk Assessment](pubs/Information-Security-Risk-Assessment.md) [Scopus]
 
-2020 [Wireless Sensors for Brain Activity — A Survey](pubs/Wireless-Sensors-for-Brain-Activity-A-Survey.md) <img src="/icons/scopus-q2.svg" height="16"> <img src="/icons/wos-cc-q2.svg" height="16"> [Scopus Q2, WoS Q2]
+2020 [Wireless Sensors for Brain Activity — A Survey](pubs/Wireless-Sensors-for-Brain-Activity-A-Survey.md) <img src="/icons/scopus-q2.svg" height="20"> <img src="/icons/wos-cc-q2.svg" height="20"> [Scopus Q2, WoS Q2]
 
 2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](pubs/Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md) [Scopus Q2]
 
