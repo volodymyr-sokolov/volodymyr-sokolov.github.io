@@ -44,21 +44,21 @@ As an editor and reviewer, I have participated in the editorial boards of confer
 
 ## Publications
 
-2026 [Asymmetric Interference Perception Method in Short-Range Wireless Systems](pubs/Asymmetric-Interference-Perception-Method-in-Short-Range-Wireless-Systems.md)
+2026 [Asymmetric Interference Perception Method in Short-Range Wireless Systems](pubs/Asymmetric-Interference-Perception-Method-in-Short-Range-Wireless-Systems.md) [Scopus Q2, WoS Q2]
 
-2026 [A Semantically Oriented Method for Knowledge Representation in Artificial Intelligence Systems for Cybersecurity](A-Semantically-Oriented-Method-for-Knowledge-Representation-in-Artificial-Intelligence-Systems-for-Cybersecurity.md)
+2026 [A Semantically Oriented Method for Knowledge Representation in Artificial Intelligence Systems for Cybersecurity](A-Semantically-Oriented-Method-for-Knowledge-Representation-in-Artificial-Intelligence-Systems-for-Cybersecurity.html) [Scopus Q2, WoS Q2]
 
-2026 [Network Traffic Analysis and Management](pubs/Network-Traffic-Analysis-and-Management.md)
+2026 [Network Traffic Analysis and Management](pubs/Network-Traffic-Analysis-and-Management.md) [Scopus]
 
-2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](pubs/Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md)
+2024 [Efficient Commutative PQC Algorithms on Isogenies of Edwards Curves](pubs/Efficient-Commutative-PQC-Algorithms-on-Isogenies-of-Edwards-Curves.md) [Scopus Q2, WoS Q2]
 
-2023 [Brainwave-based Authentication using Features Fusion](pubs/Brainwave-based-Authentication-using-Features-Fusion.md)
+2023 [Brainwave-based Authentication using Features Fusion](pubs/Brainwave-based-Authentication-using-Features-Fusion.md) [Scopus Q1, WoS Q1]
 
-2021 [Information Security Risk Assessment](pubs/Information-Security-Risk-Assessment.md)
+2021 [Information Security Risk Assessment](pubs/Information-Security-Risk-Assessment.md) [Scopus]
 
-2020 [Wireless Sensors for Brain Activity — A Survey](pubs/Wireless-Sensors-for-Brain-Activity-A-Survey.md)
+2020 [Wireless Sensors for Brain Activity — A Survey](pubs/Wireless-Sensors-for-Brain-Activity-A-Survey.md) [Scopus Q2, WoS Q2]
 
-2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](pubs/Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md)
+2019 [Implantation of Indexing Optimization Technology for Highly Specialized Terms based on Metaphone Phonetical Algorithm](pubs/Implantation-of-Indexing-Optimization-Technology-for-Highly-Specialized-Terms-based-on-Metaphone-Phonetical-Algorithm.md) [Scopus Q2]
 
 [See more](/pubs/list.md)
 
