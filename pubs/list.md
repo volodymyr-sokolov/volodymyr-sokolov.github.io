@@ -10,9 +10,9 @@
 
 2023 [Brainwave-based Authentication using Features Fusion](Brainwave-based-Authentication-using-Features-Fusion.md)
 
-2022 [Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency](Application-of-Game-Theory-Fuzzy-Logic-and-Neural-Networks-for-Assessing-Risks-and-Forecasting-Rates-of-Digital-Currency.md)
+2022 [Application of Game Theory, Fuzzy Logic and Neural Networks for Assessing Risks and Forecasting Rates of Digital Currency](Application-of-Game-Theory-Fuzzy-Logic-and-Neural-Networks-for-Assessing-Risks-and-Forecasting-Rates-of-Digital-Currency.md) <img src="/icons/scopus-q4.svg" height="20" align="absmiddle">
 
-2022 [Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models](Application-of-a-Convolutional-Neural-Network-with-a-Module-of-Elementary-Graphic-Primitive-Classifiers.md)
+2022 [Application of a Convolutional Neural Network with a Module of Elementary Graphic Primitive Classifiers in the Problems of Recognition of Drawing Documentation and Transformation of 2D to 3D Models](Application-of-a-Convolutional-Neural-Network-with-a-Module-of-Elementary-Graphic-Primitive-Classifiers.md) <img src="/icons/scopus-q4.svg" height="20" align="absmiddle">
 
 2022 [Evaluation Method of the Physical Compatibility of Equipment in a Hybrid Information Transmission Network](Evaluation-Method-of-the-Physical-Compatibility-of-Equipment-in-a-Hybrid-Information-Transmission-Network.md)
 
@@ -34,7 +34,7 @@
 
 2025 [Evaluation of State-of-the-Art Machine Learning Smart Contract Vulnerability Detection Method](Evaluation-of-State-of-the-Art-Machine-Learning-Smart-Contract-Vulnerability-Detection-Method.md)
 
-2025 [Accuracy Improvement of Spoken Language Identification System for Close-Related Languages](Accuracy-Improvement-of-Spoken-Language-Identification-System-for-Close-Related-Languages.md)
+2025 [Accuracy Improvement of Spoken Language Identification System for Close-Related Languages](Accuracy-Improvement-of-Spoken-Language-Identification-System-for-Close-Related-Languages.md) <img src="/icons/scopus-q3.svg" height="20" align="absmiddle">
 
 2023 [Social Engineering Penetration Testing in Higher Education Institutions](Social-Engineering-Penetration-Testing-in-Higher-Education-Institutions.md)
 
@@ -60,7 +60,7 @@
 
 ## Conference Papers (IEEE)
 
-2026 [Cryptographically Resilient Random Number Generators based on Entropy Sources in Information Security Systems](Cryptographically-Resilient-Random-Number-Generators-based-on-Entropy-Sources-in-Information-Security-Systems.md)
+2026 [Cryptographically Resilient Random Number Generators based on Entropy Sources in Information Security Systems](Cryptographically-Resilient-Random-Number-Generators-based-on-Entropy-Sources-in-Information-Security-Systems.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
 2026 [Telecommunication Network Availability after Hydroelectric Power Plant Reservoir Dam Incident](Telecommunication-Network-Availability-after-Hydroelectric-Power-Plant-Reservoir-Dam-Incident.md)
 
@@ -84,9 +84,9 @@
 
 2022 [Video Channel Suppression Method of Unmanned Aerial Vehicles](Video-Channel-Suppression-Method-of-Unmanned-Aerial-Vehicles.md)
 
-2022 [Assessing Approaches of IT Infrastructure Audit](Assessing-Approaches-of-IT-Infrastructure-Audit.md)
+2022 [Assessing Approaches of IT Infrastructure Audit](Assessing-Approaches-of-IT-Infrastructure-Audit.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
-2022 [Analysis of Ways and Methods of Increasing the Availability of Information in Distributed Information Systems](Analysis-of-Ways-and-Methods-of-Increasing-the-Availability-of-Information-in-Distributed-Information-Systems.md)
+2022 [Analysis of Ways and Methods of Increasing the Availability of Information in Distributed Information Systems](Analysis-of-Ways-and-Methods-of-Increasing-the-Availability-of-Information-in-Distributed-Information-Systems.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
 2022 [Technology of Location Hiding by Spoofing the Mobile Operator IP Address](Technology-of-Location-Hiding-by-Spoofing-the-Mobile-Operator-IP-Address.md)
 
@@ -102,7 +102,7 @@
 
 2020 [Bandwidth Research of Wireless IoT Switches](Bandwidth-Research-of-Wireless-IoT-Switches.md)
 
-2020 [Analysis of Implementation Results of the Distributed Access Control System](Analysis-of-Implementation-Results-of-the-Distributed-Access-Control-System.md)
+2020 [Analysis of Implementation Results of the Distributed Access Control System](Analysis-of-Implementation-Results-of-the-Distributed-Access-Control-System.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
 2020 [Investigation of Availability of Wireless Access Points based on Embedded Systems](Investigation-of-Availability-of-Wireless-Access-Points-based-on-Embedded-Systems.md)
 
@@ -124,23 +124,23 @@
 
 2026 [A Software-Defined-Radio Replay Attack on Bluetooth Low Energy Devices](A-Software-Defined-Radio-Replay-Attack-on-Bluetooth-Low-Energy-Devices.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-non.svg" height="20" align="absmiddle">
 
-2026 [Secure Self-Adaptive Recurrent Neural Networks for Intelligent Image Recognition in the Internet of Things Environments](Secure-Self-Adaptive-Recurrent-Neural-Networks-for-Intelligent-Image-Recognition-in-the-Internet-of-Things-Environments.md)
+2026 [Secure Self-Adaptive Recurrent Neural Networks for Intelligent Image Recognition in the Internet of Things Environments](Secure-Self-Adaptive-Recurrent-Neural-Networks-for-Intelligent-Image-Recognition-in-the-Internet-of-Things-Environments.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
-2026 [Neural Network Modeling for Student Competency Development](Neural-Network-Modeling-for-Student-Competency-Development.md)
+2026 [Neural Network Modeling for Student Competency Development](Neural-Network-Modeling-for-Student-Competency-Development.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
 2025 [Machine Learning Methods for Detecting Intrusions based on Network Traffic Analysis](Machine-Learning-Methods-for-Detecting-Intrusions-based-on-Network-Traffic-Analysis.md)
 
 2025 [Intelligent System for Simulation Modeling and Research of Information Objects](Intelligent-System-for-Simulation-Modeling-and-Research-of-Information-Objects.md)
 
-2025 [Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements](Adaptation-of-Network-Traffic-Routing-Policy-to-Information-Security-and-Network-Protection-Requirements.md)
+2025 [Adaptation of Network Traffic Routing Policy to Information Security and Network Protection Requirements](Adaptation-of-Network-Traffic-Routing-Policy-to-Information-Security-and-Network-Protection-Requirements.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
-2025 [Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats](Model-and-Methodology-for-the-Formation-of-Adaptive-Security-Profiles-for-the-Protection-of-Wireless-Networks.md)
+2025 [Model and Methodology for the Formation of Adaptive Security Profiles for the Protection of Wireless Networks in the Face of Dynamic Cyber Threats](Model-and-Methodology-for-the-Formation-of-Adaptive-Security-Profiles-for-the-Protection-of-Wireless-Networks.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
 2025 [Information Technologies in Modeling the Impact of the Economic Environment on the Performance of Companies](Information-Technologies-in-Modeling-the-Impact-of-the-Economic-Environment-on-the-Performance-of-Companies.md)
 
 2025 [Determining the Error Distribution of BLE Beacons at Antenna Near and Far Fields](Determining-the-Error-Distribution-of-BLE-Beacons-at-Antenna-Near-and-Far-Fields.md)
 
-2025 [Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files](Application-of-Statistical-and-Neural-Network-Algorithms-in-Steganographic-Synthesis-and-Analysis.md)
+2025 [Application of Statistical and Neural Network Algorithms in Steganographic Synthesis and Analysis of Hidden Information in Audio and Graphic Files](Application-of-Statistical-and-Neural-Network-Algorithms-in-Steganographic-Synthesis-and-Analysis.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
 2025 [Models and Technologies of Cognitive Agents for Decision-making with Integration of Artificial Intelligence](Models-and-Technologies-of-Cognitive-Agents-for-Decision-making-with-Integration-of-Artificial-Intelligence.md)
 
@@ -164,7 +164,7 @@
 
 2024 [Methodology for Choosing a Consensus Algorithm for Blockchain Technology](Methodology-for-Choosing-a-Consensus-Algorithm-for-Blockchain-Technology.md)
 
-2024 [Tokenomics and Perspectives of Proof of Stake](Tokenomics-and-Perspectives-of-Proof-of-Stake.md)
+2024 [Tokenomics and Perspectives of Proof of Stake](Tokenomics-and-Perspectives-of-Proof-of-Stake.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
 2024 [Person-of-Interest Detection on Mobile Forensics Data — AI-Driven Roadmap](Person-of-Interest-Detection-on-Mobile-Forensics-Data-AI-Driven-Roadmap.md)
 
@@ -202,13 +202,13 @@
 
 2022 [Stability Verification of Self-Organized Wireless Networks with Block Encryption](Stability-Verification-of-Self-Organized-Wireless-Networks-with-Block-Encryption.md)
 
-2021 [Analysis of Automatic Speech Recognition Methods](Analysis-of-Automatic-Speech-Recognition-Methods.md)
+2021 [Analysis of Automatic Speech Recognition Methods](Analysis-of-Automatic-Speech-Recognition-Methods.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
 2021 [Computing of Odd Degree Isogenies on Supersingular Twisted Edwards Curves](Computing-of-Odd-Degree-Isogenies-on-Supersingular-Twisted-Edwards-Curves.md)
 
 2020 [Invasion Detection Model using Two-Stage Criterion of Detection of Network Anomalies](Invasion-Detection-Model-using-Two-Stage-Criterion-of-Detection-of-Network-Anomalies.md)
 
-2020 [Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves](Analysis-of-2-Isogeny-Properties-of-Generalized-Form-Edwards-Curves.md)
+2020 [Analysis of 2-Isogeny Properties of Generalized Form Edwards Curves](Analysis-of-2-Isogeny-Properties-of-Generalized-Form-Edwards-Curves.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-non.svg" height="20" align="absmiddle">
 
 2020 [Implementation of Social Engineering Attack at Institution of Higher Education](Implementation-of-Social-Engineering-Attack-at-Institution-of-Higher-Education.md)
 
