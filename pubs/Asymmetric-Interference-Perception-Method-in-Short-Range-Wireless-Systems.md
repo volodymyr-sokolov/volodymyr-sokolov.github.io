@@ -40,8 +40,8 @@ First Online: 14 October 2026
 ## Indices
 
 * ISSN: [1999-4893](https://portal.issn.org/resource/ISSN/1999-4893) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-85205045796](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105054430884) (Q2)
-* WOS: [001912502200001](https://www.webofscience.com/wos/woscc/full-record/WOS:001912502200001) (Q2)
+* EID: [2-s2.0-85205045796](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105054430884) (Q2) <img src="/icons/scopus-q2.svg" height="16">
+* WOS: [001912502200001](https://www.webofscience.com/wos/woscc/full-record/WOS:001912502200001) (Q2) <img src="/icons/wos-cc-q2.svg" height="16">
 
 <!--
 * INSPEC: 17014667
