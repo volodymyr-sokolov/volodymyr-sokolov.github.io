@@ -48,7 +48,7 @@ First Online: 21 July 2021
 
 * ISSN: [2194-5357](https://portal.issn.org/resource/ISSN/2194-5357) <img src="/icons/print.svg" width="16" height="16">, [2194-5365](https://portal.issn.org/resource/ISSN/2194-5365) <img src="/icons/online.svg" width="16" height="16">
 * ISBN: [978-3-030-80471-8](https://isbnsearch.org/isbn/978-3-030-80471-8) <img src="/icons/print.svg" width="16" height="16">, [978-3-030-80472-5](https://isbnsearch.org/isbn/978-3-030-80472-5) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-85111924795](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85111924795) (Q4)
+* EID: [2-s2.0-85111924795](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85111924795) <img src="/icons/scopus-q4-small.svg" height="20" align="absmiddle">
 * INSPEC: 23013483
 
 ## Cite

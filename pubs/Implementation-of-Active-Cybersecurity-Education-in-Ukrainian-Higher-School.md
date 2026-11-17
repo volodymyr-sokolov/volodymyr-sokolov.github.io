@@ -49,7 +49,7 @@ First Online: 18 June 2023
 
 * ISSN: [2367-4512](https://portal.issn.org/resource/ISSN/2367-4512) <img src="/icons/print.svg" width="16" height="16">, [2367-4520](https://portal.issn.org/resource/ISSN/2367-4520) <img src="/icons/online.svg" width="16" height="16">
 * ISBN: [978-3-031-35466-3](https://isbnsearch.org/isbn/978-3-031-35466-3) <img src="/icons/print.svg" width="16" height="16">, [978-3-031-35467-0](https://isbnsearch.org/isbn/978-3-031-35467-0) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-85162953358](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85162953358) (Q3)
+* EID: [2-s2.0-85162953358](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85162953358) <img src="/icons/scopus-q3-small.svg" height="20" align="absmiddle">
 * INSPEC: 23711003
 * DBLP: [conf/cmis/BuriachokKZSS22](https://dblp.org/rec/conf/itest/BuriachokKZSS22)
 

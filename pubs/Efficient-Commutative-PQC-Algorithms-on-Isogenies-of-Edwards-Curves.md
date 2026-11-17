@@ -41,8 +41,8 @@ First Online: 27 August 2024
 ## Indices
 
 * ISSN: [2410-387X](https://portal.issn.org/resource/ISSN/2410-387X) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-85205045796](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85205045796) (Q2)
-* WOS: [001323200100001](https://www.webofscience.com/wos/woscc/full-record/WOS:001323200100001) (Q2)
+* EID: [2-s2.0-85205045796](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85205045796) <img src="/icons/scopus-q2-small.svg" height="20" align="absmiddle">
+* WOS: [001323200100001](https://www.webofscience.com/wos/woscc/full-record/WOS:001323200100001) <img src="/icons/wos-cc-q2-small.svg" height="20" align="absmiddle">
 * INSPEC: 17014667
 * DBLP: [journals/cryptography/BessalovSA24](https://dblp.org/rec/journals/cryptography/BessalovSA24)
 

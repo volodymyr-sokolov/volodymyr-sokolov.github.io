@@ -41,8 +41,8 @@ First Online: 22 March 2023
 ## Indices
 
 * ISSN: [0167-4048](https://portal.issn.org/resource/ISSN/0167-4048) <img src="/icons/print.svg" width="16" height="16">, [1872-6208](https://portal.issn.org/resource/ISSN/1872-6208) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-85150928741](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85150928741) (Q1)
-* WOS: [001053816800001](https://www.webofscience.com/wos/woscc/full-record/WOS:001053816800001) (Q1)
+* EID: [2-s2.0-85150928741](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85150928741) <img src="/icons/scopus-q1-small.svg" height="20" align="absmiddle">
+* WOS: [001053816800001](https://www.webofscience.com/wos/woscc/full-record/WOS:001053816800001) <img src="/icons/wos-cc-q1-small.svg" height="20" align="absmiddle">
 * INSPEC: 23509119
 * DBLP: [journals/compsec/TajDiniSKG23](https://dblp.org/rec/journals/compsec/TajDiniSKG23)
 
