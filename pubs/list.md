@@ -56,7 +56,7 @@
 
 2019 [Investigation of the IoT Device Lifetime with Secure Data Transmission](Investigation-of-the-IoT-Device-Lifetime-with-Secure-Data-Transmission.md) <img src="/icons/scopus-q3.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-q4.svg" height="20" align="absmiddle">
 
-2019 [Implementation of Active Learning in the Master’s Program on Cybersecurity](Implementation-of-Active-Learning-in-the-Masters-Program-on-Cybersecurity.md)
+2019 [Implementation of Active Learning in the Master’s Program on Cybersecurity](Implementation-of-Active-Learning-in-the-Masters-Program-on-Cybersecurity.md) <img src="/icons/scopus-q3.svg" height="20" align="absmiddle">
 
 ## Conference Papers (IEEE)
 
