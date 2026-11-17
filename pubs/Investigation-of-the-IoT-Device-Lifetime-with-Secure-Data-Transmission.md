@@ -48,8 +48,8 @@ First Online: 12 September 2019
 
 * ISSN: [0302-9743](https://portal.issn.org/resource/ISSN/0302-9743) <img src="/icons/print.svg" width="16" height="16">, [1611-3349](https://portal.issn.org/resource/ISSN/1611-3349) <img src="/icons/online.svg" width="16" height="16">
 * ISBN: [978-3-030-30858-2](https://isbnsearch.org/isbn/978-3-030-30858-2) <img src="/icons/print.svg" width="16" height="16">, [978-3-030-30859-9](https://isbnsearch.org/isbn/978-3-030-30859-9) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-85072951424](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85072951424) (Q3)
-* WOS: [000565635700002](https://www.webofscience.com/wos/woscc/full-record/WOS:000565635700002) (Q4)
+* EID: [2-s2.0-85072951424](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85072951424) <img src="/icons/scopus-q3-small.svg" height="20" align="absmiddle">
+* WOS: [000565635700002](https://www.webofscience.com/wos/woscc/full-record/WOS:000565635700002) <img src="/icons/wos-cc-q4-small.svg" height="20" align="absmiddle">
 * INSPEC: 19695699
 * URN: [urn:nbn:se:bth-18767](https://nbn-resolving.org/xml/urn:nbn:se:bth-18767)
 * DBLP: [conf/new2an/KuzminykhCYS19](https://dblp.org/rec/html/conf/new2an/KuzminykhCYS19)

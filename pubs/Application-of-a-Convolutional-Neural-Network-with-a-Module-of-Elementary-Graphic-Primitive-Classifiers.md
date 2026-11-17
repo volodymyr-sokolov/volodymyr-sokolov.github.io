@@ -40,7 +40,7 @@ First Online: 31 December 2022
 ## Indices
 
 * ISSN: [1992-8645](https://portal.issn.org/resource/ISSN/1992-8645) <img src="/icons/print.svg" width="16" height="16">, [1817-3195](https://portal.issn.org/resource/ISSN/1817-3195) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-85145368917](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85145368917) (Q4)
+* EID: [2-s2.0-85145368917](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85145368917) <img src="/icons/scopus-q4-small.svg" height="20" align="absmiddle">
 
 ## Cite
 
