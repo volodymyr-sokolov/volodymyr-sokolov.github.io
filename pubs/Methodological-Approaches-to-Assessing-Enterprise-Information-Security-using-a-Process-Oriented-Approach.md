@@ -42,7 +42,7 @@ First Online: 8 June 2026
 ## Indices
 
 * ISSN: [2074-9023](https://portal.issn.org/resource/ISSN/2074-9023) <img src="/icons/print.svg" width="16" height="16">, [2074-9031](https://portal.issn.org/resource/ISSN/2074-9031) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-105040763278 ](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105040763278) (Q4)
+* EID: [2-s2.0-105040763278 ](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105040763278) <img src="/icons/scopus-q4-small.svg" height="20" align="absmiddle">
 
 ## Cite
 

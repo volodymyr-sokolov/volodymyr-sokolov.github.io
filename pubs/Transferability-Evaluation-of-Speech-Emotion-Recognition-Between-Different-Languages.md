@@ -49,7 +49,7 @@ First Online: 28 April 2022
 
 * ISSN: [2367-4512](https://portal.issn.org/resource/ISSN/2367-4512) <img src="/icons/print.svg" width="16" height="16">, [2367-4520](https://portal.issn.org/resource/ISSN/2367-4520) <img src="/icons/online.svg" width="16" height="16">
 * ISBN: [978-3-031-04811-1](https://isbnsearch.org/isbn/978-3-031-04811-1) <img src="/icons/print.svg" width="16" height="16">, [978-3-031-04812-8](https://isbnsearch.org/isbn/978-3-031-04812-8) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-85129602152](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85129602152) (Q3)
+* EID: [2-s2.0-85129602152](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85129602152) <img src="/icons/scopus-q3-small.svg" height="20" align="absmiddle">
 * INSPEC: 22035725
 
 ## Cite

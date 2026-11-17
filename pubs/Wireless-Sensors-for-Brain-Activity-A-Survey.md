@@ -42,8 +42,8 @@ First Online: 8 December 2020
 ## Indices
 
 * ISSN: [2079-9292](https://portal.issn.org/resource/ISSN/2079-9292) <img src="/icons/online.svg" width="16" height="16">
-* EID: [2-s2.0-85097402923](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85097402923) (Q2)
-* WOS: [000602048000001](https://www.webofscience.com/wos/woscc/full-record/WOS:000602048000001) (Q2)
+* EID: [2-s2.0-85097402923](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-85097402923) <img src="/icons/scopus-q2-small.svg" height="20" align="absmiddle">
+* WOS: [000602048000001](https://www.webofscience.com/wos/woscc/full-record/WOS:000602048000001) <img src="/icons/wos-cc-q2-small.svg" height="20" align="absmiddle">
 
 ## Cite
 
