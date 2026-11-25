@@ -126,7 +126,7 @@
 
 2026 [Secure Self-Adaptive Recurrent Neural Networks for Intelligent Image Recognition in the Internet of Things Environments](Secure-Self-Adaptive-Recurrent-Neural-Networks-for-Intelligent-Image-Recognition-in-the-Internet-of-Things-Environments.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 
-2026 [Neural Network Modeling for Student Competency Development](Neural-Network-Modeling-for-Student-Competency-Development.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
+2026 [Neural Network Modeling for Student Competency Development](Neural-Network-Modeling-for-Student-Competency-Development.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle"> <img src="/icons/wos-cc-non.svg" height="20" align="absmiddle">
 
 2025 [Machine Learning Methods for Detecting Intrusions based on Network Traffic Analysis](Machine-Learning-Methods-for-Detecting-Intrusions-based-on-Network-Traffic-Analysis.md) <img src="/icons/scopus-non.svg" height="20" align="absmiddle">
 

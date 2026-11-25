@@ -42,6 +42,7 @@ First Online: 4 July 2026
 
 * ISSN: [1613-0073](https://portal.issn.org/resource/ISSN/1613-0073) <img src="/icons/online.svg" width="16" height="16">
 * EID: [2-s2.0-105044804135](http://www.scopus.com/record/display.url?origin=inward&eid=2-s2.0-105044804135)
+* WOS: [001907480700020](https://www.webofscience.com/wos/woscc/full-record/WOS:001907480700020)
 * URN: [urn:nbn:de:0074-4220-x](https://nbn-resolving.org/xml/urn:nbn:de:0074-4220-x)
 * DBLP: [conf/cmis/KostiukRSS26](https://dblp.org/rec/conf/cmis/KostiukRSS26)
 
